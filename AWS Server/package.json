@@ -10,6 +10,10 @@
   "author": "tjonnyc",
   "license": "proprietary",
   "dependencies": {
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "babel-preset-es2015": "^6.1.18",
+    "babel-preset-react": "^6.1.18",
     "babel-preset-stage-1": "^6.1.18",
     "body-parser": "^1.15.2",
     "express": "^4.14.0",
@@ -21,6 +25,7 @@
     "react-redux": "^4.0.0",
     "react-router": "^2.0.1",
     "react-router-redux": "^4.0.6",
-    "redux": "^3.0.4"
+    "redux": "^3.0.4",
+    "webpack": "^1.12.9"
   }
 }

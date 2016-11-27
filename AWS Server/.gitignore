@@ -1,18 +1,7 @@
 /node_modules
-/1publish
-1publish.zip
-npm-debug.log
-
-# IntelliJ
-*.iml
-/.idea
 
 # Elastic Beanstalk Files
-
 .elasticbeanstalk/*
-
 !.elasticbeanstalk/*.cfg.yml
-
 !.elasticbeanstalk/*.global.yml
-
 /.idea

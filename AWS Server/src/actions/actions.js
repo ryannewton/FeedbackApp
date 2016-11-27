@@ -1,55 +1,25 @@
 let actions = {
 	
-	pullDataFromServer(privateData, publicData) {
+	pullDataFromServer(feedback) {
 		return {
 			type: 'PULL_DATA_FROM_SERVER',
-			privateData,
-			publicData
+			feedback,			
 		}
 	},
 
-	updateDatabase() {
+	updateStartDate(date) {
 		return {
-			type: 'UPDATE_DATABASE'
+			type: 'UPDATE_START_DATE',
+			date,			
 		}
 	},
 
-	updateCategory(url, value) {
+	updateEndDate(date) {
 		return {
-			type: 'UPDATE_CATEGORY',
-			url,
-			value
+			type: 'UPDATE_END_DATE',
+			date,			
 		}
 	},
-
-	excludeURL(url, exclude) {
-		return {
-			type: 'EXCLUDE_URL',
-			url,
-			exclude
-		}
-	},
-
-	removeURL(url) {
-		return {
-			type: 'REMOVE_URL',
-			url
-		}
-	},
-
-	updateDefaultCategories() {
-		return {
-			type: 'UPDATE_DEFAULT_CATEGORIES',
-		}
-	},
-
-	changeUrlIndex(event) {
-		event.preventDefault();
-		return {
-			type: 'CHANGE_URL_INDEX',
-			id: event.target.id
-		}
-	}
 
 }
 

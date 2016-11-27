@@ -22,7 +22,12 @@ export default class StanfordFeedbackApp extends Component {
     
     let dev = "10.0.2.2";
     let production = "feedbackprototype-env.us-west-2.elasticbeanstalk.com";
-
+    let time = new Date(Date.now());
+    console.log(time);
+    let timeISO = time.toISOString();
+    console.log(timeISO);
+    let timeSliced = timeISO.slice(0, 10);
+    console.log(timeSliced);
     let current = production;
     console.log('http://' + current + '/addFeedback');
     return fetch('http://' + current + '/addFeedback', {
@@ -33,7 +38,7 @@ export default class StanfordFeedbackApp extends Component {
       },
       body: JSON.stringify({
         text,
-        time: Date.now(),
+        time: timeSliced
       }),
     })
     .then((response) => console.log(response))

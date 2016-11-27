@@ -22,17 +22,39 @@ app.use(express.static('public'));
 
 //Inserts a new Feedback Record in the Database, fields (userID, text, time_submitted)
 app.post('/addFeedback', upload.array(), function(req, res) {
-
-	var time = new Date(req.body.time);
-	console.log("Text is: " + req.body.text);
-	console.log("Time is: " + time.toUTCString());
 	
 	//INSERT TIMESEGMENT
-	connection.query("INSERT INTO feedback (text, time) VALUES ('" + req.body.text  + "', '" + time.toUTCString() + "');", function(err) {
+	connection.query("INSERT INTO feedback (text, time) VALUES ('" + req.body.text  + "', '" + req.body.time + "');", function(err) {
 	  if (err) throw err;	  	 
 	});
 
 	res.sendStatus(200);	
+});
+
+
+//Pulls Feedback From Server
+app.post('/pullFeedback', upload.array(), function(req, res) {
+	console.log(req.body);
+
+	var connection_string = `
+		SELECT
+			text
+		FROM 
+			feedback		
+		WHERE 
+			time
+				BETWEEN '` + req.body.start_date + `' AND '` + req.body.end_date + `'`;
+
+	console.log(connection_string);
+	connection.query(connection_string, function(err, rows, fields) {
+
+	  if (err) throw err;
+	  else {
+	  	console.log(rows);
+	  	res.send(rows);
+	  } 
+
+	});
 });
 
 /*
@@ -50,7 +72,7 @@ app.get('/addUser', function(req, res) {
 */
 
 app.listen(8081, function () {
-  console.log('Example app listening on port 8082!');
+  console.log('Example app listening on port 8081!');
 });
 
 
