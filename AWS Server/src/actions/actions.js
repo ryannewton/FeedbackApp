@@ -1,26 +1,47 @@
+import Moment from 'moment';
+import fetch from 'isomorphic-fetch'
+
 let actions = {
 	
-	pullDataFromServer(feedback) {
+	requestedFeedback(start_date, end_date) {
 		return {
-			type: 'PULL_DATA_FROM_SERVER',
+			type: 'REQUESTED_FEEDBACK',
+			start_date,
+			end_date,			
+		}
+	},
+
+	receivedFeedback(feedback) {
+		console.log(feedback);
+		return {
+			type: 'RECEIVED_FEEDBACK',
 			feedback,			
 		}
 	},
 
-	updateStartDate(date) {
-		return {
-			type: 'UPDATE_START_DATE',
-			date,			
-		}
-	},
+	updateDates(start_date, end_date, requestedFeedback, receivedFeedback) {
 
-	updateEndDate(date) {
-		return {
-			type: 'UPDATE_END_DATE',
-			date,			
-		}
-	},
+	  return function (dispatch) {
 
+	    dispatch(requestedFeedback(start_date, end_date));
+
+	    return fetch(`/pullFeedback`, {
+	    	method: 'POST',
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	      },
+	      body: JSON.stringify({
+	        start_date,
+	        end_date,
+	      }),
+    	})
+      .then(response => response.json() )
+      .then(feedback => dispatch(receivedFeedback(feedback)) )
+      .catch(error => console.error(error) );
+
+	  }
+	}
 }
 
 export default actions
