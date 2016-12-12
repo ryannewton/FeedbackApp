@@ -31,8 +31,8 @@ export default class Main extends Component {
   submitFeedbackToServer(text) {
     console.log("Feedback Submitted: " + text);
     
-    let dev = "10.0.2.2";
-    let production = "feedbackprototype-env.us-west-2.elasticbeanstalk.com";
+    let dev = "http://10.0.2.2";
+    let production = "https://stanfordfeedback.com";
     let time = new Date(Date.now());
     console.log(time);
     let timeISO = time.toISOString();
@@ -40,8 +40,8 @@ export default class Main extends Component {
     let timeSliced = timeISO.slice(0, 10);
     console.log(timeSliced);
     let current = production;
-    console.log('http://' + current + '/addFeedback');
-    return fetch('http://' + current + '/addFeedback', {
+    console.log(current + '/addFeedback');
+    return fetch(current + '/addFeedback', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
