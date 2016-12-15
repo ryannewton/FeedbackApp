@@ -52624,7 +52624,9 @@
 	      return Object.assign({}, state, { start_date: action.start_date, end_date: action.end_date });
 	      break;
 	    case 'RECEIVED_FEEDBACK':
-	      return Object.assign({}, state, { feedback: action.feedback });
+	      return Object.assign({}, state, { feedback: action.feedback.filter(function (item) {
+	          return item.text !== "Feedback Submitted!";
+	        }) });
 	      break;
 	    default:
 	      return state;

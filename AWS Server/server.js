@@ -34,8 +34,6 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 
 //Pulls Feedback From Server
 app.post('/pullFeedback', upload.array(), function(req, res) {
-	console.log(req.body);
-
 	var connection_string = `
 		SELECT
 			text
@@ -50,7 +48,6 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
 
 	  if (err) throw err;
 	  else {
-	  	console.log(rows);
 	  	res.send(rows);
 	  } 
 
