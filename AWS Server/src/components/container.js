@@ -6,6 +6,9 @@ import { bindActionCreators } from 'redux';
 //Import Actions
 import Actions from '../actions/actions.js';
 
+//Import Components
+import Nav from './nav.js';
+
 class Container extends Component {
 
 	constructor(props) {
@@ -15,6 +18,7 @@ class Container extends Component {
 	render() {
 		return (
 			<div>
+				<Nav />
 				{React.cloneElement(this.props.children, this.props)}
 			</div>
 		);

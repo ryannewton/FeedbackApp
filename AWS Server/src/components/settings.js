@@ -4,7 +4,7 @@ import Feedback_Row from './feedback_row.js';
 
 import {DateRangePicker} from 'react-dates';
 
-export default class Feedback extends React.Component {
+export default class Settings extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -27,7 +27,7 @@ export default class Feedback extends React.Component {
   render() {
     const { focusedInput } = this.state;
     const { start_date, end_date } = this.props.main;
-    const Rows = this.props.feedback.map((feedback, index) => {
+    const Rows = this.props.main.feedback.map((feedback, index) => {
     	return <Feedback_Row key={index} feedback={feedback} department={"Other"} />
     });
     return (

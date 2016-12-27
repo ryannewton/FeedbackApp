@@ -31,6 +31,29 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 	res.sendStatus(200);	
 });
 
+app.post('/saveProjectChanges', upload.array(), function(req, res) {
+	
+	connection.query("UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], function(err) {
+	  if (err) throw err;	  	 
+	});
+
+	res.sendStatus(200);	
+});
+
+app.post('/addProject', upload.array(), function(req, res) {
+	connection.query('INSERT INTO projects SET ?', {title: 'Blank Title', description: 'Blank Description', votes: 0}, function(err, result) {
+	  if (err) throw err;
+	  res.json({id: result.insertId});
+	});
+});
+
+app.post('/deleteProject', upload.array(), function(req, res) {
+	connection.query('DELETE FROM projects WHERE id = ?', [req.body.id], function(err, result) {
+	  if (err) throw err;
+	});
+	res.sendStatus(200);
+});
+
 
 //Pulls Feedback From Server
 app.post('/pullFeedback', upload.array(), function(req, res) {
@@ -53,6 +76,27 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
 
 	});
 });
+
+//Pulls Projects From Server
+app.post('/pullProjects', upload.array(), function(req, res) {
+	var connection_string = `
+		SELECT
+			id, title, votes, description
+		FROM 
+			projects`		
+
+	console.log(connection_string);
+	connection.query(connection_string, function(err, rows, fields) {
+
+	  if (err) throw err;
+	  else {
+	  	res.send(rows);
+	  } 
+
+	});
+});
+
+
 
 /*
 //Inserts a new user into the Database, fields (userID, email_address)
