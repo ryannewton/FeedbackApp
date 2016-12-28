@@ -24,8 +24,6 @@ const {
 } = ops;
 
 export default function feedback(state = [], action) {
-  console.log(state, action);
-
   switch (action.type) {
     case 'RECEIVED_FEEDBACK':
       return  ops.insert(0, action.feedback.filter((item) => {return item.text !== "Feedback Submitted!"}), []);

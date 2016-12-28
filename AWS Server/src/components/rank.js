@@ -20,7 +20,7 @@ export default class Rank extends React.Component {
   render() {
 
     let Rows = this.props.projects.sort(this.compareNumbers).map((project, index, array) => {
-      return <Project project={project} key={project.id} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} />
+      return <Project project={project} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.up_votes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} />
     });
 
     return (

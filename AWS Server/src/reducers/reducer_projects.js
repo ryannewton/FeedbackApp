@@ -24,8 +24,6 @@ const {
 } = ops;
 
 export default function projects(state = [], action) {
-  console.log(state, action);
-
   switch (action.type) {
     case 'REQUESTED_PROJECTS':
       return state;

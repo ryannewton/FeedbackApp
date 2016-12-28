@@ -33,8 +33,8 @@ export default class Nav extends Component {
 			    </div>
 			    <ul className="nav navbar-nav">
 			    	<li className={this.state.urlView} onClick={this.changeView.bind(this)} id={"URLNav"}><Link to="/">Rank Ideas</Link></li>
-			    	<li className={this.state.categoryView} onClick={this.changeView.bind(this)} id={"CategoryNav"}><Link to="/feedback">See Feedback</Link></li>
-			    	<li className={this.state.settingsView} onClick={this.changeView.bind(this)} id={"SettingsNav"}><Link to="/settings">Settings</Link></li>
+			    	{/*<li className={this.state.categoryView} onClick={this.changeView.bind(this)} id={"CategoryNav"}><Link to="/feedback">See Feedback</Link></li>*/}
+			    	{/*<li className={this.state.settingsView} onClick={this.changeView.bind(this)} id={"SettingsNav"}><Link to="/settings">Settings</Link></li>*/}
 			    </ul>
 			  </div>
 			</nav>

@@ -54,7 +54,6 @@ app.post('/deleteProject', upload.array(), function(req, res) {
 	res.sendStatus(200);
 });
 
-
 //Pulls Feedback From Server
 app.post('/pullFeedback', upload.array(), function(req, res) {
 	var connection_string = `
@@ -95,8 +94,6 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 
 	});
 });
-
-
 
 /*
 //Inserts a new user into the Database, fields (userID, email_address)

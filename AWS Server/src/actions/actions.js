@@ -3,6 +3,33 @@ import fetch from 'isomorphic-fetch'
 
 let actions = {
 	
+	setUpVotes(upVotes) {
+
+		return {
+			type: 'SET_UP_VOTES',
+			upVotes
+		}
+
+	},
+
+	addUpVote(upVote) {
+
+		return {
+			type: 'ADD_UP_VOTE',
+			upVote
+		}
+
+	},
+
+	removeUpVote(upVote) {
+
+		return {
+			type: 'REMOVE_UP_VOTE',
+			upVote
+		}
+
+	},
+
 	saveProjectChanges(project) {
 		
 		fetch(`/saveProjectChanges`, {
@@ -26,6 +53,7 @@ let actions = {
 	},
 
 	receivedIDForAddProject(id) {
+		console.log("ran");
 		return {
 			type: 'ADD_PROJECT',
 			id
@@ -33,7 +61,6 @@ let actions = {
 	},
 
 	addProject(receivedIDForAddProject) {		
-		
 		return function (dispatch) {
 	    return fetch(`/addProject`, {
 	    	method: 'POST',
@@ -43,15 +70,13 @@ let actions = {
 	      },
     	})
       .then(response => response.json())
-      .then(response => dispatch(receivedIDForAddProject(response.id)))
+      .then(response => receivedIDForAddProject(response.id))
       .catch(error => console.error(error));
-    }    
-    
+    }        
 	},
 
 	deleteProject(id) {
 
-		/*
 		fetch(`/deleteProject`, {
 	  	method: 'POST',
 	    headers: {
@@ -59,12 +84,11 @@ let actions = {
 	      'Content-Type': 'application/json',
 	    },
 	    body: JSON.stringify({
-	      project
+	      id
 	    })
     })
     .then(response => console.log(response))
     .catch(error => console.error(error));    
-		*/
 		
 		return {
 			type: 'DELETE_PROJECT',
@@ -82,7 +106,6 @@ let actions = {
 	},
 
 	receivedFeedback(feedback) {
-		console.log(feedback);
 		return {
 			type: 'RECEIVED_FEEDBACK',
 			feedback,			
@@ -120,7 +143,6 @@ let actions = {
 	},
 
 	receivedProjects(projects) {
-		console.log(projects);
 		return {
 			type: 'RECEIVED_PROJECTS',
 			projects,			

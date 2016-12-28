@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import Cookie from 'react-cookie';
 
 //Import Actions
 import Actions from '../actions/actions.js';
