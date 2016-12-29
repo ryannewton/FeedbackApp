@@ -20809,8 +20809,7 @@
 	  if (value == null) {
 	    return value === undefined ? undefinedTag : nullTag;
 	  }
-	  value = Object(value);
-	  return (symToStringTag && symToStringTag in value)
+	  return (symToStringTag && symToStringTag in Object(value))
 	    ? getRawTag(value)
 	    : objectToString(value);
 	}
@@ -44653,6 +44652,13 @@
 
 		    return isDayBlocked;
 		  }(),
+		  isDayHighlighted: function () {
+		    function isDayHighlighted() {
+		      return false;
+		    }
+
+		    return isDayHighlighted;
+		  }(),
 		  isOutsideRange: function () {
 		    function isOutsideRange(day) {
 		      return !(0, _isInclusivelyAfterDay2['default'])(day, (0, _moment2['default'])());
@@ -44862,6 +44868,7 @@
 
 		        var _props5 = this.props;
 		        var isDayBlocked = _props5.isDayBlocked;
+		        var isDayHighlighted = _props5.isDayHighlighted;
 		        var isOutsideRange = _props5.isOutsideRange;
 		        var numberOfMonths = _props5.numberOfMonths;
 		        var orientation = _props5.orientation;
@@ -44926,6 +44933,7 @@
 		          navNext: navNext,
 		          minimumNights: minimumNights,
 		          isOutsideRange: isOutsideRange,
+		          isDayHighlighted: isDayHighlighted,
 		          isDayBlocked: isDayBlocked,
 		          keepOpenOnDateSelect: keepOpenOnDateSelect
 		        }), withFullScreenPortal && _react2['default'].createElement('button', {
@@ -46638,8 +46646,9 @@
 	/******/ 	return __webpack_require__(0);
 	/******/ })
 	/************************************************************************/
-	/******/ ([
-	/* 0 */
+	/******/ ({
+
+	/***/ 0:
 	/***/ function(module, exports, __webpack_require__) {
 
 		var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
@@ -46661,10 +46670,6 @@
 		var _react = __webpack_require__(1);
 
 		var _react2 = _interopRequireDefault(_react);
-
-		var _reactDom = __webpack_require__(10);
-
-		var _reactDom2 = _interopRequireDefault(_reactDom);
 
 		var _classnames = __webpack_require__(5);
 
@@ -46779,10 +46784,13 @@
 		      function componentDidUpdate(prevProps) {
 		        var focused = this.props.focused;
 
-		        if (prevProps.focused !== focused && focused) {
-		          var startDateInput = _reactDom2['default'].findDOMNode(this.inputRef);
-		          startDateInput.focus();
-		          startDateInput.select();
+		        if (prevProps.focused === focused) return;
+
+		        if (focused) {
+		          this.inputRef.focus();
+		          this.inputRef.select();
+		        } else {
+		          this.inputRef.blur();
 		        }
 		      }
 
@@ -46862,7 +46870,6 @@
 		          onFocus: onFocus,
 		          placeholder: placeholder,
 		          autoComplete: 'off',
-		          maxLength: 10,
 		          disabled: disabled,
 		          readOnly: this.isTouchDevice,
 		          required: required
@@ -46888,41 +46895,29 @@
 		DateInput.defaultProps = defaultProps;
 
 	/***/ },
-	/* 1 */
+
+	/***/ 1:
 	/***/ function(module, exports) {
 
 		module.exports = __webpack_require__(1);
 
 	/***/ },
-	/* 2 */,
-	/* 3 */,
-	/* 4 */,
-	/* 5 */
+
+	/***/ 5:
 	/***/ function(module, exports) {
 
 		module.exports = __webpack_require__(377);
 
 	/***/ },
-	/* 6 */,
-	/* 7 */,
-	/* 8 */,
-	/* 9 */,
-	/* 10 */
-	/***/ function(module, exports) {
 
-		module.exports = __webpack_require__(158);
-
-	/***/ },
-	/* 11 */,
-	/* 12 */,
-	/* 13 */,
-	/* 14 */
+	/***/ 14:
 	/***/ function(module, exports) {
 
 		module.exports = __webpack_require__(379);
 
 	/***/ }
-	/******/ ]);
+
+	/******/ });
 
 /***/ },
 /* 389 */
@@ -47147,6 +47142,7 @@
 		  minimumNights: _react.PropTypes.number,
 		  isOutsideRange: _react.PropTypes.func,
 		  isDayBlocked: _react.PropTypes.func,
+		  isDayHighlighted: _react.PropTypes.func,
 
 		  // DayPicker props
 		  enableOutsideDays: _react.PropTypes.bool,
@@ -47200,6 +47196,11 @@
 		    function isDayBlocked() {}
 
 		    return isDayBlocked;
+		  }(),
+		  isDayHighlighted: function () {
+		    function isDayHighlighted() {}
+
+		    return isDayHighlighted;
 		  }(),
 
 		  // DayPicker props
@@ -47293,6 +47294,7 @@
 		    };
 
 		    _this.isTouchDevice = (0, _isTouchDevice2['default'])();
+		    _this.today = (0, _moment2['default'])();
 
 		    _this.onDayClick = _this.onDayClick.bind(_this);
 		    _this.onDayMouseEnter = _this.onDayMouseEnter.bind(_this);
@@ -47301,6 +47303,15 @@
 		  }
 
 		  _createClass(DayPickerRangeController, [{
+		    key: 'componentWillUpdate',
+		    value: function () {
+		      function componentWillUpdate() {
+		        this.today = (0, _moment2['default'])();
+		      }
+
+		      return componentWillUpdate;
+		    }()
+		  }, {
 		    key: 'onDayClick',
 		    value: function () {
 		      function onDayClick(day, modifiers, e) {
@@ -47488,6 +47499,15 @@
 		      return isBlocked;
 		    }()
 		  }, {
+		    key: 'isToday',
+		    value: function () {
+		      function isToday(day) {
+		        return (0, _isSameDay2['default'])(day, this.today);
+		      }
+
+		      return isToday;
+		    }()
+		  }, {
 		    key: 'render',
 		    value: function () {
 		      function render() {
@@ -47495,6 +47515,7 @@
 
 		        var _props8 = this.props;
 		        var isDayBlocked = _props8.isDayBlocked;
+		        var isDayHighlighted = _props8.isDayHighlighted;
 		        var isOutsideRange = _props8.isOutsideRange;
 		        var numberOfMonths = _props8.numberOfMonths;
 		        var orientation = _props8.orientation;
@@ -47510,6 +47531,13 @@
 		        var focusedInput = _props8.focusedInput;
 
 		        var modifiers = {
+		          today: function () {
+		            function today(day) {
+		              return _this2.isToday(day);
+		            }
+
+		            return today;
+		          }(),
 		          blocked: function () {
 		            function blocked(day) {
 		              return _this2.isBlocked(day);
@@ -47537,6 +47565,13 @@
 		            }
 
 		            return blockedMinimumNights;
+		          }(),
+		          'highlighted-calendar': function () {
+		            function highlightedCalendar(day) {
+		              return isDayHighlighted(day);
+		            }
+
+		            return highlightedCalendar;
 		          }(),
 		          valid: function () {
 		            function valid(day) {
@@ -49185,11 +49220,18 @@
 		    key: 'componentWillReceiveProps',
 		    value: function () {
 		      function componentWillReceiveProps(nextProps) {
-		        if (!this.hasSetInitialVisibleMonth && !nextProps.hidden) {
-		          this.hasSetInitialVisibleMonth = true;
-		          this.setState({
-		            currentMonth: nextProps.initialVisibleMonth()
-		          });
+		        if (!nextProps.hidden) {
+		          if (!this.hasSetInitialVisibleMonth) {
+		            this.hasSetInitialVisibleMonth = true;
+		            this.setState({
+		              currentMonth: nextProps.initialVisibleMonth()
+		            });
+		          }
+
+		          if (!this.dayPickerWidth && this.isHorizontal()) {
+		            this.initializeDayPickerWidth();
+		            this.adjustDayPickerHeight();
+		          }
 		        }
 		      }
 
@@ -49454,12 +49496,8 @@
 		    key: 'renderWeekHeader',
 		    value: function () {
 		      function renderWeekHeader(index) {
-		        var numberOfMonths = this.props.numberOfMonths;
-
-		        var widthPercentage = 100 / numberOfMonths;
 		        var horizontalStyle = {
-		          width: widthPercentage + '%',
-		          left: widthPercentage * index + '%'
+		          left: index * CALENDAR_MONTH_WIDTH
 		        };
 
 		        var style = this.isHorizontal() ? horizontalStyle : {};
@@ -51721,6 +51759,13 @@
 
 		    return isDayBlocked;
 		  }(),
+		  isDayHighlighted: function () {
+		    function isDayHighlighted() {
+		      return false;
+		    }
+
+		    return isDayHighlighted;
+		  }(),
 		  disabledDays: [],
 		  isOutsideRange: function () {
 		    function isOutsideRange(day) {
@@ -51783,6 +51828,8 @@
 		      hoverDate: null
 		    };
 
+		    _this.today = (0, _moment2['default'])();
+
 		    _this.onDayMouseEnter = _this.onDayMouseEnter.bind(_this);
 		    _this.onDayMouseLeave = _this.onDayMouseLeave.bind(_this);
 		    _this.onDayClick = _this.onDayClick.bind(_this);
@@ -51807,6 +51854,15 @@
 		      }
 
 		      return componentDidMount;
+		    }()
+		  }, {
+		    key: 'componentWillUpdate',
+		    value: function () {
+		      function componentWillUpdate() {
+		        this.today = (0, _moment2['default'])();
+		      }
+
+		      return componentWillUpdate;
 		    }()
 
 		    /* istanbul ignore next */
@@ -52035,6 +52091,15 @@
 		      return isSelected;
 		    }()
 		  }, {
+		    key: 'isToday',
+		    value: function () {
+		      function isToday(day) {
+		        return (0, _isSameDay2['default'])(day, this.today);
+		      }
+
+		      return isToday;
+		    }()
+		  }, {
 		    key: 'maybeRenderDayPickerWithPortal',
 		    value: function () {
 		      function maybeRenderDayPickerWithPortal() {
@@ -52060,6 +52125,7 @@
 
 		        var _props8 = this.props;
 		        var isDayBlocked = _props8.isDayBlocked;
+		        var isDayHighlighted = _props8.isDayHighlighted;
 		        var isOutsideRange = _props8.isOutsideRange;
 		        var enableOutsideDays = _props8.enableOutsideDays;
 		        var numberOfMonths = _props8.numberOfMonths;
@@ -52076,6 +52142,13 @@
 		        var dayPickerContainerStyles = this.state.dayPickerContainerStyles;
 
 		        var modifiers = {
+		          today: function () {
+		            function today(day) {
+		              return _this2.isToday(day);
+		            }
+
+		            return today;
+		          }(),
 		          blocked: function () {
 		            function blocked(day) {
 		              return _this2.isBlocked(day);
@@ -52096,6 +52169,13 @@
 		            }
 
 		            return blockedOutOfRange;
+		          }(),
+		          'highlighted-calendar': function () {
+		            function highlightedCalendar(day) {
+		              return isDayHighlighted(day);
+		            }
+
+		            return highlightedCalendar;
 		          }(),
 		          valid: function () {
 		            function valid(day) {
