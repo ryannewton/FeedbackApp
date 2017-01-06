@@ -20,11 +20,9 @@ connection.connect();
 
 app.use(express.static('public'));
 
-//Inserts a new Feedback Record in the Database, fields (userID, text, time_submitted)
 app.post('/addFeedback', upload.array(), function(req, res) {
-	
-	//INSERT TIMESEGMENT
-	connection.query("INSERT INTO feedback (text, time) VALUES ('" + req.body.text  + "', '" + req.body.time + "');", function(err) {
+
+	connection.query("INSERT INTO feedback (text, time, email) VALUES (?, ?, ?)", [req.body.text, req.body.time, req.body.email], function(err) {
 	  if (err) throw err;	  	 
 	});
 
@@ -41,6 +39,7 @@ app.post('/saveProjectChanges', upload.array(), function(req, res) {
 });
 
 app.post('/addProject', upload.array(), function(req, res) {
+
 	connection.query('INSERT INTO projects SET ?', {title: 'Blank Title', description: 'Blank Description', votes: 0}, function(err, result) {
 	  if (err) throw err;
 	  res.json({id: result.insertId});
@@ -48,14 +47,16 @@ app.post('/addProject', upload.array(), function(req, res) {
 });
 
 app.post('/deleteProject', upload.array(), function(req, res) {
+	
 	connection.query('DELETE FROM projects WHERE id = ?', [req.body.id], function(err, result) {
 	  if (err) throw err;
 	});
+
 	res.sendStatus(200);
 });
 
-//Pulls Feedback From Server
 app.post('/pullFeedback', upload.array(), function(req, res) {
+	
 	var connection_string = `
 		SELECT
 			text
@@ -63,51 +64,33 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
 			feedback		
 		WHERE 
 			time
-				BETWEEN '` + req.body.start_date + `' AND '` + req.body.end_date + `'`;
-
+				BETWEEN ? AND ?`;
 	console.log(connection_string);
-	connection.query(connection_string, function(err, rows, fields) {
 
+	connection.query(connection_string, [req.body.start_date, req.body.end_date], function(err, rows, fields) {
 	  if (err) throw err;
 	  else {
 	  	res.send(rows);
 	  } 
-
 	});
 });
 
-//Pulls Projects From Server
 app.post('/pullProjects', upload.array(), function(req, res) {
+	
 	var connection_string = `
 		SELECT
 			id, title, votes, description
 		FROM 
-			projects`		
-
+			projects`;
 	console.log(connection_string);
-	connection.query(connection_string, function(err, rows, fields) {
 
+	connection.query(connection_string, function(err, rows, fields) {
 	  if (err) throw err;
 	  else {
 	  	res.send(rows);
 	  } 
-
 	});
 });
-
-/*
-//Inserts a new user into the Database, fields (userID, email_address)
-app.get('/addUser', function(req, res) {
-
-	//INSERT TIMESEGMENT
-	connection.query("INSERT IGNORE INTO time_segments (url, datetime, userid, timespent) VALUES (" + encrypt(req.query.url, req.query.userid) + ", " + encrypt(req.query.datetime, req.query.userid) + ", " + encrypt(req.query.userid, req.query.userid) + ", " + encrypt(req.query.timespent, req.query.userid) + ");", function(err) {
-	  if (err) throw err;	  	 
-	});
-
-	res.header('Access-Control-Allow-Origin', '*');
-	res.sendStatus(200);
-});
-*/
 
 app.listen(8081, function () {
   console.log('Example app listening on port 8081!');

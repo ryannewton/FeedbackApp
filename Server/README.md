@@ -1,22 +1,6 @@
-#<Productivity App>
-<Productivity App> is a Chrome extension which shows the user where they spend time on the internet
+#<Feedback App>
+<Feedback App> is a Mobile Application which allows students to easily send complaints and suggestions to school administrators.
 
-##Tech Stack
-* React with Redux
-* Node
-* Express
+We follow up with students to get clarification on their feedback (if needed), aggregate similar compliants, and enable students to 'up-vote' the problems which are most important to them. This provides administrators with a concise, prioritized list of problems, with all the information they need to address them.
 
-##How to Use
-
---Gathering Data - Local Version
-1. Run 'webpack' in cmdr
-2. In Your Browser, go to `chrome://extensions/`
-	* Select `Developer mode` in the upper right corner
-	* Click `Load unpacked extension...`, select the project (downloaded from Git Hub). An icon should appear in the Chrome toolbar (to the right of the Address Bar)
-
---Displaying Data - AWS Version
-1. In Your Browser, in the Chrome toolbar, click the ProductivityApp icon to view your dashboard
-
---Displaying Data - Local Version
-1. Run `webpack` in cmdr
-2. In Your Browser, go to `http://localhost:8081/`
+We then follow up with administrators as they work on the highest priority areas and provide updates to students so they know their voices are being heard.

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import Main from './src/components/main.js';
+import Index from './src/components/index.js';
 
 import {
-  AppRegistry,
+	AppRegistry,
 } from 'react-native';
 
-export default class StanfordFeedbackApp extends Component {
-  constructor(props) {
-    super(props);
-  }
+export default class FeedbackApp extends Component {
+	constructor(props) {
+		super(props);
+	}
 
-  render() {
-    return (
-      <Main />
-    );
-  }
+	render() {
+		return (
+			<Index />
+		);
+	}
 }
 
-AppRegistry.registerComponent('StanfordFeedbackApp', () => StanfordFeedbackApp);
+AppRegistry.registerComponent('StanfordFeedbackApp', () => FeedbackApp);
