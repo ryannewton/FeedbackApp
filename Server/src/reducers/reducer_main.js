@@ -1,5 +1,5 @@
 export default function main(state = {}, action) {
-  console.log(state, action);
+	console.log(action);
 
   switch (action.type) {
     case 'REQUESTED_FEEDBACK':

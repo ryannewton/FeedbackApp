@@ -8,12 +8,16 @@ import {
 	Button,
 	BackAndroid
 } from 'react-native';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
+//Import Actions
+import Actions from '../actions/actions.js';
 
 //Import components, functions, and styles
-import {createAppNavigationContainer} from '../Navigation/Navigation_Functions.js';
-import styles from '../../styles/styles_main.js';
+import styles from '../styles/styles_main.js';
 
-const Submitted = createAppNavigationContainer(class extends Component {
+class Submitted extends Component {
 	constructor(props: Object, context: any) {
 		super(props, context);
 
@@ -21,12 +25,6 @@ const Submitted = createAppNavigationContainer(class extends Component {
 			props.navigate({type: 'pop'});
 			return true;
 		});
-
-		this._popRoute = this._popRoute.bind(this);    
-	}
-
-	_popRoute(): void {
-		this.props.navigate({type: 'pop'});
 	}
 
 	render() {
@@ -36,13 +34,22 @@ const Submitted = createAppNavigationContainer(class extends Component {
 					You Submitted Feedback
 				</Text>
 				<Button
-					onPress={this._popRoute}
+					onPress={() => this.props.navigate({type: 'pop'})}
 					title="Submit More Feedback"
 					style={styles.button}
 				/>
 			</View>
 		);
 	}
-});
+}
 
-export default Submitted;
+function mapStateToProps(state) {
+	return state;
+}
+
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators(Actions, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Submitted);
+

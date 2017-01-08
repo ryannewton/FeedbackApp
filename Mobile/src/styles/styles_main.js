@@ -1,10 +1,9 @@
 'use strict';
 
-const ReactNative = require('react-native');
-
-const {
+import {
 	StyleSheet,
-} = ReactNative;
+	PixelRatio
+} from 'react-native';
 
 const styles = StyleSheet.create({
 	navigator: {
@@ -48,6 +47,33 @@ const styles = StyleSheet.create({
 	button: {
 		color: "#841584",
 	},
+	up_vote_button: {
+	},
+	row: {
+		padding: 15,
+		backgroundColor: 'white',
+		borderBottomWidth: 1 / PixelRatio.get(),
+		borderBottomColor: '#CDCDCD',
+	},
+	rowText: {
+		fontSize: 17,
+	},
+	buttonText: {
+		fontSize: 17,
+		fontWeight: '500',
+	},
+	project: {
+
+	},
+	buttonAlign: {
+		flexDirection: 'row',
+		justifyContent: 'flex-end'
+	},
+	low_weight: {
+		fontWeight: '300',
+		fontSize: 12,
+		textDecorationLine: 'underline',
+	}
 });
 
 export default styles;

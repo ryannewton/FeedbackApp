@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Main from './src/components/main.js';
+import Index from './src/containers/index.js';
 
 import {
 	AppRegistry,
@@ -12,7 +12,7 @@ export default class FeedbackApp extends Component {
 
 	render() {
 		return (
-			<Main />
+			<Index />
 		);
 	}
 }
