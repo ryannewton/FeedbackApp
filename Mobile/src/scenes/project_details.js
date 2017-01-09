@@ -34,10 +34,10 @@ class Project_Details extends Component {
 			return (
 				<View style={styles.project}>
 					<Text style={[styles.buttonText, styles.low_weight]}>
-						{this.props.item.votes} Votes: 
+						{this.props.scene.route.item.votes} Votes: 
 					</Text>
 					<Text style={styles.buttonText}>
-						{this.props.item.title}
+						{this.props.scene.route.item.title}
 					</Text>
 					<View style={styles.buttonAlign}>
 						<Button

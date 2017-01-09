@@ -71,10 +71,7 @@ async function load_email() {
 
 load_email();
 
-
-
-
-//store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects));
+store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects));
 
 //console.log("Cookie");
 //console.log(JSON.parse(localStorage.getItem('upVotes')) || [0]);

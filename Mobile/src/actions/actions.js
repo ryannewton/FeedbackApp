@@ -74,8 +74,8 @@ let actions = {
 	},
 
 	saveProjectChanges(project) {
-		
-		fetch(`/saveProjectChanges`, {
+				
+		fetch(`https://stanfordfeedback.com/saveProjectChanges`, {
 	  	method: 'POST',
 	    headers: {
 	      'Accept': 'application/json',
@@ -86,7 +86,7 @@ let actions = {
 	    })
     })
     .then(response => console.log(response))
-    .catch(error => console.error(error));    
+    .catch(error => console.error(error));    		
 
 		return {
 			type: 'SAVE_PROJECT_CHANGES',

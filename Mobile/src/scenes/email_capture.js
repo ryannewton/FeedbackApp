@@ -46,7 +46,7 @@ class Email_Capture extends Component {
 				<Button
 					onPress={() => {
 							this.props.save_email(this.state.email);
-							//this.props.submitFeedbackToServer(this.props.scene.route.text, this.state.email);
+							this.props.submitFeedbackToServer(this.props.scene.route.text, this.state.email);
 							this.props.navigate({type: 'pop-push', route: {key: 'Submitted', component: Submitted}});
 						}}	
 					title="Save Email and Submit Feedback"

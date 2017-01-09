@@ -12,7 +12,9 @@ export default function projects(state = [], action) {
       let index = state.findIndex((project) => {
         return project.id === action.project.id;
       });
-      return state.splice(index, 1, action.project);
+      let new_state = state.slice(0);
+      new_state.splice(index, 1, action.project);
+      return new_state;
       break;
     case 'ADD_PROJECT':
       return state.splice(state.length-1, 0, {id: action.id, title: "Blank Title", description: "Blank Description", votes: 0});

@@ -30,7 +30,7 @@ class Feedback extends Component {
 	submitFeedback() {
 		let route = {};
 		if (this.props.main.email !== "Please set your email") {
-			//this.props.submitFeedbackToServer(this.state.text, this.props.main.email);
+			this.props.submitFeedbackToServer(this.state.text, this.props.main.email);
 			route = {key: 'Submitted', component: Submitted};
 		}
 		else {

@@ -22,9 +22,13 @@ class Projects extends Component {
 		super(props);
 	}
 
+	compareNumbers(a, b) {
+    return b.votes - a.votes;
+  }
+
 	render() {
-		const projects = this.props.projects.map((item, index) => {
-			return <Project item={item} key={index} />
+		const projects = this.props.projects.sort(this.compareNumbers).map((item, index) => {
+			return <Project item={item} key={index} navigate={this.props.navigate} saveProjectChanges={this.props.saveProjectChanges} />
 		});
 
 		return (
