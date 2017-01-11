@@ -7,6 +7,10 @@ body {
     width: 100%;
 }
 
+#rank_header {
+    margin-bottom: 20px;
+}
+
 .btn-project {
 	padding: 1px 6px;
 	height: 100%;

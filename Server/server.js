@@ -79,7 +79,7 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 	
 	var connection_string = `
 		SELECT
-			id, title, votes, description
+			id, title, votes, description, department
 		FROM 
 			projects`;
 	console.log(connection_string);

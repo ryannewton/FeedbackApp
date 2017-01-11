@@ -31,12 +31,10 @@ export default function up_votes(state = [], action) {
     	break;
     case 'ADD_UP_VOTE':
       localStorage.setItem('upVotes', JSON.stringify(ops.push(action.upVote, state)));
-      console.log(JSON.stringify(ops.push(action.upVote, state)));
       return ops.push(action.upVote, state);
       break;
     case 'REMOVE_UP_VOTE':
       localStorage.setItem('upVotes', JSON.stringify((ops.filter((id) => { return id !== action.upVote; }, state))));
-      console.log(JSON.stringify(ops.filter((id) => { return id !== action.upVote; }, state)));
       return ops.filter((id) => { return id !== action.upVote; }, state);
       break;   
     default:

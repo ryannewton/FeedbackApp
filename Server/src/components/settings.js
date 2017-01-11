@@ -15,8 +15,6 @@ export default class Settings extends React.Component {
   }
 
   onDatesChange({ startDate, endDate }) {  	
-  	console.log(startDate.format('YYYY-MM-DD'));
-  	console.log(endDate.format('YYYY-MM-DD'));
     this.props.updateDates(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'), this.props.requestedFeedback, this.props.receivedFeedback);
   }
 

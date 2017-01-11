@@ -17,4 +17,4 @@ export default class FeedbackApp extends Component {
 	}
 }
 
-AppRegistry.registerComponent('FeedbackApp', () => FeedbackApp);
+AppRegistry.registerComponent('StanfordFeedbackApp', () => FeedbackApp);

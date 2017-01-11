@@ -42,7 +42,6 @@ let actions = {
 	      project
 	    })
     })
-    .then(response => console.log(response))
     .catch(error => console.error(error));    
 
 		return {
@@ -53,7 +52,6 @@ let actions = {
 	},
 
 	receivedIDForAddProject(id) {
-		console.log("ran");
 		return {
 			type: 'ADD_PROJECT',
 			id
@@ -87,7 +85,6 @@ let actions = {
 	      id
 	    })
     })
-    .then(response => console.log(response))
     .catch(error => console.error(error));    
 		
 		return {

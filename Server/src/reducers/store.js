@@ -27,14 +27,11 @@ let store = createStore(
 	applyMiddleware(thunkMiddleware)
 );
 
-let time = new Date(Date.now());
-let timeISO = time.toISOString();
-let timeSliced = timeISO.slice(0, 10);
+let time = new Date(Date.now()).toISOString().slice(0, 10);
+store.dispatch(Actions.updateDates('2016-11-01', time, Actions.requestedFeedback, Actions.receivedFeedback));
 
-store.dispatch(Actions.updateDates('2016-11-01', timeSliced, Actions.requestedFeedback, Actions.receivedFeedback));
 store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects));
-console.log("Cookie");
-console.log(JSON.parse(localStorage.getItem('upVotes')) || [0]);
+
 store.dispatch(Actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
 
 export const history = syncHistoryWithStore(browserHistory, store);
