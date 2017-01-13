@@ -42780,24 +42780,6 @@
 									{ to: "/" },
 									"New Projects"
 								)
-							),
-							_react2.default.createElement(
-								"li",
-								{ className: this.state.categoryView, onClick: this.changeView.bind(this), id: "CategoryNav" },
-								_react2.default.createElement(
-									_reactRouter.Link,
-									{ to: "/feedback" },
-									"Projects Being Worked On"
-								)
-							),
-							_react2.default.createElement(
-								"li",
-								{ className: this.state.settingsView, onClick: this.changeView.bind(this), id: "SettingsNav" },
-								_react2.default.createElement(
-									_reactRouter.Link,
-									{ to: "/settings" },
-									"Completed Projects"
-								)
 							)
 						)
 					)
