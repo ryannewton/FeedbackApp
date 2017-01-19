@@ -2,7 +2,7 @@
 
 //Import libaries
 import React, { Component, PropTypes } from 'react';
-import { Text, View, Button,	TextInput, AsyncStorage } from 'react-native';
+import { Text, View, TextInput, AsyncStorage } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -10,9 +10,11 @@ import { bindActionCreators } from 'redux';
 import Actions from '../actions/actions.js';
 
 //Import components, functions, and styles
+import Button from '../components/button.js';
 import Submitted from './submitted.js';
 import Email_Capture from './email_capture.js';
 import styles from '../styles/styles_main.js'; 
+
 
 class Feedback extends Component {
 
@@ -21,7 +23,8 @@ class Feedback extends Component {
 
 		this.state = {      
 			height: 0,
-			text: "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response."
+			text: "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.",
+			anonymous: false
 		};
 
 		this.submitFeedback = this.submitFeedback.bind(this);
@@ -64,9 +67,15 @@ class Feedback extends Component {
 				/>
 				<Button
 					onPress={this.submitFeedback}          
-					title="Submit Feedback"
-					style={styles.button}
+					text="Submit Feedback"					
 				/>
+				{/*
+				<CheckBox
+					text="Submit Anonymously"
+					onCheck={() => this.setState({anonymous: !this.state.anonymous})},
+					checked={this.state.anonymous}
+				/>
+			*/}
 			</View>
 		);
 	}
