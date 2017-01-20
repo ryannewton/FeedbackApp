@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import {
 	Text,
 	View,
-	Button,
 	TextInput,
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -15,6 +14,7 @@ import { bindActionCreators } from 'redux';
 import Actions from '../actions/actions.js';
 
 //Import componenets, functions, and styles
+import Button from '../components/button.js';
 import Submitted from './submitted.js';
 import styles from '../styles/styles_main.js'; 
 
@@ -33,21 +33,24 @@ class Settings extends Component {
 				<Text style={styles.welcome}>
 					Settings
 				</Text>
-				<Text>
+				<Text style={[styles.normal_margin,{fontWeight: 'bold'}]}>
 					Edit your email address
 				</Text>
 				<TextInput
-					multiline={false}
+					style={[styles.normal_margin, styles.text_input]}
+					multiline={true}
 					onChangeText={(email) => {
 						this.setState({email});
 					}}
 					value={this.state.email}
 				/>
-				<Button
-					onPress={() => this.props.save_email(this.state.email)}          
-					title="Save"
-					style={styles.button}
-				/>
+				<View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
+					<Button
+						onPress={() => this.props.save_email(this.state.email)}          
+						text="Save"
+						style={{marginTop: 10, width: 300}}
+					/>
+				</View>
 			</View>
 		);
 	}

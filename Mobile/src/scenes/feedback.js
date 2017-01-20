@@ -32,7 +32,7 @@ class Feedback extends Component {
 
 	submitFeedback() {
 		let route = {};
-		if (this.props.main.email !== "Please set your email") {
+		if (this.props.main.email !== "Enter email here") {
 			this.props.submitFeedbackToServer(this.state.text, this.props.main.email);
 			route = {key: 'Submitted', component: Submitted};
 		}
@@ -45,7 +45,7 @@ class Feedback extends Component {
 
 	render() {
 		return (
-			<View style={styles.container}>
+			<View style={[styles.container,{flex: 1, flexDirection: 'column', alignItems: 'center'}]}>
 				<Text style={styles.welcome}>
 					Thanks for providing feedback!
 				</Text>
@@ -62,12 +62,13 @@ class Feedback extends Component {
 					onContentSizeChange={(event) => {
 						this.setState({height: event.nativeEvent.contentSize.height});
 					}}
-					style={styles.feedback_input}
+					style={[styles.feedback_input]}
 					value={this.state.text}
 				/>
 				<Button
-					onPress={this.submitFeedback}          
-					text="Submit Feedback"					
+					onPress={this.submitFeedback}       
+					text="Submit Feedback"
+					style={{marginTop: 10, width: 300}}
 				/>
 				{/*
 				<CheckBox

@@ -61,7 +61,7 @@ let store = createStore(
 
 async function load_email() {
 	try {
-		const email = await AsyncStorage.getItem('@FeedbackApp:email') || "Please set your email";
+		const email = await AsyncStorage.getItem('@FeedbackApp:email') || "Enter email here";
 		console.log(email);
 		store.dispatch(Actions.save_email(email));
 	} catch (error) {

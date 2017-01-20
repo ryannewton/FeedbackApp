@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import {
 	Text,
 	View,
-	Button,
 	BackAndroid
 } from 'react-native';
 import { connect } from 'react-redux';
@@ -15,6 +14,7 @@ import { bindActionCreators } from 'redux';
 import Actions from '../actions/actions.js';
 
 //Import components, functions, and styles
+import Button from '../components/button.js';
 import styles from '../styles/styles_main.js';
 
 class Submitted extends Component {
@@ -33,11 +33,13 @@ class Submitted extends Component {
 				<Text style={styles.welcome}>
 					You Submitted Feedback
 				</Text>
-				<Button
-					onPress={() => this.props.navigate({type: 'pop'})}
-					title="Submit More Feedback"
-					style={styles.button}
-				/>
+				<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+					<Button
+						onPress={() => this.props.navigate({type: 'pop'})}
+						text="Submit More Feedback"
+						style={{height: 200, width: 300}}
+					/>
+				</View>
 			</View>
 		);
 	}

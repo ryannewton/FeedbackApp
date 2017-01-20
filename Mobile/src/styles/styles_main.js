@@ -2,26 +2,64 @@
 
 import {
 	StyleSheet,
-	PixelRatio
+	PixelRatio,
+	Platform
 } from 'react-native';
 
 const styles = StyleSheet.create({
+	
+
+	//Feedback Scene
+	container: {
+		flex: 1,
+		backgroundColor: '#F7FCFF',
+	},
+	welcome: {
+		fontSize: 18,
+		textAlign: 'center',
+		marginTop: (Platform.OS === 'ios') ? 20 : 10,
+		marginBottom: 6		
+	},
+	feedback_input: {
+		height: 200,
+		borderColor: 'gray',
+		borderWidth: 1,
+		margin: 3,
+		padding: 3,
+		backgroundColor: '#FFFFFF'
+	},
+
+	//Settings Scene
+	normal_margin: {
+		marginTop: 5,
+		marginBottom: 5,
+		marginLeft: 5
+	},
+	text_input: {
+		borderBottomColor: 'gray',
+		borderBottomWidth: 1,
+		height: 24
+	},
+
+	//Navigation	
 	navigator: {
 		flex: 1,
 	},
 	navigatorCardStack: {
-		flex: 20,
+		flex: 12,
 	},
 	tabs: {
 		flex: 1,
 		flexDirection: 'row',
-		height: 100
 	},
 	tab: {
-		alignItems: 'center',
-		backgroundColor: '#fff',
 		flex: 1,
+		alignItems: 'center',
+		backgroundColor: '#E0E0E0',
 		justifyContent: 'center',
+		borderLeftWidth: 0.5,
+		borderRightWidth: 0.5,
+		borderColor: '#FFFFFF'
 	},
 	tabText: {
 		color: '#222',
@@ -30,23 +68,8 @@ const styles = StyleSheet.create({
 	tabSelected: {
 		color: 'blue',
 	},
-	container: {
-		flex: 1,
-		backgroundColor: '#F5FCFF',
-	},
-	welcome: {
-		fontSize: 18,
-		textAlign: 'center',
-		margin: 10,
-	},
-	feedback_input: {
-		height: 200,
-		borderColor: 'gray',
-		borderWidth: 1
-	},
-	button: {
-		color: "#841584",
-	},
+	
+	//Projects
 	up_vote_button: {
 	},
 	row: {

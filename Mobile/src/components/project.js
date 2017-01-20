@@ -4,12 +4,12 @@
 import React, { Component } from 'react';
 import {
 	View,
-	Button,
 	Text,
 	TouchableHighlight,
 } from 'react-native';
 
 //Import componenets, functions, and styles
+import Button from '../components/button.js';
 import Project_Details from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
 
@@ -47,8 +47,7 @@ class Project extends Component {
 						<View style={styles.buttonAlign}>
 							<Button
 								onPress={this.up_vote}          
-								title="Up Vote!"
-								style={styles.up_vote_button}
+								text="Up Vote!"
 							/>
 						</View>
 					</View>

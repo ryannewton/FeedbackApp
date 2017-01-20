@@ -19,6 +19,7 @@ export default class Button extends React.Component {
       onPress,
       text,
       disabled,
+      style
     } = this.props;
     const buttonStyles = [styles.button];
     const textStyles = [styles.text];
@@ -39,7 +40,8 @@ export default class Button extends React.Component {
     return (
       <Touchable
         disabled={disabled}
-        onPress={onPress}>
+        onPress={onPress}
+        style={style}>
         <View style={buttonStyles}>
           <Text style={textStyles}>{formattedTitle}</Text>
         </View>
@@ -51,6 +53,13 @@ export default class Button extends React.Component {
 const styles = StyleSheet.create({
   button: Platform.select({
     ios: {
+      shadowColor: "#000000",
+      shadowOpacity: 0.8,
+      shadowRadius: 2,
+      shadowOffset: {
+        height: 1,
+        width: 0
+      },
     	backgroundColor: '#2196F3',
     	borderRadius: 2,
     },
