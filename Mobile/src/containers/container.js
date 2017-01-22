@@ -1,22 +1,19 @@
 'use strict';
 
 //Import libaries
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { NavigationExperimental, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-
-const {
-	CardStack: NavigationCardStack,
-	PropTypes: NavigationPropTypes,
-} = NavigationExperimental;
 
 //Import Actions
 import Actions from '../actions/actions.js';
 
 //Import components, functions, and styles
-import Nav_Tabs from '../components/nav_tabs.js';
+import NavTabs from '../components/nav_tabs.js';
 import styles from '../styles/styles_main.js';
+
+const { CardStack: NavigationCardStack } = NavigationExperimental;
 
 class Container extends Component {
 
@@ -25,12 +22,13 @@ class Container extends Component {
 
 		this._renderScene = this._renderScene.bind(this);
 
-		console.log("Container Props");
+		console.log('Container Props');
 		console.log(props);
 	}
 
 	render(): React.Element {
-		const {tabs} = this.props.navigation;
+		// Add comment describing these variables
+		const { tabs } = this.props.navigation;
 		const tabKey = tabs.routes[tabs.index].key;
 		const scenes = this.props.navigation[tabKey];
 
@@ -42,7 +40,7 @@ class Container extends Component {
 					renderScene={this._renderScene}
 					style={styles.navigatorCardStack}					
 				/>
-				<Nav_Tabs
+				<NavTabs
 					navigationState={tabs}
 					navigate={this.props.navigate}
 				/>
@@ -51,7 +49,7 @@ class Container extends Component {
 	}
 
 	_renderScene(sceneProps: Object): React.Element {
-		return React.createElement(sceneProps.scene.route.component, {...sceneProps} );
+		return React.createElement(sceneProps.scene.route.component, { ...sceneProps });
 	}
 }
 
