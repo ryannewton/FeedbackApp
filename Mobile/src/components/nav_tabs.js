@@ -1,14 +1,14 @@
 'use strict';
 
 //Import Libaries
-import React, {Component} from 'react';
-import {View} from 'react-native';
+import React, { Component } from 'react';
+import { View } from 'react-native';
 
 //Import components, functions, and styles
-import Nav_Tab from './nav_tab.js';
+import NavTab from './nav_tab.js';
 import styles from '../styles/styles_main.js';
 
-class Nav_Tabs extends Component {
+class NavTabs extends Component {
 
 	constructor(props, context) {
 		super(props, context);
@@ -24,7 +24,7 @@ class Nav_Tabs extends Component {
 
 	_renderTab(route, index) {
 		return (
-			<Nav_Tab
+			<NavTab
 				key={route.key}
 				route={route}
 				selected={this.props.navigationState.index === index}
@@ -34,4 +34,4 @@ class Nav_Tabs extends Component {
 	}
 }
 
-export default Nav_Tabs;
+export default NavTabs;
