@@ -40,9 +40,8 @@ export default class Button extends React.Component {
     return (
       <Touchable
         disabled={disabled}
-        onPress={onPress}
-        style={style}>
-        <View style={buttonStyles}>
+        onPress={onPress}>
+        <View style={[buttonStyles, style]}>
           <Text style={textStyles}>{formattedTitle}</Text>
         </View>
       </Touchable>

@@ -4,14 +4,15 @@ import React from 'react';
 //import components
 import Project from './project.js';
 
-export default class Rank extends React.Component {
+export default class Projects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      department: "All Departments"
+      department: "All Departments",
     }
     this.filter_by_department = this.filter_by_department.bind(this);
     this.department_changed = this.department_changed.bind(this);
+    this.filter_by_stage = this.filter_by_stage.bind(this);
   }
 
   addProject() {
@@ -35,9 +36,14 @@ export default class Rank extends React.Component {
     }
   }
 
+  filter_by_stage(project) {
+    let target_stage = this.props.params.stage || 'new';
+    return target_stage === project.stage;
+  }
+
   render() {
 
-    let Rows = this.props.projects.filter(this.filter_by_department).sort(this.compareNumbers).map((project, index, array) => {
+    let Rows = this.props.projects.filter(this.filter_by_stage).filter(this.filter_by_department).sort(this.compareNumbers).map((project, index, array) => {
       return <Project project={project} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.up_votes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} />
     });
 

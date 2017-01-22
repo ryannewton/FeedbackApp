@@ -62,7 +62,7 @@ class Feedback extends Component {
 					onContentSizeChange={(event) => {
 						this.setState({height: event.nativeEvent.contentSize.height});
 					}}
-					style={[styles.feedback_input]}
+					style={styles.feedback_input}
 					value={this.state.text}
 				/>
 				<Button

@@ -7,7 +7,7 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 //Import Views
 import Container from './components/container.js';
 import Feedback from './components/feedback.js';
-import Rank from './components/rank.js';
+import Projects from './components/projects.js';
 import Settings from './components/settings.js';
 
 //Import Store
@@ -17,7 +17,8 @@ ReactDOM.render(
 	<Provider store={store}>
 		<Router history={hashHistory}>
       <Route path='/' component={Container}>
-        <IndexRoute component={Rank} />
+        <IndexRoute component={Projects} />
+        <Route path='/projects/:stage' component={Projects} />
         <Route path='/feedback' component={Feedback} />
         <Route path='/settings' component={Settings} />
       </Route>

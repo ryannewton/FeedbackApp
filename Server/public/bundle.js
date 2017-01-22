@@ -66,9 +66,9 @@
 
 	var _feedback2 = _interopRequireDefault(_feedback);
 
-	var _rank = __webpack_require__(435);
+	var _projects = __webpack_require__(435);
 
-	var _rank2 = _interopRequireDefault(_rank);
+	var _projects2 = _interopRequireDefault(_projects);
 
 	var _settings = __webpack_require__(437);
 
@@ -89,7 +89,8 @@
 	    _react2.default.createElement(
 	      _reactRouter.Route,
 	      { path: '/', component: _container2.default },
-	      _react2.default.createElement(_reactRouter.IndexRoute, { component: _rank2.default }),
+	      _react2.default.createElement(_reactRouter.IndexRoute, { component: _projects2.default }),
+	      _react2.default.createElement(_reactRouter.Route, { path: '/projects/:stage', component: _projects2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/feedback', component: _feedback2.default }),
 	      _react2.default.createElement(_reactRouter.Route, { path: '/settings', component: _settings2.default })
 	    )
@@ -42743,11 +42744,11 @@
 		_createClass(Nav, [{
 			key: "changeView",
 			value: function changeView(event) {
-				if (event.target.text === "Rank Ideas" || event.target.text === "Stanford Feedback Portal") {
+				if (event.target.text === "New Projects" || event.target.text === "Stanford Feedback Portal") {
 					this.setState({ urlView: "active", categoryView: "", settingsView: "" });
-				} else if (event.target.text === "See Feedback") {
+				} else if (event.target.text === "Projects Being Worked On") {
 					this.setState({ urlView: "", categoryView: "active", settingsView: "" });
-				} else if (event.target.text === "Settings") {
+				} else if (event.target.text === "Completed Projects") {
 					this.setState({ urlView: "", categoryView: "", settingsView: "active" });
 				}
 			}
@@ -42779,6 +42780,24 @@
 									_reactRouter.Link,
 									{ to: "/" },
 									"New Projects"
+								)
+							),
+							_react2.default.createElement(
+								"li",
+								{ className: this.state.categoryView, onClick: this.changeView.bind(this), id: "CategoryNav" },
+								_react2.default.createElement(
+									_reactRouter.Link,
+									{ to: "/projects/inprocess" },
+									"Projects Being Worked On"
+								)
+							),
+							_react2.default.createElement(
+								"li",
+								{ className: this.state.settingsView, onClick: this.changeView.bind(this), id: "SettingsNav" },
+								_react2.default.createElement(
+									_reactRouter.Link,
+									{ to: "/projects/complete" },
+									"Completed Projects"
 								)
 							)
 						)
@@ -52476,6 +52495,7 @@
 	    };
 	    _this.filter_by_department = _this.filter_by_department.bind(_this);
 	    _this.department_changed = _this.department_changed.bind(_this);
+	    _this.filter_by_stage = _this.filter_by_stage.bind(_this);
 	    return _this;
 	  }
 
@@ -52505,11 +52525,17 @@
 	      }
 	    }
 	  }, {
+	    key: 'filter_by_stage',
+	    value: function filter_by_stage(project) {
+	      var target_stage = this.props.params.stage || 'new';
+	      return target_stage === project.stage;
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var _this2 = this;
 
-	      var Rows = this.props.projects.filter(this.filter_by_department).sort(this.compareNumbers).map(function (project, index, array) {
+	      var Rows = this.props.projects.filter(this.filter_by_stage).filter(this.filter_by_department).sort(this.compareNumbers).map(function (project, index, array) {
 	        return _react2.default.createElement(_project2.default, { project: project, key: project.id, removeUpVote: _this2.props.removeUpVote, addUpVote: _this2.props.addUpVote, upVotes: _this2.props.up_votes, deleteProject: _this2.props.deleteProject.bind(_this2), saveProjectChanges: _this2.props.saveProjectChanges.bind(_this2) });
 	      });
 

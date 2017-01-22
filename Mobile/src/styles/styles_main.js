@@ -25,8 +25,14 @@ const styles = StyleSheet.create({
 		borderColor: 'gray',
 		borderWidth: 1,
 		margin: 3,
-		padding: 3,
-		backgroundColor: '#FFFFFF'
+		paddingLeft: 3,
+		paddingRight: 3,		
+		backgroundColor: '#FFFFFF',
+		...Platform.select({
+			android: {
+				width: 340
+			},
+		}),
 	},
 
 	//Settings Scene
@@ -36,9 +42,16 @@ const styles = StyleSheet.create({
 		marginLeft: 5
 	},
 	text_input: {
-		borderBottomColor: 'gray',
-		borderBottomWidth: 1,
-		height: 24
+		...Platform.select({
+			ios: {
+				height: 24,
+				borderBottomColor: 'gray',
+				borderBottomWidth: 1,
+			},
+			android: {
+				height: 40,
+			},
+		}),
 	},
 
 	//Navigation	
