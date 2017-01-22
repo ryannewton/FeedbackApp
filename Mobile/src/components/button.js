@@ -1,46 +1,22 @@
 'use strict';
 
-import React from 'React';
-import {
-	Text,
-	Platform,
-	StyleSheet,
-	TouchableNativeFeedback,
-	TouchableOpacity,
-	View
-} from 'react-native';
+// Import libraries
+import React, { Component } from 'react';
+import { Text, Platform, TouchableNativeFeedback, TouchableOpacity,	View } from 'react-native';
 
-export default class Button extends React.Component {
+//Import components, functions, and styles
+import styles from '../styles/button_styles';
+
+export default class Button extends Component {
 
   render() {
-    const {
-      backgroundColor,
-      textColor,
-      onPress,
-      text,
-      disabled,
-      style
-    } = this.props;
-    const buttonStyles = [styles.button];
-    const textStyles = [styles.text];
     const Touchable = Platform.OS === 'android' ? TouchableNativeFeedback : TouchableOpacity;
-    if (textColor) {
-    	textStyles.push({color: textColor});
-    }
-    if (backgroundColor) {
-    	buttonStyles.push({backgroundColor});
-    }
-    if (disabled) {
-      buttonStyles.push(styles.buttonDisabled);
-      textStyles.push(styles.textDisabled);
-    }
-
+    const { onPress, text, disabled, style } = this.props;
+    const { buttonStyles, textStyles } = updateStylesFromProps(this.props);
     const formattedTitle = text.toUpperCase();
 
     return (
-      <Touchable
-        disabled={disabled}
-        onPress={onPress}>
+      <Touchable disabled={disabled} onPress={onPress}>
         <View style={[buttonStyles, style]}>
           <Text style={textStyles}>{formattedTitle}</Text>
         </View>
@@ -49,54 +25,21 @@ export default class Button extends React.Component {
   }
 }
 
-const styles = StyleSheet.create({
-  button: Platform.select({
-    ios: {
-      shadowColor: "#000000",
-      shadowOpacity: 0.8,
-      shadowRadius: 2,
-      shadowOffset: {
-        height: 1,
-        width: 0
-      },
-    	backgroundColor: '#2196F3',
-    	borderRadius: 2,
-    },
-    android: {
-      elevation: 4,
-      backgroundColor: '#2196F3',
-      borderRadius: 2,
-    },
-  }),
-  text: Platform.select({
-    ios: {
-      textAlign: 'center',
-      color: 'white',      
-      padding: 8,
-      fontWeight: '500',
-    },
-    android: {
-      textAlign: 'center',
-      color: 'white',
-      padding: 8,
-      fontWeight: '500',
-    },
-  }),
-  buttonDisabled: Platform.select({
-    ios: {
-    	backgroundColor: '#dfdfdf',
-    },
-    android: {
-      elevation: 0,
-      backgroundColor: '#dfdfdf',
-    }
-  }),
-  textDisabled: Platform.select({
-    ios: {
-      color: '#a1a1a1',
-    },
-    android: {
-      color: '#a1a1a1',
-    }
-  }),
-});
+// Adds styling passed in as props
+function updateStylesFromProps(props) {
+  const { backgroundColor, textColor, disabled } = props;
+  const { buttonStyles, textStyles, buttonDisabled, textDisabled } = styles;
+
+  if (textColor) {
+    textStyles.push({ color: textColor });
+  }
+  if (backgroundColor) {
+    buttonStyles.push({ backgroundColor });
+  }
+  if (disabled) {
+    buttonStyles.push(buttonDisabled);
+    textStyles.push(textDisabled);
+  }
+
+  return styles;
+}
