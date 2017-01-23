@@ -79,7 +79,7 @@ export default class Project extends React.Component {
 		let my_project_additions = this.props.project_additions.filter((project_addition) => {
 			return project_addition.project_id === project.id
 		}).map((project_addition) => {
-			return <Project_Addition project_addition={project_addition} key={project_addition.id} />
+			return <Project_Addition project_addition={project_addition} deleteProjectAddition={this.props.deleteProjectAddition} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges} key={project_addition.id} />
 		});
 
 		let edit_button = (<button type="button" className="btn btn-primary pull-left" onClick={this.switchEditMode.bind(this)}>Edit</button>);

@@ -3,13 +3,13 @@ import fetch from 'isomorphic-fetch'
 
 let actions = {
 	
+	//Handle up voting
 	setUpVotes(upVotes) {
 
 		return {
 			type: 'SET_UP_VOTES',
 			upVotes
 		}
-
 	},
 
 	addUpVote(upVote) {
@@ -18,7 +18,6 @@ let actions = {
 			type: 'ADD_UP_VOTE',
 			upVote
 		}
-
 	},
 
 	removeUpVote(upVote) {
@@ -27,9 +26,10 @@ let actions = {
 			type: 'REMOVE_UP_VOTE',
 			upVote
 		}
-
 	},
 
+
+	//Handle project, project_addition changes
 	saveProjectChanges(project) {
 		
 		fetch(`/saveProjectChanges`, {
@@ -48,9 +48,30 @@ let actions = {
 			type: 'SAVE_PROJECT_CHANGES',
 			project
 		}
-
 	},
 
+	saveProjectAdditionChanges(project_addition) {
+		
+		fetch(`/saveProjectAdditionChanges`, {
+	  	method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify({
+	      project_addition
+	    })
+    })
+    .catch(error => console.error(error));    
+
+		return {
+			type: 'SAVE_PROJECT_ADDITION_CHANGES',
+			project_addition
+		}
+	},
+
+
+	//Add Project, Solution
 	receivedIDForAddProject(id) {
 		return {
 			type: 'ADD_PROJECT',
@@ -73,6 +94,34 @@ let actions = {
     }        
 	},
 
+	receivedIDForAddSolution(project_addition_id, project_id) {
+		return {
+			type: 'ADD_SOLUTION',
+			project_addition_id,
+			project_id
+		}
+	},
+
+	addSolution(project_id, receivedIDForAddSolution) {		
+		return function (dispatch) {
+	    return fetch(`/addSolution`, {
+	    	method: 'POST',
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	      },
+  	    body: JSON.stringify({
+		      project_id
+		    })
+    	})
+      .then(response => response.json())
+      .then(response => receivedIDForAddSolution(response.id, project_id))
+      .catch(error => console.error(error));
+    }        
+	},
+
+
+	//Delete Project, Project_Addition
 	deleteProject(id) {
 
 		fetch(`/deleteProject`, {
@@ -93,6 +142,28 @@ let actions = {
 		}
 	},
 
+	deleteProjectAddition(id) {
+
+		fetch(`/deleteProjectAddition`, {
+	  	method: 'POST',
+	    headers: {
+	      'Accept': 'application/json',
+	      'Content-Type': 'application/json',
+	    },
+	    body: JSON.stringify({
+	      id
+	    })
+    })
+    .catch(error => console.error(error));    
+		
+		return {
+			type: 'DELETE_PROJECT_ADDITION',
+			id
+		}
+	},
+
+
+	//Pull Feedback, Projects, Project Additions, Discussions
 	requestedFeedback(start_date, end_date) {
 		return {
 			type: 'REQUESTED_FEEDBACK',
@@ -178,32 +249,6 @@ let actions = {
 			type: 'RECEIVED_PROJECT_ADDITIONS',
 			project_additions,			
 		}
-	},
-
-	receivedIDForAddSolution(project_addition_id, project_id) {
-		return {
-			type: 'ADD_SOLUTION',
-			project_addition_id,
-			project_id
-		}
-	},
-
-	addSolution(project_id, receivedIDForAddSolution) {		
-		return function (dispatch) {
-	    return fetch(`/addSolution`, {
-	    	method: 'POST',
-	      headers: {
-	        'Accept': 'application/json',
-	        'Content-Type': 'application/json',
-	      },
-  	    body: JSON.stringify({
-		      project_id
-		    })
-    	})
-      .then(response => response.json())
-      .then(response => receivedIDForAddSolution(response.id, project_id))
-      .catch(error => console.error(error));
-    }        
 	},
 
 	pullProjectAdditions(requestedProjectAdditions, receivedProjectAdditions) {

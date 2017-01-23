@@ -27180,6 +27180,8 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var actions = {
+
+		//Handle up voting
 		setUpVotes: function setUpVotes(upVotes) {
 
 			return {
@@ -27201,6 +27203,9 @@
 				upVote: upVote
 			};
 		},
+
+
+		//Handle project, project_addition changes
 		saveProjectChanges: function saveProjectChanges(project) {
 
 			(0, _isomorphicFetch2.default)('/saveProjectChanges', {
@@ -27221,6 +27226,29 @@
 				project: project
 			};
 		},
+		saveProjectAdditionChanges: function saveProjectAdditionChanges(project_addition) {
+
+			(0, _isomorphicFetch2.default)('/saveProjectAdditionChanges', {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					project_addition: project_addition
+				})
+			}).catch(function (error) {
+				return console.error(error);
+			});
+
+			return {
+				type: 'SAVE_PROJECT_ADDITION_CHANGES',
+				project_addition: project_addition
+			};
+		},
+
+
+		//Add Project, Solution
 		receivedIDForAddProject: function receivedIDForAddProject(id) {
 			return {
 				type: 'ADD_PROJECT',
@@ -27244,6 +27272,36 @@
 				});
 			};
 		},
+		receivedIDForAddSolution: function receivedIDForAddSolution(project_addition_id, project_id) {
+			return {
+				type: 'ADD_SOLUTION',
+				project_addition_id: project_addition_id,
+				project_id: project_id
+			};
+		},
+		addSolution: function addSolution(project_id, receivedIDForAddSolution) {
+			return function (dispatch) {
+				return (0, _isomorphicFetch2.default)('/addSolution', {
+					method: 'POST',
+					headers: {
+						'Accept': 'application/json',
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						project_id: project_id
+					})
+				}).then(function (response) {
+					return response.json();
+				}).then(function (response) {
+					return receivedIDForAddSolution(response.id, project_id);
+				}).catch(function (error) {
+					return console.error(error);
+				});
+			};
+		},
+
+
+		//Delete Project, Project_Addition
 		deleteProject: function deleteProject(id) {
 
 			(0, _isomorphicFetch2.default)('/deleteProject', {
@@ -27264,6 +27322,29 @@
 				id: id
 			};
 		},
+		deleteProjectAddition: function deleteProjectAddition(id) {
+
+			(0, _isomorphicFetch2.default)('/deleteProjectAddition', {
+				method: 'POST',
+				headers: {
+					'Accept': 'application/json',
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify({
+					id: id
+				})
+			}).catch(function (error) {
+				return console.error(error);
+			});
+
+			return {
+				type: 'DELETE_PROJECT_ADDITION',
+				id: id
+			};
+		},
+
+
+		//Pull Feedback, Projects, Project Additions, Discussions
 		requestedFeedback: function requestedFeedback(start_date, end_date) {
 			return {
 				type: 'REQUESTED_FEEDBACK',
@@ -27345,33 +27426,6 @@
 			return {
 				type: 'RECEIVED_PROJECT_ADDITIONS',
 				project_additions: project_additions
-			};
-		},
-		receivedIDForAddSolution: function receivedIDForAddSolution(project_addition_id, project_id) {
-			return {
-				type: 'ADD_SOLUTION',
-				project_addition_id: project_addition_id,
-				project_id: project_id
-			};
-		},
-		addSolution: function addSolution(project_id, receivedIDForAddSolution) {
-			return function (dispatch) {
-				return (0, _isomorphicFetch2.default)('/addSolution', {
-					method: 'POST',
-					headers: {
-						'Accept': 'application/json',
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						project_id: project_id
-					})
-				}).then(function (response) {
-					return response.json();
-				}).then(function (response) {
-					return receivedIDForAddSolution(response.id, project_id);
-				}).catch(function (error) {
-					return console.error(error);
-				});
 			};
 		},
 		pullProjectAdditions: function pullProjectAdditions(requestedProjectAdditions, receivedProjectAdditions) {
@@ -52629,7 +52683,7 @@
 	      var _this2 = this;
 
 	      var Rows = this.props.projects.filter(this.filter_by_stage).filter(this.filter_by_department).sort(this.compareNumbers).map(function (project, index, array) {
-	        return _react2.default.createElement(_project2.default, { project: project, project_additions: _this2.props.project_additions, key: project.id, removeUpVote: _this2.props.removeUpVote, addUpVote: _this2.props.addUpVote, upVotes: _this2.props.up_votes, deleteProject: _this2.props.deleteProject.bind(_this2), saveProjectChanges: _this2.props.saveProjectChanges.bind(_this2), receivedIDForAddSolution: _this2.props.receivedIDForAddSolution.bind(_this2), addSolution: _this2.props.addSolution.bind(_this2) });
+	        return _react2.default.createElement(_project2.default, { project: project, project_additions: _this2.props.project_additions, key: project.id, removeUpVote: _this2.props.removeUpVote, addUpVote: _this2.props.addUpVote, upVotes: _this2.props.up_votes, deleteProject: _this2.props.deleteProject.bind(_this2), saveProjectChanges: _this2.props.saveProjectChanges.bind(_this2), receivedIDForAddSolution: _this2.props.receivedIDForAddSolution.bind(_this2), addSolution: _this2.props.addSolution.bind(_this2), deleteProjectAddition: _this2.props.deleteProjectAddition.bind(_this2), saveProjectAdditionChanges: _this2.props.saveProjectAdditionChanges.bind(_this2) });
 	      });
 
 	      return _react2.default.createElement(
@@ -52823,6 +52877,8 @@
 		}, {
 			key: 'render',
 			value: function render() {
+				var _this2 = this;
+
 				var project = this.state.project;
 				var up_voted = this.props.upVotes.indexOf(this.props.project.id) !== -1;
 				var title = _react2.default.createElement(
@@ -52871,7 +52927,7 @@
 				var my_project_additions = this.props.project_additions.filter(function (project_addition) {
 					return project_addition.project_id === project.id;
 				}).map(function (project_addition) {
-					return _react2.default.createElement(_project_addition2.default, { project_addition: project_addition, key: project_addition.id });
+					return _react2.default.createElement(_project_addition2.default, { project_addition: project_addition, deleteProjectAddition: _this2.props.deleteProjectAddition, saveProjectAdditionChanges: _this2.props.saveProjectAdditionChanges, key: project_addition.id });
 				});
 
 				var edit_button = _react2.default.createElement(
@@ -52981,12 +53037,79 @@
 	  function Project(props) {
 	    _classCallCheck(this, Project);
 
-	    return _possibleConstructorReturn(this, (Project.__proto__ || Object.getPrototypeOf(Project)).call(this, props));
+	    var _this = _possibleConstructorReturn(this, (Project.__proto__ || Object.getPrototypeOf(Project)).call(this, props));
+
+	    _this.state = {
+	      edit_mode: false,
+	      project_addition: props.project_addition
+	    };
+	    return _this;
 	  }
 
 	  _createClass(Project, [{
+	    key: "switchEditMode",
+	    value: function switchEditMode(event) {
+	      if (this.state.edit_mode) {
+	        this.props.saveProjectAdditionChanges(this.state.project_addition);
+	      }
+	      this.setState({ edit_mode: !this.state.edit_mode });
+	    }
+	  }, {
+	    key: "titleChanged",
+	    value: function titleChanged(event) {
+	      var project_addition = this.state.project_addition;
+	      project_addition.title = event.target.value;
+	      this.setState({ project_addition: project_addition });
+	    }
+	  }, {
+	    key: "descriptionChanged",
+	    value: function descriptionChanged(event) {
+	      var project_addition = this.state.project_addition;
+	      project_addition.description = event.target.value;
+	      this.setState({ project_addition: project_addition });
+	    }
+	  }, {
+	    key: "deleteProjectAddition",
+	    value: function deleteProjectAddition(event) {
+	      this.props.deleteProjectAddition(this.state.project_addition.id);
+	    }
+	  }, {
 	    key: "render",
 	    value: function render() {
+
+	      var title = _react2.default.createElement(
+	        "a",
+	        { role: "button", "data-toggle": "collapse", href: "#project_addition" + this.state.project_addition.id },
+	        "Proposed Solution: ",
+	        this.state.project_addition.title
+	      );
+	      var description = _react2.default.createElement(
+	        "span",
+	        { style: { width: "100%", whiteSpace: 'pre-wrap' } },
+	        this.state.project_addition.description
+	      );
+
+	      if (this.state.edit_mode) {
+	        title = _react2.default.createElement("input", { onChange: this.titleChanged.bind(this), type: "text", style: { width: "75%" }, value: this.state.project_addition.title });
+	        description = _react2.default.createElement("textarea", { onChange: this.descriptionChanged.bind(this), style: { width: "100%" }, value: this.state.project_addition.description });
+	      }
+
+	      var edit_button = _react2.default.createElement(
+	        "button",
+	        { type: "button", className: "btn btn-primary pull-left", onClick: this.switchEditMode.bind(this) },
+	        "Edit"
+	      );
+	      var save_button = _react2.default.createElement(
+	        "button",
+	        { type: "button", className: "btn btn-success pull-left", onClick: this.switchEditMode.bind(this) },
+	        "Save"
+	      );
+	      var delete_button = _react2.default.createElement(
+	        "button",
+	        { type: "button", className: "btn btn-danger pull-right", onClick: this.deleteProjectAddition.bind(this) },
+	        "Delete"
+	      );
+	      //let add_solution = (<button type="button" className="btn btn-primary pull-right" onClick={this.addSolution.bind(this)}>Add Solution</button>);
 
 	      return _react2.default.createElement(
 	        "div",
@@ -52997,22 +53120,23 @@
 	          _react2.default.createElement(
 	            "h4",
 	            { className: "panel-title", style: { color: '#3c763d' } },
-	            _react2.default.createElement(
-	              "a",
-	              { role: "button", "data-toggle": "collapse", href: "#project_addition" + this.props.project_addition.id },
-	              "Proposed Solution: ",
-	              this.props.project_addition.title
-	            ),
-	            _react2.default.createElement("a", { role: "button", "data-toggle": "collapse", href: "#project_addition" + this.props.project_addition.id, className: "glyphicon glyphicon-menu-down pull-right" })
+	            title,
+	            _react2.default.createElement("a", { role: "button", "data-toggle": "collapse", href: "#project_addition" + this.state.project_addition.id, className: "glyphicon glyphicon-menu-down pull-right" })
 	          )
 	        ),
 	        _react2.default.createElement(
 	          "div",
-	          { id: "project_addition" + this.props.project_addition.id, className: "panel-collapse collapse", role: "tabpanel" },
+	          { id: "project_addition" + this.state.project_addition.id, className: "panel-collapse collapse", role: "tabpanel" },
 	          _react2.default.createElement(
 	            "div",
-	            { className: "panel-body" },
-	            this.props.project_addition.description
+	            { className: "panel-body clearfix" },
+	            _react2.default.createElement(
+	              "div",
+	              null,
+	              description
+	            ),
+	            this.state.edit_mode ? delete_button : null,
+	            this.state.edit_mode ? save_button : edit_button
 	          )
 	        )
 	      );
@@ -56779,13 +56903,13 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case 'REQUESTED_PROJECT_ADDTIONS':
+	    case 'REQUESTED_PROJECT_ADDITIONS':
 	      return state;
 	      break;
 	    case 'RECEIVED_PROJECT_ADDITIONS':
 	      return _immutableOps2.default.insert(0, action.project_additions, []);
 	      break;
-	    case 'SAVE_PROJECT_ADDTION_CHANGES':
+	    case 'SAVE_PROJECT_ADDITION_CHANGES':
 	      var index = state.findIndex(function (project_addition) {
 	        return project_addition.id === action.project_addition.id;
 	      });
@@ -56794,7 +56918,7 @@
 	    case 'ADD_SOLUTION':
 	      return _immutableOps2.default.push({ id: action.project_addition_id, type: 'solution', votes_for: 0, votes_against: 0, title: 'Title Here', description: 'Description Here', project_id: action.project_id }, state);
 	      break;
-	    case 'DELETE_PROJECT_ADDTION':
+	    case 'DELETE_PROJECT_ADDITION':
 	      return _immutableOps2.default.filter(function (project_addition) {
 	        return project_addition.id !== action.id;
 	      }, state);

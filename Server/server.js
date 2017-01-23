@@ -20,18 +20,10 @@ connection.connect();
 
 app.use(express.static('public'));
 
+//Add Feedback, Projects, Solutions
 app.post('/addFeedback', upload.array(), function(req, res) {
 
 	connection.query("INSERT INTO feedback (text, time, email) VALUES (?, ?, ?)", [req.body.text, req.body.time, req.body.email], function(err) {
-	  if (err) throw err;	  	 
-	});
-
-	res.sendStatus(200);	
-});
-
-app.post('/saveProjectChanges', upload.array(), function(req, res) {
-	
-	connection.query("UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], function(err) {
 	  if (err) throw err;	  	 
 	});
 
@@ -54,6 +46,27 @@ app.post('/addSolution', upload.array(), function(req, res) {
 	});
 });
 
+
+//Save Project, Project_Addition Changes
+app.post('/saveProjectChanges', upload.array(), function(req, res) {
+	
+	connection.query("UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], function(err) {
+	  if (err) throw err;	  	 
+	});
+
+	res.sendStatus(200);	
+});
+
+app.post('/saveProjectAdditionChanges', upload.array(), function(req, res) {
+	connection.query("UPDATE project_additions SET votes_for = ?, votes_against = ?, title = ?, description = ? WHERE id= ?", [req.body.project_addition.votes_for, req.body.project_addition.votes_against, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
+	  if (err) throw err;	  	 
+	});
+
+	res.sendStatus(200);	
+});
+
+
+//Delete Projects, Project_Additions
 app.post('/deleteProject', upload.array(), function(req, res) {
 	
 	connection.query('DELETE FROM projects WHERE id = ?', [req.body.id], function(err, result) {
@@ -63,6 +76,16 @@ app.post('/deleteProject', upload.array(), function(req, res) {
 	res.sendStatus(200);
 });
 
+app.post('/deleteProjectAddition', upload.array(), function(req, res) {
+	
+	connection.query('DELETE FROM project_additions WHERE id = ?', [req.body.id], function(err, result) {
+	  if (err) throw err;
+	});
+
+	res.sendStatus(200);
+});
+
+//Pull Feedback, Projects, Project Additions, Discussion Posts
 app.post('/pullFeedback', upload.array(), function(req, res) {
 	
 	var connection_string = `
