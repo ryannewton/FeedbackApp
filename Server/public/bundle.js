@@ -53096,7 +53096,7 @@
 
 	      var edit_button = _react2.default.createElement(
 	        "button",
-	        { type: "button", className: "btn btn-primary pull-left", onClick: this.switchEditMode.bind(this) },
+	        { type: "button", className: "btn btn-primary pull-right", onClick: this.switchEditMode.bind(this) },
 	        "Edit"
 	      );
 	      var save_button = _react2.default.createElement(
@@ -56795,7 +56795,7 @@
 	      return _immutableOps2.default.splice(index, 1, action.project, state);
 	      break;
 	    case 'ADD_PROJECT':
-	      return _immutableOps2.default.push({ id: action.id, title: "Blank Title", description: "Blank Description", votes: 0 }, state);
+	      return _immutableOps2.default.push({ id: action.id, title: "Blank Title", description: "Blank Description", "department": 'TBD', stage: 'new', votes: 0 }, state);
 	      break;
 	    case 'DELETE_PROJECT':
 	      return _immutableOps2.default.filter(function (project) {
