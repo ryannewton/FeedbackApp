@@ -18,6 +18,8 @@ const INITIAL_STATE = {
 	},
 	feedback: [],
 	projects: [],	
+	project_additions: [],
+	discussion_posts: [],
 	up_votes: [],
 };
 
@@ -30,7 +32,7 @@ let store = createStore(
 let time = new Date(Date.now()).toISOString().slice(0, 10);
 store.dispatch(Actions.updateDates('2016-11-01', time, Actions.requestedFeedback, Actions.receivedFeedback));
 
-store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects));
+store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects, Actions.pullProjectAdditions, Actions.requestedProjectAdditions, Actions.receivedProjectAdditions, Actions.pullDiscussionPosts, Actions.requestedDiscussionPosts, Actions.receivedDiscussionPosts));
 
 store.dispatch(Actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
 

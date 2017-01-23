@@ -44,7 +44,7 @@ export default class Projects extends React.Component {
   render() {
 
     let Rows = this.props.projects.filter(this.filter_by_stage).filter(this.filter_by_department).sort(this.compareNumbers).map((project, index, array) => {
-      return <Project project={project} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.up_votes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} />
+      return <Project project={project} project_additions={this.props.project_additions} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.up_votes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} receivedIDForAddSolution={this.props.receivedIDForAddSolution.bind(this)} addSolution={this.props.addSolution.bind(this)} deleteProjectAddition={this.props.deleteProjectAddition.bind(this)} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges.bind(this)} />
     });
 
     return (

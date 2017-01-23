@@ -20,6 +20,7 @@ connection.connect();
 
 app.use(express.static('public'));
 
+//Add Feedback, Projects, Solutions
 app.post('/addFeedback', upload.array(), function(req, res) {
 
 	connection.query("INSERT INTO feedback (text, time, email) VALUES (?, ?, ?)", [req.body.text, req.body.time, req.body.email], function(err) {
@@ -29,6 +30,24 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 	res.sendStatus(200);	
 });
 
+app.post('/addProject', upload.array(), function(req, res) {
+
+	connection.query('INSERT INTO projects SET ?', {title: 'Blank Title', description: 'Blank Description', votes: 0, stage: 'new'}, function(err, result) {
+	  if (err) throw err;
+	  res.json({id: result.insertId});
+	});
+});
+
+app.post('/addSolution', upload.array(), function(req, res) {
+
+	connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes_for: 0, votes_against: 0, title: 'Title Here', description: 'Description Here', project_id: req.body.project_id}, function(err, result) {
+	  if (err) throw err;
+	  res.json({id: result.insertId});
+	});
+});
+
+
+//Save Project, Project_Addition Changes
 app.post('/saveProjectChanges', upload.array(), function(req, res) {
 	
 	connection.query("UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], function(err) {
@@ -38,14 +57,16 @@ app.post('/saveProjectChanges', upload.array(), function(req, res) {
 	res.sendStatus(200);	
 });
 
-app.post('/addProject', upload.array(), function(req, res) {
-
-	connection.query('INSERT INTO projects SET ?', {title: 'Blank Title', description: 'Blank Description', votes: 0}, function(err, result) {
-	  if (err) throw err;
-	  res.json({id: result.insertId});
+app.post('/saveProjectAdditionChanges', upload.array(), function(req, res) {
+	connection.query("UPDATE project_additions SET votes_for = ?, votes_against = ?, title = ?, description = ? WHERE id= ?", [req.body.project_addition.votes_for, req.body.project_addition.votes_against, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
+	  if (err) throw err;	  	 
 	});
+
+	res.sendStatus(200);	
 });
 
+
+//Delete Projects, Project_Additions
 app.post('/deleteProject', upload.array(), function(req, res) {
 	
 	connection.query('DELETE FROM projects WHERE id = ?', [req.body.id], function(err, result) {
@@ -55,6 +76,16 @@ app.post('/deleteProject', upload.array(), function(req, res) {
 	res.sendStatus(200);
 });
 
+app.post('/deleteProjectAddition', upload.array(), function(req, res) {
+	
+	connection.query('DELETE FROM project_additions WHERE id = ?', [req.body.id], function(err, result) {
+	  if (err) throw err;
+	});
+
+	res.sendStatus(200);
+});
+
+//Pull Feedback, Projects, Project Additions, Discussion Posts
 app.post('/pullFeedback', upload.array(), function(req, res) {
 	
 	var connection_string = `
@@ -82,6 +113,40 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 			id, title, votes, description, department, stage
 		FROM 
 			projects`;
+	console.log(connection_string);
+
+	connection.query(connection_string, function(err, rows, fields) {
+	  if (err) throw err;
+	  else {
+	  	res.send(rows);
+	  } 
+	});
+});
+
+app.post('/pullProjectAdditions', upload.array(), function(req, res) {
+	
+	var connection_string = `
+		SELECT
+			id, type, votes_for, votes_against, title, description, project_id
+		FROM 
+			project_additions`;
+	console.log(connection_string);
+
+	connection.query(connection_string, function(err, rows, fields) {
+	  if (err) throw err;
+	  else {
+	  	res.send(rows);
+	  } 
+	});
+});
+
+app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
+	
+	var connection_string = `
+		SELECT
+			id, point, counter_point, project_addition_id
+		FROM 
+			discussion_posts`;
 	console.log(connection_string);
 
 	connection.query(connection_string, function(err, rows, fields) {
