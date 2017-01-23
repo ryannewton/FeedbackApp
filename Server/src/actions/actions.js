@@ -91,7 +91,6 @@ let actions = {
 			type: 'DELETE_PROJECT',
 			id
 		}
-
 	},
 
 	requestedFeedback(start_date, end_date) {
@@ -146,11 +145,13 @@ let actions = {
 		}
 	},
 
-	pullProjects(requestedProjects, receivedProjects) {
+	pullProjects(requestedProjects, receivedProjects, pullProjectAdditions, requestedProjectAdditions, receivedProjectAdditions, pullDiscussionPosts, requestedDiscussionPosts, receivedDiscussionPosts) {
 
 	  return function (dispatch) {
 
 	    dispatch(requestedProjects());
+	    dispatch(pullProjectAdditions(requestedProjectAdditions, receivedProjectAdditions));
+	    dispatch(pullDiscussionPosts(requestedDiscussionPosts, receivedDiscussionPosts));
 
 	    return fetch(`/pullProjects`, {
 	    	method: 'POST',
@@ -161,6 +162,98 @@ let actions = {
     	})
       .then(response => response.json() )
       .then(projects => dispatch(receivedProjects(projects)) )
+      .catch(error => console.error(error) );
+
+	  }
+	},
+
+	requestedProjectAdditions() {
+		return {
+			type: 'REQUESTED_PROJECT_ADDITIONS',
+		}
+	},
+
+	receivedProjectAdditions(project_additions) {
+		return {
+			type: 'RECEIVED_PROJECT_ADDITIONS',
+			project_additions,			
+		}
+	},
+
+	receivedIDForAddSolution(project_addition_id, project_id) {
+		return {
+			type: 'ADD_SOLUTION',
+			project_addition_id,
+			project_id
+		}
+	},
+
+	addSolution(project_id, receivedIDForAddSolution) {		
+		return function (dispatch) {
+	    return fetch(`/addSolution`, {
+	    	method: 'POST',
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	      },
+  	    body: JSON.stringify({
+		      project_id
+		    })
+    	})
+      .then(response => response.json())
+      .then(response => receivedIDForAddSolution(response.id, project_id))
+      .catch(error => console.error(error));
+    }        
+	},
+
+	pullProjectAdditions(requestedProjectAdditions, receivedProjectAdditions) {
+
+	  return function (dispatch) {
+
+	    dispatch(requestedProjectAdditions());
+
+	    return fetch(`/pullProjectAdditions`, {
+	    	method: 'POST',
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	      },
+    	})
+      .then(response => response.json() )
+      .then(project_additions => dispatch(receivedProjectAdditions(project_additions)) )
+      .catch(error => console.error(error) );
+
+	  }
+	},
+
+	requestedDiscussionPosts() {
+		return {
+			type: 'REQUESTED_DISCUSSION_POSTS',
+		}
+	},
+
+	receivedDiscussionPosts(discussion_posts) {
+		return {
+			type: 'RECEIVED_DISCUSSION_POSTS',
+			discussion_posts,			
+		}
+	},
+
+	pullDiscussionPosts(requestedDiscussionPosts, receivedDiscussionPosts) {
+
+	  return function (dispatch) {
+
+	    dispatch(requestedDiscussionPosts());
+
+	    return fetch(`/pullDiscussionPosts`, {
+	    	method: 'POST',
+	      headers: {
+	        'Accept': 'application/json',
+	        'Content-Type': 'application/json',
+	      },
+    	})
+      .then(response => response.json() )
+      .then(discussion_posts => dispatch(receivedDiscussionPosts(discussion_posts)) )
       .catch(error => console.error(error) );
 
 	  }

@@ -40,7 +40,15 @@ app.post('/saveProjectChanges', upload.array(), function(req, res) {
 
 app.post('/addProject', upload.array(), function(req, res) {
 
-	connection.query('INSERT INTO projects SET ?', {title: 'Blank Title', description: 'Blank Description', votes: 0}, function(err, result) {
+	connection.query('INSERT INTO projects SET ?', {title: 'Blank Title', description: 'Blank Description', votes: 0, stage: 'new'}, function(err, result) {
+	  if (err) throw err;
+	  res.json({id: result.insertId});
+	});
+});
+
+app.post('/addSolution', upload.array(), function(req, res) {
+
+	connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes_for: 0, votes_against: 0, title: 'Title Here', description: 'Description Here', project_id: req.body.project_id}, function(err, result) {
 	  if (err) throw err;
 	  res.json({id: result.insertId});
 	});
@@ -82,6 +90,40 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 			id, title, votes, description, department, stage
 		FROM 
 			projects`;
+	console.log(connection_string);
+
+	connection.query(connection_string, function(err, rows, fields) {
+	  if (err) throw err;
+	  else {
+	  	res.send(rows);
+	  } 
+	});
+});
+
+app.post('/pullProjectAdditions', upload.array(), function(req, res) {
+	
+	var connection_string = `
+		SELECT
+			id, type, votes_for, votes_against, title, description, project_id
+		FROM 
+			project_additions`;
+	console.log(connection_string);
+
+	connection.query(connection_string, function(err, rows, fields) {
+	  if (err) throw err;
+	  else {
+	  	res.send(rows);
+	  } 
+	});
+});
+
+app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
+	
+	var connection_string = `
+		SELECT
+			id, point, counter_point, project_addition_id
+		FROM 
+			discussion_posts`;
 	console.log(connection_string);
 
 	connection.query(connection_string, function(err, rows, fields) {
