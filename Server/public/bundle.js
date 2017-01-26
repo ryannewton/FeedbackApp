@@ -27207,7 +27207,6 @@
 
 		//Handle project, project_addition changes
 		saveProjectChanges: function saveProjectChanges(project) {
-
 			(0, _isomorphicFetch2.default)('/saveProjectChanges', {
 				method: 'POST',
 				headers: {
