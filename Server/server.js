@@ -27,6 +27,27 @@ connection.connect();
 
 app.use(express.static('public'));
 
+function sendEmail(to, from, subject_line, body_text) {
+	ses.sendEmail( { 
+		Source: from, 
+		Destination: { ToAddresses: to },
+		Message: {
+			Subject: {
+				Data: subject_line
+			},
+			Body: {
+				Text: {
+					Data: body_text
+				}
+			}
+		}
+	}
+	, function(err, data) {
+		if (err) console.log(err, err.stack);
+		else     console.log(data);
+	 });
+}
+
 //Add Feedback, Projects, Solutions
 app.post('/addFeedback', upload.array(), function(req, res) {
 
@@ -37,33 +58,22 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 	//Send Email
 	var to_emails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
 	var from_email = 'admin@stanfordfeedback.com';
-
-	ses.sendEmail( { 
-		Source: from_email, 
-		Destination: { ToAddresses: to_emails },
-		Message: {
-			Subject: {
-				Data: 'Email: ' + req.body.email
-			},
-			Body: {
-				Text: {
-					Data: 'Text: ' + req.body.text
-				}
-			}
-		}
-	}
-	, function(err, data) {
-		if (err) console.log(err, err.stack);
-		else     console.log(data);
-	 });
+	sendEmail(to_emails, from_email, "Feedback: " + req.body.text, "Email: " + req.body.email);
 
 	res.sendStatus(200);	
 });
 
 app.post('/addProject', upload.array(), function(req, res) {
 
-	connection.query('INSERT INTO projects SET ?', {title: 'Blank Title', description: 'Blank Description', votes: 0, stage: 'new'}, function(err, result) {
+	var title = (req.body.feedback) ? req.body.feedback.text : "Blank Title";
+
+	connection.query('INSERT INTO projects SET ?', {title, description: 'Blank Description', votes: 0, stage: 'new'}, function(err, result) {
 		if (err) throw err;
+		if (req.body.feedback) {
+			connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], function(err) {
+				if (err) throw err;
+			});
+		}
 		res.json({id: result.insertId});
 	});
 });
@@ -120,7 +130,7 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
 	
 	var connection_string = `
 		SELECT
-			text
+			*
 		FROM 
 			feedback		
 		WHERE 

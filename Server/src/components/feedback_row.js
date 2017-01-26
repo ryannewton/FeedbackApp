@@ -1,11 +1,18 @@
 import React from 'react';
-import Autocomplete from 'react-autocomplete';
+//import Autocomplete from 'react-autocomplete';
 
 export default class Feedback_Row extends React.Component {
   constructor(props) {
     super(props);
   }
 
+  createProjectFromFeedback() {
+    //call create project
+    this.props.addProject(this.props.receivedIDForAddProject, this.props.feedback)
+    //need to also update feedback's project ID
+  }
+
+  /*
   shouldItemRender(category, searchTerm) {
     return (category.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
   }
@@ -16,6 +23,7 @@ export default class Feedback_Row extends React.Component {
       b.name.toLowerCase().indexOf(searchTerm.toLowerCase()) ? 1 : -1
     )
   }
+  */
 
   render() {
 
@@ -40,7 +48,10 @@ export default class Feedback_Row extends React.Component {
     return (
       <tr>
         <td>{this.props.feedback.text}</td>
+        <td>{this.props.feedback.project_id}</td>
         <td>
+          <button type="button" className="btn btn-primary" onClick={this.createProjectFromFeedback.bind(this)}>Create Project</button>
+          {/*
           <Autocomplete
           value={this.props.department}           
           items={[
@@ -60,6 +71,7 @@ export default class Feedback_Row extends React.Component {
               {item.name}
             </div>
           )} />
+        */}
         </td>
       </tr>
     );

@@ -38,7 +38,10 @@ export default function projects(state = [], action) {
       return ops.splice(index, 1, action.project, state);
       break;
     case 'ADD_PROJECT':
-      return ops.push({id: action.id, title: "Blank Title", description: "Blank Description", "department": 'TBD', stage: 'new', votes: 0}, state);
+      console.log("Reducer");
+      console.log(action.feedback);
+      let title = (action.feedback) ? action.feedback.text : "Blank Title";
+      return ops.push({id: action.id, title, description: "Blank Description", "department": 'TBD', stage: 'new', votes: 0}, state);
       break;
     case 'DELETE_PROJECT':
       return ops.filter((project) => { return project.id !== action.id; }, state);

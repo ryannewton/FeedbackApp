@@ -71,24 +71,32 @@ let actions = {
 
 
 	//Add Project, Solution
-	receivedIDForAddProject(id) {
+	receivedIDForAddProject(id, feedback) {
+		console.log("2nd Action " + feedback);
 		return {
 			type: 'ADD_PROJECT',
-			id
+			id,
+			feedback
 		}
 	},
 
-	addProject(receivedIDForAddProject) {		
+	addProject(receivedIDForAddProject, feedback) {		
+		console.log("1st Action " + feedback);
+
 		return function (dispatch) {
+
 	    return fetch(`/addProject`, {
 	    	method: 'POST',
 	      headers: {
 	        'Accept': 'application/json',
 	        'Content-Type': 'application/json',
 	      },
+  	    body: JSON.stringify({
+		      feedback
+		    })
     	})
       .then(response => response.json())
-      .then(response => receivedIDForAddProject(response.id))
+      .then(response => receivedIDForAddProject(response.id, feedback))
       .catch(error => console.error(error));
     }        
 	},
