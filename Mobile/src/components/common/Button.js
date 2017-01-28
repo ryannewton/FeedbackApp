@@ -3,8 +3,9 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ onPress, children }) => {
-	const { textStyle, buttonStyle } = styles;
+const Button = ({ onPress, children, style }) => {
+	const buttonStyle = { ...defaultStyles.buttonStyle, ...style };
+	const { textStyle } = defaultStyles;
 
 	return (
 		<TouchableOpacity onPress={onPress} style={buttonStyle}>
@@ -15,7 +16,7 @@ const Button = ({ onPress, children }) => {
 	);
 };
 
-const styles = {
+const defaultStyles = {
 	textStyle: {
 		alignSelf: 'center',
 		color: '#007aff',
