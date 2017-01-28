@@ -39,7 +39,7 @@ class Project_Details extends Component {
 					<Text style={styles.buttonText}>
 						{this.props.scene.route.item.title}
 					</Text>
-					<View style={styles.buttonAlign}>
+					<View>
 						<Button
 							onPress={this.up_vote}          
 							title="Up Vote!"
