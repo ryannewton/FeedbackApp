@@ -23,8 +23,8 @@ class Projects extends Component {
 	}
 
 	compareNumbers(a, b) {
-    return b.votes - a.votes;
-  }
+		return b.votes - a.votes;
+	}
 
 	render() {
 		const projects = this.props.projects.sort(this.compareNumbers).map((item, index) => {

@@ -78,4 +78,3 @@ store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedP
 //store.dispatch(Actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
 
 export default store;
-

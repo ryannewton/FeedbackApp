@@ -21,8 +21,8 @@ class Submitted extends Component {
 	constructor(props: Object, context: any) {
 		super(props, context);
 
-		BackAndroid.addEventListener('hardwareBackPress', function() {
-			props.navigate({type: 'pop'});
+		BackAndroid.addEventListener('hardwareBackPress', () => {
+			props.navigate({ type: 'pop' });
 			return true;
 		});
 	}
@@ -33,11 +33,11 @@ class Submitted extends Component {
 				<Text style={styles.welcome}>
 					You Submitted Feedback
 				</Text>
-				<View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+				<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
 					<Button
-						onPress={() => this.props.navigate({type: 'pop'})}
+						onPress={() => this.props.navigate({ type: 'pop' })}
 						text="Submit More Feedback"
-						style={{height: 200, width: 300}}
+						style={{ height: 200, width: 300 }}
 					/>
 				</View>
 			</View>
@@ -54,4 +54,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Submitted);
-

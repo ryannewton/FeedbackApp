@@ -23,7 +23,7 @@ class Feedback extends Component {
 
 		this.state = {      
 			height: 0,
-			text: "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.",
+			text: 'Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.',
 			anonymous: false
 		};
 
@@ -32,35 +32,34 @@ class Feedback extends Component {
 
 	submitFeedback() {
 		let route = {};
-		if (this.props.main.email !== "Enter email here") {
+		if (this.props.main.email !== 'Enter email here') {
 			this.props.submitFeedbackToServer(this.state.text, this.props.main.email);
-			route = {key: 'Submitted', component: Submitted};
+			route = { key: 'Submitted', component: Submitted };
+		} else {
+			route = { key: 'Email_Capture', text: this.state.text, component: Email_Capture };
 		}
-		else {
-			route = {key: 'Email_Capture', text: this.state.text, component: Email_Capture};
-		}
-		this.setState({text: "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response."});
-		this.props.navigate({type: 'push', route});
+		this.setState({ text: 'Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.' });
+		this.props.navigate({ type: 'push', route });
 	}	
 
 	render() {
 		return (
-			<View style={[styles.container,{flex: 1, flexDirection: 'column', alignItems: 'center'}]}>
+			<View style={[styles.container, { flex: 1, flexDirection: 'column', alignItems: 'center' }]}>
 				<Text style={styles.welcome}>
 					Thanks for providing feedback!
 				</Text>
 				<TextInput
 					multiline={true}
 					onChangeText={(text) => {
-						this.setState({text});
+						this.setState({ text });
 					}}
 					onFocus={() => {
-						if (this.state.text === "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.") {
-							this.setState({text: ""});
+						if (this.state.text === 'Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.') {
+							this.setState({ text: '' });
 						}
 					}}
 					onContentSizeChange={(event) => {
-						this.setState({height: event.nativeEvent.contentSize.height});
+						this.setState({ height: event.nativeEvent.contentSize.height });
 					}}
 					style={styles.feedback_input}
 					value={this.state.text}
@@ -68,7 +67,7 @@ class Feedback extends Component {
 				<Button
 					onPress={this.submitFeedback}       
 					text="Submit Feedback"
-					style={{marginTop: 10, width: 300}}
+					style={{ marginTop: 10, width: 300 }}
 				/>
 				{/*
 				<CheckBox
@@ -91,5 +90,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
-
-

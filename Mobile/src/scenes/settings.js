@@ -24,7 +24,7 @@ class Settings extends Component {
 
 		this.state = {
 			email: props.main.email
-		}
+		};
 	}
 
 	render() {
@@ -33,22 +33,22 @@ class Settings extends Component {
 				<Text style={styles.welcome}>
 					Settings
 				</Text>
-				<Text style={[styles.normal_margin,{fontWeight: 'bold'}]}>
+				<Text style={[styles.normal_margin, { fontWeight: 'bold' }]}>
 					Edit your email address
 				</Text>
 				<TextInput
 					style={[styles.normal_margin, styles.text_input]}
 					multiline={true}
 					onChangeText={(email) => {
-						this.setState({email});
+						this.setState({ email });
 					}}
 					value={this.state.email}
 				/>
-				<View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
+				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
 					<Button
 						onPress={() => this.props.save_email(this.state.email)}          
 						text="Save"
-						style={{marginTop: 10, width: 300}}
+						style={{ marginTop: 10, width: 300 }}
 					/>
 				</View>
 			</View>

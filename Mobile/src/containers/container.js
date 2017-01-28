@@ -26,6 +26,10 @@ class Container extends Component {
 		console.log(props);
 	}
 
+	_renderScene(sceneProps: Object): React.Element {
+		return React.createElement(sceneProps.scene.route.component, { ...sceneProps });
+	}
+
 	render(): React.Element {
 		// Add comment describing these variables
 		const { tabs } = this.props.navigation;
@@ -35,7 +39,7 @@ class Container extends Component {
 		return (
 			<View style={styles.navigator}>
 				<NavigationCardStack
-					key={'stack_' + tabKey}
+					key={`stack_ ${tabKey}`}
 					navigationState={scenes}
 					renderScene={this._renderScene}
 					style={styles.navigatorCardStack}					
@@ -46,10 +50,6 @@ class Container extends Component {
 				/>
 			</View>
 		);
-	}
-
-	_renderScene(sceneProps: Object): React.Element {
-		return React.createElement(sceneProps.scene.route.component, { ...sceneProps });
 	}
 }
 
