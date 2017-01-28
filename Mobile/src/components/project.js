@@ -5,9 +5,10 @@ import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
 
 //Import componenets, functions, and styles
-import Button from '../components/button.js';
+//import Button from '../components/button.js';
 import ProjectDetails from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
+import { Button } from './common';
 
 class Project extends Component {
 	constructor(props) {
@@ -47,11 +48,10 @@ class Project extends Component {
 						</Text>
 
 						{/* Button for upvoting a piece of feedback */}
-						<View style={styles.buttonAlign}>
-							<Button
-								onPress={this.upvote}
-								text="Up Vote!"
-							/>
+						<View>
+							<Button	onPress={this.upvote}>
+								"Up Vote!"
+							</Button>
 						</View>
 					</View>
 				</TouchableHighlight>

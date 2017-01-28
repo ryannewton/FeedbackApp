@@ -1,8 +1,8 @@
 'use strict';
 
 //Import libaries
-import React, { Component, PropTypes } from 'react';
-import { Text, View, TextInput, AsyncStorage } from 'react-native';
+import React, { Component } from 'react';
+import { Text, View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import Actions from '../actions/actions.js';
 
 //Import components, functions, and styles
-import Button from '../components/button.js';
+import { Button } from '../components/common';
 import Submitted from './submitted.js';
 import Email_Capture from './email_capture.js';
 import styles from '../styles/styles_main.js'; 
@@ -21,7 +21,7 @@ class Feedback extends Component {
 	constructor(props: Object, context: any) {
 		super(props, context);
 
-		this.state = {      
+		this.state = {
 			height: 0,
 			text: 'Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.',
 			anonymous: false
@@ -44,10 +44,11 @@ class Feedback extends Component {
 
 	render() {
 		return (
-			<View style={[styles.container, { flex: 1, flexDirection: 'column', alignItems: 'center' }]}>
+			<View style={[styles.container, { alignItems: 'center' }]}>
 				<Text style={styles.welcome}>
 					Thanks for providing feedback!
 				</Text>
+
 				<TextInput
 					multiline={true}
 					onChangeText={(text) => {
@@ -64,11 +65,10 @@ class Feedback extends Component {
 					style={styles.feedback_input}
 					value={this.state.text}
 				/>
-				<Button
-					onPress={this.submitFeedback}       
-					text="Submit Feedback"
-					style={{ marginTop: 10, width: 300 }}
-				/>
+
+				<Button	onPress={this.submitFeedback} style={{ marginTop: 10, height: 50 }}>
+					Submit Feedback
+				</Button>
 				{/*
 				<CheckBox
 					text="Submit Anonymously"
