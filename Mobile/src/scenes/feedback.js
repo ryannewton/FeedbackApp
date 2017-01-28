@@ -15,15 +15,16 @@ import Submitted from './submitted.js';
 import Email_Capture from './email_capture.js';
 import styles from '../styles/styles_main.js'; 
 
+const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
+	'appropriate department head on Monday and get back to you with their response.';
 
 class Feedback extends Component {
-
 	constructor(props: Object, context: any) {
 		super(props, context);
 
 		this.state = {
 			height: 0,
-			text: 'Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.',
+			text: placeholderText,
 			anonymous: false
 		};
 
@@ -38,7 +39,7 @@ class Feedback extends Component {
 		} else {
 			route = { key: 'Email_Capture', text: this.state.text, component: Email_Capture };
 		}
-		this.setState({ text: 'Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.' });
+		this.setState({ text: placeholderText });
 		this.props.navigate({ type: 'push', route });
 	}	
 
@@ -55,7 +56,7 @@ class Feedback extends Component {
 						this.setState({ text });
 					}}
 					onFocus={() => {
-						if (this.state.text === 'Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.') {
+						if (this.state.text === placeholderText) {
 							this.setState({ text: '' });
 						}
 					}}
@@ -69,13 +70,6 @@ class Feedback extends Component {
 				<Button	onPress={this.submitFeedback} style={{ marginTop: 10, height: 50 }}>
 					Submit Feedback
 				</Button>
-				{/*
-				<CheckBox
-					text="Submit Anonymously"
-					onCheck={() => this.setState({anonymous: !this.state.anonymous})},
-					checked={this.state.anonymous}
-				/>
-			*/}
 			</View>
 		);
 	}
