@@ -9,14 +9,15 @@ import {
 	DELETE_PROJECT
 } from '../actions/types';
 
-export default function projects(state = [], action) {
+export default (state = [], action) => {
 	switch (action.type) {
 		case REQUESTED_PROJECTS:
 			return state;
 		case RECEIVED_PROJECTS:
 			return action.payload;
 		case SAVE_PROJECT_CHANGES:
-			const index = state.findIndex((project) => project.id === action.payload);
+			saveProjectChanges(action.payload);
+			const index = state.findIndex((project) => project.id === action.payload.id);
 			const newState = state.slice(0);
 			newState.splice(index, 1, action.project);
 			return newState;
@@ -28,8 +29,48 @@ export default function projects(state = [], action) {
 				votes: 0
 			});
 		case DELETE_PROJECT:
+			deleteProject(action.payload);
 			return state.filter((project) => project.id !== action.payload);
 		default:
 			return state;
 	}
-}
+};
+
+const deleteProject = (id) => {
+	fetch('/deleteProject', {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({ id })
+	});
+};
+
+const saveProjectChanges = (project) => {
+	fetch('https://stanfordfeedback.com/saveProjectChanges', {
+		method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+		},
+		body: JSON.stringify({
+			project
+		})
+	});
+};
+
+const addProject = (receivedIDForAddProject) => {
+	return function (dispatch) {
+		return fetch('/addProject', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+			},
+		})
+		.then(response => response.json())
+		.then(response => receivedIDForAddProject(response.id))
+		.catch(error => console.error(error));
+	};
+};

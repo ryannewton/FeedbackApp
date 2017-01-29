@@ -10,7 +10,7 @@ const {
 	StateUtils: NavigationStateUtils,
 } = NavigationExperimental;
 
-export default function navigation(state = {}, action) {
+export default (state = {}, action) => {
 	// Defines pop, push, pop-push, and select-tab navigation types
 	function updateNavState(action, state) {
 
@@ -76,4 +76,4 @@ export default function navigation(state = {}, action) {
 		default:
 			return state;
 	}
-}
+};

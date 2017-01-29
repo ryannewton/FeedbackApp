@@ -39,7 +39,6 @@ const actions = {
 
 	save_email(email) {
 		AsyncStorage.setItem('@FeedbackApp:email', email);
-
 		return {
 			type: SET_EMAIL,
 			payload: email
@@ -62,7 +61,6 @@ const actions = {
 
 	addUpVote(upVote) {
 		localStorage.setItem('upVotes', JSON.stringify(ops.push(action.upVote, state)));
-
 		return {
 			type: ADD_UP_VOTE,
 			payload: upVote
@@ -71,7 +69,6 @@ const actions = {
 
 	removeUpVote(upVote) {
 		localStorage.setItem('upVotes', JSON.stringify((ops.filter((id) => { return id !== action.upVote; }, state))));
-
 		return {
 			type: REMOVE_UP_VOTE,
 			payload: upVote
@@ -79,22 +76,9 @@ const actions = {
 	},
 
 	saveProjectChanges(project) {
-		fetch('https://stanfordfeedback.com/saveProjectChanges', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				project
-			})
-    })
-    .then()
-    .catch();    		
-
 		return {
 			type: SAVE_PROJECT_CHANGES,
-			payload: project.id
+			payload: project
 		};
 	},
 
@@ -114,22 +98,13 @@ const actions = {
 					'Content-Type': 'application/json',
 				},
 			})
-      .then(response => response.json())
-      .then(response => receivedIDForAddProject(response.id))
-      .catch(error => console.error(error));
-    };       
+			.then(response => response.json())
+			.then(response => receivedIDForAddProject(response.id))
+			.catch(error => console.error(error));
+		};
 	},
 
 	deleteProject(id) {
-		fetch('/deleteProject', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({ id })
-		});
-		
 		return {
 			type: DELETE_PROJECT,
 			payload: id

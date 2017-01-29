@@ -2,11 +2,11 @@
 
 import { SET_EMAIL } from '../actions/types';
 
-export default function main(state = {}, action) {
+export default (state = {}, action) => {
 	switch (action.type) {
 		case SET_EMAIL:
-			return Object.assign({}, state, { email: action.payload });
+			return { ...state, email: action.payload };
 		default:
 			return state;
 	}
-}
+};

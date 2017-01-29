@@ -24,7 +24,7 @@ class Project extends Component {
 	}
 
 	upvote() {
-		const newProject = Object.assign({}, this.props.item, { votes: this.props.item.votes + 1 });
+		const newProject = { ...this.props.item, votes: this.props.item.votes + 1 };
 		this.props.saveProjectChanges(newProject);
 	}
 
