@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 //Import Actions
-import Actions from '../actions/actions.js';
+import Actions from '../actions';
 
 //Import components, functions, and styles
 import Project from '../components/project.js';

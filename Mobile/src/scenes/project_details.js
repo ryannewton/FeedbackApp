@@ -12,7 +12,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 //Import Actions
-import Actions from '../actions/actions.js';
+import Actions from '../actions';
 
 //Import componenets, functions, and styles
 import styles from '../styles/styles_main.js';

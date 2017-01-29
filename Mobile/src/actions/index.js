@@ -1,8 +1,21 @@
 'use strict';
+
 import { AsyncStorage } from 'react-native';
 
-const actions = {
+import {
+	SET_EMAIL,
+	UPDATE_NAV_STATE,
+	SET_UP_VOTES,
+	ADD_UP_VOTE,
+	REMOVE_UP_VOTE,
+	SAVE_PROJECT_CHANGES,
+	ADD_PROJECT,
+	DELETE_PROJECT,
+	REQUESTED_PROJECTS,
+	RECEIVED_PROJECTS
+} from './types';
 
+const actions = {
 	submitFeedbackToServer(text, email) {
 		return function (dispatch) {
 			const time = new Date(Date.now()).toISOString().slice(0, 10);
@@ -28,22 +41,22 @@ const actions = {
 		AsyncStorage.setItem('@FeedbackApp:email', email);
 
 		return {
-			type: 'SET_EMAIL',
-			email
+			type: SET_EMAIL,
+			payload: email
 		};
 	},
 
 	navigate(action) {		
 		return {
-			type: 'UPDATE_NAV_STATE',
-			action
+			type: UPDATE_NAV_STATE,
+			payload: action
 		};
 	},
 	
 	setUpVotes(upVotes) {
 		return {
-			type: 'SET_UP_VOTES',
-			upVotes
+			type: SET_UP_VOTES,
+			payload: upVotes
 		};
 	},
 
@@ -51,8 +64,8 @@ const actions = {
 		localStorage.setItem('upVotes', JSON.stringify(ops.push(action.upVote, state)));
 
 		return {
-			type: 'ADD_UP_VOTE',
-			upVote
+			type: ADD_UP_VOTE,
+			payload: upVote
 		};
 	},
 
@@ -60,8 +73,8 @@ const actions = {
 		localStorage.setItem('upVotes', JSON.stringify((ops.filter((id) => { return id !== action.upVote; }, state))));
 
 		return {
-			type: 'REMOVE_UP_VOTE',
-			upVote
+			type: REMOVE_UP_VOTE,
+			payload: upVote
 		};
 	},
 
@@ -77,18 +90,18 @@ const actions = {
 			})
     })
     .then()
-    .catch();
+    .catch();    		
 
 		return {
-			type: 'SAVE_PROJECT_CHANGES',
-			project
+			type: SAVE_PROJECT_CHANGES,
+			payload: project.id
 		};
 	},
 
 	receivedIDForAddProject(id) {
 		return {
-			type: 'ADD_PROJECT',
-			id
+			type: ADD_PROJECT,
+			payload: id
 		};
 	},
 
@@ -118,21 +131,21 @@ const actions = {
 		});
 		
 		return {
-			type: 'DELETE_PROJECT',
-			id
+			type: DELETE_PROJECT,
+			payload: id
 		};
 	},
 
 	requestedProjects() {
 		return {
-			type: 'REQUESTED_PROJECTS',
+			type: REQUESTED_PROJECTS
 		};
 	},
 
 	receivedProjects(projects) {
 		return {
-			type: 'RECEIVED_PROJECTS',
-			projects,			
+			type: RECEIVED_PROJECTS,
+			payload: projects
 		};
 	},
 

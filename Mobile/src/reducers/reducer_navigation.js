@@ -3,6 +3,9 @@
 //Import Libraries
 import { NavigationExperimental } from 'react-native';
 
+// Import action types
+import { UPDATE_NAV_STATE } from '../actions/types';
+
 const {
 	StateUtils: NavigationStateUtils,
 } = NavigationExperimental;
@@ -68,8 +71,8 @@ export default function navigation(state = {}, action) {
 	}
 
 	switch (action.type) {
-		case 'UPDATE_NAV_STATE':
-			return updateNavState(action.action, state);
+		case UPDATE_NAV_STATE:
+			return updateNavState(action.payload, state);
 		default:
 			return state;
 	}

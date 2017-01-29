@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 //Import Actions
-import Actions from '../actions/actions.js';
+import Actions from '../actions';
 
 //Import components, functions, and styles
 import NavTabs from '../components/nav_tabs.js';
@@ -21,9 +21,6 @@ class Container extends Component {
 		super(props, context);
 
 		this._renderScene = this._renderScene.bind(this);
-
-		console.log('Container Props');
-		console.log(props);
 	}
 
 	_renderScene(sceneProps: Object): React.Element {

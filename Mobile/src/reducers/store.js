@@ -7,7 +7,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 //Import Actions
-import Actions from '../actions/actions.js';
+import Actions from '../actions';
 
 //Import Reducers
 import Combined_Reducer from './reducer_index.js';
@@ -62,10 +62,9 @@ let store = createStore(
 async function load_email() {
 	try {
 		const email = await AsyncStorage.getItem('@FeedbackApp:email') || "Enter email here";
-		console.log(email);
 		store.dispatch(Actions.save_email(email));
 	} catch (error) {
-		console.log(error);
+		//console.log(error);
 	}
 }
 
