@@ -70,6 +70,7 @@ app.post('/addProject', upload.array(), function(req, res) {
 	connection.query('INSERT INTO projects SET ?', {title, description: 'Blank Description', votes: 0, stage: 'new'}, function(err, result) {
 		if (err) throw err;
 		if (req.body.feedback) {
+			sendEmail(['tyler.hannasch@gmail.com'], 'admin@stanfordfeedback.com', 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
 			connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], function(err) {
 				if (err) throw err;
 			});
