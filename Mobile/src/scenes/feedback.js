@@ -13,7 +13,7 @@ import Actions from '../actions';
 import { Button } from '../components/common';
 import Submitted from './submitted.js';
 import Email_Capture from './email_capture.js';
-import styles from '../styles/styles_main.js'; 
+import styles from '../styles/styles_main.js';
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
 	'appropriate department head on Monday and get back to you with their response.';
@@ -41,7 +41,7 @@ class Feedback extends Component {
 		}
 		this.setState({ text: placeholderText });
 		this.props.navigate({ type: 'push', route });
-	}	
+	}
 
 	render() {
 		return (

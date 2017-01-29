@@ -28,6 +28,24 @@ class Project extends Component {
 		this.props.saveProjectChanges(newProject);
 	}
 
+	// Temporary fix. Async issue is causing this.props.item to be temporarily undefined
+	renderDescription() {
+		if(this.props.item === undefined) {
+			return '';
+		}
+
+		return `${this.props.item.votes} Votes: `;
+	}
+
+	// Temporary fix. Async issue is causing this.props.item to be temporarily undefined
+	renderTitle() {
+		if(this.props.item === undefined) {
+			return '';
+		}
+
+		return this.props.item.title;
+	}
+
 	render() {
 			return (
 				<TouchableHighlight
@@ -39,18 +57,18 @@ class Project extends Component {
 
 						{/* Add description of Text content */}
 						<Text style={[styles.buttonText, styles.low_weight]}>
-							{this.props.item.votes} Votes: 
+							{this.renderDescription()}
 						</Text>
 
 						{/* Add description of Text content */}
 						<Text style={styles.buttonText}>
-							{this.props.item.title}
+							{this.renderTitle()}
 						</Text>
 
 						{/* Button for upvoting a piece of feedback */}
 						<View>
 							<Button	onPress={this.upvote}>
-								"Up Vote!"
+								Up Vote!
 							</Button>
 						</View>
 					</View>

@@ -1,6 +1,7 @@
 'use strict';
 
 import { AsyncStorage } from 'react-native';
+import axios from 'axios';
 
 import {
 	SET_EMAIL,
@@ -9,31 +10,26 @@ import {
 	ADD_UP_VOTE,
 	REMOVE_UP_VOTE,
 	SAVE_PROJECT_CHANGES,
-	ADD_PROJECT,
 	DELETE_PROJECT,
 	REQUESTED_PROJECTS,
-	RECEIVED_PROJECTS
+	RECEIVED_PROJECTS,
+	SUBMIT_FEEDBACK_SUCCESS,
+	SUBMIT_FEEDBACK_FAIL
 } from './types';
 
+const ROOT_URL = 'https://stanfordfeedback.com';
+
 const actions = {
+	// Is 'feedback' different from a 'project'?
 	submitFeedbackToServer(text, email) {
 		return function (dispatch) {
 			const time = new Date(Date.now()).toISOString().slice(0, 10);
-			return fetch('https://stanfordfeedback.com/addFeedback/', {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({
-					text,
-					time,
-					email
-				}),
-			})
-			.catch((error) => {
-				console.error(error);
-			});
+
+			// Post new feedback to server
+			return axios.post(`${ROOT_URL}/addFeedback/`, { text, time, email })
+			// Note: Currently no reducer listens to SUBMIT_FEEDBACK_SUCCESS or SUBMIT_FEEDBACK_FAIL
+			.then((response) => dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: response }))
+			.catch((error) => dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: error }));
 		};
 	},
 
@@ -60,7 +56,6 @@ const actions = {
 	},
 
 	addUpVote(upVote) {
-		localStorage.setItem('upVotes', JSON.stringify(ops.push(action.upVote, state)));
 		return {
 			type: ADD_UP_VOTE,
 			payload: upVote
@@ -68,7 +63,6 @@ const actions = {
 	},
 
 	removeUpVote(upVote) {
-		localStorage.setItem('upVotes', JSON.stringify((ops.filter((id) => { return id !== action.upVote; }, state))));
 		return {
 			type: REMOVE_UP_VOTE,
 			payload: upVote
@@ -79,28 +73,6 @@ const actions = {
 		return {
 			type: SAVE_PROJECT_CHANGES,
 			payload: project
-		};
-	},
-
-	receivedIDForAddProject(id) {
-		return {
-			type: ADD_PROJECT,
-			payload: id
-		};
-	},
-
-	addProject(receivedIDForAddProject) {
-		return function (dispatch) {
-			return fetch('/addProject', {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(response => response.json())
-			.then(response => receivedIDForAddProject(response.id))
-			.catch(error => console.error(error));
 		};
 	},
 
@@ -124,19 +96,13 @@ const actions = {
 		};
 	},
 
+	// To Do: Convert `${ROOT_URL}/pullProjects` to GET on server
 	pullProjects(requestedProjects, receivedProjects) {
 		return function (dispatch) {
 			dispatch(requestedProjects());
 
-			return fetch('https://stanfordfeedback.com/pullProjects', {
-				method: 'POST',
-				headers: {
-					Accept: 'application/json',
-					'Content-Type': 'application/json',
-				},
-			})
-			.then(response => response.json())
-			.then(projects => dispatch(receivedProjects(projects)))
+			return axios.post(`${ROOT_URL}/pullProjects`)
+			.then(response => dispatch(receivedProjects(response.data)))
 			.catch(error => console.error(error));
 		};
 	}

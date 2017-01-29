@@ -1,13 +1,16 @@
 'use strict';
 
+// Import libraries
+import axios from 'axios';
+
 // Import action types
 import {
 	REQUESTED_PROJECTS,
 	RECEIVED_PROJECTS,
-	SAVE_PROJECT_CHANGES,
-	ADD_PROJECT,
-	DELETE_PROJECT
+	SAVE_PROJECT_CHANGES
 } from '../actions/types';
+
+const ROOT_URL = 'https://stanfordfeedback.com';
 
 export default (state = [], action) => {
 	switch (action.type) {
@@ -21,56 +24,32 @@ export default (state = [], action) => {
 			const newState = state.slice(0);
 			newState.splice(index, 1, action.project);
 			return newState;
-		case ADD_PROJECT:
-			return state.splice(state.length-1, 0, {
-				id: action.payload,
-				title: 'Blank Title',
-				description: 'Blank Description',
-				votes: 0
-			});
-		case DELETE_PROJECT:
-			deleteProject(action.payload);
-			return state.filter((project) => project.id !== action.payload);
 		default:
 			return state;
 	}
 };
 
-const deleteProject = (id) => {
-	fetch('/deleteProject', {
-		method: 'POST',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({ id })
-	});
-};
+// const saveProjectChanges = (project) => {
+// 	fetch('https://stanfordfeedback.com/saveProjectChanges', {
+// 		method: 'POST',
+// 		headers: {
+// 			Accept: 'application/json',
+// 			'Content-Type': 'application/json',
+// 		},
+// 		body: JSON.stringify({
+// 			project
+// 		})
+// 	});
+// };
 
 const saveProjectChanges = (project) => {
-	fetch('https://stanfordfeedback.com/saveProjectChanges', {
-		method: 'POST',
-		headers: {
-			Accept: 'application/json',
-			'Content-Type': 'application/json',
-		},
-		body: JSON.stringify({
-			project
-		})
+	console.log('POST request initiated to /saveProjectChanges');
+	console.log('body is: ', project);
+	axios.post(`${ROOT_URL}/saveProjectChanges`, project)
+	.then((res) => {
+		console.log('saveProjectChange successful. Response: ', res);
+	})
+	.catch((err) => {
+		console.log('saveProjectChange FAIL. Response: ', err);
 	});
-};
-
-const addProject = (receivedIDForAddProject) => {
-	return function (dispatch) {
-		return fetch('/addProject', {
-			method: 'POST',
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-			},
-		})
-		.then(response => response.json())
-		.then(response => receivedIDForAddProject(response.id))
-		.catch(error => console.error(error));
-	};
 };

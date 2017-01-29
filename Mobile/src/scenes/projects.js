@@ -26,18 +26,33 @@ class Projects extends Component {
 		return b.votes - a.votes;
 	}
 
-	render() {
+	renderProjects() {
 		const projects = this.props.projects.sort(this.compareNumbers).map((item, index) => {
-			return <Project item={item} key={index} navigate={this.props.navigate} saveProjectChanges={this.props.saveProjectChanges} />
+			return (
+				<Project
+					item={item}
+					key={index}
+					navigate={this.props.navigate}
+					saveProjectChanges={this.props.saveProjectChanges}
+				/>
+			);
 		});
+		
+		return projects;
+	}
 
+	render() {
 		return (
 			<View style={styles.container}>
+
+				{/* Header */}
 				<Text style={styles.welcome}>
 					Projects
 				</Text>
+
+				{/* List of projects */}
 				<ScrollView>
-					{projects}
+					{this.renderProjects()}
 				</ScrollView>
 			</View>
 		);
