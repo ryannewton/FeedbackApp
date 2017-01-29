@@ -11,7 +11,6 @@ const styles = StyleSheet.create({
 
 	//Feedback Scene
 	container: {
-		flex: 1,
 		backgroundColor: '#F7FCFF',
 	},
 	welcome: {
@@ -21,12 +20,13 @@ const styles = StyleSheet.create({
 		marginBottom: 6		
 	},
 	feedback_input: {
+		fontSize: 18,
 		height: 200,
 		borderColor: 'gray',
 		borderWidth: 1,
 		margin: 3,
-		paddingLeft: 3,
-		paddingRight: 3,		
+		paddingLeft: 8,
+		paddingRight: 8,
 		backgroundColor: '#FFFFFF',
 		...Platform.select({
 			android: {
@@ -100,10 +100,6 @@ const styles = StyleSheet.create({
 	},
 	project: {
 
-	},
-	buttonAlign: {
-		flexDirection: 'row',
-		justifyContent: 'flex-end'
 	},
 	low_weight: {
 		fontWeight: '300',
