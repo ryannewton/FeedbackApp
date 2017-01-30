@@ -22,7 +22,7 @@ export default (state = [], action) => {
 			saveProjectChanges(action.payload);
 			const index = state.findIndex((project) => project.id === action.payload.id);
 			const newState = state.slice(0);
-			newState.splice(index, 1, action.project);
+			newState.splice(index, 1, action.payload);
 			return newState;
 		default:
 			return state;

@@ -48,7 +48,7 @@ const INITIAL_STATE = {
 			routes: [{key: 'Settings Home', component: Settings }],
 		},
 	},
-	up_votes: [],
+//	up_votes: [],
 };
 
 let store = createStore(
