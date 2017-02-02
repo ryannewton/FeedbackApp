@@ -16,7 +16,11 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 var connection = mysql.createConnection({
-	host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	//production database
+	//host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+
+	//development database
+	host     : 'aa1x7q3yz5wqhwq.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 	user     : 'root',
 	password : 'buechelejedi16',
 	port     : '3306',
