@@ -14,9 +14,8 @@ import { bindActionCreators } from 'redux';
 import Actions from '../actions';
 
 //Import componenets, functions, and styles
-import Button from '../components/button.js';
-import Submitted from './submitted.js';
-import styles from '../styles/styles_main.js'; 
+import { Button, Header } from '../components/common';
+import styles from '../styles/settings_styles'; 
 
 class Settings extends Component {
 	constructor(props) {
@@ -28,28 +27,37 @@ class Settings extends Component {
 	}
 
 	render() {
+		const { container, normalMargin, textDisplay, textInput } = styles;
+
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>
+			<View style={container}>
+				<Header>
 					Settings
-				</Text>
-				<Text style={[styles.normal_margin, { fontWeight: 'bold' }]}>
+				</Header>
+
+				{/* Update email description */}
+				<Text style={[normalMargin, textDisplay]}>
 					Edit your email address
 				</Text>
+
+				{/* Email update input */}
 				<TextInput
-					style={[styles.normal_margin, styles.text_input]}
+					style={[normalMargin, textInput]}
 					multiline={true}
 					onChangeText={(email) => {
 						this.setState({ email });
 					}}
 					value={this.state.email}
 				/>
+
+				{/* Save button */}
 				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
 					<Button
 						onPress={() => this.props.save_email(this.state.email)}          
-						text="Save"
-						style={{ marginTop: 10, width: 300 }}
-					/>
+						style={{ marginTop: 10 }}
+					>
+						Save
+					</Button>
 				</View>
 			</View>
 		);
