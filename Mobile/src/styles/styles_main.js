@@ -7,11 +7,11 @@ import {
 } from 'react-native';
 
 const styles = StyleSheet.create({
-	
 
 	//Feedback Scene
 	container: {
 		backgroundColor: '#F7FCFF',
+		flex: 1
 	},
 	welcome: {
 		fontSize: 18,
@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
 		height: 200,
 		borderColor: 'gray',
 		borderWidth: 1,
+		borderRadius: 4,
 		margin: 3,
 		paddingLeft: 8,
 		paddingRight: 8,
@@ -31,25 +32,6 @@ const styles = StyleSheet.create({
 		...Platform.select({
 			android: {
 				width: 340
-			},
-		}),
-	},
-
-	//Settings Scene
-	normal_margin: {
-		marginTop: 5,
-		marginBottom: 5,
-		marginLeft: 5
-	},
-	text_input: {
-		...Platform.select({
-			ios: {
-				height: 24,
-				borderBottomColor: 'gray',
-				borderBottomWidth: 1,
-			},
-			android: {
-				height: 40,
 			},
 		}),
 	},
@@ -83,10 +65,11 @@ const styles = StyleSheet.create({
 	},
 	
 	//Projects
-	up_vote_button: {
-	},
 	row: {
-		padding: 15,
+		paddingLeft: 10,
+		paddingRight: 10,
+		paddingTop: 5,
+		paddingBottom: 8,
 		backgroundColor: 'white',
 		borderBottomWidth: 1 / PixelRatio.get(),
 		borderBottomColor: '#CDCDCD',
@@ -101,9 +84,9 @@ const styles = StyleSheet.create({
 	project: {
 
 	},
-	low_weight: {
+	lowWeight: {
 		fontWeight: '300',
-		fontSize: 12,
+		fontSize: 16,
 		textDecorationLine: 'underline',
 	}
 });
