@@ -1,5 +1,7 @@
 'use strict';
 
+// Collects email after they submit feedback for new users
+
 //Import Libraries
 import React, { Component } from 'react';
 import {
@@ -14,11 +16,11 @@ import { bindActionCreators } from 'redux';
 import Actions from '../actions';
 
 //Import components, functions, and styles
-import Button from '../components/button.js';
+import { Button, Header } from '../components/common';
 import Submitted from './submitted.js';
 import styles from '../styles/styles_main.js'; 
 
-class Email_Capture extends Component {
+class EmailCapture extends Component {
 	constructor(props) {
 		super(props);
 
@@ -30,9 +32,9 @@ class Email_Capture extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>
+				<Header>
 					Enter Email:
-				</Text>
+				</Header>
 				<Text style={[styles.normal_margin, { fontWeight: 'bold' }]}>
 					Please enter your email address so we can keep you updated as your feedback is acted upon:
 				</Text>
@@ -55,10 +57,11 @@ class Email_Capture extends Component {
 										component: Submitted
 									}
 								});
-							}}	
-						text="Save Email and Submit Feedback"
+							}}
 						style={{ marginTop: 10, width: 300 }}
-					/>
+					>
+						Save Email and Submit Feedback
+					</Button>
 				</View>
 			</View>
 		);
@@ -73,5 +76,5 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators(Actions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Email_Capture);
+export default connect(mapStateToProps, mapDispatchToProps)(EmailCapture);
 
