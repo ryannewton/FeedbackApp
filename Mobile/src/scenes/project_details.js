@@ -2,12 +2,7 @@
 
 //Import Libraries
 import React, { Component } from 'react';
-import {
-	View,
-	Button,
-	Text,
-	TouchableHighlight,
-} from 'react-native';
+import { View, Button, Text, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -31,23 +26,22 @@ class Project_Details extends Component {
 	}
 
 	render() {
-			return (
-				<View style={styles.project}>
-					<Text style={[styles.buttonText, styles.low_weight]}>
-						{this.props.scene.route.item.votes} Votes: 
-					</Text>
-					<Text style={styles.buttonText}>
-						{this.props.scene.route.item.title}
-					</Text>
-					<View>
-						<Button
-							onPress={this.up_vote}          
-							title="Up Vote!"
-							style={styles.up_vote_button}
-						/>
-					</View>
+	const { project, buttonText, lowWeight } = styles;
+		return (
+			<View style={project}>
+				<Text style={[buttonText, lowWeight]}>
+					{this.props.scene.route.item.votes} Votes: 
+				</Text>
+				<Text style={buttonText}>
+					{this.props.scene.route.item.title}
+				</Text>
+				<View>
+					<Button	onPress={this.up_vote}>
+						Upvote!
+					</Button>
 				</View>
-			);
+			</View>
+		);
 	}
 }
 
