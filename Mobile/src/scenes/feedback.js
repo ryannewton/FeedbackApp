@@ -7,10 +7,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 //Import Actions
-import Actions from '../actions';
+import actions from '../actions';
 
 //Import components, functions, and styles
-import { Button } from '../components/common';
+import { Button, Header } from '../components/common';
 import Submitted from './submitted.js';
 import Email_Capture from './email_capture.js';
 import styles from '../styles/styles_main.js';
@@ -46,26 +46,28 @@ class Feedback extends Component {
 	render() {
 		return (
 			<View style={[styles.container, { alignItems: 'center' }]}>
-				<Text style={styles.welcome}>
+				<Header>
 					Thanks for providing feedback!
-				</Text>
+				</Header>
 
-				<TextInput
-					multiline={true}
-					onChangeText={(text) => {
-						this.setState({ text });
-					}}
-					onFocus={() => {
-						if (this.state.text === placeholderText) {
-							this.setState({ text: '' });
-						}
-					}}
-					onContentSizeChange={(event) => {
-						this.setState({ height: event.nativeEvent.contentSize.height });
-					}}
-					style={styles.feedback_input}
-					value={this.state.text}
-				/>
+				<View style={{ paddingTop: 10 }}>
+					<TextInput
+						multiline={true}
+						onChangeText={(text) => {
+							this.setState({ text });
+						}}
+						onFocus={() => {
+							if (this.state.text === placeholderText) {
+								this.setState({ text: '' });
+							}
+						}}
+						onContentSizeChange={(event) => {
+							this.setState({ height: event.nativeEvent.contentSize.height });
+						}}
+						style={styles.feedback_input}
+						value={this.state.text}
+					/>
+				</View>
 
 				<Button	onPress={this.submitFeedback} style={{ marginTop: 10, height: 50 }}>
 					Submit Feedback
@@ -80,7 +82,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
