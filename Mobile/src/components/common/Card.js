@@ -18,9 +18,9 @@ const styles = {
 		borderColor: '#ddd',
 		borderBottomWidth: 0,
 		elevation: 1,
-		marginLeft: 5,
-		marginRight: 5,
-		marginTop: 10
+		marginLeft: 4,
+		marginRight: 4,
+		marginTop: 4
 	}
 };
 
