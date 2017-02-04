@@ -1,27 +1,34 @@
 'use strict';
 
 import React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Platform } from 'react-native';
 
-const Header = (props) => {
+const Header = ({ children }) => {
 	const { textStyle, viewStyle } = styles;
 
 	return (
-		<View style={viewStyle}>
-			<Text style={textStyle}>{props.headerText}</Text>
+		<View style={{ flexDirection: 'row' }}>
+			<View style={viewStyle}>
+				<Text style={textStyle}>{children}</Text>
+			</View>
 		</View>
 	);
 };
 
 const styles = {
 	viewStyle: {
-		backgroundColor: '#F8F8F8',
+		flex: 1,
+		backgroundColor: '#F7FCFF',
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: 60,
-		paddingTop: 15,
+		height: 50,
 		elevation: 3,
-		position: 'relative'
+		position: 'relative',
+		...Platform.select({
+			ios: {
+				paddingTop: 15
+			}
+		})
 	},
 	textStyle: {
 		fontSize: 20
