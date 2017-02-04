@@ -2,11 +2,7 @@
 
 //Import Libaries
 import React, { Component } from 'react';
-import {
-	Text,
-	View,
-	BackAndroid
-} from 'react-native';
+import { Text, View, BackAndroid } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -14,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import Actions from '../actions';
 
 //Import components, functions, and styles
-import Button from '../components/button.js';
+import { Button, Header } from '../components/common';
 import styles from '../styles/styles_main.js';
 
 class Submitted extends Component {
@@ -30,15 +26,14 @@ class Submitted extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>
+				<Header>
 					You Submitted Feedback
-				</Text>
-				<View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-					<Button
-						onPress={() => this.props.navigate({ type: 'pop' })}
-						text="Submit More Feedback"
-						style={{ height: 200, width: 300 }}
-					/>
+				</Header>
+
+				<View style={{ flex: 1, paddingTop: 20 }}>
+					<Button	onPress={() => this.props.navigate({ type: 'pop' })}>
+						Submit More Feedback
+					</Button>
 				</View>
 			</View>
 		);
