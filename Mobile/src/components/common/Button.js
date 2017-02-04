@@ -1,18 +1,19 @@
 'use strict';
 
 import React from 'react';
-import { Text, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 
 const Button = ({ onPress, children, style }) => {
-	const buttonStyle = { ...defaultStyles.buttonStyle, ...style };
-	const { textStyle } = defaultStyles;
+	const { buttonStyle, textStyle } = defaultStyles;
 
 	return (
-		<TouchableOpacity onPress={onPress} style={buttonStyle}>
-			<Text style={textStyle}>
-				{children}
-			</Text>
-		</TouchableOpacity>
+		<View style={[{ flexDirection: 'row' }, style]}>
+			<TouchableOpacity onPress={onPress} style={[buttonStyle, style]}>
+				<Text style={textStyle}>
+					{children}
+				</Text>
+			</TouchableOpacity>
+		</View>
 	);
 };
 
@@ -28,6 +29,7 @@ const defaultStyles = {
 	buttonStyle: {
 		flex: 1,
 		alignSelf: 'stretch',
+		justifyContent: 'center',
 		backgroundColor: '#fff',
 		borderRadius: 5,
 		borderWidth: 1,
