@@ -2,11 +2,7 @@
 
 //Import libraries
 import React, { Component } from 'react';
-import {
-	Text,
-	View,
-	ScrollView,
-} from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -15,7 +11,8 @@ import Actions from '../actions';
 
 //Import components, functions, and styles
 import Project from '../components/project.js';
-import styles from '../styles/styles_main.js'; 
+import { Header } from '../components/common';
+import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
 	constructor(props) {
@@ -45,10 +42,9 @@ class Projects extends Component {
 		return (
 			<View style={styles.container}>
 
-				{/* Header */}
-				<Text style={styles.welcome}>
+				<Header>
 					Projects
-				</Text>
+				</Header>
 
 				{/* List of projects */}
 				<ScrollView>
