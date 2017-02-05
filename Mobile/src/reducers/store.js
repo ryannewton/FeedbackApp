@@ -20,7 +20,7 @@ import Settings from '../scenes/settings.js';
 //Sets our initial state (before data is pulled from the server)
 const INITIAL_STATE = {
 	main: {
-		email: "Please set your email",
+		email: "",
 		loading: false
 	},
 	projects: [],

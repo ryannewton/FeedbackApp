@@ -40,9 +40,7 @@ class Settings extends Component {
 				<TextInput
 					style={[normalMargin, textInput]}
 					multiline={true}
-					onChangeText={(email) => {
-						this.setState({ email });
-					}}
+					onChangeText={(email) => this.setState({ email })}
 					value={this.state.email}
 				/>
 
