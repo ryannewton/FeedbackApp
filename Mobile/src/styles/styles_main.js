@@ -33,6 +33,9 @@ const styles = StyleSheet.create({
 			android: {
 				width: 340
 			},
+			ios: {
+				width: 340
+			}
 		}),
 	},
 
