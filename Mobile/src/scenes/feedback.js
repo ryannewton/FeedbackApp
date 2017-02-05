@@ -2,7 +2,7 @@
 
 //Import libaries
 import React, { Component } from 'react';
-import { Text, View, TextInput } from 'react-native';
+import { View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import actions from '../actions';
 
 //Import components, functions, and styles
-import { Button, Header } from '../components/common';
+import { Button, Header, Spinner } from '../components/common';
 import Submitted from './submitted.js';
 import Email_Capture from './email_capture.js';
 import styles from '../styles/styles_main.js';
@@ -27,20 +27,37 @@ class Feedback extends Component {
 			text: placeholderText,
 			anonymous: false
 		};
-
-		this.submitFeedback = this.submitFeedback.bind(this);
 	}
 
 	submitFeedback() {
+		let scene = {};
 		let route = {};
-		if (this.props.main.email !== 'Enter email here') {
-			this.props.submitFeedbackToServer(this.state.text, this.props.main.email);
-			route = { key: 'Submitted', component: Submitted };
+		const { text } = this.state;
+		const { email } = this.props.main;
+
+		// If email address is on file, go to submitted scene
+		if (email !== 'Enter email here') {
+			scene = { key: 'Submitted', component: Submitted };
+			route = { type: 'push', route: scene };
+			this.props.submitFeedbackToServer(text, email, route, this.props.navigate);
 		} else {
-			route = { key: 'Email_Capture', text: this.state.text, component: Email_Capture };
+			// Otherwise, go to email_capture scene when done
+			scene = { key: 'Email_Capture', text, component: Email_Capture };
+			route = { type: 'push', route: scene };
+			this.props.navigate(route);
 		}
 		this.setState({ text: placeholderText });
-		this.props.navigate({ type: 'push', route });
+	}
+
+	renderButton() {
+		if (this.props.main.loading) {
+			return <Spinner size="large" />;
+		}
+		return (
+			<Button	onPress={this.submitFeedback.bind(this)} style={{ marginTop: 10, height: 50 }}>
+				Submit Feedback
+			</Button>
+			);
 	}
 
 	render() {
@@ -69,9 +86,7 @@ class Feedback extends Component {
 					/>
 				</View>
 
-				<Button	onPress={this.submitFeedback} style={{ marginTop: 10, height: 50 }}>
-					Submit Feedback
-				</Button>
+				{this.renderButton()}
 			</View>
 		);
 	}
