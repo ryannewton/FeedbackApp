@@ -20,98 +20,78 @@ import {
 
 const ROOT_URL = 'https://stanfordfeedback.com';
 
-const actions = {
-	submitFeedbackToServer(text, email, route, navigate) {
-		return function (dispatch) {
-			dispatch({ type: SUBMIT_FEEDBACK });
-			const time = new Date(Date.now()).toISOString().slice(0, 10);
+export const submitFeedbackToServer = (text, email, route) => (
+	function (dispatch) {
+		dispatch({ type: SUBMIT_FEEDBACK });
+		const time = new Date(Date.now()).toISOString().slice(0, 10);
 
-			// Post new feedback to server
-			return axios.post(`${ROOT_URL}/addFeedback/`, { text, time, email })
-			.then((response) => {
-				dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
-				dispatch(navigate(route));
-			})
-			.catch((error) => {
-				dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
-				dispatch(navigate(route));
-			});
-		};
-	},
-
-	save_email(email) {
-		AsyncStorage.setItem('@FeedbackApp:email', email);
-		return {
-			type: SET_EMAIL,
-			payload: email
-		};
-	},
-
-	navigate(route) {
-		return {
-			type: UPDATE_NAV_STATE,
-			payload: route
-		};
-	},
-	
-	setUpVotes(upVotes) {
-		return {
-			type: SET_UP_VOTES,
-			payload: upVotes
-		};
-	},
-
-	addUpVote(upVote) {
-		return {
-			type: ADD_UP_VOTE,
-			payload: upVote
-		};
-	},
-
-	removeUpVote(upVote) {
-		return {
-			type: REMOVE_UP_VOTE,
-			payload: upVote
-		};
-	},
-
-	saveProjectChanges(project) {
-		return {
-			type: SAVE_PROJECT_CHANGES,
-			payload: project
-		};
-	},
-
-	deleteProject(id) {
-		return {
-			type: DELETE_PROJECT,
-			payload: id
-		};
-	},
-
-	requestedProjects() {
-		return {
-			type: REQUESTED_PROJECTS
-		};
-	},
-
-	receivedProjects(projects) {
-		return {
-			type: RECEIVED_PROJECTS,
-			payload: projects
-		};
-	},
-
-	// To Do: Convert `${ROOT_URL}/pullProjects` to GET on server
-	pullProjects(requestedProjects, receivedProjects) {
-		return function (dispatch) {
-			dispatch(requestedProjects());
-
-			return axios.post(`${ROOT_URL}/pullProjects`)
-			.then(response => dispatch(receivedProjects(response.data)))
-			.catch(error => console.error(error));
-		};
+		// Post new feedback to server
+		return axios.post(`${ROOT_URL}/addFeedback/`, { text, time, email })
+		.then((response) => {
+			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
+			dispatch(navigate(route));
+		})
+		.catch((error) => {
+			dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
+			dispatch(navigate(route));
+		});
 	}
+);
+
+export const save_email = (email) => {
+	AsyncStorage.setItem('@FeedbackApp:email', email);
+	return {
+		type: SET_EMAIL,
+		payload: email
+	};
 };
 
-export default actions;
+export const navigate = (route) => ({
+	type: UPDATE_NAV_STATE,
+	payload: route
+});
+	
+export const setUpVotes = (upVotes) => ({
+	type: SET_UP_VOTES,
+	payload: upVotes
+});
+
+export const addUpVote = (upVote) => ({
+	type: ADD_UP_VOTE,
+	payload: upVote
+});
+
+export const removeUpVote = (upVote) => ({
+	type: REMOVE_UP_VOTE,
+	payload: upVote
+});
+
+export const saveProjectChanges = (project) => ({
+		type: SAVE_PROJECT_CHANGES,
+		payload: project
+});
+
+export const deleteProject = (id) => ({
+		type: DELETE_PROJECT,
+		payload: id
+});
+
+export const requestedProjects = () => ({
+	type: REQUESTED_PROJECTS
+});
+
+export const receivedProjects = (projects) => ({
+	type: RECEIVED_PROJECTS,
+	payload: projects
+});
+
+// To Do: Convert `${ROOT_URL}/pullProjects` to GET on server
+export const pullProjects = () => (
+	function (dispatch) {
+		dispatch(requestedProjects());
+
+		return axios.post(`${ROOT_URL}/pullProjects`)
+		.then(response => dispatch(receivedProjects(response.data)))
+		.catch(error => console.error(error));
+	}
+);
