@@ -13,6 +13,7 @@ import {
 	DELETE_PROJECT,
 	REQUESTED_PROJECTS,
 	RECEIVED_PROJECTS,
+	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
 	SUBMIT_FEEDBACK_FAIL
 } from './types';
@@ -20,16 +21,21 @@ import {
 const ROOT_URL = 'https://stanfordfeedback.com';
 
 const actions = {
-	// Is 'feedback' different from a 'project'?
-	submitFeedbackToServer(text, email) {
+	submitFeedbackToServer(text, email, route, navigate) {
 		return function (dispatch) {
+			dispatch({ type: SUBMIT_FEEDBACK });
 			const time = new Date(Date.now()).toISOString().slice(0, 10);
 
 			// Post new feedback to server
 			return axios.post(`${ROOT_URL}/addFeedback/`, { text, time, email })
-			// Note: Currently no reducer listens to SUBMIT_FEEDBACK_SUCCESS or SUBMIT_FEEDBACK_FAIL
-			.then((response) => dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: response }))
-			.catch((error) => dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: error }));
+			.then((response) => {
+				dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
+				dispatch(navigate(route));
+			})
+			.catch((error) => {
+				dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
+				dispatch(navigate(route));
+			});
 		};
 	},
 
@@ -41,10 +47,10 @@ const actions = {
 		};
 	},
 
-	navigate(action) {		
+	navigate(route) {
 		return {
 			type: UPDATE_NAV_STATE,
-			payload: action
+			payload: route
 		};
 	},
 	

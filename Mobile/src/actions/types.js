@@ -10,5 +10,6 @@ export const ADD_PROJECT = 'add_project';
 export const DELETE_PROJECT = 'delete_project';
 export const REQUESTED_PROJECTS = 'requested_projects';
 export const RECEIVED_PROJECTS = 'received_projects';
+export const SUBMIT_FEEDBACK = 'submit_feedback';
 export const SUBMIT_FEEDBACK_SUCCESS = 'submit_feedback_success';
 export const SUBMIT_FEEDBACK_FAIL = 'submit_feedback_fail';
