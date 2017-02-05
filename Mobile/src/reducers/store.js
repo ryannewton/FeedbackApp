@@ -21,6 +21,7 @@ import Settings from '../scenes/settings.js';
 const INITIAL_STATE = {
 	main: {
 		email: "Please set your email",
+		loading: false
 	},
 	projects: [],
 	navigation: {
@@ -47,8 +48,7 @@ const INITIAL_STATE = {
 			index: 0,
 			routes: [{key: 'Settings Home', component: Settings }],
 		},
-	},
-//	up_votes: [],
+	}
 };
 
 let store = createStore(
@@ -57,23 +57,16 @@ let store = createStore(
 	applyMiddleware(thunkMiddleware)
 );
 
-//AsyncStorage.removeItem('@FeedbackApp:email');
-
 async function load_email() {
 	try {
 		const email = await AsyncStorage.getItem('@FeedbackApp:email') || "Enter email here";
 		store.dispatch(Actions.save_email(email));
 	} catch (error) {
-		//console.log(error);
 	}
 }
 
 load_email();
 
 store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects));
-
-//console.log("Cookie");
-//console.log(JSON.parse(localStorage.getItem('upVotes')) || [0]);
-//store.dispatch(Actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
 
 export default store;
