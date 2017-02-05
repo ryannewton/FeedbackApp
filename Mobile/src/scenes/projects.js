@@ -6,8 +6,8 @@ import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions';
+//Import actions
+import * as actions from '../actions';
 
 //Import components, functions, and styles
 import Project from '../components/project.js';
@@ -60,7 +60,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Projects);

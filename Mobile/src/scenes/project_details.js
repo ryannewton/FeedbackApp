@@ -6,8 +6,8 @@ import { View, Button, Text, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions';
+//Import actions
+import * as actions from '../actions';
 
 //Import componenets, functions, and styles
 import styles from '../styles/styles_main.js';
@@ -50,7 +50,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Project_Details);

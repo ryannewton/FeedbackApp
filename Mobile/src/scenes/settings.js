@@ -10,8 +10,8 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions';
+//Import actions
+import * as actions from '../actions';
 
 //Import componenets, functions, and styles
 import { Button, Header } from '../components/common';
@@ -69,7 +69,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);

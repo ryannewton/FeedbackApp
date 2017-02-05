@@ -6,8 +6,8 @@ import { AsyncStorage } from 'react-native';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
-//Import Actions
-import Actions from '../actions';
+//Import actions
+import * as actions from '../actions';
 
 //Import Reducers
 import Combined_Reducer from './reducer_index.js';
@@ -60,13 +60,13 @@ let store = createStore(
 async function load_email() {
 	try {
 		const email = await AsyncStorage.getItem('@FeedbackApp:email') || "Enter email here";
-		store.dispatch(Actions.save_email(email));
+		store.dispatch(actions.save_email(email));
 	} catch (error) {
 	}
 }
 
 load_email();
 
-store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects));
+store.dispatch(actions.pullProjects(actions.requestedProjects, actions.receivedProjects));
 
 export default store;
