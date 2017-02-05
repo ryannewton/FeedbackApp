@@ -18,7 +18,7 @@ import * as actions from '../actions';
 //Import components, functions, and styles
 import { Button, Header } from '../components/common';
 import Submitted from './submitted.js';
-import styles from '../styles/styles_main.js'; 
+import styles from '../styles/email_capture_styles'; 
 
 class EmailCapture extends Component {
 	constructor(props) {
@@ -30,16 +30,18 @@ class EmailCapture extends Component {
 	}
 
 	render() {
+		const { container, normalMargin, textDisplay, textInput } = styles;
+
 		return (
-			<View style={styles.container}>
+			<View style={container}>
 				<Header>
 					Enter Email:
 				</Header>
-				<Text style={[styles.normal_margin, { fontWeight: 'bold' }]}>
+				<Text style={[normalMargin, textDisplay]}>
 					Please enter your email address so we can keep you updated as your feedback is acted upon:
 				</Text>
 				<TextInput
-					style={[styles.normal_margin, styles.text_input]}
+					style={[normalMargin, textInput]}
 					multiline={true}
 					onChangeText={(email) => {
 						this.setState({ email });
