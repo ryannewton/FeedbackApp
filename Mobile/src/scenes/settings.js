@@ -2,11 +2,7 @@
 
 //Import Libraries
 import React, { Component } from 'react';
-import {
-	Text,
-	View,
-	TextInput,
-} from 'react-native';
+import { Text, View, TextInput, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -53,7 +49,10 @@ class Settings extends Component {
 				{/* Save button */}
 				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
 					<Button
-						onPress={() => this.props.save_email(this.state.email)}          
+						onPress={() => {
+							this.props.save_email(this.state.email);
+							Keyboard.dismiss();
+						}}
 						style={{ marginTop: 10 }}
 					>
 						Save
