@@ -57,7 +57,7 @@ class Feedback extends Component {
 			<Button	onPress={this.submitFeedback.bind(this)} style={{ marginTop: 10, height: 50 }}>
 				Submit Feedback
 			</Button>
-			);
+		);
 	}
 
 	render() {
@@ -67,7 +67,8 @@ class Feedback extends Component {
 					Thanks for providing feedback!
 				</Header>
 
-				<View style={{ paddingTop: 10 }}>
+				{/* Feedback input box */}
+				<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
 					<TextInput
 						multiline={true}
 						onChangeText={(text) => {
@@ -86,7 +87,12 @@ class Feedback extends Component {
 					/>
 				</View>
 
-				{this.renderButton()}
+				{/* Submit button / loading spinner */}
+				<View style={{ flexDirection: 'row' }}>
+					<View style={{ flex: 1, paddingHorizontal: 3 }}>
+						{this.renderButton()}
+					</View>
+				</View>
 			</View>
 		);
 	}

@@ -29,14 +29,7 @@ const styles = StyleSheet.create({
 		paddingLeft: 8,
 		paddingRight: 8,
 		backgroundColor: '#FFFFFF',
-		...Platform.select({
-			android: {
-				width: 340
-			},
-			ios: {
-				width: 340
-			}
-		}),
+		flex: 1
 	},
 
 	//Navigation	
