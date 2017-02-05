@@ -72,7 +72,11 @@ class Project extends Component {
 
 							{/* Upvote button */}
 							<View style={{ flex: 1, alignItems: 'flex-end' }}>
-								<Button	onPress={this.upvote} style={{ width: 80, height: 27, marginRight: 2 }}>
+								<Button
+									onPress={this.upvote}
+									style={{ width: 80, height: 27, marginRight: 2 }}
+									textStyle={{ paddingTop: 10, paddingBottom: 10 }}
+								>
 									Upvote!
 								</Button>
 							</View>
