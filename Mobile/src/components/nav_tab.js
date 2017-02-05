@@ -14,6 +14,10 @@ class NavTab extends Component {
 		this._onPress = this._onPress.bind(this);
 	}
 
+	_onPress() {
+		this.props.navigate({ type: 'selectTab', tabKey: this.props.route.key });
+	}
+
 	render() {
 		const style = [styles.tabText];
 		if (this.props.selected) {
@@ -26,10 +30,6 @@ class NavTab extends Component {
 				</Text>
 			</TouchableOpacity>
 		);
-	}
-
-	_onPress() {
-		this.props.navigate({ type: 'selectTab', tabKey: this.props.route.key });
 	}
 }
 

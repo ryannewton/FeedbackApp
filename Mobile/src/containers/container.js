@@ -6,8 +6,8 @@ import { NavigationExperimental, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import components, functions, and styles
 import NavTabs from '../components/nav_tabs.js';
@@ -21,9 +21,10 @@ class Container extends Component {
 		super(props, context);
 
 		this._renderScene = this._renderScene.bind(this);
+	}
 
-		console.log('Container Props');
-		console.log(props);
+	_renderScene(sceneProps: Object): React.Element {
+		return React.createElement(sceneProps.scene.route.component, { ...sceneProps });
 	}
 
 	render(): React.Element {
@@ -35,7 +36,7 @@ class Container extends Component {
 		return (
 			<View style={styles.navigator}>
 				<NavigationCardStack
-					key={'stack_' + tabKey}
+					key={`stack_ ${tabKey}`}
 					navigationState={scenes}
 					renderScene={this._renderScene}
 					style={styles.navigatorCardStack}					
@@ -47,10 +48,6 @@ class Container extends Component {
 			</View>
 		);
 	}
-
-	_renderScene(sceneProps: Object): React.Element {
-		return React.createElement(sceneProps.scene.route.component, { ...sceneProps });
-	}
 }
 
 function mapStateToProps(state) {
@@ -58,7 +55,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container);

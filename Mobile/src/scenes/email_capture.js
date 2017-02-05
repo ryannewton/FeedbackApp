@@ -1,5 +1,7 @@
 'use strict';
 
+// Collects email after they submit feedback for new users
+
 //Import Libraries
 import React, { Component } from 'react';
 import {
@@ -10,50 +12,58 @@ import {
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import components, functions, and styles
-import Button from '../components/button.js';
+import { Button, Header } from '../components/common';
 import Submitted from './submitted.js';
-import styles from '../styles/styles_main.js'; 
+import styles from '../styles/email_capture_styles'; 
 
-class Email_Capture extends Component {
+class EmailCapture extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
 			email: props.main.email
-		}
+		};
 	}
 
 	render() {
+		const { container, normalMargin, textDisplay, textInput } = styles;
+
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>
+			<View style={container}>
+				<Header>
 					Enter Email:
-				</Text>
-				<Text style={[styles.normal_margin,{fontWeight: 'bold'}]}>
+				</Header>
+				<Text style={[normalMargin, textDisplay]}>
 					Please enter your email address so we can keep you updated as your feedback is acted upon:
 				</Text>
 				<TextInput
-					style={[styles.normal_margin, styles.text_input]}
+					style={[normalMargin, textInput]}
 					multiline={true}
 					onChangeText={(email) => {
-						this.setState({email});
+						this.setState({ email });
 					}}
 					value={this.state.email}
 				/>
-				<View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
+				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
 					<Button
 						onPress={() => {
 								this.props.save_email(this.state.email);
 								this.props.submitFeedbackToServer(this.props.scene.route.text, this.state.email);
-								this.props.navigate({type: 'pop-push', route: {key: 'Submitted', component: Submitted}});
-							}}	
-						text="Save Email and Submit Feedback"
-						style={{marginTop: 10, width: 300}}
-					/>
+								this.props.navigate({ type: 'pop-push',
+									route: {
+										key: 'Submitted',
+										component: Submitted
+									}
+								});
+							}}
+						style={{ marginTop: 10, width: 300 }}
+					>
+						Save Email and Submit Feedback
+					</Button>
 				</View>
 			</View>
 		);
@@ -65,8 +75,8 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Email_Capture);
+export default connect(mapStateToProps, mapDispatchToProps)(EmailCapture);
 

@@ -6,8 +6,8 @@ import { AsyncStorage } from 'react-native';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import Reducers
 import Combined_Reducer from './reducer_index.js';
@@ -20,7 +20,8 @@ import Settings from '../scenes/settings.js';
 //Sets our initial state (before data is pulled from the server)
 const INITIAL_STATE = {
 	main: {
-		email: "Please set your email",
+		email: "",
+		loading: false
 	},
 	projects: [],
 	navigation: {
@@ -47,8 +48,7 @@ const INITIAL_STATE = {
 			index: 0,
 			routes: [{key: 'Settings Home', component: Settings }],
 		},
-	},
-	up_votes: [],
+	}
 };
 
 let store = createStore(
@@ -57,25 +57,16 @@ let store = createStore(
 	applyMiddleware(thunkMiddleware)
 );
 
-//AsyncStorage.removeItem('@FeedbackApp:email');
-
 async function load_email() {
 	try {
 		const email = await AsyncStorage.getItem('@FeedbackApp:email') || "Enter email here";
-		console.log(email);
-		store.dispatch(Actions.save_email(email));
+		store.dispatch(actions.save_email(email));
 	} catch (error) {
-		console.log(error);
 	}
 }
 
 load_email();
 
-store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects));
-
-//console.log("Cookie");
-//console.log(JSON.parse(localStorage.getItem('upVotes')) || [0]);
-//store.dispatch(Actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
+store.dispatch(actions.pullProjects(actions.requestedProjects, actions.receivedProjects));
 
 export default store;
-
