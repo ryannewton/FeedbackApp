@@ -6,8 +6,8 @@ import { View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import actions from '../actions';
+//Import actions
+import * as actions from '../actions';
 
 //Import components, functions, and styles
 import { Button, Header, Spinner } from '../components/common';
@@ -51,7 +51,7 @@ class Feedback extends Component {
 
 	renderButton() {
 		if (this.props.main.loading) {
-			return <Spinner size="large" />;
+			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
 		return (
 			<Button	onPress={this.submitFeedback.bind(this)} style={{ marginTop: 10, height: 50 }}>
