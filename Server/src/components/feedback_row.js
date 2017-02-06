@@ -43,7 +43,7 @@ export default class Feedback_Row extends React.Component {
       menu: {
         border: 'solid 1px #ccc'
       }
-    }   
+    }
 
     return (
       <tr>
@@ -53,7 +53,7 @@ export default class Feedback_Row extends React.Component {
           <button type="button" className="btn btn-primary" onClick={this.createProjectFromFeedback.bind(this)}>Create Project</button>
           {/*
           <Autocomplete
-          value={this.props.department}           
+          value={this.props.department}
           items={[
             {name: "GSB Residences"},
             {name: "Arbuckle Dining Pavillion"},

@@ -28,7 +28,6 @@ let actions = {
 		}
 	},
 
-
 	//Handle project, project_addition changes
 	saveProjectChanges(project) {
 		fetch(`/saveProjectChanges`, {
