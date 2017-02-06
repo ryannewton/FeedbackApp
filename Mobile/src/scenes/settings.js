@@ -2,21 +2,16 @@
 
 //Import Libraries
 import React, { Component } from 'react';
-import {
-	Text,
-	View,
-	TextInput,
-} from 'react-native';
+import { Text, View, TextInput, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import componenets, functions, and styles
-import Button from '../components/button.js';
-import Submitted from './submitted.js';
-import styles from '../styles/styles_main.js'; 
+import { Button, Header } from '../components/common';
+import styles from '../styles/settings_styles'; 
 
 class Settings extends Component {
 	constructor(props) {
@@ -24,32 +19,42 @@ class Settings extends Component {
 
 		this.state = {
 			email: props.main.email
-		}
+		};
 	}
 
 	render() {
+		const { container, normalMargin, textDisplay, textInput } = styles;
+
 		return (
-			<View style={styles.container}>
-				<Text style={styles.welcome}>
+			<View style={container}>
+				<Header>
 					Settings
-				</Text>
-				<Text style={[styles.normal_margin,{fontWeight: 'bold'}]}>
+				</Header>
+
+				{/* Update email description */}
+				<Text style={[normalMargin, textDisplay]}>
 					Edit your email address
 				</Text>
+
+				{/* Email update input */}
 				<TextInput
-					style={[styles.normal_margin, styles.text_input]}
+					style={[normalMargin, textInput]}
 					multiline={true}
-					onChangeText={(email) => {
-						this.setState({email});
-					}}
+					onChangeText={(email) => this.setState({ email })}
 					value={this.state.email}
 				/>
-				<View style={{flex: 1, flexDirection: 'column', alignItems: 'center'}}>
+
+				{/* Save button */}
+				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
 					<Button
-						onPress={() => this.props.save_email(this.state.email)}          
-						text="Save"
-						style={{marginTop: 10, width: 300}}
-					/>
+						onPress={() => {
+							this.props.save_email(this.state.email);
+							Keyboard.dismiss();
+						}}
+						style={{ marginTop: 10 }}
+					>
+						Save
+					</Button>
 				</View>
 			</View>
 		);
@@ -61,7 +66,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Settings);
