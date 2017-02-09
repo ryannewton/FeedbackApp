@@ -8,7 +8,8 @@ import {
 	EMAIL_CHANGED,
 	PASSWORD_CHANGED,
 	PASSWORD_CONFIRM_CHANGED,
-	SIGNUP_USER
+	SIGNUP_USER,
+	SIGNUP_USER_FAIL
 } from './types';
 
 export const emailChanged = (email) => (
@@ -47,5 +48,12 @@ export const signupUser = ({ email, password }) => (
 			.catch(() => {
 				// To do: Dispatch action alerting failed signup
 			});
+	}
+);
+
+export const signupUserFail = (err) => (
+	{
+		type: SIGNUP_USER_FAIL,
+		payload: err
 	}
 );
