@@ -9,10 +9,16 @@ import { Card, CardSection, Input, Button } from '../components/common';
 import {
 	emailChanged,
 	passwordChanged,
-	passwordConfirmChanged
+	passwordConfirmChanged,
+	signupUser
 } from '../actions';
 
 class Signup extends Component {
+	onButtonPress() {
+		const { email, password } = this.props;
+		this.props.signupUser({ email, password });
+	}
+
 	render() {
 		return (
 			<Card>
@@ -49,7 +55,7 @@ class Signup extends Component {
 				</CardSection>
 
 				{/* Confirmation button */}
-				<Button>
+				<Button onPress={this.onButtonPress.bind(this)}>
 					Signup
 				</Button>
 			</Card>
@@ -65,5 +71,6 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
 	emailChanged,
 	passwordChanged,
-	passwordConfirmChanged
+	passwordConfirmChanged,
+	signupUser
 })(Signup);
