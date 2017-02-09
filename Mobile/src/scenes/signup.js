@@ -2,11 +2,11 @@
 
 // Import Libraries
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
-import { Card, CardSection, Input, Button } from '../components/common';
+import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import {
 	emailChanged,
 	passwordChanged,
@@ -24,6 +24,20 @@ class Signup extends Component {
 		} else {
 			this.props.signupUser({ email, password });
 		}
+	}
+
+	renderButton() {
+		if (this.props.loading) {
+			return <Spinner />;
+		}
+
+		return (
+			<View style={{ flex: 1 }}>
+				<Button onPress={this.onButtonPress.bind(this)}>
+					Signup
+				</Button>
+			</View>
+		);
 	}
 
 	render() {
@@ -67,9 +81,9 @@ class Signup extends Component {
 				</Text>
 
 				{/* Confirmation button */}
-				<Button onPress={this.onButtonPress.bind(this)}>
-					Signup
-				</Button>
+				<CardSection>
+					{this.renderButton()}
+				</CardSection>
 			</Card>
 		);
 	}
@@ -84,8 +98,8 @@ const styles = {
 };
 
 const mapStateToProps = (state) => {
-	const { email, password, passwordConfirm, error } = state.auth;
-	return { email, password, passwordConfirm, error };
+	const { email, password, passwordConfirm, error, loading, user } = state.auth;
+	return { email, password, passwordConfirm, error, loading, user };
 };
 
 export default connect(mapStateToProps, {
