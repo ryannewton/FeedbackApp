@@ -46,7 +46,7 @@ export const signupUser = ({ email, password }) => (
 				// To do: Navigate away after success
 			})
 			.catch(() => {
-				// To do: Dispatch action alerting failed signup
+				dispatch({ type: SIGNUP_USER_FAIL, payload: 'Email address is already in use' });
 			});
 	}
 );
