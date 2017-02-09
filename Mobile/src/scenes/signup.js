@@ -2,6 +2,7 @@
 
 // Import Libraries
 import React, { Component } from 'react';
+import { Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
@@ -10,13 +11,19 @@ import {
 	emailChanged,
 	passwordChanged,
 	passwordConfirmChanged,
-	signupUser
+	signupUser,
+	signupUserFail
 } from '../actions';
 
 class Signup extends Component {
 	onButtonPress() {
-		const { email, password } = this.props;
-		this.props.signupUser({ email, password });
+		const { email, password, passwordConfirm } = this.props;
+		if (password !== passwordConfirm) {
+			const errorMessage = 'Passwords must match';
+			this.props.signupUserFail(errorMessage);
+		} else {
+			this.props.signupUser({ email, password });
+		}
 	}
 
 	render() {
@@ -54,6 +61,11 @@ class Signup extends Component {
 					/>
 				</CardSection>
 
+				{/* Error message (blank if no error) */}
+				<Text style={styles.errorTextStyle}>
+					{this.props.error}
+				</Text>
+
 				{/* Confirmation button */}
 				<Button onPress={this.onButtonPress.bind(this)}>
 					Signup
@@ -63,14 +75,23 @@ class Signup extends Component {
 	}
 }
 
+const styles = {
+	errorTextStyle: {
+		fontSize: 20,
+		alignSelf: 'center',
+		color: 'red'
+	}
+};
+
 const mapStateToProps = (state) => {
-	const { email, password, passwordConfirm } = state.auth;
-	return { email, password, passwordConfirm };
+	const { email, password, passwordConfirm, error } = state.auth;
+	return { email, password, passwordConfirm, error };
 };
 
 export default connect(mapStateToProps, {
 	emailChanged,
 	passwordChanged,
 	passwordConfirmChanged,
-	signupUser
+	signupUser,
+	signupUserFail
 })(Signup);
