@@ -9,6 +9,7 @@ import {
 	PASSWORD_CHANGED,
 	PASSWORD_CONFIRM_CHANGED,
 	SIGNUP_USER,
+	SIGNUP_USER_SUCCESS,
 	SIGNUP_USER_FAIL
 } from './types';
 
@@ -39,15 +40,20 @@ export const signupUser = ({ email, password }) => (
 		dispatch({ type: SIGNUP_USER });
 
 		firebase.auth().createUserWithEmailAndPassword(email, password)
-			.then((res) => {
-				console.log('Signup successful');
-				console.log('Response: ', res);
-				// To do: Dispatch action confirming successful signup
+			.then((user) => {
+				dispatch(signupUserSuccess(user));
 				// To do: Navigate away after success
 			})
 			.catch(() => {
-				dispatch({ type: SIGNUP_USER_FAIL, payload: 'Email address is already in use' });
+				dispatch(signupUserFail('Email address is already in use'));
 			});
+	}
+);
+
+export const signupUserSuccess = (user) => (
+	{
+		type: SIGNUP_USER_SUCCESS,
+		payload: user
 	}
 );
 
