@@ -2,10 +2,15 @@
 
 // Import Libraries
 import React, { Component } from 'react';
-import { Text } from 'react-native';
+import { connect } from 'react-redux';
 
-// Import components
+// Import components and action creators
 import { Card, CardSection, Input, Button } from '../components/common';
+import {
+	emailChanged,
+	passwordChanged,
+	passwordConfirmChanged
+} from '../actions';
 
 class Signup extends Component {
 	render() {
@@ -16,6 +21,8 @@ class Signup extends Component {
 					<Input
 						label="Email"
 						placeholder="joe@gmail.com"
+						value={this.props.email}
+						onChangeText={(text) => this.props.emailChanged(text)}
 					/>
 				</CardSection>
 
@@ -25,6 +32,8 @@ class Signup extends Component {
 						secureTextEntry
 						label="Password"
 						placeholder="password"
+						value={this.props.password}
+						onChangeText={(text) => this.props.passwordChanged(text)}
 					/>
 				</CardSection>
 
@@ -34,6 +43,8 @@ class Signup extends Component {
 						secureTextEntry
 						label="Confirm Password"
 						placeholder="password"
+						value={this.props.passwordConfirm}
+						onChangeText={(text) => this.props.passwordConfirmChanged(text)}
 					/>
 				</CardSection>
 
@@ -46,4 +57,13 @@ class Signup extends Component {
 	}
 }
 
-export default Signup;
+const mapStateToProps = (state) => {
+	const { email, password, passwordConfirm } = state.auth;
+	return { email, password, passwordConfirm };
+};
+
+export default connect(mapStateToProps, {
+	emailChanged,
+	passwordChanged,
+	passwordConfirmChanged
+})(Signup);
