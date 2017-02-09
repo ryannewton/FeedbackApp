@@ -1,82 +1,98 @@
 'use strict';
 
 //Import libaries
-import React, { Component, PropTypes } from 'react';
-import { Text, View, TextInput, AsyncStorage } from 'react-native';
+import React, { Component } from 'react';
+import { View, TextInput } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import components, functions, and styles
-import Button from '../components/button.js';
+import { Button, Header, Spinner } from '../components/common';
 import Submitted from './submitted.js';
 import Email_Capture from './email_capture.js';
-import styles from '../styles/styles_main.js'; 
+import styles from '../styles/styles_main.js';
 
+const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
+	'appropriate department head on Monday and get back to you with their response.';
 
 class Feedback extends Component {
-
 	constructor(props: Object, context: any) {
 		super(props, context);
 
-		this.state = {      
+		this.state = {
 			height: 0,
-			text: "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.",
+			text: placeholderText,
 			anonymous: false
 		};
-
-		this.submitFeedback = this.submitFeedback.bind(this);
 	}
 
 	submitFeedback() {
+		let scene = {};
 		let route = {};
-		if (this.props.main.email !== "Enter email here") {
-			this.props.submitFeedbackToServer(this.state.text, this.props.main.email);
-			route = {key: 'Submitted', component: Submitted};
+		const { text } = this.state;
+		const { email } = this.props.main;
+
+		// If email address is on file, go to submitted scene
+		if (email !== 'Enter email here') {
+			scene = { key: 'Submitted', component: Submitted };
+			route = { type: 'push', route: scene };
+			this.props.submitFeedbackToServer(text, email, route, this.props.navigate);
+		} else {
+			// Otherwise, go to email_capture scene when done
+			scene = { key: 'Email_Capture', text, component: Email_Capture };
+			route = { type: 'push', route: scene };
+			this.props.navigate(route);
 		}
-		else {
-			route = {key: 'Email_Capture', text: this.state.text, component: Email_Capture};
+		this.setState({ text: placeholderText });
+	}
+
+	renderButton() {
+		if (this.props.main.loading) {
+			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
-		this.setState({text: "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response."});
-		this.props.navigate({type: 'push', route});
-	}	
+		return (
+			<Button	onPress={this.submitFeedback.bind(this)} style={{ marginTop: 10, height: 50 }}>
+				Submit Feedback
+			</Button>
+		);
+	}
 
 	render() {
 		return (
-			<View style={[styles.container,{flex: 1, flexDirection: 'column', alignItems: 'center'}]}>
-				<Text style={styles.welcome}>
+			<View style={[styles.container, { alignItems: 'center' }]}>
+				<Header>
 					Thanks for providing feedback!
-				</Text>
-				<TextInput
-					multiline={true}
-					onChangeText={(text) => {
-						this.setState({text});
-					}}
-					onFocus={() => {
-						if (this.state.text === "Enter your feedback here. We will discuss it with the appropriate department head on Monday and get back to you with their response.") {
-							this.setState({text: ""});
-						}
-					}}
-					onContentSizeChange={(event) => {
-						this.setState({height: event.nativeEvent.contentSize.height});
-					}}
-					style={styles.feedback_input}
-					value={this.state.text}
-				/>
-				<Button
-					onPress={this.submitFeedback}       
-					text="Submit Feedback"
-					style={{marginTop: 10, width: 300}}
-				/>
-				{/*
-				<CheckBox
-					text="Submit Anonymously"
-					onCheck={() => this.setState({anonymous: !this.state.anonymous})},
-					checked={this.state.anonymous}
-				/>
-			*/}
+				</Header>
+
+				{/* Feedback input box */}
+				<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
+					<TextInput
+						multiline={true}
+						onChangeText={(text) => {
+							this.setState({ text });
+						}}
+						onFocus={() => {
+							if (this.state.text === placeholderText) {
+								this.setState({ text: '' });
+							}
+						}}
+						onContentSizeChange={(event) => {
+							this.setState({ height: event.nativeEvent.contentSize.height });
+						}}
+						style={styles.feedback_input}
+						value={this.state.text}
+					/>
+				</View>
+
+				{/* Submit button / loading spinner */}
+				<View style={{ flexDirection: 'row' }}>
+					<View style={{ flex: 1, paddingHorizontal: 3 }}>
+						{this.renderButton()}
+					</View>
+				</View>
 			</View>
 		);
 	}
@@ -87,9 +103,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
-
-

@@ -2,57 +2,90 @@
 
 //Import Libraries
 import React, { Component } from 'react';
-import {
-	View,
-	Text,
-	TouchableHighlight,
-} from 'react-native';
+import { View, Text, TouchableHighlight } from 'react-native';
 
 //Import componenets, functions, and styles
-import Button from '../components/button.js';
-import Project_Details from '../scenes/project_details.js';
+//import Button from '../components/button.js';
+import ProjectDetails from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
+import { Button, Card } from './common';
 
 class Project extends Component {
 	constructor(props) {
 		super(props);
 
-		this.go_to_details = this.go_to_details.bind(this);
-		this.up_vote = this.up_vote.bind(this);
+		this.goToDetails = this.goToDetails.bind(this);
+		this.upvote = this.upvote.bind(this);
 	}
 
-	go_to_details() {
-		//const route = {key: 'Project_Details', item: this.props.item, component: Project_Details};
+	goToDetails() {
+		//const route = {key: 'ProjectDetails', item: this.props.item, component: ProjectDetails};
 		//this.props.navigate({type: 'push', route});
 	}
 
-	up_vote() {
-		let new_project = Object.assign({}, this.props.item, {votes: this.props.item.votes + 1});
-		this.props.saveProjectChanges(new_project);
+	upvote() {
+		const newProject = { ...this.props.item, votes: this.props.item.votes + 1 };
+		this.props.saveProjectChanges(newProject);
+	}
+
+	// Temporary fix. Async issue is causing this.props.item to be temporarily undefined
+	renderVoteCount() {
+		if (this.props.item === undefined) {
+			return '';
+		}
+		return `${this.props.item.votes} Votes`;
+	}
+
+	// Temporary fix. Async issue is causing this.props.item to be temporarily undefined
+	renderTitle() {
+		if (this.props.item === undefined) {
+			return '';
+		}
+		return this.props.item.title;
 	}
 
 	render() {
-			return (
+		const { buttonText, lowWeight, row } = styles;
+
+		return (
+			<Card>
 				<TouchableHighlight
-					style={styles.row}
-					underlayColor="#D0D0D0"
-					onPress={this.go_to_details}>
-					<View style={styles.project}>
-						<Text style={[styles.buttonText, styles.low_weight]}>
-							{this.props.item.votes} Votes: 
+					style={row}
+					underlayColor='#D0D0D0'
+					onPress={this.goToDetails}
+				>
+
+					<View style={{ justifyContent: 'flex-start' }}>
+						{/* Project title */}
+						<Text style={buttonText}>
+							{this.renderTitle()}
 						</Text>
-						<Text style={styles.buttonText}>
-							{this.props.item.title}
-						</Text>
-						<View style={styles.buttonAlign}>
-							<Button
-								onPress={this.up_vote}          
-								text="Up Vote!"
-							/>
+
+						{/* Vote section */}
+						<View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
+							{/* Vote count */}
+							<View style={{ flex: 1 }}>
+								<Text style={[buttonText, lowWeight]}>
+									{this.renderVoteCount()}
+								</Text>
+							</View>
+
+							{/* Upvote button */}
+							<View style={{ flex: 1, alignItems: 'flex-end' }}>
+								<Button
+									onPress={this.upvote}
+									style={{ width: 80, height: 27, marginRight: 2 }}
+									textStyle={{ paddingTop: 10, paddingBottom: 10 }}
+								>
+									Upvote!
+								</Button>
+							</View>
 						</View>
 					</View>
+
 				</TouchableHighlight>
-			);
+			</Card>
+		);
 	}
 }
 

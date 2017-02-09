@@ -5,6 +5,11 @@ import { combineReducers } from 'redux';
 import main from './reducer_main.js';
 import navigation from './reducer_navigation.js';
 import projects from './reducer_projects.js';
-import up_votes from './reducer_up_votes.js';
+import auth from './auth_reducer';
 
-export default combineReducers({ main, navigation, projects, up_votes });
+export default combineReducers({
+	main,
+	navigation,
+	projects,
+	auth
+});

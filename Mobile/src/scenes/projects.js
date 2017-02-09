@@ -2,20 +2,17 @@
 
 //Import libraries
 import React, { Component } from 'react';
-import {
-	Text,
-	View,
-	ScrollView,
-} from 'react-native';
+import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import components, functions, and styles
 import Project from '../components/project.js';
-import styles from '../styles/styles_main.js'; 
+import { Header } from '../components/common';
+import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
 	constructor(props) {
@@ -23,21 +20,35 @@ class Projects extends Component {
 	}
 
 	compareNumbers(a, b) {
-    return b.votes - a.votes;
-  }
+		return b.votes - a.votes;
+	}
+
+	renderProjects() {
+		const projects = this.props.projects.sort(this.compareNumbers).map((item, index) => {
+			return (
+				<Project
+					item={item}
+					key={index}
+					navigate={this.props.navigate}
+					saveProjectChanges={this.props.saveProjectChanges}
+				/>
+			);
+		});
+		
+		return projects;
+	}
 
 	render() {
-		const projects = this.props.projects.sort(this.compareNumbers).map((item, index) => {
-			return <Project item={item} key={index} navigate={this.props.navigate} saveProjectChanges={this.props.saveProjectChanges} />
-		});
-
 		return (
 			<View style={styles.container}>
-				<Text style={styles.welcome}>
+
+				<Header>
 					Projects
-				</Text>
+				</Header>
+
+				{/* List of projects */}
 				<ScrollView>
-					{projects}
+					{this.renderProjects()}
 				</ScrollView>
 			</View>
 		);
@@ -49,7 +60,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Projects);

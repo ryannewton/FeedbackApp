@@ -1,22 +1,19 @@
 'use strict';
 
 //Import libaries
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
 import { NavigationExperimental, View } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-const {
-	CardStack: NavigationCardStack,
-	PropTypes: NavigationPropTypes,
-} = NavigationExperimental;
-
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import components, functions, and styles
-import Nav_Tabs from '../components/nav_tabs.js';
+import NavTabs from '../components/nav_tabs.js';
 import styles from '../styles/styles_main.js';
+
+const { CardStack: NavigationCardStack } = NavigationExperimental;
 
 class Container extends Component {
 
@@ -24,34 +21,32 @@ class Container extends Component {
 		super(props, context);
 
 		this._renderScene = this._renderScene.bind(this);
+	}
 
-		console.log("Container Props");
-		console.log(props);
+	_renderScene(sceneProps: Object): React.Element {
+		return React.createElement(sceneProps.scene.route.component, { ...sceneProps });
 	}
 
 	render(): React.Element {
-		const {tabs} = this.props.navigation;
+		// Add comment describing these variables
+		const { tabs } = this.props.navigation;
 		const tabKey = tabs.routes[tabs.index].key;
 		const scenes = this.props.navigation[tabKey];
 
 		return (
 			<View style={styles.navigator}>
 				<NavigationCardStack
-					key={'stack_' + tabKey}
+					key={`stack_ ${tabKey}`}
 					navigationState={scenes}
 					renderScene={this._renderScene}
 					style={styles.navigatorCardStack}					
 				/>
-				<Nav_Tabs
+				<NavTabs
 					navigationState={tabs}
 					navigate={this.props.navigate}
 				/>
 			</View>
 		);
-	}
-
-	_renderScene(sceneProps: Object): React.Element {
-		return React.createElement(sceneProps.scene.route.component, {...sceneProps} );
 	}
 }
 
@@ -60,7 +55,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container);

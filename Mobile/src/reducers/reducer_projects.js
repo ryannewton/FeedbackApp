@@ -1,28 +1,55 @@
 'use strict';
 
-export default function projects(state = [], action) {
-  switch (action.type) {
-    case 'REQUESTED_PROJECTS':
-      return state;
-      break;
-    case 'RECEIVED_PROJECTS':
-      return action.projects;
-      break;
-    case 'SAVE_PROJECT_CHANGES':
-      let index = state.findIndex((project) => {
-        return project.id === action.project.id;
-      });
-      let new_state = state.slice(0);
-      new_state.splice(index, 1, action.project);
-      return new_state;
-      break;
-    case 'ADD_PROJECT':
-      return state.splice(state.length-1, 0, {id: action.id, title: "Blank Title", description: "Blank Description", votes: 0});
-      break;
-    case 'DELETE_PROJECT':
-      return state.filter((project) => { return project.id !== action.id; });
-      break;
-    default:
-      return state;
-  }
-}
+// Import libraries
+import axios from 'axios';
+
+// Import action types
+import {
+	REQUESTED_PROJECTS,
+	RECEIVED_PROJECTS,
+	SAVE_PROJECT_CHANGES
+} from '../actions/types';
+
+const ROOT_URL = 'https://stanfordfeedback.com';
+
+export default (state = [], action) => {
+	switch (action.type) {
+		case REQUESTED_PROJECTS:
+			return state;
+		case RECEIVED_PROJECTS:
+			return action.payload;
+		case SAVE_PROJECT_CHANGES:
+			saveProjectChanges(action.payload);
+			const index = state.findIndex((project) => project.id === action.payload.id);
+			const newState = state.slice(0);
+			newState.splice(index, 1, action.payload);
+			return newState;
+		default:
+			return state;
+	}
+};
+
+// const saveProjectChanges = (project) => {
+// 	fetch('https://stanfordfeedback.com/saveProjectChanges', {
+// 		method: 'POST',
+// 		headers: {
+// 			Accept: 'application/json',
+// 			'Content-Type': 'application/json',
+// 		},
+// 		body: JSON.stringify({
+// 			project
+// 		})
+// 	});
+// };
+
+const saveProjectChanges = (project) => {
+	console.log('POST request initiated to /saveProjectChanges');
+	console.log('body is: ', project);
+	axios.post(`${ROOT_URL}/saveProjectChanges`, project)
+	.then((res) => {
+		console.log('saveProjectChange successful. Response: ', res);
+	})
+	.catch((err) => {
+		console.log('saveProjectChange FAIL. Response: ', err);
+	});
+};

@@ -3,6 +3,10 @@
 //Import libaries
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
+import firebase from 'firebase';
+
+//Import API keys
+import firebaseConfig from '../../api_keys';
 
 //Import Store
 import store from '../reducers/store.js';
@@ -12,6 +16,9 @@ import Container from './container.js';
 
 // Defines a high-level (container) component
 export default class Index extends Component {
+	componentWillMount() {
+		firebase.initializeApp(firebaseConfig);
+	}
 
 	render() {
 		return (
@@ -21,5 +28,3 @@ export default class Index extends Component {
 		);
 	}
 }
-
-
