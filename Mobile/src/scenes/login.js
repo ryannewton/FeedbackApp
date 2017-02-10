@@ -7,9 +7,14 @@ import { connect } from 'react-redux';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Header } from '../components/common';
-import { emailChanged, passwordChanged } from '../actions';
+import { emailChanged, passwordChanged, loginUser } from '../actions';
 
 class Login extends Component {
+	onButtonPress() {
+		const { email, password } = this.props;
+		this.props.loginUser({ email, password });
+	}
+
 	render() {
 		return (
 			<View>
@@ -39,7 +44,7 @@ class Login extends Component {
 					</CardSection>
 
 					{/* Login button */}
-					<Button>
+					<Button onPress={this.onButtonPress.bind(this)}>
 						Login
 					</Button>
 
@@ -54,4 +59,8 @@ const mapStateToProps = (state) => {
 	return { email, password };
 };
 
-export default connect(mapStateToProps, { emailChanged, passwordChanged })(Login);
+export default connect(mapStateToProps, {
+	emailChanged,
+	passwordChanged,
+	loginUser
+})(Login);
