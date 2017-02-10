@@ -3,7 +3,11 @@
 // Import Libraries
 import firebase from 'firebase';
 
-// Import types
+// Import components
+import Submitted from '../scenes/submitted';
+
+// Import types & other action creators
+import { navigate } from './FeedbackActions';
 import {
 	EMAIL_CHANGED,
 	PASSWORD_CHANGED,
@@ -44,7 +48,16 @@ export const signupUser = ({ email, password }) => (
 		firebase.auth().createUserWithEmailAndPassword(email, password)
 			.then((user) => {
 				dispatch(signupUserSuccess(user));
-				// To do: Navigate away after success
+
+				// Navigate to Submitted scene
+				const route = {
+					type: 'pop-push',
+					route: {
+						key: 'Submitted',
+						component: Submitted
+					}
+				};
+				dispatch(navigate(route));
 			})
 			.catch(() => {
 				dispatch(signupUserFail('Email address is already in use'));
@@ -71,11 +84,20 @@ export const loginUser = ({ email, password }) => (
 		dispatch({ type: LOGIN_USER });
 
 		firebase.auth().signInWithEmailAndPassword(email, password)
-		.then((user) => {
-			dispatch(loginUserSuccess(user));
-			// To do: Navigate away
-		})
-		.catch(() => dispatch(loginUserFail()));
+			.then((user) => {
+				dispatch(loginUserSuccess(user));
+
+				// Navigate to Submitted scene
+				const route = {
+					type: 'pop-push',
+					route: {
+						key: 'Submitted',
+						component: Submitted
+					}
+				};
+				dispatch(navigate(route));
+			})
+			.catch(() => dispatch(loginUserFail()));
 	}
 );
 
