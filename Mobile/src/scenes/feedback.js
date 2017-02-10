@@ -12,8 +12,9 @@ import * as actions from '../actions';
 //Import components, functions, and styles
 import { Button, Header, Spinner } from '../components/common';
 import Submitted from './submitted.js';
-import Email_Capture from './email_capture.js';
+import Signup from './signup';
 import styles from '../styles/styles_main.js';
+
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
 	'appropriate department head on Monday and get back to you with their response.';
@@ -42,7 +43,7 @@ class Feedback extends Component {
 			this.props.submitFeedbackToServer(text, email, route, this.props.navigate);
 		} else {
 			// Otherwise, go to email_capture scene when done
-			scene = { key: 'Email_Capture', text, component: Email_Capture };
+			scene = { key: 'Signup', text, component: Signup };
 			route = { type: 'push', route: scene };
 			this.props.navigate(route);
 		}
