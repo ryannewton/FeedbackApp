@@ -2,7 +2,7 @@
 
 // Import libraries
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
@@ -43,6 +43,11 @@ class Login extends Component {
 						/>
 					</CardSection>
 
+					{/* Error message (if any) */}
+					<Text style={styles.errorTextStyle}>
+						{this.props.error}
+					</Text>
+
 					{/* Login button */}
 					<Button onPress={this.onButtonPress.bind(this)}>
 						Login
@@ -54,9 +59,17 @@ class Login extends Component {
 	}
 }
 
+const styles = {
+	errorTextStyle: {
+		fontSize: 20,
+		alignSelf: 'center',
+		color: 'red'
+	}
+};
+
 const mapStateToProps = (state) => {
-	const { email, password } = state.auth;
-	return { email, password };
+	const { email, password, loading, user, error } = state.auth;
+	return { email, password, loading, user, error };
 };
 
 export default connect(mapStateToProps, {
