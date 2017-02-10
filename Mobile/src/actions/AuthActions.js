@@ -10,7 +10,9 @@ import {
 	PASSWORD_CONFIRM_CHANGED,
 	SIGNUP_USER,
 	SIGNUP_USER_SUCCESS,
-	SIGNUP_USER_FAIL
+	SIGNUP_USER_FAIL,
+	LOGIN_USER_SUCCESS,
+	LOGIN_USER_FAIL
 } from './types';
 
 export const emailChanged = (email) => (
@@ -69,15 +71,24 @@ export const loginUser = ({ email, password }) => (
 
 		firebase.auth().signInWithEmailAndPassword(email, password)
 		.then((user) => {
-			console.log('Signin successful');
-			console.log('Response: ', user);
-			// To do: Dispatch a success action creator
+			dispatch(loginUserSuccess(user));
 			// To do: Navigate away
 		})
-		.catch((err) => {
-			console.log('Signin FAIL');
-			console.log('Error: ', err);
-			// To do: Dispatch a fail action creator
-		});
+		.catch(() => dispatch(loginUserFail()));
 	}
 );
+
+export const loginUserSuccess = (user) => (
+	{
+		type: LOGIN_USER_SUCCESS,
+		payload: user
+	}
+);
+
+export const loginUserFail = () => {
+	const err = 'Login failed. Invalid email or password';
+	return {
+		type: LOGIN_USER_FAIL,
+		payload: err
+	};
+};
