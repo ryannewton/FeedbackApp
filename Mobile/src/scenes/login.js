@@ -6,13 +6,27 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
-import { Card, CardSection, Input, Button, Header } from '../components/common';
+import { Card, CardSection, Input, Button, Header, Spinner } from '../components/common';
 import { emailChanged, passwordChanged, loginUser } from '../actions';
 
 class Login extends Component {
 	onButtonPress() {
 		const { email, password } = this.props;
 		this.props.loginUser({ email, password });
+	}
+
+	renderButton() {
+		if (this.props.loading) {
+			return <Spinner />;
+		}
+
+		return (
+			<View style={{ flex: 1 }}>
+				<Button onPress={this.onButtonPress.bind(this)}>
+					Login
+				</Button>
+			</View>
+		);
 	}
 
 	render() {
@@ -49,9 +63,9 @@ class Login extends Component {
 					</Text>
 
 					{/* Login button */}
-					<Button onPress={this.onButtonPress.bind(this)}>
-						Login
-					</Button>
+					<CardSection>
+						{this.renderButton()}
+					</CardSection>
 
 				</Card>
 			</View>

@@ -11,6 +11,7 @@ import {
 	SIGNUP_USER,
 	SIGNUP_USER_SUCCESS,
 	SIGNUP_USER_FAIL,
+	LOGIN_USER,
 	LOGIN_USER_SUCCESS,
 	LOGIN_USER_FAIL
 } from './types';
@@ -67,7 +68,7 @@ export const signupUserFail = (err) => (
 
 export const loginUser = ({ email, password }) => (
 	(dispatch) => {
-		// To do: Dispatch action creator with type LOGIN_USER
+		dispatch({ type: LOGIN_USER });
 
 		firebase.auth().signInWithEmailAndPassword(email, password)
 		.then((user) => {
