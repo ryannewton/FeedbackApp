@@ -1,10 +1,12 @@
 'use strict';
 
 // Import Libraries
+import { AsyncStorage } from 'react-native';
 import firebase from 'firebase';
 
-// Import components
+// Import components & constants
 import Submitted from '../scenes/submitted';
+import { ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
 import { navigate } from './FeedbackActions';
@@ -47,7 +49,12 @@ export const signupUser = ({ email, password }) => (
 
 		firebase.auth().createUserWithEmailAndPassword(email, password)
 			.then((user) => {
-				dispatch(signupUserSuccess(user));
+				// Get JWT and add to AsyncStorage
+				user.getToken()
+					.then((token) => {
+						AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
+						dispatch(signupUserSuccess(token));
+					});
 
 				// Navigate to Submitted scene
 				const route = {
@@ -57,8 +64,10 @@ export const signupUser = ({ email, password }) => (
 						component: Submitted
 					}
 				};
+
 				dispatch(navigate(route));
 			})
+			// If signup fails
 			.catch(() => {
 				dispatch(signupUserFail('Email address is already in use'));
 			});
@@ -85,7 +94,12 @@ export const loginUser = ({ email, password }) => (
 
 		firebase.auth().signInWithEmailAndPassword(email, password)
 			.then((user) => {
-				dispatch(loginUserSuccess(user));
+				// Get JWT and add to AsyncStorage
+				user.getToken()
+					.then((token) => {
+						AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
+						dispatch(loginUserSuccess(token));
+					});
 
 				// Navigate to Submitted scene
 				const route = {
@@ -97,6 +111,7 @@ export const loginUser = ({ email, password }) => (
 				};
 				dispatch(navigate(route));
 			})
+			// If login fails
 			.catch(() => dispatch(loginUserFail()));
 	}
 );
