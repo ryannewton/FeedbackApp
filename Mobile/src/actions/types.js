@@ -1,6 +1,7 @@
 'use strict';
 
 // FeedbackActions types
+export const FEEDBACK_CHANGED = 'feedback_changed';
 export const SET_EMAIL = 'set_email';
 export const UPDATE_NAV_STATE = 'update_nav_state';
 export const SET_UP_VOTES = 'set_upvotes';

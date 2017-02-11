@@ -4,6 +4,7 @@ import { AsyncStorage } from 'react-native';
 import axios from 'axios';
 
 import {
+	FEEDBACK_CHANGED,
 	SET_EMAIL,
 	UPDATE_NAV_STATE,
 	SET_UP_VOTES,
@@ -19,6 +20,13 @@ import {
 } from './types';
 
 const ROOT_URL = 'https://stanfordfeedback.com';
+
+export const feedbackChanged = (feedback) => (
+	{
+		type: FEEDBACK_CHANGED,
+		payload: feedback
+	}
+);
 
 export const submitFeedbackToServer = (text, email, route) => (
 	function (dispatch) {

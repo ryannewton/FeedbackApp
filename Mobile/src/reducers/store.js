@@ -17,11 +17,15 @@ import Feedback from '../scenes/feedback.js';
 import Projects from '../scenes/projects.js';
 import Settings from '../scenes/settings.js';
 
+const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
+	'appropriate department head on Monday and get back to you with their response.';
+
 //Sets our initial state (before data is pulled from the server)
 const INITIAL_STATE = {
 	main: {
 		email: "",
-		loading: false
+		loading: false,
+		feedback: placeholderText
 	},
 	projects: [],
 	navigation: {
