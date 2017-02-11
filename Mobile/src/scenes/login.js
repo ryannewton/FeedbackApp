@@ -2,7 +2,7 @@
 
 // Import libraries
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
@@ -50,44 +50,46 @@ class Login extends Component {
 
 	render() {
 		return (
-			<View>
-				<Header>
-					Login
-				</Header>
-				<Card>
-					{/* Email input */}
-					<CardSection>
-						<Input
-							label="Email"
-							placeholder="joe@gmail.com"
-							onChangeText={(text) => this.props.emailChanged(text)}
-							value={this.props.email}
-						/>
-					</CardSection>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View>
+					<Header>
+						Login
+					</Header>
+					<Card>
+						{/* Email input */}
+						<CardSection>
+							<Input
+								label="Email"
+								placeholder="joe@gmail.com"
+								onChangeText={(text) => this.props.emailChanged(text)}
+								value={this.props.email}
+							/>
+						</CardSection>
 
-					{/* Password input */}
-					<CardSection>
-						<Input
-							secureTextEntry
-							label="Password"
-							placeholder="password"
-							onChangeText={(text) => this.props.passwordChanged(text)}
-							value={this.props.password}
-						/>
-					</CardSection>
+						{/* Password input */}
+						<CardSection>
+							<Input
+								secureTextEntry
+								label="Password"
+								placeholder="password"
+								onChangeText={(text) => this.props.passwordChanged(text)}
+								value={this.props.password}
+							/>
+						</CardSection>
 
-					{/* Error message (if any) */}
-					<Text style={styles.errorTextStyle}>
-						{this.props.error}
-					</Text>
+						{/* Error message (if any) */}
+						<Text style={styles.errorTextStyle}>
+							{this.props.error}
+						</Text>
 
-					{/* Confirmation buttons, and 'go to signup' button */}
-					<CardSection>
-						{this.renderButtons()}
-					</CardSection>
+						{/* Confirmation buttons, and 'go to signup' button */}
+						<CardSection>
+							{this.renderButtons()}
+						</CardSection>
 
-				</Card>
-			</View>
+					</Card>
+				</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }

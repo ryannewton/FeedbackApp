@@ -2,7 +2,7 @@
 
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
@@ -62,55 +62,57 @@ class Signup extends Component {
 
 	render() {
 		return (
-			<View>
-				<Header>
-					Sign Up
-				</Header>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View>
+					<Header>
+						Sign Up
+					</Header>
 
-				<Card>
-					{/* Email input */}
-					<CardSection>
-						<Input
-							label="Email"
-							placeholder="joe@gmail.com"
-							value={this.props.email}
-							onChangeText={(text) => this.props.emailChanged(text)}
-						/>
-					</CardSection>
+					<Card>
+						{/* Email input */}
+						<CardSection>
+							<Input
+								label="Email"
+								placeholder="joe@gmail.com"
+								value={this.props.email}
+								onChangeText={(text) => this.props.emailChanged(text)}
+							/>
+						</CardSection>
 
-					{/* Password input */}
-					<CardSection>
-						<Input
-							secureTextEntry
-							label="Password"
-							placeholder="password"
-							value={this.props.password}
-							onChangeText={(text) => this.props.passwordChanged(text)}
-						/>
-					</CardSection>
+						{/* Password input */}
+						<CardSection>
+							<Input
+								secureTextEntry
+								label="Password"
+								placeholder="password"
+								value={this.props.password}
+								onChangeText={(text) => this.props.passwordChanged(text)}
+							/>
+						</CardSection>
 
-					{/* Password confirm input */}
-					<CardSection>
-						<Input
-							secureTextEntry
-							label="Confirm Password"
-							placeholder="password"
-							value={this.props.passwordConfirm}
-							onChangeText={(text) => this.props.passwordConfirmChanged(text)}
-						/>
-					</CardSection>
+						{/* Password confirm input */}
+						<CardSection>
+							<Input
+								secureTextEntry
+								label="Confirm Password"
+								placeholder="password"
+								value={this.props.passwordConfirm}
+								onChangeText={(text) => this.props.passwordConfirmChanged(text)}
+							/>
+						</CardSection>
 
-					{/* Error message (blank if no error) */}
-					<Text style={styles.errorTextStyle}>
-						{this.props.error}
-					</Text>
+						{/* Error message (blank if no error) */}
+						<Text style={styles.errorTextStyle}>
+							{this.props.error}
+						</Text>
 
-					{/* Confirmation button, and 'go to login' button */}
-					<CardSection>
-						{this.renderButtons()}
-					</CardSection>
-				</Card>
-			</View>
+						{/* Confirmation button, and 'go to login' button */}
+						<CardSection>
+							{this.renderButtons()}
+						</CardSection>
+					</Card>
+				</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }

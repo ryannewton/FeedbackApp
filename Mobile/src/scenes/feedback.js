@@ -2,7 +2,7 @@
 
 //Import libaries
 import React, { Component } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -40,7 +40,7 @@ class Feedback extends Component {
 		if (email !== 'Enter email here') {
 			scene = { key: 'Submitted', component: Submitted };
 			route = { type: 'push', route: scene };
-			this.props.submitFeedbackToServer(text, email, route, this.props.navigate);
+			this.props.submitFeedbackToServer(text, email, route);
 		} else {
 			// Otherwise, go to email_capture scene when done
 			scene = { key: 'Signup', text, component: Signup };
@@ -63,38 +63,40 @@ class Feedback extends Component {
 
 	render() {
 		return (
-			<View style={[styles.container, { alignItems: 'center' }]}>
-				<Header>
-					Thanks for providing feedback!
-				</Header>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={[styles.container, { alignItems: 'center' }]}>
+					<Header>
+						Thanks for providing feedback!
+					</Header>
 
-				{/* Feedback input box */}
-				<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
-					<TextInput
-						multiline={true}
-						onChangeText={(text) => {
-							this.setState({ text });
-						}}
-						onFocus={() => {
-							if (this.state.text === placeholderText) {
-								this.setState({ text: '' });
-							}
-						}}
-						onContentSizeChange={(event) => {
-							this.setState({ height: event.nativeEvent.contentSize.height });
-						}}
-						style={styles.feedback_input}
-						value={this.state.text}
-					/>
-				</View>
+					{/* Feedback input box */}
+					<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
+						<TextInput
+							multiline={true}
+							onChangeText={(text) => {
+								this.setState({ text });
+							}}
+							onFocus={() => {
+								if (this.state.text === placeholderText) {
+									this.setState({ text: '' });
+								}
+							}}
+							onContentSizeChange={(event) => {
+								this.setState({ height: event.nativeEvent.contentSize.height });
+							}}
+							style={styles.feedback_input}
+							value={this.state.text}
+						/>
+					</View>
 
-				{/* Submit button / loading spinner */}
-				<View style={{ flexDirection: 'row' }}>
-					<View style={{ flex: 1, paddingHorizontal: 3 }}>
-						{this.renderButton()}
+					{/* Submit button / loading spinner */}
+					<View style={{ flexDirection: 'row' }}>
+						<View style={{ flex: 1, paddingHorizontal: 3 }}>
+							{this.renderButton()}
+						</View>
 					</View>
 				</View>
-			</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }

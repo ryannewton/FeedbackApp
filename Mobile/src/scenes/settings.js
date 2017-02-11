@@ -2,7 +2,7 @@
 
 //Import Libraries
 import React, { Component } from 'react';
-import { Text, View, TextInput, Keyboard } from 'react-native';
+import { Text, View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -26,37 +26,39 @@ class Settings extends Component {
 		const { container, normalMargin, textDisplay, textInput } = styles;
 
 		return (
-			<View style={container}>
-				<Header>
-					Settings
-				</Header>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={container}>
+					<Header>
+						Settings
+					</Header>
 
-				{/* Update email description */}
-				<Text style={[normalMargin, textDisplay]}>
-					Edit your email address
-				</Text>
+					{/* Update email description */}
+					<Text style={[normalMargin, textDisplay]}>
+						Edit your email address
+					</Text>
 
-				{/* Email update input */}
-				<TextInput
-					style={[normalMargin, textInput]}
-					multiline={true}
-					onChangeText={(email) => this.setState({ email })}
-					value={this.state.email}
-				/>
+					{/* Email update input */}
+					<TextInput
+						style={[normalMargin, textInput]}
+						multiline={true}
+						onChangeText={(email) => this.setState({ email })}
+						value={this.state.email}
+					/>
 
-				{/* Save button */}
-				<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
-					<Button
-						onPress={() => {
-							this.props.save_email(this.state.email);
-							Keyboard.dismiss();
-						}}
-						style={{ marginTop: 10 }}
-					>
-						Save
-					</Button>
+					{/* Save button */}
+					<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+						<Button
+							onPress={() => {
+								this.props.save_email(this.state.email);
+								Keyboard.dismiss();
+							}}
+							style={{ marginTop: 10 }}
+						>
+							Save
+						</Button>
+					</View>
 				</View>
-			</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }
