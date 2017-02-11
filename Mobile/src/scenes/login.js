@@ -6,8 +6,9 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
+import Signup from './signup';
 import { Card, CardSection, Input, Button, Header, Spinner } from '../components/common';
-import { emailChanged, passwordChanged, loginUser } from '../actions';
+import { emailChanged, passwordChanged, loginUser, navigate } from '../actions';
 
 class Login extends Component {
 	onButtonPress() {
@@ -15,16 +16,34 @@ class Login extends Component {
 		this.props.loginUser({ email, password });
 	}
 
-	renderButton() {
+	renderSignupButton() {
+		const scene = { key: 'Signup', component: Signup };
+		const route = { type: 'push', route: scene };
+		return (
+			<Button onPress={() => this.props.navigate(route)}>
+				Sign Up
+			</Button>
+		);
+	}
+
+	renderLoginButton() {
+		return (
+			<Button onPress={this.onButtonPress.bind(this)}>
+				Login
+			</Button>
+		);
+	}
+
+	renderButtons() {
 		if (this.props.loading) {
 			return <Spinner />;
 		}
 
 		return (
 			<View style={{ flex: 1 }}>
-				<Button onPress={this.onButtonPress.bind(this)}>
-					Login
-				</Button>
+				{this.renderLoginButton()}
+				<Text>Don't have an account?</Text>
+				{this.renderSignupButton()}
 			</View>
 		);
 	}
@@ -62,9 +81,9 @@ class Login extends Component {
 						{this.props.error}
 					</Text>
 
-					{/* Login button */}
+					{/* Confirmation buttons, and 'go to signup' button */}
 					<CardSection>
-						{this.renderButton()}
+						{this.renderButtons()}
 					</CardSection>
 
 				</Card>
@@ -89,5 +108,6 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
 	emailChanged,
 	passwordChanged,
-	loginUser
+	loginUser,
+	navigate
 })(Login);
