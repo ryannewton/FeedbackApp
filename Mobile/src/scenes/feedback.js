@@ -4,10 +4,9 @@
 import React, { Component } from 'react';
 import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 //Import actions
-import * as actions from '../actions';
+import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
 
 //Import components, functions, and styles
 import { Button, Header, Spinner } from '../components/common';
@@ -25,7 +24,6 @@ class Feedback extends Component {
 
 		this.state = {
 			height: 0,
-			text: placeholderText,
 			anonymous: false
 		};
 	}
@@ -33,25 +31,23 @@ class Feedback extends Component {
 	submitFeedback() {
 		let scene = {};
 		let route = {};
-		const { text } = this.state;
-		const { email } = this.props.main;
+		const { feedback, email } = this.props;
 
 		// If email address is on file, go to submitted scene
 		if (email !== 'Enter email here') {
 			scene = { key: 'Submitted', component: Submitted };
 			route = { type: 'push', route: scene };
-			this.props.submitFeedbackToServer(text, email, route);
+			this.props.submitFeedbackToServer(feedback, email, route);
 		} else {
 			// Otherwise, go to email_capture scene when done
-			scene = { key: 'Signup', text, component: Signup };
+			scene = { key: 'Signup', component: Signup };
 			route = { type: 'push', route: scene };
 			this.props.navigate(route);
 		}
-		this.setState({ text: placeholderText });
 	}
 
 	renderButton() {
-		if (this.props.main.loading) {
+		if (this.props.loading) {
 			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
 		return (
@@ -72,20 +68,20 @@ class Feedback extends Component {
 					{/* Feedback input box */}
 					<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
 						<TextInput
-							multiline={true}
-							onChangeText={(text) => {
-								this.setState({ text });
+							multiline={Boolean(true)}
+							onChangeText={(feedback) => {
+								this.props.feedbackChanged(feedback);
 							}}
 							onFocus={() => {
-								if (this.state.text === placeholderText) {
-									this.setState({ text: '' });
+								if (this.props.feedback === placeholderText) {
+									this.props.feedbackChanged('');
 								}
 							}}
 							onContentSizeChange={(event) => {
 								this.setState({ height: event.nativeEvent.contentSize.height });
 							}}
 							style={styles.feedback_input}
-							value={this.state.text}
+							value={this.props.feedback}
 						/>
 					</View>
 
@@ -102,11 +98,12 @@ class Feedback extends Component {
 }
 
 function mapStateToProps(state) {
-	return state;
+	const { feedback, email, loading } = state.main;
+	return { feedback, email, loading };
 }
 
-function mapDispatchToProps(dispatch) {
-	return bindActionCreators(actions, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
+export default connect(mapStateToProps, {
+	feedbackChanged,
+	submitFeedbackToServer,
+	navigate
+})(Feedback);
