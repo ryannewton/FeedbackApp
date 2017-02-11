@@ -6,13 +6,15 @@ import { Text, View } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
+import Login from './login';
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
 import {
 	emailChanged,
 	passwordChanged,
 	passwordConfirmChanged,
 	signupUser,
-	signupUserFail
+	signupUserFail,
+	navigate
 } from '../actions';
 
 class Signup extends Component {
@@ -26,16 +28,34 @@ class Signup extends Component {
 		}
 	}
 
-	renderButton() {
+	renderSignupButton() {
+		return (
+			<Button onPress={this.onButtonPress.bind(this)}>
+				Sign Up
+			</Button>
+		);
+	}
+
+	renderLoginButton() {
+		const scene = { key: 'Login', component: Login };
+		const route = { type: 'push', route: scene };
+		return (
+			<Button onPress={() => this.props.navigate(route)}>
+				Login
+			</Button>
+		);
+	}
+
+	renderButtons() {
 		if (this.props.loading) {
 			return <Spinner />;
 		}
 
 		return (
 			<View style={{ flex: 1 }}>
-				<Button onPress={this.onButtonPress.bind(this)}>
-					Sign Up
-				</Button>
+				{this.renderSignupButton()}
+				<Text>Already have an account?</Text>
+				{this.renderLoginButton()}
 			</View>
 		);
 	}
@@ -85,9 +105,9 @@ class Signup extends Component {
 						{this.props.error}
 					</Text>
 
-					{/* Confirmation button */}
+					{/* Confirmation button, and 'go to login' button */}
 					<CardSection>
-						{this.renderButton()}
+						{this.renderButtons()}
 					</CardSection>
 				</Card>
 			</View>
@@ -113,5 +133,6 @@ export default connect(mapStateToProps, {
 	passwordChanged,
 	passwordConfirmChanged,
 	signupUser,
-	signupUserFail
+	signupUserFail,
+	navigate
 })(Signup);
