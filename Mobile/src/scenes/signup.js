@@ -16,6 +16,7 @@ import {
 	signupUserFail,
 	navigate
 } from '../actions';
+import styles from '../styles/styles_main.js';
 
 class Signup extends Component {
 	onButtonPress() {
@@ -63,7 +64,7 @@ class Signup extends Component {
 	render() {
 		return (
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-				<View>
+				<View style={styles.container}>
 					<Header>
 						Sign Up
 					</Header>
@@ -116,14 +117,6 @@ class Signup extends Component {
 		);
 	}
 }
-
-const styles = {
-	errorTextStyle: {
-		fontSize: 20,
-		alignSelf: 'center',
-		color: 'red'
-	}
-};
 
 const mapStateToProps = (state) => {
 	const { email, password, passwordConfirm, error, loading, user } = state.auth;

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import Signup from './signup';
 import { Card, CardSection, Input, Button, Header, Spinner } from '../components/common';
 import { emailChanged, passwordChanged, loginUser, navigate } from '../actions';
+import styles from '../styles/styles_main';
 
 class Login extends Component {
 	onButtonPress() {
@@ -51,7 +52,7 @@ class Login extends Component {
 	render() {
 		return (
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-				<View>
+				<View style={styles.container}>
 					<Header>
 						Login
 					</Header>
@@ -93,14 +94,6 @@ class Login extends Component {
 		);
 	}
 }
-
-const styles = {
-	errorTextStyle: {
-		fontSize: 20,
-		alignSelf: 'center',
-		color: 'red'
-	}
-};
 
 const mapStateToProps = (state) => {
 	const { email, password, loading, user, error } = state.auth;
