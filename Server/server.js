@@ -20,7 +20,7 @@ var connection = mysql.createConnection({
 	//host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
 	//development database
-	host     : 'aa1x7q3yz5wqhwq.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 	user     : 'root',
 	password : 'buechelejedi16',
 	port     : '3306',
@@ -61,10 +61,10 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 
 	//Send Email
 	var to_emails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-	var from_email = 'admin@stanfordfeedback.com';
+	var from_email = 'jeeves@collaborativefeedback.com';
 	sendEmail(to_emails, from_email, "Feedback: " + req.body.text, "Email: " + req.body.email);
 
-	res.sendStatus(200);	
+	res.sendStatus(200);
 });
 
 app.post('/addProject', upload.array(), function(req, res) {
@@ -74,7 +74,7 @@ app.post('/addProject', upload.array(), function(req, res) {
 	connection.query('INSERT INTO projects SET ?', {title, description: 'Blank Description', votes: 0, stage: 'new'}, function(err, result) {
 		if (err) throw err;
 		if (req.body.feedback) {
-			sendEmail(['tyler.hannasch@gmail.com'], 'admin@stanfordfeedback.com', 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
+			sendEmail(['tyler.hannasch@gmail.com'], 'jeeves@collaborativefeedback.com', 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
 			connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], function(err) {
 				if (err) throw err;
 			});
@@ -147,7 +147,7 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
 		if (err) throw err;
 		else {
 			res.send(rows);
-		} 
+		}
 	});
 });
 
@@ -156,7 +156,7 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 	var connection_string = `
 		SELECT
 			id, title, votes, description, department, stage
-		FROM 
+		FROM
 			projects`;
 	console.log(connection_string);
 
@@ -164,16 +164,16 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 		if (err) throw err;
 		else {
 			res.send(rows);
-		} 
+		}
 	});
 });
 
 app.post('/pullProjectAdditions', upload.array(), function(req, res) {
-	
+
 	var connection_string = `
 		SELECT
 			id, type, votes_for, votes_against, title, description, project_id
-		FROM 
+		FROM
 			project_additions`;
 	console.log(connection_string);
 
@@ -181,16 +181,16 @@ app.post('/pullProjectAdditions', upload.array(), function(req, res) {
 		if (err) throw err;
 		else {
 			res.send(rows);
-		} 
+		}
 	});
 });
 
 app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
-	
+
 	var connection_string = `
 		SELECT
 			id, point, counter_point, project_addition_id
-		FROM 
+		FROM
 			discussion_posts`;
 	console.log(connection_string);
 
@@ -198,37 +198,10 @@ app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
 		if (err) throw err;
 		else {
 			res.send(rows);
-		} 
+		}
 	});
 });
 
-//Send Email
-/*
-app.post('/sendEmailOnFeedback', upload.array(), function(req, res) {
-	
-	var to_emails = 'tyler.hannasch@gmail.com';
-	var from_email = 'admin@stanfordfeedback.com';
-
-	ses.sendEmail( { 
-		Source: from_email, 
-		Destination: { ToAddresses: to_emails },
-		Message: {
-			Subject: {
-				Data: 'New Feedback: ' + req.body.title
-			},
-			Body: {
-				Text: {
-					Data: 'Email: ' + req.body.email + ' --- Details: ' + req.body.details,
-				}
-			}
-		}
-	}
-	, function(err, data) {
-		if (err) console.log(err, err.stack);
-		else     console.log(data);
-	 });
-});
-*/
 app.listen(8081, function () {
 	console.log('Example app listening on port 8081!');
 });
