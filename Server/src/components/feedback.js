@@ -14,19 +14,19 @@ export default class Feedback extends React.Component {
     this.onFocusChange = this.onFocusChange.bind(this);
   }
 
-  onDatesChange({ startDate, endDate }) {  	
+  onDatesChange({ startDate, endDate }) {
     this.props.updateDates(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'), this.props.requestedFeedback, this.props.receivedFeedback);
   }
 
   onFocusChange(focusedInput) {
-    this.setState({ focusedInput });  
+    this.setState({ focusedInput });
   }
 
   render() {
     const { focusedInput } = this.state;
     const { start_date, end_date } = this.props.main;
     const Rows = this.props.feedback.map((feedback, index) => {
-    	return <Feedback_Row key={index} feedback={feedback} department={"Other"} />
+    	return <Feedback_Row key={index} feedback={feedback} addProject={this.props.addProject} receivedIDForAddProject={this.props.receivedIDForAddProject} department={"Other"} />
     });
     return (
       <div>
@@ -43,7 +43,8 @@ export default class Feedback extends React.Component {
         	<thead>
 					  <tr>
 					    <th>Feedback</th>
-					    <th>Department Category</th>
+					    <th>Project_ID</th>
+              <th>Add Project Button</th>
 					  </tr>
 				  </thead>
 				  <tbody>
