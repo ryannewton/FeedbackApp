@@ -30,7 +30,8 @@ export const feedbackChanged = (feedback) => (
 
 export const submitFeedbackToServer = (route) => (
 	function (dispatch, getState) {
-		const { feedback, email } = getState().main;
+		const { feedback } = getState().main;
+		const { email } = getState().auth;
 		const time = new Date(Date.now()).toISOString().slice(0, 10);
 
 		dispatch({ type: SUBMIT_FEEDBACK });
