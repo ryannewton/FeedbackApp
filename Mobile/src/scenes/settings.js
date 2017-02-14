@@ -4,22 +4,17 @@
 import React, { Component } from 'react';
 import { Text, View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 //Import actions
-import * as actions from '../actions';
+import { saveEmail } from '../actions';
 
 //Import componenets, functions, and styles
 import { Button, Header } from '../components/common';
 import styles from '../styles/settings_styles'; 
 
 class Settings extends Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			email: props.main.email
-		};
+	componentWillMount() {
+		this.setState({ email: this.props.auth.email });
 	}
 
 	render() {
@@ -51,7 +46,7 @@ class Settings extends Component {
 					<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
 						<Button
 							onPress={() => {
-								this.props.save_email(this.state.email);
+								this.props.saveEmail(this.state.email);
 								Keyboard.dismiss();
 							}}
 							style={{ marginTop: 10 }}
@@ -69,8 +64,4 @@ function mapStateToProps(state) {
 	return state;
 }
 
-function mapDispatchToProps(dispatch) {
-	return bindActionCreators(actions, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Settings);
+export default connect(mapStateToProps, { saveEmail })(Settings);
