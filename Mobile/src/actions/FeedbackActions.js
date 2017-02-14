@@ -1,10 +1,11 @@
 'use strict';
 
-import { AsyncStorage } from 'react-native';
+// Import libraries
 import axios from 'axios';
 
+// Import action types
 import {
-	SET_EMAIL,
+	FEEDBACK_CHANGED,
 	UPDATE_NAV_STATE,
 	SET_UP_VOTES,
 	ADD_UP_VOTE,
@@ -20,13 +21,23 @@ import {
 
 const ROOT_URL = 'https://stanfordfeedback.com';
 
-export const submitFeedbackToServer = (text, email, route) => (
-	function (dispatch) {
-		dispatch({ type: SUBMIT_FEEDBACK });
+export const feedbackChanged = (feedback) => (
+	{
+		type: FEEDBACK_CHANGED,
+		payload: feedback
+	}
+);
+
+export const submitFeedbackToServer = (route) => (
+	function (dispatch, getState) {
+		const { feedback } = getState().main;
+		const { email } = getState().auth;
 		const time = new Date(Date.now()).toISOString().slice(0, 10);
 
+		dispatch({ type: SUBMIT_FEEDBACK });
+
 		// Post new feedback to server
-		return axios.post(`${ROOT_URL}/addFeedback/`, { text, time, email })
+		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, email })
 		.then((response) => {
 			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
 			dispatch(navigate(route));
@@ -37,14 +48,6 @@ export const submitFeedbackToServer = (text, email, route) => (
 		});
 	}
 );
-
-export const save_email = (email) => {
-	AsyncStorage.setItem('@FeedbackApp:email', email);
-	return {
-		type: SET_EMAIL,
-		payload: email
-	};
-};
 
 export const navigate = (route) => ({
 	type: UPDATE_NAV_STATE,

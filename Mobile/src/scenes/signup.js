@@ -2,18 +2,21 @@
 
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
+import Login from './login';
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
 import {
 	emailChanged,
 	passwordChanged,
 	passwordConfirmChanged,
 	signupUser,
-	signupUserFail
+	signupUserFail,
+	navigate
 } from '../actions';
+import styles from '../styles/styles_main.js';
 
 class Signup extends Component {
 	onButtonPress() {
@@ -26,82 +29,94 @@ class Signup extends Component {
 		}
 	}
 
-	renderButton() {
+	renderSignupButton() {
+		return (
+			<Button onPress={this.onButtonPress.bind(this)}>
+				Sign Up
+			</Button>
+		);
+	}
+
+	renderLoginButton() {
+		const scene = { key: 'Login', component: Login };
+		const route = { type: 'push', route: scene };
+		return (
+			<Button onPress={() => this.props.navigate(route)}>
+				Login
+			</Button>
+		);
+	}
+
+	renderButtons() {
 		if (this.props.loading) {
 			return <Spinner />;
 		}
 
 		return (
 			<View style={{ flex: 1 }}>
-				<Button onPress={this.onButtonPress.bind(this)}>
-					Sign Up
-				</Button>
+				{this.renderSignupButton()}
+				<Text>Already have an account?</Text>
+				{this.renderLoginButton()}
 			</View>
 		);
 	}
 
 	render() {
 		return (
-			<View>
-				<Header>
-					Sign Up
-				</Header>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={styles.container}>
+					<Header>
+						Sign Up
+					</Header>
 
-				<Card>
-					{/* Email input */}
-					<CardSection>
-						<Input
-							label="Email"
-							placeholder="joe@gmail.com"
-							value={this.props.email}
-							onChangeText={(text) => this.props.emailChanged(text)}
-						/>
-					</CardSection>
+					<Card>
+						{/* Email input */}
+						<CardSection>
+							<Input
+								label="Email"
+								placeholder="joe@gmail.com"
+								value={this.props.email}
+								onChangeText={(text) => this.props.emailChanged(text)}
+							/>
+						</CardSection>
 
-					{/* Password input */}
-					<CardSection>
-						<Input
-							secureTextEntry
-							label="Password"
-							placeholder="password"
-							value={this.props.password}
-							onChangeText={(text) => this.props.passwordChanged(text)}
-						/>
-					</CardSection>
+						{/* Password input */}
+						<CardSection>
+							<Input
+								secureTextEntry
+								label="Password"
+								placeholder="password"
+								value={this.props.password}
+								onChangeText={(text) => this.props.passwordChanged(text)}
+							/>
+						</CardSection>
 
-					{/* Password confirm input */}
-					<CardSection>
-						<Input
-							secureTextEntry
-							label="Confirm Password"
-							placeholder="password"
-							value={this.props.passwordConfirm}
-							onChangeText={(text) => this.props.passwordConfirmChanged(text)}
-						/>
-					</CardSection>
+						{/* Password confirm input */}
+						<CardSection>
+							<Input
+								secureTextEntry
+								label="Confirm Password"
+								placeholder="password"
+								value={this.props.passwordConfirm}
+								onChangeText={(text) => this.props.passwordConfirmChanged(text)}
+							/>
+						</CardSection>
 
-					{/* Error message (blank if no error) */}
-					<Text style={styles.errorTextStyle}>
-						{this.props.error}
-					</Text>
+						{/* Error message (blank if no error) */}
+						<Text style={styles.errorTextStyle}>
+							{this.props.error}
+						</Text>
 
-					{/* Confirmation button */}
-					<CardSection>
-						{this.renderButton()}
-					</CardSection>
-				</Card>
-			</View>
+						{/* Confirmation button, and 'go to login' button */}
+						<CardSection>
+							{this.renderButtons()}
+						</CardSection>
+					</Card>
+				</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }
-
-const styles = {
-	errorTextStyle: {
-		fontSize: 20,
-		alignSelf: 'center',
-		color: 'red'
-	}
-};
 
 const mapStateToProps = (state) => {
 	const { email, password, passwordConfirm, error, loading, user } = state.auth;
@@ -113,5 +128,6 @@ export default connect(mapStateToProps, {
 	passwordChanged,
 	passwordConfirmChanged,
 	signupUser,
-	signupUserFail
+	signupUserFail,
+	navigate
 })(Signup);

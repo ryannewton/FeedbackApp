@@ -2,18 +2,18 @@
 
 //Import libaries
 import React, { Component } from 'react';
-import { View, TextInput } from 'react-native';
+import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 //Import actions
-import * as actions from '../actions';
+import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
 
 //Import components, functions, and styles
 import { Button, Header, Spinner } from '../components/common';
 import Submitted from './submitted.js';
-import Email_Capture from './email_capture.js';
+import Signup from './signup';
 import styles from '../styles/styles_main.js';
+
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
 	'appropriate department head on Monday and get back to you with their response.';
@@ -24,7 +24,6 @@ class Feedback extends Component {
 
 		this.state = {
 			height: 0,
-			text: placeholderText,
 			anonymous: false
 		};
 	}
@@ -32,25 +31,22 @@ class Feedback extends Component {
 	submitFeedback() {
 		let scene = {};
 		let route = {};
-		const { text } = this.state;
-		const { email } = this.props.main;
 
 		// If email address is on file, go to submitted scene
-		if (email !== 'Enter email here') {
+		if (this.props.email !== '') {
 			scene = { key: 'Submitted', component: Submitted };
 			route = { type: 'push', route: scene };
-			this.props.submitFeedbackToServer(text, email, route, this.props.navigate);
+			this.props.submitFeedbackToServer(route);
 		} else {
-			// Otherwise, go to email_capture scene when done
-			scene = { key: 'Email_Capture', text, component: Email_Capture };
+			// Otherwise, go to Signup scene when done
+			scene = { key: 'Signup', component: Signup };
 			route = { type: 'push', route: scene };
 			this.props.navigate(route);
 		}
-		this.setState({ text: placeholderText });
 	}
 
 	renderButton() {
-		if (this.props.main.loading) {
+		if (this.props.loading) {
 			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
 		return (
@@ -62,48 +58,52 @@ class Feedback extends Component {
 
 	render() {
 		return (
-			<View style={[styles.container, { alignItems: 'center' }]}>
-				<Header>
-					Thanks for providing feedback!
-				</Header>
+			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+				<View style={[styles.container, { alignItems: 'center' }]}>
+					<Header>
+						Thanks for providing feedback!
+					</Header>
 
-				{/* Feedback input box */}
-				<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
-					<TextInput
-						multiline={true}
-						onChangeText={(text) => {
-							this.setState({ text });
-						}}
-						onFocus={() => {
-							if (this.state.text === placeholderText) {
-								this.setState({ text: '' });
-							}
-						}}
-						onContentSizeChange={(event) => {
-							this.setState({ height: event.nativeEvent.contentSize.height });
-						}}
-						style={styles.feedback_input}
-						value={this.state.text}
-					/>
-				</View>
+					{/* Feedback input box */}
+					<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
+						<TextInput
+							multiline={Boolean(true)}
+							onChangeText={(feedback) => {
+								this.props.feedbackChanged(feedback);
+							}}
+							onFocus={() => {
+								if (this.props.feedback === placeholderText) {
+									this.props.feedbackChanged('');
+								}
+							}}
+							onContentSizeChange={(event) => {
+								this.setState({ height: event.nativeEvent.contentSize.height });
+							}}
+							style={styles.feedback_input}
+							value={this.props.feedback}
+						/>
+					</View>
 
-				{/* Submit button / loading spinner */}
-				<View style={{ flexDirection: 'row' }}>
-					<View style={{ flex: 1, paddingHorizontal: 3 }}>
-						{this.renderButton()}
+					{/* Submit button / loading spinner */}
+					<View style={{ flexDirection: 'row' }}>
+						<View style={{ flex: 1, paddingHorizontal: 3 }}>
+							{this.renderButton()}
+						</View>
 					</View>
 				</View>
-			</View>
+			</TouchableWithoutFeedback>
 		);
 	}
 }
 
 function mapStateToProps(state) {
-	return state;
+	const { feedback, loading } = state.main;
+	const { email } = state.auth;
+	return { feedback, email, loading };
 }
 
-function mapDispatchToProps(dispatch) {
-	return bindActionCreators(actions, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Feedback);
+export default connect(mapStateToProps, {
+	feedbackChanged,
+	submitFeedbackToServer,
+	navigate
+})(Feedback);
