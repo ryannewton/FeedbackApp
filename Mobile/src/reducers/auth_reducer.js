@@ -1,7 +1,9 @@
 'use strict';
 
+// Import action types
 import {
 	EMAIL_CHANGED,
+	SAVE_EMAIL,
 	PASSWORD_CHANGED,
 	PASSWORD_CONFIRM_CHANGED,
 	SIGNUP_USER,
@@ -24,6 +26,8 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case EMAIL_CHANGED:
+			return { ...state, email: action.payload };
+		case SAVE_EMAIL:
 			return { ...state, email: action.payload };
 		case PASSWORD_CHANGED:
 			return { ...state, password: action.payload };

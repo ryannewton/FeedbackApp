@@ -12,6 +12,7 @@ import { ROOT_STORAGE } from '../constants';
 import { submitFeedbackToServer } from './FeedbackActions';
 import {
 	EMAIL_CHANGED,
+	SAVE_EMAIL,
 	PASSWORD_CHANGED,
 	PASSWORD_CONFIRM_CHANGED,
 	SIGNUP_USER,
@@ -26,6 +27,13 @@ export const emailChanged = (email) => (
 	{
 		type: EMAIL_CHANGED,
 		payload: email
+	}
+);
+
+export const saveEmail = (email) => (
+	(dispatch) => {
+		dispatch({ type: SAVE_EMAIL, payload: email });
+		AsyncStorage.setItem(`${ROOT_STORAGE}email`, email);
 	}
 );
 
@@ -57,7 +65,7 @@ export const signupUser = ({ email, password }) => (
 					});
 
 				// Save email to AsyncStorage
-				AsyncStorage.setItem(`${ROOT_STORAGE}email`, email);
+				dispatch(saveEmail(email));
 
 				// Navigate to Submitted scene
 				const route = {
@@ -104,7 +112,7 @@ export const loginUser = ({ email, password }) => (
 					});
 
 				// Save email to AsyncStorage
-				AsyncStorage.setItem(`${ROOT_STORAGE}email`, email);
+				dispatch(saveEmail(email));
 
 				// Navigate to Submitted scene
 				const route = {
