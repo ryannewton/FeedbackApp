@@ -2,7 +2,7 @@
 
 //Import Libaries
 import React, { Component } from 'react';
-import { View, BackAndroid } from 'react-native';
+import { View, BackAndroid, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -21,6 +21,10 @@ class Submitted extends Component {
 			props.navigate({ type: 'pop' });
 			return true;
 		});
+	}
+
+	componentWillMount() {
+		Keyboard.dismiss();
 	}
 
 	render() {
