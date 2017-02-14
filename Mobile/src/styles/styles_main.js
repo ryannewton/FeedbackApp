@@ -84,6 +84,12 @@ const styles = StyleSheet.create({
 		fontWeight: '300',
 		fontSize: 16,
 		textDecorationLine: 'underline',
+	},
+
+	errorTextStyle: {
+		fontSize: 20,
+		alignSelf: 'center',
+		color: 'red'
 	}
 });
 
