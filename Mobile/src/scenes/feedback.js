@@ -31,10 +31,9 @@ class Feedback extends Component {
 	submitFeedback() {
 		let scene = {};
 		let route = {};
-		const { feedback, email } = this.props;
 
 		// If email address is on file, go to submitted scene
-		if (email !== 'Enter email here') {
+		if (this.props.email !== '') {
 			scene = { key: 'Submitted', component: Submitted };
 			route = { type: 'push', route: scene };
 			this.props.submitFeedbackToServer(route);
@@ -98,7 +97,8 @@ class Feedback extends Component {
 }
 
 function mapStateToProps(state) {
-	const { feedback, email, loading } = state.main;
+	const { feedback, loading } = state.main;
+	const { email } = state.auth;
 	return { feedback, email, loading };
 }
 
