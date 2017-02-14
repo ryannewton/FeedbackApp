@@ -61,6 +61,8 @@ export default (state = {}, action) => {
 				const tabs = NavigationStateUtils.jumpTo(state.tabs, tabKey);
 				if (tabs !== state.tabs) {
 					return { ...state, tabs	};
+				} else {
+					return state;
 				}
 				break;
 			}

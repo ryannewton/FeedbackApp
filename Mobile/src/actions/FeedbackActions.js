@@ -53,7 +53,7 @@ export const navigate = (route) => ({
 	type: UPDATE_NAV_STATE,
 	payload: route
 });
-	
+
 export const setUpVotes = (upVotes) => ({
 	type: SET_UP_VOTES,
 	payload: upVotes
