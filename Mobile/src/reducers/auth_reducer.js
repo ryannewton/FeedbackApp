@@ -23,6 +23,13 @@ const INITIAL_STATE = {
 	error: null
 };
 
+const CLEAR_STATE = {
+	password: '',
+	passwordConfirm: '',
+	loading: false,
+	error: null
+};
+
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case EMAIL_CHANGED:
@@ -36,13 +43,13 @@ export default (state = INITIAL_STATE, action) => {
 		case SIGNUP_USER:
 			return { ...state, loading: true };
 		case SIGNUP_USER_SUCCESS:
-			return { ...state, ...INITIAL_STATE, token: action.payload };
+			return { ...state, ...CLEAR_STATE, token: action.payload };
 		case SIGNUP_USER_FAIL:
 			return { ...state, error: action.payload, password: '', passwordConfirm: '', loading: false };
 		case LOGIN_USER:
 			return { ...state, loading: true };
 		case LOGIN_USER_SUCCESS:
-			return { ...state, ...INITIAL_STATE, token: action.payload };
+			return { ...state, ...CLEAR_STATE, token: action.payload };
 		case LOGIN_USER_FAIL:
 			return { ...state, error: action.payload, password: '', loading: false };
 		default:
