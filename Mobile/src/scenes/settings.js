@@ -32,18 +32,20 @@ class Settings extends Component {
 						Settings
 					</Header>
 
-					{/* Update email description */}
-					<Text style={[normalMargin, textDisplay]}>
-						Edit your email address
-					</Text>
+					{/* Email update */}
+					<View>
+						<Text style={[normalMargin, textDisplay]}>
+							Edit your email address
+						</Text>
+						<TextInput
+							style={[normalMargin, textInput]}
+							multiline={Boolean(true)}
+							onChangeText={(email) => this.setState({ email })}
+							value={this.state.email}
+						/>
+					</View>
 
-					{/* Email update input */}
-					<TextInput
-						style={[normalMargin, textInput]}
-						multiline={true}
-						onChangeText={(email) => this.setState({ email })}
-						value={this.state.email}
-					/>
+					{/* To do: add change password option*/}
 
 					{/* Save button */}
 					<View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
