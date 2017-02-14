@@ -15,7 +15,7 @@ export default class Nav extends Component {
 	}
 
 	changeView(event) {
-		if (event.target.text === "New Projects" || event.target.text === "Stanford Feedback Portal") {
+		if (event.target.text === "New Projects" || event.target.text === "Collaborative Feedback Portal") {
 			this.setState({ urlView: "active", categoryView: "", settingsView: "" });
 		}	else if (event.target.text === "Projects Being Worked On") {
 			this.setState({ urlView: "", categoryView: "active", settingsView: "" });
@@ -29,7 +29,7 @@ export default class Nav extends Component {
 			<nav className="navbar navbar-default">
 			  <div className="container">
 			    <div className="navbar-header">
-			    	<Link to="/" onClick={this.changeView.bind(this)} className="navbar-brand">Stanford Feedback Portal</Link>
+			    	<Link to="/" onClick={this.changeView.bind(this)} className="navbar-brand">Collaborative Feedback Portal</Link>
 			    </div>
 			    <ul className="nav navbar-nav">
 			    	<li className={this.state.urlView} onClick={this.changeView.bind(this)} id={"URLNav"}><Link to="/">New Projects</Link></li>

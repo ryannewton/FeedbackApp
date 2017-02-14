@@ -6,7 +6,7 @@ import { Provider } from 'react-redux';
 import firebase from 'firebase';
 
 //Import API keys
-import firebaseConfig from '../../api_keys';
+import firebaseConfig from '../../api_keys.js';
 
 //Import Store
 import store from '../reducers/store.js';
