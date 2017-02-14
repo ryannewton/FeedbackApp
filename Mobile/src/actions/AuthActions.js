@@ -9,7 +9,7 @@ import Submitted from '../scenes/submitted';
 import { ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
-import { navigate } from './FeedbackActions';
+import { submitFeedbackToServer } from './FeedbackActions';
 import {
 	EMAIL_CHANGED,
 	PASSWORD_CHANGED,
@@ -67,8 +67,7 @@ export const signupUser = ({ email, password }) => (
 						component: Submitted
 					}
 				};
-
-				dispatch(navigate(route));
+				dispatch(submitFeedbackToServer(route));
 			})
 			// If signup fails
 			.catch(() => {
@@ -115,7 +114,7 @@ export const loginUser = ({ email, password }) => (
 						component: Submitted
 					}
 				};
-				dispatch(navigate(route));
+				dispatch(submitFeedbackToServer(route));
 			})
 			// If login fails
 			.catch(() => dispatch(loginUserFail()));
