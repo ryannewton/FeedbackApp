@@ -6,11 +6,10 @@ import { AsyncStorage } from 'react-native';
 import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
-//Import actions
+//Import actions, reducers, and constants
 import * as actions from '../actions';
-
-//Import Reducers
 import Combined_Reducer from './reducer_index.js';
+import { ROOT_STORAGE } from '../constants';
 
 //Import Components
 import Feedback from '../scenes/feedback.js';
@@ -63,8 +62,8 @@ let store = createStore(
 
 async function load_email() {
 	try {
-		const email = await AsyncStorage.getItem('@FeedbackApp:email') || "Enter email here";
-		store.dispatch(actions.save_email(email));
+		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';
+		store.dispatch(actions.emailChanged(email));
 	} catch (error) {
 	}
 }

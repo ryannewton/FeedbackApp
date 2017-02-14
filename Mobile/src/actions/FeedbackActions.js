@@ -1,11 +1,11 @@
 'use strict';
 
-import { AsyncStorage } from 'react-native';
+// Import libraries
 import axios from 'axios';
 
+// Import action types
 import {
 	FEEDBACK_CHANGED,
-	SET_EMAIL,
 	UPDATE_NAV_STATE,
 	SET_UP_VOTES,
 	ADD_UP_VOTE,
@@ -48,14 +48,6 @@ export const submitFeedbackToServer = (route) => (
 		});
 	}
 );
-
-export const save_email = (email) => {
-	AsyncStorage.setItem('@FeedbackApp:email', email);
-	return {
-		type: SET_EMAIL,
-		payload: email
-	};
-};
 
 export const navigate = (route) => ({
 	type: UPDATE_NAV_STATE,
