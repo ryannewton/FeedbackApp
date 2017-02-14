@@ -39,7 +39,7 @@ class Signup extends Component {
 
 	renderLoginButton() {
 		const scene = { key: 'Login', component: Login };
-		const route = { type: 'push', route: scene };
+		const route = { type: 'pop-push', route: scene };
 		return (
 			<Button onPress={() => this.props.navigate(route)}>
 				Login
