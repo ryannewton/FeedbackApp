@@ -5,7 +5,6 @@ import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
 
 //Import componenets, functions, and styles
-//import Button from '../components/button.js';
 import ProjectDetails from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
 import { Button, Card } from './common';
