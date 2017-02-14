@@ -34,6 +34,7 @@ class Settings extends Component {
 						</Text>
 						<TextInput
 							style={[normalMargin, textInput]}
+							placeholder="Enter email here"
 							multiline={Boolean(true)}
 							onChangeText={(email) => this.setState({ email })}
 							value={this.state.email}
