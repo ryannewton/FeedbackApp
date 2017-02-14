@@ -37,9 +37,9 @@ class Feedback extends Component {
 		if (email !== 'Enter email here') {
 			scene = { key: 'Submitted', component: Submitted };
 			route = { type: 'push', route: scene };
-			this.props.submitFeedbackToServer(feedback, email, route);
+			this.props.submitFeedbackToServer(route);
 		} else {
-			// Otherwise, go to email_capture scene when done
+			// Otherwise, go to Signup scene when done
 			scene = { key: 'Signup', component: Signup };
 			route = { type: 'push', route: scene };
 			this.props.navigate(route);
