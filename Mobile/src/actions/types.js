@@ -3,7 +3,6 @@
 // FeedbackActions types
 export const FEEDBACK_CHANGED = 'feedback_changed';
 export const UPDATE_NAV_STATE = 'update_nav_state';
-export const SET_UP_VOTES = 'set_upvotes';
 export const ADD_UP_VOTE = 'add_upvote';
 export const REMOVE_UP_VOTE = 'remove_upvote';
 export const SAVE_PROJECT_CHANGES = 'save_project_changes';
