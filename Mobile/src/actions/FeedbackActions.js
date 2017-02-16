@@ -3,6 +3,9 @@
 // Import libraries
 import axios from 'axios';
 
+// Import constants
+import { ROOT_URL } from '../constants';
+
 // Import action types
 import {
 	FEEDBACK_CHANGED,
@@ -18,7 +21,6 @@ import {
 	SUBMIT_FEEDBACK_FAIL
 } from './types';
 
-const ROOT_URL = 'https://stanfordfeedback.com';
 
 export const feedbackChanged = (feedback) => (
 	{
