@@ -15,19 +15,15 @@ import { Header } from '../components/common';
 import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	compareNumbers(a, b) {
 		return b.votes - a.votes;
 	}
 
 	renderProjects() {
-		const projects = this.props.projects.sort(this.compareNumbers).map((item, index) => {
+		const projects = this.props.projects.sort(this.compareNumbers).map((project, index) => {
 			return (
 				<Project
-					item={item}
+					project={project}
 					key={index}
 					navigate={this.props.navigate}
 					saveProjectChanges={this.props.saveProjectChanges}
