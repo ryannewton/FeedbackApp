@@ -2,7 +2,6 @@
 
 import {
 	FEEDBACK_CHANGED,
-	SET_EMAIL,
 	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
 	SUBMIT_FEEDBACK_FAIL
@@ -20,8 +19,6 @@ export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case FEEDBACK_CHANGED:
 			return { ...state, feedback: action.payload };
-		case SET_EMAIL:
-			return { ...state, email: action.payload };
 		case SUBMIT_FEEDBACK:
 			return { ...state, loading: true };
 		case SUBMIT_FEEDBACK_SUCCESS:
