@@ -45,11 +45,11 @@ export default (state = [], action) => {
 const saveProjectChanges = (project) => {
 	console.log('POST request initiated to /saveProjectChanges');
 	console.log('body is: ', project);
-	axios.post(`${ROOT_URL}/saveProjectChanges`, project)
+	axios.post(`${ROOT_URL}/saveProjectChanges`, {project})
 	.then((res) => {
-		console.log('saveProjectChange successful. Response: ', res);
+		console.log('saveProjectChanges successful. Response: ', res);
 	})
 	.catch((err) => {
-		console.log('saveProjectChange FAIL. Response: ', err);
+		console.log('saveProjectChanges FAIL. Response: ', err);
 	});
 };
