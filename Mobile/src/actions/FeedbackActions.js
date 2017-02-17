@@ -19,7 +19,7 @@ import {
 	SUBMIT_FEEDBACK_FAIL
 } from './types';
 
-const ROOT_URL = 'https://stanfordfeedback.com';
+import { ROOT_URL } from '../constants';
 
 export const feedbackChanged = (feedback) => (
 	{

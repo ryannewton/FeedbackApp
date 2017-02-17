@@ -10,7 +10,7 @@ import {
 	SAVE_PROJECT_CHANGES
 } from '../actions/types';
 
-const ROOT_URL = 'https://stanfordfeedback.com';
+import { ROOT_URL } from '../constants';
 
 export default (state = [], action) => {
 	switch (action.type) {
