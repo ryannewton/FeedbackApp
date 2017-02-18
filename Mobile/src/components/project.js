@@ -44,6 +44,28 @@ class Project extends Component {
 		return this.props.project.title;
 	}
 
+	renderButton() {
+		let buttonStyle = { width: 60, height: 24, marginRight: 2 };
+		let textStyle = { fontSize: 14, paddingTop: 10, paddingBottom: 10 };
+		const { project, user } = this.props;
+
+		// If user has not upvoted this project, add grey styling
+		if (user.upvotes.indexOf(project.id) === -1) {
+			buttonStyle.borderColor = '#808080';
+			textStyle.color = '#808080';
+		}
+
+		return (
+			<Button
+				onPress={this.upvote.bind(this)}
+				style={buttonStyle}
+				textStyle={textStyle}
+			>
+				Upvote!
+			</Button>
+		);
+	}
+
 	render() {
 		const { buttonText, lowWeight, row } = styles;
 
@@ -73,13 +95,7 @@ class Project extends Component {
 							{/* Upvote button */}
 							{/* To do: change button styling when user has already upvoted project */}
 							<View style={{ flex: 1, alignItems: 'flex-end' }}>
-								<Button
-									onPress={this.upvote.bind(this)}
-									style={{ width: 80, height: 27, marginRight: 2 }}
-									textStyle={{ paddingTop: 10, paddingBottom: 10 }}
-								>
-									Upvote!
-								</Button>
+								{this.renderButton()}
 							</View>
 						</View>
 					</View>
