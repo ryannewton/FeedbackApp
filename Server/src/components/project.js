@@ -22,12 +22,12 @@ export default class Project extends React.Component {
 			project.votes -= 1;
 			this.props.removeUpVote(this.props.project.id);
 		}
-		this.props.saveProjectChanges(project);
+		this.props.saveProjectChanges(project, this.props.email, 'upvote');
 	}
 
 	switchEditMode(event) {
 		if (this.state.edit_mode) {
-			this.props.saveProjectChanges(this.state.project);
+			this.props.saveProjectChanges(this.state.project, this.props.email, 'text_edit');
 		}
 		this.setState({edit_mode: !this.state.edit_mode});
 	}
@@ -45,11 +45,11 @@ export default class Project extends React.Component {
 	}
 
 	deleteProject(event) {
-		this.props.deleteProject(this.state.project.id);
+		this.props.deleteProject(this.state.project.id, this.props.email, 'delete_project');
 	}
 
 	addSolution(event) {
-		this.props.addSolution(this.state.project.id, this.props.receivedIDForAddSolution);
+		this.props.addSolution(this.state.project.id, this.props.receivedIDForAddSolution, this.props.email, 'add_solution');
 	}
 
 	render() {
