@@ -91,6 +91,13 @@ app.post('/addSolution', upload.array(), function(req, res) {
 	});
 });
 
+app.post('/addSubscriber', upload.array(), function(req, res) {
+
+	connection.query('INSERT INTO subscriptions SET ?', {project_id: req.body.project_id, email: req.body.email, type: req.body.type}, function(err, result) {
+		if (err) throw err;
+		res.json({id: result.insertId});
+	});
+});
 
 //Save Project, Project_Addition Changes
 app.post('/saveProjectChanges', upload.array(), function(req, res) {

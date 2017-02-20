@@ -19,7 +19,7 @@ import {
 	SUBMIT_FEEDBACK_FAIL
 } from './types';
 
-const ROOT_URL = 'https://stanfordfeedback.com';
+import { ROOT_URL } from '../constants';
 
 export const feedbackChanged = (feedback) => (
 	{
@@ -69,14 +69,15 @@ export const removeUpVote = (upVote) => ({
 	payload: upVote
 });
 
-export const saveProjectChanges = (project) => ({
-		type: SAVE_PROJECT_CHANGES,
-		payload: project
+export const saveProjectChanges = (project, change_type) => ({
+	type: SAVE_PROJECT_CHANGES,
+	payload: project,
+	change_type
 });
 
 export const deleteProject = (id) => ({
-		type: DELETE_PROJECT,
-		payload: id
+	type: DELETE_PROJECT,
+	payload: id
 });
 
 export const requestedProjects = () => ({
