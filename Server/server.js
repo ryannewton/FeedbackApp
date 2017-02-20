@@ -17,10 +17,10 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 var connection = mysql.createConnection({
 	//production database
-	host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	//host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
 	//development database
-	//host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 	user     : 'root',
 	password : 'buechelejedi16',
 	port     : '3306',
@@ -91,6 +91,13 @@ app.post('/addSolution', upload.array(), function(req, res) {
 	});
 });
 
+app.post('/addSubscriber', upload.array(), function(req, res) {
+
+	connection.query('INSERT INTO subscriptions SET ?', {project_id: req.body.project_id, email: req.body.email, type: req.body.type}, function(err, result) {
+		if (err) throw err;
+		res.json({id: result.insertId});
+	});
+});
 
 //Save Project, Project_Addition Changes
 app.post('/saveProjectChanges', upload.array(), function(req, res) {
