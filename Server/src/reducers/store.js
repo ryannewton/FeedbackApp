@@ -13,8 +13,9 @@ import Combined_Reducer from './reducer_index.js';
 //Sets our initial state (before data is pulled from the server)
 const INITIAL_STATE = {
 	main: {
+		email: null,
 		start_date: null,
-    end_date: null,    
+    	end_date: null,    
 	},
 	feedback: [],
 	projects: [],	
@@ -35,6 +36,8 @@ store.dispatch(Actions.updateDates('2016-11-01', time, Actions.requestedFeedback
 store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects, Actions.pullProjectAdditions, Actions.requestedProjectAdditions, Actions.receivedProjectAdditions, Actions.pullDiscussionPosts, Actions.requestedDiscussionPosts, Actions.receivedDiscussionPosts));
 
 store.dispatch(Actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
+
+store.dispatch(Actions.updateEmail(localStorage.getItem('email')));
 
 export const history = syncHistoryWithStore(browserHistory, store);
 

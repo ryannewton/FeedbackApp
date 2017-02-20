@@ -3,6 +3,14 @@ import fetch from 'isomorphic-fetch'
 
 let actions = {
 	
+	//Email Collection
+	updateEmail(email) {
+		return {
+			type: 'UPDATE_EMAIL',
+			email
+		}
+	},
+
 	//Handle up voting
 	setUpVotes(upVotes) {
 
@@ -29,24 +37,36 @@ let actions = {
 	},
 
 	//Handle project, project_addition changes
-	saveProjectChanges(project) {
+	saveProjectChanges(project, email, type) {
 		fetch(`/saveProjectChanges`, {
-	  	method: 'POST',
-	    headers: {
-	      'Accept': 'application/json',
-	      'Content-Type': 'application/json',
-	    },
-	    body: JSON.stringify({
-	      project
+		  	method: 'POST',
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json',
+		    },
+		    body: JSON.stringify({
+		      project
+		    })
 	    })
-    })
-    .catch(error => console.error(error));    
-
-		return {
-			type: 'SAVE_PROJECT_CHANGES',
-			project
-		}
-	},
+	    .then(
+	    	fetch(`/addSubscriber`, {
+			  	method: 'POST',
+			    headers: {
+			      'Accept': 'application/json',
+			      'Content-Type': 'application/json',
+			    },
+			    body: JSON.stringify({
+			      project_id: project.id,
+			      email,
+			      type
+			    })
+	    }))
+	    .catch(error => console.error(error));
+			return {
+				type: 'SAVE_PROJECT_CHANGES',
+				project
+			}
+		},
 
 	saveProjectAdditionChanges(project_addition) {
 		
@@ -79,25 +99,39 @@ let actions = {
 		}
 	},
 
-	addProject(receivedIDForAddProject, feedback) {		
-		console.log("1st Action " + feedback);
+	addProject(receivedIDForAddProject, feedback, email, type) {		
+			console.log("1st Action " + feedback);
 
 		return function (dispatch) {
 
-	    return fetch(`/addProject`, {
-	    	method: 'POST',
-	      headers: {
-	        'Accept': 'application/json',
-	        'Content-Type': 'application/json',
-	      },
-  	    body: JSON.stringify({
-		      feedback
+		    return fetch(`/addProject`, {
+		    	method: 'POST',
+		      	headers: {
+		        	'Accept': 'application/json',
+		        	'Content-Type': 'application/json',
+		      	},
+	  	    	body: JSON.stringify({
+			      	feedback
+			    	})
+	    		})
+	      .then(response => response.json())
+	      .then(response => {
+	      	receivedIDForAddProject(response.id, feedback)
+		    	fetch(`/addSubscriber`, {
+				  	method: 'POST',
+				    headers: {
+				      'Accept': 'application/json',
+				      'Content-Type': 'application/json',
+				    },
+				    body: JSON.stringify({
+				      project_id: response.id,
+				      email,
+				      type
+				    })
+				  })
 		    })
-    	})
-      .then(response => response.json())
-      .then(response => receivedIDForAddProject(response.id, feedback))
-      .catch(error => console.error(error));
-    }        
+	      .catch(error => console.error(error));
+	    }        
 	},
 
 	receivedIDForAddSolution(project_addition_id, project_id) {
@@ -108,27 +142,40 @@ let actions = {
 		}
 	},
 
-	addSolution(project_id, receivedIDForAddSolution) {		
+	addSolution(project_id, receivedIDForAddSolution, email, type) {		
 		return function (dispatch) {
-	    return fetch(`/addSolution`, {
-	    	method: 'POST',
-	      headers: {
-	        'Accept': 'application/json',
-	        'Content-Type': 'application/json',
-	      },
-  	    body: JSON.stringify({
-		      project_id
-		    })
-    	})
-      .then(response => response.json())
-      .then(response => receivedIDForAddSolution(response.id, project_id))
-      .catch(error => console.error(error));
-    }        
+		    return fetch(`/addSolution`, {
+		    	method: 'POST',
+		      headers: {
+		        'Accept': 'application/json',
+		        'Content-Type': 'application/json',
+		      },
+	  	    body: JSON.stringify({
+			      project_id
+			    })
+	    	})
+	      .then(response => response.json())
+	      .then(response => receivedIDForAddSolution(response.id, project_id))
+	      .then(
+	    	fetch(`/addSubscriber`, {
+			  	method: 'POST',
+			    headers: {
+			      'Accept': 'application/json',
+			      'Content-Type': 'application/json',
+			    },
+			    body: JSON.stringify({
+			      project_id,
+			      email,
+			      type
+			    })
+	    	}))
+	      .catch(error => console.error(error));
+	    }        
 	},
 
 
 	//Delete Project, Project_Addition
-	deleteProject(id) {
+	deleteProject(id, email, type) {
 
 		fetch(`/deleteProject`, {
 	  	method: 'POST',
@@ -140,6 +187,19 @@ let actions = {
 	      id
 	    })
     })
+	.then(
+    	fetch(`/addSubscriber`, {
+		  	method: 'POST',
+		    headers: {
+		      'Accept': 'application/json',
+		      'Content-Type': 'application/json',
+		    },
+		    body: JSON.stringify({
+		      project_id: id,
+		      email,
+		      type
+		    })
+	}))
     .catch(error => console.error(error));    
 		
 		return {
