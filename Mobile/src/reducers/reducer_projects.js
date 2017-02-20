@@ -19,6 +19,7 @@ export default (state = [], action) => {
 		case RECEIVED_PROJECTS:
 			return action.payload;
 		case SAVE_PROJECT_CHANGES:
+			console.log("reducer fired in projects");
 			saveProjectChanges(action.payload);
 			const index = state.findIndex((project) => project.id === action.payload.id);
 			const newState = state.slice(0);

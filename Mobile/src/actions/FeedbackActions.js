@@ -69,10 +69,10 @@ export const removeUpVote = (upVote) => ({
 	payload: upVote
 });
 
-export const saveProjectChanges = (project, type) => ({
+export const saveProjectChanges = (project, change_type) => ({
 	type: SAVE_PROJECT_CHANGES,
 	payload: project,
-	type
+	change_type
 });
 
 export const deleteProject = (id) => ({

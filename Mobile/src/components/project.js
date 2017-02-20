@@ -25,6 +25,7 @@ class Project extends Component {
 	upvote() {
 		const newProject = { ...this.props.item, votes: this.props.item.votes + 1 };
 		this.props.saveProjectChanges(newProject, 'upvote');
+		console.log("upvote called");
 	}
 
 	// Temporary fix. Async issue is causing this.props.item to be temporarily undefined
