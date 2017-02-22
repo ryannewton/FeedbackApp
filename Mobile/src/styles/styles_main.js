@@ -10,32 +10,33 @@ const styles = StyleSheet.create({
 
 	//Feedback Scene
 	container: {
-		backgroundColor: '#F7FCFF',
-		flex: 1
-	},
-	welcome: {
-		fontSize: 18,
-		textAlign: 'center',
-		marginTop: (Platform.OS === 'ios') ? 20 : 10,
-		marginBottom: 6		
+		flex: 1,
+		flexDirection: 'column',
+		justifyContent: 'flex-start',
+		alignItems: 'stretch',
+		backgroundColor: '#F7FCFF'		
 	},
 	feedback_input: {
 		fontSize: 18,
-		height: 200,
+		height: 180,
 		borderColor: 'gray',
 		borderWidth: 1,
 		borderRadius: 4,
 		margin: 3,
-		paddingLeft: 8,
-		paddingRight: 8,
+		marginVertical: 10,
+		marginHorizontal: 5,
+		paddingVertical: 8,
+		paddingHorizontal: 8,
 		backgroundColor: '#FFFFFF',
-		flex: 1
 	},
+	//Navigation
 
-	//Navigation	
+	//Highest level flexbox	
 	navigator: {
 		flex: 1,
 	},
+
+	//Within navigator is cardstack and tabs -- note within cardstack are the scenes
 	navigatorCardStack: {
 		flex: 12,
 	},
@@ -43,6 +44,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: 'row',
 	},
+
+	//Within tabs is tab
 	tab: {
 		flex: 1,
 		alignItems: 'center',
