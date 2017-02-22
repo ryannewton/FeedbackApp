@@ -55,7 +55,7 @@ class Feedback extends Component {
 			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
 		return (
-			<Button	onPress={this.submitFeedback.bind(this)} style={{ marginTop: 10, height: 50 }}>
+			<Button	onPress={this.submitFeedback.bind(this)}>
 				Submit Feedback
 			</Button>
 		);
