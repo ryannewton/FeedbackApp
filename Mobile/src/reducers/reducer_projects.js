@@ -1,16 +1,11 @@
 'use strict';
 
-// Import libraries
-import axios from 'axios';
-
 // Import action types
 import {
 	REQUESTED_PROJECTS,
 	RECEIVED_PROJECTS,
 	SAVE_PROJECT_CHANGES
 } from '../actions/types';
-
-import { ROOT_URL } from '../constants';
 
 export default (state = [], action) => {
 	switch (action.type) {
@@ -19,8 +14,6 @@ export default (state = [], action) => {
 		case RECEIVED_PROJECTS:
 			return action.payload;
 		case SAVE_PROJECT_CHANGES:
-			console.log("reducer fired in projects");
-			saveProjectChanges(action.payload);
 			const index = state.findIndex((project) => project.id === action.payload.id);
 			const newState = state.slice(0);
 			newState.splice(index, 1, action.payload);
@@ -28,29 +21,4 @@ export default (state = [], action) => {
 		default:
 			return state;
 	}
-};
-
-// const saveProjectChanges = (project) => {
-// 	fetch('https://stanfordfeedback.com/saveProjectChanges', {
-// 		method: 'POST',
-// 		headers: {
-// 			Accept: 'application/json',
-// 			'Content-Type': 'application/json',
-// 		},
-// 		body: JSON.stringify({
-// 			project
-// 		})
-// 	});
-// };
-
-const saveProjectChanges = (project) => {
-	console.log('POST request initiated to /saveProjectChanges');
-	console.log('body is: ', project);
-	axios.post(`${ROOT_URL}/saveProjectChanges`, {project})
-	.then((res) => {
-		console.log('saveProjectChanges successful. Response: ', res);
-	})
-	.catch((err) => {
-		console.log('saveProjectChanges FAIL. Response: ', err);
-	});
 };

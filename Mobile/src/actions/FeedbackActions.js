@@ -7,7 +7,6 @@ import axios from 'axios';
 import {
 	FEEDBACK_CHANGED,
 	UPDATE_NAV_STATE,
-	SET_UP_VOTES,
 	ADD_UP_VOTE,
 	REMOVE_UP_VOTE,
 	SAVE_PROJECT_CHANGES,
@@ -54,26 +53,33 @@ export const navigate = (route) => ({
 	payload: route
 });
 
-export const setUpVotes = (upVotes) => ({
-	type: SET_UP_VOTES,
-	payload: upVotes
-});
+export const addUpVote = (project) => (
+	(dispatch) => {
+		dispatch({ type: ADD_UP_VOTE, payload: project });
+		dispatch(saveProjectChanges(project));
+	}
+);
 
-export const addUpVote = (upVote) => ({
-	type: ADD_UP_VOTE,
-	payload: upVote
-});
+export const removeUpVote = (project) => (
+	(dispatch) => {
+		dispatch({ type: REMOVE_UP_VOTE, payload: project });
+		dispatch(saveProjectChanges(project));
+	}
+);
 
-export const removeUpVote = (upVote) => ({
-	type: REMOVE_UP_VOTE,
-	payload: upVote
-});
-
-export const saveProjectChanges = (project, change_type) => ({
-	type: SAVE_PROJECT_CHANGES,
-	payload: project,
-	change_type
-});
+export const saveProjectChanges = (project, change_type) => (
+	(dispatch) => {
+		dispatch({ type: SAVE_PROJECT_CHANGES, payload: project });
+		fetch(`${ROOT_URL}/saveProjectChanges`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({ project })
+		});
+	}
+);
 
 export const deleteProject = (id) => ({
 	type: DELETE_PROJECT,
