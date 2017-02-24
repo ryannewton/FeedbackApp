@@ -26,7 +26,7 @@ class NavTab extends Component {
 		return (
 			<TouchableOpacity style={styles.tab} onPress={this._onPress}>
 				<Text style={style}>
-					{this.props.route.key}
+					{this.props.route.displayName}
 				</Text>
 			</TouchableOpacity>
 		);

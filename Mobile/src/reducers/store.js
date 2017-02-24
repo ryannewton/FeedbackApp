@@ -15,6 +15,7 @@ import { ROOT_STORAGE } from '../constants';
 import Feedback from '../scenes/feedback.js';
 import Projects from '../scenes/projects.js';
 import Settings from '../scenes/settings.js';
+import New_Projects from '../scenes/new_projects.js';
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
 	'appropriate department head on Monday and get back to you with their response.';
@@ -31,9 +32,10 @@ const INITIAL_STATE = {
 		tabs: {
 			index: 0,
 			routes: [
-				{key: 'Feedback'},
-				{key: 'Projects'},
-				{key: 'Settings'},
+				{key: 'Feedback', displayName: 'Send Feedback', inTabs: true},
+				{key: 'NewProjects', displayName: 'New Projects', inTabs: true},
+				{key: 'AllProjects', displayName: 'All Projects', inTabs: true},
+				{key: 'Settings', displayName: 'Settings', inTabs: false},				
 			],
 		},
 		// Scenes for the `Feedback` tab.
@@ -42,7 +44,7 @@ const INITIAL_STATE = {
 			routes: [{key: 'Feedback Home', component: Feedback }],
 		},
 		// Scenes for the `Projects` tab.
-		Projects: {
+		AllProjects: {
 			index: 0,
 			routes: [{key: 'Projects Home', component: Projects }],
 		},
@@ -50,6 +52,11 @@ const INITIAL_STATE = {
 		Settings: {
 			index: 0,
 			routes: [{key: 'Settings Home', component: Settings }],
+		},
+		// Scenes for the 'New Projects' tab.
+		NewProjects: {
+			index: 0,
+			routes: [{key: 'New Projects Home', component: New_Projects }],
 		},
 	}
 };
