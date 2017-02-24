@@ -6,7 +6,6 @@ import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components and action creators
-import Login from './login';
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
 import {
 	emailChanged,
@@ -20,29 +19,14 @@ import styles from '../styles/styles_main.js';
 
 class Signup extends Component {
 	onButtonPress() {
-		const { email, password, passwordConfirm } = this.props;
-		if (password !== passwordConfirm) {
-			const errorMessage = 'Passwords must match';
-			this.props.signupUserFail(errorMessage);
-		} else {
-			this.props.signupUser({ email, password });
-		}
+		const { email } = this.props;
+		this.props.signupUser({ email, password: 'password' });
 	}
 
 	renderSignupButton() {
 		return (
 			<Button onPress={this.onButtonPress.bind(this)}>
-				Sign Up
-			</Button>
-		);
-	}
-
-	renderLoginButton() {
-		const scene = { key: 'Login', component: Login };
-		const route = { type: 'pop-push', route: scene };
-		return (
-			<Button onPress={() => this.props.navigate(route)}>
-				Login
+				Submit
 			</Button>
 		);
 	}
@@ -55,8 +39,6 @@ class Signup extends Component {
 		return (
 			<View style={{ flex: 1 }}>
 				{this.renderSignupButton()}
-				<Text>Already have an account?</Text>
-				{this.renderLoginButton()}
 			</View>
 		);
 	}
@@ -66,39 +48,18 @@ class Signup extends Component {
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<View style={styles.container}>
 					<Header>
-						Sign Up
+						Enter Email
 					</Header>
+
 
 					<Card>
 						{/* Email input */}
 						<CardSection>
 							<Input
-								label="Email"
+								label="GSB email"
 								placeholder="joe@gmail.com"
 								value={this.props.email}
 								onChangeText={(text) => this.props.emailChanged(text)}
-							/>
-						</CardSection>
-
-						{/* Password input */}
-						<CardSection>
-							<Input
-								secureTextEntry
-								label="Password"
-								placeholder="password"
-								value={this.props.password}
-								onChangeText={(text) => this.props.passwordChanged(text)}
-							/>
-						</CardSection>
-
-						{/* Password confirm input */}
-						<CardSection>
-							<Input
-								secureTextEntry
-								label="Confirm Password"
-								placeholder="password"
-								value={this.props.passwordConfirm}
-								onChangeText={(text) => this.props.passwordConfirmChanged(text)}
 							/>
 						</CardSection>
 
@@ -110,6 +71,14 @@ class Signup extends Component {
 						{/* Confirmation button, and 'go to login' button */}
 						<CardSection>
 							{this.renderButtons()}
+						</CardSection>
+
+						<CardSection>
+							<Text style={styles.text}>
+									Why do we need your email? Two reasons:{'\n'}
+									1) We need to confirm you are member of GSB{'\n'}
+									2) We will occasionally update you on progress for your feedback
+							</Text>
 						</CardSection>
 					</Card>
 				</View>
