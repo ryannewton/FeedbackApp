@@ -67,9 +67,11 @@ export const removeUpVote = (project) => (
 	}
 );
 
-export const saveProjectChanges = (project, change_type) => (
-	(dispatch) => {
+export const saveProjectChanges = (project, changeType) => (
+	(dispatch, getState) => {
 		dispatch({ type: SAVE_PROJECT_CHANGES, payload: project });
+
+		// Save the project change to the server
 		fetch(`${ROOT_URL}/saveProjectChanges`, {
 			method: 'POST',
 			headers: {
@@ -78,8 +80,16 @@ export const saveProjectChanges = (project, change_type) => (
 			},
 			body: JSON.stringify({ project })
 		});
+
+		// Subscribe the user to the project
+		const { email } = getState().auth;
+		addSubscriber(email, project.id, changeType);
 	}
 );
+
+const addSubscriber = (email, projectId, type) => {
+	axios.post(`${ROOT_URL}/addSubscriber`, { email, projectId, type });
+};
 
 export const deleteProject = (id) => ({
 	type: DELETE_PROJECT,
