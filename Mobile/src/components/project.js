@@ -21,7 +21,7 @@ class Project extends Component {
 		const { project, user } = this.props;
 
 		// If user hasn't upvoted this project, add an upvote
-		if (user.upvotes.contains(project.id)) {
+		if (!user.upvotes.includes(project.id)) {
 			this.props.addUpVote(project);
 		} else {
 			this.props.removeUpVote(project);
