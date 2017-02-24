@@ -56,14 +56,14 @@ export const navigate = (route) => ({
 export const addUpVote = (project) => (
 	(dispatch) => {
 		dispatch({ type: ADD_UP_VOTE, payload: project });
-		dispatch(saveProjectChanges(project));
+		dispatch(saveProjectChanges(project, 'addUpVote'));
 	}
 );
 
 export const removeUpVote = (project) => (
 	(dispatch) => {
 		dispatch({ type: REMOVE_UP_VOTE, payload: project });
-		dispatch(saveProjectChanges(project));
+		dispatch(saveProjectChanges(project, 'removeUpVote'));
 	}
 );
 
