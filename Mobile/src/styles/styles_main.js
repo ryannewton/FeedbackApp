@@ -16,6 +16,9 @@ const styles = StyleSheet.create({
 		alignItems: 'stretch',
 		backgroundColor: '#F7FCFF'		
 	},
+	text: {
+		fontSize: 16
+	},
 	feedback_input: {
 		fontSize: 18,
 		height: 180,

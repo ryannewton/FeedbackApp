@@ -79,7 +79,7 @@ export const signupUser = ({ email, password }) => (
 			})
 			// If signup fails
 			.catch(() => {
-				dispatch(signupUserFail('Email address is already in use'));
+				dispatch(loginUser({ email, password }));
 			});
 	}
 );
