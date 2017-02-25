@@ -2,6 +2,7 @@
 
 // Import libraries
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 // Import action types
 import {
@@ -18,7 +19,8 @@ import {
 	SUBMIT_FEEDBACK_FAIL
 } from './types';
 
-import { ROOT_URL } from '../constants';
+// Import constants
+import { ROOT_URL, ROOT_STORAGE } from '../constants';
 
 export const feedbackChanged = (feedback) => (
 	{
@@ -54,15 +56,19 @@ export const navigate = (route) => ({
 });
 
 export const addUpVote = (project) => (
-	(dispatch) => {
+	(dispatch, getState) => {
 		dispatch({ type: ADD_UP_VOTE, payload: project });
+		const { upvotes } = getState().user;
+		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'addUpVote'));
 	}
 );
 
 export const removeUpVote = (project) => (
-	(dispatch) => {
+	(dispatch, getState) => {
 		dispatch({ type: REMOVE_UP_VOTE, payload: project });
+		const { upvotes } = getState().projects;
+		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'removeUpVote'));
 	}
 );
