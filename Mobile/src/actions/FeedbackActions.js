@@ -10,6 +10,7 @@ import {
 	UPDATE_NAV_STATE,
 	ADD_UP_VOTE,
 	REMOVE_UP_VOTE,
+	LOAD_USER_UPVOTES,
 	SAVE_PROJECT_CHANGES,
 	DELETE_PROJECT,
 	REQUESTED_PROJECTS,
@@ -70,6 +71,13 @@ export const removeUpVote = (project) => (
 		const { upvotes } = getState().projects;
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'removeUpVote'));
+	}
+);
+
+export const loadUpvotes = (upvotes) => (
+	{
+		type: LOAD_USER_UPVOTES,
+		payload: upvotes
 	}
 );
 

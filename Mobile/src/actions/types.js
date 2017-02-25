@@ -5,6 +5,7 @@ export const FEEDBACK_CHANGED = 'feedback_changed';
 export const UPDATE_NAV_STATE = 'update_nav_state';
 export const ADD_UP_VOTE = 'add_upvote';
 export const REMOVE_UP_VOTE = 'remove_upvote';
+export const LOAD_USER_UPVOTES = 'load_user_upvotes';
 export const SAVE_PROJECT_CHANGES = 'save_project_changes';
 export const ADD_PROJECT = 'add_project';
 export const DELETE_PROJECT = 'delete_project';

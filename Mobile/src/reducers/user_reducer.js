@@ -3,7 +3,8 @@
 // Import action types
 import {
 	ADD_UP_VOTE,
-	REMOVE_UP_VOTE
+	REMOVE_UP_VOTE,
+	LOAD_USER_UPVOTES
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -16,6 +17,8 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, upvotes: [...state.upvotes, action.payload.id] };
 		case REMOVE_UP_VOTE:
 			return { ...state, upvotes: removeItem(state.upvotes, action.payload.id) };
+		case LOAD_USER_UPVOTES:
+			return { ...state, upvotes: action.payload };
 		default:
 			return state;
 	}
@@ -27,4 +30,4 @@ const removeItem = (arr, item) => {
 		return [...arr.slice(0, index), ...arr.slice(index + 1)];
 	}
 	return arr;
-}
+};
