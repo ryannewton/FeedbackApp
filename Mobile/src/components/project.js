@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import ProjectDetails from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
 import { Button, Card } from './common';
-import { addUpVote, removeUpVote } from '../actions';
+import { addUpvote, removeUpvote } from '../actions';
 
 class Project extends Component {
 	goToDetails() {
@@ -21,9 +21,9 @@ class Project extends Component {
 		const { project, user } = this.props;
 		// If user hasn't upvoted this project, add an upvote
 		if (!user.upvotes.includes(project.id)) {
-			this.props.addUpVote(project);
+			this.props.addUpvote(project);
 		} else {
-			this.props.removeUpVote(project);
+			this.props.removeUpvote(project);
 		}
 	}
 
@@ -107,4 +107,4 @@ const mapStateToProps = (state) => {
 	return { user };
 };
 
-export default connect(mapStateToProps, { addUpVote, removeUpVote })(Project);
+export default connect(mapStateToProps, { addUpvote, removeUpvote })(Project);

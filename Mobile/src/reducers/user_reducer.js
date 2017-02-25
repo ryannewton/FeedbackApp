@@ -2,8 +2,8 @@
 
 // Import action types
 import {
-	ADD_UP_VOTE,
-	REMOVE_UP_VOTE,
+	ADD_UPVOTE,
+	REMOVE_UPVOTE,
 	LOAD_USER_UPVOTES
 } from '../actions/types';
 
@@ -13,9 +13,9 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
-		case ADD_UP_VOTE:
+		case ADD_UPVOTE:
 			return { ...state, upvotes: [...state.upvotes, action.payload.id] };
-		case REMOVE_UP_VOTE:
+		case REMOVE_UPVOTE:
 			return { ...state, upvotes: removeItem(state.upvotes, action.payload.id) };
 		case LOAD_USER_UPVOTES:
 			return { ...state, upvotes: action.payload };

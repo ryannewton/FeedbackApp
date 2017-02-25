@@ -8,8 +8,8 @@ import { AsyncStorage } from 'react-native';
 import {
 	FEEDBACK_CHANGED,
 	UPDATE_NAV_STATE,
-	ADD_UP_VOTE,
-	REMOVE_UP_VOTE,
+	ADD_UPVOTE,
+	REMOVE_UPVOTE,
 	LOAD_USER_UPVOTES,
 	SAVE_PROJECT_CHANGES,
 	DELETE_PROJECT,
@@ -56,21 +56,21 @@ export const navigate = (route) => ({
 	payload: route
 });
 
-export const addUpVote = (project) => (
+export const addUpvote = (project) => (
 	(dispatch, getState) => {
-		dispatch({ type: ADD_UP_VOTE, payload: project });
+		dispatch({ type: ADD_UPVOTE, payload: project });
 		const { upvotes } = getState().user;
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
-		dispatch(saveProjectChanges(project, 'addUpVote'));
+		dispatch(saveProjectChanges(project, 'addUpvote'));
 	}
 );
 
-export const removeUpVote = (project) => (
+export const removeUpvote = (project) => (
 	(dispatch, getState) => {
-		dispatch({ type: REMOVE_UP_VOTE, payload: project });
+		dispatch({ type: REMOVE_UPVOTE, payload: project });
 		const { upvotes } = getState().projects;
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
-		dispatch(saveProjectChanges(project, 'removeUpVote'));
+		dispatch(saveProjectChanges(project, 'removeUpvote'));
 	}
 );
 

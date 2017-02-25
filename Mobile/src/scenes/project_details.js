@@ -21,7 +21,7 @@ class Project_Details extends Component {
 
 	}
 
-	up_vote() {
+	upvote() {
 
 	}
 
@@ -36,7 +36,7 @@ class Project_Details extends Component {
 					{this.props.scene.route.item.title}
 				</Text>
 				<View>
-					<Button	onPress={this.up_vote}>
+					<Button	onPress={this.upvote}>
 						Upvote!
 					</Button>
 				</View>
