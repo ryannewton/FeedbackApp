@@ -68,7 +68,17 @@ async function load_email() {
 	}
 }
 
+async function load_upvotes() {
+	try {
+		let upvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}upvotes`) || [];
+		upvotes = JSON.parse(upvotes);
+		store.dispatch(actions.loadUpvotes(upvotes));
+	} catch (error) {
+	}
+}
+
 load_email();
+load_upvotes();
 
 store.dispatch(actions.pullProjects(actions.requestedProjects, actions.receivedProjects));
 

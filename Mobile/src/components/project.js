@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import ProjectDetails from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
 import { Button, Card } from './common';
-import { addUpVote, removeUpVote } from '../actions';
+import { addUpvote, removeUpvote } from '../actions';
 
 class Project extends Component {
 	goToDetails() {
@@ -19,12 +19,11 @@ class Project extends Component {
 
 	upvote() {
 		const { project, user } = this.props;
-
 		// If user hasn't upvoted this project, add an upvote
 		if (!user.upvotes.includes(project.id)) {
-			this.props.addUpVote(project);
+			this.props.addUpvote(project);
 		} else {
-			this.props.removeUpVote(project);
+			this.props.removeUpvote(project);
 		}
 	}
 
@@ -42,6 +41,26 @@ class Project extends Component {
 			return '';
 		}
 		return this.props.project.title;
+	}
+
+	renderButton() {
+		const { project, user } = this.props;
+		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
+		let textStyles = { paddingTop: 10, paddingBottom: 10 };
+		// If user hasn't upvoted this project
+		if (user.upvotes.includes(project.id)) {
+			buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
+			textStyles = { ...textStyles, color: '#fff' };
+		}
+		return (
+			<Button
+				onPress={this.upvote.bind(this)}
+				style={buttonStyles}
+				textStyle={textStyles}
+			>
+				Upvote!
+			</Button>
+		);
 	}
 
 	render() {
@@ -64,7 +83,7 @@ class Project extends Component {
 						{/* Vote section */}
 						<View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
 							{/* Vote count */}
-							<View style={{ flex: 1 }}>
+							<View style={{ flex: 3 }}>
 								<Text style={[buttonText, lowWeight]}>
 									{this.renderVoteCount()}
 								</Text>
@@ -72,13 +91,7 @@ class Project extends Component {
 
 							{/* Upvote button */}
 							<View style={{ flex: 1, alignItems: 'flex-end' }}>
-								<Button
-									onPress={this.upvote.bind(this)}
-									style={{ width: 80, height: 27, marginRight: 2 }}
-									textStyle={{ paddingTop: 10, paddingBottom: 10 }}
-								>
-									Upvote!
-								</Button>
+								{this.renderButton()}
 							</View>
 						</View>
 					</View>
@@ -94,4 +107,4 @@ const mapStateToProps = (state) => {
 	return { user };
 };
 
-export default connect(mapStateToProps, { addUpVote, removeUpVote })(Project);
+export default connect(mapStateToProps, { addUpvote, removeUpvote })(Project);

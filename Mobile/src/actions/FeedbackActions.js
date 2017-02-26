@@ -2,13 +2,15 @@
 
 // Import libraries
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 // Import action types
 import {
 	FEEDBACK_CHANGED,
 	UPDATE_NAV_STATE,
-	ADD_UP_VOTE,
-	REMOVE_UP_VOTE,
+	ADD_UPVOTE,
+	REMOVE_UPVOTE,
+	LOAD_USER_UPVOTES,
 	SAVE_PROJECT_CHANGES,
 	DELETE_PROJECT,
 	REQUESTED_PROJECTS,
@@ -18,7 +20,8 @@ import {
 	SUBMIT_FEEDBACK_FAIL
 } from './types';
 
-import { ROOT_URL } from '../constants';
+// Import constants
+import { ROOT_URL, ROOT_STORAGE } from '../constants';
 
 export const feedbackChanged = (feedback) => (
 	{
@@ -53,17 +56,28 @@ export const navigate = (route) => ({
 	payload: route
 });
 
-export const addUpVote = (project) => (
-	(dispatch) => {
-		dispatch({ type: ADD_UP_VOTE, payload: project });
-		dispatch(saveProjectChanges(project, 'addUpVote'));
+export const addUpvote = (project) => (
+	(dispatch, getState) => {
+		dispatch({ type: ADD_UPVOTE, payload: project });
+		const { upvotes } = getState().user;
+		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
+		dispatch(saveProjectChanges(project, 'addUpvote'));
 	}
 );
 
-export const removeUpVote = (project) => (
-	(dispatch) => {
-		dispatch({ type: REMOVE_UP_VOTE, payload: project });
-		dispatch(saveProjectChanges(project, 'removeUpVote'));
+export const removeUpvote = (project) => (
+	(dispatch, getState) => {
+		dispatch({ type: REMOVE_UPVOTE, payload: project });
+		const { upvotes } = getState().projects;
+		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
+		dispatch(saveProjectChanges(project, 'removeUpvote'));
+	}
+);
+
+export const loadUpvotes = (upvotes) => (
+	{
+		type: LOAD_USER_UPVOTES,
+		payload: upvotes
 	}
 );
 
