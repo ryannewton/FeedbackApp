@@ -8,24 +8,29 @@ import { connect } from 'react-redux';
 import Signup from '../scenes/signup';
 import { navigate } from '../actions';
 
-export default function (ComposedComponent) {
+export default function (ComposedComponent, ComponentType) {
 	class Authentication extends Component {
 		// Gives access to this.context.router
 		static contextTypes = {
 			router: React.PropTypes.object
 		}
 
-		componentWillMount() {
+		/*componentWillMount() {
 			// If user is not authenticated, navigate to /signin
 			if (!this.props.token) {
 				const scene = { key: 'Signup', component: Signup };
 				const route = { type: 'push', route: scene };
 				this.props.navigate(route);
 			}
-		}
+		}*/
 
 		render() {
-			return <ComposedComponent {...this.props} />;
+			if (!this.props.token) {
+				return <Signup endPoint={ComposedComponent} endPointType={ComponentType} {...this.props} />;
+			}
+			else {
+				return <ComposedComponent {...this.props} />;
+			}
 		}
 	}
 

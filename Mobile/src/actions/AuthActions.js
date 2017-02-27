@@ -9,7 +9,7 @@ import Submitted from '../scenes/submitted';
 import { ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
-import { submitFeedbackToServer } from './FeedbackActions';
+import { submitFeedbackToServer, navigate } from './FeedbackActions';
 import {
 	EMAIL_CHANGED,
 	SAVE_EMAIL,
@@ -52,7 +52,7 @@ export const passwordConfirmChanged = (passwordConfirm) => (
 	}
 );
 
-export const signupUser = ({ email, password }) => (
+export const signupUser = ({ email, password, endPoint, endPointType }) => (
 	(dispatch) => {
 		dispatch({ type: SIGNUP_USER });
 
@@ -61,6 +61,7 @@ export const signupUser = ({ email, password }) => (
 				// Get JWT and add to AsyncStorage
 				user.getToken()
 					.then((token) => {
+						console.log(token);
 						AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
 						dispatch(signupUserSuccess(token));
 					});
@@ -71,19 +72,27 @@ export const signupUser = ({ email, password }) => (
 				// Save password to AsyncStorage
 				AsyncStorage.setItem(`${ROOT_STORAGE}password`, password);
 
-				// Navigate to Submitted scene
+				// Navigate to endPoint scene
 				const route = {
 					type: 'pop-push',
 					route: {
-						key: 'Submitted',
-						component: Submitted
+						key: endPointType,
+						component: endPoint
 					}
 				};
-				dispatch(submitFeedbackToServer(route));
+
+				if (endPointType === 'Submitted') {
+					dispatch(submitFeedbackToServer(route));
+				} else {
+					console.log("don't need navigate, will auto update");
+					//dispatch(navigate(route));
+				}
+
 			})
 			// If signup fails
-			.catch(() => {
-				dispatch(loginUser({ email, password }));
+			.catch((error) => {
+				console.log('signup fail', error);
+				//dispatch(loginUser({ email, password }));
 			});
 	}
 );
