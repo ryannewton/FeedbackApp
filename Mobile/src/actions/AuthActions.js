@@ -20,7 +20,8 @@ import {
 	SIGNUP_USER_FAIL,
 	LOGIN_USER,
 	LOGIN_USER_SUCCESS,
-	LOGIN_USER_FAIL
+	LOGIN_USER_FAIL,
+	LOAD_TOKEN
 } from './types';
 
 export const emailChanged = (email) => (
@@ -66,6 +67,9 @@ export const signupUser = ({ email, password }) => (
 
 				// Save email to AsyncStorage
 				dispatch(saveEmail(email));
+
+				// Save password to AsyncStorage
+				AsyncStorage.setItem(`${ROOT_STORAGE}password`, password);
 
 				// Navigate to Submitted scene
 				const route = {
@@ -143,3 +147,10 @@ export const loginUserFail = () => {
 		payload: err
 	};
 };
+
+export const loadToken = (token) => {
+	return {
+		type: LOAD_TOKEN,
+		payload: token
+	}
+}

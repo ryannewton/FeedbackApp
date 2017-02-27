@@ -77,8 +77,17 @@ async function load_upvotes() {
 	}
 }
 
+async function load_token() {
+	try {
+		let token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
+		store.dispatch(actions.loadToken(token));
+	} catch (error) {
+	}
+}
+
 load_email();
 load_upvotes();
+load_token();
 
 store.dispatch(actions.pullProjects(actions.requestedProjects, actions.receivedProjects));
 
