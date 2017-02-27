@@ -20,7 +20,8 @@ import {
 	SIGNUP_USER_FAIL,
 	LOGIN_USER,
 	LOGIN_USER_SUCCESS,
-	LOGIN_USER_FAIL
+	LOGIN_USER_FAIL,
+	LOAD_TOKEN
 } from './types';
 
 export const emailChanged = (email) => (
@@ -146,3 +147,10 @@ export const loginUserFail = () => {
 		payload: err
 	};
 };
+
+export const loadToken = (token) => {
+	return {
+		type: LOAD_TOKEN,
+		payload: token
+	}
+}
