@@ -67,6 +67,9 @@ export const signupUser = ({ email, password }) => (
 				// Save email to AsyncStorage
 				dispatch(saveEmail(email));
 
+				// Save password to AsyncStorage
+				AsyncStorage.setItem(`${ROOT_STORAGE}password`, password);
+
 				// Navigate to Submitted scene
 				const route = {
 					type: 'pop-push',
