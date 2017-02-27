@@ -10,6 +10,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 
 //Import components, functions, and styles
+import RequireAuth from '../components/require_auth';
 import Project from '../components/project.js';
 import { Header } from '../components/common';
 import styles from '../styles/styles_main.js';
@@ -59,4 +60,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators(actions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Projects);
+export default connect(mapStateToProps, mapDispatchToProps)(RequireAuth(Projects));
