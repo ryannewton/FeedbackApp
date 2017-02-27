@@ -87,6 +87,19 @@ class Signup extends Component {
 	}
 }
 
+const generatePassword = (len = 20) => {
+	let password = '';
+	let num;
+	// Add random characters to password
+	for (let i = 0; i < len; i++) {
+		// Generate an integer between 33 & 125 (valid ascii chars)
+		num = Math.random() * (125 - 33);
+		num = Math.floor(num) + 33;
+		password += String.fromCharCode(num);
+	}
+	return password;
+};
+
 const mapStateToProps = (state) => {
 	const { email, password, passwordConfirm, error, loading, user } = state.auth;
 	return { email, password, passwordConfirm, error, loading, user };
