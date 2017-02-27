@@ -44,9 +44,12 @@ export const submitFeedbackToServer = (route) => (
 		})
 		.then((response) => {
 			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
+			console.log("navigate to projects");
 			dispatch(navigate(route));
 		})
 		.catch((error) => {
+			console.log("error");
+			console.log(error);
 			dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
 			dispatch(navigate(route));
 		});

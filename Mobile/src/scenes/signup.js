@@ -18,9 +18,15 @@ import {
 import styles from '../styles/styles_main.js';
 
 class Signup extends Component {
+	constructor(props) {
+		super(props);
+
+		console.log(props);
+	}
+
 	onButtonPress() {
 		const { email } = this.props;
-		this.props.signupUser({ email, password: 'password' });
+		this.props.signupUser({ email, password: 'password', endPoint: this.props.endPoint, endPointType: this.props.endPointType });
 	}
 
 	renderSignupButton() {
