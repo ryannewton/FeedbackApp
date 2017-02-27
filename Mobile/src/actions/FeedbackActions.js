@@ -39,7 +39,9 @@ export const submitFeedbackToServer = (route) => (
 		dispatch({ type: SUBMIT_FEEDBACK });
 
 		// Post new feedback to server
-		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, email })
+		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, email }, {
+			headers: { authorization: getState().auth.token }
+		})
 		.then((response) => {
 			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
 			dispatch(navigate(route));
@@ -90,7 +92,8 @@ export const saveProjectChanges = (project, changeType) => (
 			method: 'POST',
 			headers: {
 				Accept: 'application/json',
-				'Content-Type': 'application/json'
+				'Content-Type': 'application/json',
+				authorization: getState().auth.token
 			},
 			body: JSON.stringify({ project })
 		});
@@ -101,9 +104,13 @@ export const saveProjectChanges = (project, changeType) => (
 	}
 );
 
-const addSubscriber = (email, projectId, type) => {
-	axios.post(`${ROOT_URL}/addSubscriber`, { email, projectId, type });
-};
+const addSubscriber = (email, projectId, type) => (
+	(dispatch, getState) => {
+		axios.post(`${ROOT_URL}/addSubscriber`, { email, projectId, type }, {
+			headers: { authorization: getState().auth.token }
+		});
+	}
+);
 
 export const deleteProject = (id) => ({
 	type: DELETE_PROJECT,
@@ -121,10 +128,12 @@ export const receivedProjects = (projects) => ({
 
 // To Do: Convert `${ROOT_URL}/pullProjects` to GET on server
 export const pullProjects = () => (
-	function (dispatch) {
+	function (dispatch, getState) {
 		dispatch(requestedProjects());
 
-		return axios.post(`${ROOT_URL}/pullProjects`)
+		return axios.post(`${ROOT_URL}/pullProjects`, {
+			headers: { authorization: getState().auth.token }
+		})
 		.then(response => dispatch(receivedProjects(response.data)))
 		.catch(error => console.error(error));
 	}
