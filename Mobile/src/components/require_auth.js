@@ -15,15 +15,6 @@ export default function (ComposedComponent, ComponentType) {
 			router: React.PropTypes.object
 		}
 
-		/*componentWillMount() {
-			// If user is not authenticated, navigate to /signin
-			if (!this.props.token) {
-				const scene = { key: 'Signup', component: Signup };
-				const route = { type: 'push', route: scene };
-				this.props.navigate(route);
-			}
-		}*/
-
 		render() {
 			if (!this.props.token) {
 				return <Signup endPoint={ComposedComponent} endPointType={ComponentType} {...this.props} />;

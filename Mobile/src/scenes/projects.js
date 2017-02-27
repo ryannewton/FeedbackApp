@@ -17,10 +17,7 @@ import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
 	constructor(props) {
-		super(props);
-		
-		console.log('projects props');
-		console.log(props);
+		super(props);		
 	}
 
 	compareNumbers(a, b) {

@@ -63,7 +63,7 @@ class Signup extends Component {
 						<CardSection>
 							<Input
 								label="GSB email"
-								placeholder="joe@gmail.com"
+								placeholder="joe@stanford.com"
 								value={this.props.email}
 								onChangeText={(text) => this.props.emailChanged(text)}
 							/>

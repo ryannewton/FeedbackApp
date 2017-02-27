@@ -32,7 +32,6 @@ const CLEAR_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
-	console.log(action);
 
 	switch (action.type) {
 		case EMAIL_CHANGED:
@@ -46,7 +45,6 @@ export default (state = INITIAL_STATE, action) => {
 		case SIGNUP_USER:
 			return { ...state, loading: true };
 		case SIGNUP_USER_SUCCESS:
-			console.log("signup user success");
 			return { ...state, ...CLEAR_STATE, token: action.payload };
 		case SIGNUP_USER_FAIL:
 			return { ...state, error: action.payload, password: '', passwordConfirm: '', loading: false };
