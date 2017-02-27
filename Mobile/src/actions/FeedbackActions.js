@@ -17,11 +17,27 @@ import {
 	RECEIVED_PROJECTS,
 	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
-	SUBMIT_FEEDBACK_FAIL
+	SUBMIT_FEEDBACK_FAIL,
+	ADD_TO_DO_NOT_DISPLAY_LIST,
+	LOAD_DO_NOT_DISPLAY_LIST
 } from './types';
 
 // Import constants
 import { ROOT_URL, ROOT_STORAGE } from '../constants';
+
+export const addToDoNotDisplayList = (projectID) => (
+	{
+		type: ADD_TO_DO_NOT_DISPLAY_LIST,
+		payload: projectID
+	}
+);
+
+export const loadDoNotDisplayList = (list) => (
+	{
+		type: LOAD_DO_NOT_DISPLAY_LIST,
+		payload: list
+	}
+);
 
 export const feedbackChanged = (feedback) => (
 	{

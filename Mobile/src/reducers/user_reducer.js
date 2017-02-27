@@ -5,10 +5,18 @@ import {
 	ADD_UPVOTE,
 	REMOVE_UPVOTE,
 	LOAD_USER_UPVOTES
+	ADD_UP_VOTE,
+	REMOVE_UP_VOTE,
+	ADD_TO_DO_NOT_DISPLAY_LIST,
+	LOAD_DO_NOT_DISPLAY_LIST
 } from '../actions/types';
 
+import { AsyncStorage } from 'react-native';
+import { ROOT_STORAGE } from '../constants';
+
 const INITIAL_STATE = {
-	upvotes: []
+	upvotes: [],
+	doNotDisplayList: []
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,6 +27,10 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, upvotes: removeItem(state.upvotes, action.payload.id) };
 		case LOAD_USER_UPVOTES:
 			return { ...state, upvotes: action.payload };
+		case ADD_TO_DO_NOT_DISPLAY_LIST:			
+			return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
+		case LOAD_DO_NOT_DISPLAY_LIST:
+			return { ...state, doNotDisplayList: action.payload };
 		default:
 			return state;
 	}
