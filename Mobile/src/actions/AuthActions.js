@@ -61,7 +61,6 @@ export const signupUser = ({ email, password, endPoint, endPointType }) => (
 				// Get JWT and add to AsyncStorage
 				user.getToken()
 					.then((token) => {
-						console.log(token);
 						AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
 						dispatch(signupUserSuccess(token));
 					});
@@ -71,28 +70,10 @@ export const signupUser = ({ email, password, endPoint, endPointType }) => (
 
 				// Save password to AsyncStorage
 				AsyncStorage.setItem(`${ROOT_STORAGE}password`, password);
-
-				// Navigate to endPoint scene
-				const route = {
-					type: 'pop-push',
-					route: {
-						key: endPointType,
-						component: endPoint
-					}
-				};
-
-				if (endPointType === 'Submitted') {
-					dispatch(submitFeedbackToServer(route));
-				} else {
-					console.log("don't need navigate, will auto update");
-					//dispatch(navigate(route));
-				}
-
 			})
 			// If signup fails
 			.catch((error) => {
-				console.log('signup fail', error);
-				//dispatch(loginUser({ email, password }));
+				dispatch(loginUser({ email, password, endPoint, endPointType }));
 			});
 	}
 );
@@ -126,16 +107,6 @@ export const loginUser = ({ email, password }) => (
 
 				// Save email to AsyncStorage
 				dispatch(saveEmail(email));
-
-				// Navigate to Submitted scene
-				const route = {
-					type: 'pop-push',
-					route: {
-						key: 'Submitted',
-						component: Submitted
-					}
-				};
-				dispatch(submitFeedbackToServer(route));
 			})
 			// If login fails
 			.catch(() => dispatch(loginUserFail()));

@@ -9,6 +9,7 @@ import { connect } from 'react-redux';
 import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
 
 //Import components, functions, and styles
+import RequireAuth from '../components/require_auth';
 import { Button, HeaderPlusMenu, Spinner } from '../components/common';
 import Submitted from './submitted.js';
 import Signup from './signup';
@@ -44,9 +45,10 @@ class Feedback extends Component {
 			this.props.submitFeedbackToServer(route);
 		} else {
 			// Otherwise, go to Signup scene when done
-			scene = { key: 'Signup', component: Signup };
-			route = { type: 'push', route: scene };
-			this.props.navigate(route);
+			console.log("error, no email");
+			//scene = { key: 'Signup', component: Signup };
+			//route = { type: 'push', route: scene };
+			//this.props.navigate(route);
 		}
 	}
 
@@ -107,4 +109,4 @@ export default connect(mapStateToProps, {
 	feedbackChanged,
 	submitFeedbackToServer,
 	navigate
-})(Feedback);
+})(RequireAuth(Feedback, 'Feedback'));

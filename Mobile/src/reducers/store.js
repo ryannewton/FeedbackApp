@@ -87,7 +87,7 @@ async function load_token() {
 
 load_email();
 load_upvotes();
-//load_token();
+load_token();
 
 store.dispatch(actions.pullProjects(actions.requestedProjects, actions.receivedProjects));
 
