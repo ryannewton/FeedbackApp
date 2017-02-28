@@ -10,11 +10,16 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 
 //Import components, functions, and styles
+import RequireAuth from '../components/require_auth';
 import Project from '../components/project.js';
 import { Header } from '../components/common';
 import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
+	constructor(props) {
+		super(props);		
+	}
+
 	compareNumbers(a, b) {
 		return b.votes - a.votes;
 	}
@@ -59,4 +64,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators(actions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Projects);
+export default connect(mapStateToProps, mapDispatchToProps)(RequireAuth(Projects, 'Projects'));

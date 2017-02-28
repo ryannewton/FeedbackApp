@@ -17,7 +17,9 @@ import {
 	RECEIVED_PROJECTS,
 	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
-	SUBMIT_FEEDBACK_FAIL
+	SUBMIT_FEEDBACK_FAIL,
+	ADD_TO_DO_NOT_DISPLAY_LIST,
+	LOAD_DO_NOT_DISPLAY_LIST
 } from './types';
 
 // Import constants
@@ -47,6 +49,8 @@ export const submitFeedbackToServer = (route) => (
 			dispatch(navigate(route));
 		})
 		.catch((error) => {
+			console.log("Error in submitFeedbackToServer in FeedbackActions");
+			console.log(error);
 			dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
 			dispatch(navigate(route));
 		});
@@ -67,6 +71,14 @@ export const addUpvote = (project) => (
 	}
 );
 
+export const addToDoNotDisplayList = (projectID) => (
+	(dispatch, getState) => {
+		dispatch({ type: ADD_TO_DO_NOT_DISPLAY_LIST, payload: projectID });
+		const { doNotDisplayList } = getState().user;
+		AsyncStorage.setItem(`${ROOT_STORAGE}doNotDisplayList`, JSON.stringify(doNotDisplayList));
+	}
+);
+
 export const removeUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: REMOVE_UPVOTE, payload: project });
@@ -80,6 +92,13 @@ export const loadUpvotes = (upvotes) => (
 	{
 		type: LOAD_USER_UPVOTES,
 		payload: upvotes
+	}
+);
+
+export const loadDoNotDisplayList = (list) => (
+	{
+		type: LOAD_DO_NOT_DISPLAY_LIST,
+		payload: list
 	}
 );
 

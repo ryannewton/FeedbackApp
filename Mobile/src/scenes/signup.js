@@ -18,9 +18,15 @@ import {
 import styles from '../styles/styles_main.js';
 
 class Signup extends Component {
+	constructor(props) {
+		super(props);
+
+		console.log(props);
+	}
+
 	onButtonPress() {
 		const { email } = this.props;
-		this.props.signupUser({ email, password: 'password' });
+		this.props.signupUser({ email, password: 'password', endPoint: this.props.endPoint, endPointType: this.props.endPointType });
 	}
 
 	renderSignupButton() {
@@ -57,7 +63,7 @@ class Signup extends Component {
 						<CardSection>
 							<Input
 								label="GSB email"
-								placeholder="joe@gmail.com"
+								placeholder="joe@stanford.com"
 								value={this.props.email}
 								onChangeText={(text) => this.props.emailChanged(text)}
 							/>

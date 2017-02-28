@@ -9,7 +9,7 @@ import Submitted from '../scenes/submitted';
 import { ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
-import { submitFeedbackToServer } from './FeedbackActions';
+import { submitFeedbackToServer, navigate } from './FeedbackActions';
 import {
 	EMAIL_CHANGED,
 	SAVE_EMAIL,
@@ -52,7 +52,7 @@ export const passwordConfirmChanged = (passwordConfirm) => (
 	}
 );
 
-export const signupUser = ({ email, password }) => (
+export const signupUser = ({ email, password, endPoint, endPointType }) => (
 	(dispatch) => {
 		dispatch({ type: SIGNUP_USER });
 
@@ -70,20 +70,10 @@ export const signupUser = ({ email, password }) => (
 
 				// Save password to AsyncStorage
 				AsyncStorage.setItem(`${ROOT_STORAGE}password`, password);
-
-				// Navigate to Submitted scene
-				const route = {
-					type: 'pop-push',
-					route: {
-						key: 'Submitted',
-						component: Submitted
-					}
-				};
-				dispatch(submitFeedbackToServer(route));
 			})
 			// If signup fails
-			.catch(() => {
-				dispatch(loginUser({ email, password }));
+			.catch((error) => {
+				dispatch(loginUser({ email, password, endPoint, endPointType }));
 			});
 	}
 );
@@ -117,16 +107,6 @@ export const loginUser = ({ email, password }) => (
 
 				// Save email to AsyncStorage
 				dispatch(saveEmail(email));
-
-				// Navigate to Submitted scene
-				const route = {
-					type: 'pop-push',
-					route: {
-						key: 'Submitted',
-						component: Submitted
-					}
-				};
-				dispatch(submitFeedbackToServer(route));
 			})
 			// If login fails
 			.catch(() => dispatch(loginUserFail()));

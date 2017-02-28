@@ -14,6 +14,8 @@ export const RECEIVED_PROJECTS = 'received_projects';
 export const SUBMIT_FEEDBACK = 'submit_feedback';
 export const SUBMIT_FEEDBACK_SUCCESS = 'submit_feedback_success';
 export const SUBMIT_FEEDBACK_FAIL = 'submit_feedback_fail';
+export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';
+export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
 
 // AuthActions types
 export const EMAIL_CHANGED = 'email_changed';

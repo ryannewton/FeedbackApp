@@ -17,7 +17,7 @@ class NavTabs extends Component {
 	render() {
 		return (
 			<View style={styles.tabs}>
-				{this.props.navigationState.routes.map(this._renderTab, this)}
+				{this.props.navigationState.routes.filter((item) => {return item.inTabs}).map(this._renderTab, this)}
 			</View>
 		);
 	}
