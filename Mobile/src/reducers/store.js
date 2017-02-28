@@ -92,20 +92,20 @@ async function load_token() {
 	}
 }
 
+async function load_doNotDisplayList() {
+	try {
+		let doNotDisplayList = await AsyncStorage.getItem(`${ROOT_STORAGE}doNotDisplayList`) || [];
+		doNotDisplayList = JSON.parse(doNotDisplayList);
+		store.dispatch(actions.loadDoNotDisplayList(doNotDisplayList));
+	} catch (error) {
+	}
+}
+
 load_email();
 load_upvotes();
 load_token();
 
 
-
-async function load_doNotDisplayList() {
-	try {
-		const doNotDisplayList = await AsyncStorage.getItem(`${ROOT_STORAGE}doNotDisplayList`) || '';
-		console.log("loading list", doNotDisplayList);
-		store.dispatch(actions.loadDoNotDisplayList(doNotDisplayList));
-	} catch (error) {
-	}
-}
 
 load_doNotDisplayList();
 

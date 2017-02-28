@@ -6,6 +6,7 @@ import { Image, View } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Right, Body, Thumbnail, Text } from 'native-base';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import RequireAuth from '../components/require_auth';
 
 //Import actions
 import * as actions from '../actions';
@@ -38,7 +39,7 @@ class New_Projects extends Component {
 
         // If user hasn't upvoted this project, add an upvote
         if (!user.upvotes.includes(project.id)) {
-        //    this.props.addUpVote(project);
+            this.props.addUpvote(project);
         }
 
         this.props.addToDoNotDisplayList(project.id);
@@ -98,4 +99,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators(actions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(New_Projects);
+export default connect(mapStateToProps, mapDispatchToProps)(RequireAuth(New_Projects, 'New Projects'));

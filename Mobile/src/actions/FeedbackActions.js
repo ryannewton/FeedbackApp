@@ -25,20 +25,6 @@ import {
 // Import constants
 import { ROOT_URL, ROOT_STORAGE } from '../constants';
 
-export const addToDoNotDisplayList = (projectID) => (
-	{
-		type: ADD_TO_DO_NOT_DISPLAY_LIST,
-		payload: projectID
-	}
-);
-
-export const loadDoNotDisplayList = (list) => (
-	{
-		type: LOAD_DO_NOT_DISPLAY_LIST,
-		payload: list
-	}
-);
-
 export const feedbackChanged = (feedback) => (
 	{
 		type: FEEDBACK_CHANGED,
@@ -85,6 +71,14 @@ export const addUpvote = (project) => (
 	}
 );
 
+export const addToDoNotDisplayList = (projectID) => (
+	(dispatch, getState) => {
+		dispatch({ type: ADD_TO_DO_NOT_DISPLAY_LIST, payload: projectID });
+		const { doNotDisplayList } = getState().user;
+		AsyncStorage.setItem(`${ROOT_STORAGE}doNotDisplayList`, JSON.stringify(doNotDisplayList));
+	}
+);
+
 export const removeUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: REMOVE_UPVOTE, payload: project });
@@ -98,6 +92,13 @@ export const loadUpvotes = (upvotes) => (
 	{
 		type: LOAD_USER_UPVOTES,
 		payload: upvotes
+	}
+);
+
+export const loadDoNotDisplayList = (list) => (
+	{
+		type: LOAD_DO_NOT_DISPLAY_LIST,
+		payload: list
 	}
 );
 
