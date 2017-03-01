@@ -77,7 +77,7 @@ class Feedback extends Component {
 								this.setState({ height: event.nativeEvent.contentSize.height });
 							}}
 							style={styles.feedback_input}
-							value={this.props.feedback}
+							placeholder={this.props.feedback}
 						/>
 
 						{/* Submit button / loading spinner */}
