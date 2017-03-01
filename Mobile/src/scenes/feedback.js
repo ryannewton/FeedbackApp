@@ -4,6 +4,7 @@
 import React, { Component } from 'react';
 import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
+import { MenuContext } from 'react-native-menu';
 
 //Import actions
 import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
@@ -14,9 +15,6 @@ import { Button, HeaderPlusMenu, Spinner } from '../components/common';
 import Submitted from './submitted.js';
 import styles from '../styles/styles_main.js';
 
-import {
-	MenuContext,
-} from 'react-native-menu';
 
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
@@ -30,7 +28,6 @@ class Feedback extends Component {
 			height: 0,
 			anonymous: false
 		};
-
 	}
 
 	submitFeedback() {
@@ -42,8 +39,6 @@ class Feedback extends Component {
 			scene = { key: 'Submitted', component: Submitted };
 			route = { type: 'push', route: scene };
 			this.props.submitFeedbackToServer(route);
-		} else {
-			console.log("error, no email");
 		}
 	}
 
@@ -60,8 +55,8 @@ class Feedback extends Component {
 
 	render() {
 		return (
-			<MenuContext style={{ flex: 1}} ref="MenuContext">
-				<TouchableWithoutFeedback style={{ flex: 1}} onPress={() => Keyboard.dismiss()}>
+			<MenuContext style={{ flex: 1 }} ref="MenuContext">
+				<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
 					<View style={styles.container}>
 						<HeaderPlusMenu navigate={this.props.navigate}>
 							Thanks for providing feedback!
