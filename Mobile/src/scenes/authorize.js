@@ -7,32 +7,26 @@ import { connect } from 'react-redux';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
-import {
-	emailChanged,
-	passwordChanged,
-	passwordConfirmChanged,
-	signupUser,
-	signupUserFail,
-	navigate
-} from '../actions';
+import { authorizeUser } from '../actions';
 import styles from '../styles/styles_main.js';
 
-class Signup extends Component {
+class Authorize extends Component {
 	constructor(props) {
 		super(props);
 
-		console.log(props);
+		this.state = {
+			code: ''
+		}
 	}
 
 	onButtonPress() {
-		const { email } = this.props;
-		this.props.signupUser({ email, password: 'password', endPoint: this.props.endPoint, endPointType: this.props.endPointType });
+		this.props.authorizeUser({ email: this.props.email, code: this.state.code });
 	}
 
 	renderSignupButton() {
 		return (
 			<Button onPress={this.onButtonPress.bind(this)}>
-				Submit
+				Verify Email
 			</Button>
 		);
 	}
@@ -54,7 +48,7 @@ class Signup extends Component {
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<View style={styles.container}>
 					<Header>
-						Enter Email
+						Enter Code From Email
 					</Header>
 
 
@@ -63,9 +57,9 @@ class Signup extends Component {
 						<CardSection>
 							<Input
 								label="GSB email"
-								placeholder="joe@stanford.com"
-								value={this.props.email}
-								onChangeText={(text) => this.props.emailChanged(text)}
+								placeholder="1234"
+								value={this.state.code}
+								onChangeText={(text) => this.setState({ code: text })}
 							/>
 						</CardSection>
 
@@ -81,9 +75,8 @@ class Signup extends Component {
 
 						<CardSection>
 							<Text style={styles.text}>
-									Why do we need your email? Two reasons:{'\n'}
-									1) We need to confirm you are member of GSB{'\n'}
-									2) We will occasionally update you on progress for your feedback
+									We sent you an email with a 4 digit code.{'\n'}
+									Please enter it here to verify your email address{'\n'}
 							</Text>
 						</CardSection>
 					</Card>
@@ -93,29 +86,9 @@ class Signup extends Component {
 	}
 }
 
-const generatePassword = (len = 20) => {
-	let password = '';
-	let num;
-	// Add random characters to password
-	for (let i = 0; i < len; i++) {
-		// Generate an integer between 33 & 125 (valid ascii chars)
-		num = Math.random() * (125 - 33);
-		num = Math.floor(num) + 33;
-		password += String.fromCharCode(num);
-	}
-	return password;
-};
-
 const mapStateToProps = (state) => {
-	const { email, password, passwordConfirm, error, loading, user } = state.auth;
-	return { email, password, passwordConfirm, error, loading, user };
+	const { email, error, loading } = state.auth;
+	return { email, error, loading };
 };
 
-export default connect(mapStateToProps, {
-	emailChanged,
-	passwordChanged,
-	passwordConfirmChanged,
-	signupUser,
-	signupUserFail,
-	navigate
-})(Signup);
+export default connect(mapStateToProps, { authorizeUser })(Authorize);

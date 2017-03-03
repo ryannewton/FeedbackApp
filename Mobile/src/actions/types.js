@@ -18,14 +18,10 @@ export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
 
 // AuthActions types
-export const EMAIL_CHANGED = 'email_changed';
 export const SAVE_EMAIL = 'save_email';
-export const PASSWORD_CHANGED = 'password_changed';
-export const PASSWORD_CONFIRM_CHANGED = 'password_confirm_changed';
-export const SIGNUP_USER = 'signup_user';
-export const SIGNUP_USER_SUCCESS = 'signup_user_success';
-export const SIGNUP_USER_FAIL = 'signup_user_fail';
-export const LOGIN_USER = 'login_user';
-export const LOGIN_USER_SUCCESS = 'login_user_success';
-export const LOGIN_USER_FAIL = 'login_user_fail';
+export const SENDING_AUTHORIZATION_EMAIL = 'sending_authorization_email';
+export const SENT_AUTHORIZATION_EMAIL = 'sent_authorization_email';
+export const AUTHORIZING_USER = 'authorizing_user';
+export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
+export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
 export const LOAD_TOKEN = 'load_token';

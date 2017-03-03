@@ -67,11 +67,22 @@ let store = createStore(
 	applyMiddleware(thunkMiddleware)
 );
 
+async function load_token() {
+	try {
+		let token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
+		store.dispatch(actions.loadToken(token));
+		store.dispatch(actions.pullProjects(token));
+	} catch (error) {
+		console.log(error);
+	}
+}
+
 async function load_email() {
 	try {
-		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';
-		store.dispatch(actions.emailChanged(email));
+		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';		
+		store.dispatch(actions.saveEmail(email));		
 	} catch (error) {
+		console.log(error);
 	}
 }
 
@@ -80,14 +91,6 @@ async function load_upvotes() {
 		let upvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}upvotes`) || [];
 		upvotes = JSON.parse(upvotes);
 		store.dispatch(actions.loadUpvotes(upvotes));
-	} catch (error) {
-	}
-}
-
-async function load_token() {
-	try {
-		let token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
-		store.dispatch(actions.loadToken(token));
 	} catch (error) {
 	}
 }
@@ -101,15 +104,9 @@ async function load_doNotDisplayList() {
 	}
 }
 
+load_token();
 load_email();
 load_upvotes();
-load_token();
-
-
-
 load_doNotDisplayList();
-
-
-store.dispatch(actions.pullProjects(actions.requestedProjects, actions.receivedProjects));
 
 export default store;

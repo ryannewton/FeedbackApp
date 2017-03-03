@@ -17,15 +17,28 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 var connection = mysql.createConnection({
 	//production database
-	host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	//host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
 	//development database
-	//host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 	user     : 'root',
 	password : 'buechelejedi16',
 	port     : '3306',
 	database : 'feedbackappdb'
 });
+
+// const generatePassword = (len = 20) => {
+// 	let password = '';
+// 	let num;
+// 	// Add random characters to password
+// 	for (let i = 0; i < len; i++) {
+// 		// Generate an integer between 33 & 125 (valid ascii chars)
+// 		num = Math.random() * (125 - 33);
+// 		num = Math.floor(num) + 33;
+// 		password += String.fromCharCode(num);
+// 	}
+// 	return password;
+// };
 
 connection.connect();
 
@@ -51,6 +64,15 @@ function sendEmail(to, from, subject_line, body_text) {
 		else     console.log(data);
 	 });
 }
+
+//Authentication
+app.post('/sendAuthorizationEmail', upload.array(), function(req, res) {
+	res.sendStatus(200);
+});
+
+app.post('/authorizeUser', upload.array(), function(req, res) {
+	res.send('123456789');
+});
 
 //Add Feedback, Projects, Solutions
 app.post('/addFeedback', upload.array(), function(req, res) {

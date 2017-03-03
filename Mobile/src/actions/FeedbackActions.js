@@ -146,14 +146,17 @@ export const receivedProjects = (projects) => ({
 });
 
 // To Do: Convert `${ROOT_URL}/pullProjects` to GET on server
-export const pullProjects = () => (
+export const pullProjects = (token) => (
 	function (dispatch, getState) {
 		dispatch(requestedProjects());
 
 		return axios.post(`${ROOT_URL}/pullProjects`, {
-			headers: { authorization: getState().auth.token }
+			headers: { authorization: token }
 		})
-		.then(response => dispatch(receivedProjects(response.data)))
-		.catch(error => console.error(error));
+		.then(response => {
+			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
+			dispatch(receivedProjects(response.data));
+		})
+		.catch(error => dispatch({ type: AUTHORIZE_USER_FAIL, payload: error }));
 	}
 );
