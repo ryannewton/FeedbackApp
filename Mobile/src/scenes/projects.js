@@ -4,10 +4,9 @@
 import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 //Import actions
-import * as actions from '../actions';
+import { navigate, saveProjectChanges } from '../actions';
 
 //Import components, functions, and styles
 import RequireAuth from '../components/require_auth';
@@ -16,10 +15,6 @@ import { Header } from '../components/common';
 import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
-	constructor(props) {
-		super(props);		
-	}
-
 	compareNumbers(a, b) {
 		return b.votes - a.votes;
 	}
@@ -57,11 +52,11 @@ class Projects extends Component {
 }
 
 function mapStateToProps(state) {
-	return state;
+	const { projects } = state;
+	return { projects };
 }
 
-function mapDispatchToProps(dispatch) {
-	return bindActionCreators(actions, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RequireAuth(Projects));
+export default connect(mapStateToProps, {
+	navigate,
+	saveProjectChanges
+})(RequireAuth(Projects));

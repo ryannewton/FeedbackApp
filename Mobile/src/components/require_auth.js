@@ -10,12 +10,6 @@ import SendAuthorizationEmail from '../scenes/sendAuthorizationEmail.js';
 
 export default function (ComposedComponent) {
 	class Authentication extends Component {
-		constructor(props) {
-			super(props);
-
-			console.log("Require Auth", props);
-		}
-
 		render() {
 			if (this.props.loggedIn) {
 				return <ComposedComponent {...this.props} />;

@@ -11,14 +11,7 @@ import { sendAuthorizationEmail, updateEmail } from '../actions';
 import styles from '../styles/styles_main.js';
 
 class SendAuthorizationEmail extends Component {
-	constructor(props) {
-		super(props);
-
-		console.log("Send Email", props);
-	}
-
 	onButtonPress() {
-		console.log('button pressed');
 		this.props.sendAuthorizationEmail(this.props.email);
 	}
 
