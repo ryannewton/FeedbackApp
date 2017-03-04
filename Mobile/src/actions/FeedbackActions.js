@@ -37,15 +37,12 @@ export const feedbackChanged = (feedback) => (
 export const submitFeedbackToServer = (route) => (
 	function (dispatch, getState) {
 		const { feedback } = getState().main;
-		const { email } = getState().auth;
 		const time = new Date(Date.now()).toISOString().slice(0, 10);
 
 		dispatch({ type: SUBMIT_FEEDBACK });
 
 		// Post new feedback to server
-		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, email }, {
-			headers: { authorization: getState().auth.token }
-		})
+		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, authorization: getState().auth.token })
 		.then((response) => {
 			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
 			dispatch(navigate(route));

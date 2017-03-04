@@ -70,7 +70,7 @@ let store = createStore(
 async function load_token_and_email() {
 	try {
 		let token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
-		store.dispatch(actions.loadToken(token));
+		//store.dispatch(actions.loadToken(token));
 		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';		
 		store.dispatch(actions.saveEmail(email));
 		store.dispatch(actions.pullProjects(token, email));
@@ -97,7 +97,7 @@ async function load_doNotDisplayList() {
 	}
 }
 
-//load_token_and_email();
+load_token_and_email();
 load_upvotes();
 load_doNotDisplayList();
 

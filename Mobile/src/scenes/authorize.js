@@ -56,8 +56,8 @@ class Authorize extends Component {
 						{/* Email input */}
 						<CardSection>
 							<Input
-								label="GSB email"
-								placeholder="1234"
+								label="Code: "
+								placeholder="Enter code here"
 								value={this.state.code}
 								onChangeText={(text) => this.setState({ code: text })}
 							/>

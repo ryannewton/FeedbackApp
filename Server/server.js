@@ -21,10 +21,10 @@ app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x
 
 var connection = mysql.createConnection({
 	//production database
-	//host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
 	//development database
-	host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+	//host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 	user     : 'root',
 	password : 'buechelejedi16',
 	port     : '3306',
@@ -109,15 +109,24 @@ app.post('/authorizeUser', upload.array(), function(req, res) {
 //Add Feedback, Projects, Solutions
 app.post('/addFeedback', upload.array(), function(req, res) {
 
-	connection.query("INSERT INTO feedback (text, time, email) VALUES (?, ?, ?)", [req.body.text, req.body.time, req.body.email], function(err) {
-		if (err) throw err;
-	});
+	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
 
-	//Send Email
-	var to_emails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-	sendEmail(to_emails, from_email, "Feedback: " + req.body.text, "Email: " + req.body.email);
+		if (err) {
+			res.status(400).send('authorization failed');
+		} else {
+			var school = decoded.email.split('@')[1];
 
-	res.sendStatus(200);
+			connection.query("INSERT INTO feedback (text, time, email, school) VALUES (?, ?, ?, ?)", [req.body.text, req.body.time, decoded.email, school], function(err) {
+				if (err) throw err;
+			});
+
+			//Send Email
+			var to_emails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu'];
+			sendEmail(to_emails, from_email, "Feedback: " + req.body.text, "Email: " + decoded.email);
+
+			res.sendStatus(200);
+		}
+	});	
 });
 
 app.post('/addProject', upload.array(), function(req, res) {
