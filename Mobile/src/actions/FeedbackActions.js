@@ -19,7 +19,9 @@ import {
 	SUBMIT_FEEDBACK_SUCCESS,
 	SUBMIT_FEEDBACK_FAIL,
 	ADD_TO_DO_NOT_DISPLAY_LIST,
-	LOAD_DO_NOT_DISPLAY_LIST
+	LOAD_DO_NOT_DISPLAY_LIST,
+	AUTHORIZE_USER_SUCCESS,
+	AUTHORIZE_USER_FAIL
 } from './types';
 
 // Import constants
@@ -35,15 +37,12 @@ export const feedbackChanged = (feedback) => (
 export const submitFeedbackToServer = (route) => (
 	function (dispatch, getState) {
 		const { feedback } = getState().main;
-		const { email } = getState().auth;
 		const time = new Date(Date.now()).toISOString().slice(0, 10);
 
 		dispatch({ type: SUBMIT_FEEDBACK });
 
 		// Post new feedback to server
-		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, email }, {
-			headers: { authorization: getState().auth.token }
-		})
+		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, authorization: getState().auth.token })
 		.then((response) => {
 			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
 			dispatch(navigate(route));
@@ -146,14 +145,15 @@ export const receivedProjects = (projects) => ({
 });
 
 // To Do: Convert `${ROOT_URL}/pullProjects` to GET on server
-export const pullProjects = () => (
+export const pullProjects = (token) => (
 	function (dispatch, getState) {
 		dispatch(requestedProjects());
 
-		return axios.post(`${ROOT_URL}/pullProjects`, {
-			headers: { authorization: getState().auth.token }
+		return axios.post(`${ROOT_URL}/pullProjects`, { authorization: token })
+		.then(response => {
+			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
+			dispatch(receivedProjects(response.data));
 		})
-		.then(response => dispatch(receivedProjects(response.data)))
-		.catch(error => console.error(error));
+		.catch(error => dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' }));
 	}
 );

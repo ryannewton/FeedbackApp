@@ -99,4 +99,4 @@ function mapDispatchToProps(dispatch) {
 	return bindActionCreators(actions, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(RequireAuth(New_Projects, 'New Projects'));
+export default connect(mapStateToProps, mapDispatchToProps)(RequireAuth(New_Projects));

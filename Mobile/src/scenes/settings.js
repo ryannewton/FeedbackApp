@@ -66,4 +66,4 @@ function mapStateToProps(state) {
 	return state;
 }
 
-export default connect(mapStateToProps, { saveEmail })(RequireAuth(Settings, 'Settings'));
+export default connect(mapStateToProps, { saveEmail })(RequireAuth(Settings));

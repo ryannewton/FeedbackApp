@@ -7,32 +7,25 @@ import { connect } from 'react-redux';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
-import {
-	emailChanged,
-	passwordChanged,
-	passwordConfirmChanged,
-	signupUser,
-	signupUserFail,
-	navigate
-} from '../actions';
+import { sendAuthorizationEmail, updateEmail } from '../actions';
 import styles from '../styles/styles_main.js';
 
-class Signup extends Component {
+class SendAuthorizationEmail extends Component {
 	constructor(props) {
 		super(props);
 
-		console.log(props);
+		console.log("Send Email", props);
 	}
 
 	onButtonPress() {
-		const { email } = this.props;
-		this.props.signupUser({ email, password: 'password', endPoint: this.props.endPoint, endPointType: this.props.endPointType });
+		console.log('button pressed');
+		this.props.sendAuthorizationEmail(this.props.email);
 	}
 
 	renderSignupButton() {
 		return (
 			<Button onPress={this.onButtonPress.bind(this)}>
-				Submit
+				Send Authorization Email
 			</Button>
 		);
 	}
@@ -54,7 +47,7 @@ class Signup extends Component {
 			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
 				<View style={styles.container}>
 					<Header>
-						Enter Email
+						Verify Your University
 					</Header>
 
 
@@ -62,10 +55,10 @@ class Signup extends Component {
 						{/* Email input */}
 						<CardSection>
 							<Input
-								label="GSB email"
-								placeholder="joe@stanford.com"
+								label="School Email"
+								placeholder="my_username@my_university.edu"
 								value={this.props.email}
-								onChangeText={(text) => this.props.emailChanged(text)}
+								onChangeText={(text) => this.props.updateEmail(text)}
 							/>
 						</CardSection>
 
@@ -82,8 +75,8 @@ class Signup extends Component {
 						<CardSection>
 							<Text style={styles.text}>
 									Why do we need your email? Two reasons:{'\n'}
-									1) We need to confirm you are member of GSB{'\n'}
-									2) We will occasionally update you on progress for your feedback
+									1) We need to confirm you are member of your university{'\n'}
+									2) We will keep you updated as changes are made based on your feedback
 							</Text>
 						</CardSection>
 					</Card>
@@ -93,29 +86,9 @@ class Signup extends Component {
 	}
 }
 
-const generatePassword = (len = 20) => {
-	let password = '';
-	let num;
-	// Add random characters to password
-	for (let i = 0; i < len; i++) {
-		// Generate an integer between 33 & 125 (valid ascii chars)
-		num = Math.random() * (125 - 33);
-		num = Math.floor(num) + 33;
-		password += String.fromCharCode(num);
-	}
-	return password;
-};
-
 const mapStateToProps = (state) => {
-	const { email, password, passwordConfirm, error, loading, user } = state.auth;
-	return { email, password, passwordConfirm, error, loading, user };
+	const { email, error, loading } = state.auth;
+	return { email, error, loading };
 };
 
-export default connect(mapStateToProps, {
-	emailChanged,
-	passwordChanged,
-	passwordConfirmChanged,
-	signupUser,
-	signupUserFail,
-	navigate
-})(Signup);
+export default connect(mapStateToProps, { sendAuthorizationEmail, updateEmail })(SendAuthorizationEmail);

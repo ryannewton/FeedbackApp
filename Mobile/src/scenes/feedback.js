@@ -12,7 +12,6 @@ import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
 import RequireAuth from '../components/require_auth';
 import { Button, HeaderPlusMenu, Spinner } from '../components/common';
 import Submitted from './submitted.js';
-import Signup from './signup';
 import styles from '../styles/styles_main.js';
 
 import {
@@ -44,11 +43,7 @@ class Feedback extends Component {
 			route = { type: 'push', route: scene };
 			this.props.submitFeedbackToServer(route);
 		} else {
-			// Otherwise, go to Signup scene when done
 			console.log("error, no email");
-			//scene = { key: 'Signup', component: Signup };
-			//route = { type: 'push', route: scene };
-			//this.props.navigate(route);
 		}
 	}
 
@@ -109,4 +104,4 @@ export default connect(mapStateToProps, {
 	feedbackChanged,
 	submitFeedbackToServer,
 	navigate
-})(RequireAuth(Feedback, 'Feedback'));
+})(RequireAuth(Feedback));

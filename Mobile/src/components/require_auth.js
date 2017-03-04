@@ -5,29 +5,34 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // Import Scenes and action creators
-import Signup from '../scenes/signup';
-import { navigate } from '../actions';
+import Authorize from '../scenes/authorize.js';
+import SendAuthorizationEmail from '../scenes/sendAuthorizationEmail.js';
 
-export default function (ComposedComponent, ComponentType) {
+export default function (ComposedComponent) {
 	class Authentication extends Component {
-		// Gives access to this.context.router
-		static contextTypes = {
-			router: React.PropTypes.object
+		constructor(props) {
+			super(props);
+
+			console.log("Require Auth", props);
 		}
 
 		render() {
-			if (!this.props.token) {
-				return <Signup endPoint={ComposedComponent} endPointType={ComponentType} {...this.props} />;
-			}
-			else {
+			if (this.props.loggedIn) {
 				return <ComposedComponent {...this.props} />;
+			} else if (this.props.sentAuthorizationEmail) {
+				return <Authorize {...this.props} />
+			} else {
+				return <SendAuthorizationEmail {...this.props} />;
 			}
 		}
 	}
 
 	function mapStateToProps(state) {
-		return { token: state.auth.token };
+		return { 
+			loggedIn: state.auth.loggedIn,
+			sentAuthorizationEmail: state.auth.sentAuthorizationEmail,
+		};
 	}
 
-	return connect(mapStateToProps, { navigate })(Authentication);
+	return connect(mapStateToProps)(Authentication);
 }
