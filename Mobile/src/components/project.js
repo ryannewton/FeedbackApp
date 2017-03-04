@@ -13,8 +13,8 @@ import { addUpvote, removeUpvote } from '../actions';
 
 class Project extends Component {
 	goToDetails() {
-		//const route = {key: 'ProjectDetails', project: this.props.project, component: ProjectDetails};
-		//this.props.navigate({type: 'push', route});
+		// const route = { key: 'ProjectDetails', project: this.props.project, component: ProjectDetails };
+		// this.props.navigate({ type: 'push', route });
 	}
 
 	upvote() {
@@ -71,7 +71,7 @@ class Project extends Component {
 				<TouchableHighlight
 					style={row}
 					underlayColor='#D0D0D0'
-					onPress={this.goToDetails}
+					onPress={this.goToDetails.bind(this)}
 				>
 
 					<View style={{ justifyContent: 'flex-start' }}>
