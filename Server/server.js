@@ -147,10 +147,18 @@ app.post('/addProject', upload.array(), function(req, res) {
 
 app.post('/addSolution', upload.array(), function(req, res) {
 
-	connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes_for: 0, votes_against: 0, title: 'Title Here', description: 'Description Here', project_id: req.body.project_id}, function(err, result) {
-		if (err) throw err;
-		res.json({id: result.insertId});
+	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
+
+		if (err) {
+			res.status(400).send('authorization failed');
+		} else {
+			connection.query('INSERT INTO project_additions SET ?', {description: req.body.description, projectId: req.body.projectId, email: decoded.email, type: 'solution'}, function(err, result) {
+				if (err) throw err;
+				res.json({id: result.insertId});
+			});
+		}
 	});
+
 });
 
 app.post('/addSubscriber', upload.array(), function(req, res) {
