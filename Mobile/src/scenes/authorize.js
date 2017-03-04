@@ -20,7 +20,7 @@ class Authorize extends Component {
 	}
 
 	onButtonPress() {
-		this.props.authorizeUser({ email: this.props.email, code: this.state.code });
+		this.props.authorizeUser(this.props.email, this.state.code);
 	}
 
 	renderSignupButton() {

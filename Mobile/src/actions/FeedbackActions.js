@@ -19,7 +19,9 @@ import {
 	SUBMIT_FEEDBACK_SUCCESS,
 	SUBMIT_FEEDBACK_FAIL,
 	ADD_TO_DO_NOT_DISPLAY_LIST,
-	LOAD_DO_NOT_DISPLAY_LIST
+	LOAD_DO_NOT_DISPLAY_LIST,
+	AUTHORIZE_USER_SUCCESS,
+	AUTHORIZE_USER_FAIL
 } from './types';
 
 // Import constants
@@ -150,13 +152,11 @@ export const pullProjects = (token) => (
 	function (dispatch, getState) {
 		dispatch(requestedProjects());
 
-		return axios.post(`${ROOT_URL}/pullProjects`, {
-			headers: { authorization: token }
-		})
+		return axios.post(`${ROOT_URL}/pullProjects`, { authorization: token })
 		.then(response => {
 			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
 			dispatch(receivedProjects(response.data));
 		})
-		.catch(error => dispatch({ type: AUTHORIZE_USER_FAIL, payload: error }));
+		.catch(error => dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' }));
 	}
 );

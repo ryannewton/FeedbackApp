@@ -10,11 +10,16 @@ import SendAuthorizationEmail from '../scenes/sendAuthorizationEmail.js';
 
 export default function (ComposedComponent) {
 	class Authentication extends Component {
+		constructor(props) {
+			super(props);
+
+			console.log("Require Auth", props);
+		}
 
 		render() {
-			if (loggedIn) {
+			if (this.props.loggedIn) {
 				return <ComposedComponent {...this.props} />;
-			} else if (sentAuthorizationEmail) {
+			} else if (this.props.sentAuthorizationEmail) {
 				return <Authorize {...this.props} />
 			} else {
 				return <SendAuthorizationEmail {...this.props} />;
@@ -24,6 +29,7 @@ export default function (ComposedComponent) {
 
 	function mapStateToProps(state) {
 		return { 
+			loggedIn: state.auth.loggedIn,
 			sentAuthorizationEmail: state.auth.sentAuthorizationEmail,
 		};
 	}

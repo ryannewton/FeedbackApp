@@ -67,20 +67,13 @@ let store = createStore(
 	applyMiddleware(thunkMiddleware)
 );
 
-async function load_token() {
+async function load_token_and_email() {
 	try {
 		let token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
 		store.dispatch(actions.loadToken(token));
-		store.dispatch(actions.pullProjects(token));
-	} catch (error) {
-		console.log(error);
-	}
-}
-
-async function load_email() {
-	try {
 		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';		
-		store.dispatch(actions.saveEmail(email));		
+		store.dispatch(actions.saveEmail(email));
+		store.dispatch(actions.pullProjects(token, email));
 	} catch (error) {
 		console.log(error);
 	}
@@ -104,8 +97,7 @@ async function load_doNotDisplayList() {
 	}
 }
 
-load_token();
-load_email();
+//load_token_and_email();
 load_upvotes();
 load_doNotDisplayList();
 

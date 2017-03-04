@@ -21,6 +21,7 @@ const INITIAL_STATE = {
 };
 
 export default (state = INITIAL_STATE, action) => {
+	console.log(state, action);
 
 	switch (action.type) {
 		case SAVE_EMAIL:
@@ -34,7 +35,8 @@ export default (state = INITIAL_STATE, action) => {
 		case AUTHORIZE_USER_SUCCESS:
 			return { ...state, sentAuthorizationEmail: false, loading: false, loggedIn: true, token: action.payload, error: false };
 		case AUTHORIZE_USER_FAIL:
-			return { ...state, sentAuthorizationEmail: true, loading: false, loggedIn: false, error: action.payload };
+			console.log(action.payload);
+			return { ...state, loading: false, loggedIn: false, error: action.payload };
 		case LOAD_TOKEN:
 			return { ...state, token: action.payload };
 		default:

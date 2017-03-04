@@ -2,6 +2,9 @@ var express = require('express');
 var mysql   = require('mysql');
 var app = express();
 
+//For authentication
+var jwt = require('jsonwebtoken');
+
 //For uploading longer/complicated texts
 var bodyParser = require('body-parser');
 var multer = require('multer'); // v1.0.5
@@ -14,6 +17,7 @@ var ses = new aws.SES({apiVersion: '2010-12-01'}); // load AWS SES
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+//app.use(expressJWT({ secret: 'buechelejedi16' }).unless({ path: ['/sendAuthorizationEmail', '/authorizeUser'] }));
 
 var connection = mysql.createConnection({
 	//production database
@@ -27,18 +31,7 @@ var connection = mysql.createConnection({
 	database : 'feedbackappdb'
 });
 
-// const generatePassword = (len = 20) => {
-// 	let password = '';
-// 	let num;
-// 	// Add random characters to password
-// 	for (let i = 0; i < len; i++) {
-// 		// Generate an integer between 33 & 125 (valid ascii chars)
-// 		num = Math.random() * (125 - 33);
-// 		num = Math.floor(num) + 33;
-// 		password += String.fromCharCode(num);
-// 	}
-// 	return password;
-// };
+var from_email = 'admin@collaborativefeedback.com';
 
 connection.connect();
 
@@ -61,17 +54,56 @@ function sendEmail(to, from, subject_line, body_text) {
 	}
 	, function(err, data) {
 		if (err) console.log(err, err.stack);
-		else     console.log(data);
 	 });
 }
 
+const generatePassword = (len) => {
+	let password = '';
+	let num;
+	// Add random characters to password
+	for (let i = 0; i < len; i++) {
+		// Generate an integer between 33 & 125 (valid ascii chars)
+		num = Math.random() * 10;
+		num = Math.floor(num);
+		password += String(num);
+	}
+	return password;
+};	
+
 //Authentication
 app.post('/sendAuthorizationEmail', upload.array(), function(req, res) {
+	console.log(req.body);
+	//Step #1: Generate a code
+	let code = generatePassword(4);
+	console.log(code);
+
+	//Step #2: Add the email, code, and timestamp to the database
+	connection.query("INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()", [req.body.email, String(code), String(code)], function(err) {
+		if (err) throw err;
+	});
+
+	//Step #3: Send an email with the code to the user (make sure it shows up in notification)
+	sendEmail([req.body.email], from_email, "Collaborative Feedback: Verify Your Email Address", "Enter this passcode: " + String(code));
+
 	res.sendStatus(200);
 });
 
 app.post('/authorizeUser', upload.array(), function(req, res) {
-	res.send('123456789');
+	console.log(req.body);
+
+	//Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
+	connection.query("SELECT passcode_time FROM users WHERE email=? AND passcode=?", [req.body.email, req.body.code], function(err, rows, fields) {
+		if (err) throw err;
+		//Step #2: Check that it matches the passcode submitted by the user, if not send error
+		//Step #3: If it checks out then create a JWT token and send to the user
+		if (rows.length) {
+			var myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16')
+			console.log(myToken);
+			res.status(200).json(myToken);
+		} else {
+			res.status(400).send('Incorrect Code');
+		}
+	});
 });
 
 //Add Feedback, Projects, Solutions
@@ -83,7 +115,6 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 
 	//Send Email
 	var to_emails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-	var from_email = 'jeeves@collaborativefeedback.com';
 	sendEmail(to_emails, from_email, "Feedback: " + req.body.text, "Email: " + req.body.email);
 
 	res.sendStatus(200);
@@ -96,7 +127,7 @@ app.post('/addProject', upload.array(), function(req, res) {
 	connection.query('INSERT INTO projects SET ?', {title, description: 'Blank Description', votes: 0, stage: 'new'}, function(err, result) {
 		if (err) throw err;
 		if (req.body.feedback) {
-			sendEmail(['tyler.hannasch@gmail.com'], 'jeeves@collaborativefeedback.com', 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
+			sendEmail(['tyler.hannasch@gmail.com'], from_email, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
 			connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], function(err) {
 				if (err) throw err;
 			});
@@ -159,6 +190,7 @@ app.post('/deleteProjectAddition', upload.array(), function(req, res) {
 	res.sendStatus(200);
 });
 
+
 //Pull Feedback, Projects, Project Additions, Discussion Posts
 app.post('/pullFeedback', upload.array(), function(req, res) {
 
@@ -182,17 +214,25 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
 
 app.post('/pullProjects', upload.array(), function(req, res) {
 
-	var connection_string = `
-		SELECT
-			id, title, votes, description, department, stage
-		FROM
-			projects`;
-	console.log(connection_string);
+	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
 
-	connection.query(connection_string, function(err, rows, fields) {
-		if (err) throw err;
-		else {
-			res.send(rows);
+		if (err) {
+			res.status(400).send('authorization failed');
+		} else {
+			var connection_string = `
+				SELECT
+					id, title, votes, description, department, stage
+				FROM
+					projects
+				WHERE
+					school=?`;
+
+			connection.query(connection_string, [decoded.email.split('@')[1]], function(err, rows, fields) {
+				if (err) throw err;
+				else {
+					res.send(rows);
+				}
+			});
 		}
 	});
 });
@@ -231,8 +271,12 @@ app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
 	});
 });
 
-app.listen(8081, function () {
-	console.log('Example app listening on port 8081!');
+// app.listen(8081, function () {
+// 	console.log('Example app listening on port 8081!');
+// });
+
+app.listen(3000, function () {
+	console.log('Example app listening on port 3000!');
 });
 
 

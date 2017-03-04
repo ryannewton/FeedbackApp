@@ -7,24 +7,19 @@ import { connect } from 'react-redux';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
-import {
-	sendAuthorizationEmail,
-	signupUserFail,
-	navigate
-} from '../actions';
+import { sendAuthorizationEmail, updateEmail } from '../actions';
 import styles from '../styles/styles_main.js';
 
 class SendAuthorizationEmail extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			email: this.props.email
-		}
+		console.log("Send Email", props);
 	}
 
 	onButtonPress() {
-		this.props.sendAuthorizationEmail(this.state.email);
+		console.log('button pressed');
+		this.props.sendAuthorizationEmail(this.props.email);
 	}
 
 	renderSignupButton() {
@@ -62,8 +57,8 @@ class SendAuthorizationEmail extends Component {
 							<Input
 								label="School Email"
 								placeholder="my_username@my_university.edu"
-								value={this.state.email}
-								onChangeText={(text) => this.setState({ email: text })}
+								value={this.props.email}
+								onChangeText={(text) => this.props.updateEmail(text)}
 							/>
 						</CardSection>
 
@@ -96,4 +91,4 @@ const mapStateToProps = (state) => {
 	return { email, error, loading };
 };
 
-export default connect(mapStateToProps, { sendAuthorizationEmail })(SendAuthorizationEmail);
+export default connect(mapStateToProps, { sendAuthorizationEmail, updateEmail })(SendAuthorizationEmail);
