@@ -13,7 +13,7 @@ import { ROOT_STORAGE } from '../constants';
 
 //Import Components
 import Feedback from '../scenes/feedback.js';
-import Projects from '../scenes/projects.js';
+import ProjectsTab from '../scenes/projectsTab.js';
 import Settings from '../scenes/settings.js';
 import New_Projects from '../scenes/new_projects.js';
 
@@ -43,10 +43,10 @@ const INITIAL_STATE = {
 			index: 0,
 			routes: [{key: 'Feedback Home', component: Feedback }],
 		},
-		// Scenes for the `Projects` tab.
+		// Scenes for the `ProjectsTab` tab.
 		AllProjects: {
 			index: 0,
-			routes: [{key: 'Projects Home', component: Projects }],
+			routes: [{key: 'Projects Home', component: ProjectsTab }],
 		},
 		// Scenes for the `Settings` tab.
 		Settings: {
