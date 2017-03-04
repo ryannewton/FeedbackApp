@@ -44,14 +44,14 @@ class ProjectDetails extends Component {
 
 					{/* Upvote button */}
 					<View style={{ flex: 1 }}>
-						{this.renderButton()}
+						{this.renderUpvoteButton()}
 					</View>
 				</View>
 			</View>
 		);
 	}
 
-	renderButton() {
+	renderUpvoteButton() {
 		const { user } = this.props;
 		const { project } = this.props.navigation.state.params;
 		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
@@ -68,6 +68,14 @@ class ProjectDetails extends Component {
 				textStyle={textStyles}
 			>
 				Upvote!
+			</Button>
+		);
+	}
+
+	renderSubmitButton() {
+		return (
+			<Button	onPress={() => console.log('Button clicked!')}>
+				Submit Suggestion
 			</Button>
 		);
 	}
@@ -94,6 +102,8 @@ class ProjectDetails extends Component {
 						style={inputText}
 						placeholder='Submit a suggestion'
 					/>
+
+					{this.renderSubmitButton()}
 
 				</View>
 			</TouchableWithoutFeedback>
