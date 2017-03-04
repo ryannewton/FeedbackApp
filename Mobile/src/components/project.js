@@ -13,8 +13,8 @@ import { addUpvote, removeUpvote } from '../actions';
 
 class Project extends Component {
 	goToDetails() {
-		const route = { key: 'ProjectDetails', project: this.props.project, component: ProjectDetails };
-		this.props.navigate({ type: 'push', route });
+		// const route = { key: 'ProjectDetails', project: this.props.project, component: ProjectDetails };
+		// this.props.navigate({ type: 'push', route });
 	}
 
 	upvote() {
