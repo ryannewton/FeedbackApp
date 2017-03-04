@@ -8,13 +8,13 @@ import { connect } from 'react-redux';
 //Import componenets, functions, and styles
 import styles from '../styles/styles_main.js';
 import { addUpvote, removeUpvote } from '../actions';
-import { Button, Header, Card, CardSection } from '../components/common';
+import { Button, Card, CardSection } from '../components/common';
 
 class ProjectDetails extends Component {
 	constructor(props) {
 		super(props);
 
-		const { project } = this.props.navigationState.routes.slice(-1)[0];
+		const project = this.props.navigation.state.params.project;
 		this.state = { project };
 	}
 
@@ -83,10 +83,6 @@ class ProjectDetails extends Component {
 			<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
 				<View style={container}>
 
-					<Header>
-						Projects Details
-					</Header>
-
 					<Card>
 						<CardSection>
 							{this.projectDescription()}
@@ -119,4 +115,10 @@ function mapStateToProps(state) {
 	return { user };
 }
 
-export default connect(mapStateToProps, { addUpvote, removeUpvote })(ProjectDetails);
+const AppScreen = connect(mapStateToProps, { addUpvote, removeUpvote })(ProjectDetails);
+
+AppScreen.navigationOptions = {
+	title: 'Project Details'
+};
+
+export default AppScreen;

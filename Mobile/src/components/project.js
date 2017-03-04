@@ -6,15 +6,13 @@ import { View, Text, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
-import ProjectDetails from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
 import { Button, Card } from './common';
 import { addUpvote, removeUpvote } from '../actions';
 
 class Project extends Component {
 	goToDetails() {
-		// const route = { key: 'ProjectDetails', project: this.props.project, component: ProjectDetails };
-		// this.props.navigate({ type: 'push', route });
+		// this.props.navigate('Details', { project: this.props.project });
 	}
 
 	upvote() {

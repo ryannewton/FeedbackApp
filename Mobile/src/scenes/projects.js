@@ -6,12 +6,11 @@ import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 //Import actions
-import { navigate, saveProjectChanges } from '../actions';
+import { saveProjectChanges } from '../actions';
 
 //Import components, functions, and styles
 import RequireAuth from '../components/require_auth';
 import Project from '../components/project.js';
-import { Header } from '../components/common';
 import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
@@ -25,7 +24,7 @@ class Projects extends Component {
 				<Project
 					project={project}
 					key={index}
-					navigate={this.props.navigate}
+					navigate={this.props.navigation.navigate}
 					saveProjectChanges={this.props.saveProjectChanges}
 				/>
 			);
@@ -37,10 +36,6 @@ class Projects extends Component {
 	render() {
 		return (
 			<View style={styles.container}>
-
-				<Header>
-					Projects
-				</Header>
 
 				{/* List of projects */}
 				<ScrollView>
@@ -56,7 +51,12 @@ function mapStateToProps(state) {
 	return { projects };
 }
 
-export default connect(mapStateToProps, {
-	navigate,
+const AppScreen = connect(mapStateToProps, {
 	saveProjectChanges
 })(RequireAuth(Projects));
+
+AppScreen.navigationOptions = {
+	title: 'Projects'
+};
+
+export default AppScreen;
