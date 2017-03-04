@@ -6,21 +6,14 @@ import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react
 import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
-import styles from '../styles/styles_main.js';
+import styles from '../styles/project_details_styles.js';
 import { addUpvote, removeUpvote } from '../actions';
 import { Button, Card, CardSection } from '../components/common';
 
 class ProjectDetails extends Component {
-	constructor(props) {
-		super(props);
-
-		const project = this.props.navigation.state.params.project;
-		this.state = { project };
-	}
-
 	upvote() {
 		const { user } = this.props;
-		const { project } = this.state;
+		const { project } = this.props.navigation.state.params;
 		// If user hasn't upvoted this project, add an upvote
 		if (!user.upvotes.includes(project.id)) {
 			this.props.addUpvote(project);
@@ -31,11 +24,13 @@ class ProjectDetails extends Component {
 
 	projectDescription() {
 		const { buttonText, lowWeight } = styles;
+		const { project } = this.props.navigation.state.params;
+
 		return (
 			<View style={{ justifyContent: 'flex-start' }}>
 				{/* Project title */}
 				<Text style={buttonText}>
-					{this.state.project.title}
+					{project.title}
 				</Text>
 
 				{/* Vote section */}
@@ -43,12 +38,12 @@ class ProjectDetails extends Component {
 					{/* Vote count */}
 					<View style={{ flex: 3 }}>
 						<Text style={[buttonText, lowWeight]}>
-							{`${this.state.project.votes} Votes`}
+							{`${project.votes} Votes`}
 						</Text>
 					</View>
 
 					{/* Upvote button */}
-					<View style={{ flex: 1, alignItems: 'flex-end' }}>
+					<View style={{ flex: 1 }}>
 						{this.renderButton()}
 					</View>
 				</View>
@@ -58,7 +53,7 @@ class ProjectDetails extends Component {
 
 	renderButton() {
 		const { user } = this.props;
-		const { project } = this.state;
+		const { project } = this.props.navigation.state.params;
 		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
 		let textStyles = { paddingTop: 10, paddingBottom: 10 };
 		// If user hasn't upvoted this project
@@ -78,7 +73,7 @@ class ProjectDetails extends Component {
 	}
 
 	render() {
-		const { container } = styles;
+		const { container, text, inputText } = styles;
 		return (
 			<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
 				<View style={container}>
@@ -91,19 +86,15 @@ class ProjectDetails extends Component {
 
 					<Card>
 						<CardSection>
-							<Text>Suggested solutions:</Text>
+							<Text style={text}>Suggested solutions:</Text>
 						</CardSection>
 					</Card>
 
-					<Card>
-						<CardSection>
-							<Text style={{ textAlign: 'center' }}>Add a solution:</Text>
-						</CardSection>
-						<CardSection>
-							<TextInput />
-						</CardSection>
+					<TextInput
+						style={inputText}
+						placeholder='Submit a suggestion'
+					/>
 
-					</Card>
 				</View>
 			</TouchableWithoutFeedback>
 		);
