@@ -12,7 +12,7 @@ import { addUpvote, removeUpvote } from '../actions';
 
 class Project extends Component {
 	goToDetails() {
-		// this.props.navigate('Details', { project: this.props.project });
+		this.props.navigate('Details', { project: this.props.project });
 	}
 
 	upvote() {
