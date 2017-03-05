@@ -51,6 +51,37 @@ class ProjectDetails extends Component {
 		);
 	}
 
+	solutionsList() {
+		const { text } = styles;
+		const { solutions } = this.props;
+		const { project } = this.props.navigation.state.params;
+		const projectSolutions = solutions.filter((solution) => solution.project_id === project.id);
+
+		// If no solutions have been submitted
+		if (projectSolutions.length === 0) {
+			return (
+				<CardSection>
+					<Text>No solutions submitted yet. Be the first!</Text>
+				</CardSection>
+			);
+		}
+
+		const formattedSolutions = projectSolutions.map((solution) => (
+			<CardSection>
+				<Text>{solution.title}</Text>
+			</CardSection>
+		));
+
+		return (
+			<View>
+				<CardSection>
+					<Text style={text}>Suggested solutions:</Text>
+				</CardSection>
+				{formattedSolutions}
+			</View>
+		);
+	}
+
 	renderUpvoteButton() {
 		const { user } = this.props;
 		const { project } = this.props.navigation.state.params;
@@ -81,7 +112,7 @@ class ProjectDetails extends Component {
 	}
 
 	render() {
-		const { container, text, inputText } = styles;
+		const { container, inputText } = styles;
 		return (
 			<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
 				<View style={container}>
@@ -93,9 +124,7 @@ class ProjectDetails extends Component {
 					</Card>
 
 					<Card>
-						<CardSection>
-							<Text style={text}>Suggested solutions:</Text>
-						</CardSection>
+						{this.solutionsList()}
 					</Card>
 
 					<TextInput
@@ -112,8 +141,8 @@ class ProjectDetails extends Component {
 }
 
 function mapStateToProps(state) {
-	const { user } = state;
-	return { user };
+	const { user, solutions } = state;
+	return { user, solutions };
 }
 
 const AppScreen = connect(mapStateToProps, { addUpvote, removeUpvote })(ProjectDetails);
