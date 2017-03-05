@@ -19,12 +19,13 @@ export const solutionChanged = (solution) => (
 	}
 );
 
-export const submitSolutionToServer = (solution, project) => (
+export const submitSolutionToServer = (solution, projectId) => (
 	function (dispatch, getState) {
 		const token = getState().auth.token;
 
-		return axios.post(`${ROOT_URL}/addSolution`, { description: solution, projectId: project.id, authorization: token })
-			.then(response => {
+		return axios.post(`${ROOT_URL}/addSolution`, { description: solution, projectId, authorization: token })
+			.then(() => {
+				// To do: Provide user feedback that the solution was received
 				console.log('Solution submitted SUCCESS');
 			});
 	}
