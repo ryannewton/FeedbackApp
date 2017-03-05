@@ -57,7 +57,7 @@ function sendEmail(to, from, subject_line, body_text) {
 	 });
 }
 
-const generatePassword = (len) => {
+function generatePassword(len) {
 	let password = '';
 	let num;
 	// Add random characters to password
@@ -68,7 +68,13 @@ const generatePassword = (len) => {
 		password += String(num);
 	}
 	return password;
-};	
+}
+
+function getDomain(email) {
+	var re = /@\w*\.\w*$|\.\w*\.\w*$/;
+	console.log(re.exec(email)[0].slice(1));
+	return re.exec(email)[0].slice(1);
+}
 
 //Authentication
 app.post('/sendAuthorizationEmail', upload.array(), function(req, res) {
@@ -114,7 +120,7 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 		if (err) {
 			res.status(400).send('authorization failed');
 		} else {
-			var school = decoded.email.split('@')[1];
+			var school = getDomain(decoded.email);
 
 			connection.query("INSERT INTO feedback (text, time, email, school) VALUES (?, ?, ?, ?)", [req.body.text, req.body.time, decoded.email, school], function(err) {
 				if (err) throw err;
@@ -152,7 +158,7 @@ app.post('/addSolution', upload.array(), function(req, res) {
 		if (err) {
 			res.status(400).send('authorization failed');
 		} else {
-			connection.query('INSERT INTO project_additions SET ?', {description: req.body.description, projectId: req.body.projectId, email: decoded.email, school: decoded.email.split('@')[1], type: 'solution'}, function(err, result) {
+			connection.query('INSERT INTO project_additions SET ?', {description: req.body.description, projectId: req.body.projectId, email: decoded.email, school: getDomain(decoded.email), type: 'solution'}, function(err, result) {
 				if (err) throw err;
 				res.json({id: result.insertId});
 			});
@@ -243,7 +249,7 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 				WHERE
 					school=?`;
 
-			connection.query(connection_string, [decoded.email.split('@')[1]], function(err, rows, fields) {
+			connection.query(connection_string, [getDomain(decoded.email)], function(err, rows, fields) {
 				if (err) throw err;
 				else res.send(rows);
 			});
@@ -266,7 +272,7 @@ app.post('/pullProjectAdditions', upload.array(), function(req, res) {
 				WHERE
 					school=?`;
 
-			connection.query(connection_string, [decoded.email.split('@')[1]], function(err, rows, fields) {
+			connection.query(connection_string, [getDomain(decoded.email)], function(err, rows, fields) {
 				if (err) throw err;
 				else res.send(rows);
 			});
