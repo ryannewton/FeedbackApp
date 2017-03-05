@@ -57,7 +57,7 @@ function sendEmail(to, from, subject_line, body_text) {
 	 });
 }
 
-const generatePassword = (len) => {
+function generatePassword(len) {
 	let password = '';
 	let num;
 	// Add random characters to password
@@ -68,7 +68,13 @@ const generatePassword = (len) => {
 		password += String(num);
 	}
 	return password;
-};	
+}
+
+function getDomain(email) {
+	var re = /@\w*\.\w*$|\.\w*\.\w*$/;
+	console.log(re.exec(email)[0].slice(1));
+	return re.exec(email)[0].slice(1);
+}
 
 //Authentication
 app.post('/sendAuthorizationEmail', upload.array(), function(req, res) {
@@ -114,7 +120,7 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 		if (err) {
 			res.status(400).send('authorization failed');
 		} else {
-			var school = decoded.email.split('@')[1];
+			var school = getDomain(decoded.email);
 
 			connection.query("INSERT INTO feedback (text, time, email, school) VALUES (?, ?, ?, ?)", [req.body.text, req.body.time, decoded.email, school], function(err) {
 				if (err) throw err;
@@ -147,10 +153,18 @@ app.post('/addProject', upload.array(), function(req, res) {
 
 app.post('/addSolution', upload.array(), function(req, res) {
 
-	connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes_for: 0, votes_against: 0, title: 'Title Here', description: 'Description Here', project_id: req.body.project_id}, function(err, result) {
-		if (err) throw err;
-		res.json({id: result.insertId});
+	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
+
+		if (err) {
+			res.status(400).send('authorization failed');
+		} else {
+			connection.query('INSERT INTO project_additions SET ?', {description: req.body.description, projectId: req.body.projectId, email: decoded.email, school: getDomain(decoded.email), type: 'solution'}, function(err, result) {
+				if (err) throw err;
+				res.json({id: result.insertId});
+			});
+		}
 	});
+
 });
 
 app.post('/addSubscriber', upload.array(), function(req, res) {
@@ -211,7 +225,6 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
 		WHERE
 			time
 				BETWEEN ? AND ?`;
-	console.log(connection_string);
 
 	connection.query(connection_string, [req.body.start_date, req.body.end_date], function(err, rows, fields) {
 		if (err) throw err;
@@ -236,11 +249,9 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 				WHERE
 					school=?`;
 
-			connection.query(connection_string, [decoded.email.split('@')[1]], function(err, rows, fields) {
+			connection.query(connection_string, [getDomain(decoded.email)], function(err, rows, fields) {
 				if (err) throw err;
-				else {
-					res.send(rows);
-				}
+				else res.send(rows);
 			});
 		}
 	});
@@ -248,19 +259,26 @@ app.post('/pullProjects', upload.array(), function(req, res) {
 
 app.post('/pullProjectAdditions', upload.array(), function(req, res) {
 
-	var connection_string = `
-		SELECT
-			id, type, votes_for, votes_against, title, description, project_id
-		FROM
-			project_additions`;
-	console.log(connection_string);
+	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
 
-	connection.query(connection_string, function(err, rows, fields) {
-		if (err) throw err;
-		else {
-			res.send(rows);
+		if (err) {
+			res.status(400).send('authorization failed');
+		} else {
+			var connection_string = `
+				SELECT
+					id, project_id, description
+				FROM
+					project_additions
+				WHERE
+					school=?`;
+
+			connection.query(connection_string, [getDomain(decoded.email)], function(err, rows, fields) {
+				if (err) throw err;
+				else res.send(rows);
+			});
 		}
 	});
+	
 });
 
 app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
@@ -280,13 +298,13 @@ app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
 	});
 });
 
-// app.listen(8081, function () {
-// 	console.log('Example app listening on port 8081!');
-// });
-
-app.listen(3000, function () {
-	console.log('Example app listening on port 3000!');
+app.listen(8081, function () {
+	console.log('Example app listening on port 8081!');
 });
+
+// app.listen(3000, function () {
+// 	console.log('Example app listening on port 3000!');
+// });
 
 
 
