@@ -5,8 +5,7 @@ import axios from 'axios';
 
 // Import action types
 import {
-	RECEIVED_SOLUTION,
-	SUBMIT_SOLUTION_SUCCESS
+	RECEIVED_SOLUTION
 } from './types';
 
 // Import constants
@@ -28,9 +27,12 @@ export const pullSolutions = () => (
 		const token = getState().auth.token;
 
 		return axios.post(`${ROOT_URL}/pullProjectAdditions`, { authorization: token })
-			.then(response => {
-				dispatch(receivedSolutions(response));
-			});
+		.then(response => {
+			dispatch(receivedSolutions(response.data));
+		})
+		.catch(error => {
+			console.error('pullSolutions() ERROR: ', error);
+		});
 	}
 );
 
