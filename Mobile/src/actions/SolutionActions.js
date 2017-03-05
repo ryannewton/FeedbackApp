@@ -5,11 +5,19 @@ import axios from 'axios';
 
 // Import action types
 import {
-	RECEIVED_SOLUTION
+	RECEIVED_SOLUTION,
+	SOLUTION_CHANGED
 } from './types';
 
 // Import constants
 import { ROOT_URL } from '../constants';
+
+export const solutionChanged = (solution) => (
+	{
+		type: SOLUTION_CHANGED,
+		payload: solution
+	}
+);
 
 export const submitSolutionToServer = (solution, project) => (
 	function (dispatch, getState) {

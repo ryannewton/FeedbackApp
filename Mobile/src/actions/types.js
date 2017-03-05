@@ -27,5 +27,6 @@ export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
 export const LOAD_TOKEN = 'load_token';
 
 // SolutionActions types
+export const SOLUTION_CHANGED = 'solution_changed';
 export const RECEIVED_SOLUTION = 'received_solution';
 export const SUBMIT_SOLUTION_SUCCESS = 'submit_solution_success';

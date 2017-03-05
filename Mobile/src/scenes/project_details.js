@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
 import styles from '../styles/project_details_styles.js';
-import { addUpvote, removeUpvote } from '../actions';
+import { addUpvote, removeUpvote, solutionChanged } from '../actions';
 import { Button, Card, CardSection } from '../components/common';
 
 class ProjectDetails extends Component {
@@ -128,8 +128,11 @@ class ProjectDetails extends Component {
 					</Card>
 
 					<TextInput
+						multiline={Boolean(true)}
 						style={inputText}
 						placeholder='Submit a suggestion'
+						onChange={this.props.solutionChanged}
+						value={this.props.main.solution}
 					/>
 
 					{this.renderSubmitButton()}
@@ -141,11 +144,15 @@ class ProjectDetails extends Component {
 }
 
 function mapStateToProps(state) {
-	const { user, solutions } = state;
-	return { user, solutions };
+	const { user, solutions, main } = state;
+	return { user, solutions, main };
 }
 
-const AppScreen = connect(mapStateToProps, { addUpvote, removeUpvote })(ProjectDetails);
+const AppScreen = connect(mapStateToProps, {
+	addUpvote,
+	removeUpvote,
+	solutionChanged
+})(ProjectDetails);
 
 AppScreen.navigationOptions = {
 	title: 'Project Details'
