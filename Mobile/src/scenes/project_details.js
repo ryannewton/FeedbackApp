@@ -7,8 +7,13 @@ import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
 import styles from '../styles/project_details_styles.js';
-import { addUpvote, removeUpvote, solutionChanged } from '../actions';
 import { Button, Card, CardSection } from '../components/common';
+import {
+	addUpvote,
+	removeUpvote,
+	solutionChanged,
+	submitSolutionToServer
+} from '../actions';
 
 class ProjectDetails extends Component {
 	upvote() {
@@ -104,8 +109,11 @@ class ProjectDetails extends Component {
 	}
 
 	renderSubmitButton() {
+		const { solution } = this.props.main;
+		const { project } = this.props.navigation.state.params;
+
 		return (
-			<Button	onPress={() => console.log('Button clicked!')}>
+			<Button	onPress={() => this.props.submitSolutionToServer(solution, project.id)}>
 				Submit Suggestion
 			</Button>
 		);
@@ -131,7 +139,7 @@ class ProjectDetails extends Component {
 						multiline={Boolean(true)}
 						style={inputText}
 						placeholder='Submit a suggestion'
-						onChange={this.props.solutionChanged}
+						onChangeText={(solution) => this.props.solutionChanged(solution)}
 						value={this.props.main.solution}
 					/>
 
@@ -151,7 +159,8 @@ function mapStateToProps(state) {
 const AppScreen = connect(mapStateToProps, {
 	addUpvote,
 	removeUpvote,
-	solutionChanged
+	solutionChanged,
+	submitSolutionToServer
 })(ProjectDetails);
 
 AppScreen.navigationOptions = {
