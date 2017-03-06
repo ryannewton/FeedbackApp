@@ -31,9 +31,8 @@ export const submitSolutionToServer = (solution, projectId) => (
 	}
 );
 
-export const pullSolutions = () => (
-	function (dispatch, getState) {
-		const token = getState().auth.token;
+export const pullSolutions = (token) => (
+	function (dispatch) {
 
 		return axios.post(`${ROOT_URL}/pullProjectAdditions`, { authorization: token })
 		.then(response => {
