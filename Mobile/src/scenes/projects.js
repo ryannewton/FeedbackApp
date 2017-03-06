@@ -4,32 +4,27 @@
 import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 //Import actions
-import * as actions from '../actions';
+import { saveProjectChanges } from '../actions';
 
 //Import components, functions, and styles
+import RequireAuth from '../components/require_auth';
 import Project from '../components/project.js';
-import { Header } from '../components/common';
 import styles from '../styles/styles_main.js';
 
 class Projects extends Component {
-	constructor(props) {
-		super(props);
-	}
-
 	compareNumbers(a, b) {
 		return b.votes - a.votes;
 	}
 
 	renderProjects() {
-		const projects = this.props.projects.sort(this.compareNumbers).map((item, index) => {
+		const projects = this.props.projects.sort(this.compareNumbers).map((project, index) => {
 			return (
 				<Project
-					item={item}
+					project={project}
 					key={index}
-					navigate={this.props.navigate}
+					navigate={this.props.navigation.navigate}
 					saveProjectChanges={this.props.saveProjectChanges}
 				/>
 			);
@@ -42,10 +37,6 @@ class Projects extends Component {
 		return (
 			<View style={styles.container}>
 
-				<Header>
-					Projects
-				</Header>
-
 				{/* List of projects */}
 				<ScrollView>
 					{this.renderProjects()}
@@ -56,11 +47,16 @@ class Projects extends Component {
 }
 
 function mapStateToProps(state) {
-	return state;
+	const { projects } = state;
+	return { projects };
 }
 
-function mapDispatchToProps(dispatch) {
-	return bindActionCreators(actions, dispatch);
-}
+const AppScreen = connect(mapStateToProps, {
+	saveProjectChanges
+})(RequireAuth(Projects));
 
-export default connect(mapStateToProps, mapDispatchToProps)(Projects);
+AppScreen.navigationOptions = {
+	title: 'Projects'
+};
+
+export default AppScreen;

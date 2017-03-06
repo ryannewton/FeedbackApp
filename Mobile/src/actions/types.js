@@ -3,9 +3,9 @@
 // FeedbackActions types
 export const FEEDBACK_CHANGED = 'feedback_changed';
 export const UPDATE_NAV_STATE = 'update_nav_state';
-export const SET_UP_VOTES = 'set_upvotes';
-export const ADD_UP_VOTE = 'add_upvote';
-export const REMOVE_UP_VOTE = 'remove_upvote';
+export const ADD_UPVOTE = 'add_upvote';
+export const REMOVE_UPVOTE = 'remove_upvote';
+export const LOAD_USER_UPVOTES = 'load_user_upvotes';
 export const SAVE_PROJECT_CHANGES = 'save_project_changes';
 export const ADD_PROJECT = 'add_project';
 export const DELETE_PROJECT = 'delete_project';
@@ -14,15 +14,14 @@ export const RECEIVED_PROJECTS = 'received_projects';
 export const SUBMIT_FEEDBACK = 'submit_feedback';
 export const SUBMIT_FEEDBACK_SUCCESS = 'submit_feedback_success';
 export const SUBMIT_FEEDBACK_FAIL = 'submit_feedback_fail';
+export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';
+export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
 
 // AuthActions types
-export const EMAIL_CHANGED = 'email_changed';
 export const SAVE_EMAIL = 'save_email';
-export const PASSWORD_CHANGED = 'password_changed';
-export const PASSWORD_CONFIRM_CHANGED = 'password_confirm_changed';
-export const SIGNUP_USER = 'signup_user';
-export const SIGNUP_USER_SUCCESS = 'signup_user_success';
-export const SIGNUP_USER_FAIL = 'signup_user_fail';
-export const LOGIN_USER = 'login_user';
-export const LOGIN_USER_SUCCESS = 'login_user_success';
-export const LOGIN_USER_FAIL = 'login_user_fail';
+export const SENDING_AUTHORIZATION_EMAIL = 'sending_authorization_email';
+export const SENT_AUTHORIZATION_EMAIL = 'sent_authorization_email';
+export const AUTHORIZING_USER = 'authorizing_user';
+export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
+export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
+export const LOAD_TOKEN = 'load_token';

@@ -1,11 +1,11 @@
 'use strict';
 
+// Import action types
 import {
 	FEEDBACK_CHANGED,
-	SET_EMAIL,
 	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
-	SUBMIT_FEEDBACK_FAIL
+	SUBMIT_FEEDBACK_FAIL,
 } from '../actions/types';
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
@@ -20,8 +20,6 @@ export default (state = INITIAL_STATE, action) => {
 	switch (action.type) {
 		case FEEDBACK_CHANGED:
 			return { ...state, feedback: action.payload };
-		case SET_EMAIL:
-			return { ...state, email: action.payload };
 		case SUBMIT_FEEDBACK:
 			return { ...state, loading: true };
 		case SUBMIT_FEEDBACK_SUCCESS:
@@ -32,3 +30,4 @@ export default (state = INITIAL_STATE, action) => {
 			return state;
 	}
 };
+

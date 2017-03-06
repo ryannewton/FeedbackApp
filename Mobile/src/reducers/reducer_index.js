@@ -1,15 +1,19 @@
 'use strict';
 
-//Import Libraries
+// Import Libraries
 import { combineReducers } from 'redux';
-import main from './reducer_main.js';
-import navigation from './reducer_navigation.js';
-import projects from './reducer_projects.js';
+
+// Import reducers
+import main from './reducer_main';
+import navigation from './reducer_navigation';
+import projects from './reducer_projects';
 import auth from './auth_reducer';
+import user from './user_reducer';
 
 export default combineReducers({
 	main,
 	navigation,
 	projects,
-	auth
+	auth,
+	user
 });

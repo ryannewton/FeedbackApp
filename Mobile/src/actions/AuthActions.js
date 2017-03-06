@@ -1,32 +1,36 @@
 'use strict';
 
 // Import Libraries
+import axios from 'axios';
 import { AsyncStorage } from 'react-native';
-import firebase from 'firebase';
 
 // Import components & constants
-import Submitted from '../scenes/submitted';
-import { ROOT_STORAGE } from '../constants';
+import { ROOT_URL, ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
-import { submitFeedbackToServer } from './FeedbackActions';
+import { pullProjects } from './FeedbackActions';
+
 import {
-	EMAIL_CHANGED,
 	SAVE_EMAIL,
-	PASSWORD_CHANGED,
-	PASSWORD_CONFIRM_CHANGED,
-	SIGNUP_USER,
-	SIGNUP_USER_SUCCESS,
-	SIGNUP_USER_FAIL,
-	LOGIN_USER,
-	LOGIN_USER_SUCCESS,
-	LOGIN_USER_FAIL
+	SENDING_AUTHORIZATION_EMAIL,
+	SENT_AUTHORIZATION_EMAIL,
+	AUTHORIZING_USER,
+	AUTHORIZE_USER_SUCCESS,
+	AUTHORIZE_USER_FAIL,
+	LOAD_TOKEN
 } from './types';
 
-export const emailChanged = (email) => (
+export const updateEmail = (email) => (
+	{ 
+		type: SAVE_EMAIL,
+		payload: email 
+	}
+);
+
+export const authorizeUserFail = (error) => (
 	{
-		type: EMAIL_CHANGED,
-		payload: email
+		type: AUTHORIZE_USER_FAIL,
+		payload: error
 	}
 );
 
@@ -37,109 +41,52 @@ export const saveEmail = (email) => (
 	}
 );
 
-export const passwordChanged = (password) => (
-	{
-		type: PASSWORD_CHANGED,
-		payload: password
-	}
-);
-
-export const passwordConfirmChanged = (passwordConfirm) => (
-	{
-		type: PASSWORD_CONFIRM_CHANGED,
-		payload: passwordConfirm
-	}
-);
-
-export const signupUser = ({ email, password }) => (
+export const sendAuthorizationEmail = (email) => (
 	(dispatch) => {
-		dispatch({ type: SIGNUP_USER });
+		dispatch({ type: SENDING_AUTHORIZATION_EMAIL });
 
-		firebase.auth().createUserWithEmailAndPassword(email, password)
-			.then((user) => {
-				// Get JWT and add to AsyncStorage
-				user.getToken()
-					.then((token) => {
-						AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
-						dispatch(signupUserSuccess(token));
-					});
-
-				// Save email to AsyncStorage
-				dispatch(saveEmail(email));
-
-				// Navigate to Submitted scene
-				const route = {
-					type: 'pop-push',
-					route: {
-						key: 'Submitted',
-						component: Submitted
-					}
-				};
-				dispatch(submitFeedbackToServer(route));
-			})
-			// If signup fails
-			.catch(() => {
-				dispatch(signupUserFail('Email address is already in use'));
-			});
+		// Add a new user to our database (or update the passcode of the user)
+		return axios.post(`${ROOT_URL}/sendAuthorizationEmail/`, { email })
+		// If successful navigate to the login in screen (for post email verification)
+		.then((response) => {
+			// Save email to AsyncStorage
+			dispatch(saveEmail(email));
+			// Change the in-authorization flag in state so we update the component
+			dispatch({ type: SENT_AUTHORIZATION_EMAIL });
+		})
+		.catch((error) => {
+			console.log("Error in sendAuthorizationEmail in AuthActions");
+			console.log(error);
+		});
 	}
 );
 
-export const signupUserSuccess = (user) => (
-	{
-		type: SIGNUP_USER_SUCCESS,
-		payload: user
-	}
-);
-
-export const signupUserFail = (err) => (
-	{
-		type: SIGNUP_USER_FAIL,
-		payload: err
-	}
-);
-
-export const loginUser = ({ email, password }) => (
+export const authorizeUser = (email, code) => (
 	(dispatch) => {
-		dispatch({ type: LOGIN_USER });
+		dispatch({ type: AUTHORIZING_USER });
 
-		firebase.auth().signInWithEmailAndPassword(email, password)
-			.then((user) => {
-				// Get JWT and add to AsyncStorage
-				user.getToken()
-					.then((token) => {
-						AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
-						dispatch(loginUserSuccess(token));
-					});
-
-				// Save email to AsyncStorage
-				dispatch(saveEmail(email));
-
-				// Navigate to Submitted scene
-				const route = {
-					type: 'pop-push',
-					route: {
-						key: 'Submitted',
-						component: Submitted
-					}
-				};
-				dispatch(submitFeedbackToServer(route));
-			})
-			// If login fails
-			.catch(() => dispatch(loginUserFail()));
+		// Submits the code the user entered from their email
+		return axios.post(`${ROOT_URL}/authorizeUser/`, { email, code })
+		// If successful store the token, repull state from the database, and set state to logged-in
+		.then((response) => {
+			let token = String(response.data);
+			console.log('received token', token)
+			AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
+			dispatch(pullProjects(token));
+			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
+		})
+		// If not, show an error message
+		.catch((error) => {
+			console.log("Error in loginUser in AuthActions");
+			console.log(error);
+			dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message });
+		});
 	}
 );
 
-export const loginUserSuccess = (user) => (
-	{
-		type: LOGIN_USER_SUCCESS,
-		payload: user
-	}
-);
-
-export const loginUserFail = () => {
-	const err = 'Login failed. Invalid email or password';
+export const loadToken = (token) => {
 	return {
-		type: LOGIN_USER_FAIL,
-		payload: err
-	};
-};
+		type: LOAD_TOKEN,
+		payload: token
+	}
+}

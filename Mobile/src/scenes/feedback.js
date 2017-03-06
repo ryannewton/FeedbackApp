@@ -4,15 +4,17 @@
 import React, { Component } from 'react';
 import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
+import { MenuContext } from 'react-native-menu';
 
 //Import actions
 import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
 
 //Import components, functions, and styles
-import { Button, Header, Spinner } from '../components/common';
+import RequireAuth from '../components/require_auth';
+import { Button, HeaderPlusMenu, Spinner } from '../components/common';
 import Submitted from './submitted.js';
-import Signup from './signup';
 import styles from '../styles/styles_main.js';
+
 
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
@@ -37,11 +39,6 @@ class Feedback extends Component {
 			scene = { key: 'Submitted', component: Submitted };
 			route = { type: 'push', route: scene };
 			this.props.submitFeedbackToServer(route);
-		} else {
-			// Otherwise, go to Signup scene when done
-			scene = { key: 'Signup', component: Signup };
-			route = { type: 'push', route: scene };
-			this.props.navigate(route);
 		}
 	}
 
@@ -50,7 +47,7 @@ class Feedback extends Component {
 			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
 		return (
-			<Button	onPress={this.submitFeedback.bind(this)} style={{ marginTop: 10, height: 50 }}>
+			<Button	onPress={this.submitFeedback.bind(this)}>
 				Submit Feedback
 			</Button>
 		);
@@ -58,14 +55,14 @@ class Feedback extends Component {
 
 	render() {
 		return (
-			<TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-				<View style={[styles.container, { alignItems: 'center' }]}>
-					<Header>
-						Thanks for providing feedback!
-					</Header>
+			<MenuContext style={{ flex: 1 }} ref="MenuContext">
+				<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+					<View style={styles.container}>
+						<HeaderPlusMenu navigate={this.props.navigate}>
+							Thanks for providing feedback!
+						</HeaderPlusMenu>
 
-					{/* Feedback input box */}
-					<View style={{ paddingTop: 10, paddingHorizontal: 5, flexDirection: 'row' }}>
+						{/* Feedback input box */}
 						<TextInput
 							multiline={Boolean(true)}
 							onChangeText={(feedback) => {
@@ -80,18 +77,14 @@ class Feedback extends Component {
 								this.setState({ height: event.nativeEvent.contentSize.height });
 							}}
 							style={styles.feedback_input}
-							value={this.props.feedback}
+							placeholder={this.props.feedback}
 						/>
-					</View>
 
-					{/* Submit button / loading spinner */}
-					<View style={{ flexDirection: 'row' }}>
-						<View style={{ flex: 1, paddingHorizontal: 3 }}>
-							{this.renderButton()}
-						</View>
+						{/* Submit button / loading spinner */}
+						{this.renderButton()}
 					</View>
-				</View>
-			</TouchableWithoutFeedback>
+				</TouchableWithoutFeedback>
+			</MenuContext>
 		);
 	}
 }
@@ -106,4 +99,4 @@ export default connect(mapStateToProps, {
 	feedbackChanged,
 	submitFeedbackToServer,
 	navigate
-})(Feedback);
+})(RequireAuth(Feedback));

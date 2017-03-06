@@ -3,6 +3,7 @@ import React from 'react';
 
 //import components
 import Project from './project.js';
+import Email_Capture from './email_capture.js';
 
 export default class Projects extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ export default class Projects extends React.Component {
   }
 
   addProject() {
-    this.props.addProject(this.props.receivedIDForAddProject);
+    this.props.addProject(this.props.receivedIDForAddProject, undefined, this.props.main.email, 'add project on website');
   }
 
   compareNumbers(a, b) {
@@ -47,7 +48,7 @@ export default class Projects extends React.Component {
       return <Project project={project} project_additions={this.props.project_additions} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.up_votes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} receivedIDForAddSolution={this.props.receivedIDForAddSolution.bind(this)} addSolution={this.props.addSolution.bind(this)} deleteProjectAddition={this.props.deleteProjectAddition.bind(this)} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges.bind(this)} email={this.props.main.email} />
     });
 
-    return (
+    let Project_View = (
       <div>
         <div id="rank_header">
           <span className="h4">{this.state.department}</span>
@@ -70,6 +71,11 @@ export default class Projects extends React.Component {
           {Rows}
         </div>
         <button type="button" className="btn btn-success" onClick={this.addProject.bind(this)}>Add Project</button>
+      </div>);
+
+    return (
+      <div>
+        {(this.props.main.email === null) ? <Email_Capture email={this.props.main.email} updateEmail={this.props.updateEmail} /> : Project_View}
       </div>
     );
   }

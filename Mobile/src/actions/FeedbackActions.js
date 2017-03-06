@@ -2,24 +2,30 @@
 
 // Import libraries
 import axios from 'axios';
+import { AsyncStorage } from 'react-native';
 
 // Import action types
 import {
 	FEEDBACK_CHANGED,
 	UPDATE_NAV_STATE,
-	SET_UP_VOTES,
-	ADD_UP_VOTE,
-	REMOVE_UP_VOTE,
+	ADD_UPVOTE,
+	REMOVE_UPVOTE,
+	LOAD_USER_UPVOTES,
 	SAVE_PROJECT_CHANGES,
 	DELETE_PROJECT,
 	REQUESTED_PROJECTS,
 	RECEIVED_PROJECTS,
 	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
-	SUBMIT_FEEDBACK_FAIL
+	SUBMIT_FEEDBACK_FAIL,
+	ADD_TO_DO_NOT_DISPLAY_LIST,
+	LOAD_DO_NOT_DISPLAY_LIST,
+	AUTHORIZE_USER_SUCCESS,
+	AUTHORIZE_USER_FAIL
 } from './types';
 
-import { ROOT_URL } from '../constants';
+// Import constants
+import { ROOT_URL, ROOT_STORAGE } from '../constants';
 
 export const feedbackChanged = (feedback) => (
 	{
@@ -31,18 +37,19 @@ export const feedbackChanged = (feedback) => (
 export const submitFeedbackToServer = (route) => (
 	function (dispatch, getState) {
 		const { feedback } = getState().main;
-		const { email } = getState().auth;
 		const time = new Date(Date.now()).toISOString().slice(0, 10);
 
 		dispatch({ type: SUBMIT_FEEDBACK });
 
 		// Post new feedback to server
-		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, email })
+		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, authorization: getState().auth.token })
 		.then((response) => {
 			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
 			dispatch(navigate(route));
 		})
 		.catch((error) => {
+			console.log("Error in submitFeedbackToServer in FeedbackActions");
+			console.log(error);
 			dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
 			dispatch(navigate(route));
 		});
@@ -54,29 +61,78 @@ export const navigate = (route) => ({
 	payload: route
 });
 
-export const setUpVotes = (upVotes) => ({
-	type: SET_UP_VOTES,
-	payload: upVotes
-});
+export const addUpvote = (project) => (
+	(dispatch, getState) => {
+		dispatch({ type: ADD_UPVOTE, payload: project });
+		const { upvotes } = getState().user;
+		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
+		dispatch(saveProjectChanges(project, 'addUpvote'));
+	}
+);
 
-export const addUpVote = (upVote) => ({
-	type: ADD_UP_VOTE,
-	payload: upVote
-});
+export const addToDoNotDisplayList = (projectID) => (
+	(dispatch, getState) => {
+		dispatch({ type: ADD_TO_DO_NOT_DISPLAY_LIST, payload: projectID });
+		const { doNotDisplayList } = getState().user;
+		AsyncStorage.setItem(`${ROOT_STORAGE}doNotDisplayList`, JSON.stringify(doNotDisplayList));
+	}
+);
 
-export const removeUpVote = (upVote) => ({
-	type: REMOVE_UP_VOTE,
-	payload: upVote
-});
+export const removeUpvote = (project) => (
+	(dispatch, getState) => {
+		dispatch({ type: REMOVE_UPVOTE, payload: project });
+		const { upvotes } = getState().projects;
+		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
+		dispatch(saveProjectChanges(project, 'removeUpvote'));
+	}
+);
 
-export const saveProjectChanges = (project) => ({
-		type: SAVE_PROJECT_CHANGES,
-		payload: project
-});
+export const loadUpvotes = (upvotes) => (
+	{
+		type: LOAD_USER_UPVOTES,
+		payload: upvotes
+	}
+);
+
+export const loadDoNotDisplayList = (list) => (
+	{
+		type: LOAD_DO_NOT_DISPLAY_LIST,
+		payload: list
+	}
+);
+
+export const saveProjectChanges = (project, changeType) => (
+	(dispatch, getState) => {
+		dispatch({ type: SAVE_PROJECT_CHANGES, payload: project });
+
+		// Save the project change to the server
+		fetch(`${ROOT_URL}/saveProjectChanges`, {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type': 'application/json',
+				authorization: getState().auth.token
+			},
+			body: JSON.stringify({ project })
+		});
+
+		// Subscribe the user to the project
+		const { email } = getState().auth;
+		addSubscriber(email, project.id, changeType);
+	}
+);
+
+const addSubscriber = (email, projectId, type) => (
+	(dispatch, getState) => {
+		axios.post(`${ROOT_URL}/addSubscriber`, { email, projectId, type }, {
+			headers: { authorization: getState().auth.token }
+		});
+	}
+);
 
 export const deleteProject = (id) => ({
-		type: DELETE_PROJECT,
-		payload: id
+	type: DELETE_PROJECT,
+	payload: id
 });
 
 export const requestedProjects = () => ({
@@ -89,12 +145,15 @@ export const receivedProjects = (projects) => ({
 });
 
 // To Do: Convert `${ROOT_URL}/pullProjects` to GET on server
-export const pullProjects = () => (
-	function (dispatch) {
+export const pullProjects = (token) => (
+	function (dispatch, getState) {
 		dispatch(requestedProjects());
 
-		return axios.post(`${ROOT_URL}/pullProjects`)
-		.then(response => dispatch(receivedProjects(response.data)))
-		.catch(error => console.error(error));
+		return axios.post(`${ROOT_URL}/pullProjects`, { authorization: token })
+		.then(response => {
+			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
+			dispatch(receivedProjects(response.data));
+		})
+		.catch(error => dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' }));
 	}
 );

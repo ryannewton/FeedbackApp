@@ -3,44 +3,62 @@
 //Import Libraries
 import React, { Component } from 'react';
 import { View, Text, TouchableHighlight } from 'react-native';
+import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
-import ProjectDetails from '../scenes/project_details.js';
 import styles from '../styles/styles_main.js';
 import { Button, Card } from './common';
+import { addUpvote, removeUpvote } from '../actions';
 
 class Project extends Component {
-	constructor(props) {
-		super(props);
-
-		this.goToDetails = this.goToDetails.bind(this);
-		this.upvote = this.upvote.bind(this);
-	}
-
 	goToDetails() {
-		//const route = {key: 'ProjectDetails', item: this.props.item, component: ProjectDetails};
-		//this.props.navigate({type: 'push', route});
+		// this.props.navigate('Details', { project: this.props.project });
 	}
 
 	upvote() {
-		const newProject = { ...this.props.item, votes: this.props.item.votes + 1 };
-		this.props.saveProjectChanges(newProject);
+		const { project, user } = this.props;
+		// If user hasn't upvoted this project, add an upvote
+		if (!user.upvotes.includes(project.id)) {
+			this.props.addUpvote(project);
+		} else {
+			this.props.removeUpvote(project);
+		}
 	}
 
-	// Temporary fix. Async issue is causing this.props.item to be temporarily undefined
+	// Temporary fix. Async issue is causing this.props.project to be temporarily undefined
 	renderVoteCount() {
-		if (this.props.item === undefined) {
+		if (this.props.project === undefined) {
 			return '';
 		}
-		return `${this.props.item.votes} Votes`;
+		return `${this.props.project.votes} Votes`;
 	}
 
-	// Temporary fix. Async issue is causing this.props.item to be temporarily undefined
+	// Temporary fix. Async issue is causing this.props.project to be temporarily undefined
 	renderTitle() {
-		if (this.props.item === undefined) {
+		if (this.props.project === undefined) {
 			return '';
 		}
-		return this.props.item.title;
+		return this.props.project.title;
+	}
+
+	renderButton() {
+		const { project, user } = this.props;
+		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
+		let textStyles = { paddingTop: 10, paddingBottom: 10 };
+		// If user hasn't upvoted this project
+		if (user.upvotes.includes(project.id)) {
+			buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
+			textStyles = { ...textStyles, color: '#fff' };
+		}
+		return (
+			<Button
+				onPress={this.upvote.bind(this)}
+				style={buttonStyles}
+				textStyle={textStyles}
+			>
+				Upvote!
+			</Button>
+		);
 	}
 
 	render() {
@@ -51,7 +69,7 @@ class Project extends Component {
 				<TouchableHighlight
 					style={row}
 					underlayColor='#D0D0D0'
-					onPress={this.goToDetails}
+					onPress={this.goToDetails.bind(this)}
 				>
 
 					<View style={{ justifyContent: 'flex-start' }}>
@@ -63,7 +81,7 @@ class Project extends Component {
 						{/* Vote section */}
 						<View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
 							{/* Vote count */}
-							<View style={{ flex: 1 }}>
+							<View style={{ flex: 3 }}>
 								<Text style={[buttonText, lowWeight]}>
 									{this.renderVoteCount()}
 								</Text>
@@ -71,13 +89,7 @@ class Project extends Component {
 
 							{/* Upvote button */}
 							<View style={{ flex: 1, alignItems: 'flex-end' }}>
-								<Button
-									onPress={this.upvote}
-									style={{ width: 80, height: 27, marginRight: 2 }}
-									textStyle={{ paddingTop: 10, paddingBottom: 10 }}
-								>
-									Upvote!
-								</Button>
+								{this.renderButton()}
 							</View>
 						</View>
 					</View>
@@ -88,4 +100,9 @@ class Project extends Component {
 	}
 }
 
-export default Project;
+const mapStateToProps = (state) => {
+	const { user } = state;
+	return { user };
+};
+
+export default connect(mapStateToProps, { addUpvote, removeUpvote })(Project);
