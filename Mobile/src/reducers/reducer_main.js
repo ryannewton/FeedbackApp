@@ -6,6 +6,7 @@ import {
 	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
 	SUBMIT_FEEDBACK_FAIL,
+	SOLUTION_CHANGED
 } from '../actions/types';
 
 const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
@@ -26,6 +27,8 @@ export default (state = INITIAL_STATE, action) => {
 			return { ...state, loading: false, feedback: INITIAL_STATE.feedback };
 		case SUBMIT_FEEDBACK_FAIL:
 			return { ...state, loading: false };
+		case SOLUTION_CHANGED:
+			return { ...state, solution: action.payload };
 		default:
 			return state;
 	}
