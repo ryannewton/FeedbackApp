@@ -7,12 +7,17 @@ import { connect } from 'react-redux';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
-import { sendAuthorizationEmail, updateEmail } from '../actions';
+import { sendAuthorizationEmail, updateEmail, authorizeUserFail } from '../actions';
 import styles from '../styles/styles_main.js';
 
 class SendAuthorizationEmail extends Component {
 	onButtonPress() {
-		this.props.sendAuthorizationEmail(this.props.email);
+		let re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
+		if (re.test(this.props.email)) {
+			this.props.sendAuthorizationEmail(this.props.email);
+		} else {
+			this.props.authorizeUserFail("Invalid Email Address");
+		}		
 	}
 
 	renderSignupButton() {
@@ -84,4 +89,4 @@ const mapStateToProps = (state) => {
 	return { email, error, loading };
 };
 
-export default connect(mapStateToProps, { sendAuthorizationEmail, updateEmail })(SendAuthorizationEmail);
+export default connect(mapStateToProps, { sendAuthorizationEmail, updateEmail, authorizeUserFail })(SendAuthorizationEmail);

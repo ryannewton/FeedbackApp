@@ -96,7 +96,7 @@ async function load_doNotDisplayList() {
 	}
 }
 
-load_token_and_email();
+//load_token_and_email();
 load_upvotes();
 load_doNotDisplayList();
 
