@@ -27,6 +27,13 @@ export const updateEmail = (email) => (
 	}
 );
 
+export const authorizeUserFail = (error) => (
+	{
+		type: AUTHORIZE_USER_FAIL,
+		payload: error
+	}
+);
+
 export const saveEmail = (email) => (
 	(dispatch) => {
 		dispatch({ type: SAVE_EMAIL, payload: email });
