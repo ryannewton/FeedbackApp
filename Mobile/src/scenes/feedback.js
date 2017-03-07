@@ -65,14 +65,8 @@ class Feedback extends Component {
 						{/* Feedback input box */}
 						<TextInput
 							multiline={Boolean(true)}
-							onChangeText={(feedback) => {
-								this.props.feedbackChanged(feedback);
-							}}
-							onFocus={() => {
-								if (this.props.feedback === placeholderText) {
-									this.props.feedbackChanged('');
-								}
-							}}
+							onChangeText={(feedback) => this.props.feedbackChanged(feedback)}
+							onFocus={() => this.props.feedbackChanged('')}
 							onContentSizeChange={(event) => {
 								this.setState({ height: event.nativeEvent.contentSize.height });
 							}}
