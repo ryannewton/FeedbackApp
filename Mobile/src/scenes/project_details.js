@@ -32,7 +32,7 @@ class ProjectDetails extends Component {
 		const { project } = this.props.navigation.state.params;
 
 		return (
-			<View style={{ justifyContent: 'flex-start' }}>
+			<View style={{ flex: 1, justifyContent: 'flex-start' }}>
 				{/* Project title */}
 				<Text style={buttonText}>
 					{project.title}
