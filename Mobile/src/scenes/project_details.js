@@ -73,7 +73,7 @@ class ProjectDetails extends Component {
 
 		const formattedSolutions = projectSolutions.map((solution, index) => (
 			<CardSection key={index} >
-				<Text>{solution.title}</Text>
+				<Text>{solution.description}</Text>
 			</CardSection>
 		));
 
