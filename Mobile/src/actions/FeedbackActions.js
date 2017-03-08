@@ -65,6 +65,7 @@ export const addUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: ADD_UPVOTE, payload: project });
 		const { upvotes } = getState().user;
+		console.log("upvotes", upvotes);
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'addUpvote'));
 	}
@@ -81,7 +82,8 @@ export const addToDoNotDisplayList = (projectID) => (
 export const removeUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: REMOVE_UPVOTE, payload: project });
-		const { upvotes } = getState().projects;
+		const { upvotes } = getState().user;
+		console.log( "upvotes", upvotes);
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'removeUpvote'));
 	}
@@ -117,16 +119,8 @@ export const saveProjectChanges = (project, changeType) => (
 		});
 
 		// Subscribe the user to the project
-		const { email } = getState().auth;
-		addSubscriber(email, project.id, changeType);
-	}
-);
-
-const addSubscriber = (email, projectId, type) => (
-	(dispatch, getState) => {
-		axios.post(`${ROOT_URL}/addSubscriber`, { email, projectId, type }, {
-			headers: { authorization: getState().auth.token }
-		});
+		const { token } = getState().auth;
+		axios.post(`${ROOT_URL}/addSubscriber`, { authorization: token, project_id: project.id, type: changeType });
 	}
 );
 
