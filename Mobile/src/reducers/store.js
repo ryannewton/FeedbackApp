@@ -17,8 +17,7 @@ import ProjectsTab from '../scenes/projectsTab.js';
 import Settings from '../scenes/settings.js';
 import New_Projects from '../scenes/new_projects.js';
 
-const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
-	'appropriate department head on Monday and get back to you with their response.';
+const placeholderText = 'We meet with administrators each week and find solutions to the feedback submitted about their departments';
 
 //Sets our initial state (before data is pulled from the server)
 const INITIAL_STATE = {

@@ -59,7 +59,7 @@ class Feedback extends Component {
 				<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
 					<View style={styles.container}>
 						<HeaderPlusMenu navigate={this.props.navigate}>
-							Thanks for providing feedback!
+							Enter your feedback here
 						</HeaderPlusMenu>
 
 						{/* Feedback input box */}
