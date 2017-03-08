@@ -44,7 +44,7 @@ class Project extends Component {
 	renderButton() {
 		const { project, user } = this.props;
 		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
-		let textStyles = { paddingTop: 10, paddingBottom: 10 };
+		let textStyles = {};
 		// If user hasn't upvoted this project
 		if (user.upvotes.includes(project.id)) {
 			buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
