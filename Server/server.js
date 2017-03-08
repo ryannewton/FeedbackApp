@@ -169,9 +169,15 @@ app.post('/addSolution', upload.array(), function(req, res) {
 
 app.post('/addSubscriber', upload.array(), function(req, res) {
 
-	connection.query('INSERT INTO subscriptions SET ?', {project_id: req.body.project_id, email: req.body.email, type: req.body.type}, function(err, result) {
-		if (err) throw err;
-		res.json({id: result.insertId});
+	console.log("Add Subscriber Body", req.body);
+
+	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
+
+		connection.query('INSERT INTO subscriptions SET ?', {project_id: req.body.project_id, email: decoded.email, type: req.body.type}, function(err, result) {
+			if (err) throw err;
+			res.sendStatus(200);
+		});
+
 	});
 });
 

@@ -73,7 +73,7 @@ async function load_token_and_email() {
 		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';
 		store.dispatch(actions.saveEmail(email));
 		store.dispatch(actions.pullProjects(token, email));
-		store.dispatch(actions.pullSolutions(token));
+		//store.dispatch(actions.pullSolutions(token));
 	} catch (error) {
 		console.log(error);
 	}
