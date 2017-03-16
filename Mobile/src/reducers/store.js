@@ -74,8 +74,8 @@ let store = createStore(
 
 async function load_token_and_email() {
 	try {
-		let token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
-		//store.dispatch(actions.loadToken(token));
+		const token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
+		store.dispatch(actions.loadToken(token));
 		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';
 		store.dispatch(actions.saveEmail(email));
 		store.dispatch(actions.pullProjects(token, email));
@@ -104,17 +104,19 @@ async function load_doNotDisplayList() {
 }
 
 // Initialize saved state
-console.log('loading...');
 Promise.all([
 	load_token_and_email(),
 	load_upvotes(),
 	load_doNotDisplayList()
 	])
 	.then(() => {
-		if(store.getState().auth.email) {
-			store.dispatch(actions.authorizeSuccess(store.getState().auth.token));
+		const token = store.getState().auth.token;
+		// If token is stored on device, flag that user is logged in
+		if(token) {
+			store.dispatch(actions.authorizeSuccess(token));
 		}
-		console.log('loaded!');
+
+		// Redirect to Feedback scene after asyncStorage is loaded to state
 		store.dispatch(actions.navigate({ type: 'selectTab', tabKey: 'Feedback' }));
 	});
 
