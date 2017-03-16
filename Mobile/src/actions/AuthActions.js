@@ -55,7 +55,7 @@ export const sendAuthorizationEmail = (email) => (
 			dispatch({ type: SENT_AUTHORIZATION_EMAIL });
 		})
 		.catch((error) => {
-			console.log("Error in sendAuthorizationEmail in AuthActions");
+			console.log('Error in sendAuthorizationEmail in AuthActions');
 			console.log(error);
 		});
 	}
@@ -69,15 +69,15 @@ export const authorizeUser = (email, code) => (
 		return axios.post(`${ROOT_URL}/authorizeUser/`, { email, code })
 		// If successful store the token, repull state from the database, and set state to logged-in
 		.then((response) => {
-			let token = String(response.data);
-			console.log('received token', token)
+			const token = String(response.data);
+			console.log('received token', token);
 			AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
 			dispatch(pullProjects(token));
 			dispatch(authorizeSuccess(token));
 		})
 		// If not, show an error message
 		.catch((error) => {
-			console.log("Error in loginUser in AuthActions");
+			console.log('Error in loginUser in AuthActions');
 			console.log(error);
 			dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message });
 		});
@@ -89,9 +89,7 @@ export const authorizeSuccess = (token) => ({
 	payload: token
 });
 
-export const loadToken = (token) => {
-	return {
-		type: LOAD_TOKEN,
-		payload: token
-	}
-}
+export const loadToken = (token) => ({
+	type: LOAD_TOKEN,
+	payload: token
+});

@@ -11,20 +11,25 @@ import SendAuthorizationEmail from '../scenes/sendAuthorizationEmail.js';
 export default function (ComposedComponent) {
 	class Authentication extends Component {
 		render() {
+			// If user is already logged in, return the original component
 			if (this.props.loggedIn) {
 				return <ComposedComponent {...this.props} />;
-			} else if (this.props.sentAuthorizationEmail) {
-				return <Authorize {...this.props} />
-			} else {
-				return <SendAuthorizationEmail {...this.props} />;
 			}
+
+			// If the authroization email has been sent, show scene to get auth code
+			if (this.props.sentAuthorizationEmail) {
+				return <Authorize {...this.props} />;
+			}
+
+			// Otherwise, show the sendAuthorizationEmail scene
+			return <SendAuthorizationEmail {...this.props} />;
 		}
 	}
 
 	function mapStateToProps(state) {
 		return { 
 			loggedIn: state.auth.loggedIn,
-			sentAuthorizationEmail: state.auth.sentAuthorizationEmail,
+			sentAuthorizationEmail: state.auth.sentAuthorizationEmail
 		};
 	}
 

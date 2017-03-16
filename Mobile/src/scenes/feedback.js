@@ -15,11 +15,6 @@ import { Button, HeaderPlusMenu, Spinner } from '../components/common';
 import Submitted from './submitted.js';
 import styles from '../styles/styles_main.js';
 
-
-
-const placeholderText = 'Enter your feedback here. We will discuss it with the ' +
-	'appropriate department head on Monday and get back to you with their response.';
-
 class Feedback extends Component {
 	constructor(props: Object, context: any) {
 		super(props, context);
