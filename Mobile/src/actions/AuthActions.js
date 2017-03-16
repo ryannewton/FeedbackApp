@@ -73,7 +73,7 @@ export const authorizeUser = (email, code) => (
 			console.log('received token', token)
 			AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
 			dispatch(pullProjects(token));
-			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
+			dispatch(authorizeSuccess(token));
 		})
 		// If not, show an error message
 		.catch((error) => {
@@ -83,6 +83,11 @@ export const authorizeUser = (email, code) => (
 		});
 	}
 );
+
+export const authorizeSuccess = (token) => ({
+	type: AUTHORIZE_USER_SUCCESS,
+	payload: token
+});
 
 export const loadToken = (token) => {
 	return {
