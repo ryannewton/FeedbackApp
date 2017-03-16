@@ -16,6 +16,7 @@ import Feedback from '../scenes/feedback.js';
 import ProjectsTab from '../scenes/projectsTab.js';
 import Settings from '../scenes/settings.js';
 import New_Projects from '../scenes/new_projects.js';
+import Welcome from '../scenes/welcome';
 
 const placeholderText = 'We meet with administrators each week and find solutions to the feedback submitted about their departments';
 
@@ -29,12 +30,13 @@ const INITIAL_STATE = {
 	projects: [],
 	navigation: {
 		tabs: {
-			index: 0,
+			index: 4,
 			routes: [
 				{key: 'Feedback', displayName: 'Send Feedback', inTabs: true},
 				{key: 'NewProjects', displayName: 'New Projects', inTabs: true},
 				{key: 'AllProjects', displayName: 'All Projects', inTabs: true},
-				{key: 'Settings', displayName: 'Settings', inTabs: false},				
+				{key: 'Settings', displayName: 'Settings', inTabs: false},
+				{key: 'Welcome', displayName: 'Welcome', inTabs: false}
 			],
 		},
 		// Scenes for the `Feedback` tab.
@@ -57,6 +59,10 @@ const INITIAL_STATE = {
 			index: 0,
 			routes: [{key: 'New Projects Home', component: New_Projects }],
 		},
+		Welcome: {
+			index: 0,
+			routes: [{key: 'Welcome Home', component: Welcome }]
+		}
 	}
 };
 
@@ -97,8 +103,19 @@ async function load_doNotDisplayList() {
 	}
 }
 
-load_token_and_email();
-load_upvotes();
-load_doNotDisplayList();
+// Initialize saved state
+console.log('loading...');
+Promise.all([
+	load_token_and_email(),
+	load_upvotes(),
+	load_doNotDisplayList()
+	])
+	.then(() => {
+		if(store.getState().auth.email) {
+			store.dispatch(actions.authorizeSuccess(store.getState().auth.token));
+		}
+		console.log('loaded!');
+		store.dispatch(actions.navigate({ type: 'selectTab', tabKey: 'Feedback' }));
+	});
 
 export default store;

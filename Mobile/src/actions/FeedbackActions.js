@@ -145,6 +145,8 @@ export const pullProjects = (token) => (
 
 		return axios.post(`${ROOT_URL}/pullProjects`, { authorization: token })
 		.then(response => {
+			// Why are we confirming user authorization here? If we have a token, they've
+			//  already been authorized
 			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
 			dispatch(receivedProjects(response.data));
 		})
