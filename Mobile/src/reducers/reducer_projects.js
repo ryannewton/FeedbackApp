@@ -10,8 +10,6 @@ import {
 } from '../actions/types';
 
 export default (state = [], action) => {
-	console.log(state, action);
-
 	switch (action.type) {
 		case REQUESTED_PROJECTS:
 			return state;
