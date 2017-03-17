@@ -28,5 +28,7 @@ export const LOAD_TOKEN = 'load_token';
 
 // SolutionActions types
 export const SOLUTION_CHANGED = 'solution_changed';
-export const RECEIVED_SOLUTION = 'received_solution';
+export const RECEIVED_SOLUTION_LIST = 'received_solution_list';
+export const SUBMIT_SOLUTION = 'submit_solution';
 export const SUBMIT_SOLUTION_SUCCESS = 'submit_solution_success';
+export const SUBMIT_SOLUTION_FAIL = 'submit_solution_fail';
