@@ -1,8 +1,5 @@
 'use strict';
 
-// Import libraries
-import axios from 'axios';
-
 // Import action types
 import {
 	RECEIVED_SOLUTION_LIST,
@@ -13,7 +10,7 @@ import {
 } from './types';
 
 // Import constants
-import { ROOT_URL } from '../constants';
+import { http } from '../constants';
 
 export const solutionChanged = (solution) => (
 	{
@@ -27,7 +24,7 @@ export const submitSolutionToServer = (solution, projectId) => (
 		const token = getState().auth.token;
 
 		dispatch({ type: SUBMIT_SOLUTION });
-		return axios.post(`${ROOT_URL}/addSolution`, { description: solution, projectId, authorization: token })
+		return http.post('/addSolution', { description: solution, projectId, authorization: token })
 			.then(() => {
 				dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
 			})
@@ -40,7 +37,7 @@ export const submitSolutionToServer = (solution, projectId) => (
 
 export const pullSolutions = (token) => (
 	function (dispatch) {
-		return axios.post(`${ROOT_URL}/pullProjectAdditions`, { authorization: token })
+		return http.post('/pullProjectAdditions', { authorization: token })
 		.then(response => {
 			dispatch(receivedSolutionList(response.data));
 		})

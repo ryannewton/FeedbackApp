@@ -1,15 +1,13 @@
 'use strict';
 
 // Import Libraries
-import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 
 // Import components & constants
-import { ROOT_URL, ROOT_STORAGE } from '../constants';
+import { http, ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
 import { pullProjects } from './FeedbackActions';
-
 import {
 	SAVE_EMAIL,
 	SENDING_AUTHORIZATION_EMAIL,
@@ -46,7 +44,7 @@ export const sendAuthorizationEmail = (email) => (
 		dispatch({ type: SENDING_AUTHORIZATION_EMAIL });
 
 		// Add a new user to our database (or update the passcode of the user)
-		return axios.post(`${ROOT_URL}/sendAuthorizationEmail/`, { email })
+		return http.post('/sendAuthorizationEmail/', { email })
 		// If successful navigate to the login in screen (for post email verification)
 		.then((response) => {
 			// Save email to AsyncStorage
@@ -66,7 +64,7 @@ export const authorizeUser = (email, code) => (
 		dispatch({ type: AUTHORIZING_USER });
 
 		// Submits the code the user entered from their email
-		return axios.post(`${ROOT_URL}/authorizeUser/`, { email, code })
+		return http.post('/authorizeUser/', { email, code })
 		// If successful store the token, repull state from the database, and set state to logged-in
 		.then((response) => {
 			const token = String(response.data);
