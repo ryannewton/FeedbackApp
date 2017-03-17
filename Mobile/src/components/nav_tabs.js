@@ -9,17 +9,8 @@ import NavTab from './nav_tab.js';
 import styles from '../styles/styles_main.js';
 
 class NavTabs extends Component {
-
 	constructor(props, context) {
 		super(props, context);
-	}
-
-	render() {
-		return (
-			<View style={styles.tabs}>
-				{this.props.navigationState.routes.filter((item) => {return item.inTabs}).map(this._renderTab, this)}
-			</View>
-		);
 	}
 
 	_renderTab(route, index) {
@@ -30,6 +21,14 @@ class NavTabs extends Component {
 				selected={this.props.navigationState.index === index}
 				navigate={this.props.navigate}
 			/>
+		);
+	}
+
+	render() {
+		return (
+			<View style={styles.tabs}>
+				{this.props.navigationState.routes.filter((item) => item.inTabs).map(this._renderTab, this)}
+			</View>
 		);
 	}
 }

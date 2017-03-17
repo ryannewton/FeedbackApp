@@ -12,11 +12,11 @@ import styles from '../styles/styles_main.js';
 
 class SendAuthorizationEmail extends Component {
 	onButtonPress() {
-		let re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
+		const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
 		if (re.test(this.props.email)) {
 			this.props.sendAuthorizationEmail(this.props.email);
 		} else {
-			this.props.authorizeUserFail("Invalid Email Address");
+			this.props.authorizeUserFail('Invalid Email Address');
 		}		
 	}
 
@@ -47,7 +47,6 @@ class SendAuthorizationEmail extends Component {
 					<Header>
 						Verify Your University
 					</Header>
-
 
 					<Card>
 						{/* Email input */}
@@ -89,4 +88,8 @@ const mapStateToProps = (state) => {
 	return { email, error, loading };
 };
 
-export default connect(mapStateToProps, { sendAuthorizationEmail, updateEmail, authorizeUserFail })(SendAuthorizationEmail);
+export default connect(mapStateToProps, {
+	sendAuthorizationEmail,
+	updateEmail,
+	authorizeUserFail
+})(SendAuthorizationEmail);

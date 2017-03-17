@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
 import styles from '../styles/project_details_styles.js';
-import { Button, Card, CardSection } from '../components/common';
+import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
 	addUpvote,
 	removeUpvote,
@@ -58,9 +58,9 @@ class ProjectDetails extends Component {
 
 	solutionsList() {
 		const { text } = styles;
-		const { solutions } = this.props;
+		const { allSolutions } = this.props.solutions;
 		const { project } = this.props.navigation.state.params;
-		const projectSolutions = solutions.filter((solution) => solution.project_id === project.id);
+		const projectSolutions = allSolutions.filter((solution) => solution.project_id === project.id);
 
 		// If no solutions have been submitted
 		if (projectSolutions.length === 0) {
@@ -109,6 +109,12 @@ class ProjectDetails extends Component {
 	}
 
 	renderSubmitButton() {
+		// If waiting for response from server, show a spinner
+		if (this.props.solutions.loading) {
+			console.log('Waiting for response from server');
+			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
+		}
+
 		const { solution } = this.props.main;
 		const { project } = this.props.navigation.state.params;
 
@@ -125,16 +131,19 @@ class ProjectDetails extends Component {
 			<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
 				<View style={container}>
 
+					{/* Project description */}
 					<Card>
 						<CardSection>
 							{this.projectDescription()}
 						</CardSection>
 					</Card>
 
+					{/* List of submitted solutions */}
 					<Card>
 						{this.solutionsList()}
 					</Card>
 
+					{/* Input to submit a new solution */}
 					<TextInput
 						multiline={Boolean(true)}
 						style={inputText}
@@ -143,6 +152,12 @@ class ProjectDetails extends Component {
 						value={this.props.main.solution}
 					/>
 
+					{/* Success/fail message for submitted solution */}
+					<View>
+						<Text>{this.props.solutions.message}</Text>
+					</View>
+
+					{/* Submit button */}
 					{this.renderSubmitButton()}
 
 				</View>

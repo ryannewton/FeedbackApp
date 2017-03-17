@@ -1,7 +1,6 @@
 'use strict';
 
 // Import libraries
-import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 
 // Import action types
@@ -25,7 +24,7 @@ import {
 } from './types';
 
 // Import constants
-import { ROOT_URL, ROOT_STORAGE } from '../constants';
+import { http, ROOT_URL, ROOT_STORAGE } from '../constants';
 
 export const feedbackChanged = (feedback) => (
 	{
@@ -42,14 +41,13 @@ export const submitFeedbackToServer = (route) => (
 		dispatch({ type: SUBMIT_FEEDBACK });
 
 		// Post new feedback to server
-		return axios.post(`${ROOT_URL}/addFeedback/`, { text: feedback, time, authorization: getState().auth.token })
+		return http.post('/addFeedback/', { text: feedback, time, authorization: getState().auth.token })
 		.then((response) => {
 			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
 			dispatch(navigate(route));
 		})
 		.catch((error) => {
-			console.log("Error in submitFeedbackToServer in FeedbackActions");
-			console.log(error);
+			console.error('submitFeedbackToServer ERROR: ', error);
 			dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
 			dispatch(navigate(route));
 		});
@@ -65,7 +63,6 @@ export const addUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: ADD_UPVOTE, payload: project });
 		const { upvotes } = getState().user;
-		console.log("upvotes", upvotes);
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'addUpvote'));
 	}
@@ -83,7 +80,6 @@ export const removeUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: REMOVE_UPVOTE, payload: project });
 		const { upvotes } = getState().user;
-		console.log( "upvotes", upvotes);
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'removeUpvote'));
 	}
@@ -120,7 +116,7 @@ export const saveProjectChanges = (project, changeType) => (
 
 		// Subscribe the user to the project
 		const { token } = getState().auth;
-		axios.post(`${ROOT_URL}/addSubscriber`, { authorization: token, project_id: project.id, type: changeType });
+		http.post('/addSubscriber', { authorization: token, project_id: project.id, type: changeType });
 	}
 );
 
@@ -143,7 +139,7 @@ export const pullProjects = (token) => (
 	function (dispatch, getState) {
 		dispatch(requestedProjects());
 
-		return axios.post(`${ROOT_URL}/pullProjects`, { authorization: token })
+		return http.post('/pullProjects', { authorization: token })
 		.then(response => {
 			// Why are we confirming user authorization here? If we have a token, they've
 			//  already been authorized
