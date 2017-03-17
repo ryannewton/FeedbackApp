@@ -48,8 +48,7 @@ export const submitFeedbackToServer = (route) => (
 			dispatch(navigate(route));
 		})
 		.catch((error) => {
-			console.log("Error in submitFeedbackToServer in FeedbackActions");
-			console.log(error);
+			console.error('submitFeedbackToServer ERROR: ', error);
 			dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
 			dispatch(navigate(route));
 		});
@@ -65,7 +64,6 @@ export const addUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: ADD_UPVOTE, payload: project });
 		const { upvotes } = getState().user;
-		console.log("upvotes", upvotes);
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'addUpvote'));
 	}
@@ -83,7 +81,6 @@ export const removeUpvote = (project) => (
 	(dispatch, getState) => {
 		dispatch({ type: REMOVE_UPVOTE, payload: project });
 		const { upvotes } = getState().user;
-		console.log( "upvotes", upvotes);
 		AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
 		dispatch(saveProjectChanges(project, 'removeUpvote'));
 	}

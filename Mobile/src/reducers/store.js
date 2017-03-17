@@ -79,7 +79,7 @@ async function load_token_and_email() {
 		const email = await AsyncStorage.getItem(`${ROOT_STORAGE}email`) || '';
 		store.dispatch(actions.saveEmail(email));
 		store.dispatch(actions.pullProjects(token, email));
-		//store.dispatch(actions.pullSolutions(token));
+		store.dispatch(actions.pullSolutions(token));
 	} catch (error) {
 		console.log(error);
 	}
@@ -104,11 +104,9 @@ async function load_doNotDisplayList() {
 }
 
 // Initialize saved state
-Promise.all([
-	load_token_and_email(),
-	load_upvotes(),
-	load_doNotDisplayList()
-	])
+load_upvotes();
+load_doNotDisplayList();
+load_token_and_email()
 	.then(() => {
 		const token = store.getState().auth.token;
 		// If token is stored on device, flag that user is logged in
