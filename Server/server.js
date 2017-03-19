@@ -158,7 +158,7 @@ app.post('/addSolution', upload.array(), function(req, res) {
 		if (err) {
 			res.status(400).send('authorization failed');
 		} else {
-			connection.query('INSERT INTO project_additions SET ?', {description: req.body.description, project_id: req.body.projectId, email: decoded.email, school: getDomain(decoded.email), type: 'solution'}, function(err, result) {
+			connection.query('INSERT INTO project_additions SET ?', {description: req.body.description, project_id: req.body.projectId, email: decoded.email, school: getDomain(decoded.email), type: 'solution', title: '', votes_for: 0, votes_against: 0 }, function(err, result) {
 				if (err) throw err;
 				res.json({id: result.insertId});
 			});
