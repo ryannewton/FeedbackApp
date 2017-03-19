@@ -6,7 +6,7 @@ import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react
 import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
-import styles from '../styles/project_details_styles.js';
+import styles from '../styles/scenes/project_details_styles.js';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
 	addUpvote,
