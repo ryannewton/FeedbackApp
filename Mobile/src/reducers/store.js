@@ -11,11 +11,6 @@ import * as actions from '../actions';
 import Combined_Reducer from './reducer_index.js';
 import { ROOT_STORAGE } from '../constants';
 
-	navigation: {
-		
-	}
-};
-
 let store = createStore(
 	Combined_Reducer,
 	applyMiddleware(thunkMiddleware)
