@@ -143,9 +143,9 @@ export const pullProjects = (token) => (
 		.then(response => {
 			// Why are we confirming user authorization here? If we have a token, they've
 			//  already been authorized
-			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
-			dispatch(navigate({ type: 'selectTab', tabKey: 'Feedback' }));
+			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });			
 			dispatch(receivedProjects(response.data));
+			dispatch(navigate({ type: 'selectTab', tabKey: 'NewProjects' }));
 		})
 		.catch(error => {
 			console.log("pull projects error", error);
