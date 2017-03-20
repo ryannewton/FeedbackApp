@@ -22,7 +22,6 @@ export default (state = INITIAL_STATE, action) => {
 		case RECEIVED_SOLUTION_LIST:
 			return { ...state, list: action.payload };
 		case SUBMIT_SOLUTION:
-			console.log('SUBMIT_SOLUTION run');
 			return { ...state, loading: true, message: '' };
 		case SUBMIT_SOLUTION_SUCCESS:
 			return { ...state, loading: false, message: 'Solution successfully submitted' };

@@ -145,7 +145,6 @@ class ProjectDetails extends Component {
 	renderSubmitButton() {
 		// If waiting for response from server, show a spinner
 		if (this.props.solutions.loading) {
-			console.log('Waiting for response from server');
 			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
 
