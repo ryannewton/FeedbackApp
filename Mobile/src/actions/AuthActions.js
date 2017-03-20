@@ -18,13 +18,6 @@ import {
 	LOAD_TOKEN
 } from './types';
 
-export const updateEmail = (email) => (
-	{ 
-		type: SAVE_EMAIL,
-		payload: email 
-	}
-);
-
 export const authorizeUserFail = (error) => (
 	{
 		type: AUTHORIZE_USER_FAIL,
@@ -32,24 +25,16 @@ export const authorizeUserFail = (error) => (
 	}
 );
 
-export const saveEmail = (email) => (
-	(dispatch) => {
-		dispatch({ type: SAVE_EMAIL, payload: email });
-		AsyncStorage.setItem(`${ROOT_STORAGE}email`, email);
-	}
-);
-
 export const sendAuthorizationEmail = (email) => (
-	(dispatch) => {
+	(dispatch, getState) => {
 		dispatch({ type: SENDING_AUTHORIZATION_EMAIL });
 
 		// Add a new user to our database (or update the passcode of the user)
 		return http.post('/sendAuthorizationEmail/', { email })
 		// If successful navigate to the login in screen (for post email verification)
 		.then((response) => {
-			// Save email to AsyncStorage
-			dispatch(saveEmail(email));
 			// Change the in-authorization flag in state so we update the component
+			dispatch({ type: SAVE_EMAIL, payload: email });
 			dispatch({ type: SENT_AUTHORIZATION_EMAIL });
 		})
 		.catch((error) => {
@@ -60,15 +45,14 @@ export const sendAuthorizationEmail = (email) => (
 );
 
 export const authorizeUser = (email, code) => (
-	(dispatch) => {
+	(dispatch, getState) => {
 		dispatch({ type: AUTHORIZING_USER });
 
 		// Submits the code the user entered from their email
 		return http.post('/authorizeUser/', { email, code })
 		// If successful store the token, repull state from the database, and set state to logged-in
 		.then((response) => {
-			const token = String(response.data);
-			console.log('received token', token);
+			let token = String(response.data);
 			AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
 			dispatch(pullProjects(token));
 			dispatch(authorizeSuccess(token));
@@ -84,10 +68,5 @@ export const authorizeUser = (email, code) => (
 
 export const authorizeSuccess = (token) => ({
 	type: AUTHORIZE_USER_SUCCESS,
-	payload: token
-});
-
-export const loadToken = (token) => ({
-	type: LOAD_TOKEN,
 	payload: token
 });

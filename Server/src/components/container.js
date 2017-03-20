@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
 //Import Actions
-import Actions from '../actions/actions.js';
+import * as actions from '../actions';
 
 //Import Components
 import Nav from './nav.js';
@@ -30,7 +30,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-	return bindActionCreators(Actions, dispatch);
+	return bindActionCreators(actions, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Container);  

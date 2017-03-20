@@ -10,7 +10,52 @@ const {
 	StateUtils: NavigationStateUtils,
 } = NavigationExperimental;
 
-export default (state = {}, action) => {
+//Import Components
+import Feedback from '../scenes/feedback.js';
+import ProjectsTab from '../scenes/projectsTab.js';
+import Settings from '../scenes/settings.js';
+import New_Projects from '../scenes/new_projects.js';
+import Welcome from '../scenes/welcome';
+
+//Sets our initial state (before data is pulled from the server)
+const INITIAL_STATE = {
+	tabs: {
+		index: 4,
+		routes: [
+			{key: 'Feedback', displayName: 'Send Feedback', inTabs: true},
+			{key: 'NewProjects', displayName: 'New Projects', inTabs: true},
+			{key: 'AllProjects', displayName: 'All Projects', inTabs: true},
+			{key: 'Settings', displayName: 'Settings', inTabs: false},
+			{key: 'Welcome', displayName: 'Welcome', inTabs: false}
+		],
+	},
+	// Scenes for the `Feedback` tab.
+	Feedback: {
+		index: 0,
+		routes: [{key: 'Feedback Home', component: Feedback }],
+	},
+	// Scenes for the `ProjectsTab` tab.
+	AllProjects: {
+		index: 0,
+		routes: [{key: 'Projects Home', component: ProjectsTab }],
+	},
+	// Scenes for the `Settings` tab.
+	Settings: {
+		index: 0,
+		routes: [{key: 'Settings Home', component: Settings }],
+	},
+	// Scenes for the 'New Projects' tab.
+	NewProjects: {
+		index: 0,
+		routes: [{key: 'New Projects Home', component: New_Projects }],
+	},
+	Welcome: {
+		index: 0,
+		routes: [{key: 'Welcome Home', component: Welcome }]
+	}
+};
+
+export default (state = INITIAL_STATE, action) => {
 	// Defines pop, push, pop-push, and select-tab navigation types
 	function updateNavState(action, state) {
 

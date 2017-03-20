@@ -18,13 +18,12 @@ export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
 
 // AuthActions types
-export const SAVE_EMAIL = 'save_email';
 export const SENDING_AUTHORIZATION_EMAIL = 'sending_authorization_email';
 export const SENT_AUTHORIZATION_EMAIL = 'sent_authorization_email';
 export const AUTHORIZING_USER = 'authorizing_user';
 export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
 export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
-export const LOAD_TOKEN = 'load_token';
+export const SAVE_EMAIL = 'save_email';
 
 // SolutionActions types
 export const SOLUTION_CHANGED = 'solution_changed';

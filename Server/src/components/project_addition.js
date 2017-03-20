@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default class Project extends React.Component {
+export default class Project_Addition extends React.Component {
   constructor(props) {
     super(props);
 
@@ -12,7 +12,7 @@ export default class Project extends React.Component {
 
   switchEditMode(event) {
     if (this.state.edit_mode) {
-      this.props.saveProjectAdditionChanges(this.state.project_addition);
+      this.props.saveProjectAdditionChanges(this.state.project_addition, 'text_edit');
     }
     this.setState({edit_mode: !this.state.edit_mode});
   }
@@ -30,7 +30,7 @@ export default class Project extends React.Component {
   }
 
   deleteProjectAddition(event) {
-    this.props.deleteProjectAddition(this.state.project_addition.id);
+    this.props.deleteProjectAddition(this.state.project_addition.id, 'delete project addition');
   }
 
   render() {
@@ -49,7 +49,6 @@ export default class Project extends React.Component {
     let edit_button = (<button type="button" className="btn btn-primary pull-right" onClick={this.switchEditMode.bind(this)}>Edit</button>);
     let save_button = (<button type="button" className="btn btn-success pull-left" onClick={this.switchEditMode.bind(this)}>Save</button>);
     let delete_button = (<button type="button" className="btn btn-danger pull-right" onClick={this.deleteProjectAddition.bind(this)}>Delete</button>);
-    //let add_solution = (<button type="button" className="btn btn-primary pull-right" onClick={this.addSolution.bind(this)}>Add Solution</button>);
 
     return (
       <div className="panel panel-default">

@@ -15,7 +15,7 @@ export default class Feedback extends React.Component {
   }
 
   onDatesChange({ startDate, endDate }) {
-    this.props.updateDates(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'), this.props.requestedFeedback, this.props.receivedFeedback);
+    this.props.updateDates(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
   }
 
   onFocusChange(focusedInput) {

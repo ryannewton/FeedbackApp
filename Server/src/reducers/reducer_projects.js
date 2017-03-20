@@ -44,7 +44,7 @@ export default function projects(state = [], action) {
       return ops.push({id: action.id, title, description: "Blank Description", "department": 'TBD', stage: 'new', votes: 0}, state);
       break;
     case 'DELETE_PROJECT':
-      return ops.filter((project) => { return project.id !== action.id; }, state);
+      return ops.filter((project) => { return project.id !== action.payload; }, state);
       break;
     default:
       return state;

@@ -4,8 +4,8 @@ import { syncHistoryWithStore } from 'react-router-redux';
 import { browserHistory } from 'react-router';
 import thunkMiddleware from 'redux-thunk';
 
-//Import Actions
-import Actions from '../actions/actions.js';
+//Import actions
+import * as actions from '../actions';
 
 //Import Reducers
 import Combined_Reducer from './reducer_index.js';
@@ -31,13 +31,11 @@ let store = createStore(
 );
 
 let time = new Date(Date.now()).toISOString().slice(0, 10);
-store.dispatch(Actions.updateDates('2016-11-01', time, Actions.requestedFeedback, Actions.receivedFeedback));
-
-store.dispatch(Actions.pullProjects(Actions.requestedProjects, Actions.receivedProjects, Actions.pullProjectAdditions, Actions.requestedProjectAdditions, Actions.receivedProjectAdditions, Actions.pullDiscussionPosts, Actions.requestedDiscussionPosts, Actions.receivedDiscussionPosts));
-
-store.dispatch(Actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
-
-store.dispatch(Actions.updateEmail(localStorage.getItem('email')));
+let token = localStorage.getItem('token') || null;
+store.dispatch(actions.updateDates('2016-11-01', time, token));
+store.dispatch(actions.pullProjects(token));
+store.dispatch(actions.pullProjectAdditions(token));
+store.dispatch(actions.setUpVotes(JSON.parse(localStorage.getItem('upVotes')) || [0]));
 
 export const history = syncHistoryWithStore(browserHistory, store);
 

@@ -35,21 +35,21 @@ export const feedbackChanged = (feedback) => (
 
 export const submitFeedbackToServer = (route) => (
 	function (dispatch, getState) {
-		const { feedback } = getState().main;
-		const time = new Date(Date.now()).toISOString().slice(0, 10);
 
 		dispatch({ type: SUBMIT_FEEDBACK });
 
+		const { feedback } = getState().main;
+		const time = new Date(Date.now()).toISOString().slice(0, 10);		
+
 		// Post new feedback to server
-		return http.post('/addFeedback/', { text: feedback, time, authorization: getState().auth.token })
+		return http.post('/addFeedback/', { text: feedback, authorization: getState().auth.token })
 		.then((response) => {
-			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS, payload: { response, route } });
+			dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
 			dispatch(navigate(route));
 		})
 		.catch((error) => {
-			console.error('submitFeedbackToServer ERROR: ', error);
-			dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: { error, route } });
-			dispatch(navigate(route));
+			console.log("Error in submitFeedbackToServer in FeedbackActions", error);
+			dispatch({ type: SUBMIT_FEEDBACK_FAIL });
 		});
 	}
 );
@@ -144,8 +144,12 @@ export const pullProjects = (token) => (
 			// Why are we confirming user authorization here? If we have a token, they've
 			//  already been authorized
 			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
+			dispatch(navigate({ type: 'selectTab', tabKey: 'Feedback' }));
 			dispatch(receivedProjects(response.data));
 		})
-		.catch(error => dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' }));
+		.catch(error => {
+			console.log("pull projects error", error);
+			dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' })
+		});
 	}
 );
