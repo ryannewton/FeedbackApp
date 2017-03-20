@@ -9,6 +9,7 @@ import {
 	REMOVE_UPVOTE
 } from '../actions/types';
 
+
 export default (state = [], action) => {
 	switch (action.type) {
 		case REQUESTED_PROJECTS:

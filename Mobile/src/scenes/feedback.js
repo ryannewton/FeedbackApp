@@ -21,20 +21,13 @@ class Feedback extends Component {
 
 		this.state = {
 			height: 0,
-			anonymous: false
 		};
 	}
 
 	submitFeedback() {
-		let scene = {};
-		let route = {};
-
-		// If email address is on file, go to submitted scene
-		if (this.props.email !== '') {
-			scene = { key: 'Submitted', component: Submitted };
-			route = { type: 'push', route: scene };
-			this.props.submitFeedbackToServer(route);
-		}
+		let scene = { key: 'Submitted', component: Submitted };
+		let route = { type: 'push', route: scene };			
+		this.props.submitFeedbackToServer(route);		
 	}
 
 	renderButton() {
@@ -49,6 +42,8 @@ class Feedback extends Component {
 	}
 
 	render() {
+		const placeholderText = 'Enter your feedback here. We will work on addressing it with the appropriate administrator!';
+
 		return (
 			<MenuContext style={{ flex: 1 }} ref="MenuContext">
 				<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
@@ -61,12 +56,12 @@ class Feedback extends Component {
 						<TextInput
 							multiline={Boolean(true)}
 							onChangeText={(feedback) => this.props.feedbackChanged(feedback)}
-							onFocus={() => this.props.feedbackChanged('')}
 							onContentSizeChange={(event) => {
 								this.setState({ height: event.nativeEvent.contentSize.height });
 							}}
 							style={styles.feedback_input}
-							placeholder={this.props.feedback}
+							placeholder={placeholderText}
+							value={this.props.feedback}
 						/>
 
 						{/* Submit button / loading spinner */}
@@ -80,8 +75,7 @@ class Feedback extends Component {
 
 function mapStateToProps(state) {
 	const { feedback, loading } = state.main;
-	const { email } = state.auth;
-	return { feedback, email, loading };
+	return { feedback, loading };
 }
 
 export default connect(mapStateToProps, {

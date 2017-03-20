@@ -8,7 +8,6 @@ import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 're
 import Container from './components/container.js';
 import Feedback from './components/feedback.js';
 import Projects from './components/projects.js';
-import Settings from './components/settings.js';
 
 //Import Store
 import store, { history } from './reducers/store.js';
@@ -20,7 +19,6 @@ ReactDOM.render(
         <IndexRoute component={Projects} />
         <Route path='/projects/:stage' component={Projects} />
         <Route path='/feedback' component={Feedback} />
-        <Route path='/settings' component={Settings} />
       </Route>
  		</Router>		
 	</Provider>

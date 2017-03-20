@@ -7,14 +7,22 @@ import { connect } from 'react-redux';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
-import { sendAuthorizationEmail, updateEmail, authorizeUserFail } from '../actions';
+import { sendAuthorizationEmail, authorizeUserFail } from '../actions';
 import styles from '../styles/styles_main.js';
 
 class SendAuthorizationEmail extends Component {
+	constructor(props) {
+		super(props);
+
+		this.state = {
+			email: ''
+		}
+	}
+
 	onButtonPress() {
-		const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
-		if (re.test(this.props.email)) {
-			this.props.sendAuthorizationEmail(this.props.email);
+		let re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
+		if (re.test(this.state.email)) {
+			this.props.sendAuthorizationEmail(this.state.email);
 		} else {
 			this.props.authorizeUserFail('Invalid Email Address');
 		}		
@@ -54,8 +62,8 @@ class SendAuthorizationEmail extends Component {
 							<Input
 								label="School Email"
 								placeholder="my_username@my_university.edu"
-								value={this.props.email}
-								onChangeText={(text) => this.props.updateEmail(text)}
+								value={this.state.email}
+								onChangeText={(text) => this.setState({ email: text })}
 							/>
 						</CardSection>
 
@@ -72,8 +80,8 @@ class SendAuthorizationEmail extends Component {
 						<CardSection>
 							<Text style={styles.text}>
 									Why do we need your email? Two reasons:{'\n'}
-									1) We need to confirm you are member of your university{'\n'}
-									2) We will keep you updated as changes are made based on your feedback
+									1- We need to confirm you are member of your university{'\n'}
+									2- We will keep you updated as changes are made based on your feedback
 							</Text>
 						</CardSection>
 					</Card>
@@ -84,12 +92,8 @@ class SendAuthorizationEmail extends Component {
 }
 
 const mapStateToProps = (state) => {
-	const { email, error, loading } = state.auth;
-	return { email, error, loading };
+	const { error, loading } = state.auth;
+	return { error, loading };
 };
 
-export default connect(mapStateToProps, {
-	sendAuthorizationEmail,
-	updateEmail,
-	authorizeUserFail
-})(SendAuthorizationEmail);
+export default connect(mapStateToProps, { sendAuthorizationEmail, authorizeUserFail })(SendAuthorizationEmail);

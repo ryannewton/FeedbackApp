@@ -5,7 +5,6 @@ export default class Project extends React.Component {
 	constructor(props) {
 		super(props);
 
-		//TO DO - STATE SHOULD NOT REFERENCE PROPS
 		this.state = {
 			edit_mode: false,
 			project: props.project,
@@ -22,12 +21,12 @@ export default class Project extends React.Component {
 			project.votes -= 1;
 			this.props.removeUpVote(this.props.project.id);
 		}
-		this.props.saveProjectChanges(project, this.props.email, 'upvote');
+		this.props.saveProjectChanges(project, 'upvote');
 	}
 
 	switchEditMode(event) {
 		if (this.state.edit_mode) {
-			this.props.saveProjectChanges(this.state.project, this.props.email, 'text_edit');
+			this.props.saveProjectChanges(this.state.project, 'text_edit');
 		}
 		this.setState({edit_mode: !this.state.edit_mode});
 	}
@@ -45,11 +44,11 @@ export default class Project extends React.Component {
 	}
 
 	deleteProject(event) {
-		this.props.deleteProject(this.state.project.id, this.props.email, 'delete_project');
+		this.props.deleteProject(this.state.project.id, 'delete_project');
 	}
 
 	addSolution(event) {
-		this.props.addSolution(this.state.project.id, this.props.receivedIDForAddSolution, this.props.email, 'add_solution');
+		this.props.addSolution(this.state.project.id, 'add_solution');
 	}
 
 	render() {

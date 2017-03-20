@@ -7,23 +7,8 @@ export default class Feedback_Row extends React.Component {
   }
 
   createProjectFromFeedback() {
-    //call create project
-    this.props.addProject(this.props.receivedIDForAddProject, this.props.feedback)
-    //need to also update feedback's project ID
+    this.props.addProject(this.props.feedback, 'add project from feedback page on website')
   }
-
-  /*
-  shouldItemRender(category, searchTerm) {
-    return (category.name.toLowerCase().indexOf(searchTerm.toLowerCase()) !== -1);
-  }
-
-  sortItems(a, b, searchTerm) {
-    return (
-      a.name.toLowerCase().indexOf(searchTerm.toLowerCase()) >
-      b.name.toLowerCase().indexOf(searchTerm.toLowerCase()) ? 1 : -1
-    )
-  }
-  */
 
   render() {
 
