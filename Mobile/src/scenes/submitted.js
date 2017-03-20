@@ -35,8 +35,8 @@ class Submitted extends Component {
 				</Header>
 
 				<View style={{ flex: 1, paddingTop: 20 }}>
-					<Button	onPress={() => this.props.navigate({ type: 'pop' })}>
-						Submit More Feedback
+					<Button	onPress={() => this.props.navigate({ type: 'pop-switch', tabKey: 'NewProjects' })}>
+						Vote on Feedback!
 					</Button>
 				</View>
 			</View>

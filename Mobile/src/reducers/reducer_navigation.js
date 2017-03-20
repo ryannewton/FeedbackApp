@@ -85,17 +85,21 @@ export default (state = INITIAL_STATE, action) => {
 				break;
 			}
 
-			case 'pop-push': {
-				// Pops a route from the scenes stack.
-				const route: Object = action.route;
+			case 'pop-switch': {
+				// Pops a route from the scenes stack and then switches tabs
+				//The Pop
 				const { tabs } = state;
 				const tabKey = tabs.routes[tabs.index].key;
 				const scenes = state[tabKey];
-				const nextScenes = NavigationStateUtils.pop(scenes);
-				const finalScenes = NavigationStateUtils.push(nextScenes, route);
+				const nextScenes = NavigationStateUtils.pop(scenes);				
 
-				if (scenes !== finalScenes) {
-					return { ...state, [tabKey]: finalScenes };
+				//The Switch
+				const newTabKey: string = action.tabKey;
+				tabs = NavigationStateUtils.jumpTo(tabs, newTabKey);
+				if (tabs !== state.tabs) {
+					return { ...state, tabs, [tabKey]: nextScenes};
+				} else {
+					return state;
 				}
 				break;
 			}

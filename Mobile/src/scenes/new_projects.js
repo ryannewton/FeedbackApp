@@ -57,7 +57,7 @@ class New_Projects extends Component {
 
 	renderCard(project) {
 		return (
-			<View>
+			<View>				
 				<Card style={{ elevation: 3, marginHorizontal: 8, height: 300 }}>
 					<CardItem>
 						<Left>
