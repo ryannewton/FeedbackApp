@@ -6,17 +6,19 @@ import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react
 import { connect } from 'react-redux';
 
 //Import componenets, functions, and styles
-import styles from '../styles/project_details_styles.js';
+import styles from '../styles/scenes/project_details_styles.js';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
 	addUpvote,
 	removeUpvote,
+	addSolutionUpvote,
+	removeSolutionUpvote,
 	solutionChanged,
 	submitSolutionToServer
 } from '../actions';
 
 class ProjectDetails extends Component {
-	upvote() {
+	upvoteProject() {
 		const { user } = this.props;
 		const { project } = this.props.navigation.state.params;
 		// If user hasn't upvoted this project, add an upvote
@@ -24,6 +26,16 @@ class ProjectDetails extends Component {
 			this.props.addUpvote(project);
 		} else {
 			this.props.removeUpvote(project);
+		}
+	}
+
+	upvoteSolution(solution) {
+		const { user } = this.props;
+		// If user hasn't upvoted this project, add an upvote
+		if (!user.solutionUpvotes.includes(solution.id)) {
+			this.props.addSolutionUpvote(solution);
+		} else {
+			this.props.removeSolutionUpvote(solution);
 		}
 	}
 
@@ -57,30 +69,32 @@ class ProjectDetails extends Component {
 	}
 
 	solutionsList() {
-		const { text } = styles;
-		const { allSolutions } = this.props.solutions;
+		const { solutionText, subheaderText } = styles;
+		const { solutions } = this.props;
 		const { project } = this.props.navigation.state.params;
-		const projectSolutions = allSolutions.filter((solution) => solution.project_id === project.id);
+		const projectSolutions = solutions.list.filter((solution) => solution.project_id === project.id);
 
 		// If no solutions have been submitted
 		if (projectSolutions.length === 0) {
 			return (
 				<CardSection>
-					<Text>No solutions submitted yet. Be the first!</Text>
+					<Text style={solutionText}>No solutions submitted yet. Be the first!</Text>
 				</CardSection>
 			);
 		}
 
 		const formattedSolutions = projectSolutions.map((solution, index) => (
 			<CardSection key={index} >
-				<Text>{solution.description}</Text>
+				<Text style={solutionText}>{solution.description}</Text>
+				{/* Note: Adding solution upvote count to DB. Enable upvote button when this is done. */}
+				{/*this.renderSolutionUpvoteButton(solution)*/}
 			</CardSection>
 		));
 
 		return (
 			<View>
 				<CardSection>
-					<Text style={text}>Suggested solutions:</Text>
+					<Text style={subheaderText}>Suggested solutions</Text>
 				</CardSection>
 				{formattedSolutions}
 			</View>
@@ -99,7 +113,27 @@ class ProjectDetails extends Component {
 		}
 		return (
 			<Button
-				onPress={this.upvote.bind(this)}
+				onPress={this.upvoteProject.bind(this)}
+				style={buttonStyles}
+				textStyle={textStyles}
+			>
+				Upvote!
+			</Button>
+		);
+	}
+
+	renderSolutionUpvoteButton(solution) {
+		const { user } = this.props;
+		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
+		let textStyles = {};
+		// If user hasn't upvoted this project
+		if (user.solutionUpvotes.includes(solution.id)) {
+			buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
+			textStyles = { ...textStyles, color: '#fff' };
+		}
+		return (
+			<Button
+				onPress={() => this.upvoteSolution(solution)}
 				style={buttonStyles}
 				textStyle={textStyles}
 			>
@@ -111,7 +145,6 @@ class ProjectDetails extends Component {
 	renderSubmitButton() {
 		// If waiting for response from server, show a spinner
 		if (this.props.solutions.loading) {
-			console.log('Waiting for response from server');
 			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
 		}
 
@@ -174,6 +207,8 @@ function mapStateToProps(state) {
 const AppScreen = connect(mapStateToProps, {
 	addUpvote,
 	removeUpvote,
+	addSolutionUpvote,
+	removeSolutionUpvote,
 	solutionChanged,
 	submitSolutionToServer
 })(ProjectDetails);

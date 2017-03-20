@@ -32,3 +32,6 @@ export const RECEIVED_SOLUTION_LIST = 'received_solution_list';
 export const SUBMIT_SOLUTION = 'submit_solution';
 export const SUBMIT_SOLUTION_SUCCESS = 'submit_solution_success';
 export const SUBMIT_SOLUTION_FAIL = 'submit_solution_fail';
+export const ADD_SOLUTION_UPVOTE = 'add_solution_upvote';
+export const REMOVE_SOLUTION_UPVOTE = 'remove_solution_upvote';
+export const SAVE_SOLUTION_CHANGES = 'save_solution_changes';
