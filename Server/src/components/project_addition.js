@@ -1,73 +1,98 @@
 import React from 'react';
 
-export default class Project_Addition extends React.Component {
+export default class ProjectAddition extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      edit_mode: false,
-      project_addition: props.project_addition,
-    }
+      editMode: false,
+      projectAddition: props.projectAddition,
+    };
+
+    this.titleChanged = this.titleChanged.bind(this);
+    this.descriptionChanged = this.descriptionChanged.bind(this);
+    this.switchEditMode = this.switchEditMode.bind(this);
+    this.deleteProjectAddition = this.deleteProjectAddition.bind(this);
   }
 
-  switchEditMode(event) {
-    if (this.state.edit_mode) {
-      this.props.saveProjectAdditionChanges(this.state.project_addition, 'text_edit');
+  switchEditMode() {
+    if (this.state.editMode) {
+      this.props.saveProjectAdditionChanges(this.state.projectAddition, 'text_edit');
     }
-    this.setState({edit_mode: !this.state.edit_mode});
+    this.setState({ editMode: !this.state.editMode });
   }
 
   titleChanged(event) {
-    let project_addition = this.state.project_addition;
-    project_addition.title = event.target.value;
-    this.setState({project_addition});
+    const projectAddition = this.state.projectAddition;
+    projectAddition.title = event.target.value;
+    this.setState({ projectAddition });
   }
 
   descriptionChanged(event) {
-    let project_addition = this.state.project_addition;
-    project_addition.description = event.target.value;
-    this.setState({project_addition});
+    const projectAddition = this.state.projectAddition;
+    projectAddition.description = event.target.value;
+    this.setState({ projectAddition });
   }
 
-  deleteProjectAddition(event) {
-    this.props.deleteProjectAddition(this.state.project_addition.id, 'delete project addition');
+  deleteProjectAddition() {
+    this.props.deleteProjectAddition(this.state.projectAddition.id, 'delete project addition');
   }
 
   render() {
-
     let title = (
-      <a role="button" data-toggle="collapse" href={"#project_addition" + this.state.project_addition.id}>
-        Proposed Solution: {this.state.project_addition.title}
+      <a role="button" data-toggle="collapse" href={'#projectAddition' + this.state.projectAddition.id}>
+        Proposed Solution: {this.state.projectAddition.title}
       </a>);
-    let description = <span style={{width: "100%", whiteSpace: 'pre-wrap'}}>{this.state.project_addition.description}</span>;
+    let description = <span style={{ width: '100%', whiteSpace: 'pre-wrap' }}>{this.state.projectAddition.description}</span>;
 
-    if (this.state.edit_mode) {
-      title = <input onChange={this.titleChanged.bind(this)} type="text" style={{width: "75%"}} value={this.state.project_addition.title} />;
-      description = <textarea onChange={this.descriptionChanged.bind(this)} style={{width: "100%"}} value={this.state.project_addition.description} />
+    if (this.state.editMode) {
+      title = <input onChange={this.titleChanged} type="text" style={{ width: '75%' }} value={this.state.projectAddition.title} />;
+      description = <textarea onChange={this.descriptionChanged} style={{ width: '100%' }} value={this.state.projectAddition.description} />;
     }
 
-    let edit_button = (<button type="button" className="btn btn-primary pull-right" onClick={this.switchEditMode.bind(this)}>Edit</button>);
-    let save_button = (<button type="button" className="btn btn-success pull-left" onClick={this.switchEditMode.bind(this)}>Save</button>);
-    let delete_button = (<button type="button" className="btn btn-danger pull-right" onClick={this.deleteProjectAddition.bind(this)}>Delete</button>);
+    const editButton = (
+      <button
+        type="button"
+        className="btn btn-primary pull-right"
+        onClick={this.switchEditMode}
+      >
+        Edit
+      </button>);
+    const saveButton = (
+      <button
+        type="button"
+        className="btn btn-success pull-left"
+        onClick={this.switchEditMode}
+      >
+        Save
+      </button>);
+    const deleteButton = (
+      <button
+        type="button"
+        className="btn btn-danger pull-right"
+        onClick={this.deleteProjectAddition}
+      >
+        Delete
+      </button>);
 
     return (
       <div className="panel panel-default">
-        <div className="panel-heading clearfix" style={{backgroundImage: 'linear-gradient(to bottom,#dff0d8 0,#dff0d8 100%)', borderColor: '#d6e9c6'}} role="tab">
-          <h4 className="panel-title" style={{color: '#3c763d'}}>
+        <div className="panel-heading clearfix" style={{ backgroundImage: 'linear-gradient(to bottom,#dff0d8 0,#dff0d8 100%)', borderColor: '#d6e9c6' }} role="tab">
+          <h4 className="panel-title" style={{ color: '#3c763d' }}>
             {title}
-            <a role="button" data-toggle="collapse" href={"#project_addition" + this.state.project_addition.id} className="glyphicon glyphicon-menu-down pull-right"></a>
+            <a role="button" data-toggle="collapse" href={'#projectAddition' + this.state.projectAddition.id} className="glyphicon glyphicon-menu-down pull-right"></a>
           </h4>
         </div>
-        <div id={"project_addition" + this.state.project_addition.id} className="panel-collapse collapse" role="tabpanel">
+        <div id={'projectAddition' + this.state.projectAddition.id} className='panel-collapse collapse' role='tabpanel'>
           <div className="panel-body clearfix">
             <div>
               {description}
             </div>
-            {this.state.edit_mode ? delete_button : null}
-            {this.state.edit_mode ? save_button : edit_button}
+            {this.state.editMode ? deleteButton : null}
+            {this.state.editMode ? saveButton : editButton}
           </div>
         </div>
-      </div>             
+      </div>
     );
   }
 }

@@ -8,8 +8,8 @@ import styles from '../styles/scenes/project_details_styles';
 import Solution from '../components/solution';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
-  addUpvote,
-  removeUpvote,
+  addProjectUpvote,
+  removeProjectUpvote,
   addSolutionUpvote,
   removeSolutionUpvote,
   solutionChanged,
@@ -21,11 +21,15 @@ class ProjectDetails extends Component {
     const { user } = this.props;
     const { project } = this.props.navigation.state.params;
     // If user hasn't upvoted this project, add an upvote
-    if (!user.upvotes.includes(project.id)) {
-      this.props.addUpvote(project);
+    if (!user.projectUpvotes.includes(project.id)) {
+      this.props.addProjectUpvote(project);
     } else {
-      this.props.removeUpvote(project);
+      this.props.removeProjectUpvote(project);
     }
+  }
+
+  compareNumbers(a, b) {
+    return b.votes - a.votes;
   }
 
   projectDescription() {
@@ -72,7 +76,7 @@ class ProjectDetails extends Component {
       );
     }
 
-    const formattedSolutions = projectSolutions.map((solution, index) => (
+    const formattedSolutions = projectSolutions.sort(this.compareNumbers).map((solution, index) => (
       <Solution solution={solution} key={index} />
     ));
 
@@ -92,7 +96,7 @@ class ProjectDetails extends Component {
     let buttonStyles = { width: 80, height: 27, marginRight: 2 };
     let textStyles = {};
     // If user hasn't upvoted this project
-    if (user.upvotes.includes(project.id)) {
+    if (user.projectUpvotes.includes(project.id)) {
       buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
       textStyles = { ...textStyles, color: '#fff' };
     }
@@ -169,10 +173,10 @@ ProjectDetails.propTypes = {
   user: React.PropTypes.object,
   solutions: React.PropTypes.object,
   main: React.PropTypes.object,
-  addUpvote: React.PropTypes.func,
-  removeUpvote: React.PropTypes.func,
-  addSolutionUpvote: React.PropTypes.func,
-  removeSolutionUpvote: React.PropTypes.func,
+  addProjectUpvote: React.PropTypes.func,
+  removeProjectUpvote: React.PropTypes.func,
+  addSolutionProjectUpvote: React.PropTypes.func,
+  removeSolutionProjectUpvote: React.PropTypes.func,
   solutionChanged: React.PropTypes.func,
   submitSolutionToServer: React.PropTypes.func,
 };
@@ -183,8 +187,8 @@ function mapStateToProps(state) {
 }
 
 const AppScreen = connect(mapStateToProps, {
-  addUpvote,
-  removeUpvote,
+  addProjectUpvote,
+  removeProjectUpvote,
   addSolutionUpvote,
   removeSolutionUpvote,
   solutionChanged,

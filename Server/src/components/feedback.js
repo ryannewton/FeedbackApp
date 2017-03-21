@@ -1,8 +1,8 @@
 import React from 'react';
 import Moment from 'moment';
-import Feedback_Row from './feedback_row.js';
+import { DateRangePicker } from 'react-dates';
 
-import {DateRangePicker} from 'react-dates';
+import FeedbackRow from './feedback_row';
 
 export default class Feedback extends React.Component {
   constructor(props) {
@@ -26,7 +26,7 @@ export default class Feedback extends React.Component {
     const { focusedInput } = this.state;
     const { start_date, end_date } = this.props.main;
     const Rows = this.props.feedback.map((feedback, index) => {
-    	return <Feedback_Row key={index} feedback={feedback} addProject={this.props.addProject} receivedIDForAddProject={this.props.receivedIDForAddProject} department={"Other"} />
+      return <FeedbackRow key={index} feedback={feedback} addProject={this.props.addProject} receivedIDForAddProject={this.props.receivedIDForAddProject} department={'Other'} />;
     });
     return (
       <div>
@@ -40,16 +40,16 @@ export default class Feedback extends React.Component {
           isOutsideRange={() => false}
         />
         <table>
-        	<thead>
-					  <tr>
-					    <th>Feedback</th>
-					    <th>Project_ID</th>
+          <thead>
+            <tr>
+              <th>Feedback</th>
+              <th>Project_ID</th>
               <th>Add Project Button</th>
-					  </tr>
-				  </thead>
-				  <tbody>
-				  	{Rows}
-			  	</tbody>
+            </tr>
+          </thead>
+          <tbody>
+            {Rows}
+          </tbody>
         </table>
       </div>
     );

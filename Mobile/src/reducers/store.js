@@ -25,9 +25,15 @@ async function load_token() {
 
 async function load_upvotes() {
   try {
-    let upvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}upvotes`) || [];
-    upvotes = JSON.parse(upvotes);
-    store.dispatch(actions.loadUpvotes(upvotes));
+    // Project Upvotes
+    let projectUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}upvotes`) || [];
+    projectUpvotes = JSON.parse(projectUpvotes);
+    store.dispatch(actions.loadProjectUpvotes(projectUpvotes));
+
+    // Solution Upvotes
+    let solutionUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}solutionUpvotes`) || [];
+    solutionUpvotes = JSON.parse(solutionUpvotes);
+    store.dispatch(actions.loadSolutionUpvotes(solutionUpvotes));
   } catch (error) {
     console.log(error);
   }

@@ -47,7 +47,7 @@ class Solution extends Component {
       <CardSection>
         <View style={{ justifyContent: 'flex-start', flex: 1 }}>
           {/* Solution description */}
-          <Text style={solutionText}>{solution.description}</Text>
+          <Text style={solutionText}>{solution.title}</Text>
 
           {/* Upvote count and button */}
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
