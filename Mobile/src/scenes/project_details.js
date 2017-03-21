@@ -1,220 +1,198 @@
-'use strict';
-
-//Import Libraries
+// Import Libraries
 import React, { Component } from 'react';
 import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 
-//Import componenets, functions, and styles
-import styles from '../styles/scenes/project_details_styles.js';
+// Import componenets, functions, and styles
+import styles from '../styles/scenes/project_details_styles';
+import Solution from '../components/solution';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
-	addUpvote,
-	removeUpvote,
-	addSolutionUpvote,
-	removeSolutionUpvote,
-	solutionChanged,
-	submitSolutionToServer
+  addUpvote,
+  removeUpvote,
+  addSolutionUpvote,
+  removeSolutionUpvote,
+  solutionChanged,
+  submitSolutionToServer,
 } from '../actions';
 
 class ProjectDetails extends Component {
-	upvoteProject() {
-		const { user } = this.props;
-		const { project } = this.props.navigation.state.params;
-		// If user hasn't upvoted this project, add an upvote
-		if (!user.upvotes.includes(project.id)) {
-			this.props.addUpvote(project);
-		} else {
-			this.props.removeUpvote(project);
-		}
-	}
+  upvoteProject() {
+    const { user } = this.props;
+    const { project } = this.props.navigation.state.params;
+    // If user hasn't upvoted this project, add an upvote
+    if (!user.upvotes.includes(project.id)) {
+      this.props.addUpvote(project);
+    } else {
+      this.props.removeUpvote(project);
+    }
+  }
 
-	upvoteSolution(solution) {
-		const { user } = this.props;
-		// If user hasn't upvoted this project, add an upvote
-		if (!user.solutionUpvotes.includes(solution.id)) {
-			this.props.addSolutionUpvote(solution);
-		} else {
-			this.props.removeSolutionUpvote(solution);
-		}
-	}
+  projectDescription() {
+    const { buttonText, lowWeight } = styles;
+    const { project } = this.props.navigation.state.params;
 
-	projectDescription() {
-		const { buttonText, lowWeight } = styles;
-		const { project } = this.props.navigation.state.params;
+    return (
+      <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+        {/* Project title */}
+        <Text style={buttonText}>
+          {project.title}
+        </Text>
 
-		return (
-			<View style={{ flex: 1, justifyContent: 'flex-start' }}>
-				{/* Project title */}
-				<Text style={buttonText}>
-					{project.title}
-				</Text>
+        {/* Vote section */}
+        <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
+          {/* Vote count */}
+          <View style={{ flex: 3 }}>
+            <Text style={[buttonText, lowWeight]}>
+              {`${project.votes} Votes`}
+            </Text>
+          </View>
 
-				{/* Vote section */}
-				<View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
-					{/* Vote count */}
-					<View style={{ flex: 3 }}>
-						<Text style={[buttonText, lowWeight]}>
-							{`${project.votes} Votes`}
-						</Text>
-					</View>
+          {/* Upvote button */}
+          <View style={{ flex: 1 }}>
+            {this.renderUpvoteButton()}
+          </View>
+        </View>
+      </View>
+    );
+  }
 
-					{/* Upvote button */}
-					<View style={{ flex: 1 }}>
-						{this.renderUpvoteButton()}
-					</View>
-				</View>
-			</View>
-		);
-	}
+  solutionsList() {
+    const { solutionText, subheaderText } = styles;
+    const { solutions } = this.props;
+    const { project } = this.props.navigation.state.params;
+    const projectSolutions = solutions.list.filter(solution => solution.project_id === project.id);
 
-	solutionsList() {
-		const { solutionText, subheaderText } = styles;
-		const { solutions } = this.props;
-		const { project } = this.props.navigation.state.params;
-		const projectSolutions = solutions.list.filter((solution) => solution.project_id === project.id);
+    // If no solutions have been submitted
+    if (projectSolutions.length === 0) {
+      return (
+        <CardSection>
+          <Text style={solutionText}>No solutions submitted yet. Be the first!</Text>
+        </CardSection>
+      );
+    }
 
-		// If no solutions have been submitted
-		if (projectSolutions.length === 0) {
-			return (
-				<CardSection>
-					<Text style={solutionText}>No solutions submitted yet. Be the first!</Text>
-				</CardSection>
-			);
-		}
+    const formattedSolutions = projectSolutions.map((solution, index) => (
+      <Solution solution={solution} key={index} />
+    ));
 
-		const formattedSolutions = projectSolutions.map((solution, index) => (
-			<CardSection key={index} >
-				<Text style={solutionText}>{solution.description}</Text>
-				{/* Note: Adding solution upvote count to DB. Enable upvote button when this is done. */}
-				{/*this.renderSolutionUpvoteButton(solution)*/}
-			</CardSection>
-		));
+    return (
+      <View>
+        <CardSection>
+          <Text style={subheaderText}>Suggested solutions</Text>
+        </CardSection>
+        {formattedSolutions}
+      </View>
+    );
+  }
 
-		return (
-			<View>
-				<CardSection>
-					<Text style={subheaderText}>Suggested solutions</Text>
-				</CardSection>
-				{formattedSolutions}
-			</View>
-		);
-	}
+  renderUpvoteButton() {
+    const { user } = this.props;
+    const { project } = this.props.navigation.state.params;
+    let buttonStyles = { width: 80, height: 27, marginRight: 2 };
+    let textStyles = {};
+    // If user hasn't upvoted this project
+    if (user.upvotes.includes(project.id)) {
+      buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
+      textStyles = { ...textStyles, color: '#fff' };
+    }
+    return (
+      <Button
+        onPress={this.upvoteProject.bind(this)}
+        style={buttonStyles}
+        textStyle={textStyles}
+      >
+        Upvote!
+      </Button>
+    );
+  }
 
-	renderUpvoteButton() {
-		const { user } = this.props;
-		const { project } = this.props.navigation.state.params;
-		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
-		let textStyles = {};
-		// If user hasn't upvoted this project
-		if (user.upvotes.includes(project.id)) {
-			buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
-			textStyles = { ...textStyles, color: '#fff' };
-		}
-		return (
-			<Button
-				onPress={this.upvoteProject.bind(this)}
-				style={buttonStyles}
-				textStyle={textStyles}
-			>
-				Upvote!
-			</Button>
-		);
-	}
+  renderSubmitButton() {
+    // If waiting for response from server, show a spinner
+    if (this.props.solutions.loading) {
+      return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
+    }
 
-	renderSolutionUpvoteButton(solution) {
-		const { user } = this.props;
-		let buttonStyles = { width: 80, height: 27, marginRight: 2 };
-		let textStyles = {};
-		// If user hasn't upvoted this project
-		if (user.solutionUpvotes.includes(solution.id)) {
-			buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
-			textStyles = { ...textStyles, color: '#fff' };
-		}
-		return (
-			<Button
-				onPress={() => this.upvoteSolution(solution)}
-				style={buttonStyles}
-				textStyle={textStyles}
-			>
-				Upvote!
-			</Button>
-		);
-	}
+    const { solution } = this.props.main;
+    const { project } = this.props.navigation.state.params;
 
-	renderSubmitButton() {
-		// If waiting for response from server, show a spinner
-		if (this.props.solutions.loading) {
-			return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
-		}
+    return (
+      <Button onPress={() => this.props.submitSolutionToServer(solution, project.id)}>
+        Submit Suggestion
+      </Button>
+    );
+  }
 
-		const { solution } = this.props.main;
-		const { project } = this.props.navigation.state.params;
+  render() {
+    const { container, inputText } = styles;
+    return (
+      <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+        <View style={container}>
 
-		return (
-			<Button	onPress={() => this.props.submitSolutionToServer(solution, project.id)}>
-				Submit Suggestion
-			</Button>
-		);
-	}
+          {/* Project description */}
+          <Card>
+            <CardSection>
+              {this.projectDescription()}
+            </CardSection>
+          </Card>
 
-	render() {
-		const { container, inputText } = styles;
-		return (
-			<TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-				<View style={container}>
+          {/* List of submitted solutions */}
+          <Card>
+            {this.solutionsList()}
+          </Card>
 
-					{/* Project description */}
-					<Card>
-						<CardSection>
-							{this.projectDescription()}
-						</CardSection>
-					</Card>
+          {/* Input to submit a new solution */}
+          <TextInput
+            multiline={Boolean(true)}
+            style={inputText}
+            placeholder="Submit a suggestion"
+            onChangeText={solution => this.props.solutionChanged(solution)}
+            value={this.props.main.solution}
+          />
 
-					{/* List of submitted solutions */}
-					<Card>
-						{this.solutionsList()}
-					</Card>
+          {/* Success/fail message for submitted solution */}
+          <View>
+            <Text>{this.props.solutions.message}</Text>
+          </View>
 
-					{/* Input to submit a new solution */}
-					<TextInput
-						multiline={Boolean(true)}
-						style={inputText}
-						placeholder='Submit a suggestion'
-						onChangeText={(solution) => this.props.solutionChanged(solution)}
-						value={this.props.main.solution}
-					/>
+          {/* Submit button */}
+          {this.renderSubmitButton()}
 
-					{/* Success/fail message for submitted solution */}
-					<View>
-						<Text>{this.props.solutions.message}</Text>
-					</View>
-
-					{/* Submit button */}
-					{this.renderSubmitButton()}
-
-				</View>
-			</TouchableWithoutFeedback>
-		);
-	}
+        </View>
+      </TouchableWithoutFeedback>
+    );
+  }
 }
 
+ProjectDetails.propTypes = {
+  navigation: React.PropTypes.object,
+  user: React.PropTypes.object,
+  solutions: React.PropTypes.object,
+  main: React.PropTypes.object,
+  addUpvote: React.PropTypes.func,
+  removeUpvote: React.PropTypes.func,
+  addSolutionUpvote: React.PropTypes.func,
+  removeSolutionUpvote: React.PropTypes.func,
+  solutionChanged: React.PropTypes.func,
+  submitSolutionToServer: React.PropTypes.func,
+};
+
 function mapStateToProps(state) {
-	const { user, solutions, main } = state;
-	return { user, solutions, main };
+  const { user, solutions, main } = state;
+  return { user, solutions, main };
 }
 
 const AppScreen = connect(mapStateToProps, {
-	addUpvote,
-	removeUpvote,
-	addSolutionUpvote,
-	removeSolutionUpvote,
-	solutionChanged,
-	submitSolutionToServer
+  addUpvote,
+  removeUpvote,
+  addSolutionUpvote,
+  removeSolutionUpvote,
+  solutionChanged,
+  submitSolutionToServer,
 })(ProjectDetails);
 
 AppScreen.navigationOptions = {
-	title: 'Project Details'
+  title: 'Project Details',
 };
 
 export default AppScreen;

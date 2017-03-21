@@ -1,5 +1,3 @@
-'use strict';
-
 // FeedbackActions types
 export const FEEDBACK_CHANGED = 'feedback_changed';
 export const UPDATE_NAV_STATE = 'update_nav_state';

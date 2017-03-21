@@ -1,20 +1,16 @@
 import React, { Component } from 'react';
-import Index from './src/containers/index.js';
-
 import {
-	AppRegistry,
+  AppRegistry,
 } from 'react-native';
 
-export default class FeedbackApp extends Component {
-	constructor(props) {
-		super(props);
-	}
+import Index from './src/containers/index';
 
-	render() {
-		return (
-			<Index />
-		);
-	}
+export default class FeedbackApp extends Component {
+  render() {
+    return (
+      <Index />
+    );
+  }
 }
 
 AppRegistry.registerComponent('FeedbackApp', () => FeedbackApp);

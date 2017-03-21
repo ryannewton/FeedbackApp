@@ -1,62 +1,66 @@
-'use strict';
-
-//Import libraries
+// Import libraries
 import React, { Component } from 'react';
 import { View, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
-//Import actions
+// Import actions
 import { saveProjectChanges } from '../actions';
 
-//Import components, functions, and styles
+// Import components, functions, and styles
 import RequireAuth from '../components/require_auth';
-import Project from '../components/project.js';
-import styles from '../styles/styles_main.js';
+import Project from '../components/project';
+import styles from '../styles/styles_main';
 
 class Projects extends Component {
-	compareNumbers(a, b) {
-		return b.votes - a.votes;
-	}
+  compareNumbers(a, b) {
+    return b.votes - a.votes;
+  }
 
-	renderProjects() {
-		const projects = this.props.projects.sort(this.compareNumbers).map((project, index) => {
-			return (
-				<Project
-					project={project}
-					key={index}
-					navigate={this.props.navigation.navigate}
-					saveProjectChanges={this.props.saveProjectChanges}
-				/>
-			);
-		});
-		
-		return projects;
-	}
+  renderProjects() {
+    const projects = this.props.projects.sort(this.compareNumbers).map((project, index) => {
+      return (
+        <Project
+          project={project}
+          key={index}
+          navigate={this.props.navigation.navigate}
+          saveProjectChanges={this.props.saveProjectChanges}
+        />
+      );
+    });
 
-	render() {
-		return (
-			<View style={styles.container}>
+    return projects;
+  }
 
-				{/* List of projects */}
-				<ScrollView>
-					{this.renderProjects()}
-				</ScrollView>
-			</View>
-		);
-	}
+  render() {
+    return (
+      <View style={styles.container}>
+
+        {/* List of projects */}
+        <ScrollView>
+          {this.renderProjects()}
+        </ScrollView>
+      </View>
+    );
+  }
 }
 
+Projects.propTypes = {
+  navigation: React.PropTypes.object,
+  projects: React.PropTypes.array,
+  saveProjectChanges: React.PropTypes.func,
+};
+
 function mapStateToProps(state) {
-	const { projects } = state;
-	return { projects };
+  const { projects } = state;
+  return { projects };
 }
 
 const AppScreen = connect(mapStateToProps, {
-	saveProjectChanges
+  saveProjectChanges,
 })(RequireAuth(Projects));
 
 AppScreen.navigationOptions = {
-	title: 'Projects'
+  title: 'Projects',
 };
 
 export default AppScreen;
