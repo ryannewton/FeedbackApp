@@ -13,7 +13,7 @@ export default function (ComposedComponent) {
 			if (this.props.loggedIn) {
 				return <ComposedComponent {...this.props} />;
 			} else {
-				return <Authorize {...this.props} />
+				return <Authorize />
 			}
 		}
 	}
