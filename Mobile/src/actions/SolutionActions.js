@@ -25,12 +25,12 @@ export const solutionChanged = (solution) => (
 	}
 );
 
-export const submitSolutionToServer = (solution, projectId) => (
+export const submitSolutionToServer = (solution, project_id) => (
 	function (dispatch, getState) {
 		const token = getState().auth.token;
 
 		dispatch({ type: SUBMIT_SOLUTION });
-		return http.post('/addSolution', { description: solution, projectId, authorization: token })
+		return http.post('/addSolution', { description: solution, project_id, authorization: token })
 			.then(() => {
 				// To do: Add solution id to solution state
 				dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
@@ -47,6 +47,7 @@ export const pullSolutions = (token) => (
 		return http.post('/pullProjectAdditions', { authorization: token })
 		.then(response => {
 			dispatch(receivedSolutionList(response.data));
+			console.log('solutions: ', response.data);
 		})
 		.catch(error => {
 			console.error('pullSolutions() ERROR: ', error);

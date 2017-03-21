@@ -116,7 +116,7 @@ export const saveProjectChanges = (project, changeType) => (
 
 		// Subscribe the user to the project
 		const { token } = getState().auth;
-		http.post('/addSubscriber', { authorization: token, project_id: project.id, type: changeType });
+		http.post('/addSubscriber', { authorization: token, projectId: project.id, type: changeType });
 	}
 );
 
