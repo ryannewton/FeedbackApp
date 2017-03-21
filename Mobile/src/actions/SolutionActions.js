@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 // Import action types
 import {
+  LOAD_SOLUTION_UPVOTES,
   RECEIVED_SOLUTION_LIST,
   SOLUTION_CHANGED,
   SUBMIT_SOLUTION,
@@ -23,12 +24,12 @@ export const solutionChanged = solution => (
   }
 );
 
-export const submitSolutionToServer = (solution, projectId) => (
+export const submitSolutionToServer = (solution, project_id) => (
   function (dispatch, getState) {
     const token = getState().auth.token;
 
     dispatch({ type: SUBMIT_SOLUTION });
-    return http.post('/addSolution', { description: solution, projectId, authorization: token })
+    return http.post('/addSolution', { title: solution, project_id, authorization: token })
       .then(() => {
         // To do: Add solution id to solution state
         dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
@@ -59,16 +60,23 @@ export const receivedSolutionList = solutions => ({
 
 export const addSolutionUpvote = solution => (
   (dispatch, getState) => {
-    dispatch({ type: ADD_SOLUTION_UPVOTE, payload: solution.id });
+    dispatch({ type: ADD_SOLUTION_UPVOTE, payload: solution });
     const { solutionUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
     dispatch(saveSolutionChanges(solution, 'addUpvote'));
   }
 );
 
+export const loadSolutionUpvotes = solutionUpvotes => (
+  {
+    type: LOAD_SOLUTION_UPVOTES,
+    payload: solutionUpvotes,
+  }
+);
+
 export const removeSolutionUpvote = solution => (
   (dispatch, getState) => {
-    dispatch({ type: REMOVE_SOLUTION_UPVOTE, payload: solution.id });
+    dispatch({ type: REMOVE_SOLUTION_UPVOTE, payload: solution });
     const { solutionUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
     dispatch(saveSolutionChanges(solution, 'removeUpvote'));
@@ -80,12 +88,12 @@ export const saveSolutionChanges = (solution, changeType) => (
     dispatch({ type: SAVE_SOLUTION_CHANGES, payload: solution });
 
     // Save the solution change to the server
-    http.post('/saveProjectAdditionChanges', { solution }, {
+    http.post('/saveProjectAdditionChanges', { project_addition: solution, authorization: getState().auth.token }, {
       headers: { authorization: getState().auth.token },
     });
 
     // Subscribe the user to the project
-    const { token } = getState().auth;
-    http.post('/addSubscriber', { authorization: token, solutionId: solution.id, type: changeType });
+    //const { token } = getState().auth;
+    //http.post('/addSubscriber', { authorization: token, id: solution.id, type: changeType });
   }
 );

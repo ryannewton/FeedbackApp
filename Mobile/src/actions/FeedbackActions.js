@@ -5,9 +5,9 @@ import { AsyncStorage } from 'react-native';
 import {
   FEEDBACK_CHANGED,
   UPDATE_NAV_STATE,
-  ADD_UPVOTE,
-  REMOVE_UPVOTE,
-  LOAD_USER_UPVOTES,
+  ADD_PROJECT_UPVOTE,
+  REMOVE_PROJECT_UPVOTE,
+  LOAD_PROJECT_UPVOTES,
   SAVE_PROJECT_CHANGES,
   DELETE_PROJECT,
   REQUESTED_PROJECTS,
@@ -31,8 +31,13 @@ export const feedbackChanged = feedback => (
   }
 );
 
+export const navigate = route => ({
+  type: UPDATE_NAV_STATE,
+  payload: route,
+});
+
 export const submitFeedbackToServer = route => (
-  function (dispatch, getState) {
+  (dispatch, getState) => {
     dispatch({ type: SUBMIT_FEEDBACK });
 
     const { feedback } = getState().main;
@@ -50,17 +55,24 @@ export const submitFeedbackToServer = route => (
   }
 );
 
-export const navigate = route => ({
-  type: UPDATE_NAV_STATE,
-  payload: route,
-});
 
-export const addUpvote = project => (
+export const addProjectUpvote = project => (
   (dispatch, getState) => {
-    dispatch({ type: ADD_UPVOTE, payload: project });
-    const { upvotes } = getState().user;
-    AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
-    dispatch(saveProjectChanges(project, 'addUpvote'));
+    dispatch({ type: ADD_PROJECT_UPVOTE, payload: project });
+    const { projectUpvotes } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}projectUpvotes`, JSON.stringify(projectUpvotes));
+    AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(projectUpvotes));
+    dispatch(saveProjectChanges(project, 'add project upvote'));
+  }
+);
+
+export const removeProjectUpvote = project => (
+  (dispatch, getState) => {
+    dispatch({ type: REMOVE_PROJECT_UPVOTE, payload: project });
+    const { projectUpvotes } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}projectUpvotes`, JSON.stringify(projectUpvotes));
+    AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(projectUpvotes));
+    dispatch(saveProjectChanges(project, 'remove project upvote'));
   }
 );
 
@@ -72,19 +84,10 @@ export const addToDoNotDisplayList = projectID => (
   }
 );
 
-export const removeUpvote = project => (
-  (dispatch, getState) => {
-    dispatch({ type: REMOVE_UPVOTE, payload: project });
-    const { upvotes } = getState().user;
-    AsyncStorage.setItem(`${ROOT_STORAGE}upvotes`, JSON.stringify(upvotes));
-    dispatch(saveProjectChanges(project, 'removeUpvote'));
-  }
-);
-
-export const loadUpvotes = upvotes => (
+export const loadProjectUpvotes = projectUpvotes => (
   {
-    type: LOAD_USER_UPVOTES,
-    payload: upvotes,
+    type: LOAD_PROJECT_UPVOTES,
+    payload: projectUpvotes,
   }
 );
 
@@ -99,19 +102,21 @@ export const saveProjectChanges = (project, changeType) => (
   (dispatch, getState) => {
     dispatch({ type: SAVE_PROJECT_CHANGES, payload: project });
 
+    const { token } = getState().auth;
+
     // Save the project change to the server
     fetch(`${ROOT_URL}/saveProjectChanges`, {
       method: 'POST',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        authorization: getState().auth.token,
+        authorization: token,
       },
-      body: JSON.stringify({ project }),
+      body: JSON.stringify({ project, authorization: token }),
     });
 
     // Subscribe the user to the project
-    const { token } = getState().auth;
+    
     http.post('/addSubscriber', { authorization: token, projectId: project.id, type: changeType });
   }
 );

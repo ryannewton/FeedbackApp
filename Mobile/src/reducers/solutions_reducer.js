@@ -34,15 +34,15 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_SOLUTION_UPVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
-      // Note: votes is not currently implemented as a solutions property; updating database
-      // newList[index].votes += 1;
+      console.log("index", index);
+      console.log('newList', newList);
+      newList[index].votes += 1;
       return { ...state, list: newList };
     }
     case REMOVE_SOLUTION_UPVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
-      // Note: votes is not currently implemented as a solutions property; updating database
-      // newList[index].votes -= 1;
+      newList[index].votes -= 1;
       return { ...state, list: newList };
     }
     default:

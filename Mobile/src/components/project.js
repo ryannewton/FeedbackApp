@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 // Import componenets, functions, and styles
 import styles from '../styles/styles_main';
 import { Button, Card } from './common';
-import { addUpvote, removeUpvote } from '../actions';
+import { addProjectUpvote, removeProjectUpvote } from '../actions';
 
 class Project extends Component {
   goToDetails() {
@@ -16,10 +16,10 @@ class Project extends Component {
   upvote() {
     const { project, user } = this.props;
     // If user hasn't upvoted this project, add an upvote
-    if (!user.upvotes.includes(project.id)) {
-      this.props.addUpvote(project);
+    if (!user.projectUpvotes.includes(project.id)) {
+      this.props.addProjectUpvote(project);
     } else {
-      this.props.removeUpvote(project);
+      this.props.removeProjectUpvote(project);
     }
   }
 
@@ -44,7 +44,7 @@ class Project extends Component {
     let buttonStyles = { width: 80, height: 27, marginRight: 2 };
     let textStyles = {};
     // If user hasn't upvoted this project
-    if (user.upvotes.includes(project.id)) {
+    if (user.projectUpvotes.includes(project.id)) {
       buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
       textStyles = { ...textStyles, color: '#fff' };
     }
@@ -102,8 +102,8 @@ Project.propTypes = {
   project: React.PropTypes.object,
   navigate: React.PropTypes.func,
   user: React.PropTypes.object,
-  addUpvote: React.PropTypes.func,
-  removeUpvote: React.PropTypes.func,
+  addProjectUpvote: React.PropTypes.func,
+  removeProjectUpvote: React.PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -111,4 +111,4 @@ const mapStateToProps = (state) => {
   return { user };
 };
 
-export default connect(mapStateToProps, { addUpvote, removeUpvote })(Project);
+export default connect(mapStateToProps, { addProjectUpvote, removeProjectUpvote })(Project);

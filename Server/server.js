@@ -174,8 +174,6 @@ app.post('/addProject', upload.array(), function(req, res) {
 
 app.post('/addSolution', upload.array(), function(req, res) {
 
-	console.log('solution', req.body);
-
 	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
 
 		if (err) {
@@ -215,8 +213,6 @@ app.post('/saveProjectChanges', upload.array(), function(req, res) {
 			res.status(400).send('authorization failed');
 		} else {
 
-			console.log('authorization', req.body.authorization);
-
 			connection.query("UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], function(err) {
 				if (err) throw err;
 			});
@@ -229,12 +225,11 @@ app.post('/saveProjectChanges', upload.array(), function(req, res) {
 app.post('/saveProjectAdditionChanges', upload.array(), function(req, res) {
 
 	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
 		if (err) {
 			res.status(400).send('authorization failed');
 		} else {
 
-			connection.query("UPDATE project_additions SET votes = ?, votes_against = ?, title = ?, description = ? WHERE id= ?", [req.body.project_addition.votes, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
+			connection.query("UPDATE project_additions SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project_addition.votes, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
 				if (err) throw err;
 			});
 
@@ -281,8 +276,6 @@ app.post('/deleteProjectAddition', upload.array(), function(req, res) {
 
 //Pull Feedback, Projects, Project Additions, Discussion Posts
 app.post('/pullFeedback', upload.array(), function(req, res) {
-
-	console.log("feedback", req.body);
 
 	jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
 
@@ -366,7 +359,6 @@ app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
 					id, point, counter_point, project_addition_id
 				FROM
 					discussion_posts`;
-			console.log(connection_string);
 
 			connection.query(connection_string, function(err, rows, fields) {
 				if (err) throw err;

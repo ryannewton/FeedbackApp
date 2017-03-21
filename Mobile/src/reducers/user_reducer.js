@@ -1,8 +1,9 @@
 // Import action types
 import {
-  ADD_UPVOTE,
-  REMOVE_UPVOTE,
-  LOAD_USER_UPVOTES,
+  ADD_PROJECT_UPVOTE,
+  REMOVE_PROJECT_UPVOTE,
+  LOAD_PROJECT_UPVOTES,
+  LOAD_SOLUTION_UPVOTES,
   ADD_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_UPVOTE,
   ADD_TO_DO_NOT_DISPLAY_LIST,
@@ -10,23 +11,25 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  upvotes: [],
+  projectUpvotes: [],
   doNotDisplayList: [],
   solutionUpvotes: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ADD_UPVOTE:
-      return { ...state, upvotes: [...state.upvotes, action.payload.id] };
-    case REMOVE_UPVOTE:
-      return { ...state, upvotes: removeItem(state.upvotes, action.payload.id) };
-    case LOAD_USER_UPVOTES:
-      return { ...state, upvotes: action.payload };
+    case ADD_PROJECT_UPVOTE:
+      return { ...state, projectUpvotes: [...state.projectUpvotes, action.payload.id] };
     case ADD_SOLUTION_UPVOTE:
-      return { ...state, solutionUpvotes: [...state.solutionUpvotes, action.payload] };
+      return { ...state, solutionUpvotes: [...state.solutionUpvotes, action.payload.id] };
+    case REMOVE_PROJECT_UPVOTE:
+      return { ...state, projectUpvotes: removeItem(state.projectUpvotes, action.payload.id) };
     case REMOVE_SOLUTION_UPVOTE:
-      return { ...state, solutionUpvotes: removeItem(state.solutionUpvotes, action.payload) };
+      return { ...state, solutionUpvotes: removeItem(state.solutionUpvotes, action.payload.id) };
+    case LOAD_PROJECT_UPVOTES:
+      return { ...state, projectUpvotes: action.payload };
+    case LOAD_SOLUTION_UPVOTES:
+      return { ...state, solutionUpvotes: action.payload };
     case ADD_TO_DO_NOT_DISPLAY_LIST:
       return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
     case LOAD_DO_NOT_DISPLAY_LIST:

@@ -1,9 +1,10 @@
 // FeedbackActions types
 export const FEEDBACK_CHANGED = 'feedback_changed';
 export const UPDATE_NAV_STATE = 'update_nav_state';
-export const ADD_UPVOTE = 'add_upvote';
-export const REMOVE_UPVOTE = 'remove_upvote';
-export const LOAD_USER_UPVOTES = 'load_user_upvotes';
+export const ADD_PROJECT_UPVOTE = 'add_project_upvote';
+export const REMOVE_PROJECT_UPVOTE = 'remove_project_upvote';
+export const LOAD_PROJECT_UPVOTES = 'load_project_upvotes';
+export const LOAD_SOLUTION_UPVOTES = 'load_solution_upvotes';
 export const SAVE_PROJECT_CHANGES = 'save_project_changes';
 export const ADD_PROJECT = 'add_project';
 export const DELETE_PROJECT = 'delete_project';
