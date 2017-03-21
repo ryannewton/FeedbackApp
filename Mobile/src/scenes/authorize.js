@@ -82,6 +82,13 @@ class Authorize extends Component {
   }
 }
 
+Authorize.propTypes = {
+  error: React.PropTypes.bool,
+  loading: React.PropTypes.bool,
+  email: React.PropTypes.string,
+  authorizeUser: React.PropTypes.func,
+};
+
 const mapStateToProps = (state) => {
   const { email, error, loading } = state.auth;
   return { email, error, loading };

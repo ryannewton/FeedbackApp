@@ -98,6 +98,14 @@ class Project extends Component {
   }
 }
 
+Project.propTypes = {
+  project: React.PropTypes.object,
+  navigate: React.PropTypes.func,
+  user: React.PropTypes.object,
+  addUpvote: React.PropTypes.func,
+  removeUpvote: React.PropTypes.func,
+};
+
 const mapStateToProps = (state) => {
   const { user } = state;
   return { user };

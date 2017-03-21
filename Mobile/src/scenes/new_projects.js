@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import RequireAuth from '../components/require_auth';
 
 // Import actions
-import * as actions from '../actions';
+import { addUpvote, addToDoNotDisplayList } from '../actions';
 
 class New_Projects extends Component {
   constructor(props) {
@@ -15,7 +15,7 @@ class New_Projects extends Component {
 
     this.state = {
       index: 0,
-      projects: this.props.projects.filter((project) =>
+      projects: this.props.projects.filter(project =>
         !this.props.user.doNotDisplayList
         .includes(project.id))
         .sort(this.sortByID)
@@ -94,12 +94,19 @@ class New_Projects extends Component {
   }
 }
 
+New_Projects.propTypes = {
+  projects: React.PropTypes.array,
+  user: React.PropTypes.object,
+  addToDoNotDisplayList: React.PropTypes.func,
+  addUpvote: React.PropTypes.func,
+};
+
 function mapStateToProps(state) {
-  return state;
+  const { user, projects } = state;
+  return { user, projects };
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actions, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(RequireAuth(New_Projects));
+export default connect(mapStateToProps, {
+  addUpvote,
+  addToDoNotDisplayList,
+})(RequireAuth(New_Projects));

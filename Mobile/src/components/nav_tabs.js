@@ -7,7 +7,7 @@ import NavTab from './nav_tab';
 import styles from '../styles/styles_main';
 
 class NavTabs extends Component {
-  _renderTab(route, index) {
+  renderTab(route, index) {
     return (
       <NavTab
         key={route.key}
@@ -21,10 +21,15 @@ class NavTabs extends Component {
   render() {
     return (
       <View style={styles.tabs}>
-        {this.props.navigationState.routes.filter((item) => item.inTabs).map(this._renderTab, this)}
+        {this.props.navigationState.routes.filter(item => item.inTabs).map(this.renderTab, this)}
       </View>
     );
   }
 }
+
+NavTabs.propTypes = {
+  navigationState: React.PropTypes.object,
+  navigate: React.PropTypes.func,
+};
 
 export default NavTabs;

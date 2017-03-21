@@ -9,10 +9,10 @@ class NavTab extends Component {
 
   constructor(props, context) {
     super(props, context);
-    this._onPress = this._onPress.bind(this);
+    this.onPress = this.onPress.bind(this);
   }
 
-  _onPress() {
+  onPress() {
     this.props.navigate({ type: 'selectTab', tabKey: this.props.route.key });
   }
 
@@ -22,7 +22,7 @@ class NavTab extends Component {
       style.push(styles.tabSelected);
     }
     return (
-      <TouchableOpacity style={styles.tab} onPress={this._onPress}>
+      <TouchableOpacity style={styles.tab} onPress={this.onPress}>
         <Text style={style}>
           {this.props.route.displayName}
         </Text>
@@ -30,5 +30,11 @@ class NavTab extends Component {
     );
   }
 }
+
+NavTab.propTypes = {
+  route: React.PropTypes.object,
+  selected: React.PropTypes.bool,
+  navigate: React.PropTypes.func,
+};
 
 export default NavTab;

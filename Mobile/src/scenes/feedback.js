@@ -23,9 +23,9 @@ class Feedback extends Component {
   }
 
   submitFeedback() {
-    let scene = { key: 'Submitted', component: Submitted };
-    let route = { type: 'push', route: scene };     
-    this.props.submitFeedbackToServer(route);   
+    const scene = { key: 'Submitted', component: Submitted };
+    const route = { type: 'push', route: scene };
+    this.props.submitFeedbackToServer(route);
   }
 
   renderButton() {
@@ -53,7 +53,7 @@ class Feedback extends Component {
             {/* Feedback input box */}
             <TextInput
               multiline={Boolean(true)}
-              onChangeText={(feedback) => this.props.feedbackChanged(feedback)}
+              onChangeText={feedback => this.props.feedbackChanged(feedback)}
               onContentSizeChange={(event) => {
                 this.setState({ height: event.nativeEvent.contentSize.height });
               }}
@@ -71,6 +71,14 @@ class Feedback extends Component {
   }
 }
 
+Feedback.propTypes = {
+  feedbackChanged: React.PropTypes.func,
+  submitFeedbackToServer: React.PropTypes.func,
+  navigate: React.PropTypes.func,
+  feedback: React.PropTypes.string,
+  loading: React.PropTypes.bool,
+};
+
 function mapStateToProps(state) {
   const { feedback, loading } = state.main;
   return { feedback, loading };
@@ -79,5 +87,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   feedbackChanged,
   submitFeedbackToServer,
-  navigate
+  navigate,
 })(RequireAuth(Feedback));

@@ -13,6 +13,10 @@ const Header = ({ children }) => {
   );
 };
 
+Header.propTypes = {
+  children: React.PropTypes.string,
+};
+
 const styles = {
   viewStyle: {
     flex: 1,

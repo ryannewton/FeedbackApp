@@ -197,6 +197,19 @@ class ProjectDetails extends Component {
   }
 }
 
+ProjectDetails.propTypes = {
+  navigation: React.PropTypes.object,
+  user: React.PropTypes.object,
+  solutions: React.PropTypes.object,
+  main: React.PropTypes.object,
+  addUpvote: React.PropTypes.func,
+  removeUpvote: React.PropTypes.func,
+  addSolutionUpvote: React.PropTypes.func,
+  removeSolutionUpvote: React.PropTypes.func,
+  solutionChanged: React.PropTypes.func,
+  submitSolutionToServer: React.PropTypes.func,
+};
+
 function mapStateToProps(state) {
   const { user, solutions, main } = state;
   return { user, solutions, main };

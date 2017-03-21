@@ -8,7 +8,7 @@ import styles from '../styles/styles_main';
 import { Button, Card } from './common';
 import { addUpvote, removeUpvote } from '../actions';
 
-class Project_Group extends Component {
+class ProjectGroup extends Component {
   goToDetails() {
     this.props.navigate('Group', { project: this.props.project });
   }
@@ -98,9 +98,17 @@ class Project_Group extends Component {
   }
 }
 
+ProjectGroup.propTypes = {
+  project: React.PropTypes.object,
+  navigate: React.PropTypes.func,
+  user: React.PropTypes.object,
+  addUpvote: React.PropTypes.func,
+  removeUpvote: React.PropTypes.func,
+};
+
 const mapStateToProps = (state) => {
   const { user } = state;
   return { user };
 };
 
-export default connect(mapStateToProps, { addUpvote, removeUpvote })(Project_Group);
+export default connect(mapStateToProps, { addUpvote, removeUpvote })(ProjectGroup);

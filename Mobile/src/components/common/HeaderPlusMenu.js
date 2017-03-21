@@ -32,6 +32,11 @@ class HeaderPlusMenu extends React.Component {
   }
 }
 
+HeaderPlusMenu.propTypes = {
+  navigate: React.PropTypes.func,
+  children: React.PropTypes.string,
+};
+
 const styles = {
   container: {
     height: 40,

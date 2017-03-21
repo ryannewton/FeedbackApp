@@ -1,16 +1,21 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
 
-const Button = ({ onPress, children, style, textStyle }) => {
-  return (
-    <View style={[{ flexDirection: 'row' }]}>
-      <TouchableOpacity onPress={onPress} style={[defaultStyles.buttonStyle, style]}>
-        <Text style={[defaultStyles.textStyle, textStyle]}>
-          {children}
-        </Text>
-      </TouchableOpacity>
-    </View>
-  );
+const Button = ({ onPress, children, style, textStyle }) => (
+  <View style={[{ flexDirection: 'row' }]}>
+    <TouchableOpacity onPress={onPress} style={[defaultStyles.buttonStyle, style]}>
+      <Text style={[defaultStyles.textStyle, textStyle]}>
+        {children}
+      </Text>
+    </TouchableOpacity>
+  </View>
+);
+
+Button.propTypes = {
+  onPress: React.PropTypes.func,
+  children: React.PropTypes.string,
+  style: React.PropTypes.object,
+  textStyle: React.PropTypes.object,
 };
 
 const defaultStyles = {

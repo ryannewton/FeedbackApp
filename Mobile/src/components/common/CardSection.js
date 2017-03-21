@@ -9,6 +9,10 @@ const CardSection = props => {
   );
 };
 
+CardSection.propTypes = {
+  children: React.PropTypes.object,
+};
+
 const styles = {
   containerStyle: {
     borderBottomWidth: 1,

@@ -2,10 +2,9 @@
 import React, { Component } from 'react';
 import { View, BackAndroid, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 // Import actions
-import * as actions from '../actions';
+import { navigate } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Header } from '../components/common';
@@ -42,12 +41,12 @@ class Submitted extends Component {
   }
 }
 
+Submitted.propTypes = {
+  navigate: React.PropTypes.func,
+};
+
 function mapStateToProps(state) {
   return state;
 }
 
-function mapDispatchToProps(dispatch) {
-  return bindActionCreators(actions, dispatch);
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Submitted);
+export default connect(mapStateToProps, { navigate })(Submitted);

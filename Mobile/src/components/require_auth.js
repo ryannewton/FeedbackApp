@@ -24,6 +24,11 @@ export default function (ComposedComponent) {
     }
   }
 
+  Authentication.propTypes = {
+    loggedIn: React.PropTypes.bool,
+    sentAuthorizationEmail: React.PropTypes.bool,
+  };
+
   function mapStateToProps(state) {
     return {
       loggedIn: state.auth.loggedIn,

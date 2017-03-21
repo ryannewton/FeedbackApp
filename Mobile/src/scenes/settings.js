@@ -60,6 +60,11 @@ class Settings extends Component {
   }
 }
 
+Settings.propTypes = {
+  auth: React.PropTypes.object,
+  saveEmail: React.PropTypes.func,
+};
+
 function mapStateToProps(state) {
   return state;
 }

@@ -44,6 +44,12 @@ class Projects extends Component {
   }
 }
 
+Projects.propTypes = {
+  navigation: React.PropTypes.object,
+  projects: React.PropTypes.array,
+  saveProjectChanges: React.PropTypes.func,
+};
+
 function mapStateToProps(state) {
   const { projects } = state;
   return { projects };

@@ -7,6 +7,10 @@ const Card = props => (
   </View>
 );
 
+Card.propTypes = {
+  children: React.PropTypes.object,
+};
+
 const styles = {
   containerStyle: {
     borderWidth: 1,

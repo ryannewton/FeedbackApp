@@ -20,6 +20,14 @@ const Input = ({ label, value, onChangeText, placeholder, secureTextEntry }) => 
   );
 };
 
+Input.propTypes = {
+  label: React.PropTypes.string,
+  value: React.PropTypes.string,
+  onChangeText: React.PropTypes.func,
+  placeholder: React.PropTypes.string,
+  secureTextEntry: React.PropTypes.bool,
+};
+
 const styles = {
   inputStyle: {
     color: '#000',
