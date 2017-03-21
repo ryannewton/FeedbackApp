@@ -81,11 +81,25 @@ class ProjectDetails extends Component {
       );
     }
 
+    {/* To do: Make rendering a single solution a stand alone component */}
     const formattedSolutions = projectSolutions.map((solution, index) => (
       <CardSection key={index} >
-        <Text style={solutionText}>{solution.description}</Text>
-        {/* Note: Adding solution upvote count to DB. Enable upvote button when this is done. */}
-        {/*this.renderSolutionUpvoteButton(solution)*/}
+        <View style={{ justifyContent: 'flex-start', flex: 1 }}>
+          {/* Solution description */}
+          <Text style={solutionText}>{solution.description}</Text>
+
+          {/* Upvote count and button */}
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
+            <View style={{ flex: 4 }}>
+              <Text style={{ textDecorationLine: 'underline' }}>
+                {`${solution.votes} Votes`}
+              </Text>
+            </View>
+            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+              {this.renderSolutionUpvoteButton(solution)}
+            </View>
+          </View>
+        </View>
       </CardSection>
     ));
 
@@ -122,8 +136,8 @@ class ProjectDetails extends Component {
 
   renderSolutionUpvoteButton(solution) {
     const { user } = this.props;
-    let buttonStyles = { width: 80, height: 27, marginRight: 2 };
-    let textStyles = {};
+    let buttonStyles = { width: 60, height: 23, marginRight: 2 };
+    let textStyles = { fontSize: 13 };
     // If user hasn't upvoted this project
     if (user.solutionUpvotes.includes(solution.id)) {
       buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
