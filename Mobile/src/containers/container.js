@@ -17,13 +17,13 @@ const { CardStack: NavigationCardStack } = NavigationExperimental;
 
 class Container extends Component {
 
-	constructor(props: any, context: any) {
+	constructor(props, context) {
 		super(props, context);
 
 		this._renderScene = this._renderScene.bind(this);
 	}
 
-	_renderScene(sceneProps: Object): React.Element {
+	_renderScene(sceneProps): React.Element {
 		return React.createElement(sceneProps.scene.route.component, { ...sceneProps });
 	}
 

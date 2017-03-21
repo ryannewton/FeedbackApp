@@ -1,5 +1,3 @@
-'use strict';
-
 // Import Libraries
 import { combineReducers } from 'redux';
 
@@ -12,10 +10,10 @@ import user from './user_reducer';
 import solutions from './solutions_reducer';
 
 export default combineReducers({
-	main,
-	navigation,
-	projects,
-	solutions,
-	auth,
-	user
+  main,
+  navigation,
+  projects,
+  solutions,
+  auth,
+  user,
 });
