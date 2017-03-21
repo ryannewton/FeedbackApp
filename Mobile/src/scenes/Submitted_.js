@@ -1,4 +1,4 @@
-// Import Libaries
+// Import Libraries 
 import React, { Component } from 'react';
 import { View, BackAndroid, Keyboard } from 'react-native';
 import { connect } from 'react-redux';

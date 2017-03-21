@@ -5,11 +5,11 @@ import { NavigationExperimental } from 'react-native';
 import { UPDATE_NAV_STATE } from '../actions/types';
 
 // Import Components
-import Feedback from '../scenes/feedback';
-import ProjectsTab from '../scenes/projectsTab';
-import Settings from '../scenes/settings';
-import New_Projects from '../scenes/new_projects';
-import Welcome from '../scenes/welcome';
+import Feedback from '../scenes/Feedback';
+import ProjectsTab from '../scenes/ProjectsTab';
+import Settings from '../scenes/Settings';
+import New_Projects from '../scenes/NewProjects';
+import Welcome from '../scenes/Welcome';
 
 const {
   StateUtils: NavigationStateUtils,

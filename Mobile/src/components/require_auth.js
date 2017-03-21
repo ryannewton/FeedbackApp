@@ -3,8 +3,8 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
 // Import Scenes and action creators
-import Authorize from '../scenes/authorize';
-import SendAuthorizationEmail from '../scenes/sendAuthorizationEmail';
+import Authorize from '../scenes/Authorize';
+import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
 
 export default function (ComposedComponent) {
   class Authentication extends Component {
