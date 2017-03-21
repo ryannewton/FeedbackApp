@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import RequireAuth from '../components/require_auth';
 
 // Import actions
-import { addUpvote, addToDoNotDisplayList } from '../actions';
+import { addProjectUpvote, addToDoNotDisplayList } from '../actions';
 
 class New_Projects extends Component {
   constructor(props) {
@@ -39,8 +39,8 @@ class New_Projects extends Component {
     const project = this.state.projects[this.state.index];
 
     // If user hasn't upvoted this project, add an upvote
-    if (!user.upvotes.includes(project.id)) {
-      this.props.addUpvote(project);
+    if (!user.projectUpvotes.includes(project.id)) {
+      this.props.addProjectUpvote(project);
     }
 
     this.props.addToDoNotDisplayList(project.id);
@@ -98,7 +98,7 @@ New_Projects.propTypes = {
   projects: React.PropTypes.array,
   user: React.PropTypes.object,
   addToDoNotDisplayList: React.PropTypes.func,
-  addUpvote: React.PropTypes.func,
+  addProjectUpvote: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -107,6 +107,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  addUpvote,
+  addProjectUpvote,
   addToDoNotDisplayList,
 })(RequireAuth(New_Projects));
