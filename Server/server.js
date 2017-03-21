@@ -181,7 +181,7 @@ app.post('/addSolution', upload.array(), function(req, res) {
 		if (err) {
 			res.status(400).send('authorization failed');
 		} else {
-			connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes_for: 0, votes_against: 0, title: req.body.title || 'Blank Title', description: req.body.description || 'Blank Description', project_id: req.body.project_id, school: getDomain(decoded.email), email: decoded.email }, function(err, result) {
+			connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes: 0, title: req.body.title || 'Blank Title', description: req.body.description || 'Blank Description', project_id: req.body.project_id, school: getDomain(decoded.email), email: decoded.email }, function(err, result) {
 				if (err) throw err;
 				res.json({id: result.insertId});
 			});
@@ -234,7 +234,7 @@ app.post('/saveProjectAdditionChanges', upload.array(), function(req, res) {
 			res.status(400).send('authorization failed');
 		} else {
 
-			connection.query("UPDATE project_additions SET votes_for = ?, votes_against = ?, title = ?, description = ? WHERE id= ?", [req.body.project_addition.votes_for, req.body.project_addition.votes_against, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
+			connection.query("UPDATE project_additions SET votes = ?, votes_against = ?, title = ?, description = ? WHERE id= ?", [req.body.project_addition.votes, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
 				if (err) throw err;
 			});
 
@@ -340,7 +340,7 @@ app.post('/pullProjectAdditions', upload.array(), function(req, res) {
 		} else {
 			var connection_string = `
 				SELECT
-					id, type, votes_for, votes_against, title, description, project_id
+					id, type, votes, title, description, project_id
 				FROM
 					project_additions
 				WHERE
