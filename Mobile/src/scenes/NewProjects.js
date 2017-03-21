@@ -1,4 +1,4 @@
-// Import Libraries 
+// Import Libraries
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-base';

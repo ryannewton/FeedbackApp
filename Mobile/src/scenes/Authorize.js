@@ -1,4 +1,4 @@
-// Import Libraries 
+// Import Libraries
 import React, { Component } from 'react';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';

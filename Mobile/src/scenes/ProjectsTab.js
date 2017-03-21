@@ -1,4 +1,4 @@
-// Import Libraries 
+// Import Libraries
 import { StackNavigator } from 'react-navigation';
 
 // Import Scenes
