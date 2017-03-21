@@ -47,7 +47,6 @@ export const pullSolutions = (token) => (
 		return http.post('/pullProjectAdditions', { authorization: token })
 		.then(response => {
 			dispatch(receivedSolutionList(response.data));
-			console.log('solutions: ', response.data);
 		})
 		.catch(error => {
 			console.error('pullSolutions() ERROR: ', error);

@@ -32,7 +32,6 @@ export default (state = INITIAL_STATE, action) => {
 		case AUTHORIZING_USER:
 			return { ...state, loading: true };
 		case AUTHORIZE_USER_SUCCESS:
-			console.log("authorize user called");
 			return { ...state, sentAuthorizationEmail: false, loading: false, loggedIn: true, token: action.payload, error: false };
 		case AUTHORIZE_USER_FAIL:
 			return { ...state, loading: false, error: action.payload };
