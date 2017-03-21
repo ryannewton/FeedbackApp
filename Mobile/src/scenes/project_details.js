@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
 import styles from '../styles/scenes/project_details_styles';
+import Solution from '../components/solution';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
   addUpvote,
@@ -24,16 +25,6 @@ class ProjectDetails extends Component {
       this.props.addUpvote(project);
     } else {
       this.props.removeUpvote(project);
-    }
-  }
-
-  upvoteSolution(solution) {
-    const { user } = this.props;
-    // If user hasn't upvoted this project, add an upvote
-    if (!user.solutionUpvotes.includes(solution.id)) {
-      this.props.addSolutionUpvote(solution);
-    } else {
-      this.props.removeSolutionUpvote(solution);
     }
   }
 
@@ -81,26 +72,8 @@ class ProjectDetails extends Component {
       );
     }
 
-    {/* To do: Make rendering a single solution a stand alone component */}
     const formattedSolutions = projectSolutions.map((solution, index) => (
-      <CardSection key={index} >
-        <View style={{ justifyContent: 'flex-start', flex: 1 }}>
-          {/* Solution description */}
-          <Text style={solutionText}>{solution.description}</Text>
-
-          {/* Upvote count and button */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
-            <View style={{ flex: 4 }}>
-              <Text style={{ textDecorationLine: 'underline' }}>
-                {`${solution.votes} Votes`}
-              </Text>
-            </View>
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
-              {this.renderSolutionUpvoteButton(solution)}
-            </View>
-          </View>
-        </View>
-      </CardSection>
+      <Solution solution={solution} key={index} />
     ));
 
     return (
@@ -126,26 +99,6 @@ class ProjectDetails extends Component {
     return (
       <Button
         onPress={this.upvoteProject.bind(this)}
-        style={buttonStyles}
-        textStyle={textStyles}
-      >
-        Upvote!
-      </Button>
-    );
-  }
-
-  renderSolutionUpvoteButton(solution) {
-    const { user } = this.props;
-    let buttonStyles = { width: 60, height: 23, marginRight: 2 };
-    let textStyles = { fontSize: 13 };
-    // If user hasn't upvoted this project
-    if (user.solutionUpvotes.includes(solution.id)) {
-      buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
-      textStyles = { ...textStyles, color: '#fff' };
-    }
-    return (
-      <Button
-        onPress={() => this.upvoteSolution(solution)}
         style={buttonStyles}
         textStyle={textStyles}
       >
