@@ -7,7 +7,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 
 // Import Components
-import Nav from './nav';
+import Nav from './Nav';
 
 class Container extends Component {
 

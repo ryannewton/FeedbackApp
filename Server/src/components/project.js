@@ -1,12 +1,12 @@
 import React from 'react';
-import ProjectAddition from './project_addition';
+import ProjectAddition from './ProjectAddition';
 
 export default class Project extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      edit_mode: false,
+      editMode: false,
       project: props.project,
     };
 
@@ -32,10 +32,10 @@ export default class Project extends React.Component {
   }
 
   switchEditMode() {
-    if (this.state.edit_mode) {
-      this.props.saveProjectChanges(this.state.project, 'text_edit');
+    if (this.state.editMode) {
+      this.props.saveProjectChanges(this.state.project, 'Edited Text');
     }
-    this.setState({ edit_mode: !this.state.edit_mode });
+    this.setState({ editMode: !this.state.editMode });
   }
 
   titleChanged(event) {
@@ -51,7 +51,7 @@ export default class Project extends React.Component {
   }
 
   deleteProject() {
-    this.props.deleteProject(this.state.project.id, 'delete_project');
+    this.props.deleteProject(this.state.project.id, 'Deleted Project');
   }
 
   addSolution() {
@@ -60,10 +60,10 @@ export default class Project extends React.Component {
 
   render() {
     const project = this.state.project;
-    const upVoted = (this.props.upVotes.indexOf(this.props.project.id) !== -1);
+    const upVoted = this.props.upVotes.indexOf(this.props.project.id) !== -1;
     let title = <span className="h4"><strong>{'Comment: ' + this.state.project.title}</strong></span>;
     let description = <span style={{ width: '100%', whiteSpace: 'pre-wrap' }}>{this.state.project.description}</span>;
-    if (this.state.edit_mode) {
+    if (this.state.editMode) {
       title = <input onChange={this.titleChanged} type="text" style={{ width: '75%' }} className="panel-title" value={this.state.project.title} />;
       description = <textarea onChange={this.descriptionChanged} style={{ width: '100%' }} value={this.state.project.description} />;
     }
@@ -83,7 +83,7 @@ export default class Project extends React.Component {
       );
 
     let myProjectAdditions = this.props.projectAdditions.filter((projectAddition) => {
-      return projectAddition.project_id === project.id
+      return projectAddition.projectId === project.id
     }).map((projectAddition) => {
       return <ProjectAddition projectAddition={projectAddition} deleteProjectAddition={this.props.deleteProjectAddition} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges} key={projectAddition.id} />
     });
@@ -142,8 +142,8 @@ export default class Project extends React.Component {
             </div>
             {myProjectAdditions}
           </div>
-          {this.state.edit_mode ? deleteButton : addSolution}
-          {this.state.edit_mode ? saveButton : editButton}
+          {this.state.editMode ? deleteButton : addSolution}
+          {this.state.editMode ? saveButton : editButton}
         </div>
       </div>
     );

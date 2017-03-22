@@ -1,12 +1,21 @@
-//Import Libraries
+// Import Libraries
 import { combineReducers } from 'redux';
 import { routerReducer } from 'react-router-redux';
-import main from './reducer_main.js';
-import feedback from './reducer_feedback.js';
-import projects from './reducer_projects.js';
-import up_votes from './reducer_upvotes.js';
-import project_additions from './reducer_project_additions.js';
-import discussion_posts from './reducer_discussion_posts.js';
-import auth from './auth_reducer.js';
+import main from './reducer_main';
+import feedback from './reducer_feedback';
+import projects from './reducer_projects';
+import upVotes from './reducer_upvotes';
+import projectAdditions from './reducer_project_additions';
+import discussionPosts from './reducer_discussion_posts';
+import auth from './auth_reducer';
 
-export default combineReducers({main, feedback, projects, up_votes, project_additions, discussion_posts, auth, routing: routerReducer });
+export default combineReducers({
+  main,
+  feedback,
+  projects,
+  upVotes,
+  projectAdditions,
+  discussionPosts,
+  auth,
+  routing: routerReducer,
+});

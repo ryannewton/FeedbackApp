@@ -1,17 +1,15 @@
-'use strict';
-
 // Import action types
 import {
 	FEEDBACK_CHANGED,
 	SUBMIT_FEEDBACK,
 	SUBMIT_FEEDBACK_SUCCESS,
 	SUBMIT_FEEDBACK_FAIL,
-	SOLUTION_CHANGED
+	SOLUTION_CHANGED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
 	loading: false,
-	feedback: ''
+	feedback: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
