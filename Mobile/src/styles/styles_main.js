@@ -38,10 +38,10 @@ const styles = StyleSheet.create({
 
   // Within navigator is cardstack and tabs -- note within cardstack are the scenes
   navigatorCardStack: {
-    flex: 12,
+    flex: 20,
   },
   tabs: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
   },
 
@@ -49,18 +49,15 @@ const styles = StyleSheet.create({
   tab: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#fefefe',
     justifyContent: 'center',
-    borderLeftWidth: 0.5,
-    borderRightWidth: 0.5,
-    borderColor: '#FFFFFF',
   },
   tabText: {
     color: '#222',
     fontWeight: '500',
   },
   tabSelected: {
-    color: 'blue',
+    backgroundColor: '#2eb4f0',
   },
 
   // Projects

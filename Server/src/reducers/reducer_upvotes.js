@@ -24,7 +24,7 @@ const {
 } = ops;
 
 
-export default function up_votes(state = [], action) {
+export default function upVotes(state = [], action) {
   switch (action.type) {
     case 'SET_UP_VOTES':
     	return ops.push(action.upVotes, state);

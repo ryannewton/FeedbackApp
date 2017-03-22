@@ -10,20 +10,6 @@ import * as actions from '../actions';
 //Import Reducers
 import Combined_Reducer from './reducer_index.js';
 
-//Sets our initial state (before data is pulled from the server)
-const INITIAL_STATE = {
-	main: {
-		email: null,
-		start_date: null,
-    	end_date: null,    
-	},
-	feedback: [],
-	projects: [],	
-	project_additions: [],
-	discussion_posts: [],
-	up_votes: [],
-};
-
 let store = createStore(
 	Combined_Reducer,
 	INITIAL_STATE,
