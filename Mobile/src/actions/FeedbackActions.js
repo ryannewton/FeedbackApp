@@ -150,6 +150,7 @@ export const pullProjects = token => (
     })
     .catch((error) => {
       console.log('pull projects error', error);
+      dispatch(navigate({ type: 'selectTab', tabKey: 'NewProjects' }));
       dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' });
     });
   }

@@ -36,7 +36,7 @@ export const submitSolutionToServer = (solution, project_id) => (
       })
       .catch((err) => {
         dispatch({ type: SUBMIT_SOLUTION_FAIL });
-        console.error('submitSolutionToServer() ERROR: ', err);
+        console.log('submitSolutionToServer() ERROR: ', err);
       });
   }
 );
@@ -48,7 +48,7 @@ export const pullSolutions = token => (
       dispatch(receivedSolutionList(response.data));
     })
     .catch((error) => {
-      console.error('pullSolutions() ERROR: ', error);
+      console.log('pullSolutions() ERROR: ', error);
     });
   }
 );

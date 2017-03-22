@@ -14,8 +14,9 @@ let store = createStore(
 );
 
 async function load_token() {
-  try {
+  try {    
     const token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
+    //const token = '';
     store.dispatch(actions.pullProjects(token));
     store.dispatch(actions.pullSolutions(token));
   } catch (error) {
