@@ -1,4 +1,4 @@
-// Import libaries
+// Import Libraries
 import React, { Component } from 'react';
 import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
@@ -10,7 +10,7 @@ import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
 // Import components, functions, and styles
 import RequireAuth from '../components/require_auth';
 import { Button, HeaderPlusMenu, Spinner } from '../components/common';
-import Submitted from './submitted';
+import Submitted from './Submitted';
 import styles from '../styles/styles_main';
 
 class Feedback extends Component {

@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
@@ -130,40 +130,42 @@ class ProjectDetails extends Component {
   render() {
     const { container, inputText } = styles;
     return (
-      <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-        <View style={container}>
+      <ScrollView>
+        <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+          <View style={container}>
 
-          {/* Project description */}
-          <Card>
-            <CardSection>
-              {this.projectDescription()}
-            </CardSection>
-          </Card>
+            {/* Project description */}
+            <Card>
+              <CardSection>
+                {this.projectDescription()}
+              </CardSection>
+            </Card>
 
-          {/* List of submitted solutions */}
-          <Card>
-            {this.solutionsList()}
-          </Card>
+            {/* List of submitted solutions */}
+            <Card>
+              {this.solutionsList()}
+            </Card>
 
-          {/* Input to submit a new solution */}
-          <TextInput
-            multiline={Boolean(true)}
-            style={inputText}
-            placeholder="Submit a suggestion"
-            onChangeText={solution => this.props.solutionChanged(solution)}
-            value={this.props.main.solution}
-          />
+            {/* Input to submit a new solution */}
+            <TextInput
+              multiline={Boolean(true)}
+              style={inputText}
+              placeholder="Submit a suggestion"
+              onChangeText={solution => this.props.solutionChanged(solution)}
+              value={this.props.main.solution}
+            />
 
-          {/* Success/fail message for submitted solution */}
-          <View>
-            <Text>{this.props.solutions.message}</Text>
+            {/* Success/fail message for submitted solution */}
+            <View>
+              <Text>{this.props.solutions.message}</Text>
+            </View>
+
+            {/* Submit button */}
+            {this.renderSubmitButton()}
+
           </View>
-
-          {/* Submit button */}
-          {this.renderSubmitButton()}
-
-        </View>
-      </TouchableWithoutFeedback>
+        </TouchableWithoutFeedback>
+      </ScrollView>
     );
   }
 }

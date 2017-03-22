@@ -2,8 +2,8 @@
 import { StackNavigator } from 'react-navigation';
 
 // Import Scenes
-import Projects from './projects';
-import ProjectDetails from './project_details';
+import Projects from './Projects';
+import ProjectDetails from './ProjectDetails';
 
 const ProjectsTab = StackNavigator({
   Projects: { screen: Projects },

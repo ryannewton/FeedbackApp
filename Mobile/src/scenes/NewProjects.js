@@ -3,13 +3,12 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-base';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 import RequireAuth from '../components/require_auth';
 
 // Import actions
 import { addProjectUpvote, addToDoNotDisplayList } from '../actions';
 
-class New_Projects extends Component {
+class NewProjects extends Component {
   constructor(props) {
     super(props);
 
@@ -94,7 +93,7 @@ class New_Projects extends Component {
   }
 }
 
-New_Projects.propTypes = {
+NewProjects.propTypes = {
   projects: React.PropTypes.array,
   user: React.PropTypes.object,
   addToDoNotDisplayList: React.PropTypes.func,
@@ -109,4 +108,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
-})(RequireAuth(New_Projects));
+})(RequireAuth(NewProjects));

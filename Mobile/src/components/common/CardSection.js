@@ -10,7 +10,7 @@ const CardSection = props => {
 };
 
 CardSection.propTypes = {
-  children: React.PropTypes.object,
+  children: React.PropTypes.node,
 };
 
 const styles = {
