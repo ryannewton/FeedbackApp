@@ -17,7 +17,7 @@ class Projects extends Component {
   }
 
   renderProjects() {
-    const projects = this.props.projects.sort(this.compareNumbers).map((project, index) => {
+    const projects = this.props.projects.slice(0,5).sort(this.compareNumbers).map((project, index) => {
       return (
         <Project
           project={project}

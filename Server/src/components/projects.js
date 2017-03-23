@@ -2,8 +2,8 @@
 import React from 'react';
 
 //import components
-import Project from './project.js';
-import RequireAuth from './require_auth.js';
+import Project from './Project.js';
+import RequireAuth from './RequireAuth.js';
 
 class Projects extends React.Component {
   constructor(props) {
@@ -11,9 +11,9 @@ class Projects extends React.Component {
     this.state = {
       department: "All Departments",
     }
-    this.filter_by_department = this.filter_by_department.bind(this);
-    this.department_changed = this.department_changed.bind(this);
-    this.filter_by_stage = this.filter_by_stage.bind(this);
+    this.filterByDepartment = this.filterByDepartment.bind(this);
+    this.departmentChanged = this.departmentChanged.bind(this);
+    this.filterByStage = this.filterByStage.bind(this);
   }
 
   addProject() {
@@ -24,33 +24,33 @@ class Projects extends React.Component {
     return b.votes - a.votes;
   }
 
-  department_changed(event) {
+  departmentChanged(event) {
     event.preventDefault();
-    this.setState({department: event.target.text});
+    this.setState({ department: event.target.text });
   }
 
-  filter_by_department(project) {
-    if (this.state.department === "All Departments") {
+  filterByDepartment(project) {
+    if (this.state.department === 'All Departments') {
       return true;
     } else {
       return (this.state.department === project.department);
     }
   }
 
-  filter_by_stage(project) {
-    let target_stage = this.props.params.stage || 'new';
-    return target_stage === project.stage;
+  filterByStage(project) {
+    let targetStage = this.props.params.stage || 'new';
+    return targetStage === project.stage;
   }
 
   render() {
 
-    let Rows = this.props.projects.filter(this.filter_by_stage).filter(this.filter_by_department).sort(this.compareNumbers).map((project, index, array) => {
-      return <Project project={project} project_additions={this.props.project_additions} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.up_votes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} receivedIDForAddSolution={this.props.receivedIDForAddSolution.bind(this)} addSolution={this.props.addSolution.bind(this)} deleteProjectAddition={this.props.deleteProjectAddition.bind(this)} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges.bind(this)} email={this.props.main.email} />
+    let Rows = this.props.projects.filter(this.filterByStage).filter(this.filterByDepartment).sort(this.compareNumbers).map((project, index, array) => {
+      return <Project project={project} projectAdditions={this.props.projectAdditions} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.upVotes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} receivedIDForAddSolution={this.props.receivedIDForAddSolution.bind(this)} addSolution={this.props.addSolution.bind(this)} deleteProjectAddition={this.props.deleteProjectAddition.bind(this)} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges.bind(this)} email={this.props.main.email} />
     });
 
     return (
       <div>
-        <div id="rank_header">
+        <div id="rankHeader">
           <span className="h4">{this.state.department}</span>
           <div className="dropdown pull-right">
             <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -58,12 +58,12 @@ class Projects extends React.Component {
               <span className="caret"></span>
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="#" onClick={this.department_changed}>All Departments</a></li>
-              <li><a href="#" onClick={this.department_changed}>Housing</a></li>
-              <li><a href="#" onClick={this.department_changed}>Dining</a></li>
-              <li><a href="#" onClick={this.department_changed}>Academic Operations</a></li>
-              <li><a href="#" onClick={this.department_changed}>Facilities</a></li>
-              <li><a href="#" onClick={this.department_changed}>Other</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>All Departments</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Housing</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Dining</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Academic Operations</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Facilities</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Other</a></li>
             </ul>
           </div>
         </div>

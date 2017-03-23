@@ -1,5 +1,3 @@
-'use strict';
-
 // Import libraries
 import Moment from 'moment';
 import axios from 'axios';
@@ -249,7 +247,7 @@ export const requestedProjects = () => (
 export const receivedProjects = (projects) => (
 	{
 		type: 'RECEIVED_PROJECTS',
-		projects,			
+		projects,
 	}
 );
 
@@ -262,7 +260,10 @@ export const pullProjects = (token) => (
 			dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
 			dispatch(receivedProjects(response.data));
 		})
-		.catch(error => dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' }));
+		.catch(error => {
+			console.log(error);
+			dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message })
+		});
 	}
 );
 

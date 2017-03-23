@@ -5,8 +5,9 @@ import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-
 import { connect } from 'react-redux';
 import RequireAuth from '../components/require_auth';
 
-// Import actions
+// Import actions and styles
 import { addProjectUpvote, addToDoNotDisplayList } from '../actions';
+import styles from '../styles/styles_main';
 
 class NewProjects extends Component {
   constructor(props) {
@@ -54,7 +55,7 @@ class NewProjects extends Component {
 
   renderCard(project) {
     return (
-      <View>
+      <View style={styles.container}>
         <Card style={{ elevation: 3, marginHorizontal: 8, height: 300 }}>
           <CardItem>
             <Left>
@@ -80,7 +81,7 @@ class NewProjects extends Component {
   render() {
     return (
       <Container>
-        <View>
+        <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
             dataSource={this.state.projects}
             onSwipeRight={this.swipeRight}

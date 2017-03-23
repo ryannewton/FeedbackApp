@@ -1,5 +1,3 @@
-'use strict';
-
 // Import Libraries
 import axios from 'axios';
 

@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#F7FCFF',
+    backgroundColor: '#fafafa',
   },
   text: {
     fontSize: 16,
@@ -29,38 +29,44 @@ const styles = StyleSheet.create({
     paddingHorizontal: 8,
     backgroundColor: '#FFFFFF',
   },
+  // New Projects Scene
+  swiper: {
+    paddingTop: 20,
+  },
+
   // Navigation
 
   // Highest level flexbox
   navigator: {
     flex: 1,
+    backgroundColor: '#fafafa',
   },
 
   // Within navigator is cardstack and tabs -- note within cardstack are the scenes
   navigatorCardStack: {
-    flex: 12,
+    flex: 20,
+    backgroundColor: '#fafafa',
   },
   tabs: {
-    flex: 1,
+    flex: 2,
     flexDirection: 'row',
+    borderTopWidth: 1,
+    borderTopColor: '#d5d5d5',
   },
 
   // Within tabs is tab
   tab: {
     flex: 1,
     alignItems: 'center',
-    backgroundColor: '#E0E0E0',
+    backgroundColor: '#fefefe',
     justifyContent: 'center',
-    borderLeftWidth: 0.5,
-    borderRightWidth: 0.5,
-    borderColor: '#FFFFFF',
   },
   tabText: {
     color: '#222',
     fontWeight: '500',
   },
   tabSelected: {
-    color: 'blue',
+    backgroundColor: '#2eb4f0',
   },
 
   // Projects

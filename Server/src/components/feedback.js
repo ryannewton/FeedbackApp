@@ -2,7 +2,7 @@ import React from 'react';
 import Moment from 'moment';
 import { DateRangePicker } from 'react-dates';
 
-import FeedbackRow from './feedback_row';
+import FeedbackRow from './FeedbackRow';
 
 export default class Feedback extends React.Component {
   constructor(props) {
