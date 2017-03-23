@@ -348,7 +348,7 @@
 			isa = PBXGroup;
 			children = (
 				146834041AC3E56700842450 /* libReact.a */,
-				36B3C21E1E51797400FEC0C8 /* libReact-tvOS.a */,
+				36B3C21E1E51797400FEC0C8 /* libReact.a */,
 				368523DF1E6D60CF000FB309 /* libyoga.a */,
 				368523E11E6D60CF000FB309 /* libyoga.a */,
 				368523E31E6D60CF000FB309 /* libcxxreact.a */,
@@ -676,10 +676,10 @@
 			remoteRef = 36B3C2191E51797400FEC0C8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		36B3C21E1E51797400FEC0C8 /* libReact-tvOS.a */ = {
+		36B3C21E1E51797400FEC0C8 /* libReact.a */ = {
 			isa = PBXReferenceProxy;
 			fileType = archive.ar;
-			path = "libReact-tvOS.a";
+			path = libReact.a;
 			remoteRef = 36B3C21D1E51797400FEC0C8 /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
