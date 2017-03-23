@@ -47,6 +47,44 @@ export const loadProjectUpvotes = projectUpvotes => (
   }
 );
 
+// Handle Feedback
+export const requestedFeedback = (startDate, endDate) => (
+  {
+    type: 'REQUESTED_FEEDBACK',
+    startDate,
+    endDate,
+  }
+);
+
+export const receivedFeedback = feedback => (
+  {
+    type: 'RECEIVED_FEEDBACK',
+    feedback,
+  }
+);
+
+export const updateDates = (startDate, endDate, token) => (
+  (dispatch, getState) => {
+    dispatch(requestedFeedback(startDate, endDate));
+
+    return fetch('/pullFeedback', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        startDate,
+        endDate,
+        authorization: token || getState().auth.token,
+      }),
+    })
+    .then(response => response.json())
+    .then(feedback => dispatch(receivedFeedback(feedback)))
+    .catch(error => console.error(error));
+  }
+);
+
 // Handle project, project_addition changes
 export const saveProjectChanges = (project, changeType) => (
   (dispatch, getState) => {
@@ -202,43 +240,7 @@ export const deleteProjectAddition = (id) => (
 );
 
 
-//Pull Feedback, Projects, Project Additions, Discussions
-export const requestedFeedback = (start_date, end_date) => (
-  {
-    type: 'REQUESTED_FEEDBACK',
-    start_date,
-    end_date,     
-  }
-);
 
-export const receivedFeedback = (feedback) => (
-  {
-    type: 'RECEIVED_FEEDBACK',
-    feedback,     
-  }
-);
-
-export const updateDates = (start_date, end_date, token) => (
-  (dispatch, getState) => {
-    dispatch(requestedFeedback(start_date, end_date));
-
-      return fetch(`/pullFeedback`, {
-        method: 'POST',
-        headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        start_date,
-        end_date,
-        authorization: token
-      }),
-    })
-    .then(response => response.json() )
-    .then(feedback => dispatch(receivedFeedback(feedback)) )
-    .catch(error => console.error(error) );
-  } 
-);
 
 export const requestedProjects = () => (
   {

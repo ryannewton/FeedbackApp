@@ -1,8 +1,8 @@
 const INITIAL_STATE = {
 	main: {
 		email: null,
-		start_date: null,
-    	end_date: null,    
+		startDate: null,
+    	endDate: null,    
 	},
 };
 
@@ -14,7 +14,7 @@ export default function main(state = {}, action) {
 		localStorage.setItem('email', action.email);
 		return Object.assign({}, state, {email: action.email});
 	case 'REQUESTED_FEEDBACK':
-	  return Object.assign({}, state, {start_date: action.start_date, end_date: action.end_date});
+	  return Object.assign({}, state, {startDate: action.startDate, endDate: action.endDate});
 	  break;
 	default:
 	  return state;
