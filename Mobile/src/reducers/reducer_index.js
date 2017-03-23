@@ -5,9 +5,9 @@ import { combineReducers } from 'redux';
 import main from './reducer_main';
 import navigation from './reducer_navigation';
 import projects from './reducer_projects';
-import auth from './auth_reducer';
-import user from './user_reducer';
-import solutions from './solutions_reducer';
+import auth from './reducer_auth';
+import user from './reducer_user';
+import solutions from './reducer_solutions';
 
 export default combineReducers({
   main,

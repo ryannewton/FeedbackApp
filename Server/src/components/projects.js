@@ -45,7 +45,7 @@ class Projects extends React.Component {
   render() {
 
     let Rows = this.props.projects.filter(this.filterByStage).filter(this.filterByDepartment).sort(this.compareNumbers).map((project, index, array) => {
-      return <Project project={project} projectAdditions={this.props.projectAdditions} key={project.id} removeUpVote={this.props.removeUpVote} addUpVote={this.props.addUpVote} upVotes={this.props.upVotes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} receivedIDForAddSolution={this.props.receivedIDForAddSolution.bind(this)} addSolution={this.props.addSolution.bind(this)} deleteProjectAddition={this.props.deleteProjectAddition.bind(this)} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges.bind(this)} email={this.props.main.email} />
+      return <Project project={project} projectAdditions={this.props.projectAdditions} key={project.id} removeProjectUpvote={this.props.removeProjectUpvote} addProjectUpvote={this.props.addProjectUpvote} projectUpvotes={this.props.user.projectUpvotes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} receivedIDForAddSolution={this.props.receivedIDForAddSolution.bind(this)} addSolution={this.props.addSolution.bind(this)} deleteProjectAddition={this.props.deleteProjectAddition.bind(this)} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges.bind(this)} email={this.props.main.email} />
     });
 
     return (
