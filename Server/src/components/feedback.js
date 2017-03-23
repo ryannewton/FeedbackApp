@@ -24,7 +24,7 @@ export default class Feedback extends React.Component {
 
   render() {
     const { focusedInput } = this.state;
-    const { start_date, end_date } = this.props.main;
+    const { startDate, endDate } = this.props.main;
     const Rows = this.props.feedback.map((feedback, index) => {
       return <FeedbackRow key={index} feedback={feedback} addProject={this.props.addProject} receivedIDForAddProject={this.props.receivedIDForAddProject} department={'Other'} />;
     });
@@ -35,8 +35,8 @@ export default class Feedback extends React.Component {
           onDatesChange={this.onDatesChange}
           onFocusChange={this.onFocusChange}
           focusedInput={focusedInput}
-          startDate={Moment(start_date)}
-          endDate={Moment(end_date)}
+          startDate={Moment(startDate)}
+          endDate={Moment(endDate)}
           isOutsideRange={() => false}
         />
         <table>

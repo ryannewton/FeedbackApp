@@ -265,15 +265,19 @@ app.post('/deleteProjectAddition', upload.array(), function(req, res) {
 });
 
 
-//Pull Feedback, Projects, Project Additions, Discussion Posts
-app.post('/pullFeedback', upload.array(), function(req, res) {
+// Pull Feedback, Projects, Project Additions, Discussion Posts
+app.post('/pullFeedback', upload.array(), (req, res) => {
+  console.log('pull feedback body', req.body);
 
   jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
     if (err) {
+      console.log('auth failed');
       res.status(400).send('authorization failed');
     } else {
-      var connection_string = `
+
+      console.log('verified user');
+
+      const connection_string = `
         SELECT
           *
         FROM
@@ -282,10 +286,10 @@ app.post('/pullFeedback', upload.array(), function(req, res) {
           time
             BETWEEN ? AND ?`;
 
-      connection.query(connection_string, [req.body.start_date, req.body.end_date], function(err, rows, fields) {
+      connection.query(connection_string, [req.body.startDate, req.body.endDate], function(err, rows, fields) {
         if (err) throw err;
         else {
-          res.send(rows);
+          res.json(rows);
         }
       });
     }
