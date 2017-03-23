@@ -24,38 +24,7 @@ import {
 // Import constants
 import { http, ROOT_URL, ROOT_STORAGE } from '../constants';
 
-export const feedbackChanged = feedback => (
-  {
-    type: FEEDBACK_CHANGED,
-    payload: feedback,
-  }
-);
-
-export const navigate = route => ({
-  type: UPDATE_NAV_STATE,
-  payload: route,
-});
-
-export const submitFeedbackToServer = route => (
-  (dispatch, getState) => {
-    dispatch({ type: SUBMIT_FEEDBACK });
-
-    const { feedback } = getState().main;
-
-    // Post new feedback to server
-    return http.post('/addFeedback/', { text: feedback, authorization: getState().auth.token })
-    .then(() => {
-      dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
-      dispatch(navigate(route));
-    })
-    .catch((error) => {
-      console.error('Error in submitFeedbackToServer in FeedbackActions', error);
-      dispatch({ type: SUBMIT_FEEDBACK_FAIL });
-    });
-  }
-);
-
-
+// Handle Upvoting
 export const addProjectUpvote = project => (
   (dispatch, getState) => {
     dispatch({ type: ADD_PROJECT_UPVOTE, payload: project });
@@ -76,18 +45,52 @@ export const removeProjectUpvote = project => (
   }
 );
 
+export const loadProjectUpvotes = projectUpvotes => (
+  {
+    type: LOAD_PROJECT_UPVOTES,
+    payload: projectUpvotes,
+  }
+);
+
+// Handle Feedback
+export const feedbackChanged = feedback => (
+  {
+    type: FEEDBACK_CHANGED,
+    payload: feedback,
+  }
+);
+
+export const submitFeedbackToServer = route => (
+  (dispatch, getState) => {
+    dispatch({ type: SUBMIT_FEEDBACK });
+
+    const { feedback } = getState().main;
+
+    // Post new feedback to server
+    return http.post('/addFeedback/', { text: feedback, authorization: getState().auth.token })
+    .then(() => {
+      dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
+      dispatch(navigate(route));
+    })
+    .catch((error) => {
+      console.error('Error in submitFeedbackToServer in FeedbackActions', error);
+      dispatch({ type: SUBMIT_FEEDBACK_FAIL });
+    });
+  }
+);
+
+// Handle navigation
+export const navigate = route => ({
+  type: UPDATE_NAV_STATE,
+  payload: route,
+});
+
+// Handle New Projects
 export const addToDoNotDisplayList = projectID => (
   (dispatch, getState) => {
     dispatch({ type: ADD_TO_DO_NOT_DISPLAY_LIST, payload: projectID });
     const { doNotDisplayList } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}doNotDisplayList`, JSON.stringify(doNotDisplayList));
-  }
-);
-
-export const loadProjectUpvotes = projectUpvotes => (
-  {
-    type: LOAD_PROJECT_UPVOTES,
-    payload: projectUpvotes,
   }
 );
 
@@ -98,6 +101,7 @@ export const loadDoNotDisplayList = list => (
   }
 );
 
+// Handle Projects
 export const saveProjectChanges = (project, changeType) => (
   (dispatch, getState) => {
     dispatch({ type: SAVE_PROJECT_CHANGES, payload: project });
@@ -116,7 +120,6 @@ export const saveProjectChanges = (project, changeType) => (
     });
 
     // Subscribe the user to the project
-    
     http.post('/addSubscriber', { authorization: token, projectId: project.id, type: changeType });
   }
 );

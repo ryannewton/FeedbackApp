@@ -1,14 +1,13 @@
 // Import libraries
-import Moment from 'moment';
 import axios from 'axios';
 
 // Import action types
 import {
   FEEDBACK_CHANGED,
   UPDATE_NAV_STATE,
-  ADD_UPVOTE,
-  REMOVE_UPVOTE,
-  LOAD_USER_UPVOTES,
+  ADD_PROJECT_UPVOTE,
+  REMOVE_PROJECT_UPVOTE,
+  LOAD_PROJECT_UPVOTES,
   SAVE_PROJECT_CHANGES,
   DELETE_PROJECT,
   REQUESTED_PROJECTS,
@@ -19,33 +18,36 @@ import {
   ADD_TO_DO_NOT_DISPLAY_LIST,
   LOAD_DO_NOT_DISPLAY_LIST,
   AUTHORIZE_USER_SUCCESS,
-  AUTHORIZE_USER_FAIL
+  AUTHORIZE_USER_FAIL,
 } from './types';
 
-
-//Handle up voting
-export const setUpVotes = (upVotes) => (
-  {
-    type: 'SET_UP_VOTES',
-    upVotes
+// Handle Upvoting
+export const addProjectUpvote = project => (
+  (dispatch, getState) => {
+    dispatch({ type: ADD_PROJECT_UPVOTE, payload: project });
+    const { projectUpvotes } = getState().user;
+    localStorage.setItem('projectUpvotes', JSON.stringify(projectUpvotes));
+    dispatch(saveProjectChanges(project, 'add project upvote'));
   }
 );
 
-export const addUpVote = (upVote) => (
-  {
-    type: 'ADD_UP_VOTE',
-    upVote
+export const removeProjectUpvote = project => (
+  (dispatch, getState) => {
+    dispatch({ type: REMOVE_PROJECT_UPVOTE, payload: project });
+    const { projectUpvotes } = getState().user;
+    localStorage.setItem('projectUpvotes', JSON.stringify(projectUpvotes));
+    dispatch(saveProjectChanges(project, 'remove project upvote'));
   }
 );
 
-export const removeUpVote = (upVote) => (
+export const loadProjectUpvotes = projectUpvotes => (
   {
-    type: 'REMOVE_UP_VOTE',
-    upVote
+    type: LOAD_PROJECT_UPVOTES,
+    payload: projectUpvotes,
   }
 );
 
-//Handle project, project_addition changes
+// Handle project, project_addition changes
 export const saveProjectChanges = (project, changeType) => (
   (dispatch, getState) => {
     dispatch({ type: SAVE_PROJECT_CHANGES, payload: project });

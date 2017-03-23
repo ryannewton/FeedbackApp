@@ -12,23 +12,22 @@ export default class Project extends React.Component {
 
     this.titleChanged = this.titleChanged.bind(this);
     this.descriptionChanged = this.descriptionChanged.bind(this);
-    this.upVote = this.upVote.bind(this);
+    this.projectUpvote = this.projectUpvote.bind(this);
     this.switchEditMode = this.switchEditMode.bind(this);
     this.deleteProject = this.deleteProject.bind(this);
     this.addSolution = this.addSolution.bind(this);
   }
 
-  upVote() {
+  projectUpvote() {
     const project = this.state.project;
-    if (this.props.upVotes.indexOf(this.props.project.id) === -1) {
+    if (!this.props.projectUpvotes.includes(this.props.project.id)) {
       project.votes += 1;
-      this.props.addUpVote(this.props.project.id);
+      this.props.addProjectUpvote(this.props.project);
     }
     else {
       project.votes -= 1;
-      this.props.removeUpVote(this.props.project.id);
+      this.props.removeProjectUpvote(this.props.project);
     }
-    this.props.saveProjectChanges(project, 'upvote');
   }
 
   switchEditMode() {
@@ -60,7 +59,7 @@ export default class Project extends React.Component {
 
   render() {
     const project = this.state.project;
-    const upVoted = this.props.upVotes.indexOf(this.props.project.id) !== -1;
+    const projectUpvoted = this.props.projectUpvotes.indexOf(this.props.project.id) !== -1;
     let title = <span className="h4"><strong>{'Comment: ' + this.state.project.title}</strong></span>;
     let description = <span style={{ width: '100%', whiteSpace: 'pre-wrap' }}>{this.state.project.description}</span>;
     if (this.state.editMode) {
@@ -68,14 +67,14 @@ export default class Project extends React.Component {
       description = <textarea onChange={this.descriptionChanged} style={{ width: '100%' }} value={this.state.project.description} />;
     }
     let voteButton = (
-        <button type="button" className="btn btn-default btn-project pull-right" onClick={this.upVote}>
+        <button type="button" className="btn btn-default btn-project pull-right" onClick={this.projectUpvote}>
           &nbsp;Up Vote!&nbsp;
           <span className="glyphicon glyphicon-thumbs-up"></span>&nbsp;
           <span className="numberCircle">{this.state.project.votes}</span>
         </button>
       );
     let votedButton = (
-        <button type="button" className="btn btn-success btn-project pull-right" onClick={this.upVote}>
+        <button type="button" className="btn btn-success btn-project pull-right" onClick={this.projectUpvote}>
           &nbsp;Voted&nbsp;
           <span className="glyphicon glyphicon-thumbs-up"></span>&nbsp;
           <span className="numberCircle">{this.state.project.votes}</span>
@@ -122,7 +121,7 @@ export default class Project extends React.Component {
         <div className="panel-body" style={{ backgroundColor: '#f4f4f4' }}>
           <div className="clearfix" style={{ marginBottom: '5px' }}>
             {title}
-            {upVoted ? votedButton : voteButton}
+            {projectUpvoted ? votedButton : voteButton}
           </div>
           <div className="panel-group" role="tablist">
             <div className="panel panel-default">
