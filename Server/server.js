@@ -5,36 +5,36 @@ const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const aws = require('aws-sdk'); // load aws sdk
 
+aws.config.loadFromPath('config.json'); // load aws config
 const app = express();
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 
-aws.config.loadFromPath('config.json'); // load aws config
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
 const connection = mysql.createConnection({
-  user     : 'root',
-  password : 'buechelejedi16',
-  port     : '3306',
-  database : 'feedbackappdb',
+  user: 'root',
+  password: 'buechelejedi16',
+  port: '3306',
+  database: 'feedbackappdb',
 
   // production database
-  host     : 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  // host     : 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com', 
+  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
-const fromEmail = 'admin@collaborativefeedback.com';
+const defaultFromEmail = 'admin@collaborativefeedback.com';
 
 connection.connect();
 
-function sendEmail(to, from, subjectLine, bodyText) {
-  ses.sendEmail( {
-    Source: from,
-    Destination: { ToAddresses: to },
+function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
+  ses.sendEmail({
+    Source: fromEmail,
+    Destination: { ToAddresses: toEmail },
     Message: {
       Subject: {
         Data: subjectLine,
@@ -46,9 +46,9 @@ function sendEmail(to, from, subjectLine, bodyText) {
       },
     },
   }
-  , function (err) {
+  , (err) => {
     if (err) console.log(err, err.stack);
-   });
+  });
 }
 
 function generatePassword(len) {
@@ -65,23 +65,23 @@ function generatePassword(len) {
 }
 
 function getDomain(email) {
-  var re = /@\w*\.\w*$|\.\w*\.\w*$/;
+  const re = /@\w*\.\w*$|\.\w*\.\w*$/;
   return re.exec(email)[0].slice(1);
 }
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), function (req, res) {
   // Step #1: Generate a code
-  let code = generatePassword(4);
+  const code = generatePassword(4);
   console.log(code);
 
-  //Step #2: Add the email, code, and timestamp to the database
-  connection.query("INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()", [req.body.email, String(code), String(code)], function(err) {
+  // Step #2: Add the email, code, and timestamp to the database
+  connection.query('INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()', [req.body.email, String(code), String(code)], function(err) {
     if (err) throw err;
   });
 
-  //Step #3: Send an email with the code to the user (make sure it shows up in notification)
-  sendEmail([req.body.email], fromEmail, "Collaborative Feedback: Verify Your Email Address", "Enter this passcode: " + String(code));
+  // Step #3: Send an email with the code to the user (make sure it shows up in notification)
+  sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
 
   res.sendStatus(200);
 });
@@ -134,7 +134,7 @@ app.post('/addFeedback', upload.array(), function(req, res) {
 
       //Send Email
       var to_emails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu'];
-      sendEmail(to_emails, fromEmail, "Feedback: " + req.body.text, "Email: " + decoded.email);
+      sendEmail(to_emails, defaultFromEmail, "Feedback: " + req.body.text, "Email: " + decoded.email);
 
       res.sendStatus(200);
     }
@@ -154,33 +154,24 @@ app.post('/addProject', upload.array(), function(req, res) {
       connection.query('INSERT INTO projects SET ?', {title, description: 'Blank Description', votes: 0, stage: 'new', school: getDomain(decoded.email) }, function(err, result) {
         if (err) throw err;
         if (req.body.feedback) {
-          sendEmail(['tyler.hannasch@gmail.com'], fromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
+          sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
           connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], function(err) {
             if (err) throw err;
           });
         }
-        res.json({id: result.insertId});
+        res.json({ id: result.insertId });
       });
     }
-  }); 
+  });
 });
 
-app.post('/addSolution', upload.array(), function(req, res) {
-
-  console.log('add solution called');
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
-
+app.post('/addSolution', upload.array(), function (req, res) {
+  jwt.verify(req.body.authorization, 'buechelejedi16', function (err, decoded) {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-
-      console.log('add solution authorized');
-
       connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes: 0, title: req.body.title || 'Title Here', description: req.body.description || 'Description Here', project_id: req.body.project_id, school: getDomain(decoded.email), email: decoded.email }, function(err, result) {
         if (err) throw err;
-        console.log('new id', result.insertId);
         res.json({id: result.insertId});
       });
     }
