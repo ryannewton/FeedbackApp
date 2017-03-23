@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
   },
   inputText: {
     ...inputText,
+    height: 50,
     marginTop: 20,
   },
   solutionText: {
