@@ -12,7 +12,6 @@ import Combined_Reducer from './reducer_index.js';
 
 let store = createStore(
 	Combined_Reducer,
-	INITIAL_STATE,
 	applyMiddleware(thunkMiddleware)
 );
 
