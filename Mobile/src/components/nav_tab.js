@@ -21,13 +21,13 @@ class NavTab extends Component {
     let source;
     switch (this.props.route.key) {
       case 'Feedback': {
-        source = this.props.selected ? require('../../images/icons/feedback2-selected.png') : require('../../images/icons/feedback2-notselected.png');
+        source = this.props.selected ? require('../../images/icons/feedback2-selected_100px.png') : require('../../images/icons/feedback2-notselected_100px.png');
         break;
       } case 'NewProjects': {
-        source = this.props.selected ? require('../../images/icons/newprojects2-selected.png') : require('../../images/icons/newprojects2-notselected.png');
+        source = this.props.selected ? require('../../images/icons/newprojects2-selected_100px.png') : require('../../images/icons/newprojects2-notselected_100px.png');
         break;
       } case 'AllProjects': {
-        source = this.props.selected ? require('../../images/icons/allprojects3-selected.png') : require('../../images/icons/allprojects3-notselected.png');
+        source = this.props.selected ? require('../../images/icons/allprojects4-selected_100px.png') : require('../../images/icons/allprojects4-notselected_100px.png');
         break;
       }
       default:

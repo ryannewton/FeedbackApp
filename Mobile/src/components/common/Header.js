@@ -20,7 +20,7 @@ Header.propTypes = {
 const styles = {
   viewStyle: {
     flex: 1,
-    backgroundColor: '#F7FCFF',
+    backgroundColor: '#fefefe',
     justifyContent: 'center',
     alignItems: 'center',
     height: 50,

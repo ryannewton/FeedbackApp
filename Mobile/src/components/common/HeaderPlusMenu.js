@@ -43,7 +43,7 @@ const styles = {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#F7FCFF',
+    backgroundColor: '#fefefe',
     elevation: 3,
     position: 'relative',
     ...Platform.select({
