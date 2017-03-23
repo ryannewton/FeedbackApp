@@ -35,7 +35,7 @@ export default class FeedbackRow extends React.Component {
           <button
             type="button"
             className="btn btn-primary"
-            onClick={this.createProjectFromFeedback}
+            onClick={this.createProjectFromFeedback.bind(this)}
           >
             Create Project
           </button>

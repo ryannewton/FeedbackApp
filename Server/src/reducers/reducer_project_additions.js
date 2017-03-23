@@ -38,7 +38,7 @@ export default function project_additions(state = [], action) {
       return ops.splice(index, 1, action.project_addition, state);
       break;
     case 'ADD_SOLUTION':
-      return ops.push({id: action.project_addition_id, type: 'solution', votes_for: 0, votes_against: 0, title: 'Title Here', description: 'Description Here', project_id: action.project_id}, state);
+      return ops.push({id: action.project_addition_id, type: 'solution', votes: 0, title: 'Title Here', description: 'Description Here', project_id: action.project_id}, state);
       break;
     case 'DELETE_PROJECT_ADDITION':
       return ops.filter((project_addition) => { return project_addition.id !== action.payload; }, state);
