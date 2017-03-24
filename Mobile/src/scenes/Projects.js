@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, ScrollView } from 'react-native';
+import { View, ListView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import actions
@@ -12,6 +12,15 @@ import Project from '../components/project';
 import styles from '../styles/styles_main';
 
 class Projects extends Component {
+  constructor(props) {
+    super(props);
+
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    this.state = {
+      dataSource: ds.cloneWithRows(props.projects),
+    };
+  }
+
   compareNumbers(a, b) {
     return b.votes - a.votes;
   }
@@ -35,10 +44,24 @@ class Projects extends Component {
     return (
       <View style={styles.container}>
 
-        {/* List of projects */}
+        {/* List of projects
         <ScrollView>
           {this.renderProjects()}
         </ScrollView>
+        */}
+
+        <ListView
+          dataSource={this.state.dataSource}
+          renderRow={rowData =>
+            <Project
+              project={rowData}
+              key={rowData.id}
+              navigate={this.props.navigation.navigate}
+              saveProjectChanges={this.props.saveProjectChanges}
+            />
+          }
+        />
+
       </View>
     );
   }
