@@ -267,15 +267,10 @@ app.post('/deleteProjectAddition', upload.array(), function(req, res) {
 
 // Pull Feedback, Projects, Project Additions, Discussion Posts
 app.post('/pullFeedback', upload.array(), (req, res) => {
-  console.log('pull feedback body', req.body);
-
   jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
     if (err) {
-      console.log('auth failed');
       res.status(400).send('authorization failed');
     } else {
-
-      console.log('verified user');
 
       const connection_string = `
         SELECT

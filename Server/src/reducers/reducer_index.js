@@ -5,11 +5,10 @@ import { routerReducer } from 'react-router-redux';
 // Import reducers
 import main from './reducer_main';
 import projects from './reducer_projects';
-import auth from './auth_reducer';
+import auth from './reducer_auth';
 import user from './reducer_user';
 import feedback from './reducer_feedback';
-import projectAdditions from './reducer_project_additions';
-import discussionPosts from './reducer_discussion_posts';
+import projectAdditions from './reducer_projectAdditions';
 
 export default combineReducers({
   main,
@@ -18,6 +17,5 @@ export default combineReducers({
   user,
   feedback,
   projectAdditions,
-  discussionPosts,
   routing: routerReducer,
 });
