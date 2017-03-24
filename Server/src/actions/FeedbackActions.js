@@ -38,7 +38,7 @@ export const saveProjectChanges = (project, changeType) => (
     })
     .catch(error => console.log(error));
 
-    addSubscriber(project.id, changeType);
+    dispatch(addSubscriber(project.id, changeType));
   }
 );
 
@@ -50,7 +50,7 @@ export const saveProjectAdditionChanges = (project_addition, changeType) => (
     })
     .catch(error => console.error(error));
 
-    addSubscriber(project_addition.project_id, changeType);
+    dispatch(addSubscriber(project_addition.project_id, changeType));
 
     return {
       type: 'SAVE_PROJECT_ADDITION_CHANGES',
@@ -132,7 +132,7 @@ export const addProject = (feedback, type) => (
     })
     .then((response) => {
       dispatch(receivedIDForAddProject(response.data.id, feedback));
-      addSubscriber(response.data.id, type);
+      dispatch(addSubscriber(response.data.id, type));
     })
     .catch(error => console.error(error));
   }
@@ -154,7 +154,7 @@ export const addSolution = (project_id, type) => (
     })
     .then((response) => {
       dispatch(receivedIDForAddSolution(response.data.id, project_id));
-      addSubscriber(project_id, type);
+      dispatch(addSubscriber(project_id, type));
     })
     .catch(error => console.error(error));
   }
@@ -169,7 +169,7 @@ export const deleteProject = (id, type) => (
     })
     .catch(error => console.error(error));
 
-    addSubscriber(id, type);
+    dispatch(addSubscriber(id, type));
     dispatch({ type: DELETE_PROJECT, payload: id });
   }
 );
