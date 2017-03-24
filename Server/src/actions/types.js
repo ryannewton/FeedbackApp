@@ -1,15 +1,19 @@
 // FeedbackActions types
-export const FEEDBACK_CHANGED = 'feedback_changed';
-export const UPDATE_NAV_STATE = 'update_nav_state';
+export const REQUESTED_FEEDBACK = 'REQUESTED_FEEDBACK';
+export const RECEIVED_FEEDBACK = 'RECEIVED_FEEDBACK';
+export const ADD_PROJECT = 'ADD_PROJECT';
+export const ADD_SOLUTION = 'ADD_SOLUTION';
 export const ADD_PROJECT_UPVOTE = 'add_project_upvote';
 export const REMOVE_PROJECT_UPVOTE = 'remove_project_upvote';
 export const LOAD_PROJECT_UPVOTES = 'load_project_upvotes';
 export const LOAD_SOLUTION_UPVOTES = 'load_solution_upvotes';
 export const SAVE_PROJECT_CHANGES = 'save_project_changes';
-export const ADD_PROJECT = 'add_project';
 export const DELETE_PROJECT = 'delete_project';
+export const DELETE_PROJECT_ADDITION = 'DELETE_PROJECT_ADDITION';
 export const REQUESTED_PROJECTS = 'requested_projects';
 export const RECEIVED_PROJECTS = 'received_projects';
+export const REQUESTED_PROJECT_ADDITIONS = 'REQUESTED_PROJECT_ADDITIONS';
+export const RECEIVED_PROJECT_ADDITIONS = 'RECEIVED_PROJECT_ADDITIONS';
 export const SUBMIT_FEEDBACK = 'submit_feedback';
 export const SUBMIT_FEEDBACK_SUCCESS = 'submit_feedback_success';
 export const SUBMIT_FEEDBACK_FAIL = 'submit_feedback_fail';

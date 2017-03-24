@@ -1,25 +1,63 @@
-// Import libraries
-import axios from 'axios';
-
 // Import action types
 import {
-  FEEDBACK_CHANGED,
-  UPDATE_NAV_STATE,
+  REQUESTED_FEEDBACK,
+  RECEIVED_FEEDBACK,
+  ADD_PROJECT,
+  ADD_SOLUTION,
   ADD_PROJECT_UPVOTE,
   REMOVE_PROJECT_UPVOTE,
   LOAD_PROJECT_UPVOTES,
   SAVE_PROJECT_CHANGES,
   DELETE_PROJECT,
+  DELETE_PROJECT_ADDITION,
   REQUESTED_PROJECTS,
   RECEIVED_PROJECTS,
-  SUBMIT_FEEDBACK,
-  SUBMIT_FEEDBACK_SUCCESS,
-  SUBMIT_FEEDBACK_FAIL,
-  ADD_TO_DO_NOT_DISPLAY_LIST,
-  LOAD_DO_NOT_DISPLAY_LIST,
+  REQUESTED_PROJECT_ADDITIONS,
+  RECEIVED_PROJECT_ADDITIONS,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
 } from './types';
+
+// Import constants
+import http from '../constants';
+
+export const addSubscriber = (project_id, type) => (
+  (dispatch, getState) => {
+    http.post('/addSubscriber', { authorization: getState().auth.token, project_id, type });
+  }
+);
+
+// Handle project, projectAddition changes
+export const saveProjectChanges = (project, changeType) => (
+  (dispatch, getState) => {
+    dispatch({ type: SAVE_PROJECT_CHANGES, project });
+
+    http.post('/saveProjectChanges', {
+      project,
+      authorization: getState().auth.token,
+    })
+    .catch(error => console.log(error));
+
+    addSubscriber(project.id, changeType);
+  }
+);
+
+export const saveProjectAdditionChanges = (project_addition, changeType) => (
+  (dispatch, getState) => {
+    http.post('/saveProjectAdditionChanges', {
+      project_addition,
+      authorization: getState().auth.token,
+    })
+    .catch(error => console.error(error));
+
+    addSubscriber(project_addition.project_id, changeType);
+
+    return {
+      type: 'SAVE_PROJECT_ADDITION_CHANGES',
+      project_addition,
+    };
+  }
+);
 
 // Handle Upvoting
 export const addProjectUpvote = project => (
@@ -50,7 +88,7 @@ export const loadProjectUpvotes = projectUpvotes => (
 // Handle Feedback
 export const requestedFeedback = (startDate, endDate) => (
   {
-    type: 'REQUESTED_FEEDBACK',
+    type: REQUESTED_FEEDBACK,
     startDate,
     endDate,
   }
@@ -58,7 +96,7 @@ export const requestedFeedback = (startDate, endDate) => (
 
 export const receivedFeedback = feedback => (
   {
-    type: 'RECEIVED_FEEDBACK',
+    type: RECEIVED_FEEDBACK,
     feedback,
   }
 );
@@ -67,96 +105,34 @@ export const updateDates = (startDate, endDate, token) => (
   (dispatch, getState) => {
     dispatch(requestedFeedback(startDate, endDate));
 
-    return fetch('/pullFeedback', {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        startDate,
-        endDate,
-        authorization: token || getState().auth.token,
-      }),
+    http.post('/pullFeedback', {
+      startDate,
+      endDate,
+      authorization: token || getState().auth.token,
     })
-    .then(response => response.json())
-    .then(feedback => dispatch(receivedFeedback(feedback)))
-    .catch(error => console.error(error));
+    .then(response => dispatch(receivedFeedback(response.data)))
+    .catch(error => console.log(error));
   }
 );
 
-// Handle project, project_addition changes
-export const saveProjectChanges = (project, changeType) => (
-  (dispatch, getState) => {
-    dispatch({ type: SAVE_PROJECT_CHANGES, payload: project });
-
-    // Save the project change to the server
-    fetch(`/saveProjectChanges`, {
-      method: 'POST',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json'        
-      },
-      body: JSON.stringify({ project, authorization: getState().auth.token })
-    });
-
-    addSubscriber(project.id, changeType);    
-  }
-);
-
-export const saveProjectAdditionChanges = (project_addition, changeType) => (
-  (dispatch, getState) => { 
-    fetch(`/saveProjectAdditionChanges`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        project_addition,
-        authorization: getState().auth.token
-      })
-    })
-    .catch(error => console.error(error)); 
-
-    addSubscriber(project_addition.project_id, changeType);   
-
-    return {
-      type: 'SAVE_PROJECT_ADDITION_CHANGES',
-      project_addition
-    }
-  }
-);
-
-
-//Add Project, Solution, Subscriber
+// Add Project, Solution, Subscriber
 export const receivedIDForAddProject = (id, feedback) => (
   {
-    type: 'ADD_PROJECT',
+    type: ADD_PROJECT,
     id,
-    feedback
+    feedback,
   }
 );
 
-export const addProject = (feedback, type) => (   
+export const addProject = (feedback, type) => (
   (dispatch, getState) => {
-
-    return fetch(`/addProject`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        feedback,
-        authorization: getState().auth.token
-      })
+    http.post('/addProject', {
+      feedback,
+      authorization: getState().auth.token,
     })
-    .then(response => response.json())
-    .then(response => {
-      console.log("receieved add project response", response);
-      dispatch(receivedIDForAddProject(response.id, feedback));
-      addSubscriber(response.id, type);     
+    .then((response) => {
+      dispatch(receivedIDForAddProject(response.data.id, feedback));
+      addSubscriber(response.data.id, type);
     })
     .catch(error => console.error(error));
   }
@@ -164,176 +140,102 @@ export const addProject = (feedback, type) => (
 
 export const receivedIDForAddSolution = (project_addition_id, project_id) => (
   {
-    type: 'ADD_SOLUTION',
+    type: ADD_SOLUTION,
     project_addition_id,
     project_id,
   }
 );
 
 export const addSolution = (project_id, type) => (
-  (dispatch, getState) => {   
-    return fetch(`/addSolution`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        project_id,
-        authorization: getState().auth.token
-      })
+  (dispatch, getState) => {
+    http.post('/addSolution', {
+      project_id,
+      authorization: getState().auth.token,
     })
-    .then(response => response.json())
-    .then(response => {
-      dispatch(receivedIDForAddSolution(response.id, project_id));
+    .then((response) => {
+      dispatch(receivedIDForAddSolution(response.data.id, project_id));
       addSubscriber(project_id, type);
-    })    
+    })
     .catch(error => console.error(error));
   }
 );
 
-export const addSubscriber = (project_id, type) => (
-  (dispatch, getState) => {   
-    axios.post(`/addSubscriber`, { authorization: getState().auth.token, project_id, type });
-  }
-);
-
-//Delete Project, Project_Addition
+// Delete Project, Project_Addition
 export const deleteProject = (id, type) => (
   (dispatch, getState) => {
-
-    fetch(`/deleteProject`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id,
-        authorization: getState().auth.token
-      })
-    })
-    .catch(error => console.error(error));  
-
-    addSubscriber(id, type);      
-    dispatch({ type: 'DELETE_PROJECT', payload: id });        
-  }
-);
-
-export const deleteProjectAddition = (id) => (
-  (dispatch, getState) => {
-    fetch(`/deleteProjectAddition`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        id,
-        authorization: getState().auth.token
-      })
+    http.post('/deleteProject', {
+      id,
+      authorization: getState().auth.token,
     })
     .catch(error => console.error(error));
 
-    dispatch({ type: 'DELETE_PROJECT_ADDITION', payload: id });    
+    addSubscriber(id, type);
+    dispatch({ type: DELETE_PROJECT, payload: id });
   }
 );
 
+export const deleteProjectAddition = id => (
+  (dispatch, getState) => {
+    http.post('/deleteProjectAddition', {
+      id,
+      authorization: getState().auth.token,
+    })
+    .catch(error => console.error(error));
 
-
+    dispatch({ type: DELETE_PROJECT_ADDITION, payload: id });
+  }
+);
 
 export const requestedProjects = () => (
   {
-    type: 'REQUESTED_PROJECTS',
+    type: REQUESTED_PROJECTS,
   }
 );
 
-export const receivedProjects = (projects) => (
+export const receivedProjects = projects => (
   {
-    type: 'RECEIVED_PROJECTS',
+    type: RECEIVED_PROJECTS,
     projects,
   }
 );
 
-export const pullProjects = (token) => (
-  function (dispatch, getState) {
+export const pullProjects = token => (
+  (dispatch) => {
     dispatch(requestedProjects());
 
-    return axios.post(`/pullProjects`, { authorization: token })
-    .then(response => {
+    return http.post('/pullProjects', { authorization: token })
+    .then((response) => {
       dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
       dispatch(receivedProjects(response.data));
     })
-    .catch(error => {
+    .catch((error) => {
       console.log(error);
-      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message })
+      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message });
     });
   }
 );
 
 export const requestedProjectAdditions = () => (
   {
-    type: 'REQUESTED_PROJECT_ADDITIONS',
+    type: REQUESTED_PROJECT_ADDITIONS,
   }
 );
 
-export const receivedProjectAdditions = (project_additions) => (
+export const receivedProjectAdditions = projectAdditions => (
   {
-    type: 'RECEIVED_PROJECT_ADDITIONS',
-    project_additions,      
+    type: RECEIVED_PROJECT_ADDITIONS,
+    projectAdditions,
   }
 );
 
-export const pullProjectAdditions = (token) => (
-  function (dispatch, getState) {
-  dispatch(requestedProjectAdditions());
+export const pullProjectAdditions = token => (
+  (dispatch) => {
+    dispatch(requestedProjectAdditions());
 
-  return fetch(`/pullProjectAdditions`, {
-    method: 'POST',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-      authorization: token
-    }),
-  })
-  .then(response => response.json() )
-  .then(project_additions => dispatch(receivedProjectAdditions(project_additions)) )
-  .catch(error => console.error(error));
-  }
-);
-
-export const requestedDiscussionPosts = () => (
-  {
-    type: 'REQUESTED_DISCUSSION_POSTS',
-  }
-);
-
-export const receivedDiscussionPosts = (discussion_posts) => (
-  {
-    type: 'RECEIVED_DISCUSSION_POSTS',
-    discussion_posts,     
-  }
-);
-
-export const pullDiscussionPosts = () => (
-  function (dispatch, getState) {
-
-    dispatch(requestedDiscussionPosts());
-
-    return fetch(`/pullDiscussionPosts`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        authorization: getState().auth.token
-      }),
+    http.post('/pullProjectAdditions', {
+      authorization: token,
     })
-    .then(response => response.json() )
-    .then(discussion_posts => dispatch(receivedDiscussionPosts(discussion_posts)) )
+    .then(response => dispatch(receivedProjectAdditions(response.data)))
     .catch(error => console.error(error));
   }
 );
