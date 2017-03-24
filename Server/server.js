@@ -201,7 +201,6 @@ app.post('/saveProjectChanges', upload.array(), (req, res) => {
 });
 
 app.post('/saveProjectAdditionChanges', upload.array(), (req, res) => {
-
   jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
