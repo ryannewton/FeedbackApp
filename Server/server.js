@@ -70,7 +70,7 @@ function getDomain(email) {
 }
 
 // Authentication
-app.post('/sendAuthorizationEmail', upload.array(), function (req, res) {
+app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
   // Step #1: Generate a code
   const code = generatePassword(4);
   console.log(code);
@@ -86,15 +86,15 @@ app.post('/sendAuthorizationEmail', upload.array(), function (req, res) {
   res.sendStatus(200);
 });
 
-app.post('/authorizeUser', upload.array(), function(req, res) {
+app.post('/authorizeUser', upload.array(), (req, res) => {
 
-  //Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-  connection.query("SELECT passcode_time FROM users WHERE email=? AND passcode=?", [req.body.email, req.body.code], function(err, rows, fields) {
+  // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
+  connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows, fields) => {
     if (err) throw err;
-    //Step #2: Check that it matches the passcode submitted by the user, if not send error
-    //Step #3: If it checks out then create a JWT token and send to the user
+    // Step #2: Check that it matches the passcode submitted by the user, if not send error
+    // Step #3: If it checks out then create a JWT token and send to the user
     if (rows.length || req.body.code === "apple") {
-      var myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16')
+      const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16')
       res.status(200).json(myToken);
     } else {
       res.status(400).send('Incorrect Code');
@@ -102,15 +102,15 @@ app.post('/authorizeUser', upload.array(), function(req, res) {
   });
 });
 
-app.post('/authorizeAdminUser', upload.array(), function(req, res) {
+app.post('/authorizeAdminUser', upload.array(), (req, res) => {
 
-  //Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-  connection.query("SELECT passcode_time FROM users WHERE email=? AND passcode=?", [req.body.email, req.body.code], function(err, rows, fields) {
+  // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
+  connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;
-    //Step #2: Check that it matches the passcode submitted by the user, if not send error
-    //Step #3: If it checks out then create a JWT token and send to the user
-    if (rows.length && req.body.adminCode === "GSB2017") {
-      var myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16')
+    // Step #2: Check that it matches the passcode submitted by the user, if not send error
+    // Step #3: If it checks out then create a JWT token and send to the user
+    if (rows.length && req.body.adminCode === 'GSB2017') {
+      const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16');
       res.status(200).json(myToken);
     } else {
       res.status(400).send('Incorrect Code');
@@ -118,45 +118,40 @@ app.post('/authorizeAdminUser', upload.array(), function(req, res) {
   });
 });
 
-//Add Feedback, Projects, Solutions
-app.post('/addFeedback', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+// Add Feedback, Projects, Solutions
+app.post('/addFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      var school = getDomain(decoded.email);
+      const school = getDomain(decoded.email);
 
-      connection.query("INSERT INTO feedback (text, email, school) VALUES (?, ?, ?)", [req.body.text, decoded.email, school], function(err) {
+      connection.query('INSERT INTO feedback (text, email, school) VALUES (?, ?, ?)', [req.body.text, decoded.email, school], err => {
         if (err) throw err;
       });
 
-      //Send Email
-      var to_emails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu'];
-      sendEmail(to_emails, defaultFromEmail, "Feedback: " + req.body.text, "Email: " + decoded.email);
+      // Send Email
+      const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu'];
+      sendEmail(toEmails, defaultFromEmail, 'Feedback: ' + req.body.text, 'Email: ' + decoded.email);
 
       res.sendStatus(200);
     }
-  }); 
+  });
 });
 
-app.post('/addProject', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+app.post('/addProject', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
+      const title = (req.body.feedback) ? req.body.feedback.text : 'Blank Title';
 
-      var title = (req.body.feedback) ? req.body.feedback.text : "Blank Title";
-
-      connection.query('INSERT INTO projects SET ?', {title, description: 'Blank Description', votes: 0, stage: 'new', school: getDomain(decoded.email) }, function(err, result) {
-        if (err) throw err;
+      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, stage: 'new', school: getDomain(decoded.email) }, (err2, result) => {
+        if (err2) throw err2;
         if (req.body.feedback) {
           sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
-          connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], function(err) {
-            if (err) throw err;
+          connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], (err3) => {
+            if (err3) throw err3;
           });
         }
         res.json({ id: result.insertId });
@@ -165,100 +160,82 @@ app.post('/addProject', upload.array(), function(req, res) {
   });
 });
 
-app.post('/addSolution', upload.array(), function (req, res) {
-  jwt.verify(req.body.authorization, 'buechelejedi16', function (err, decoded) {
+app.post('/addSolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('INSERT INTO project_additions SET ?', {type: 'solution', votes: 0, title: req.body.title || 'Title Here', description: req.body.description || 'Description Here', project_id: req.body.project_id, school: getDomain(decoded.email), email: decoded.email }, function(err, result) {
+      connection.query('INSERT INTO project_additions SET ?', { type: 'solution', votes: 0, title: req.body.title || 'Title Here', description: req.body.description || 'Description Here', project_id: req.body.project_id, school: getDomain(decoded.email), email: decoded.email }, (err, result) => {
         if (err) throw err;
-        res.json({id: result.insertId});
+        res.json({ id: result.insertId });
       });
     }
   });
 });
 
-app.post('/addSubscriber', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+app.post('/addSubscriber', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-
-      connection.query('INSERT INTO subscriptions SET ?', {project_id: req.body.project_id, email: decoded.email, type: req.body.type}, function(err, result) {
-        if (err) throw err;
+      connection.query('INSERT INTO subscriptions SET ?', { project_id: req.body.project_id, email: decoded.email, type: req.body.type }, (err2) => {
+        if (err2) throw err2;
         res.sendStatus(200);
       });
     }
-
   });
 });
 
-//Save Project, Project_Addition Changes
-app.post('/saveProjectChanges', upload.array(), function(req, res) {  
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+// Save Project, Project_Addition Changes
+app.post('/saveProjectChanges', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-
-      connection.query("UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], function(err) {
+      connection.query('UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?', [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], (err) => {
         if (err) throw err;
       });
-
       res.sendStatus(200);
     }
   });
 });
 
-app.post('/saveProjectAdditionChanges', upload.array(), function(req, res) {
+app.post('/saveProjectAdditionChanges', upload.array(), (req, res) => {
 
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-
-      connection.query("UPDATE project_additions SET votes = ?, title = ?, description = ? WHERE id= ?", [req.body.project_addition.votes, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
+      connection.query('UPDATE project_additions SET votes = ?, title = ?, description = ? WHERE id= ?', [req.body.project_addition.votes, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
         if (err) throw err;
       });
-
       res.sendStatus(200);
     }
   });
 });
 
-//Delete Projects, Project_Additions
-app.post('/deleteProject', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+// Delete Projects, Project_Additions
+app.post('/deleteProject', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-
-      connection.query('DELETE FROM projects WHERE id = ?', [req.body.id], function(err, result) {
+      connection.query('DELETE FROM projects WHERE id = ?', [req.body.id], (err) => {
         if (err) throw err;
       });
-
       res.sendStatus(200);
     }
   });
 });
 
-app.post('/deleteProjectAddition', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+app.post('/deleteProjectAddition', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-
-      connection.query('DELETE FROM project_additions WHERE id = ?', [req.body.id], function(err, result) {
-        if (err) throw err;
+      connection.query('DELETE FROM project_additions WHERE id = ?', [req.body.id], (err2) => {
+        if (err2) throw err2;
       });
-
       res.sendStatus(200);
     }
   });
@@ -267,12 +244,11 @@ app.post('/deleteProjectAddition', upload.array(), function(req, res) {
 
 // Pull Feedback, Projects, Project Additions, Discussion Posts
 app.post('/pullFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-
-      const connection_string = `
+      const connectionString = `
         SELECT
           *
         FROM
@@ -280,9 +256,8 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
         WHERE
           time
             BETWEEN ? AND ?`;
-
-      connection.query(connection_string, [req.body.startDate, req.body.endDate], function(err, rows, fields) {
-        if (err) throw err;
+      connection.query(connectionString, [req.body.startDate, req.body.endDate], (err2, rows) => {
+        if (err2) throw err2;
         else {
           res.json(rows);
         }
@@ -291,66 +266,57 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
   });
 });
 
-app.post('/pullProjects', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+app.post('/pullProjects', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      var connection_string = `
+      const connectionString = `
         SELECT
           id, title, votes, description, department, stage
         FROM
           projects
         WHERE
           school=?`;
-
-      connection.query(connection_string, [getDomain(decoded.email)], function(err, rows, fields) {
-        if (err) throw err;
+      connection.query(connectionString, [getDomain(decoded.email)], (err2, rows) => {
+        if (err2) throw err2;
         else res.send(rows);
       });
     }
   });
 });
 
-app.post('/pullProjectAdditions', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+app.post('/pullProjectAdditions', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      var connection_string = `
+      const connectionString = `
         SELECT
           id, type, votes, title, description, project_id
         FROM
           project_additions
         WHERE
           school=?`;
-
-      connection.query(connection_string, [getDomain(decoded.email)], function(err, rows, fields) {
-        if (err) throw err;
+      connection.query(connectionString, [getDomain(decoded.email)], (err2, rows) => {
+        if (err2) throw err2;
         else res.send(rows);
       });
     }
-  }); 
+  });
 });
 
-app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
-
-  jwt.verify(req.body.authorization, 'buechelejedi16', function(err, decoded) {
-
+app.post('/pullDiscussionPosts', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      var connection_string = `
+      const connectionString = `
         SELECT
           id, point, counter_point, project_addition_id
         FROM
           discussion_posts`;
-
-      connection.query(connection_string, function(err, rows, fields) {
+      connection.query(connectionString, (err2, rows) => {
         if (err) throw err;
         else {
           res.send(rows);
@@ -360,10 +326,10 @@ app.post('/pullDiscussionPosts', upload.array(), function(req, res) {
   });
 });
 
-// app.listen(8081, function () {
+// app.listen(8081, () => {
 //  console.log('Example app listening on port 8081!');
 // });
 
-app.listen(3000, function () {
+app.listen(3000, () => {
   console.log('Example app listening on port 3000!');
 });
