@@ -1,6 +1,12 @@
 // Import libaries
 import React, { Component } from 'react';
 import { TouchableOpacity, Image } from 'react-native';
+import FeedbackSelected from '../../images/icons/feedback2-selected_100px.png';
+import FeedbackNotSelected from '../../images/icons/feedback2-notselected_100px.png';
+import NewProjectsSelected from '../../images/icons/newprojects2-selected_100px.png';
+import NewProjectsNotSelected from '../../images/icons/newprojects2-notselected_100px.png';
+import AllProjectsSelected from '../../images/icons/allprojects4-selected_100px.png';
+import AllProjectsNotSelected from '../../images/icons/allprojects4-notselected_100px.png';
 
 // Import components, functions, and styles
 import styles from '../styles/styles_main';
@@ -21,13 +27,13 @@ class NavTab extends Component {
     let source;
     switch (this.props.route.key) {
       case 'Feedback': {
-        source = this.props.selected ? require('../../images/icons/feedback2-selected_100px.png') : require('../../images/icons/feedback2-notselected_100px.png');
+        source = this.props.selected ? FeedbackSelected : FeedbackNotSelected;
         break;
       } case 'NewProjects': {
-        source = this.props.selected ? require('../../images/icons/newprojects2-selected_100px.png') : require('../../images/icons/newprojects2-notselected_100px.png');
+        source = this.props.selected ? NewProjectsSelected : NewProjectsNotSelected;
         break;
       } case 'AllProjects': {
-        source = this.props.selected ? require('../../images/icons/allprojects4-selected_100px.png') : require('../../images/icons/allprojects4-notselected_100px.png');
+        source = this.props.selected ? AllProjectsSelected : AllProjectsNotSelected;
         break;
       }
       default:
