@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
 import styles from '../styles/scenes/project_details_styles';
+import Project from '../components/Project';
 import Solution from '../components/Solution';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
@@ -17,50 +18,6 @@ import {
 } from '../actions';
 
 class ProjectDetails extends Component {
-  upvoteProject() {
-    const { user } = this.props;
-    const { project } = this.props.navigation.state.params;
-    // If user hasn't upvoted this project, add an upvote
-    if (!user.projectUpvotes.includes(project.id)) {
-      this.props.addProjectUpvote(project);
-    } else {
-      this.props.removeProjectUpvote(project);
-    }
-  }
-
-  compareNumbers(a, b) {
-    return b.votes - a.votes;
-  }
-
-  projectDescription() {
-    const { buttonText, lowWeight } = styles;
-    const { project } = this.props.navigation.state.params;
-
-    return (
-      <View style={{ flex: 1, justifyContent: 'flex-start' }}>
-        {/* Project title */}
-        <Text style={buttonText}>
-          {project.title}
-        </Text>
-
-        {/* Vote section */}
-        <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
-          {/* Vote count */}
-          <View style={{ flex: 3 }}>
-            <Text style={[buttonText, lowWeight]}>
-              {`${project.votes} Votes`}
-            </Text>
-          </View>
-
-          {/* Upvote button */}
-          <View style={{ flex: 1 }}>
-            {this.renderUpvoteButton()}
-          </View>
-        </View>
-      </View>
-    );
-  }
-
   solutionsList() {
     const { solutionText, subheaderText } = styles;
     const { solutions } = this.props;
@@ -76,9 +33,11 @@ class ProjectDetails extends Component {
       );
     }
 
-    const formattedSolutions = projectSolutions.sort(this.compareNumbers).map((solution, index) => (
-      <Solution solution={solution} key={index} />
-    ));
+    const formattedSolutions = projectSolutions
+      .sort((a, b) => b.votes - a.votes)
+      .map((solution, index) => (
+        <Solution solution={solution} key={index} />
+      ));
 
     return (
       <View>
@@ -90,27 +49,6 @@ class ProjectDetails extends Component {
     );
   }
 
-  renderUpvoteButton() {
-    const { user } = this.props;
-    const { project } = this.props.navigation.state.params;
-    let buttonStyles = { width: 80, height: 27, marginRight: 2 };
-    let textStyles = {};
-    // If user hasn't upvoted this project
-    if (user.projectUpvotes.includes(project.id)) {
-      buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
-      textStyles = { ...textStyles, color: '#fff' };
-    }
-    return (
-      <Button
-        onPress={this.upvoteProject.bind(this)}
-        style={buttonStyles}
-        textStyle={textStyles}
-      >
-        Upvote!
-      </Button>
-    );
-  }
-
   renderSubmitButton() {
     // If waiting for response from server, show a spinner
     if (this.props.solutions.loading) {
@@ -119,7 +57,6 @@ class ProjectDetails extends Component {
 
     const { solution } = this.props.main;
     const { project } = this.props.navigation.state.params;
-
     return (
       <Button onPress={() => this.props.submitSolutionToServer(solution, project.id)}>
         Submit Suggestion
@@ -129,17 +66,14 @@ class ProjectDetails extends Component {
 
   render() {
     const { container, inputText } = styles;
+    const { project } = this.props.navigation.state.params;
     return (
       <ScrollView>
         <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
           <View style={container}>
 
             {/* Project description */}
-            <Card>
-              <CardSection>
-                {this.projectDescription()}
-              </CardSection>
-            </Card>
+            <Project project={project} navigate={() => undefined} />
 
             {/* List of submitted solutions */}
             <Card>
