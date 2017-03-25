@@ -1,6 +1,6 @@
 // Import libaries
 import React, { Component } from 'react';
-import { Text, TouchableOpacity, Image } from 'react-native';
+import { TouchableOpacity, Image } from 'react-native';
 
 // Import components, functions, and styles
 import styles from '../styles/styles_main';
@@ -31,11 +31,11 @@ class NavTab extends Component {
         break;
       }
       default:
-        console.log('error in switch in nav_tab');
+        console.error('Error in switch in NavTab');
     }
-    
+
     if (this.props.selected) {
-      style.push(styles.tabSelected);      
+      style.push(styles.tabSelected);
     }
 
     return (

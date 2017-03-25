@@ -10,7 +10,7 @@ import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 
 //Import components, functions, and styles
-import NavTabs from '../components/nav_tabs.js';
+import NavTabs from '../components/NavTabs.js';
 import styles from '../styles/styles_main.js';
 
 const { CardStack: NavigationCardStack } = NavigationExperimental;

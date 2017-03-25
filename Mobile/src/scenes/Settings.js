@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { saveEmail } from '../actions';
 
 // Import componenets, functions, and styles
-import RequireAuth from '../components/require_auth';
+import RequireAuth from '../components/RequireAuth';
 import { Button, Header } from '../components/common';
 import styles from '../styles/settings_styles';
 

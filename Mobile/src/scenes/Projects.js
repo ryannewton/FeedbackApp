@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 import { saveProjectChanges } from '../actions';
 
 // Import components, functions, and styles
-import RequireAuth from '../components/require_auth';
-import Project from '../components/project';
+import RequireAuth from '../components/RequireAuth';
+import Project from '../components/Project';
 import styles from '../styles/styles_main';
 
 class Projects extends Component {
