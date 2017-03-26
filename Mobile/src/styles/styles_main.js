@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
   },
   feedback_input: {
     fontSize: 18,
-    height: 180,
+    height: 140,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 4,
