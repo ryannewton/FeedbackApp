@@ -1,6 +1,6 @@
 // Import Libraries
 import React from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, TouchableOpacity } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -22,17 +22,14 @@ import NewProjectsNotSelected from '../../images/icons/newprojects2-notselected_
 import AllProjectsSelected from '../../images/icons/allprojects4-selected_100px.png';
 import AllProjectsNotSelected from '../../images/icons/allprojects4-notselected_100px.png';
 
-function navButton(target, label, navigate) {
+function settingsButton(navigate) {
   const right = (
-    <View style={{ width: 80 }}>
-      <Button
-        onPress={() => {
-          navigate(target);
-        }}
-      >
-        {label}
-      </Button>
-    </View>
+    <TouchableOpacity
+      style={{ width: 50 }}
+      onPress={() => navigate('Settings')}
+    >
+      <Icon name="settings" size={25} />
+    </TouchableOpacity>
   );
 
   return { right };
@@ -43,7 +40,7 @@ export const FeedbackStack = StackNavigator({
     screen: Feedback,
     navigationOptions: {
       title: 'Send Feedback',
-      header: ({ navigate }) => navButton('Settings', 'Settings', navigate),
+      header: ({ navigate }) => settingsButton(navigate),
     },
   },
   Settings: {
