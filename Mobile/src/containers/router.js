@@ -82,8 +82,8 @@ export const Tabs = TabNavigator(
       navigationOptions: {
         tabBar: {
           label: 'Feedback',
-          icon: ({ tintColor }) => <Icon name="create" size={25} color={tintColor} />,
-          // icon: <Image source={FeedbackSelected} style={{ width: 25, height: 25 }} />,
+          icon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
+          // icon: <Image source={FeedbackSelected} style={{ width: 22, height: 22 }} />,
         },
       },
     },
@@ -92,8 +92,8 @@ export const Tabs = TabNavigator(
       navigationOptions: {
         tabBar: {
           label: 'New Projects',
-          // icon: ({ tintColor }) => <Icon name="mode-edit" size={25} color={tintColor} />,
-          icon: <Image source={NewProjectsSelected} style={{ width: 25, height: 25 }} />,
+          // icon: ({ tintColor }) => <Icon name="mode-edit" size={22} color={tintColor} />,
+          icon: <Image source={NewProjectsSelected} style={{ width: 22, height: 22 }} />,
         },
       },
     },
@@ -102,8 +102,8 @@ export const Tabs = TabNavigator(
       navigationOptions: {
         tabBar: {
           label: 'Projects',
-          icon: ({ tintColor }) => <Icon name="view-list" size={25} color={tintColor} />,
-          // icon: <Image source={AllProjectsSelected} style={{ width: 25, height: 25 }} />,
+          icon: ({ tintColor }) => <Icon name="view-list" size={22} color={tintColor} />,
+          // icon: <Image source={AllProjectsSelected} style={{ width: 22, height: 22 }} />,
         },
       },
     },
@@ -111,6 +111,8 @@ export const Tabs = TabNavigator(
   {
     tabBarOptions: {
       showIcon: true,
+      tabStyle: { margin: 0, padding: 8, height: 55 },
+      labelStyle: { margin: 0, padding: 0, fontSize: 11 },
     },
   });
 
