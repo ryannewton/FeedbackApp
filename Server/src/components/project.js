@@ -30,16 +30,16 @@ class Project extends Component {
   }
 
   projectUpvote() {
-    const project = this.state.project;
+    const project = {...this.state.project};
     if (!this.props.projectUpvotes.includes(this.props.project.id)) {
       project.votes += 1;
       this.props.addProjectUpvote(project);
-      this.props.saveProjectChanges(project, 'add upvote');    
+      this.props.saveProjectChanges(project, 'Added Upvote');    
     }
     else {
       project.votes -= 1;
-      this.props.removeProjectUpvote(this.props.project);
-      this.props.saveProjectChanges(project, 'remove upvote');  
+      this.props.removeProjectUpvote(project);
+      this.props.saveProjectChanges(project, 'Removed Upvote');  
     };    
   }
 
@@ -51,15 +51,11 @@ class Project extends Component {
   }
 
   titleChanged(event) {
-    const project = this.state.project;
-    project.title = event.target.value;
-    this.setState({ project });
+    this.setState({ project: { ...this.state.project, title: event.target.value }});
   }
 
   descriptionChanged(event) {
-    const project = this.state.project;
-    project.description = event.target.value;
-    this.setState({ project });
+    this.setState({ project: { ...this.state.project, description: event.target.value }});
   }
 
   deleteProject() {
@@ -67,7 +63,7 @@ class Project extends Component {
   }
 
   addSolution() {
-    this.props.addSolution(this.state.project.id, 'addSolution');
+    this.props.addSolution(this.state.project.id, 'Added Solution');
   }
 
   render() {
@@ -168,4 +164,9 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  addProjectUpvote, removeProjectUpvote })(Project);
+  addProjectUpvote,
+  removeProjectUpvote,
+  saveProjectChanges,
+  deleteProject,
+  addSolution,
+})(Project);
