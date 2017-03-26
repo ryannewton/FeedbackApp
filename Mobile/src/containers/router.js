@@ -1,8 +1,8 @@
 // Import Libraries
 import React from 'react';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
-// import { Icon } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
 
 // Import Scenes
 import Feedback from '../scenes/Feedback';
@@ -44,7 +44,6 @@ export const FeedbackStack = StackNavigator({
     navigationOptions: {
       title: 'Send Feedback',
       header: ({ navigate }) => navButton('Settings', 'Settings', navigate),
-      icon: FeedbackSelected,
     },
   },
   Settings: {
@@ -79,27 +78,44 @@ export const ProjectsStack = StackNavigator({
   },
 });
 
-export const Tabs = TabNavigator({
-  Feedback: {
-    screen: FeedbackStack,
-    navigationOptions: {
-      tabBar: {
-        label: 'Feedback',
+export const Tabs = TabNavigator(
+  {
+    Feedback: {
+      screen: FeedbackStack,
+      navigationOptions: {
+        tabBar: {
+          label: 'Feedback',
+          icon: ({ tintColor }) => <Icon name="create" size={25} color={tintColor} />,
+          // icon: <Image source={FeedbackSelected} style={{ width: 25, height: 25 }} />,
+        },
+      },
+    },
+    NewProjects: {
+      screen: NewProjectsStack,
+      navigationOptions: {
+        tabBar: {
+          label: 'New Projects',
+          // icon: ({ tintColor }) => <Icon name="mode-edit" size={25} color={tintColor} />,
+          icon: <Image source={NewProjectsSelected} style={{ width: 25, height: 25 }} />,
+        },
+      },
+    },
+    ProjectsStack: {
+      screen: ProjectsStack,
+      navigationOptions: {
+        tabBar: {
+          label: 'Projects',
+          icon: ({ tintColor }) => <Icon name="view-list" size={25} color={tintColor} />,
+          // icon: <Image source={AllProjectsSelected} style={{ width: 25, height: 25 }} />,
+        },
       },
     },
   },
-  NewProjects: {
-    screen: NewProjectsStack,
-    navigationOptions: {
-      tabBar: {
-        label: 'New Projects',
-      },
+  {
+    tabBarOptions: {
+      showIcon: true,
     },
-  },
-  ProjectsStack: {
-    screen: ProjectsStack,
-  },
-});
+  });
 
 export const Root = StackNavigator({
   Tabs: {
