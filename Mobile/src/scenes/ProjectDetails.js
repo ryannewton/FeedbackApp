@@ -131,8 +131,4 @@ const AppScreen = connect(mapStateToProps, {
   submitSolutionToServer,
 })(ProjectDetails);
 
-AppScreen.navigationOptions = {
-  title: 'Project Details',
-};
-
 export default AppScreen;
