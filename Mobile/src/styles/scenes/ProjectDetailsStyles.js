@@ -14,21 +14,29 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textDecorationLine: 'underline',
   },
-  text: {
-    fontSize: 16,
-  },
   subheaderText: {
-    fontSize: 16,
+    fontSize: 17,
+    textAlign: 'center',
+    flex: 1,
+    color: '#555555',
     textAlign: 'center',
     fontWeight: '500',
   },
   inputText: {
     ...inputText,
-    height: 50,
+    height: 90,
     marginTop: 20,
   },
   solutionText: {
-    fontSize: 13,
+    fontSize: 18,
+    color: '#444444',
+  },
+  noSolutionsMessage: {
+    fontSize: 18,
+    textAlign: 'center',
+    flex: 1,
+    color: '#595959',
+    fontWeight: '500',
   },
 });
 

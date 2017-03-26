@@ -4,7 +4,7 @@ import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView }
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
-import styles from '../styles/scenes/project_details_styles';
+import styles from '../styles/scenes/ProjectDetailsStyles';
 import Project from '../components/Project';
 import Solution from '../components/Solution';
 import { Button, Card, CardSection, Spinner } from '../components/common';
@@ -19,7 +19,7 @@ import {
 
 class ProjectDetails extends Component {
   solutionsList() {
-    const { solutionText, subheaderText } = styles;
+    const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
     const { project } = this.props.navigation.state.params;
     const projectSolutions = solutions.list.filter(solution => solution.project_id === project.id);
@@ -28,7 +28,7 @@ class ProjectDetails extends Component {
     if (projectSolutions.length === 0) {
       return (
         <CardSection>
-          <Text style={solutionText}>No solutions submitted yet. Be the first!</Text>
+          <Text style={noSolutionsMessage}>{'No solutions (yet)\nBe the first!'}</Text>
         </CardSection>
       );
     }
