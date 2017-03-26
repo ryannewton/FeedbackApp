@@ -32,7 +32,7 @@ function settingsButton(navigate) {
     </TouchableOpacity>
   );
 
-  return { right };
+  return right;
 }
 
 export const FeedbackStack = StackNavigator({
@@ -40,13 +40,19 @@ export const FeedbackStack = StackNavigator({
     screen: Feedback,
     navigationOptions: {
       title: 'Send Feedback',
-      header: ({ navigate }) => settingsButton(navigate),
+      header: ({ navigate }) => ({
+        right: settingsButton(navigate),
+        style: { height: 45 },
+      }),
     },
   },
   Settings: {
     screen: Settings,
     navigationOptions: {
       title: 'Settings',
+      header: {
+        style: { height: 45 },
+      },
     },
   },
 });
@@ -56,6 +62,9 @@ export const NewProjectsStack = StackNavigator({
     screen: NewProjects,
     navigationOptions: {
       title: 'New Projects',
+      header: {
+        style: { height: 45 },
+      },
     },
   },
 });
@@ -65,12 +74,18 @@ export const ProjectsStack = StackNavigator({
     screen: Projects,
     navigationOptions: {
       title: 'Projects',
+      header: {
+        style: { height: 45 },
+      },
     },
   },
   Details: {
     screen: ProjectDetails,
     navigationOptions: {
       title: 'Project Details',
+      header: {
+        style: { height: 45 },
+      },
     },
   },
 });
