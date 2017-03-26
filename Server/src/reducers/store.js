@@ -15,15 +15,8 @@ let store = createStore(
 	applyMiddleware(thunkMiddleware)
 );
 
-let time = new Date(Date.now()).toISOString().slice(0, 10);
 let token = localStorage.getItem('token') || null;
-store.dispatch(actions.updateDates('2016-11-01', time, token));
-store.dispatch(actions.pullProjects(token));
-store.dispatch(actions.pullProjectAdditions(token));
-
-// Load Upvotes
-store.dispatch(actions.loadProjectUpvotes(JSON.parse(localStorage.getItem('projectUpvotes')) || [0]));
-//store.dispatch(actions.loadSolutionUpvotes(JSON.parse(localStorage.getItem('solutionUpvotes')) || [0]));
+store.dispatch(actions.loadData(token));
 
 export const history = syncHistoryWithStore(browserHistory, store);
 

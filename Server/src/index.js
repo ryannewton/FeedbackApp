@@ -1,15 +1,14 @@
-//Import Libraries
-import React, { Component } from 'react';
+// Import Libraries
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { Router, Route, Link, IndexRoute, hashHistory, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
-//Import Views
-import Container from './components/container.js';
-import Feedback from './components/feedback.js';
-import Projects from './components/projects.js';
+// Import Views
+import Container from './components/Container';
+import Feedback from './components/Feedback';
+import Projects from './components/Projects';
 
-//Import Store
+// Import Store
 import store, { history } from './reducers/store.js';
 
 ReactDOM.render(
@@ -21,5 +20,5 @@ ReactDOM.render(
         <Route path='/feedback' component={Feedback} />
       </Route>
  		</Router>		
-	</Provider>
-	, document.querySelector('.app'));
+	</Provider>,
+	document.querySelector('.app'));

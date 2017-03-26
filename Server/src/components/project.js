@@ -1,7 +1,18 @@
-import React from 'react';
-import ProjectAddition from './ProjectAddition';
+// Import Libraries
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class Project extends React.Component {
+// Import componenets, functions, and styles
+import ProjectAddition from './ProjectAddition';
+import {
+  addProjectUpvote,
+  removeProjectUpvote,
+  saveProjectChanges,
+  deleteProject,
+  addSolution
+} from '../actions';
+
+class Project extends Component {
   constructor(props) {
     super(props);
 
@@ -22,12 +33,14 @@ export default class Project extends React.Component {
     const project = this.state.project;
     if (!this.props.projectUpvotes.includes(this.props.project.id)) {
       project.votes += 1;
-      this.props.addProjectUpvote(this.props.project);
+      this.props.addProjectUpvote(project);
+      this.props.saveProjectChanges(project, 'add upvote');    
     }
     else {
       project.votes -= 1;
       this.props.removeProjectUpvote(this.props.project);
-    }
+      this.props.saveProjectChanges(project, 'remove upvote');  
+    };    
   }
 
   switchEditMode() {
@@ -148,3 +161,11 @@ export default class Project extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(mapStateToProps, {
+  addProjectUpvote, removeProjectUpvote })(Project);
