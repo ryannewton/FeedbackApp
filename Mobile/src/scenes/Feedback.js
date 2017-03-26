@@ -46,10 +46,6 @@ class Feedback extends Component {
       <MenuContext style={{ flex: 1 }} ref="MenuContext">
         <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
           <View style={styles.container}>
-            <HeaderPlusMenu navigate={this.props.navigate}>
-              Enter your feedback here
-            </HeaderPlusMenu>
-
             {/* Feedback input box */}
             <TextInput
               multiline={Boolean(true)}
