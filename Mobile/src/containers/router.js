@@ -1,6 +1,6 @@
 // Import Libraries
 import React from 'react';
-import { View, Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity } from 'react-native';
 import { TabNavigator, StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
@@ -11,16 +11,13 @@ import Projects from '../scenes/Projects';
 import ProjectDetails from '../scenes/ProjectDetails';
 import Settings from '../scenes/Settings';
 
-// Import Components
-import { Button } from '../components/common';
-
 // Import icons
-import FeedbackSelected from '../../images/icons/feedback2-selected_100px.png';
-import FeedbackNotSelected from '../../images/icons/feedback2-notselected_100px.png';
+// import FeedbackSelected from '../../images/icons/feedback2-selected_100px.png';
+// import FeedbackNotSelected from '../../images/icons/feedback2-notselected_100px.png';
 import NewProjectsSelected from '../../images/icons/newprojects2-selected_100px.png';
-import NewProjectsNotSelected from '../../images/icons/newprojects2-notselected_100px.png';
-import AllProjectsSelected from '../../images/icons/allprojects4-selected_100px.png';
-import AllProjectsNotSelected from '../../images/icons/allprojects4-notselected_100px.png';
+// import NewProjectsNotSelected from '../../images/icons/newprojects2-notselected_100px.png';
+// import AllProjectsSelected from '../../images/icons/allprojects4-selected_100px.png';
+// import AllProjectsNotSelected from '../../images/icons/allprojects4-notselected_100px.png';
 
 function settingsButton(navigate) {
   const right = (
@@ -124,6 +121,7 @@ export const Tabs = TabNavigator(
     },
   },
   {
+    swipeEnabled: false,
     tabBarOptions: {
       showIcon: true,
       tabStyle: { margin: 0, padding: 8, height: 55 },
