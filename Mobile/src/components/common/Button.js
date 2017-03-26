@@ -14,8 +14,14 @@ const Button = ({ onPress, children, style, textStyle }) => (
 Button.propTypes = {
   onPress: React.PropTypes.func,
   children: React.PropTypes.string,
-  style: React.PropTypes.object,
-  textStyle: React.PropTypes.object,
+  style: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.number,
+  ]),
+  textStyle: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.number,
+  ]),
 };
 
 const defaultStyles = {

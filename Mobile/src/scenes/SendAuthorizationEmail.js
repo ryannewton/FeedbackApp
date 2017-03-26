@@ -90,8 +90,8 @@ class SendAuthorizationEmail extends Component {
 }
 
 SendAuthorizationEmail.propTypes = {
-  error: React.PropTypes.boolean,
-  loading: React.PropTypes.boolean,
+  error: React.PropTypes.oneOf([true, false, null]),
+  loading: React.PropTypes.oneOf([true, false, null]),
   sendAuthorizationEmail: React.PropTypes.func,
   authorizeUserFail: React.PropTypes.func,
 };
