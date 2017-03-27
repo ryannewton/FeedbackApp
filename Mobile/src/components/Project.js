@@ -4,7 +4,7 @@ import { View, Text, TouchableHighlight } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
-import styles from '../styles/styles_main';
+import styles from '../styles/components/ProjectStyles';
 import { Button, Card } from './common';
 import { addProjectUpvote, removeProjectUpvote } from '../actions';
 
@@ -60,7 +60,7 @@ class Project extends Component {
   }
 
   render() {
-    const { buttonText, lowWeight, row } = styles;
+    const { buttonText, lowWeight, row, projectTitle } = styles;
 
     return (
       <Card>
@@ -72,7 +72,7 @@ class Project extends Component {
 
           <View style={{ justifyContent: 'flex-start' }}>
             {/* Project title */}
-            <Text style={buttonText}>
+            <Text style={projectTitle}>
               {this.renderTitle()}
             </Text>
 

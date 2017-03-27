@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import styles, components, and action creators
-import styles from '../styles/scenes/project_details_styles';
+import styles from '../styles/components/SolutionStyles';
 import { Button, CardSection } from '../components/common';
 import { addSolutionUpvote, removeSolutionUpvote } from '../actions';
 
@@ -21,18 +21,16 @@ class Solution extends Component {
 
   renderSolutionUpvoteButton(solution) {
     const { user } = this.props;
-    let buttonStyles = { height: 23, marginRight: 2 };
-    let textStyles = { fontSize: 13 };
-    // If user hasn't upvoted this project
-    if (user.solutionUpvotes.includes(solution.id)) {
-      buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
-      textStyles = { ...textStyles, color: '#fff' };
-    }
+    // If user has upvoted this project
+    const upvoted = user.solutionUpvotes.includes(solution.id);
+    const buttonStyles = upvoted ? styles.buttonStylesSelected : styles.buttonStylesNotSelected;
+    const buttonTextStyles = upvoted ? styles.buttonTextSelected : styles.buttonTextNotSelected;
+
     return (
       <Button
         onPress={() => this.upvoteSolution(solution)}
         style={buttonStyles}
-        textStyle={textStyles}
+        textStyle={buttonTextStyles}
       >
         Upvote!
       </Button>
@@ -41,7 +39,7 @@ class Solution extends Component {
 
   render() {
     const { solution } = this.props;
-    const { solutionText } = styles;
+    const { solutionText, upvoteCountText } = styles;
 
     return (
       <CardSection>
@@ -51,12 +49,12 @@ class Solution extends Component {
 
           {/* Upvote count and button */}
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
-            <View style={{ flex: 4 }}>
-              <Text style={{ textDecorationLine: 'underline' }}>
+            <View style={{ flex: 7 }}>
+              <Text style={upvoteCountText}>
                 {`${solution.votes} Votes`}
               </Text>
             </View>
-            <View style={{ flex: 1, alignItems: 'flex-end' }}>
+            <View style={{ flex: 2, alignItems: 'flex-end' }}>
               {this.renderSolutionUpvoteButton(solution)}
             </View>
           </View>

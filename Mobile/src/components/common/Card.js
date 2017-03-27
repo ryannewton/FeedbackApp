@@ -8,7 +8,10 @@ const Card = props => (
 );
 
 Card.propTypes = {
-  children: React.PropTypes.object,
+  children: React.PropTypes.oneOfType([
+    React.PropTypes.object,
+    React.PropTypes.array,
+  ]),
 };
 
 const styles = {

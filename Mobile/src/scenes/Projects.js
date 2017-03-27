@@ -9,7 +9,7 @@ import { saveProjectChanges } from '../actions';
 // Import components, functions, and styles
 import RequireAuth from '../components/RequireAuth';
 import Project from '../components/Project';
-import styles from '../styles/styles_main';
+import styles from '../styles/scenes/ProjectsStyles';
 
 class Projects extends Component {
   constructor(props) {
