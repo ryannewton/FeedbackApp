@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 
 // Import components, functions, and styles
-import NavTab from './nav_tab';
+import NavTab from './NavTab';
 import styles from '../styles/styles_main';
 
 class NavTabs extends Component {

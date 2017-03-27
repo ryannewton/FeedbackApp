@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
 import styles from '../styles/scenes/project_details_styles';
-import Solution from '../components/solution';
+import Solution from '../components/Solution';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
   addProjectUpvote,

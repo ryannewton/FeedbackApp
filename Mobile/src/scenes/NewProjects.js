@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-base';
 import { connect } from 'react-redux';
-import RequireAuth from '../components/require_auth';
+import RequireAuth from '../components/RequireAuth';
 
 // Import actions and styles
 import { addProjectUpvote, addToDoNotDisplayList } from '../actions';
