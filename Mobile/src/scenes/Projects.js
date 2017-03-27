@@ -21,21 +21,27 @@ class Projects extends Component {
     };
   }
 
-  compareNumbers(a, b) {
-    return b.votes - a.votes;
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.projects !== this.props.projects) {
+      const newProjectsList = nextProps.projects.slice();
+      this.setState({
+        dataSource: this.state.dataSource.cloneWithRows(newProjectsList),
+      });
+    }
   }
 
   renderProjects() {
-    const projects = this.props.projects.slice(0,5).sort(this.compareNumbers).map((project, index) => {
-      return (
+    const projects = this.props.projects.slice(0, 5)
+      .sort((a, b) => b.votes - a.votes)
+      .map((project, index) => (
         <Project
           project={project}
           key={index}
           navigate={this.props.navigation.navigate}
           saveProjectChanges={this.props.saveProjectChanges}
         />
-      );
-    });
+      ),
+    );
 
     return projects;
   }
@@ -43,15 +49,9 @@ class Projects extends Component {
   render() {
     return (
       <View style={styles.container}>
-
-        {/* List of projects
-        <ScrollView>
-          {this.renderProjects()}
-        </ScrollView>
-        */}
-
         <ListView
           dataSource={this.state.dataSource}
+          enableEmptySections
           renderRow={rowData =>
             <Project
               project={rowData}
@@ -81,9 +81,5 @@ function mapStateToProps(state) {
 const AppScreen = connect(mapStateToProps, {
   saveProjectChanges,
 })(RequireAuth(Projects));
-
-AppScreen.navigationOptions = {
-  title: 'Projects',
-};
 
 export default AppScreen;

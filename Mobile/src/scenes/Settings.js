@@ -8,7 +8,7 @@ import { saveEmail } from '../actions';
 
 // Import componenets, functions, and styles
 import RequireAuth from '../components/RequireAuth';
-import { Button, Header } from '../components/common';
+import { Button } from '../components/common';
 import styles from '../styles/settings_styles';
 
 class Settings extends Component {
@@ -22,10 +22,6 @@ class Settings extends Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={container}>
-          <Header>
-            Settings
-          </Header>
-
           {/* Email update */}
           <View>
             <Text style={[normalMargin, textDisplay]}>

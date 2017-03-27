@@ -4,6 +4,7 @@ import { View } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-base';
 import { connect } from 'react-redux';
 import RequireAuth from '../components/RequireAuth';
+import RequireData from '../components/RequireData';
 
 // Import actions and styles
 import { addProjectUpvote, addToDoNotDisplayList } from '../actions';
@@ -26,12 +27,15 @@ class NewProjects extends Component {
     this.swipeLeft = this.swipeLeft.bind(this);
   }
 
-  sortByID(a, b) {
-    return b.id - a.id;
-  }
-
-  sortByVotes(a, b) {
-    return b.votes - a.votes;
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.projects !== this.props.projects) {
+      this.setState({
+        projects: nextProps.projects
+          .filter(project => !nextProps.user.doNotDisplayList.includes(project.id))
+          .sort((a, b) => b.id - a.id)
+          .sort((a, b) => b.votes - a.votes),
+      });
+    }
   }
 
   swipeRight() {
@@ -109,4 +113,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
-})(RequireAuth(NewProjects));
+})(RequireAuth(RequireData(NewProjects)));

@@ -6,15 +6,17 @@ import { Provider } from 'react-redux';
 import store from '../reducers/store';
 
 // Import components, functions, and styles
-import Container from './container';
+import { Root } from './router';
 
 // Defines a high-level (container) component
-export default class Index extends Component {
+class Index extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Container />
+        <Root />
       </Provider>
     );
   }
 }
+
+export default Index;
