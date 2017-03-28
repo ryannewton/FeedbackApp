@@ -43,11 +43,6 @@ class Authorize extends Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <Header>
-            Enter Code From Email
-          </Header>
-
-
           <Card>
             {/* Email input */}
             <CardSection>

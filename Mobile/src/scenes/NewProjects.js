@@ -77,8 +77,14 @@ class NewProjects extends Component {
           </CardItem>
         </Card>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text>Swipe Left To Skip</Text>
-          <Text>Swipe Right To Upvote</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Icon name="arrow-back" size={25} />
+            <Text>  Skip</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Upvote  </Text>
+            <Icon name="arrow-forward" size={25} />
+          </View>
         </View>
       </View>
     );

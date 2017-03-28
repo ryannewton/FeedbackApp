@@ -50,16 +50,12 @@ class SendAuthorizationEmail extends Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
-          <Header>
-            Verify Your University
-          </Header>
-
           <Card>
             {/* Email input */}
             <CardSection>
               <Input
                 label="School Email"
-                placeholder="my_username@my_university.edu"
+                placeholder="joe@university.edu"
                 value={this.state.email}
                 onChangeText={text => this.setState({ email: text })}
               />
@@ -78,8 +74,8 @@ class SendAuthorizationEmail extends Component {
             <CardSection>
               <Text style={styles.text}>
                   Why do we need your email? Two reasons:{'\n'}
-                  1- We need to confirm you are member of your university{'\n'}
-                  2- We will keep you updated as changes are made based on your feedback
+                  1) We need to confirm you are member of your university{'\n'}
+                  2) We will keep you updated as changes are made based on your feedback
               </Text>
             </CardSection>
           </Card>
