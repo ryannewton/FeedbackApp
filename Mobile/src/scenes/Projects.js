@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { saveProjectChanges } from '../actions';
 
 // Import components, functions, and styles
-import RequireAuth from '../components/RequireAuth';
 import Project from '../components/Project';
 import styles from '../styles/scenes/ProjectsStyles';
 
@@ -80,6 +79,6 @@ function mapStateToProps(state) {
 
 const AppScreen = connect(mapStateToProps, {
   saveProjectChanges,
-})(RequireAuth(Projects));
+})(Projects);
 
 export default AppScreen;

@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { saveEmail } from '../actions';
 
 // Import componenets, functions, and styles
-import RequireAuth from '../components/RequireAuth';
 import { Button } from '../components/common';
 import styles from '../styles/settings_styles';
 
@@ -65,4 +64,4 @@ function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps, { saveEmail })(RequireAuth(Settings));
+export default connect(mapStateToProps, { saveEmail })(Settings);

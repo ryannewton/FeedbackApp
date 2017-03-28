@@ -8,8 +8,7 @@ import { MenuContext } from 'react-native-menu';
 import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
 
 // Import components, functions, and styles
-import RequireAuth from '../components/RequireAuth';
-import { Button, HeaderPlusMenu, Spinner } from '../components/common';
+import { Button, Spinner } from '../components/common';
 import Submitted from './Submitted';
 import styles from '../styles/styles_main';
 
@@ -84,4 +83,4 @@ export default connect(mapStateToProps, {
   feedbackChanged,
   submitFeedbackToServer,
   navigate,
-})(RequireAuth(Feedback));
+})(Feedback);

@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-base';
 import { connect } from 'react-redux';
-import RequireAuth from '../components/RequireAuth';
+//import { Icon } from 'react-native-elements';
+
+// Import Components
 import RequireData from '../components/RequireData';
 
 // Import actions and styles
@@ -113,4 +115,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
-})(RequireAuth(RequireData(NewProjects)));
+})(RequireData(NewProjects));
