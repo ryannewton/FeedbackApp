@@ -15,6 +15,7 @@ class Submitted extends Component {
     super(props, context);
 
     BackAndroid.addEventListener('hardwareBackPress', () => {
+      // To do: Update navigation to use react-navigation
       props.navigate({ type: 'pop' });
       return true;
     });
@@ -32,6 +33,7 @@ class Submitted extends Component {
         </Header>
 
         <View style={{ flex: 1, paddingTop: 20 }}>
+          {/* To do: To do: Update navigation to use react-navigation */}
           <Button onPress={() => this.props.navigate({ type: 'pop-switch', tabKey: 'NewProjects' })}>
             Vote on Feedback!
           </Button>

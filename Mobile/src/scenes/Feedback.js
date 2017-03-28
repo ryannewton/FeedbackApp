@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { MenuContext } from 'react-native-menu';
 
 // Import actions
-import { feedbackChanged, submitFeedbackToServer, navigate } from '../actions';
+import { feedbackChanged, submitFeedbackToServer } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
@@ -69,7 +69,6 @@ class Feedback extends Component {
 Feedback.propTypes = {
   feedbackChanged: React.PropTypes.func,
   submitFeedbackToServer: React.PropTypes.func,
-  navigate: React.PropTypes.func,
   feedback: React.PropTypes.string,
   loading: React.PropTypes.bool,
 };
@@ -82,5 +81,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   feedbackChanged,
   submitFeedbackToServer,
-  navigate,
 })(Feedback);
