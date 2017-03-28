@@ -6,7 +6,13 @@ import { StackNavigator } from 'react-navigation';
 import NavTabs from './NavTabs';
 import Authorize from '../scenes/Authorize';
 import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
+import SplashScreen from '../scenes/SplashScreen';
 
+export const SplashScreenStack = StackNavigator({
+  SplashScreen: {
+    screen: SplashScreen,
+  },
+});
 
 export const AuthStack = StackNavigator({
   SubmitEmail: {
@@ -30,11 +36,14 @@ export const AuthStack = StackNavigator({
 });
 
 export const Root = StackNavigator({
-  Tabs: {
-    screen: NavTabs,
+  SplashScreen: {
+    screen: SplashScreenStack,
   },
   Auth: {
     screen: AuthStack,
+  },
+  Tabs: {
+    screen: NavTabs,
   },
 }, {
   mode: 'modal',
