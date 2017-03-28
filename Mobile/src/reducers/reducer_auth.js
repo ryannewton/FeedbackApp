@@ -7,19 +7,23 @@ import {
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   LOAD_TOKEN,
+  LOAD_STATE_SUCCESS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
+  loadingState: true,
   email: '',
   token: null,
   loading: false,
   sentAuthorizationEmail: false,
   error: null,
-  loggedIn: false,
+  loggedIn: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case LOAD_STATE_SUCCESS:
+      return { ...state, loadingState: false };
     case SAVE_EMAIL:
       return { ...state, email: action.payload };
     case SENDING_AUTHORIZATION_EMAIL:
@@ -31,7 +35,7 @@ export default (state = INITIAL_STATE, action) => {
     case AUTHORIZE_USER_SUCCESS:
       return { ...state, sentAuthorizationEmail: false, loading: false, loggedIn: true, token: action.payload, error: false };
     case AUTHORIZE_USER_FAIL:
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loading: false, loggedIn: false, error: action.payload };
     case LOAD_TOKEN:
       return { ...state, token: action.payload };
     default:

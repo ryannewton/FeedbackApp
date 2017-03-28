@@ -3,7 +3,9 @@ import React, { Component } from 'react';
 import { View } from 'react-native';
 import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-base';
 import { connect } from 'react-redux';
-import RequireAuth from '../components/RequireAuth';
+//import { Icon } from 'react-native-elements';
+
+// Import Components
 import RequireData from '../components/RequireData';
 
 // Import actions and styles
@@ -75,8 +77,14 @@ class NewProjects extends Component {
           </CardItem>
         </Card>
         <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <Text>Swipe Left To Skip</Text>
-          <Text>Swipe Right To Upvote</Text>
+          <View style={{ flexDirection: 'row' }}>
+            <Icon name="arrow-back" size={25} />
+            <Text>  Skip</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Text>Upvote  </Text>
+            <Icon name="arrow-forward" size={25} />
+          </View>
         </View>
       </View>
     );
@@ -113,4 +121,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
-})(RequireAuth(RequireData(NewProjects)));
+})(RequireData(NewProjects));
