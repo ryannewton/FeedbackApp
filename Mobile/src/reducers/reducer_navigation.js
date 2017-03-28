@@ -9,7 +9,7 @@ import Feedback from '../scenes/Feedback';
 import ProjectsTab from '../scenes/ProjectsTab';
 import Settings from '../scenes/Settings';
 import New_Projects from '../scenes/NewProjects';
-import Welcome from '../scenes/Welcome';
+import SplashScreen from '../scenes/SplashScreen';
 
 const {
   StateUtils: NavigationStateUtils,
@@ -24,7 +24,7 @@ const INITIAL_STATE = {
       { key: 'NewProjects', displayName: 'New Projects', inTabs: true },
       { key: 'AllProjects', displayName: 'All Projects', inTabs: true },
       { key: 'Settings', displayName: 'Settings', inTabs: false },
-      { key: 'Welcome', displayName: 'Welcome', inTabs: false },
+      { key: 'SplashScreen', displayName: 'SplashScreen', inTabs: false },
     ],
   },
   // Scenes for the `Feedback` tab.
@@ -49,7 +49,7 @@ const INITIAL_STATE = {
   },
   Welcome: {
     index: 0,
-    routes: [{ key: 'Welcome Home', component: Welcome }],
+    routes: [{ key: 'SplashScreen Home', component: SplashScreen }],
   },
 };
 
