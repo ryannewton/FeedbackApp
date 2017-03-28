@@ -4,7 +4,6 @@ import { AsyncStorage } from 'react-native';
 // Import action types
 import {
   FEEDBACK_CHANGED,
-  UPDATE_NAV_STATE,
   ADD_PROJECT_UPVOTE,
   REMOVE_PROJECT_UPVOTE,
   LOAD_PROJECT_UPVOTES,
@@ -70,7 +69,6 @@ export const submitFeedbackToServer = route => (
     return http.post('/addFeedback/', { text: feedback, authorization: getState().auth.token })
     .then(() => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
-      dispatch(navigate(route));
     })
     .catch((error) => {
       console.error('Error in submitFeedbackToServer in FeedbackActions', error);
@@ -78,12 +76,6 @@ export const submitFeedbackToServer = route => (
     });
   }
 );
-
-// Handle navigation
-export const navigate = route => ({
-  type: UPDATE_NAV_STATE,
-  payload: route,
-});
 
 // Handle New Projects
 export const addToDoNotDisplayList = projectID => (
@@ -147,11 +139,9 @@ export const pullProjects = token => (
     .then((response) => {
       dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
       dispatch(receivedProjects(response.data));
-      dispatch(navigate({ type: 'selectTab', tabKey: 'NewProjects' }));
     })
     .catch((error) => {
       console.log('pull projects error', error);
-      dispatch(navigate({ type: 'selectTab', tabKey: 'NewProjects' }));
       dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' });
     });
   }
