@@ -13,12 +13,19 @@ import {
   AUTHORIZING_USER,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
+  LOAD_STATE_SUCCESS,
 } from './types';
 
 export const authorizeUserFail = error => (
   {
     type: AUTHORIZE_USER_FAIL,
     payload: error,
+  }
+);
+
+export const loadStateSuccess = () => (
+  {
+    type: LOAD_STATE_SUCCESS,
   }
 );
 

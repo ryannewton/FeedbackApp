@@ -23,6 +23,7 @@ export const AUTHORIZING_USER = 'authorizing_user';
 export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
 export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
 export const SAVE_EMAIL = 'save_email';
+export const LOAD_STATE_SUCCESS = 'load_state_success';
 
 // SolutionActions types
 export const SOLUTION_CHANGED = 'solution_changed';
