@@ -62,17 +62,15 @@ export const authorizeUser = (email, code, adminCode) => (
   }
 );
 
-export const loadData = (token) => (
+export const loadData = initialToken => (
   (dispatch, getState) => {
-
-    //Add a post to test the token
-
+    // Add a post to test the token
     const time = new Date(Date.now()).toISOString().slice(0, 10);
-    const token = token || getState().auth.token;
+    const token = initialToken || getState().auth.token;
     dispatch(updateDates('2016-11-01', time, token));
     dispatch(pullProjects(token));
     dispatch(pullProjectAdditions(token));
     dispatch(loadProjectUpvotes(JSON.parse(localStorage.getItem('projectUpvotes')) || [0]));
-    //store.dispatch(actions.loadSolutionUpvotes(JSON.parse(localStorage.getItem('solutionUpvotes')) || [0]));
+    // store.dispatch(actions.loadSolutionUpvotes(JSON.parse(localStorage.getItem('solutionUpvotes')) || [0]));
   }
 );

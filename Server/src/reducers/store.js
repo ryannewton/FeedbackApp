@@ -8,14 +8,14 @@ import thunkMiddleware from 'redux-thunk';
 import * as actions from '../actions';
 
 // Import Reducers
-import Combined_Reducer from './reducer_index.js';
+import CombinedReducer from './reducer_index';
 
-let store = createStore(
-	Combined_Reducer,
-	applyMiddleware(thunkMiddleware)
+const store = createStore(
+  CombinedReducer,
+  applyMiddleware(thunkMiddleware),
 );
 
-let token = localStorage.getItem('token') || null;
+const token = localStorage.getItem('token') || null;
 store.dispatch(actions.loadData(token));
 
 export const history = syncHistoryWithStore(browserHistory, store);

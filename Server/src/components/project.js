@@ -30,17 +30,18 @@ class Project extends Component {
   }
 
   projectUpvote() {
-    const project = {...this.state.project};
     if (!this.props.projectUpvotes.includes(this.props.project.id)) {
-      project.votes += 1;
+      const project = { ...this.state.project, votes: this.state.project.votes + 1 };
       this.props.addProjectUpvote(project);
-      this.props.saveProjectChanges(project, 'Added Upvote');    
+      this.props.saveProjectChanges(project, 'Added Upvote');
+      this.setState({ project: { ...this.state.project, votes: this.state.project.votes + 1 } });
     }
     else {
-      project.votes -= 1;
+      const project = { ...this.state.project, votes: this.state.project.votes - 1 };
       this.props.removeProjectUpvote(project);
-      this.props.saveProjectChanges(project, 'Removed Upvote');  
-    };    
+      this.props.saveProjectChanges(project, 'Removed Upvote');
+      this.setState({ project: { ...this.state.project, votes: this.state.project.votes - 1 } });
+    }
   }
 
   switchEditMode() {
@@ -51,11 +52,11 @@ class Project extends Component {
   }
 
   titleChanged(event) {
-    this.setState({ project: { ...this.state.project, title: event.target.value }});
+    this.setState({ project: { ...this.state.project, title: event.target.value } });
   }
 
   descriptionChanged(event) {
-    this.setState({ project: { ...this.state.project, description: event.target.value }});
+    this.setState({ project: { ...this.state.project, description: event.target.value } });
   }
 
   deleteProject() {
@@ -159,8 +160,9 @@ class Project extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { user } = state;
-  return { user };
+  const projectUpvotes = state.user.projectUpvotes;
+  const projectAdditions = state.projectAdditions;
+  return { projectUpvotes, projectAdditions };
 };
 
 export default connect(mapStateToProps, {

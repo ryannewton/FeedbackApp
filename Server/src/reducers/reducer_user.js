@@ -9,8 +9,8 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  projectUpvotes: [],
-  solutionUpvotes: [],
+  projectUpvotes: null,
+  solutionUpvotes: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
