@@ -7,7 +7,7 @@ import {
   DELETE_PROJECT_ADDITION,
 } from '../actions/types';
 
-export default function projectAdditions(state = [], action) {
+export default function projectAdditions(state = null, action) {
   switch (action.type) {
     case REQUESTED_PROJECT_ADDITIONS:
       return state;

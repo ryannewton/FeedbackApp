@@ -9,11 +9,13 @@ class Projects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      department: "All Departments",
+      department: 'All Departments',
     }
     this.filterByDepartment = this.filterByDepartment.bind(this);
     this.departmentChanged = this.departmentChanged.bind(this);
     this.filterByStage = this.filterByStage.bind(this);
+
+    console.log('project upvotes in projects props', props.projectUpvotes);
   }
 
   addProject() {
@@ -45,7 +47,7 @@ class Projects extends React.Component {
   render() {
 
     let Rows = this.props.projects.filter(this.filterByStage).filter(this.filterByDepartment).sort(this.compareNumbers).map((project, index, array) => {
-      return <Project project={project} projectAdditions={this.props.projectAdditions} key={project.id} removeProjectUpvote={this.props.removeProjectUpvote} addProjectUpvote={this.props.addProjectUpvote} projectUpvotes={this.props.user.projectUpvotes} deleteProject={this.props.deleteProject.bind(this)} saveProjectChanges={this.props.saveProjectChanges.bind(this)} receivedIDForAddSolution={this.props.receivedIDForAddSolution.bind(this)} addSolution={this.props.addSolution.bind(this)} deleteProjectAddition={this.props.deleteProjectAddition.bind(this)} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges.bind(this)} email={this.props.main.email} />
+      return <Project project={project} key={project.id} />
     });
 
     return (

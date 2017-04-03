@@ -28,8 +28,8 @@ class Authorize extends Component {
     if (re.test(this.state.email)) {
       this.props.sendAuthorizationEmail(this.state.email);
     } else {
-      this.props.authorizeUserFail("Invalid Email Address");
-    }  
+      this.props.authorizeUserFail('Invalid Email Address');
+    }
   }
 
   render() {

@@ -7,7 +7,7 @@ import {
   DELETE_PROJECT,
 } from '../actions/types';
 
-export default function projects(state = [], action) {
+export default function projects(state = null, action) {
   switch (action.type) {
     case REQUESTED_PROJECTS:
       return state;

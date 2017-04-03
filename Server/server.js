@@ -89,11 +89,11 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
 app.post('/authorizeUser', upload.array(), (req, res) => {
 
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-  connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows, fields) => {
+  connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
-    if (rows.length || req.body.code === "apple") {
+    if (rows.length || req.body.code === 'apple') {
       const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16')
       res.status(200).json(myToken);
     } else {
@@ -126,8 +126,8 @@ app.post('/addFeedback', upload.array(), (req, res) => {
     } else {
       const school = getDomain(decoded.email);
 
-      connection.query('INSERT INTO feedback (text, email, school) VALUES (?, ?, ?)', [req.body.text, decoded.email, school], err => {
-        if (err) throw err;
+      connection.query('INSERT INTO feedback (text, email, school) VALUES (?, ?, ?)', [req.body.text, decoded.email, school], err2 => {
+        if (err2) throw err;
       });
 
       // Send Email

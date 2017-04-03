@@ -1,42 +1,21 @@
 // Import action types
 import {
-  SENDING_AUTHORIZATION_EMAIL,
-  SENT_AUTHORIZATION_EMAIL,
-  AUTHORIZING_USER,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
-  LOAD_TOKEN,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   token: null,
-  loading: false,
-  sentAuthorizationEmail: false,
-  error: null,
-  loggedIn: false,
+  error: false,
+  loginFailed: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case SENDING_AUTHORIZATION_EMAIL:
-      return { ...state, loading: true };
-    case SENT_AUTHORIZATION_EMAIL:
-      return { ...state, sentAuthorizationEmail: true, loading: false, error: false };
-    case AUTHORIZING_USER:
-      return { ...state, loading: true };
     case AUTHORIZE_USER_SUCCESS:
-      return {
-        ...state,
-        sentAuthorizationEmail: false,
-        loading: false,
-        loggedIn: true,
-        token: action.payload,
-        error: false,
-      };
+      return { ...state, token: action.payload, error: false, loginFailed: false };
     case AUTHORIZE_USER_FAIL:
-      return { ...state, loading: false, error: action.payload };
-    case LOAD_TOKEN:
-      return { ...state, token: action.payload };
+      return { ...state, token: null, error: action.payload, loginFailed: true };
     default:
       return state;
   }

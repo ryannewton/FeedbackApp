@@ -6,8 +6,7 @@
   "repository": "",
   "scripts": {
     "start": "node server.js",
-    "dev-1": "nodemon server.js",
-    "dev-2": "webpack-dev-server --progress --inline"
+    "dev-1": "nodemon server.js"
   },
   "author": "tjonnyc",
   "license": "proprietary",
@@ -43,7 +42,6 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "nodemon": "^1.11.0",
-    "webpack": "^2.3.1",
-    "webpack-dev-server": "^2.4.2"
+    "webpack": "^2.3.1"
   }
 }

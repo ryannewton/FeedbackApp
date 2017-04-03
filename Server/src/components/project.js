@@ -1,7 +1,18 @@
-import React from 'react';
-import ProjectAddition from './ProjectAddition';
+// Import Libraries
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default class Project extends React.Component {
+// Import componenets, functions, and styles
+import ProjectAddition from './ProjectAddition';
+import {
+  addProjectUpvote,
+  removeProjectUpvote,
+  saveProjectChanges,
+  deleteProject,
+  addSolution
+} from '../actions';
+
+class Project extends Component {
   constructor(props) {
     super(props);
 
@@ -19,14 +30,17 @@ export default class Project extends React.Component {
   }
 
   projectUpvote() {
-    const project = this.state.project;
     if (!this.props.projectUpvotes.includes(this.props.project.id)) {
-      project.votes += 1;
-      this.props.addProjectUpvote(this.props.project);
+      const project = { ...this.state.project, votes: this.state.project.votes + 1 };
+      this.props.addProjectUpvote(project);
+      this.props.saveProjectChanges(project, 'Added Upvote');
+      this.setState({ project: { ...this.state.project, votes: this.state.project.votes + 1 } });
     }
     else {
-      project.votes -= 1;
-      this.props.removeProjectUpvote(this.props.project);
+      const project = { ...this.state.project, votes: this.state.project.votes - 1 };
+      this.props.removeProjectUpvote(project);
+      this.props.saveProjectChanges(project, 'Removed Upvote');
+      this.setState({ project: { ...this.state.project, votes: this.state.project.votes - 1 } });
     }
   }
 
@@ -38,15 +52,11 @@ export default class Project extends React.Component {
   }
 
   titleChanged(event) {
-    const project = this.state.project;
-    project.title = event.target.value;
-    this.setState({ project });
+    this.setState({ project: { ...this.state.project, title: event.target.value } });
   }
 
   descriptionChanged(event) {
-    const project = this.state.project;
-    project.description = event.target.value;
-    this.setState({ project });
+    this.setState({ project: { ...this.state.project, description: event.target.value } });
   }
 
   deleteProject() {
@@ -54,7 +64,7 @@ export default class Project extends React.Component {
   }
 
   addSolution() {
-    this.props.addSolution(this.state.project.id, 'addSolution');
+    this.props.addSolution(this.state.project.id, 'Added Solution');
   }
 
   render() {
@@ -148,3 +158,17 @@ export default class Project extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  const projectUpvotes = state.user.projectUpvotes;
+  const projectAdditions = state.projectAdditions;
+  return { projectUpvotes, projectAdditions };
+};
+
+export default connect(mapStateToProps, {
+  addProjectUpvote,
+  removeProjectUpvote,
+  saveProjectChanges,
+  deleteProject,
+  addSolution,
+})(Project);

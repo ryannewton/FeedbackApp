@@ -8,22 +8,15 @@ import thunkMiddleware from 'redux-thunk';
 import * as actions from '../actions';
 
 // Import Reducers
-import Combined_Reducer from './reducer_index.js';
+import CombinedReducer from './reducer_index';
 
-let store = createStore(
-	Combined_Reducer,
-	applyMiddleware(thunkMiddleware)
+const store = createStore(
+  CombinedReducer,
+  applyMiddleware(thunkMiddleware),
 );
 
-let time = new Date(Date.now()).toISOString().slice(0, 10);
-let token = localStorage.getItem('token') || null;
-store.dispatch(actions.updateDates('2016-11-01', time, token));
-store.dispatch(actions.pullProjects(token));
-store.dispatch(actions.pullProjectAdditions(token));
-
-// Load Upvotes
-store.dispatch(actions.loadProjectUpvotes(JSON.parse(localStorage.getItem('projectUpvotes')) || [0]));
-//store.dispatch(actions.loadSolutionUpvotes(JSON.parse(localStorage.getItem('solutionUpvotes')) || [0]));
+const token = localStorage.getItem('token') || null;
+store.dispatch(actions.loadData(token));
 
 export const history = syncHistoryWithStore(browserHistory, store);
 
