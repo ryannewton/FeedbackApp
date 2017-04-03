@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#fafafa',
+    backgroundColor: '#b6001e',
   },
   text: {
     fontSize: 16,

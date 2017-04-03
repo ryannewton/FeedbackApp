@@ -3,14 +3,11 @@ import { StyleSheet, PixelRatio } from 'react-native';
 
 // Import Styles
 import { buttonText } from '../common/button_styles';
+import { bodyText } from '../common/textStyles';
 
 const styles = StyleSheet.create({
   buttonText,
-  projectTitle: {
-    fontSize: 17,
-    fontWeight: '500',
-    color: '#555555',
-  },
+  projectTitle: bodyText,
   row: {
     paddingLeft: 10,
     paddingRight: 10,
