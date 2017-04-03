@@ -11,6 +11,11 @@ import SplashScreen from '../scenes/SplashScreen';
 export const SplashScreenStack = StackNavigator({
   SplashScreen: {
     screen: SplashScreen,
+    navigationOptions: {
+      header: {
+        visible: false,
+      },
+    },
   },
 });
 
