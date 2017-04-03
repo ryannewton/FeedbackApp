@@ -14,6 +14,9 @@ import {
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   LOAD_STATE_SUCCESS,
+  EMAIL_SAVE_SUCCESS,
+  TOKEN_SAVE_SUCCESS,
+  LOG_OUT_USER,
 } from './types';
 
 export const authorizeUserFail = error => (
@@ -29,7 +32,7 @@ export const loadStateSuccess = () => (
   }
 );
 
-export const sendAuthorizationEmail = email => (
+export const sendAuthorizationEmail = (email, navigateToNext) => (
   (dispatch) => {
     dispatch({ type: SENDING_AUTHORIZATION_EMAIL });
 
@@ -40,6 +43,7 @@ export const sendAuthorizationEmail = email => (
       // Change the in-authorization flag in state so we update the component
       dispatch({ type: SAVE_EMAIL, payload: email });
       dispatch({ type: SENT_AUTHORIZATION_EMAIL });
+      navigateToNext();
     })
     .catch((error) => {
       console.error('Error in sendAuthorizationEmail in AuthActions: ', error);
@@ -65,6 +69,32 @@ export const authorizeUser = (email, code) => (
       console.error('Error in loginUser in AuthActions: ', error);
       dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message });
     });
+  }
+);
+
+export const saveEmail = email => (
+  (dispatch) => {
+    AsyncStorage.setItem(`${ROOT_STORAGE}email`, email)
+    .then(() => {
+      dispatch({ type: EMAIL_SAVE_SUCCESS });
+    });
+  }
+);
+
+export const saveToken = token => (
+  (dispatch) => {
+    AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
+    .then(() => {
+      dispatch({ type: TOKEN_SAVE_SUCCESS });
+    });
+  }
+);
+
+export const logOut = () => (
+  (dispatch) => {
+    saveEmail('');
+    saveToken('');
+    dispatch({ type: LOG_OUT_USER });
   }
 );
 
