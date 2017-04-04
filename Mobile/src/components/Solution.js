@@ -1,11 +1,12 @@
 // Import libraries
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { Icon } from 'react-native-elements';
 
 // Import styles, components, and action creators
 import styles from '../styles/components/SolutionStyles';
-import { Button, CardSection } from '../components/common';
+import { CardSection } from '../components/common';
 import { addSolutionUpvote, removeSolutionUpvote } from '../actions';
 
 class Solution extends Component {
@@ -21,19 +22,18 @@ class Solution extends Component {
 
   renderSolutionUpvoteButton(solution) {
     const { user } = this.props;
-    // If user has upvoted this project
-    const upvoted = user.solutionUpvotes.includes(solution.id);
-    const buttonStyles = upvoted ? styles.buttonStylesSelected : styles.buttonStylesNotSelected;
-    const buttonTextStyles = upvoted ? styles.buttonTextSelected : styles.buttonTextNotSelected;
+    let iconColor = 'grey';
+    // If user hasn't upvoted this project
+    if (user.solutionUpvotes.includes(solution.id)) {
+      iconColor = '#b6001e';
+    }
 
     return (
-      <Button
-        onPress={() => this.upvoteSolution(solution)}
-        style={buttonStyles}
-        textStyle={buttonTextStyles}
-      >
-        Upvote!
-      </Button>
+      <TouchableOpacity onPress={() => this.upvoteSolution(solution)}>
+        <View>
+          <Icon name="thumb-up" size={30} color={iconColor} />
+        </View>
+      </TouchableOpacity>
     );
   }
 

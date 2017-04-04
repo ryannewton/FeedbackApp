@@ -2,9 +2,10 @@
 import React, { Component } from 'react';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
-import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
+import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { authorizeUser } from '../actions';
 import styles from '../styles/styles_main';
 
@@ -15,8 +16,28 @@ class Authorize extends Component {
     this.state = { code: '' };
   }
 
+  componentWillUpdate() {
+    this.route();
+  }
+
+  route() {
+    // Route to main if logged in
+    if (this.props.auth.loggedIn) {
+      this.navigateTo('Tabs', 'NewProjects');
+    }
+  }
+
+  navigateTo(routeName, subRouteName) {
+    const navigateAction = NavigationActions.navigate({
+      routeName,
+      params: {},
+      action: NavigationActions.navigate({ routeName: subRouteName }),
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   onButtonPress() {
-    this.props.authorizeUser(this.props.email, this.state.code);
+    this.props.authorizeUser(this.props.auth.email, this.state.code);
   }
 
   renderSignupButton() {
@@ -28,7 +49,7 @@ class Authorize extends Component {
   }
 
   renderButtons() {
-    if (this.props.loading) {
+    if (this.props.auth.loading) {
       return <Spinner />;
     }
 
@@ -56,7 +77,7 @@ class Authorize extends Component {
 
             {/* Error message (blank if no error) */}
             <Text style={styles.errorTextStyle}>
-              {this.props.error}
+              {this.props.auth.error}
             </Text>
 
             {/* Confirmation button, and 'go to login' button */}
@@ -78,15 +99,14 @@ class Authorize extends Component {
 }
 
 Authorize.propTypes = {
-  error: React.PropTypes.bool,
-  loading: React.PropTypes.bool,
-  email: React.PropTypes.string,
+  auth: React.PropTypes.object,
   authorizeUser: React.PropTypes.func,
+  navigation: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { email, error, loading } = state.auth;
-  return { email, error, loading };
+  const { auth } = state;
+  return { auth };
 };
 
 export default connect(mapStateToProps, { authorizeUser })(Authorize);

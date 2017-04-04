@@ -1,11 +1,12 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import { Icon } from 'react-native-elements';
 
 // Import componenets, functions, and styles
 import styles from '../styles/components/ProjectStyles';
-import { Button, Card } from './common';
+import { Card } from './common';
 import { addProjectUpvote, removeProjectUpvote } from '../actions';
 
 class Project extends Component {
@@ -41,21 +42,17 @@ class Project extends Component {
 
   renderButton() {
     const { project, user } = this.props;
-    let buttonStyles = { width: 80, height: 27, marginRight: 2 };
-    let textStyles = {};
+    let iconColor = 'grey';
     // If user hasn't upvoted this project
     if (user.projectUpvotes.includes(project.id)) {
-      buttonStyles = { ...buttonStyles, backgroundColor: '#007aff' };
-      textStyles = { ...textStyles, color: '#fff' };
+      iconColor = '#b6001e';
     }
     return (
-      <Button
-        onPress={this.upvote.bind(this)}
-        style={buttonStyles}
-        textStyle={textStyles}
-      >
-        Upvote!
-      </Button>
+      <TouchableOpacity onPress={this.upvote.bind(this)}>
+        <View>
+          <Icon name="thumb-up" size={35} color={iconColor} />
+        </View>
+      </TouchableOpacity>
     );
   }
 

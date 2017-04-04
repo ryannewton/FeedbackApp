@@ -2,9 +2,10 @@
 import React, { Component } from 'react';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
-import { Card, CardSection, Input, Button, Spinner, Header } from '../components/common';
+import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { sendAuthorizationEmail, authorizeUserFail } from '../actions';
 import styles from '../styles/styles_main';
 
@@ -12,18 +13,39 @@ class SendAuthorizationEmail extends Component {
   constructor(props) {
     super(props);
 
+    this.route();
     this.state = {
       email: '',
     };
   }
 
+  componentWillUpdate() {
+    this.route();
+  }
+
+  route() {
+    // Route to main if logged in
+    if (this.props.auth.loggedIn) {
+      this.navigateTo('Tabs', 'NewProjects');
+    }
+  }
+
   onButtonPress() {
     const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
     if (re.test(this.state.email)) {
-      this.props.sendAuthorizationEmail(this.state.email);
+      this.props.sendAuthorizationEmail(this.state.email, () => this.navigateTo('Auth', 'AuthCode'));
     } else {
       this.props.authorizeUserFail('Invalid Email Address');
     }
+  }
+
+  navigateTo(routeName, subRouteName) {
+    const navigateAction = NavigationActions.navigate({
+      routeName,
+      params: {},
+      action: NavigationActions.navigate({ routeName: subRouteName }),
+    });
+    this.props.navigation.dispatch(navigateAction);
   }
 
   renderSignupButton() {
@@ -35,7 +57,7 @@ class SendAuthorizationEmail extends Component {
   }
 
   renderButtons() {
-    if (this.props.loading) {
+    if (this.props.auth.loading) {
       return <Spinner />;
     }
 
@@ -63,7 +85,7 @@ class SendAuthorizationEmail extends Component {
 
             {/* Error message (blank if no error) */}
             <Text style={styles.errorTextStyle}>
-              {this.props.error}
+              {this.props.auth.error}
             </Text>
 
             {/* Confirmation button, and 'go to login' button */}
@@ -86,15 +108,15 @@ class SendAuthorizationEmail extends Component {
 }
 
 SendAuthorizationEmail.propTypes = {
-  error: React.PropTypes.oneOf([true, false, null]),
-  loading: React.PropTypes.oneOf([true, false, null]),
+  auth: React.PropTypes.object,
   sendAuthorizationEmail: React.PropTypes.func,
   authorizeUserFail: React.PropTypes.func,
+  navigation: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { error, loading } = state.auth;
-  return { error, loading };
+  const { auth } = state;
+  return { auth };
 };
 
 export default connect(mapStateToProps, {

@@ -8,6 +8,7 @@ import {
   AUTHORIZE_USER_FAIL,
   LOAD_TOKEN,
   LOAD_STATE_SUCCESS,
+  LOG_OUT_USER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -38,6 +39,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: false, loggedIn: false, error: action.payload };
     case LOAD_TOKEN:
       return { ...state, token: action.payload };
+    case LOG_OUT_USER:
+      return { ...state, loggedIn: false };
     default:
       return state;
   }

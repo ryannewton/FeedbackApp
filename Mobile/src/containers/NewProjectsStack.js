@@ -11,7 +11,7 @@ const NewProjectsStack = StackNavigator({
     navigationOptions: {
       title: 'New Projects',
       header: {
-        style: { height: 45 },
+        visible: false,
       },
     },
   },

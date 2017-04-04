@@ -1,12 +1,12 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Image } from 'react-native';
+import { View, Image, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
 // Import components and images
 import { Spinner } from '../components/common';
-import logo from '../../images/icons/icon120.png';
+import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 class SplashScreen extends Component {
   componentWillMount() {
@@ -40,11 +40,8 @@ class SplashScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: 'white' }}>
-        <View style={{ flex: 1, justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Image source={logo} />
-        </View>
-        <Spinner />
+      <View style={{ flex: 1 }}>
+        <Image source={fullScreen} />
       </View>
     );
   }

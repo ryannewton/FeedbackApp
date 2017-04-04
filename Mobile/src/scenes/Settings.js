@@ -1,10 +1,10 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import actions
-import { saveEmail } from '../actions';
+import { logOut } from '../actions';
 
 // Import componenets, functions, and styles
 import { Button } from '../components/common';
@@ -16,37 +16,23 @@ class Settings extends Component {
   }
 
   render() {
-    const { container, normalMargin, textDisplay, textInput } = styles;
+    const { container } = styles;
 
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={container}>
-          {/* Email update */}
-          <View>
-            <Text style={[normalMargin, textDisplay]}>
-              Edit your email address
-            </Text>
-            <TextInput
-              style={[normalMargin, textInput]}
-              placeholder="Enter email here"
-              multiline={Boolean(true)}
-              onChangeText={email => this.setState({ email })}
-              value={this.state.email}
-            />
-          </View>
-
           {/* To do: add change password option*/}
 
-          {/* Save button */}
+          {/* Sign-out button */}
           <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
             <Button
               onPress={() => {
-                this.props.saveEmail(this.state.email);
+                this.props.logOut();
                 Keyboard.dismiss();
               }}
               style={{ marginTop: 10 }}
             >
-              Save
+              Sign Out
             </Button>
           </View>
         </View>
@@ -57,11 +43,11 @@ class Settings extends Component {
 
 Settings.propTypes = {
   auth: React.PropTypes.object,
-  saveEmail: React.PropTypes.func,
+  logOut: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps, { saveEmail })(Settings);
+export default connect(mapStateToProps, { logOut })(Settings);

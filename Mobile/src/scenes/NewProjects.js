@@ -1,16 +1,16 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { Container, Icon, DeckSwiper, Card, CardItem, Left, Text } from 'native-base';
+import { Container, DeckSwiper } from 'native-base';
 import { connect } from 'react-redux';
-//import { Icon } from 'react-native-elements';
 
 // Import Components
+import SwipeCard from '../components/SwipeCard';
 import RequireData from '../components/RequireData';
 
 // Import actions and styles
 import { addProjectUpvote, addToDoNotDisplayList } from '../actions';
-import styles from '../styles/styles_main';
+import styles from '../styles/scenes/NewProjectsStyles';
 
 class NewProjects extends Component {
   constructor(props) {
@@ -59,46 +59,22 @@ class NewProjects extends Component {
     this.setState({ index: this.state.index + 1 });
   }
 
-  renderCard(project) {
-    return (
-      <View style={styles.container}>
-        <Card style={{ elevation: 3, marginHorizontal: 8, height: 300 }}>
-          <CardItem>
-            <Left>
-              <Text>{project.title}</Text>
-            </Left>
-          </CardItem>
-          <CardItem cardBody style={{ paddingHorizontal: 8 }}>
-            <Text>{project.description}</Text>
-          </CardItem>
-          <CardItem>
-            <Icon name="heart" style={{ color: '#ED4A6A' }} />
-            <Text>{project.votes}</Text>
-          </CardItem>
-        </Card>
-        <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-          <View style={{ flexDirection: 'row', margin: 10 }}>
-            <Icon name="arrow-back" size={25} />
-            <Text>  Skip</Text>
-          </View>
-          <View style={{ flexDirection: 'row', margin: 10 }}>
-            <Text>Upvote  </Text>
-            <Icon name="arrow-forward" size={25} />
-          </View>
-        </View>
-      </View>
-    );
-  }
-
   render() {
     return (
       <Container>
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
+            ref={(ds) => { this.deckSwiper = ds; }}
             dataSource={this.state.projects}
             onSwipeRight={this.swipeRight}
             onSwipeLeft={this.swipeLeft}
-            renderItem={project => this.renderCard(project)}
+            renderItem={project =>
+              <SwipeCard
+                project={project}
+                right={() => this.deckSwiper._root.swipeRight()}
+                left={() => this.deckSwiper._root.swipeLeft()}
+              />
+            }
           />
         </View>
       </Container>

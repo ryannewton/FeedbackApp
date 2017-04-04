@@ -23,6 +23,9 @@ export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
 export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
 export const SAVE_EMAIL = 'save_email';
 export const LOAD_STATE_SUCCESS = 'load_state_success';
+export const EMAIL_SAVE_SUCCESS = 'email_save_success';
+export const TOKEN_SAVE_SUCCESS = 'token_save_success';
+export const LOG_OUT_USER = 'log_out_user';
 
 // SolutionActions types
 export const SOLUTION_CHANGED = 'solution_changed';
