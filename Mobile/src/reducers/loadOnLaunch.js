@@ -19,12 +19,12 @@ async function loadToken() {
 async function loadUpvotes() {
   try {
     // Project Upvotes
-    let projectUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}upvotes`) || [];
+    let projectUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}upvotes`) || '[]';
     projectUpvotes = JSON.parse(projectUpvotes);
     store.dispatch(actions.loadProjectUpvotes(projectUpvotes));
 
     // Solution Upvotes
-    let solutionUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}solutionUpvotes`) || [];
+    let solutionUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}solutionUpvotes`) || '[]';
     solutionUpvotes = JSON.parse(solutionUpvotes);
     store.dispatch(actions.loadSolutionUpvotes(solutionUpvotes));
   } catch (error) {
@@ -34,7 +34,7 @@ async function loadUpvotes() {
 
 async function loadDoNotDisplayList() {
   try {
-    let doNotDisplayList = await AsyncStorage.getItem(`${ROOT_STORAGE}doNotDisplayList`) || [];
+    let doNotDisplayList = await AsyncStorage.getItem(`${ROOT_STORAGE}doNotDisplayList`) || '[]';
     doNotDisplayList = JSON.parse(doNotDisplayList);
     store.dispatch(actions.loadDoNotDisplayList(doNotDisplayList));
   } catch (error) {

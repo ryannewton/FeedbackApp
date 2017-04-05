@@ -12,7 +12,7 @@ export default (state = [], action) => {
     case REQUESTED_PROJECTS:
       return state;
     case RECEIVED_PROJECTS:
-      return action.payload;
+      return action.payload.sort((a, b) => b.id - a.id).sort((a, b) => b.votes - a.votes);
     case SAVE_PROJECT_CHANGES: {
       const index = state.findIndex(project => project.id === action.payload.id);
       const newState = state.slice(0);

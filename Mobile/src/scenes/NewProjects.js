@@ -20,9 +20,7 @@ class NewProjects extends Component {
       index: 0,
       projects: this.props.projects.filter(project =>
         !this.props.user.doNotDisplayList
-        .includes(project.id))
-        .sort(this.sortByID)
-        .sort(this.sortByVotes),
+        .includes(project.id)),
     };
 
     this.swipeRight = this.swipeRight.bind(this);
@@ -33,9 +31,7 @@ class NewProjects extends Component {
     if (nextProps.projects !== this.props.projects) {
       this.setState({
         projects: nextProps.projects
-          .filter(project => !nextProps.user.doNotDisplayList.includes(project.id))
-          .sort((a, b) => b.id - a.id)
-          .sort((a, b) => b.votes - a.votes),
+          .filter(project => !nextProps.user.doNotDisplayList.includes(project.id)),
       });
     }
   }

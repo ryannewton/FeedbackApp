@@ -30,8 +30,7 @@ class Projects extends Component {
   }
 
   renderProjects() {
-    const projects = this.props.projects.slice(0, 5)
-      .sort((a, b) => b.votes - a.votes)
+    const projects = this.props.projects
       .map((project, index) => (
         <Project
           project={project}
