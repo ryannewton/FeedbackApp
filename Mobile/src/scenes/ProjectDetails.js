@@ -68,38 +68,38 @@ class ProjectDetails extends Component {
     const { container, inputText } = styles;
     const { project } = this.props.navigation.state.params;
     return (
-      <ScrollView>
-        <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-          <View style={container}>
-
-            {/* Project description */}
-            <Project project={project} navigate={() => undefined} />
-
-            {/* List of submitted solutions */}
-            <Card>
-              {this.solutionsList()}
-            </Card>
-
-            {/* Input to submit a new solution */}
-            <TextInput
-              multiline={Boolean(true)}
-              style={inputText}
-              placeholder="Submit a suggestion"
-              onChangeText={solution => this.props.solutionChanged(solution)}
-              value={this.props.main.solution}
-            />
-
-            {/* Success/fail message for submitted solution */}
+      <View style={container}>
+        <ScrollView>
+          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View>
-              <Text>{this.props.solutions.message}</Text>
+              {/* Project description */}
+              <Project project={project} navigate={() => undefined} />
+
+              {/* List of submitted solutions */}
+              <Card>
+                {this.solutionsList()}
+              </Card>
+
+              {/* Input to submit a new solution */}
+              <TextInput
+                multiline={Boolean(true)}
+                style={inputText}
+                placeholder="Submit a suggestion"
+                onChangeText={solution => this.props.solutionChanged(solution)}
+                value={this.props.main.solution}
+              />
+
+              {/* Success/fail message for submitted solution */}
+              <View>
+                <Text>{this.props.solutions.message}</Text>
+              </View>
+
+              {/* Submit button */}
+              {this.renderSubmitButton()}
             </View>
-
-            {/* Submit button */}
-            {this.renderSubmitButton()}
-
-          </View>
-        </TouchableWithoutFeedback>
-      </ScrollView>
+          </TouchableWithoutFeedback>
+        </ScrollView>
+      </View>
     );
   }
 }
