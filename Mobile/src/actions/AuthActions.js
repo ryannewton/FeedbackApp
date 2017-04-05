@@ -15,8 +15,6 @@ import {
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   LOAD_STATE_SUCCESS,
-  EMAIL_SAVE_SUCCESS,
-  TOKEN_SAVE_SUCCESS,
   LOG_OUT_USER,
 } from './types';
 
@@ -74,29 +72,12 @@ export const authorizeUser = (email, code) => (
   }
 );
 
-export const saveEmail = email => (
-  (dispatch) => {
-    AsyncStorage.setItem(`${ROOT_STORAGE}email`, email)
-    .then(() => {
-      dispatch({ type: EMAIL_SAVE_SUCCESS });
-    });
-  }
-);
-
-export const saveToken = token => (
-  (dispatch) => {
-    AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
-    .then(() => {
-      dispatch({ type: TOKEN_SAVE_SUCCESS });
-    });
-  }
-);
-
 export const logOut = () => (
   (dispatch) => {
-    saveEmail('');
-    saveToken('');
-    dispatch({ type: LOG_OUT_USER });
+    AsyncStorage.setItem(`${ROOT_STORAGE}token`, '')
+    .then(() => {
+      dispatch({ type: LOG_OUT_USER });
+    });
   }
 );
 
