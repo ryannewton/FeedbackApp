@@ -1,11 +1,11 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Image, Text } from 'react-native';
+import { Text, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
-// Import components and images
-import { Spinner } from '../components/common';
+// Import image and styles
+import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 class SplashScreen extends Component {
@@ -40,9 +40,9 @@ class SplashScreen extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <Image source={fullScreen} />
-      </View>
+      <Image style={styles.background} source={fullScreen} resizeMode="cover">
+        <Text style={styles.text}>COLLABORATIVE FEEDBACK</Text>
+      </Image>
     );
   }
 }
