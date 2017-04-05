@@ -93,7 +93,7 @@ export const saveSolutionChanges = (solution, changeType) => (
     });
 
     // Subscribe the user to the project
-    //const { token } = getState().auth;
-    //http.post('/addSubscriber', { authorization: token, id: solution.id, type: changeType });
+    // const { token } = getState().auth;
+    // http.post('/addSubscriber', { authorization: token, id: solution.id, type: changeType });
   }
 );

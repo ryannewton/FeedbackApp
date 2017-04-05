@@ -40,7 +40,7 @@ export default (state = INITIAL_STATE, action) => {
     case LOAD_TOKEN:
       return { ...state, token: action.payload };
     case LOG_OUT_USER:
-      return { ...state, loggedIn: false };
+      return { ...state, loggedIn: false, token: null };
     default:
       return state;
   }
