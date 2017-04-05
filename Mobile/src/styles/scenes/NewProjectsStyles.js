@@ -8,7 +8,7 @@ import { bodyText } from '../common/textStyles';
 const styles = StyleSheet.create({
   container: {
     ...container,
-    backgroundColor: '#b6001e',
+    backgroundColor: '#A41034',
   },
   swiper: {
     paddingTop: 40,

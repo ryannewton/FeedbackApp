@@ -4,7 +4,7 @@ export default StyleSheet.create({
 
   // Settings Scene
   container: {
-    backgroundColor: '#F7FCFF',
+    backgroundColor: '#A41034',
     flex: 1,
   },
   normalMargin: {
