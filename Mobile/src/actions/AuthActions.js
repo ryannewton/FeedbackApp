@@ -6,6 +6,7 @@ import { http, ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
 import { pullProjects } from './FeedbackActions';
+import { pullSolutions } from './SolutionActions';
 import {
   SAVE_EMAIL,
   SENDING_AUTHORIZATION_EMAIL,
@@ -62,6 +63,7 @@ export const authorizeUser = (email, code) => (
       const token = String(response.data);
       AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
       dispatch(pullProjects(token));
+      dispatch(pullSolutions(token));
       dispatch(authorizeSuccess(token));
     })
     // If not, show an error message
