@@ -11,6 +11,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: 20,
     margin: 10,
+    backgroundColor:'transparent',
   },
 });
 
