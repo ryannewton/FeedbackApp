@@ -79,6 +79,7 @@ Feedback.propTypes = {
   submitFeedbackToServer: React.PropTypes.func,
   feedback: React.PropTypes.string,
   loading: React.PropTypes.bool,
+  navigation: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
