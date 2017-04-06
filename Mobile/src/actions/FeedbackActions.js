@@ -80,8 +80,10 @@ export const submitFeedbackToServer = route => (
 // Handle New Projects
 export const addToDoNotDisplayList = projectID => (
   (dispatch, getState) => {
+    console.log('add to do not display fired');
     dispatch({ type: ADD_TO_DO_NOT_DISPLAY_LIST, payload: projectID });
     const { doNotDisplayList } = getState().user;
+    console.log('action', doNotDisplayList);
     AsyncStorage.setItem(`${ROOT_STORAGE}doNotDisplayList`, JSON.stringify(doNotDisplayList));
   }
 );

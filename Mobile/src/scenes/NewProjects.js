@@ -16,10 +16,12 @@ class NewProjects extends Component {
   constructor(props) {
     super(props);
 
+    console.log('constructor do not display list', props.user.doNotDisplayList);
+
     this.state = {
       index: 0,
-      projects: this.props.projects.filter(project =>
-        !this.props.user.doNotDisplayList
+      projects: props.projects.filter(project =>
+        !props.user.doNotDisplayList
         .includes(project.id)),
     };
 
@@ -37,6 +39,7 @@ class NewProjects extends Component {
   // }
 
   swipeRight() {
+    console.log('swipe right');
     const { user } = this.props;
     const project = this.state.projects[this.state.index];
 
@@ -50,6 +53,7 @@ class NewProjects extends Component {
   }
 
   swipeLeft() {
+    console.log('swipe left');
     const project = this.state.projects[this.state.index];
     this.props.addToDoNotDisplayList(project.id);
     this.setState({ index: this.state.index + 1 });
@@ -67,8 +71,14 @@ class NewProjects extends Component {
             renderItem={project =>
               <SwipeCard
                 project={project}
-                right={() => this.deckSwiper._root.swipeRight()}
-                left={() => this.deckSwiper._root.swipeLeft()}
+                right={() => {
+                  this.swipeRight();
+                  this.deckSwiper._root.swipeRight();
+                }}
+                left={() => {
+                  this.swipeLeft();
+                  this.deckSwiper._root.swipeLeft();
+                }}
               />
             }
           />
