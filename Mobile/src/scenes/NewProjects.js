@@ -27,14 +27,14 @@ class NewProjects extends Component {
     this.swipeLeft = this.swipeLeft.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.projects !== this.props.projects) {
-      this.setState({
-        projects: nextProps.projects
-          .filter(project => !nextProps.user.doNotDisplayList.includes(project.id)),
-      });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.projects !== this.props.projects) {
+  //     this.setState({
+  //       projects: nextProps.projects
+  //         .filter(project => !nextProps.user.doNotDisplayList.includes(project.id)),
+  //     });
+  //   }
+  // }
 
   swipeRight() {
     const { user } = this.props;
