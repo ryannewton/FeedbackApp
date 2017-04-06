@@ -18,8 +18,8 @@ class NewProjects extends Component {
 
     this.state = {
       index: 0,
-      projects: this.props.projects.filter(project =>
-        !this.props.user.doNotDisplayList
+      projects: props.projects.filter(project =>
+        !props.user.doNotDisplayList
         .includes(project.id)),
     };
 
@@ -67,8 +67,14 @@ class NewProjects extends Component {
             renderItem={project =>
               <SwipeCard
                 project={project}
-                right={() => this.deckSwiper._root.swipeRight()}
-                left={() => this.deckSwiper._root.swipeLeft()}
+                right={() => {
+                  this.swipeRight();
+                  this.deckSwiper._root.swipeRight();
+                }}
+                left={() => {
+                  this.swipeLeft();
+                  this.deckSwiper._root.swipeLeft();
+                }}
               />
             }
           />
