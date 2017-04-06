@@ -35,69 +35,74 @@ class Authorize extends Component {
   render() {
     return (
       <div>
-        <div>
-          Verify Your University
-        </div>
-        <div>
-          {/* Email input */}
-          <div>
-            <input
-              type="text"
-              placeholder="my_username@my_university.edu"
-              value={this.state.email}
-              onChange={event => this.setState({ email: event.target.value })}
-            />
+        {/* Email input */}
+        <div className="panel panel-default">
+          <div className="panel-heading">
+            <h3 className="panel-title">Verify Your University Affiliation</h3>
           </div>
+          <div className="panel-body">
+            <span className="input-group">
+              <span
+                className="input-group-addon"
+              >
+                School Email Address
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="my_username@my_university.edu"
+                value={this.state.email}
+                onChange={event => this.setState({ email: event.target.value })}
+                style={{ width: 300 }}
+              />
+            </span>
+            <button
+              type="button"
+              onClick={this.onSendAuthorizationEmailButtonPress}
+              className="btn btn-primary"
+              style={{ marginTop: 5 }}
+            >
+                Send Verification Email
+            </button>
 
-          {/* Error message (blank if no error) */}
-          <div>
-            {this.props.error}
-          </div>
-
-          {/* Confirmation button, and 'go to login' button */}
-          <button onClick={this.onSendAuthorizationEmailButtonPress}>
-              Send Email to Verify Email Address
-          </button>
-
-          <div>
-            Why do we need your email? Two reasons:{'\n'}
-            1) We need to confirm you are member of your university{'\n'}
-            2) We will keep you updated as changes are made based on your feedback
-          </div>
-        </div>
-
-
-        <div>
-          Enter Code From Email
-        </div>
-
-
-        <div>
-          {/* Email input */}
-          <input
-            type="text"
-            placeholder="Enter code here"
-            value={this.state.code}
-            onChange={event => this.setState({ code: event.target.value })}
-          />
-          <input
-            type="text"
-            placeholder="Enter admin code here"
-            value={this.state.adminCode}
-            onChange={event => this.setState({ adminCode: event.target.value })}
-          />
-
-          {/* Error message (blank if no error) */}
-          <div>
-            {this.props.error}
-          </div>
-
-          {/* Confirmation button, and 'go to login' button */}
-          <button onClick={this.onLoginButtonPress}>Login</button>
-
-          <div>
-              We sent you an email with a 4 digit code.{'\n'}
-              Please enter it here to verify your email address{'\n'}
+            <div className="input-group" style={{ marginTop: 10 }}>
+              <span
+                className="input-group-addon"
+              >
+                Enter Code From Email
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter code here"
+                value={this.state.code}
+                onChange={event => this.setState({ code: event.target.value })}
+                style={{ width: 300 }}
+              />
+            </div>
+            <div className="input-group">
+              <span
+                className="input-group-addon"
+              >
+                Enter Admin Code
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Enter admin code here"
+                value={this.state.adminCode}
+                onChange={event => this.setState({ adminCode: event.target.value })}
+                style={{ width: 300 }}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={this.onLoginButtonPress}
+              className="btn btn-primary"
+              style={{ marginTop: 5 }}
+            >
+                Login
+            </button>
           </div>
         </div>
       </div>

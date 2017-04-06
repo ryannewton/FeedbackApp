@@ -9,7 +9,7 @@ import {
   removeProjectUpvote,
   saveProjectChanges,
   deleteProject,
-  addSolution
+  addSolution,
 } from '../actions';
 
 class Project extends Component {
