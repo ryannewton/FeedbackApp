@@ -59,7 +59,7 @@ export const feedbackChanged = feedback => (
   }
 );
 
-export const submitFeedbackToServer = route => (
+export const submitFeedbackToServer = () => (
   (dispatch, getState) => {
     dispatch({ type: SUBMIT_FEEDBACK });
 
@@ -71,7 +71,7 @@ export const submitFeedbackToServer = route => (
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
     })
     .catch((error) => {
-      console.error('Error in submitFeedbackToServer in FeedbackActions', error.message);
+      console.log('Error in submitFeedbackToServer in FeedbackActions', error.message);
       dispatch({ type: SUBMIT_FEEDBACK_FAIL });
     });
   }

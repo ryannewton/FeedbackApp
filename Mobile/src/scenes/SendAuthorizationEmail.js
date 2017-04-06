@@ -38,7 +38,7 @@ class SendAuthorizationEmail extends Component {
   sendAuthorizationEmail() {
     const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
     if (re.test(this.state.email)) {
-      this.props.sendAuthorizationEmail(this.state.email, () => this.navigateTo('Auth', 'AuthCode'));
+      this.props.sendAuthorizationEmail(this.state.email, () => this.navigateTo('AuthCode'));
     } else {
       this.props.authorizeUserFail('Invalid Email Address');
     }
