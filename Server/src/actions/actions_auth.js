@@ -50,7 +50,7 @@ export const authorizeUser = (email, code, adminCode) => (
     .then((response) => {
       const token = String(response.data);
       localStorage.setItem('token', token);
-      dispatch(pullProjects(token));
+      dispatch(loadData(token));
       dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
     })
     // If not, show an error message

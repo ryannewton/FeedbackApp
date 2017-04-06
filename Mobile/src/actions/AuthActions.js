@@ -45,7 +45,7 @@ export const sendAuthorizationEmail = (email, navigateToNext) => (
       navigateToNext();
     })
     .catch((error) => {
-      console.error('Error in sendAuthorizationEmail in AuthActions: ', error);
+      console.error('Error in sendAuthorizationEmail in AuthActions: ', error.message);
     });
   }
 );
@@ -66,7 +66,7 @@ export const authorizeUser = (email, code) => (
     })
     // If not, show an error message
     .catch((error) => {
-      console.error('Error in loginUser in AuthActions: ', error);
+      console.error('Error in loginUser in AuthActions: ', error.message);
       dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message });
     });
   }
@@ -74,7 +74,7 @@ export const authorizeUser = (email, code) => (
 
 export const logOut = () => (
   (dispatch) => {
-    AsyncStorage.setItem(`${ROOT_STORAGE}token`, '')
+    AsyncStorage.removeItem(`${ROOT_STORAGE}token`)
     .then(() => {
       dispatch({ type: LOG_OUT_USER });
     });

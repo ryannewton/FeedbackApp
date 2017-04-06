@@ -6,6 +6,7 @@ import {
   SUBMIT_FEEDBACK_FAIL,
   SOLUTION_CHANGED,
   RECEIVED_PROJECTS,
+  SUBMIT_SOLUTION_SUCCESS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -26,6 +27,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: false };
     case SOLUTION_CHANGED:
       return { ...state, solution: action.payload };
+    case SUBMIT_SOLUTION_SUCCESS:
+      return { ...state, solution: null };
     case RECEIVED_PROJECTS:
       return { ...state, projectsLoaded: true };
     default:

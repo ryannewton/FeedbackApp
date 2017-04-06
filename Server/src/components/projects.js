@@ -61,10 +61,15 @@ class Projects extends React.Component {
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
               <li><a href="#" onClick={this.departmentChanged}>All Departments</a></li>
-              <li><a href="#" onClick={this.departmentChanged}>Housing</a></li>
-              <li><a href="#" onClick={this.departmentChanged}>Dining</a></li>
-              <li><a href="#" onClick={this.departmentChanged}>Academic Operations</a></li>
-              <li><a href="#" onClick={this.departmentChanged}>Facilities</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Academic</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Student Life</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Tech & Comms</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Social</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Diversity</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>International</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Careers</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Athletic</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>Feedback App</a></li>
               <li><a href="#" onClick={this.departmentChanged}>Other</a></li>
             </ul>
           </div>

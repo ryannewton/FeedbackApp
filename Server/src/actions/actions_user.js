@@ -6,17 +6,17 @@ import {
 } from './types';
 
 export const addProjectUpvote = project => (
-  { 
+  {
     type: ADD_PROJECT_UPVOTE,
     payload: project,
-  }  
+  }
 );
 
 export const removeProjectUpvote = project => (
-  { 
+  {
     type: REMOVE_PROJECT_UPVOTE,
     payload: project,
-  } 
+  }
 );
 
 export const loadProjectUpvotes = projectUpvotes => (

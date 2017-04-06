@@ -22,10 +22,10 @@ export default (state = INITIAL_STATE, action) => {
       localStorage.setItem('solutionUpvotes', JSON.stringify([...state.solutionUpvotes, action.payload.id]));
       return { ...state, solutionUpvotes: [...state.solutionUpvotes, action.payload.id] };
     case REMOVE_PROJECT_UPVOTE:
-      localStorage.setItem('projectUpvotes', JSON.stringify([...state.projectUpvotes, action.payload.id]));
+      localStorage.setItem('projectUpvotes', JSON.stringify(removeItem(state.projectUpvotes, action.payload.id)));
       return { ...state, projectUpvotes: removeItem(state.projectUpvotes, action.payload.id) };
     case REMOVE_SOLUTION_UPVOTE:
-      localStorage.setItem('solutionUpvotes', JSON.stringify([...state.solutionUpvotes, action.payload.id]));
+      localStorage.setItem('solutionUpvotes', JSON.stringify(removeItem(state.solutionUpvotes, action.payload.id)));
       return { ...state, solutionUpvotes: removeItem(state.solutionUpvotes, action.payload.id) };
     case LOAD_PROJECT_UPVOTES:
       return { ...state, projectUpvotes: action.payload };

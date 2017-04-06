@@ -9,12 +9,21 @@ import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 class SplashScreen extends Component {
-  componentWillMount() {
-    this.route();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      cleared: false,
+    };
+
+    this.route = this.route.bind(this);
+    this.navigateTo = this.navigateTo.bind(this);
   }
 
   componentDidUpdate() {
-    this.route();
+    if (this.state.cleared === false) {
+      this.route();
+    }
   }
 
   route() {
@@ -26,6 +35,8 @@ class SplashScreen extends Component {
       } else {
         this.navigateTo('Auth');
       }
+
+      this.setState({ cleared: true });
     }
   }
 
