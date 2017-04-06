@@ -29,15 +29,13 @@ class SwipeCard extends Component {
           <CardItem style={{ justifyContent: 'space-between' }} >
             <TouchableOpacity onPress={this.props.left}>
               <Icon name="skip-next" size={50} color={'#A41034'} />
-              <Text>Swipe Left</Text>
-              <Text>To Skip</Text>
+              <Text>Skip</Text>
             </TouchableOpacity>
             {/* To do: Add link to project details */}
             {/* <Icon name="comment" size={50} color={'#b6001e'} /> */}
             <TouchableOpacity onPress={this.props.right}>
               <Icon name="thumb-up" size={50} color={'#A41034'} />
-              <Text>Swipe Right</Text>
-              <Text>To Upvote</Text>
+              <Text>Upvote</Text>
             </TouchableOpacity>
           </CardItem>
         </View>

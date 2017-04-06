@@ -31,10 +31,8 @@ export default (state = INITIAL_STATE, action) => {
     case LOAD_SOLUTION_UPVOTES:
       return { ...state, solutionUpvotes: action.payload };
     case ADD_TO_DO_NOT_DISPLAY_LIST:
-      console.log('reducer', [...state.doNotDisplayList, action.payload]);
       return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
     case LOAD_DO_NOT_DISPLAY_LIST:
-      console.log('reducer load', action.payload);
       return { ...state, doNotDisplayList: action.payload };
     default:
       return state;

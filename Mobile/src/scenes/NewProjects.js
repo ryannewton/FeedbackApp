@@ -16,8 +16,6 @@ class NewProjects extends Component {
   constructor(props) {
     super(props);
 
-    console.log('constructor do not display list', props.user.doNotDisplayList);
-
     this.state = {
       index: 0,
       projects: props.projects.filter(project =>
@@ -39,7 +37,6 @@ class NewProjects extends Component {
   // }
 
   swipeRight() {
-    console.log('swipe right');
     const { user } = this.props;
     const project = this.state.projects[this.state.index];
 
@@ -53,7 +50,6 @@ class NewProjects extends Component {
   }
 
   swipeLeft() {
-    console.log('swipe left');
     const project = this.state.projects[this.state.index];
     this.props.addToDoNotDisplayList(project.id);
     this.setState({ index: this.state.index + 1 });
