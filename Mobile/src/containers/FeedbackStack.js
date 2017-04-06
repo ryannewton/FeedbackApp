@@ -7,6 +7,7 @@ import { Icon } from 'react-native-elements';
 // Import Scenes
 import Feedback from '../scenes/Feedback';
 import Settings from '../scenes/Settings';
+import Submitted from '../scenes/Submitted';
 
 
 function settingsButton(navigate) {
@@ -37,6 +38,15 @@ const FeedbackStack = StackNavigator({
     screen: Settings,
     navigationOptions: {
       title: 'Settings',
+      header: {
+        style: { height: 45 },
+      },
+    },
+  },
+  Submitted: {
+    screen: Submitted,
+    navigationOptions: {
+      title: 'Feedback Received',
       header: {
         style: { height: 45 },
       },

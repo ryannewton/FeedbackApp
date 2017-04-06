@@ -2,12 +2,13 @@
 import React, { Component } from 'react';
 import { View, BackAndroid, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 // Import actions
 import { navigate } from '../actions';
 
 // Import components, functions, and styles
-import { Button, Header } from '../components/common';
+import { Button } from '../components/common';
 import styles from '../styles/styles_main';
 
 class Submitted extends Component {
@@ -25,16 +26,21 @@ class Submitted extends Component {
     Keyboard.dismiss();
   }
 
+  navigateTo(routeName, subRouteName) {
+    const navigateAction = NavigationActions.navigate({
+      routeName,
+      params: {},
+      action: NavigationActions.navigate({ routeName: subRouteName }),
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Header>
-          You Submitted Feedback
-        </Header>
-
         <View style={{ flex: 1, paddingTop: 20 }}>
           {/* To do: To do: Update navigation to use react-navigation */}
-          <Button onPress={() => this.props.navigate({ type: 'pop-switch', tabKey: 'NewProjects' })}>
+          <Button onPress={() => this.navigateTo('Tabs', 'NewProjects')}>
             Vote on Feedback!
           </Button>
         </View>
@@ -44,7 +50,7 @@ class Submitted extends Component {
 }
 
 Submitted.propTypes = {
-  navigate: React.PropTypes.func,
+  navigation: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {

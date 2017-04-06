@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuContext } from 'react-native-menu';
+import { NavigationActions } from 'react-navigation';
 
 // Import actions
 import { feedbackChanged, submitFeedbackToServer } from '../actions';
@@ -21,10 +22,20 @@ class Feedback extends Component {
     };
   }
 
+  navigateTo(routeName, subRouteName) {
+    const navigateAction = NavigationActions.navigate({
+      routeName,
+      params: {},
+      action: NavigationActions.navigate({ routeName: subRouteName }),
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
+
   submitFeedback() {
     const scene = { key: 'Submitted', component: Submitted };
     const route = { type: 'push', route: scene };
     this.props.submitFeedbackToServer(route);
+    this.navigateTo('Tabs', 'Submitted');
   }
 
   renderButton() {
