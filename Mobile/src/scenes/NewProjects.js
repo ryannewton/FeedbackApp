@@ -75,6 +75,7 @@ class NewProjects extends Component {
                   this.swipeLeft();
                   this.deckSwiper._root.swipeLeft();
                 }}
+                navigate={this.props.navigation.navigate}
               />
             }
           />
