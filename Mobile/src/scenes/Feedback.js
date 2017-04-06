@@ -10,7 +10,6 @@ import { feedbackChanged, submitFeedbackToServer } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
-import Submitted from './Submitted';
 import styles from '../styles/styles_main';
 
 class Feedback extends Component {
@@ -32,9 +31,7 @@ class Feedback extends Component {
   }
 
   submitFeedback() {
-    const scene = { key: 'Submitted', component: Submitted };
-    const route = { type: 'push', route: scene };
-    this.props.submitFeedbackToServer(route);
+    this.props.submitFeedbackToServer();
     this.navigateTo('Tabs', 'Submitted');
   }
 

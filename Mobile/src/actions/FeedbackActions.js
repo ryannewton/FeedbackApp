@@ -59,7 +59,7 @@ export const feedbackChanged = feedback => (
   }
 );
 
-export const submitFeedbackToServer = route => (
+export const submitFeedbackToServer = () => (
   (dispatch, getState) => {
     dispatch({ type: SUBMIT_FEEDBACK });
 
