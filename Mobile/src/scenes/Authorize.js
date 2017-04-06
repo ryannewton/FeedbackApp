@@ -13,7 +13,11 @@ class Authorize extends Component {
   constructor(props) {
     super(props);
 
-    this.state = { code: '' };
+    this.state = {
+      code: '',
+    };
+
+    this.route = this.route.bind(this);
   }
 
   componentWillUpdate() {

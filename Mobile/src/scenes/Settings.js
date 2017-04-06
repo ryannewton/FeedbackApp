@@ -1,7 +1,8 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 // Import actions
 import { logOut } from '../actions';
@@ -11,6 +12,15 @@ import { Button } from '../components/common';
 import styles from '../styles/settings_styles';
 
 class Settings extends Component {
+
+  navigateTo(routeName, subRouteName) {
+    const navigateAction = NavigationActions.navigate({
+      routeName,
+      params: {},
+      action: NavigationActions.navigate({ routeName: subRouteName }),
+    });
+    this.props.navigation.dispatch(navigateAction);
+  }
 
   render() {
     const { container } = styles;
@@ -24,7 +34,7 @@ class Settings extends Component {
           <Button
             onPress={() => {
               this.props.logOut();
-              Keyboard.dismiss();
+              this.navigateTo('Auth');
             }}
             style={{ marginTop: 10 }}
           >
@@ -39,6 +49,7 @@ class Settings extends Component {
 Settings.propTypes = {
   auth: React.PropTypes.object,
   logOut: React.PropTypes.func,
+  navigation: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {

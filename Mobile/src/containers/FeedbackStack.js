@@ -28,7 +28,7 @@ const FeedbackStack = StackNavigator({
     navigationOptions: {
       title: 'Send Feedback',
       header: ({ navigate }) => ({
-        right: settingsButton(navigate),
+        /*right: settingsButton(navigate),*/
         style: { height: 45 },
       }),
     },

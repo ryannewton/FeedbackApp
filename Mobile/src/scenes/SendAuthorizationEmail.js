@@ -13,24 +13,29 @@ class SendAuthorizationEmail extends Component {
   constructor(props) {
     super(props);
 
-    this.route();
+    // this.route = this.route.bind(this);
+
+    // this.route();
     this.state = {
       email: '',
     };
+
+    this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
+    this.navigateTo = this.navigateTo.bind(this);
   }
 
-  componentWillUpdate() {
-    this.route();
-  }
+  // componentWillUpdate() {
+  //   this.route();
+  // }
 
-  route() {
-    // Route to main if logged in
-    if (this.props.auth.loggedIn) {
-      this.navigateTo('Tabs', 'NewProjects');
-    }
-  }
+  // route() {
+  //   // Route to main if logged in
+  //   if (this.props.auth.loggedIn) {
+  //     this.navigateTo('Tabs', 'NewProjects');
+  //   }
+  // }
 
-  onButtonPress() {
+  sendAuthorizationEmail() {
     const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
     if (re.test(this.state.email)) {
       this.props.sendAuthorizationEmail(this.state.email, () => this.navigateTo('Auth', 'AuthCode'));
@@ -50,7 +55,7 @@ class SendAuthorizationEmail extends Component {
 
   renderSignupButton() {
     return (
-      <Button onPress={this.onButtonPress.bind(this)}>
+      <Button onPress={this.sendAuthorizationEmail}>
         Send Authorization Email
       </Button>
     );
