@@ -10,6 +10,8 @@ import {
   saveProjectChanges,
   deleteProject,
   addSolution,
+  saveProjectAdditionChanges,
+  deleteProjectAddition,
 } from '../actions';
 
 class Project extends Component {
@@ -94,7 +96,7 @@ class Project extends Component {
     let myProjectAdditions = this.props.projectAdditions.filter((projectAddition) => {
       return projectAddition.project_id === project.id;
     }).map((projectAddition) => {
-      return <ProjectAddition projectAddition={projectAddition} deleteProjectAddition={this.props.deleteProjectAddition} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges} key={projectAddition.id} />
+      return <ProjectAddition projectAddition={projectAddition} deleteProjectAddition={this.props.deleteProjectAddition} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges} key={projectAddition.id} />;
     });
 
     let editButton =
@@ -171,4 +173,6 @@ export default connect(mapStateToProps, {
   saveProjectChanges,
   deleteProject,
   addSolution,
+  saveProjectAdditionChanges,
+  deleteProjectAddition,
 })(Project);
