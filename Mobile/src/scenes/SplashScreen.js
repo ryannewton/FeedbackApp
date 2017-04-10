@@ -44,9 +44,7 @@ class SplashScreen extends Component {
     const navigateAction = NavigationActions.navigate({
       routeName,
       params: {},
-      action: [
-        NavigationActions.navigate({ routeName: subRouteName })
-      ],
+      action: NavigationActions.navigate({ routeName: subRouteName }),
     });
     this.props.navigation.dispatch(navigateAction);
   }

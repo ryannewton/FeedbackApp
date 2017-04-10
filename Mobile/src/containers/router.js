@@ -7,8 +7,6 @@ import NavTabs from './NavTabs';
 import Authorize from '../scenes/Authorize';
 import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
 import SplashScreen from '../scenes/SplashScreen';
-import { TabNavigator } from 'react-navigation';
-import { NavigationActions } from 'react-navigation';
 
 export const SplashScreenStack = StackNavigator(
   {
