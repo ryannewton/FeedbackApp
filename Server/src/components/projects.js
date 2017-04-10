@@ -1,21 +1,20 @@
-//import libraries
+// Import libraries
 import React from 'react';
 
-//import components
-import Project from './Project.js';
-import RequireAuth from './RequireAuth.js';
+// Import components
+import Project from './Project';
+import RequireAuth from './RequireAuth';
 
 class Projects extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      department: 'All Departments',
-    }
+      department: 'All Committees',
+    };
+
     this.filterByDepartment = this.filterByDepartment.bind(this);
     this.departmentChanged = this.departmentChanged.bind(this);
     this.filterByStage = this.filterByStage.bind(this);
-
-    console.log('project upvotes in projects props', props.projectUpvotes);
   }
 
   addProject() {
@@ -32,7 +31,7 @@ class Projects extends React.Component {
   }
 
   filterByDepartment(project) {
-    if (this.state.department === 'All Departments') {
+    if (this.state.department === 'All Committees') {
       return true;
     } else {
       return (this.state.department === project.department);
@@ -56,11 +55,11 @@ class Projects extends React.Component {
           <span className="h4">{this.state.department}</span>
           <div className="dropdown pull-right">
             <button className="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-              Filter by Department
+              Filter by Committee
               <span className="caret"></span>
             </button>
             <ul className="dropdown-menu" aria-labelledby="dropdownMenu1">
-              <li><a href="#" onClick={this.departmentChanged}>All Departments</a></li>
+              <li><a href="#" onClick={this.departmentChanged}>All Committees</a></li>
               <li><a href="#" onClick={this.departmentChanged}>Academic</a></li>
               <li><a href="#" onClick={this.departmentChanged}>Student Life</a></li>
               <li><a href="#" onClick={this.departmentChanged}>Tech & Comms</a></li>
