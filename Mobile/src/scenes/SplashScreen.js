@@ -41,11 +41,12 @@ class SplashScreen extends Component {
   }
 
   navigateTo(routeName, subRouteName) {
-    const navigateAction = NavigationActions.reset({
-      index: 0,
+    const navigateAction = NavigationActions.navigate({
       routeName,
       params: {},
-      action: [NavigationActions.navigate({ routeName: subRouteName })],
+      action: [
+        NavigationActions.navigate({ routeName: subRouteName })
+      ],
     });
     this.props.navigation.dispatch(navigateAction);
   }

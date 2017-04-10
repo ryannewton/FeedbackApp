@@ -23,35 +23,37 @@ function settingsButton(navigate) {
   return right;
 }
 
-const FeedbackStack = StackNavigator({
-  Feedback: {
-    screen: Feedback,
-    navigationOptions: {
-      title: 'Send Feedback',
-      header: ({ navigate }) => ({
-        right: settingsButton(navigate),
-        style: { height: 45 },
-      }),
+const FeedbackStack = StackNavigator(
+  {
+    Feedback: {
+      screen: Feedback,
+      navigationOptions: {
+        title: 'Send Feedback',
+        header: ({ navigate }) => ({
+          right: settingsButton(navigate),
+          style: { height: 45 },
+        }),
+      },
     },
-  },
-  Settings: {
-    screen: Settings,
-    navigationOptions: {
-      title: 'Settings',
-      header: {
-        style: { height: 45 },
+    Settings: {
+      screen: Settings,
+      navigationOptions: {
+        title: 'Settings',
+        header: {
+          style: { height: 45 },
+        },
+      },
+    },
+    Submitted: {
+      screen: Submitted,
+      navigationOptions: {
+        title: 'Feedback Received',
+        header: {
+          style: { height: 45 },
+        },
       },
     },
   },
-  Submitted: {
-    screen: Submitted,
-    navigationOptions: {
-      title: 'Feedback Received',
-      header: {
-        style: { height: 45 },
-      },
-    },
-  },
-});
+);
 
 export default FeedbackStack;
