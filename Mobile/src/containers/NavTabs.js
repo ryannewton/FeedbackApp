@@ -13,7 +13,6 @@ import ProjectsStack from './ProjectsStack';
 import NewProjectsSelected from '../../images/icons/newprojects2-selected_100px.png';
 import NewProjectsNotSelected from '../../images/icons/newprojects2-notselected_100px.png';
 
-
 const NavTabs = TabNavigator(
   {
     Feedback: {
@@ -22,6 +21,9 @@ const NavTabs = TabNavigator(
         tabBar: {
           label: 'Feedback',
           icon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
+        },
+        cardStack: {
+          gesturesEnabled: false,
         },
       },
     },
@@ -37,6 +39,9 @@ const NavTabs = TabNavigator(
             return <Image source={NewProjectsSelected} style={{ width: 22, height: 22 }} />;
           },
         },
+        cardStack: {
+          gesturesEnabled: false,
+        },
       },
     },
     ProjectsStack: {
@@ -46,11 +51,15 @@ const NavTabs = TabNavigator(
           label: 'Projects',
           icon: ({ tintColor }) => <Icon name="view-list" size={22} color={tintColor} />,
         },
+        cardStack: {
+          gesturesEnabled: false,
+        },
       },
     },
   },
   {
     swipeEnabled: false,
+    backBehavior: 'none',
     // tabBarPosition: 'bottom',
     tabBarOptions: {
       showIcon: true,

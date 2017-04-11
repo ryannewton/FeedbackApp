@@ -19,6 +19,8 @@ class Feedback extends Component {
     this.state = {
       height: 0,
     };
+
+    this.navigateTo = this.navigateTo.bind(this);
   }
 
   navigateTo(routeName, subRouteName) {

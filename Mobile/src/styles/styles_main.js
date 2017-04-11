@@ -1,7 +1,5 @@
-import {
-  StyleSheet,
-  PixelRatio,
-} from 'react-native';
+// Import Libraries
+import { StyleSheet, PixelRatio, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
 
@@ -17,8 +15,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   feedback_input: {
-    fontSize: 18,
-    height: 140,
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 4,
@@ -28,6 +24,11 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     paddingHorizontal: 8,
     backgroundColor: '#FFFFFF',
+    fontSize: 18,
+    ...Platform.select({
+      ios: { height: 200 },
+      android: { height: 140 },
+    }),
   },
   // New Projects Scene
   swiper: {
