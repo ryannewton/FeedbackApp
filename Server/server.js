@@ -200,7 +200,23 @@ app.post('/saveProjectChanges', upload.array(), (req, res) => {
   });
 });
 
-app.post('/saveProjectAdditionChanges', upload.array(), (req, res) => {
+var addSubscriber = function(req, res, next) {
+  console.log('add subscriber function called');
+  
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
+    if (err) {
+      res.status(400).send('authorization failed');
+    } else {
+      connection.query('INSERT INTO subscriptions SET ?', { project_id: req.body.project_addition.id, email: decoded.email, type: 'up vote solution' }, (err2) => {
+        if (err2) throw err2;
+        res.sendStatus(200);
+      });
+    }
+  });
+  next();
+};
+
+app.post('/saveProjectAdditionChanges', upload.array(), addSubscriber, (req, res) => {
   jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
     if (err) {
       res.status(400).send('authorization failed');
