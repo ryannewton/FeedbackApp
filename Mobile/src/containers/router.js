@@ -7,6 +7,7 @@ import NavTabs from './NavTabs';
 import Authorize from '../scenes/Authorize';
 import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
 import SplashScreen from '../scenes/SplashScreen';
+import styles from '../styles/common/navStyles';
 
 export const SplashScreenStack = StackNavigator(
   {
@@ -27,7 +28,7 @@ export const AuthStack = StackNavigator({
     navigationOptions: {
       title: 'Verify Your University',
       header: {
-        style: { height: 45 },
+        style: { height: styles.header.height },
       },
     },
   },
@@ -36,7 +37,7 @@ export const AuthStack = StackNavigator({
     navigationOptions: {
       title: 'Enter Code From Email',
       header: {
-        style: { height: 45 },
+        style: { height: styles.header.height },
       },
     },
   },

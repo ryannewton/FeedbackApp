@@ -5,6 +5,7 @@ import { StackNavigator } from 'react-navigation';
 // Import Scenes
 import NewProjects from '../scenes/NewProjects';
 import ProjectDetails from '../scenes/ProjectDetails';
+import styles from '../styles/common/navStyles';
 
 const NewProjectsStack = StackNavigator(
   {
@@ -14,6 +15,7 @@ const NewProjectsStack = StackNavigator(
         title: 'New Projects',
         header: {
           visible: false,
+          style: { height: styles.header.height },
         },
       },
     },
@@ -22,7 +24,7 @@ const NewProjectsStack = StackNavigator(
       navigationOptions: {
         title: 'Project Details',
         header: {
-          style: { height: 45 },
+          style: { height: styles.header.height },
         },
       },
     },
