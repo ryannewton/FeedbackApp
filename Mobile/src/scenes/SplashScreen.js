@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
 // Import image and styles
+import { Spinner } from '../components/common';
 import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
@@ -52,6 +53,7 @@ class SplashScreen extends Component {
   render() {
     return (
       <Image style={styles.background} source={fullScreen} resizeMode="cover">
+        <Spinner size='large' style={{ 'marginTop': 200 }} />
         <Text style={styles.text}>COLLABORATIVE FEEDBACK</Text>
       </Image>
     );
