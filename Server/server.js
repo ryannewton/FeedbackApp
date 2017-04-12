@@ -21,10 +21,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'admin@collaborativefeedback.com';
@@ -145,8 +145,9 @@ app.post('/addProject', upload.array(), (req, res) => {
       res.status(400).send('authorization failed');
     } else {
       const title = (req.body.feedback) ? req.body.feedback.text : 'Blank Title';
+      const school = (req.body.feedback) ? req.body.feedback.school : getDomain(decoded.email);
 
-      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, stage: 'new', school: getDomain(decoded.email) }, (err2, result) => {
+      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, stage: 'new', school }, (err2, result) => {
         if (err2) throw err2;
         if (req.body.feedback) {
           sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
@@ -259,7 +260,7 @@ app.post('/deleteProjectAddition', upload.array(), (req, res) => {
 
 // Pull Feedback, Projects, Project Additions, Discussion Posts
 app.post('/pullFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
@@ -270,8 +271,10 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
           feedback
         WHERE
           time
-            BETWEEN ? AND ?`;
-      connection.query(connectionString, [req.body.startDate, req.body.endDate], (err2, rows) => {
+            BETWEEN ? AND ?
+        AND
+          school = ?`;
+      connection.query(connectionString, [req.body.startDate, req.body.endDate, getDomain(decoded.email)], (err2, rows) => {
         if (err2) throw err2;
         else {
           res.json(rows);
@@ -341,10 +344,10 @@ app.post('/pullDiscussionPosts', upload.array(), (req, res) => {
   });
 });
 
-app.listen(8081, () => {
- console.log('Example app listening on port 8081!');
-});
-
-// app.listen(3000, () => {
-//   console.log('Example app listening on port 3000!');
+// app.listen(8081, () => {
+//  console.log('Example app listening on port 8081!');
 // });
+
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!');
+});
