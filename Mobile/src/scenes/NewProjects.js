@@ -27,15 +27,6 @@ class NewProjects extends Component {
     this.swipeLeft = this.swipeLeft.bind(this);
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.projects !== this.props.projects) {
-  //     this.setState({
-  //       projects: nextProps.projects
-  //         .filter(project => !nextProps.user.doNotDisplayList.includes(project.id)),
-  //     });
-  //   }
-  // }
-
   swipeRight() {
     const { user } = this.props;
     const project = this.state.projects[this.state.index];
@@ -44,15 +35,24 @@ class NewProjects extends Component {
     if (!user.projectUpvotes.includes(project.id)) {
       this.props.addProjectUpvote(project);
     }
-
     this.props.addToDoNotDisplayList(project.id);
-    this.setState({ index: this.state.index + 1 });
+
+    if (this.state.index === this.state.projects.length - 1) {
+      this.setState({ index: 0, projects: [] });
+    } else {
+      this.setState({ index: this.state.index + 1 });
+    }
   }
 
   swipeLeft() {
     const project = this.state.projects[this.state.index];
     this.props.addToDoNotDisplayList(project.id);
-    this.setState({ index: this.state.index + 1 });
+
+    if (this.state.index === this.state.projects.length - 1) {
+      this.setState({ index: 0, projects: [] });
+    } else {
+      this.setState({ index: this.state.index + 1 });
+    }
   }
 
   render() {
