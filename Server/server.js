@@ -21,10 +21,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  //host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  //host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'admin@collaborativefeedback.com';
@@ -202,15 +202,12 @@ app.post('/saveProjectChanges', upload.array(), (req, res) => {
 });
 
 var addSubscriber = function(req, res, next) {
-  console.log('add subscriber function called');
-  
   jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
       connection.query('INSERT INTO subscriptions SET ?', { project_id: req.body.project_addition.id, email: decoded.email, type: 'up vote solution' }, (err2) => {
         if (err2) throw err2;
-        res.sendStatus(200);
       });
     }
   });
@@ -344,10 +341,10 @@ app.post('/pullDiscussionPosts', upload.array(), (req, res) => {
   });
 });
 
-app.listen(8081, () => {
- console.log('Example app listening on port 8081!');
-});
-
-// app.listen(3000, () => {
-//   console.log('Example app listening on port 3000!');
+// app.listen(8081, () => {
+//  console.log('Example app listening on port 8081!');
 // });
+
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!');
+});

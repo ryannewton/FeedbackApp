@@ -88,29 +88,22 @@ class ProjectDetails extends Component {
               {/* List of submitted solutions */}
               <Card>
                 {this.solutionsList()}
-              </Card>
-
-              {/* Input to submit a new solution */}
-              <KeyboardAvoidingView behavior="padding">
-                <TextInput
-                  style={inputText}
-                  placeholder="Submit a suggestion"
-                  onChangeText={solution => this.props.solutionChanged(solution)}
-                  value={this.props.main.solution}
-                  returnKeyType={'done'}
-                />
-
-                {/* Success/fail message for submitted solution */}
-                <View>
-                  <Text>{this.props.solutions.message}</Text>
-                </View>
-
-                {/* Submit button */}
-                {this.renderSubmitButton()}
-              </KeyboardAvoidingView>
+              </Card>              
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
+        {/* Input to submit a new solution */}
+        <KeyboardAvoidingView behavior={'padding'}>        
+          <TextInput
+            style={inputText}
+            placeholder="Enter your idea here!"
+            onChangeText={solution => this.props.solutionChanged(solution)}
+            value={this.props.main.solution}
+            returnKeyType={'done'}
+          />
+          {/* Submit button */}
+          {this.renderSubmitButton()}
+        </KeyboardAvoidingView>
       </View>
     );
   }
