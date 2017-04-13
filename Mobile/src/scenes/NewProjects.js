@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { Container, DeckSwiper } from 'native-base';
 import { connect } from 'react-redux';
 
@@ -9,7 +9,7 @@ import SwipeCard from '../components/SwipeCard';
 import RequireData from '../components/RequireData';
 
 // Import actions and styles
-import { addProjectUpvote, addToDoNotDisplayList } from '../actions';
+import { addProjectUpvote, addToDoNotDisplayList, closeInstructions } from '../actions';
 import styles from '../styles/scenes/NewProjectsStyles';
 
 class NewProjects extends Component {
@@ -25,6 +25,7 @@ class NewProjects extends Component {
 
     this.swipeRight = this.swipeRight.bind(this);
     this.swipeLeft = this.swipeLeft.bind(this);
+    this.closeInstructions = this.closeInstructions.bind(this);
   }
 
   swipeRight() {
@@ -55,30 +56,46 @@ class NewProjects extends Component {
     }
   }
 
+  closeInstructions() {
+    this.props.closeInstructions('New Projects Scene');
+  }
+
   render() {
+    const instructionsScreen = (
+      <TouchableOpacity onPress={this.closeInstructions}>
+        <Text>Image Here</Text>
+      </TouchableOpacity>
+    );
+
+    const newProjectsScene = (      
+      <DeckSwiper
+        ref={(ds) => { this.deckSwiper = ds; }}
+        dataSource={this.state.projects}
+        onSwipeRight={this.swipeRight}
+        onSwipeLeft={this.swipeLeft}
+        renderItem={project =>
+          <SwipeCard
+            project={project}
+            right={() => {
+              this.swipeRight();
+              this.deckSwiper._root.swipeRight();
+            }}
+            left={() => {
+              this.swipeLeft();
+              this.deckSwiper._root.swipeLeft();
+            }}
+            navigate={this.props.navigation.navigate}
+          />
+        }
+      />      
+    );
+
+    const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : newProjectsScene;
+
     return (
       <Container>
         <View style={[styles.container, styles.swiper]}>
-          <DeckSwiper
-            ref={(ds) => { this.deckSwiper = ds; }}
-            dataSource={this.state.projects}
-            onSwipeRight={this.swipeRight}
-            onSwipeLeft={this.swipeLeft}
-            renderItem={project =>
-              <SwipeCard
-                project={project}
-                right={() => {
-                  this.swipeRight();
-                  this.deckSwiper._root.swipeRight();
-                }}
-                left={() => {
-                  this.swipeLeft();
-                  this.deckSwiper._root.swipeLeft();
-                }}
-                navigate={this.props.navigation.navigate}
-              />
-            }
-          />
+          {screenToShow}
         </View>
       </Container>
     );
@@ -100,4 +117,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
+  closeInstructions,
 })(RequireData(NewProjects));
