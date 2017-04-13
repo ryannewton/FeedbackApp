@@ -36,3 +36,7 @@ export const SUBMIT_SOLUTION_FAIL = 'submit_solution_fail';
 export const ADD_SOLUTION_UPVOTE = 'add_solution_upvote';
 export const REMOVE_SOLUTION_UPVOTE = 'remove_solution_upvote';
 export const SAVE_SOLUTION_CHANGES = 'save_solution_changes';
+
+// User types
+export const CLOSE_INSTRUCTIONS = 'close_instructions';
+export const LOAD_INSTRUCTIONS_VIEWED = 'load_instructions_viewed';

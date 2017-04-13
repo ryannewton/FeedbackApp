@@ -42,12 +42,24 @@ async function loadDoNotDisplayList() {
   }
 }
 
+async function loadInstructions() {
+  try {
+    // AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
+    let instructionsViewed = await AsyncStorage.getItem(`${ROOT_STORAGE}instructionsViewed`) || '[]';
+    instructionsViewed = JSON.parse(instructionsViewed);
+    store.dispatch(actions.loadInstructionsViewed(instructionsViewed));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Initialize saved state
 const loadOnLaunch = () => {
   Promise.all([
     loadUpvotes(),
     loadDoNotDisplayList(),
     loadToken(),
+    loadInstructions(),
   ])
   .then(() => {
     store.dispatch(actions.loadStateSuccess());
