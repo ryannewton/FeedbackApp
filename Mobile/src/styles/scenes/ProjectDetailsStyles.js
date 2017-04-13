@@ -24,8 +24,9 @@ const styles = StyleSheet.create({
   },
   inputText: {
     ...inputText,
-    height: 90,
-    marginTop: 20,
+    height: 60,
+    marginTop: 5,
+    marginBottom: 5
   },
   solutionText: {
     fontSize: 18,
