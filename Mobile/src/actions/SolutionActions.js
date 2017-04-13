@@ -12,6 +12,7 @@ import {
   ADD_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_UPVOTE,
   SAVE_SOLUTION_CHANGES,
+  ADD_SOLUTION_TO_STATE,
 } from './types';
 
 // Import constants
@@ -24,14 +25,23 @@ export const solutionChanged = solution => (
   }
 );
 
+export const recievedIDForAddSolution = (solutionId, title, projectId) => (
+  {
+    type: ADD_SOLUTION_TO_STATE,
+    solutionId,
+    title,
+    projectId
+  }
+);
+
 export const submitSolutionToServer = (solution, project_id) => (
   function (dispatch, getState) {
     const token = getState().auth.token;
 
     dispatch({ type: SUBMIT_SOLUTION });
     return http.post('/addSolution', { title: solution, project_id, authorization: token })
-      .then(() => {
-        // To do: Add solution id to solution state
+      .then((response) => {
+        dispatch(recievedIDForAddSolution(response.data.id, solution, project_id));
         dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
       })
       .catch((err) => {
