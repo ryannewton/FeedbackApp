@@ -29,7 +29,7 @@ class SwipeCard extends Component {
           <CardItem style={{ justifyContent: 'space-between' }} >
             <TouchableOpacity onPress={this.props.left}>
               <Icon name="skip-next" size={50} color={'#A41034'} />
-              <Text>Skip</Text>
+              <Text>Next</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => this.props.navigate('Details', { project: this.props.project })}>
               <Icon name="comment" size={50} color={'#b6001e'} />
