@@ -65,7 +65,7 @@ export const authorizeUser = (email, code, adminCode) => (
 export const loadData = initialToken => (
   (dispatch, getState) => {
     // Add a post to test the token
-    const time = new Date(Date.now()).toISOString().slice(0, 10);
+    const time = new Date(Date.now() + 1000 * 60 * 60 * 24).toISOString().slice(0, 10);
     const token = initialToken || getState().auth.token;
     dispatch(updateDates('2016-11-01', time, token));
     dispatch(pullProjects(token));
