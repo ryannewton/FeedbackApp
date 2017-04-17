@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, TextInput, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
@@ -13,9 +13,6 @@ class SendAuthorizationEmail extends Component {
   constructor(props) {
     super(props);
 
-    // this.route = this.route.bind(this);
-
-    // this.route();
     this.state = {
       email: '',
     };
@@ -23,17 +20,6 @@ class SendAuthorizationEmail extends Component {
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
     this.navigateTo = this.navigateTo.bind(this);
   }
-
-  // componentWillUpdate() {
-  //   this.route();
-  // }
-
-  // route() {
-  //   // Route to main if logged in
-  //   if (this.props.auth.loggedIn) {
-  //     this.navigateTo('Tabs', 'NewProjects');
-  //   }
-  // }
 
   sendAuthorizationEmail() {
     const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
@@ -85,6 +71,7 @@ class SendAuthorizationEmail extends Component {
                 placeholder="joe@university.edu"
                 value={this.state.email}
                 onChangeText={text => this.setState({ email: text })}
+                keyboardType="email-address"
               />
             </CardSection>
 

@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
@@ -18,6 +18,11 @@ import {
 } from '../actions';
 
 class ProjectDetails extends Component {
+  constructor(props) {
+    super(props);
+
+    this.submitSolution = this.submitSolution.bind(this);
+  }
   solutionsList() {
     const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
@@ -49,16 +54,21 @@ class ProjectDetails extends Component {
     );
   }
 
+  submitSolution() {
+    const { solution } = this.props.main;
+    const { project } = this.props.navigation.state.params;
+    this.props.submitSolutionToServer(solution, project.id);
+    Keyboard.dismiss();
+  }
+
   renderSubmitButton() {
     // If waiting for response from server, show a spinner
     if (this.props.solutions.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
 
-    const { solution } = this.props.main;
-    const { project } = this.props.navigation.state.params;
     return (
-      <Button onPress={() => this.props.submitSolutionToServer(solution, project.id)}>
+      <Button onPress={this.submitSolution}>
         Submit Suggestion
       </Button>
     );
@@ -79,26 +89,21 @@ class ProjectDetails extends Component {
               <Card>
                 {this.solutionsList()}
               </Card>
-
-              {/* Input to submit a new solution */}
-              <TextInput
-                multiline={Boolean(true)}
-                style={inputText}
-                placeholder="Submit a suggestion"
-                onChangeText={solution => this.props.solutionChanged(solution)}
-                value={this.props.main.solution}
-              />
-
-              {/* Success/fail message for submitted solution */}
-              <View>
-                <Text>{this.props.solutions.message}</Text>
-              </View>
-
-              {/* Submit button */}
-              {this.renderSubmitButton()}
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
+        {/* Input to submit a new solution */}
+        <KeyboardAvoidingView behavior={'height'}>
+          <TextInput
+            style={inputText}
+            placeholder="Enter your idea here!"
+            onChangeText={solution => this.props.solutionChanged(solution)}
+            value={this.props.main.solution}
+            returnKeyType={'done'}
+          />
+          {/* Submit button */}
+          {this.renderSubmitButton()}
+        </KeyboardAvoidingView>
       </View>
     );
   }

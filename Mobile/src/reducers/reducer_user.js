@@ -8,12 +8,15 @@ import {
   REMOVE_SOLUTION_UPVOTE,
   ADD_TO_DO_NOT_DISPLAY_LIST,
   LOAD_DO_NOT_DISPLAY_LIST,
+  CLOSE_INSTRUCTIONS,
+  LOAD_INSTRUCTIONS_VIEWED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   projectUpvotes: [],
   doNotDisplayList: [],
   solutionUpvotes: [],
+  instructionsViewed: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -34,6 +37,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
     case LOAD_DO_NOT_DISPLAY_LIST:
       return { ...state, doNotDisplayList: action.payload };
+    case CLOSE_INSTRUCTIONS:
+      return { ...state, instructionsViewed: [...state.instructionsViewed, action.payload] };
+    case LOAD_INSTRUCTIONS_VIEWED:
+      return { ...state, instructionsViewed: action.payload };
     default:
       return state;
   }
