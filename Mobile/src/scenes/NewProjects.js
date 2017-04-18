@@ -33,8 +33,8 @@ class NewProjects extends Component {
     this.state = {
       index: 0,
       projects: props.projects.filter(project =>
-        !props.user.doNotDisplayList
-        .includes(project.id)),
+        (!props.user.doNotDisplayList.includes(project.id) && project.stage !== 'complete'),
+      ),
     };
 
     this.swipeRight = this.swipeRight.bind(this);
