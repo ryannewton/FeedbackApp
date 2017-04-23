@@ -1,10 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-<<<<<<< HEAD
-import { Text, TextInput, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
-=======
 import { Text, View, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
->>>>>>> “infoScreens”
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
