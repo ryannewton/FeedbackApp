@@ -116,7 +116,7 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
     if (err) throw err;
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
-    if ((rows.length || req.body.code === 'apple') && req.body.adminCode === 'GSB2017') {
+    if ((rows.length || req.body.code === 'apple') && (req.body.adminCode === 'GSB2017' || req.body.adminCode === 'HBS2017' || req.body.adminCode === 'GYM2017')) {
       const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16');
       res.status(200).json(myToken);
     } else {
