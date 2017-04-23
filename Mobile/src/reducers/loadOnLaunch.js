@@ -8,6 +8,7 @@ import { ROOT_STORAGE } from '../constants';
 
 async function loadToken() {
   try {
+    // AsyncStorage.removeItem(`${ROOT_STORAGE}token`);
     const token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
     store.dispatch(actions.pullProjects(token));
     store.dispatch(actions.pullSolutions(token));
@@ -44,7 +45,7 @@ async function loadDoNotDisplayList() {
 
 async function loadInstructions() {
   try {
-    // AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
+    // AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`); //TODO: REMOVE THIS LINE
     let instructionsViewed = await AsyncStorage.getItem(`${ROOT_STORAGE}instructionsViewed`) || '[]';
     instructionsViewed = JSON.parse(instructionsViewed);
     store.dispatch(actions.loadInstructionsViewed(instructionsViewed));
