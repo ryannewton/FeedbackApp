@@ -71,25 +71,24 @@ function getDomain(email) {
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  if (req.body.email.includes('admin_test')) {
-    res.sendStatus(200);
+  const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com)$/;
+  if (!re.test(req.body.email)) {
+    res.status(400).send('Sorry, your company is not currently supported :(');
   } else {
-    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    if (!re.test(req.body.email)) {
-      res.status(400).send('Sorry, your company is not currently supported :(');
+    // Step #1: Generate a code
+    const code = generatePassword(4);
+    console.log(code);
+
+    // Step #2: Add the email, code, and timestamp to the database
+    connection.query('INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()', [req.body.email, String(code), String(code)], function(err) {
+      if (err) throw err;
+    });
+
+    if (req.body.email.includes('admin_test')) {
+      console.log('skipped email');
     } else {
-      // Step #1: Generate a code
-      const code = generatePassword(4);
-      console.log(code);
-
-      // Step #2: Add the email, code, and timestamp to the database
-      connection.query('INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()', [req.body.email, String(code), String(code)], function(err) {
-        if (err) throw err;
-      });
-
       // Step #3: Send an email with the code to the user (make sure it shows up in notification)
       sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
-
       res.sendStatus(200);
     }
   }

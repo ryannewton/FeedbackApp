@@ -121,7 +121,8 @@ class SendAuthorizationEmail extends Component {
       </View>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
+    //const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
+    const screenToShow = SendEmailScene;
 
     return screenToShow;
   }
