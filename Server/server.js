@@ -85,7 +85,7 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
     });
 
     if (req.body.email.includes('admin_test')) {
-      console.log('skipped email');
+      res.sendStatus(200);
     } else {
       // Step #3: Send an email with the code to the user (make sure it shows up in notification)
       sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));

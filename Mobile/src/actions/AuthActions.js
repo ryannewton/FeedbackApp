@@ -65,8 +65,7 @@ export const authorizeUser = (email, code) => (
     })
     // If not, show an error message
     .catch((error) => {
-      console.log('Error in loginUser in AuthActions: ', error.message);
-      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message });
+      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.response.data });
     });
   }
 );

@@ -70,17 +70,9 @@ class Feedback extends Component {
   render() {
     const placeholderText = 'Enter your feedback here. We will work on addressing it with the appropriate administrator!';
 
-    // const instructionsScreen = (
-    //   <View style={styles.imageContainer}>
-    //     <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
-    //       <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
-    //     </TouchableOpacity>
-    //   </View>
-    // );
-
     const instructionsScreen = (
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={this.closeInstructions}>
+        <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
           <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
         </TouchableOpacity>
       </View>
@@ -111,8 +103,8 @@ class Feedback extends Component {
       </View>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
-    //const screenToShow = WriteFeedbackScene;
+    //const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
+    const screenToShow = WriteFeedbackScene;
 
     return screenToShow;
 
