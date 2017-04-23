@@ -75,7 +75,6 @@ class NewProjects extends Component {
   }
 
   render() {
-
     const instructionsScreen = (
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
@@ -84,7 +83,7 @@ class NewProjects extends Component {
       </View>
     );
 
-    const newProjectsScene = (     
+    const newProjectsScene = (
       <Container>
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
@@ -106,13 +105,12 @@ class NewProjects extends Component {
                 navigate={this.props.navigation.navigate}
               />
             }
-          />  
+          />
         </View>
-      </Container>     
+      </Container>
     );
 
    const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : newProjectsScene;
-   // const screenToShow = newProjectsScene;
 
     return screenToShow;
   }

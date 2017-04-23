@@ -6,7 +6,7 @@ import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
-import { sendAuthorizationEmail, authorizeUserFail, closeInstructions  } from '../actions';
+import { sendAuthorizationEmail, authorizeUserFail, closeInstructions } from '../actions';
 import styles from '../styles/styles_main';
 import fullScreen from '../../images/backgrounds/EmailInfo.png';
 
@@ -51,6 +51,10 @@ class SendAuthorizationEmail extends Component {
     this.props.navigation.dispatch(navigateAction);
   }
 
+  closeInstructions() {
+    this.props.closeInstructions('Send Email Scene');
+  }
+
   renderSignupButton() {
     return (
       <Button onPress={this.sendAuthorizationEmail}>
@@ -69,10 +73,6 @@ class SendAuthorizationEmail extends Component {
         {this.renderSignupButton()}
       </View>
     );
-  }
-
-  closeInstructions() {
-    this.props.closeInstructions('Send Email Scene');
   }
 
   render() {
@@ -124,7 +124,6 @@ class SendAuthorizationEmail extends Component {
     const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
 
     return screenToShow;
-
   }
 }
 
