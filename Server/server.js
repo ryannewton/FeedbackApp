@@ -21,7 +21,7 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  //host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
   host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
@@ -163,6 +163,7 @@ app.post('/addProject', upload.array(), (req, res) => {
 
 app.post('/addSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
+
     if (err) {
       res.status(400).send('authorization failed');
     } else {
@@ -179,7 +180,7 @@ app.post('/addSubscriber', upload.array(), (req, res) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('INSERT INTO subscriptions SET ?', { project_id: req.body.project_id, email: decoded.email, type: req.body.type }, (err2) => {
+      connection.query('INSERT INTO subscriptions SET ?', { project_id: req.body.projectId, email: decoded.email, type: req.body.type }, (err2) => {
         if (err2) throw err2;
         res.sendStatus(200);
       });

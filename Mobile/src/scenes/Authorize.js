@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, TextInput, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
@@ -18,6 +18,8 @@ class Authorize extends Component {
     };
 
     this.route = this.route.bind(this);
+    this.navigateTo = this.navigateTo.bind(this);
+    this.authorizeUser = this.authorizeUser.bind(this);
   }
 
   componentWillUpdate() {
@@ -25,7 +27,6 @@ class Authorize extends Component {
   }
 
   route() {
-    // Route to main if logged in
     if (this.props.auth.loggedIn) {
       this.navigateTo('Tabs', 'NewProjects');
     }
@@ -40,13 +41,13 @@ class Authorize extends Component {
     this.props.navigation.dispatch(navigateAction);
   }
 
-  onButtonPress() {
+  authorizeUser() {
     this.props.authorizeUser(this.props.auth.email, this.state.code);
   }
 
   renderSignupButton() {
     return (
-      <Button onPress={this.onButtonPress.bind(this)}>
+      <Button onPress={this.authorizeUser}>
         Verify Email
       </Button>
     );
@@ -76,6 +77,7 @@ class Authorize extends Component {
                 placeholder="Enter code here"
                 value={this.state.code}
                 onChangeText={text => this.setState({ code: text })}
+                keyboardType="phone-pad"
               />
             </CardSection>
 

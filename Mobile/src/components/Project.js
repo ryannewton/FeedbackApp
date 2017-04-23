@@ -10,6 +10,12 @@ import { Card } from './common';
 import { addProjectUpvote, removeProjectUpvote } from '../actions';
 
 class Project extends Component {
+  constructor(props) {
+    super(props);
+
+    this.upvote = this.upvote.bind(this);
+  }
+
   goToDetails() {
     this.props.navigate('Details', { project: this.props.project });
   }
@@ -48,12 +54,21 @@ class Project extends Component {
       iconColor = '#b6001e';
     }
     return (
-      <TouchableOpacity onPress={this.upvote.bind(this)}>
-        <View>
-          <Icon name="thumb-up" size={35} color={iconColor} />
-        </View>
-      </TouchableOpacity>
+      <View>
+        <Icon name="thumb-up" size={35} color={iconColor} />
+      </View>
     );
+  }
+
+  renderStatus() {
+    const { stage } = this.props.project;
+    if (stage && stage === 'complete') {
+      return <Icon name="done" size={35} color={'#006400'} />;
+    } else if (stage && stage === 'inprocess') {
+      return <Icon name="sync" size={35} color={'#00008B'} />;
+    } else {
+      return <Icon name="block" size={35} color={'#A9A9A9'} />;
+    }
   }
 
   render() {
@@ -66,29 +81,37 @@ class Project extends Component {
           underlayColor="#D0D0D0"
           onPress={this.goToDetails.bind(this)}
         >
-
-          <View style={{ justifyContent: 'flex-start' }}>
-            {/* Project title */}
-            <Text style={projectTitle}>
-              {this.renderTitle()}
-            </Text>
-
-            {/* Vote section */}
-            <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
+          <View style={{ flexDirection: 'column', justifyContent: 'space-between'}}>
+            {/* First row */}{/* Project title */}
+            <View style={{ flex: 5, paddingTop: 5 }}>
+              <Text style={projectTitle}>
+                {this.renderTitle()}
+              </Text>
               {/* Vote count */}
-              <View style={{ flex: 3 }}>
+              <View>
                 <Text style={[buttonText, lowWeight]}>
                   {this.renderVoteCount()}
                 </Text>
               </View>
+            </View>
 
-              {/* Upvote button */}
-              <View style={{ flex: 1, alignItems: 'flex-end' }}>
-                {this.renderButton()}
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+
+              {/* Upvote Button */}
+              <TouchableOpacity onPress={this.upvote}>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                  <Text style={{ paddingRight: 3 }}>Upvote</Text>
+                  {this.renderButton()}
+                </View>
+              </TouchableOpacity>
+
+              {/* Status box */}
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
+                {this.renderStatus()}
               </View>
             </View>
           </View>
-
         </TouchableHighlight>
       </Card>
     );
