@@ -1,13 +1,28 @@
 // Import Libraries
 import React, { Component } from 'react';
+<<<<<<< HEAD
 import { Text, TextInput, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+=======
+import { Text, View, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
+>>>>>>> “infoScreens”
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
-import { sendAuthorizationEmail, authorizeUserFail } from '../actions';
+import { sendAuthorizationEmail, authorizeUserFail, closeInstructions  } from '../actions';
 import styles from '../styles/styles_main';
+import fullScreen from '../../images/backgrounds/EmailInfo.png';
+
+var styles2 = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+    alignItems: 'stretch'
+  },
+  image: {
+    flex: 1
+  }
+});
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -19,6 +34,7 @@ class SendAuthorizationEmail extends Component {
 
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
     this.navigateTo = this.navigateTo.bind(this);
+    this.closeInstructions = this.closeInstructions.bind(this);
   }
 
   sendAuthorizationEmail() {
@@ -59,8 +75,12 @@ class SendAuthorizationEmail extends Component {
     );
   }
 
+  closeInstructions() {
+    this.props.closeInstructions('Send Email Scene');
+  }
+
   render() {
-    return (
+    const SendEmailScene = (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
           <Card>
@@ -96,6 +116,19 @@ class SendAuthorizationEmail extends Component {
         </View>
       </TouchableWithoutFeedback>
     );
+
+    const instructionsScreen = (
+      <View style={styles.imageContainer}>
+        <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
+          <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
+        </TouchableOpacity>
+      </View>
+    );
+
+    const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
+
+    return screenToShow;
+
   }
 }
 
@@ -103,15 +136,17 @@ SendAuthorizationEmail.propTypes = {
   auth: React.PropTypes.object,
   sendAuthorizationEmail: React.PropTypes.func,
   authorizeUserFail: React.PropTypes.func,
+  user: React.PropTypes.object,
   navigation: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { auth } = state;
-  return { auth };
+  const { user, auth } = state;
+  return { user, auth };
 };
 
 export default connect(mapStateToProps, {
   sendAuthorizationEmail,
   authorizeUserFail,
+  closeInstructions,
 })(SendAuthorizationEmail);
