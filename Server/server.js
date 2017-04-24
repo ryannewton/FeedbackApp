@@ -110,7 +110,6 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
 });
 
 app.post('/authorizeAdminUser', upload.array(), (req, res) => {
-
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
   connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;

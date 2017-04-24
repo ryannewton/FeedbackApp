@@ -2,9 +2,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { Card, CardItem, Left } from 'native-base';
-import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
-import { NavigationActions } from 'react-navigation';
 
 // Import actions and styles
 import styles from '../styles/components/SwipeCardStyles';
@@ -31,7 +29,11 @@ class SwipeCard extends Component {
               <Icon name="skip-next" size={50} color={'#A41034'} />
               <Text>Next</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => this.props.navigate('Details', { project: this.props.project })}>
+            <TouchableOpacity onPress={() => {
+              if (this.props.project.id) {
+                this.props.navigate('Details', { project: this.props.project });
+              }                
+            }}>
               <Icon name="comment" size={50} color={'#b6001e'} />
               <Text>Solutions</Text>
             </TouchableOpacity>
@@ -48,15 +50,9 @@ class SwipeCard extends Component {
 
 SwipeCard.propTypes = {
   project: React.PropTypes.object,
-  user: React.PropTypes.object,
   navigate: React.PropTypes.func,
   left: React.PropTypes.func,
   right: React.PropTypes.func,
 };
 
-function mapStateToProps(state) {
-  const { user } = state;
-  return { user };
-}
-
-export default connect(mapStateToProps)(SwipeCard);
+export default SwipeCard;
