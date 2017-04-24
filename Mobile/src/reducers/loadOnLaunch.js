@@ -46,7 +46,7 @@ async function loadDoNotDisplayList() {
 
 async function loadInstructions() {
   try {
-    // AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
+    AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
     let instructionsViewed = await AsyncStorage.getItem(`${ROOT_STORAGE}instructionsViewed`) || '[]';
     instructionsViewed = JSON.parse(instructionsViewed);
     store.dispatch(actions.loadInstructionsViewed(instructionsViewed));

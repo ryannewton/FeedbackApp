@@ -83,8 +83,8 @@ class SendAuthorizationEmail extends Component {
             {/* Email input */}
             <CardSection>
               <Input
-                label="School Email"
-                placeholder="joe@university.edu"
+                label="Your Email"
+                placeholder="tyler@collaborativefeedback.com"
                 value={this.state.email}
                 onChangeText={text => this.setState({ email: text })}
                 keyboardType="email-address"
@@ -104,7 +104,7 @@ class SendAuthorizationEmail extends Component {
             <CardSection>
               <Text style={styles.text}>
                   Why do we need your email? Two reasons:{'\n'}
-                  1) We need to confirm you are member of your university{'\n'}
+                  1) We need to confirm you are member of your organization{'\n'}
                   2) We will keep you updated as changes are made based on your feedback
               </Text>
             </CardSection>
