@@ -88,12 +88,12 @@ class ProjectDetails extends Component {
               {/* List of submitted solutions */}
               <Card>
                 {this.solutionsList()}
-              </Card>              
+              </Card>
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
         {/* Input to submit a new solution */}
-        <KeyboardAvoidingView behavior={'padding'}>        
+        <KeyboardAvoidingView behavior={'padding'}>
           <TextInput
             style={inputText}
             placeholder="Enter your idea here!"

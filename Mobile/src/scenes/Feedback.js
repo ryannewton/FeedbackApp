@@ -1,16 +1,35 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, TextInput, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet, Text, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuContext } from 'react-native-menu';
 import { NavigationActions } from 'react-navigation';
 
 // Import actions
-import { feedbackChanged, submitFeedbackToServer } from '../actions';
+import { feedbackChanged, submitFeedbackToServer, closeInstructions } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
 import styles from '../styles/styles_main';
+
+// Import about info image
+// import styles2 from '../styles/scenes/SplashScreenStyles';
+import fullScreen from '../../images/backgrounds/FeedbackInfo.png';
+
+const styles2 = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+    alignItems: 'stretch',
+  },
+  image: {
+    flex: 1,
+  },
+  touchableOpacityStyle: {
+    ...Platform.select({
+      ios: { flex: 1 },
+    }),
+  },
+});
 
 class Feedback extends Component {
   constructor(props, context) {
@@ -21,6 +40,7 @@ class Feedback extends Component {
     };
 
     this.navigateTo = this.navigateTo.bind(this);
+    this.closeInstructions = this.closeInstructions.bind(this);
   }
 
   navigateTo(routeName, subRouteName) {
@@ -48,31 +68,51 @@ class Feedback extends Component {
     );
   }
 
+  closeInstructions() {
+    this.props.closeInstructions('Write Feedback Scene');
+  }
+
   render() {
     const placeholderText = 'Enter your feedback here. We will work on addressing it with the appropriate administrator!';
 
-    return (
-      <MenuContext style={{ flex: 1 }} ref="MenuContext">
-        <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-          <View style={styles.container}>
-            {/* Feedback input box */}
-            <TextInput
-              multiline={Boolean(true)}
-              onChangeText={feedback => this.props.feedbackChanged(feedback)}
-              onContentSizeChange={(event) => {
-                this.setState({ height: event.nativeEvent.contentSize.height });
-              }}
-              style={styles.feedback_input}
-              placeholder={placeholderText}
-              value={this.props.feedback}
-            />
-
-            {/* Submit button / loading spinner */}
-            {this.renderButton()}
-          </View>
-        </TouchableWithoutFeedback>
-      </MenuContext>
+    const instructionsScreen = (
+      <View style={styles.imageContainer}>
+        <TouchableOpacity onPress={this.closeInstructions} style={styles2.touchableOpacityStyle}>
+          <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
+        </TouchableOpacity>
+      </View>
     );
+
+    const WriteFeedbackScene = (
+      <View style={[styles.container, styles.swiper]}>
+        <MenuContext style={{ flex: 1 }} ref="MenuContext">
+          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+            <View style={styles.container}>
+              {/* Feedback input box */}
+              <TextInput
+                multiline={Boolean(true)}
+                onChangeText={feedback => this.props.feedbackChanged(feedback)}
+                onContentSizeChange={(event) => {
+                  this.setState({ height: event.nativeEvent.contentSize.height });
+                }}
+                style={styles.feedback_input}
+                placeholder={placeholderText}
+                value={this.props.feedback}
+              />
+
+              {/* Submit button / loading spinner */}
+              {this.renderButton()}
+            </View>
+          </TouchableWithoutFeedback>
+        </MenuContext>
+      </View>
+    );
+
+    //const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
+    const screenToShow = WriteFeedbackScene;
+
+    return screenToShow;
+
   }
 }
 
@@ -80,16 +120,19 @@ Feedback.propTypes = {
   feedbackChanged: React.PropTypes.func,
   submitFeedbackToServer: React.PropTypes.func,
   feedback: React.PropTypes.string,
+  user: React.PropTypes.object,
   loading: React.PropTypes.bool,
   navigation: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
   const { feedback, loading } = state.main;
-  return { feedback, loading };
+  const { user } = state;
+  return { user, feedback, loading };
 }
 
 export default connect(mapStateToProps, {
   feedbackChanged,
   submitFeedbackToServer,
+  closeInstructions,
 })(Feedback);

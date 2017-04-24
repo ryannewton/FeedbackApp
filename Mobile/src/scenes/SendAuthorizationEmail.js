@@ -1,42 +1,40 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
-import { sendAuthorizationEmail, authorizeUserFail } from '../actions';
+import { sendAuthorizationEmail, authorizeUserFail, closeInstructions } from '../actions';
 import styles from '../styles/styles_main';
+import fullScreen from '../../images/backgrounds/EmailInfo.png';
+
+var styles2 = StyleSheet.create({
+  imageContainer: {
+    flex: 1,
+    alignItems: 'stretch'
+  },
+  image: {
+    flex: 1
+  }
+});
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
     super(props);
 
-    // this.route = this.route.bind(this);
-
-    // this.route();
     this.state = {
       email: '',
     };
 
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
     this.navigateTo = this.navigateTo.bind(this);
+    this.closeInstructions = this.closeInstructions.bind(this);
   }
 
-  // componentWillUpdate() {
-  //   this.route();
-  // }
-
-  // route() {
-  //   // Route to main if logged in
-  //   if (this.props.auth.loggedIn) {
-  //     this.navigateTo('Tabs', 'NewProjects');
-  //   }
-  // }
-
   sendAuthorizationEmail() {
-    const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
       this.props.sendAuthorizationEmail(this.state.email, () => this.navigateTo('AuthCode'));
     } else {
@@ -51,6 +49,10 @@ class SendAuthorizationEmail extends Component {
       action: NavigationActions.navigate({ routeName: subRouteName }),
     });
     this.props.navigation.dispatch(navigateAction);
+  }
+
+  closeInstructions() {
+    this.props.closeInstructions('Send Email Scene');
   }
 
   renderSignupButton() {
@@ -74,17 +76,18 @@ class SendAuthorizationEmail extends Component {
   }
 
   render() {
-    return (
+    const SendEmailScene = (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
           <Card>
             {/* Email input */}
             <CardSection>
               <Input
-                label="School Email"
-                placeholder="joe@university.edu"
+                label="Your Email"
+                placeholder="tyler@collaborativefeedback.com"
                 value={this.state.email}
                 onChangeText={text => this.setState({ email: text })}
+                keyboardType="email-address"
               />
             </CardSection>
 
@@ -101,7 +104,7 @@ class SendAuthorizationEmail extends Component {
             <CardSection>
               <Text style={styles.text}>
                   Why do we need your email? Two reasons:{'\n'}
-                  1) We need to confirm you are member of your university{'\n'}
+                  1) We need to confirm you are member of your organization{'\n'}
                   2) We will keep you updated as changes are made based on your feedback
               </Text>
             </CardSection>
@@ -109,6 +112,19 @@ class SendAuthorizationEmail extends Component {
         </View>
       </TouchableWithoutFeedback>
     );
+
+    const instructionsScreen = (
+      <View style={styles.imageContainer}>
+        <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
+          <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
+        </TouchableOpacity>
+      </View>
+    );
+
+    //const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
+    const screenToShow = SendEmailScene;
+
+    return screenToShow;
   }
 }
 
@@ -116,15 +132,17 @@ SendAuthorizationEmail.propTypes = {
   auth: React.PropTypes.object,
   sendAuthorizationEmail: React.PropTypes.func,
   authorizeUserFail: React.PropTypes.func,
+  user: React.PropTypes.object,
   navigation: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { auth } = state;
-  return { auth };
+  const { user, auth } = state;
+  return { user, auth };
 };
 
 export default connect(mapStateToProps, {
   sendAuthorizationEmail,
   authorizeUserFail,
+  closeInstructions,
 })(SendAuthorizationEmail);
