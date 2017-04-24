@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuContext } from 'react-native-menu';
 import { NavigationActions } from 'react-navigation';
@@ -78,7 +78,7 @@ class Feedback extends Component {
       </View>
     );
 
-    const WriteFeedbackScene = (      
+    const WriteFeedbackScene = (
       <View style={[styles.container, styles.swiper]}>
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
@@ -99,12 +99,12 @@ class Feedback extends Component {
               {this.renderButton()}
             </View>
           </TouchableWithoutFeedback>
-        </MenuContext>     
+        </MenuContext>
       </View>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
-    // const screenToShow = newProjectsScene;
+    //const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
+    const screenToShow = WriteFeedbackScene;
 
     return screenToShow;
 

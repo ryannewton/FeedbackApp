@@ -35,6 +35,7 @@ async function loadUpvotes() {
 
 async function loadDoNotDisplayList() {
   try {
+    //AsyncStorage.removeItem(`${ROOT_STORAGE}doNotDisplayList`);
     let doNotDisplayList = await AsyncStorage.getItem(`${ROOT_STORAGE}doNotDisplayList`) || '[]';
     doNotDisplayList = JSON.parse(doNotDisplayList);
     store.dispatch(actions.loadDoNotDisplayList(doNotDisplayList));
@@ -45,7 +46,7 @@ async function loadDoNotDisplayList() {
 
 async function loadInstructions() {
   try {
-    // AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`); //TODO: REMOVE THIS LINE
+    // AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
     let instructionsViewed = await AsyncStorage.getItem(`${ROOT_STORAGE}instructionsViewed`) || '[]';
     instructionsViewed = JSON.parse(instructionsViewed);
     store.dispatch(actions.loadInstructionsViewed(instructionsViewed));

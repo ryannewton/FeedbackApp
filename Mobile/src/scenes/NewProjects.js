@@ -26,15 +26,20 @@ var styles2 = StyleSheet.create({
   }
 });
 
+const inboxZeroProject = {
+  title: "Great job! You've reached inbox zero.",
+  votes: 999,
+};
+
 class NewProjects extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       index: 0,
-      projects: props.projects.filter(project =>
-        !props.user.doNotDisplayList
-        .includes(project.id)),
+      projects: [...props.projects.filter(project =>
+        (!props.user.doNotDisplayList.includes(project.id) && project.stage !== 'complete'),
+      ), inboxZeroProject],
     };
 
     this.swipeRight = this.swipeRight.bind(this);
@@ -47,13 +52,14 @@ class NewProjects extends Component {
     const project = this.state.projects[this.state.index];
 
     // If user hasn't upvoted this project, add an upvote
-    if (!user.projectUpvotes.includes(project.id)) {
+    if (project.id && !user.projectUpvotes.includes(project.id)) {
       this.props.addProjectUpvote(project);
+    } else if (project.id) {
+      this.props.addToDoNotDisplayList(project.id);
     }
-    this.props.addToDoNotDisplayList(project.id);
 
     if (this.state.index === this.state.projects.length - 1) {
-      this.setState({ index: 0, projects: [] });
+      this.setState({ index: 0, projects: [inboxZeroProject] });
     } else {
       this.setState({ index: this.state.index + 1 });
     }
@@ -61,10 +67,12 @@ class NewProjects extends Component {
 
   swipeLeft() {
     const project = this.state.projects[this.state.index];
-    this.props.addToDoNotDisplayList(project.id);
+    if (project.id) {
+      this.props.addToDoNotDisplayList(project.id);
+    }
 
     if (this.state.index === this.state.projects.length - 1) {
-      this.setState({ index: 0, projects: [] });
+      this.setState({ index: 0, projects: [inboxZeroProject] });
     } else {
       this.setState({ index: this.state.index + 1 });
     }
@@ -75,7 +83,6 @@ class NewProjects extends Component {
   }
 
   render() {
-
     const instructionsScreen = (
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
@@ -84,7 +91,7 @@ class NewProjects extends Component {
       </View>
     );
 
-    const newProjectsScene = (     
+    const newProjectsScene = (
       <Container>
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
@@ -106,13 +113,12 @@ class NewProjects extends Component {
                 navigate={this.props.navigation.navigate}
               />
             }
-          />  
+          />
         </View>
-      </Container>     
+      </Container>
     );
 
    const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : newProjectsScene;
-   // const screenToShow = newProjectsScene;
 
     return screenToShow;
   }
