@@ -41,7 +41,7 @@ const styles = {
   labelStyle: {
     fontSize: 18,
     paddingLeft: 0,
-    flex: 2,
+    flex: 1,
   },
   containerStyle: {
     height: 40,

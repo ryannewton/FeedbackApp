@@ -14,6 +14,7 @@ class Project extends Component {
     super(props);
 
     this.upvote = this.upvote.bind(this);
+    this.renderStatusBox = this.renderStatusBox.bind(this);
   }
 
   goToDetails() {
@@ -71,6 +72,17 @@ class Project extends Component {
     }
   }
 
+  renderStatusBox() {
+    if (this.props.showStatus) {
+      return (
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+          <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
+          {this.renderStatus()}
+        </View>
+      );
+    }
+  }
+
   render() {
     const { buttonText, lowWeight, row, projectTitle } = styles;
 
@@ -106,10 +118,7 @@ class Project extends Component {
               </TouchableOpacity>
 
               {/* Status box */}
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
-                {this.renderStatus()}
-              </View>
+              {this.renderStatusBox()}
             </View>
           </View>
         </TouchableHighlight>
@@ -128,7 +137,8 @@ Project.propTypes = {
 
 const mapStateToProps = (state) => {
   const { user } = state;
-  return { user };
+  const { showStatus } = state.features;
+  return { user, showStatus };
 };
 
 export default connect(mapStateToProps, { addProjectUpvote, removeProjectUpvote })(Project);

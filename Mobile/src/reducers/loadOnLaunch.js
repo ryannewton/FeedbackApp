@@ -12,6 +12,7 @@ async function loadToken() {
     const token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
     store.dispatch(actions.pullProjects(token));
     store.dispatch(actions.pullSolutions(token));
+    store.dispatch(actions.pullFeatures(token));
   } catch (error) {
     console.log(error);
   }
@@ -35,6 +36,7 @@ async function loadUpvotes() {
 
 async function loadDoNotDisplayList() {
   try {
+    //AsyncStorage.removeItem(`${ROOT_STORAGE}doNotDisplayList`);
     let doNotDisplayList = await AsyncStorage.getItem(`${ROOT_STORAGE}doNotDisplayList`) || '[]';
     doNotDisplayList = JSON.parse(doNotDisplayList);
     store.dispatch(actions.loadDoNotDisplayList(doNotDisplayList));
@@ -45,7 +47,7 @@ async function loadDoNotDisplayList() {
 
 async function loadInstructions() {
   try {
-    // AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`); //TODO: REMOVE THIS LINE
+    //AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
     let instructionsViewed = await AsyncStorage.getItem(`${ROOT_STORAGE}instructionsViewed`) || '[]';
     instructionsViewed = JSON.parse(instructionsViewed);
     store.dispatch(actions.loadInstructionsViewed(instructionsViewed));

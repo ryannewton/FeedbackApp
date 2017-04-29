@@ -93,7 +93,7 @@ class ProjectDetails extends Component {
           </TouchableWithoutFeedback>
         </ScrollView>
         {/* Input to submit a new solution */}
-        <KeyboardAvoidingView behavior={'height'}>
+        <KeyboardAvoidingView behavior={'padding'}>
           <TextInput
             style={inputText}
             placeholder="Enter your idea here!"

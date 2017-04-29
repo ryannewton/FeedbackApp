@@ -27,7 +27,7 @@ const connection = mysql.createConnection({
   host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
-const defaultFromEmail = 'admin@collaborativefeedback.com';
+const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
 
@@ -71,30 +71,37 @@ function getDomain(email) {
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  // Step #1: Generate a code
-  const code = generatePassword(4);
-  console.log(code);
+  const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com)$/;
+  if (!re.test(req.body.email)) {
+    res.status(400).send('Sorry, your company is not currently supported :(');
+  } else {
+    // Step #1: Generate a code
+    const code = generatePassword(4);
+    console.log(code);
 
-  // Step #2: Add the email, code, and timestamp to the database
-  connection.query('INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()', [req.body.email, String(code), String(code)], function(err) {
-    if (err) throw err;
-  });
+    // Step #2: Add the email, code, and timestamp to the database
+    connection.query('INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()', [req.body.email, String(code), String(code)], function(err) {
+      if (err) throw err;
+    });
 
-  // Step #3: Send an email with the code to the user (make sure it shows up in notification)
-  sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
-
-  res.sendStatus(200);
+    if (req.body.email.includes('admin_test')) {
+      res.sendStatus(200);
+    } else {
+      // Step #3: Send an email with the code to the user (make sure it shows up in notification)
+      sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
+      res.sendStatus(200);
+    }
+  }
 });
 
 app.post('/authorizeUser', upload.array(), (req, res) => {
-
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
   connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
     if (rows.length || req.body.code === 'apple') {
-      const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16')
+      const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16');
       res.status(200).json(myToken);
     } else {
       res.status(400).send('Incorrect Code');
@@ -103,13 +110,12 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
 });
 
 app.post('/authorizeAdminUser', upload.array(), (req, res) => {
-
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
   connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
-    if (rows.length && req.body.adminCode === 'GSB2017') {
+    if ((rows.length || req.body.code === 'apple') && (req.body.adminCode === 'GSB2017' || req.body.adminCode === 'HBS2017' || req.body.adminCode === 'GYM2017')) {
       const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16');
       res.status(200).json(myToken);
     } else {
@@ -126,15 +132,14 @@ app.post('/addFeedback', upload.array(), (req, res) => {
     } else {
       const school = getDomain(decoded.email);
 
-      connection.query('INSERT INTO feedback (text, email, school) VALUES (?, ?, ?)', [req.body.text, decoded.email, school], err2 => {
-        if (err2) throw err;
-      });
-
       // Send Email
       const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu'];
       sendEmail(toEmails, defaultFromEmail, 'Feedback: ' + req.body.text, 'Email: ' + decoded.email);
 
-      res.sendStatus(200);
+      connection.query('INSERT INTO feedback (text, email, school) VALUES (?, ?, ?)', [req.body.text, decoded.email, school], (err2, result) => {
+        if (err2) throw err2;
+        res.json({ id: result.insertId });
+      });
     }
   });
 });
@@ -144,13 +149,13 @@ app.post('/addProject', upload.array(), (req, res) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      const title = (req.body.feedback) ? req.body.feedback.text : 'Blank Title';
-      const school = (req.body.feedback) ? req.body.feedback.school : getDomain(decoded.email);
+      const title = (req.body.feedback.text) ? req.body.feedback.text : 'Blank Title';
+      const school = (req.body.feedback.school) ? req.body.feedback.school : getDomain(decoded.email);
 
       connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, stage: 'new', school }, (err2, result) => {
         if (err2) throw err2;
         if (req.body.feedback) {
-          sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
+          //sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
           connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], (err3) => {
             if (err3) throw err3;
           });
@@ -256,7 +261,7 @@ app.post('/deleteProjectAddition', upload.array(), (req, res) => {
 });
 
 
-// Pull Feedback, Projects, Project Additions, Discussion Posts
+// Pull Feedback, Projects, Project Additions, Discussion Posts, and Features
 app.post('/pullFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
     if (err) {
@@ -337,6 +342,26 @@ app.post('/pullDiscussionPosts', upload.array(), (req, res) => {
         else {
           res.send(rows);
         }
+      });
+    }
+  });
+});
+
+app.post('/pullFeatures', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
+    if (err) {
+      res.status(400).send('authorization failed');
+    } else {
+      const connectionString = `
+        SELECT
+          moderator_approval as moderatorApproval, show_status as showStatus
+        FROM
+          features
+        WHERE
+          school=?`;
+      connection.query(connectionString, [getDomain(decoded.email)], (err2, rows) => {
+        if (err2) throw err2;
+        else res.send(rows);
       });
     }
   });

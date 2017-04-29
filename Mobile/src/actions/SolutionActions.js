@@ -58,7 +58,7 @@ export const pullSolutions = token => (
       dispatch(receivedSolutionList(response.data));
     })
     .catch((error) => {
-      console.log('pullSolutions() ERROR: ', error.message);
+      console.log('pullSolutions() ERROR: ', error.response.data);
     });
   }
 );

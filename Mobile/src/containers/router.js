@@ -26,7 +26,7 @@ export const AuthStack = StackNavigator({
   SubmitEmail: {
     screen: SendAuthorizationEmail,
     navigationOptions: {
-      title: 'Verify Your University',
+      title: 'Verify Your Organization',
       header: {
         style: { height: styles.header.height },
       },

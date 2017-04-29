@@ -6,7 +6,7 @@ import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
-import { sendAuthorizationEmail, authorizeUserFail, closeInstructions  } from '../actions';
+import { sendAuthorizationEmail, authorizeUserFail, closeInstructions } from '../actions';
 import styles from '../styles/styles_main';
 import fullScreen from '../../images/backgrounds/EmailInfo.png';
 
@@ -34,7 +34,7 @@ class SendAuthorizationEmail extends Component {
   }
 
   sendAuthorizationEmail() {
-    const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu)$/;
+    const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
       this.props.sendAuthorizationEmail(this.state.email, () => this.navigateTo('AuthCode'));
     } else {
@@ -49,6 +49,10 @@ class SendAuthorizationEmail extends Component {
       action: NavigationActions.navigate({ routeName: subRouteName }),
     });
     this.props.navigation.dispatch(navigateAction);
+  }
+
+  closeInstructions() {
+    this.props.closeInstructions('Send Email Scene');
   }
 
   renderSignupButton() {
@@ -71,10 +75,6 @@ class SendAuthorizationEmail extends Component {
     );
   }
 
-  closeInstructions() {
-    this.props.closeInstructions('Send Email Scene');
-  }
-
   render() {
     const SendEmailScene = (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -83,8 +83,8 @@ class SendAuthorizationEmail extends Component {
             {/* Email input */}
             <CardSection>
               <Input
-                label="School Email"
-                placeholder="joe@university.edu"
+                label="Your Email"
+                placeholder="tyler@collaborativefeedback.com"
                 value={this.state.email}
                 onChangeText={text => this.setState({ email: text })}
                 keyboardType="email-address"
@@ -104,7 +104,7 @@ class SendAuthorizationEmail extends Component {
             <CardSection>
               <Text style={styles.text}>
                   Why do we need your email? Two reasons:{'\n'}
-                  1) We need to confirm you are member of your university{'\n'}
+                  1) We need to confirm you are member of your organization{'\n'}
                   2) We will keep you updated as changes are made based on your feedback
               </Text>
             </CardSection>
@@ -121,10 +121,10 @@ class SendAuthorizationEmail extends Component {
       </View>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
+    //const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
+    const screenToShow = SendEmailScene;
 
     return screenToShow;
-
   }
 }
 

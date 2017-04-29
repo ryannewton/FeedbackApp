@@ -29,7 +29,7 @@ const FeedbackStack = StackNavigator(
     Feedback: {
       screen: Feedback,
       navigationOptions: {
-        title: 'Send Feedback',
+        title: 'Submit Feedback',
         header: ({ navigate }) => ({
           right: settingsButton(navigate),
           style: { height: styles.header.height },

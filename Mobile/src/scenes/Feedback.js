@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet, Text, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuContext } from 'react-native-menu';
 import { NavigationActions } from 'react-navigation';
@@ -16,14 +16,19 @@ import styles from '../styles/styles_main';
 // import styles2 from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/FeedbackInfo.png';
 
-var styles2 = StyleSheet.create({
+const styles2 = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   image: {
-    flex: 1
-  }
+    flex: 1,
+  },
+  touchableOpacityStyle: {
+    ...Platform.select({
+      ios: { flex: 1 },
+    }),
+  },
 });
 
 class Feedback extends Component {
@@ -48,7 +53,7 @@ class Feedback extends Component {
   }
 
   submitFeedback() {
-    this.props.submitFeedbackToServer();
+    this.props.submitFeedbackToServer(this.props.moderatorApproval);
     this.navigateTo('Tabs', 'Submitted');
   }
 
@@ -68,17 +73,17 @@ class Feedback extends Component {
   }
 
   render() {
-    const placeholderText = 'Enter your feedback here. We will work on addressing it with the appropriate administrator!';
+    const placeholderText = 'Enter your feedback here!';
 
     const instructionsScreen = (
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
+        <TouchableOpacity onPress={this.closeInstructions} style={styles2.touchableOpacityStyle}>
           <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
         </TouchableOpacity>
       </View>
     );
 
-    const WriteFeedbackScene = (      
+    const WriteFeedbackScene = (
       <View style={[styles.container, styles.swiper]}>
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
@@ -99,12 +104,12 @@ class Feedback extends Component {
               {this.renderButton()}
             </View>
           </TouchableWithoutFeedback>
-        </MenuContext>     
+        </MenuContext>
       </View>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
-    // const screenToShow = newProjectsScene;
+    //const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
+    const screenToShow = WriteFeedbackScene;
 
     return screenToShow;
 
@@ -123,7 +128,8 @@ Feedback.propTypes = {
 function mapStateToProps(state) {
   const { feedback, loading } = state.main;
   const { user } = state;
-  return { user, feedback, loading };
+  const { moderatorApproval } = state.features;
+  return { user, feedback, loading, moderatorApproval };
 }
 
 export default connect(mapStateToProps, {
