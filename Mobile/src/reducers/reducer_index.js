@@ -7,6 +7,7 @@ import projects from './reducer_projects';
 import auth from './reducer_auth';
 import user from './reducer_user';
 import solutions from './reducer_solutions';
+import features from './reducer_features';
 
 export default combineReducers({
   main,
@@ -14,4 +15,5 @@ export default combineReducers({
   solutions,
   auth,
   user,
+  features,
 });
