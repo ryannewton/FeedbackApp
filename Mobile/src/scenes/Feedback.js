@@ -53,7 +53,7 @@ class Feedback extends Component {
   }
 
   submitFeedback() {
-    this.props.submitFeedbackToServer();
+    this.props.submitFeedbackToServer(this.props.moderatorApproval);
     this.navigateTo('Tabs', 'Submitted');
   }
 
@@ -73,7 +73,7 @@ class Feedback extends Component {
   }
 
   render() {
-    const placeholderText = 'Enter your feedback here. We will work on addressing it with the appropriate administrator!';
+    const placeholderText = 'Enter your feedback here!';
 
     const instructionsScreen = (
       <View style={styles.imageContainer}>
@@ -128,7 +128,8 @@ Feedback.propTypes = {
 function mapStateToProps(state) {
   const { feedback, loading } = state.main;
   const { user } = state;
-  return { user, feedback, loading };
+  const { moderatorApproval } = state.features;
+  return { user, feedback, loading, moderatorApproval };
 }
 
 export default connect(mapStateToProps, {

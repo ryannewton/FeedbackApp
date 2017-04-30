@@ -41,3 +41,6 @@ export const ADD_SOLUTION_TO_STATE = 'add_solution_to_state';
 // User types
 export const CLOSE_INSTRUCTIONS = 'close_instructions';
 export const LOAD_INSTRUCTIONS_VIEWED = 'load_instructions_viewed';
+
+// Feature types
+export const PULL_FEATURES = 'pull_features';
