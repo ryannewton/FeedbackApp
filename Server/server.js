@@ -77,7 +77,7 @@ app.post('/slack/suggestion', upload.array(), (req) => {
   const token = process.env.SLACK_API_TOKEN || 'xoxp-149702699123-149702929379-180578344978-3dc257e4468e1f9a45cc50a4fd29bf55';
 
   const web = new WebClient(token);
-  web.chat.postMessage('suggestions', req.body, (err, res) => {
+  web.chat.postMessage('suggestions', req.body.text, (err, res) => {
     if (err) {
       console.log('Error:', err);
     } else {
