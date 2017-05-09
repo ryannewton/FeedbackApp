@@ -69,6 +69,13 @@ function getDomain(email) {
   return re.exec(email)[0].slice(1);
 }
 
+// Slack
+app.post('/slack/suggestion', upload.array(), (req, res) => {
+  console.log('received', req.body);
+  res.sendStatus(200);
+});
+
+
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
   const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com)$/;
