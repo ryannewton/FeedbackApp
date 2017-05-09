@@ -14,6 +14,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
+const WebClient = require('@slack/client').WebClient; // for Slack
+
 const connection = mysql.createConnection({
   user: 'root',
   password: 'buechelejedi16',
@@ -70,11 +72,47 @@ function getDomain(email) {
 }
 
 // Slack
-app.post('/slack/suggestion', upload.array(), (req, res) => {
-  console.log('received', req.body);
-  res.sendStatus(200);
+app.post('/slack/suggestion', upload.array(), (req) => {
+  console.log(req.body);
+  const token = process.env.SLACK_API_TOKEN || 'xoxp-149702699123-149702929379-180578344978-3dc257e4468e1f9a45cc50a4fd29bf55';
+
+  const web = new WebClient(token);
+  web.chat.postMessage('suggestions', req.body, (err, res) => {
+    if (err) {
+      console.log('Error:', err);
+    } else {
+      console.log('Message sent: ', res);
+    }
+  });
 });
 
+// var IncomingWebhook = require('@slack/client').IncomingWebhook;
+
+// var url = process.env.SLACK_WEBHOOK_URL || 'https://hooks.slack.com/services/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'; //see section above on sensitive data
+
+// var webhook = new IncomingWebhook(url);
+
+// webhook.send('Hello there', function(err, res) {
+//     if (err) {
+//         console.log('Error:', err);
+//     } else {
+//         console.log('Message sent: ', res);
+//     }
+// });
+
+// var WebClient = require('@slack/client').WebClient;
+
+// var token = process.env.SLACK_API_TOKEN || 'xoxp-149702699123-149702929379-180578344978-3dc257e4468e1f9a45cc50a4fd29bf55'; //see section above on sensitive data
+
+// var web = new WebClient(token);
+// web.chat.postMessage('suggestions', 'Hello there', function(err, res) {
+//     if (err) {
+//         console.log("test");
+//         console.log('Error:', err);
+//     } else {
+//         console.log('Message sent: ', res);
+//     }
+// });
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {

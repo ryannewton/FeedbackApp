@@ -11,6 +11,7 @@
   "author": "tjonnyc",
   "license": "proprietary",
   "dependencies": {
+    "@slack/client": "^3.9.0",
     "aws-sdk": "^2.8.0",
     "axios": "^0.15.3",
     "body-parser": "^1.15.2",
