@@ -154,7 +154,7 @@ app.post('/slack/vote', upload.array(), (req, res) => {
   // checks to see if it was an upvote or a downvote... probably looks at the id of the button
   // updates the votes for that feedback accordingly
   // runs the 'check for updates routine'
-
+  console.log(req.body);
   res.sendStatus(200);
 });
 
