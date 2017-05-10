@@ -16,6 +16,9 @@ app.use(express.static('public'));
 
 const WebClient = require('@slack/client').WebClient; // for Slack
 
+const token = process.env.SLACK_API_TOKEN || 'xoxp-149702699123-149702929379-180578344978-3dc257e4468e1f9a45cc50a4fd29bf55';
+const web = new WebClient(token);
+
 const connection = mysql.createConnection({
   user: 'root',
   password: 'buechelejedi16',
@@ -72,11 +75,69 @@ function getDomain(email) {
 }
 
 // Slack
-app.post('/slack/suggestion', upload.array(), (req) => {
-  console.log(req.body);
-  const token = process.env.SLACK_API_TOKEN || 'xoxp-149702699123-149702929379-180578344978-3dc257e4468e1f9a45cc50a4fd29bf55';
+function getHistory() {
+  web.channels.history('C5AGEPJ2E', (err, res) => {
+    if (err) {
+      console.log('ERROR:', err);
+    } else {
+      //console.log('Success: ', res);
+      updateBoard(res.messages);
+    }
+  });
+}
 
-  const web = new WebClient(token);
+function updateBoard(messages) {
+  messages.forEach((currentValue, index) => {
+    web.chat.update(currentValue.ts, 'C5AGEPJ2E', 'updated text ' + String(index), (err) => {
+      if (err) {
+        console.log('Error:', err);
+      }
+    });
+  });
+}
+
+// When the user submits a /suggestion
+app.post('/slack/suggestion', upload.array(), (req, res) => {
+
+  // Adds the feedback to the feedback table
+
+  // runs the 'check for updates routine'
+
+  web.chat.postMessage('suggestions', '*27 Votes*: JSON test', {
+    attachments: [
+      {
+        text: '',
+        callback_id: 'suggestion',
+        color: '#3AA3E3',
+        attachment_type: 'default',
+        actions: [
+          {
+            name: 'upvote',
+            style: 'primary',
+            text: 'I agree (add vote)',
+            type: 'button',
+            value: 'upvote',
+          },
+          {
+            name: 'downvote',
+            style: 'danger',
+            text: 'Meh... (skip)',
+            type: 'button',
+            value: 'downvote',
+          },
+        ],
+      },
+    ],
+  }, (err, res) => {
+    if (err) {
+      console.log('Error:', err);
+    } else {
+      console.log('Message sent: ', res);
+    }
+  });
+
+  // The suggestion is posted in the suggestions channel (by the bot)
+  console.log(req.body);
   web.chat.postMessage('suggestions', req.body.text, (err, res) => {
     if (err) {
       console.log('Error:', err);
@@ -84,35 +145,18 @@ app.post('/slack/suggestion', upload.array(), (req) => {
       console.log('Message sent: ', res);
     }
   });
+
+  res.sendStatus(200);
 });
 
-// var IncomingWebhook = require('@slack/client').IncomingWebhook;
+// When a user presses a button
+app.post('/slack/vote', upload.array(), (req, res) => {
+  // checks to see if it was an upvote or a downvote... probably looks at the id of the button
+  // updates the votes for that feedback accordingly
+  // runs the 'check for updates routine'
 
-// var url = process.env.SLACK_WEBHOOK_URL || 'https://hooks.slack.com/services/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'; //see section above on sensitive data
-
-// var webhook = new IncomingWebhook(url);
-
-// webhook.send('Hello there', function(err, res) {
-//     if (err) {
-//         console.log('Error:', err);
-//     } else {
-//         console.log('Message sent: ', res);
-//     }
-// });
-
-// var WebClient = require('@slack/client').WebClient;
-
-// var token = process.env.SLACK_API_TOKEN || 'xoxp-149702699123-149702929379-180578344978-3dc257e4468e1f9a45cc50a4fd29bf55'; //see section above on sensitive data
-
-// var web = new WebClient(token);
-// web.chat.postMessage('suggestions', 'Hello there', function(err, res) {
-//     if (err) {
-//         console.log("test");
-//         console.log('Error:', err);
-//     } else {
-//         console.log('Message sent: ', res);
-//     }
-// });
+  res.sendStatus(200);
+});
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
