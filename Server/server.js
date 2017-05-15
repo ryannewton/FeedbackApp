@@ -132,26 +132,19 @@ app.get('/slack/auth', (req, res) => {
 
 // Gets a list of all the users to send a DM to (for upvoting)
 // TO DO -- switch to users in suggestions channel instead of all users in team (?)
-function getUsers(text, suggestionId, teamId) {
+function getUsers(text, suggestionId) {
   botWeb.im.list((err, res) => {
     if (err) {
       console.log('ERROR: getUsers ', err);
     } else {
-      postMessageToDM(text, res.ims, suggestionId, teamId);
+      postMessageToDM(text, res.ims, suggestionId);
     }
-  });
-}
-
-// depreciated - using callback_id
-function insertDM(dm, suggestionId, teamId) {
-  connection.query('INSERT INTO dms (suggestion_id, ts, team_id, dm_id) VALUES (?, ?, ?, ?)', [suggestionId, dm.ts, teamId, dm.channel], (err) => {
-    if (err) throw err;
   });
 }
 
 // Sends each user the text of the suggestion and an upvote button
 // TO DO -- automatically turn off notifications for this message
-function postMessageToDM(text, users, suggestionId, teamId) {
+function postMessageToDM(text, users, suggestionId) {
   users.forEach((currentValue) => {
     botWeb.chat.postMessage(currentValue.id, text, {
       attachments: [
@@ -177,12 +170,9 @@ function postMessageToDM(text, users, suggestionId, teamId) {
           ],
         },
       ],
-    }, (err, res) => {
+    }, (err) => {
       if (err) {
         console.log('Error:', err);
-      } else {
-        //console.log('DM Response', res);
-        //insertDM(res, suggestionId, teamId);
       }
     });
   });
@@ -210,9 +200,13 @@ function getSlots(teamId) {
 function getProjects(slots, teamId) {
   const connectionString = `
     SELECT
-      id, text, votes
+      a.id, title AS text, votes
     FROM
-      slack_feedback
+      projects a
+    JOIN
+      domain_lookup b
+    ON
+      a.school = b.school
     WHERE
       team_id=?`;
   connection.query(connectionString, [teamId], (err, feedback) => {
@@ -227,7 +221,7 @@ function getProjects(slots, teamId) {
 // ******* TO DO -- need to save the channel to database too
 function updateBoard(slots, feedback, teamId) {
   //slotsSorted = slots.sort((a, b) => a.ts - b.ts);
-  feedback.sort((a, b) => a.votes - b.votes).forEach((currentValue, index) => {
+  feedback.sort((a, b) => b.votes - a.votes).forEach((currentValue, index) => {
     const text = '*' + currentValue.votes + ' Votes* ' + currentValue.text;
     const channel = 'C5CSA6ECC';
     if (index >= slots.length) {
@@ -244,16 +238,22 @@ function updateBoard(slots, feedback, teamId) {
 
 app.post('/slack/suggestion', upload.array(), (req, res) => {
   // Adds the feedback to the feedback table and updates the board
-  connection.query('INSERT INTO slack_feedback (text, submitted_by, team_id) VALUES (?, ?, ?)', [req.body.text, req.body.user_id, req.body.team_id], (err, res) => {
+  connection.query(`
+    INSERT INTO
+      projects (title, school)
+    VALUES
+      (?, (SELECT school FROM domain_lookup WHERE team_id=?))`, [req.body.text, req.body.team_id], (err, res2) => {
     if (err) throw err;
     else {
       getSlots(req.body.team_id);
       // Sends a DM to all users (for upvoting)
-      getUsers(req.body.text, res.insertId, req.body.team_id);
+      getUsers(req.body.text, res2.insertId);
     }
   });
 
-  res.sendStatus(200);
+  res.json({
+    text: 'Your idea ‘' + req.body.text + '’ has been posted!',
+  });
 });
 
 // STEP #3 -- When a user 'upvotes'
@@ -263,7 +263,7 @@ app.post('/slack/vote', upload.array(), (req, res) => {
 
   if (upvote === 'upvote') {
     // *** TO DO -- updates the votes for that feedback accordingly in the database
-    connection.query('UPDATE slack_feedback SET votes=votes+1 WHERE id=?', [payload.callback_id], (err) => {
+    connection.query('UPDATE projects SET votes=votes+1 WHERE id=?', [payload.callback_id], (err) => {
       if (err) throw err;
       else {
         getSlots(payload.team.id);
