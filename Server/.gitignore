@@ -7,3 +7,5 @@ config.json
 !.elasticbeanstalk/*.global.yml
 /.idea
 public/bundle.js
+
+.env

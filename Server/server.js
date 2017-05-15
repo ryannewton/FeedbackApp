@@ -1,18 +1,33 @@
+require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql');
 const multer = require('multer');
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const aws = require('aws-sdk'); // load aws sdk
+const WebClient = require('@slack/client').WebClient; // for Slack
 
-aws.config.loadFromPath('config.json'); // load aws config
+const request = require('request'); // Slack
+
 const app = express();
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
+aws.config.loadFromPath('config.json'); // load aws config
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
+
+//Slack
+const botToken = process.env.SLACK_API_BOT_TOKEN || '';
+const botWeb = new WebClient(botToken);
+
+// depreciated - admin use only
+const IncomingWebhook = require('@slack/client').IncomingWebhook;
+const token = process.env.SLACK_API_TOKEN || '';
+const web = new WebClient(token);
+const url = process.env.SLACK_WEBHOOK_URL || ''; // see section above on sensitive data
+const webhook = new IncomingWebhook(url);
 
 const connection = mysql.createConnection({
   user: 'root',
@@ -68,6 +83,205 @@ function getDomain(email) {
   const re = /@\w*\.\w*$|\.\w*\.\w*$/;
   return re.exec(email)[0].slice(1);
 }
+
+// Slack
+// Step #1 -- When user clicks 'add to slack', slack passes the API keys to this API
+
+// Saves the timestamp in the database (so we know the key for updating)
+function insertSlot(message, teamId) {
+  connection.query('INSERT INTO slack_slots (team_id, ts) VALUES (?, ?)', [teamId, message.ts], (err) => {
+    if (err) throw err;
+  });
+}
+
+// Posts messages to channel during setup (start with 5)
+function postMessageToSuggestions(text, teamId) {
+  botWeb.chat.postMessage('#suggestions', text, (err, res) => {
+    if (err) {
+      console.log('Error:', err);
+    } else {
+      console.log('message response to suggestions', res);
+      insertSlot(res.message, teamId);
+    }
+  });
+}
+// TO DO -- store API keys in database
+// TO DO -- route the user to the success screen
+// Posts the first 5 messages (requires the admin to have already created the suggestions channel)
+app.get('/slack/auth', (req, res) => {
+  const options = {
+    uri: 'https://slack.com/api/oauth.access?code='
+        + req.query.code +
+        '&client_id=' + process.env.CLIENT_ID +
+        '&client_secret=' + process.env.CLIENT_SECRET,
+    method: 'GET',
+  };
+  request(options, (error, response, body) => {
+    const JSONresponse = JSON.parse(body);
+    if (!JSONresponse.ok) {
+      console.log(JSONresponse);
+      res.send('Error encountered: \n' + JSON.stringify(JSONresponse)).status(200).end();
+    } else {
+      console.log(JSONresponse);
+      res.send('Success!');
+    }
+  });
+});
+
+// Step #2 -- When the user submits a /suggestion
+
+// Gets a list of all the users to send a DM to (for upvoting)
+// TO DO -- switch to users in suggestions channel instead of all users in team (?)
+function getUsers(text, suggestionId, teamId) {
+  botWeb.im.list((err, res) => {
+    if (err) {
+      console.log('ERROR: getUsers ', err);
+    } else {
+      postMessageToDM(text, res.ims, suggestionId, teamId);
+    }
+  });
+}
+
+// depreciated - using callback_id
+function insertDM(dm, suggestionId, teamId) {
+  connection.query('INSERT INTO dms (suggestion_id, ts, team_id, dm_id) VALUES (?, ?, ?, ?)', [suggestionId, dm.ts, teamId, dm.channel], (err) => {
+    if (err) throw err;
+  });
+}
+
+// Sends each user the text of the suggestion and an upvote button
+// TO DO -- automatically turn off notifications for this message
+function postMessageToDM(text, users, suggestionId, teamId) {
+  users.forEach((currentValue) => {
+    botWeb.chat.postMessage(currentValue.id, text, {
+      attachments: [
+        {
+          text: 'Do you agree with this suggestion?',
+          fallback: 'Woops... sorry something went wrong...',
+          callback_id: String(suggestionId),
+          color: '#3AA3E3',
+          attachment_type: 'default',
+          actions: [
+            {
+              name: 'vote',
+              text: 'I agree (vote)',
+              type: 'button',
+              value: 'upvote',
+            },
+            {
+              name: 'skip',
+              text: 'Meh... (skip)',
+              type: 'button',
+              value: 'skip',
+            },
+          ],
+        },
+      ],
+    }, (err, res) => {
+      if (err) {
+        console.log('Error:', err);
+      } else {
+        //console.log('DM Response', res);
+        //insertDM(res, suggestionId, teamId);
+      }
+    });
+  });
+}
+
+// Helper functino for updateBoard -- pull the slack spots for the current team
+function getSlots(teamId) {
+  console.log('get slots');
+  const connectionString = `
+    SELECT
+      ts
+    FROM
+      slack_slots
+    WHERE
+      team_id=?`;
+  connection.query(connectionString, [teamId], (err, slots) => {
+    if (err) throw err;
+    else {
+      getProjects(slots, teamId);
+    }
+  });
+}
+
+// Helper function for updateBoard -- pull the current projects from the database
+function getProjects(slots, teamId) {
+  const connectionString = `
+    SELECT
+      id, text, votes
+    FROM
+      slack_feedback
+    WHERE
+      team_id=?`;
+  connection.query(connectionString, [teamId], (err, feedback) => {
+    if (err) throw err;
+    else {
+      updateBoard(slots, feedback, teamId);
+    }
+  });
+}
+
+// Updates the board to reflect the current status of the database
+// ******* TO DO -- need to save the channel to database too
+function updateBoard(slots, feedback, teamId) {
+  //slotsSorted = slots.sort((a, b) => a.ts - b.ts);
+  feedback.sort((a, b) => a.votes - b.votes).forEach((currentValue, index) => {
+    const text = '*' + currentValue.votes + ' Votes* ' + currentValue.text;
+    const channel = 'C5CSA6ECC';
+    if (index >= slots.length) {
+      postMessageToSuggestions(text, teamId);
+    } else {
+      botWeb.chat.update(slots[index].ts, channel, text, { as_user: true }, (err) => {
+        if (err) {
+          console.log('Error:', err);
+        }
+      });
+    }
+  });
+}
+
+app.post('/slack/suggestion', upload.array(), (req, res) => {
+  // Adds the feedback to the feedback table and updates the board
+  connection.query('INSERT INTO slack_feedback (text, submitted_by, team_id) VALUES (?, ?, ?)', [req.body.text, req.body.user_id, req.body.team_id], (err, res) => {
+    if (err) throw err;
+    else {
+      getSlots(req.body.team_id);
+      // Sends a DM to all users (for upvoting)
+      getUsers(req.body.text, res.insertId, req.body.team_id);
+    }
+  });
+
+  res.sendStatus(200);
+});
+
+// STEP #3 -- When a user 'upvotes'
+app.post('/slack/vote', upload.array(), (req, res) => {
+  const payload = JSON.parse(req.body.payload);
+  const upvote = payload.actions[0].value;
+
+  if (upvote === 'upvote') {
+    // *** TO DO -- updates the votes for that feedback accordingly in the database
+    connection.query('UPDATE slack_feedback SET votes=votes+1 WHERE id=?', [payload.callback_id], (err) => {
+      if (err) throw err;
+      else {
+        getSlots(payload.team.id);
+      }
+    });
+    res.json({
+      response_type: 'ephemeral',
+      replace_original: true,
+      text: '# of Votes increased by 1!',
+    });
+  } else {
+    res.json({
+      response_type: 'ephemeral',
+      replace_original: true,
+      text: 'Suggestion skipped',
+    });
+  }
+});
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
@@ -367,10 +581,10 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
   });
 });
 
-// app.listen(8081, () => {
-//  console.log('Example app listening on port 8081!');
-// });
-
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(8081, () => {
+ console.log('Example app listening on port 8081!');
 });
+
+// app.listen(3000, () => {
+//   console.log('Example app listening on port 3000!');
+// });
