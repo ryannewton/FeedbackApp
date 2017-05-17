@@ -67,7 +67,7 @@ export const authorizeUser = (email, code) => (
     })
     // If not, show an error message
     .catch((error) => {
-      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.response.data });
+      authorizeFail(error.response.data);
     });
   }
 );
@@ -84,4 +84,9 @@ export const logOut = () => (
 export const authorizeSuccess = token => ({
   type: AUTHORIZE_USER_SUCCESS,
   payload: token,
+});
+
+export const authorizeFail = err => ({
+  type: AUTHORIZE_USER_FAIL,
+  payload: err,
 });

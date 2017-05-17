@@ -10,9 +10,13 @@ async function loadToken() {
   try {
     // AsyncStorage.removeItem(`${ROOT_STORAGE}token`);
     const token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
-    store.dispatch(actions.pullProjects(token));
-    store.dispatch(actions.pullSolutions(token));
-    store.dispatch(actions.pullFeatures(token));
+    if (token === null) {
+      store.dispatch(actions.authorizeFail());
+    } else {
+      store.dispatch(actions.pullProjects(token));
+      store.dispatch(actions.pullSolutions(token));
+      store.dispatch(actions.pullFeatures(token));
+    }
   } catch (error) {
     console.log(error);
   }
