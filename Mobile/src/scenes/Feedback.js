@@ -39,22 +39,12 @@ class Feedback extends Component {
       height: 0,
     };
 
-    this.navigateTo = this.navigateTo.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);
-  }
-
-  navigateTo(routeName, subRouteName) {
-    const navigateAction = NavigationActions.navigate({
-      routeName,
-      params: {},
-      action: NavigationActions.navigate({ routeName: subRouteName }),
-    });
-    this.props.navigation.dispatch(navigateAction);
   }
 
   submitFeedback() {
     this.props.submitFeedbackToServer(this.props.moderatorApproval);
-    this.navigateTo('Tabs', 'Submitted');
+    this.props.navigation.navigate('Submitted');
   }
 
   renderButton() {

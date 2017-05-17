@@ -18,7 +18,6 @@ class SplashScreen extends Component {
     };
 
     this.route = this.route.bind(this);
-    this.navigateTo = this.navigateTo.bind(this);
   }
 
   componentDidUpdate() {
@@ -32,22 +31,13 @@ class SplashScreen extends Component {
     if (!this.props.auth.loadingState && this.props.auth.loggedIn !== null) {
       // Route to main if logged in
       if (this.props.auth.loggedIn) {
-        this.navigateTo('Tabs', 'NewProjects');
+        this.props.navigation.navigate('NewProjects');
       } else {
-        this.navigateTo('Auth');
+        this.props.navigation.navigate('SubmitEmail');
       }
 
       this.setState({ cleared: true });
     }
-  }
-
-  navigateTo(routeName, subRouteName) {
-    const navigateAction = NavigationActions.navigate({
-      routeName,
-      params: {},
-      action: NavigationActions.navigate({ routeName: subRouteName }),
-    });
-    this.props.navigation.dispatch(navigateAction);
   }
 
   render() {

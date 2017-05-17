@@ -16,8 +16,8 @@ var styles2 = StyleSheet.create({
     alignItems: 'stretch'
   },
   image: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 class SendAuthorizationEmail extends Component {
@@ -29,26 +29,16 @@ class SendAuthorizationEmail extends Component {
     };
 
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
-    this.navigateTo = this.navigateTo.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);
   }
 
   sendAuthorizationEmail() {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
-      this.props.sendAuthorizationEmail(this.state.email, () => this.navigateTo('AuthCode'));
+      this.props.sendAuthorizationEmail(this.state.email, () => this.props.navigation.navigate('AuthCode'));
     } else {
       this.props.authorizeUserFail('Invalid Email Address');
     }
-  }
-
-  navigateTo(routeName, subRouteName) {
-    const navigateAction = NavigationActions.navigate({
-      routeName,
-      params: {},
-      action: NavigationActions.navigate({ routeName: subRouteName }),
-    });
-    this.props.navigation.dispatch(navigateAction);
   }
 
   closeInstructions() {

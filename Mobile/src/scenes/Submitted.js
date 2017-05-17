@@ -26,21 +26,12 @@ class Submitted extends Component {
     Keyboard.dismiss();
   }
 
-  navigateTo(routeName, subRouteName) {
-    const navigateAction = NavigationActions.navigate({
-      routeName,
-      params: {},
-      action: NavigationActions.navigate({ routeName: subRouteName }),
-    });
-    this.props.navigation.dispatch(navigateAction);
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <View style={{ flex: 1, paddingTop: 20 }}>
           {/* To do: To do: Update navigation to use react-navigation */}
-          <Button onPress={() => this.navigateTo('Tabs', 'NewProjects')}>
+          <Button onPress={() => this.props.navigation.navigate('NewProjects')}>
             Vote on Feedback!
           </Button>
         </View>
