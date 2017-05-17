@@ -13,18 +13,14 @@ const ProjectsStack = StackNavigator({
     screen: Projects,
     navigationOptions: {
       title: 'All Feedback',
-      header: {
-        style: { height: styles.header.height },
-      },
+      headerStyle: { height: styles.header.height },
     },
   },
   Details: {
     screen: ProjectDetails,
     navigationOptions: {
       title: 'Feedback Details',
-      header: {
-        style: { height: styles.header.height },
-      },
+      headerStyle: { height: styles.header.height },
     },
   },
 });

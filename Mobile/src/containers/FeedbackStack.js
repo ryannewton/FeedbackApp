@@ -28,30 +28,24 @@ const FeedbackStack = StackNavigator(
   {
     Feedback: {
       screen: Feedback,
-      navigationOptions: {
+      navigationOptions: ({ navigation }) => ({
         title: 'Submit Feedback',
-        header: ({ navigate }) => ({
-          right: settingsButton(navigate),
-          style: { height: styles.header.height },
-        }),
-      },
+        headerRight: settingsButton(navigation.navigate),
+        headerStyle: { height: styles.header.height },
+      }),
     },
     Settings: {
       screen: Settings,
       navigationOptions: {
         title: 'Settings',
-        header: {
-          style: { height: styles.header.height },
-        },
+        headerStyle: { height: styles.header.height },
       },
     },
     Submitted: {
       screen: Submitted,
       navigationOptions: {
         title: 'Feedback Received',
-        header: {
-          style: { height: styles.header.height },
-        },
+        headerStyle: { height: styles.header.height },
       },
     },
   },
