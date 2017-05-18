@@ -36,10 +36,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
@@ -285,7 +285,7 @@ app.post('/slack/vote', upload.array(), (req, res) => {
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com)$/;
+  const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com|northwestern\.edu)$/;
   if (!re.test(req.body.email)) {
     res.status(400).send('Sorry, your company is not currently supported :(');
   } else {
