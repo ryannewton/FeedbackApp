@@ -7,10 +7,11 @@ import { http, ROOT_STORAGE } from '../constants';
 // Import types & other action creators
 import { pullProjects } from './FeedbackActions';
 import { pullSolutions } from './SolutionActions';
+import { pullFeatures } from './actions_features';
 import {
-  SAVE_EMAIL,
   SENDING_AUTHORIZATION_EMAIL,
-  SENT_AUTHORIZATION_EMAIL,
+  SENT_AUTHORIZATION_EMAIL_SUCCESS,
+  SENT_AUTHORIZATION_EMAIL_FAIL,
   AUTHORIZING_USER,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
@@ -40,12 +41,11 @@ export const sendAuthorizationEmail = (email, navigateToNext) => (
     // If successful navigate to the login in screen (for post email verification)
     .then(() => {
       // Change the in-authorization flag in state so we update the component
-      dispatch({ type: SAVE_EMAIL, payload: email });
-      dispatch({ type: SENT_AUTHORIZATION_EMAIL });
+      dispatch({ type: SENT_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
       navigateToNext();
     })
     .catch((error) => {
-      console.log('Error in sendAuthorizationEmail in AuthActions: ', error.message);
+      dispatch({ type: SENT_AUTHORIZATION_EMAIL_FAIL, payload: error.response.data });
     });
   }
 );
@@ -62,12 +62,12 @@ export const authorizeUser = (email, code) => (
       AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
       dispatch(pullProjects(token));
       dispatch(pullSolutions(token));
+      dispatch(pullFeatures(token));
       dispatch(authorizeSuccess(token));
     })
     // If not, show an error message
     .catch((error) => {
-      console.log('Error in loginUser in AuthActions: ', error.message);
-      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.message });
+      authorizeFail(error.response.data);
     });
   }
 );
@@ -84,4 +84,9 @@ export const logOut = () => (
 export const authorizeSuccess = token => ({
   type: AUTHORIZE_USER_SUCCESS,
   payload: token,
+});
+
+export const authorizeFail = err => ({
+  type: AUTHORIZE_USER_FAIL,
+  payload: err,
 });

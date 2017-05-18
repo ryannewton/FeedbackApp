@@ -19,9 +19,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 4,
     margin: 3,
-    marginVertical: 10,
+    marginTop: 0,
+    marginBottom: 5,
     marginHorizontal: 5,
-    paddingVertical: 8,
+    paddingTop: 0,
+    paddingBottom: 3,
     paddingHorizontal: 8,
     backgroundColor: '#FFFFFF',
     fontSize: 18,
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
   },
   // New Projects Scene
   swiper: {
-    paddingTop: 20,
+    paddingTop: 10,
   },
 
   // Navigation

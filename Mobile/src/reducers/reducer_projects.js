@@ -5,6 +5,7 @@ import {
   SAVE_PROJECT_CHANGES,
   ADD_PROJECT_UPVOTE,
   REMOVE_PROJECT_UPVOTE,
+  ADD_PROJECT,
 } from '../actions/types';
 
 export default (state = [], action) => {
@@ -20,6 +21,9 @@ export default (state = [], action) => {
       const newState = state.slice(0);
       newState.splice(index, 1, action.payload);
       return newState;
+    }
+    case ADD_PROJECT: {
+      return [...state, { id: action.payload.id, title: action.payload.title, description: 'Blank Description', votes: 0, stage: 'new' }];
     }
     case ADD_PROJECT_UPVOTE: {
       const index = state.findIndex(project => project.id === action.payload.id);

@@ -18,10 +18,8 @@ const NavTabs = TabNavigator(
     Feedback: {
       screen: FeedbackStack,
       navigationOptions: {
-        tabBar: {
-          label: 'Feedback',
-          icon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
-        },
+        tabBarLabel: 'Submit Feedback',
+        tabBarIcon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
         cardStack: {
           gesturesEnabled: false,
         },
@@ -30,14 +28,12 @@ const NavTabs = TabNavigator(
     NewProjects: {
       screen: NewProjectsStack,
       navigationOptions: {
-        tabBar: {
-          label: 'New Projects',
-          icon: ({ tintColor }) => {
-            if (tintColor === 'grey') {
-              return <Image source={NewProjectsNotSelected} style={{ width: 22, height: 22 }} />;
-            }
-            return <Image source={NewProjectsSelected} style={{ width: 22, height: 22 }} />;
-          },
+        tabBarLabel: 'New Feedback',
+        tabBarIcon: ({ tintColor }) => {
+          if (tintColor === 'grey') {
+            return <Image source={NewProjectsNotSelected} style={{ width: 22, height: 22 }} />;
+          }
+          return <Image source={NewProjectsSelected} style={{ width: 22, height: 22 }} />;
         },
         cardStack: {
           gesturesEnabled: false,
@@ -47,10 +43,8 @@ const NavTabs = TabNavigator(
     ProjectsStack: {
       screen: ProjectsStack,
       navigationOptions: {
-        tabBar: {
-          label: 'Projects',
-          icon: ({ tintColor }) => <Icon name="view-list" size={22} color={tintColor} />,
-        },
+        tabBarLabel: 'All Feedback',
+        tabBarIcon: ({ tintColor }) => <Icon name="view-list" size={22} color={tintColor} />,
         cardStack: {
           gesturesEnabled: false,
         },

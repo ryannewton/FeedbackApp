@@ -7,11 +7,11 @@ import { bodyText } from '../common/textStyles';
 
 const styles = {
   card: {
-    height: 300,
     justifyContent: 'space-between',
     backgroundColor: 'white',
   },
   bodyText: {
+    maxHeight: 300,
     fontSize: 20,
     fontWeight: '400',
     color: 'black',

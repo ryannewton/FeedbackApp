@@ -12,19 +12,15 @@ const ProjectsStack = StackNavigator({
   Projects: {
     screen: Projects,
     navigationOptions: {
-      title: 'Projects',
-      header: {
-        style: { height: styles.header.height },
-      },
+      title: 'All Feedback',
+      headerStyle: { height: styles.header.height },
     },
   },
   Details: {
     screen: ProjectDetails,
     navigationOptions: {
-      title: 'Project Details',
-      header: {
-        style: { height: styles.header.height },
-      },
+      title: 'Feedback Details',
+      headerStyle: { height: styles.header.height },
     },
   },
 });

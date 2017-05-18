@@ -17,11 +17,11 @@ export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
 
 // AuthActions types
 export const SENDING_AUTHORIZATION_EMAIL = 'sending_authorization_email';
-export const SENT_AUTHORIZATION_EMAIL = 'sent_authorization_email';
+export const SENT_AUTHORIZATION_EMAIL_SUCCESS = 'sent_authorization_email_success';
+export const SENT_AUTHORIZATION_EMAIL_FAIL = 'sent_authorization_email_fail';
 export const AUTHORIZING_USER = 'authorizing_user';
 export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
 export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
-export const SAVE_EMAIL = 'save_email';
 export const LOAD_STATE_SUCCESS = 'load_state_success';
 export const EMAIL_SAVE_SUCCESS = 'email_save_success';
 export const TOKEN_SAVE_SUCCESS = 'token_save_success';
@@ -41,3 +41,6 @@ export const ADD_SOLUTION_TO_STATE = 'add_solution_to_state';
 // User types
 export const CLOSE_INSTRUCTIONS = 'close_instructions';
 export const LOAD_INSTRUCTIONS_VIEWED = 'load_instructions_viewed';
+
+// Feature types
+export const PULL_FEATURES = 'pull_features';

@@ -14,9 +14,7 @@ export const SplashScreenStack = StackNavigator(
     SplashScreen: {
       screen: SplashScreen,
       navigationOptions: {
-        header: {
-          visible: false,
-        },
+        header: null,
       },
     },
   },
@@ -26,26 +24,22 @@ export const AuthStack = StackNavigator({
   SubmitEmail: {
     screen: SendAuthorizationEmail,
     navigationOptions: {
-      title: 'Verify Your University',
-      header: {
-        style: { height: styles.header.height },
-      },
+      title: 'Verify Your Organization',
+      headerStyle: { height: styles.header.height },
     },
   },
   AuthCode: {
     screen: Authorize,
     navigationOptions: {
       title: 'Enter Code From Email',
-      header: {
-        style: { height: styles.header.height },
-      },
+      headerStyle: { height: styles.header.height },
     },
   },
 });
 
 export const Root = StackNavigator({
   SplashScreen: {
-    screen: SplashScreenStack,
+    screen: SplashScreen,
   },
   Auth: {
     screen: AuthStack,

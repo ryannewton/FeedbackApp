@@ -18,6 +18,7 @@ import {
   LOAD_DO_NOT_DISPLAY_LIST,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
+  ADD_PROJECT,
 } from './types';
 
 // Import constants
@@ -59,19 +60,36 @@ export const feedbackChanged = feedback => (
   }
 );
 
-export const submitFeedbackToServer = () => (
+export const addProject = (feedback, feedbackId) => (
+  (dispatch, getState) => {
+    console.log('add project called');    
+    const feedbackObject = { text: feedback, id: feedbackId };
+    http.post('/addProject/', { feedback: feedbackObject, authorization: getState().auth.token })
+    .then((response) => {
+      dispatch({ type: ADD_PROJECT, payload: { title: feedback, id: response.data.id } });
+    })
+    .catch((error) => {
+      console.log('add project error');
+      console.log('Error in addProject in FeedbackActions', error.response.data);
+    });
+    
+  }
+);
+
+export const submitFeedbackToServer = moderatorApproval => (
   (dispatch, getState) => {
     dispatch({ type: SUBMIT_FEEDBACK });
 
     const { feedback } = getState().main;
 
     // Post new feedback to server
-    return http.post('/addFeedback/', { text: feedback, authorization: getState().auth.token })
-    .then(() => {
+    http.post('/addFeedback/', { text: feedback, authorization: getState().auth.token })
+    .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
+      if (!moderatorApproval) dispatch(addProject(feedback, response.data.id));
     })
     .catch((error) => {
-      console.log('Error in submitFeedbackToServer in FeedbackActions', error.message);
+      console.log('Error in submitFeedbackToServer in FeedbackActions', error.response.data);
       dispatch({ type: SUBMIT_FEEDBACK_FAIL });
     });
   }
@@ -141,7 +159,7 @@ export const pullProjects = token => (
       dispatch(receivedProjects(response.data));
     })
     .catch((error) => {
-      console.log('pull projects error', error.message);
+      console.log('pull projects error', error.response.data);
       dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' });
     });
   }

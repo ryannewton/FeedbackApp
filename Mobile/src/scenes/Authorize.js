@@ -18,7 +18,6 @@ class Authorize extends Component {
     };
 
     this.route = this.route.bind(this);
-    this.navigateTo = this.navigateTo.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
   }
 
@@ -28,17 +27,8 @@ class Authorize extends Component {
 
   route() {
     if (this.props.auth.loggedIn) {
-      this.navigateTo('Tabs', 'NewProjects');
+      this.props.navigation.navigate('NewProjects');
     }
-  }
-
-  navigateTo(routeName, subRouteName) {
-    const navigateAction = NavigationActions.navigate({
-      routeName,
-      params: {},
-      action: NavigationActions.navigate({ routeName: subRouteName }),
-    });
-    this.props.navigation.dispatch(navigateAction);
   }
 
   authorizeUser() {
