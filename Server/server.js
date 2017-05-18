@@ -1,10 +1,12 @@
 require('dotenv').config();
+
 const express = require('express');
 const mysql = require('mysql');
 const multer = require('multer');
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const aws = require('aws-sdk'); // load aws sdk
+aws.config.loadFromPath('config.json'); // load aws config
 const WebClient = require('@slack/client').WebClient; // for Slack
 
 const request = require('request'); // Slack
@@ -12,7 +14,6 @@ const request = require('request'); // Slack
 const app = express();
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
-aws.config.loadFromPath('config.json'); // load aws config
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
