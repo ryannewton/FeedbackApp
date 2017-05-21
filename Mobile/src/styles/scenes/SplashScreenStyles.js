@@ -1,9 +1,10 @@
 // Import Libraries
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Image } from 'react-native';
 
 const styles = StyleSheet.create({
   background: {
     flex: 1,
+    width: null,
     alignItems: 'center',
     justifyContent: 'flex-end',
   },

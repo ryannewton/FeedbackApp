@@ -13,23 +13,8 @@ import { Button, Spinner } from '../components/common';
 import styles from '../styles/styles_main';
 
 // Import about info image
-// import styles2 from '../styles/scenes/SplashScreenStyles';
-import fullScreen from '../../images/backgrounds/FeedbackInfo.png';
-
-const styles2 = StyleSheet.create({
-  imageContainer: {
-    flex: 1,
-    alignItems: 'stretch',
-  },
-  image: {
-    flex: 1,
-  },
-  touchableOpacityStyle: {
-    ...Platform.select({
-      ios: { flex: 1 },
-    }),
-  },
-});
+import styles2 from '../styles/scenes/FullscreenStyle';
+import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
 class Feedback extends Component {
   constructor(props, context) {
@@ -68,7 +53,7 @@ class Feedback extends Component {
     const instructionsScreen = (
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={this.closeInstructions} style={styles2.touchableOpacityStyle}>
-          <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
+          <Image style={styles2.image} source={fullScreen} resizeMode="cover" />
         </TouchableOpacity>
       </View>
     );
@@ -98,8 +83,8 @@ class Feedback extends Component {
       </View>
     );
 
-    //const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
-    const screenToShow = WriteFeedbackScene;
+    const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
+    //const screenToShow = WriteFeedbackScene;
 
     return screenToShow;
 
