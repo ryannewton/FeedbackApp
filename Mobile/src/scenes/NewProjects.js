@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, Image, StyleSheet, Platform } from 'react-native';
 import { Container, DeckSwiper } from 'native-base';
 import { connect } from 'react-redux';
 
@@ -13,18 +13,8 @@ import { addProjectUpvote, addToDoNotDisplayList, closeInstructions } from '../a
 import styles from '../styles/scenes/NewProjectsStyles';
 
 // Import about info image
-//import styles2 from '../styles/scenes/SplashScreenStyles';
-import fullScreen from '../../images/backgrounds/SwipeInfo.png';
-
-var styles2 = StyleSheet.create({
-  imageContainer: {
-    flex: 1,
-    alignItems: 'stretch'
-  },
-  image: {
-    flex: 1
-  }
-});
+import styles2 from '../styles/scenes/FullscreenStyle';
+import fullScreen from '../../images/backgrounds/SwipeInfo.jpg';
 
 const inboxZeroProject = {
   title: "Great job! You've reached inbox zero.",
@@ -83,10 +73,11 @@ class NewProjects extends Component {
   }
 
   render() {
+
     const instructionsScreen = (
       <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
-          <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
+        <TouchableOpacity onPress={this.closeInstructions} style={styles2.touchableOpacityStyle}>
+          <Image style={styles2.image} source={fullScreen} resizeMode="cover"/>
         </TouchableOpacity>
       </View>
     );
@@ -118,8 +109,8 @@ class NewProjects extends Component {
       </Container>
     );
 
-    //const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : newProjectsScene;
-    const screenToShow = newProjectsScene;
+    const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : newProjectsScene;
+    //const screenToShow = newProjectsScene;
 
     return screenToShow;
   }
