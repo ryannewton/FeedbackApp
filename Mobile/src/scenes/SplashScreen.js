@@ -3,13 +3,13 @@ import React, { Component } from 'react';
 import { Text, Image } from 'react-native';
 import { connect } from 'react-redux';
 
-//Import containers
-import NavTabs from '../containers/NavTabs';
-
 // Import image and styles
 import { Spinner } from '../components/common';
 import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
+
+// Import tracking
+//import tracker from '../constants';
 
 class SplashScreen extends Component {
   constructor(props) {
@@ -20,6 +20,8 @@ class SplashScreen extends Component {
     };
 
     this.route = this.route.bind(this);
+
+    //tracker.trackScreenView('Loading Screen');
   }
 
   componentDidUpdate() {
