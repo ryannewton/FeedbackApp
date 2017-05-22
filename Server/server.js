@@ -37,10 +37,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
@@ -569,23 +569,23 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          moderator_approval as moderatorApproval, show_status as showStatus
+          moderator_approval AS moderatorApproval, show_status AS showStatus, enable_new_feedback AS enableNewFeedback
         FROM
           features
         WHERE
           school=?`;
-      connection.query(connectionString, [getDomain(decoded.email)], (err2, rows) => {
-        if (err2) throw err2;
+      connection.query(connectionString, [getDomain(decoded.email)], (connectionError, rows) => {
+        if (connectionError) throw connectionError;
         else res.send(rows);
       });
     }
   });
 });
 
-app.listen(8081, () => {
- console.log('Example app listening on port 8081!');
-});
-
-// app.listen(3000, () => {
-//   console.log('Example app listening on port 3000!');
+// app.listen(8081, () => {
+//  console.log('Example app listening on port 8081!');
 // });
+
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!');
+});

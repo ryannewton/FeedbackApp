@@ -1,29 +1,27 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { Container, DeckSwiper } from 'native-base';
 import { connect } from 'react-redux';
 
 // Import Components
 import SwipeCard from '../components/SwipeCard';
-import RequireData from '../components/RequireData';
 
 // Import actions and styles
 import { addProjectUpvote, addToDoNotDisplayList, closeInstructions } from '../actions';
 import styles from '../styles/scenes/NewProjectsStyles';
 
 // Import about info image
-//import styles2 from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SwipeInfo.png';
 
-var styles2 = StyleSheet.create({
+const styles2 = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   image: {
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 const inboxZeroProject = {
@@ -141,4 +139,4 @@ export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
   closeInstructions,
-})(RequireData(NewProjects));
+})(NewProjects);

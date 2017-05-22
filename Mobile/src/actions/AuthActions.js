@@ -15,7 +15,6 @@ import {
   AUTHORIZING_USER,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
-  LOAD_STATE_SUCCESS,
   LOG_OUT_USER,
 } from './types';
 
@@ -26,11 +25,11 @@ export const authorizeUserFail = error => (
   }
 );
 
-export const loadStateSuccess = () => (
-  {
-    type: LOAD_STATE_SUCCESS,
-  }
-);
+export const authorizeUserSuccess = token => ({
+  type: AUTHORIZE_USER_SUCCESS,
+  payload: token,
+});
+
 
 export const sendAuthorizationEmail = (email, navigateToNext) => (
   (dispatch) => {
@@ -63,7 +62,7 @@ export const authorizeUser = (email, code) => (
       dispatch(pullProjects(token));
       dispatch(pullSolutions(token));
       dispatch(pullFeatures(token));
-      dispatch(authorizeSuccess(token));
+      dispatch(authorizeUserSuccess(token));
     })
     // If not, show an error message
     .catch((error) => {
@@ -81,12 +80,3 @@ export const logOut = () => (
   }
 );
 
-export const authorizeSuccess = token => ({
-  type: AUTHORIZE_USER_SUCCESS,
-  payload: token,
-});
-
-export const authorizeFail = err => ({
-  type: AUTHORIZE_USER_FAIL,
-  payload: err,
-});

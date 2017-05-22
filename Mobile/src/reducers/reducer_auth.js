@@ -12,7 +12,6 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  loadingState: true,
   email: '',
   token: null,
   loading: false,
@@ -23,8 +22,6 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case LOAD_STATE_SUCCESS:
-      return { ...state, loadingState: false };
     case SENDING_AUTHORIZATION_EMAIL:
       return { ...state, loading: true };
     case SENT_AUTHORIZATION_EMAIL_SUCCESS:
