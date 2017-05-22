@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, TextInput, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
@@ -21,14 +21,27 @@ class Authorize extends Component {
     this.authorizeUser = this.authorizeUser.bind(this);
   }
 
-  componentWillUpdate() {
+  componentWilUpdate() {
     this.route();
   }
 
   route() {
-    if (this.props.auth.loggedIn) {
-      this.props.navigation.navigate('NewProjects');
+    // We want to naviagte when loggedIn is true (we logged in) and we have stored all the data we need in state
+    //   - We need projects and enableNewFeedback
+    if (
+        this.props.auth.loggedIn === true &&
+        this.props.projects !== null &&
+        this.props.enableNewFeedback !== null
+      ) {
+      // If enableNewFeedback is true then we navigate to new projects as normal
+      if (this.props.enableNewFeedback) {
+        this.props.navigation.navigate('NewProjects');
+      // If not, then we navigate to Feedback and disable the New Projects tab
+      } else {
+        this.props.navigation.navigate('Feedback');
+      }
     }
+    // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
   authorizeUser() {
@@ -98,11 +111,15 @@ Authorize.propTypes = {
   auth: React.PropTypes.object,
   authorizeUser: React.PropTypes.func,
   navigation: React.PropTypes.object,
+  enableNewFeedback: React.PropTypes.bool,
+  projects: React.PropTypes.array,
 };
 
-const mapStateToProps = (state) => {
-  const { auth } = state;
-  return { auth };
-};
+function mapStateToProps(state) {
+  const { auth, projects } = state;
+  const { enableNewFeedback } = state.features;
+  return { auth, enableNewFeedback, projects };
+}
+
 
 export default connect(mapStateToProps, { authorizeUser })(Authorize);

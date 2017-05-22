@@ -1,10 +1,12 @@
 require('dotenv').config();
+
 const express = require('express');
 const mysql = require('mysql');
 const multer = require('multer');
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const aws = require('aws-sdk'); // load aws sdk
+aws.config.loadFromPath('config.json'); // load aws config
 const WebClient = require('@slack/client').WebClient; // for Slack
 
 const request = require('request'); // Slack
@@ -12,7 +14,6 @@ const request = require('request'); // Slack
 const app = express();
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
-aws.config.loadFromPath('config.json'); // load aws config
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -132,26 +133,19 @@ app.get('/slack/auth', (req, res) => {
 
 // Gets a list of all the users to send a DM to (for upvoting)
 // TO DO -- switch to users in suggestions channel instead of all users in team (?)
-function getUsers(text, suggestionId, teamId) {
+function getUsers(text, suggestionId) {
   botWeb.im.list((err, res) => {
     if (err) {
       console.log('ERROR: getUsers ', err);
     } else {
-      postMessageToDM(text, res.ims, suggestionId, teamId);
+      postMessageToDM(text, res.ims, suggestionId);
     }
-  });
-}
-
-// depreciated - using callback_id
-function insertDM(dm, suggestionId, teamId) {
-  connection.query('INSERT INTO dms (suggestion_id, ts, team_id, dm_id) VALUES (?, ?, ?, ?)', [suggestionId, dm.ts, teamId, dm.channel], (err) => {
-    if (err) throw err;
   });
 }
 
 // Sends each user the text of the suggestion and an upvote button
 // TO DO -- automatically turn off notifications for this message
-function postMessageToDM(text, users, suggestionId, teamId) {
+function postMessageToDM(text, users, suggestionId) {
   users.forEach((currentValue) => {
     botWeb.chat.postMessage(currentValue.id, text, {
       attachments: [
@@ -177,12 +171,9 @@ function postMessageToDM(text, users, suggestionId, teamId) {
           ],
         },
       ],
-    }, (err, res) => {
+    }, (err) => {
       if (err) {
         console.log('Error:', err);
-      } else {
-        //console.log('DM Response', res);
-        //insertDM(res, suggestionId, teamId);
       }
     });
   });
@@ -210,9 +201,13 @@ function getSlots(teamId) {
 function getProjects(slots, teamId) {
   const connectionString = `
     SELECT
-      id, text, votes
+      a.id, title AS text, votes
     FROM
-      slack_feedback
+      projects a
+    JOIN
+      domain_lookup b
+    ON
+      a.school = b.school
     WHERE
       team_id=?`;
   connection.query(connectionString, [teamId], (err, feedback) => {
@@ -227,7 +222,7 @@ function getProjects(slots, teamId) {
 // ******* TO DO -- need to save the channel to database too
 function updateBoard(slots, feedback, teamId) {
   //slotsSorted = slots.sort((a, b) => a.ts - b.ts);
-  feedback.sort((a, b) => a.votes - b.votes).forEach((currentValue, index) => {
+  feedback.sort((a, b) => b.votes - a.votes).forEach((currentValue, index) => {
     const text = '*' + currentValue.votes + ' Votes* ' + currentValue.text;
     const channel = 'C5CSA6ECC';
     if (index >= slots.length) {
@@ -244,16 +239,22 @@ function updateBoard(slots, feedback, teamId) {
 
 app.post('/slack/suggestion', upload.array(), (req, res) => {
   // Adds the feedback to the feedback table and updates the board
-  connection.query('INSERT INTO slack_feedback (text, submitted_by, team_id) VALUES (?, ?, ?)', [req.body.text, req.body.user_id, req.body.team_id], (err, res) => {
+  connection.query(`
+    INSERT INTO
+      projects (title, school)
+    VALUES
+      (?, (SELECT school FROM domain_lookup WHERE team_id=?))`, [req.body.text, req.body.team_id], (err, res2) => {
     if (err) throw err;
     else {
       getSlots(req.body.team_id);
       // Sends a DM to all users (for upvoting)
-      getUsers(req.body.text, res.insertId, req.body.team_id);
+      getUsers(req.body.text, res2.insertId);
     }
   });
 
-  res.sendStatus(200);
+  res.json({
+    text: 'Your idea ‘' + req.body.text + '’ has been posted!',
+  });
 });
 
 // STEP #3 -- When a user 'upvotes'
@@ -263,7 +264,7 @@ app.post('/slack/vote', upload.array(), (req, res) => {
 
   if (upvote === 'upvote') {
     // *** TO DO -- updates the votes for that feedback accordingly in the database
-    connection.query('UPDATE slack_feedback SET votes=votes+1 WHERE id=?', [payload.callback_id], (err) => {
+    connection.query('UPDATE projects SET votes=votes+1 WHERE id=?', [payload.callback_id], (err) => {
       if (err) throw err;
       else {
         getSlots(payload.team.id);
@@ -285,7 +286,7 @@ app.post('/slack/vote', upload.array(), (req, res) => {
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com)$/;
+  const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com|northwestern\.edu)$/;
   if (!re.test(req.body.email)) {
     res.status(400).send('Sorry, your company is not currently supported :(');
   } else {
@@ -568,23 +569,23 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          moderator_approval as moderatorApproval, show_status as showStatus
+          moderator_approval AS moderatorApproval, show_status AS showStatus, enable_new_feedback AS enableNewFeedback
         FROM
           features
         WHERE
           school=?`;
-      connection.query(connectionString, [getDomain(decoded.email)], (err2, rows) => {
-        if (err2) throw err2;
+      connection.query(connectionString, [getDomain(decoded.email)], (connectionError, rows) => {
+        if (connectionError) throw connectionError;
         else res.send(rows);
       });
     }
   });
 });
 
-app.listen(8081, () => {
- console.log('Example app listening on port 8081!');
-});
-
-// app.listen(3000, () => {
-//   console.log('Example app listening on port 3000!');
+// app.listen(8081, () => {
+//  console.log('Example app listening on port 8081!');
 // });
+
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!');
+});

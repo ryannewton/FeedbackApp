@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 
 // Import Components
 import SwipeCard from '../components/SwipeCard';
-import RequireData from '../components/RequireData';
 
 // Import actions and styles
 import { addProjectUpvote, addToDoNotDisplayList, closeInstructions } from '../actions';
@@ -132,4 +131,4 @@ export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
   closeInstructions,
-})(RequireData(NewProjects));
+})(NewProjects);

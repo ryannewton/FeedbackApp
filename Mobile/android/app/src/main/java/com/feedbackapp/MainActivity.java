@@ -1,6 +1,7 @@
 package com.feedbackapp;
 
 import com.facebook.react.ReactActivity;
+import com.idehub.GoogleAnalyticsBridge.GoogleAnalyticsBridgePackage;
 
 public class MainActivity extends ReactActivity {
 
