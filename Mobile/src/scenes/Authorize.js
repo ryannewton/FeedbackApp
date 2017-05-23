@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, TextInput, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 
@@ -8,6 +8,9 @@ import { NavigationActions } from 'react-navigation';
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { authorizeUser } from '../actions';
 import styles from '../styles/styles_main';
+
+// Import tracking
+import { tracker } from '../constants';
 
 class Authorize extends Component {
   constructor(props) {
@@ -19,16 +22,31 @@ class Authorize extends Component {
 
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
+
+    tracker.trackScreenView('Authorize');
   }
 
-  componentWillUpdate() {
-    this.route();
+  componentWillReceiveProps(nextProps) {
+    this.route(nextProps);
   }
 
-  route() {
-    if (this.props.auth.loggedIn) {
-      this.props.navigation.navigate('NewProjects');
+  route(nextProps) {
+    // We want to naviagte when loggedIn is true (we logged in) and we have stored all the data we need in state
+    //   - We need projects and enableNewFeedback
+    if (
+        nextProps.auth.loggedIn === true &&
+        nextProps.projects !== null &&
+        nextProps.features.enableNewFeedback !== null
+      ) {
+      // If enableNewFeedback is true then we navigate to new projects as normal
+      if (nextProps.features.enableNewFeedback) {
+        nextProps.navigation.navigate('NewProjects');
+      // If not, then we navigate to Feedback and disable the New Projects tab
+      } else {
+        nextProps.navigation.navigate('Feedback');
+      }
     }
+    // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
   authorizeUser() {
@@ -98,11 +116,14 @@ Authorize.propTypes = {
   auth: React.PropTypes.object,
   authorizeUser: React.PropTypes.func,
   navigation: React.PropTypes.object,
+  features: React.PropTypes.object,
+  projects: React.PropTypes.array,
 };
 
-const mapStateToProps = (state) => {
-  const { auth } = state;
-  return { auth };
-};
+function mapStateToProps(state) {
+  const { auth, projects, features } = state;
+  return { auth, projects, features };
+}
+
 
 export default connect(mapStateToProps, { authorizeUser })(Authorize);

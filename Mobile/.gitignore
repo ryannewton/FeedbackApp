@@ -47,3 +47,5 @@ api_keys.js
 fastlane/report.xml
 fastlane/Preview.html
 fastlane/screenshots
+
+.DS_Store

@@ -10,6 +10,7 @@ import {
   LOAD_DO_NOT_DISPLAY_LIST,
   CLOSE_INSTRUCTIONS,
   LOAD_INSTRUCTIONS_VIEWED,
+  LOG_OUT_USER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,6 +18,14 @@ const INITIAL_STATE = {
   doNotDisplayList: [],
   solutionUpvotes: [],
   instructionsViewed: [],
+};
+
+const removeItem = (arr, item) => {
+  const index = arr.indexOf(item);
+  if (index !== -1) {
+    return [...arr.slice(0, index), ...arr.slice(index + 1)];
+  }
+  return arr;
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -41,15 +50,9 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, instructionsViewed: [...state.instructionsViewed, action.payload] };
     case LOAD_INSTRUCTIONS_VIEWED:
       return { ...state, instructionsViewed: action.payload };
+    case LOG_OUT_USER:
+      return INITIAL_STATE;
     default:
       return state;
   }
-};
-
-const removeItem = (arr, item) => {
-  const index = arr.indexOf(item);
-  if (index !== -1) {
-    return [...arr.slice(0, index), ...arr.slice(index + 1)];
-  }
-  return arr;
 };

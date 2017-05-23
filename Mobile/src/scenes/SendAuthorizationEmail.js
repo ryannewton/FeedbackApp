@@ -10,10 +10,13 @@ import { sendAuthorizationEmail, authorizeUserFail, closeInstructions } from '..
 import styles from '../styles/styles_main';
 import fullScreen from '../../images/backgrounds/EmailInfo.png';
 
+// Import tracking
+import { tracker } from '../constants';
+
 var styles2 = StyleSheet.create({
   imageContainer: {
     flex: 1,
-    alignItems: 'stretch'
+    alignItems: 'stretch',
   },
   image: {
     flex: 1,
@@ -27,6 +30,8 @@ class SendAuthorizationEmail extends Component {
     this.state = {
       email: '',
     };
+
+    tracker.trackScreenView('Send Auth Email');
 
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);

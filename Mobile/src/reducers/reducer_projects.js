@@ -6,9 +6,10 @@ import {
   ADD_PROJECT_UPVOTE,
   REMOVE_PROJECT_UPVOTE,
   ADD_PROJECT,
+  LOG_OUT_USER,
 } from '../actions/types';
 
-export default (state = [], action) => {
+export default (state = null, action) => {
   switch (action.type) {
     case REQUESTED_PROJECTS:
       return state;
@@ -37,6 +38,8 @@ export default (state = [], action) => {
       newState[index].votes -= 1;
       return newState;
     }
+    case LOG_OUT_USER:
+      return null;
     default:
       return state;
   }

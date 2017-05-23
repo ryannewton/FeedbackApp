@@ -10,6 +10,9 @@ import { saveProjectChanges } from '../actions';
 import Project from '../components/Project';
 import styles from '../styles/scenes/ProjectsStyles';
 
+// Import tracking
+import { tracker } from '../constants';
+
 class Projects extends Component {
   constructor(props) {
     super(props);
@@ -18,10 +21,12 @@ class Projects extends Component {
     this.state = {
       dataSource: ds.cloneWithRows(props.projects),
     };
+
+    tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.projects !== this.props.projects) {
+    if (nextProps.projects && nextProps.projects !== this.props.projects) {
       const newProjectsList = nextProps.projects.slice();
       this.setState({
         dataSource: this.state.dataSource.cloneWithRows(newProjectsList),
@@ -31,10 +36,10 @@ class Projects extends Component {
 
   renderProjects() {
     const projects = this.props.projects
-      .map((project, index) => (
+      .map(project => (
         <Project
           project={project}
-          key={index}
+          key={project.id}
           navigate={this.props.navigation.navigate}
           saveProjectChanges={this.props.saveProjectChanges}
         />
@@ -43,8 +48,6 @@ class Projects extends Component {
 
     return projects;
   }
-
-
 
   render() {
     return (
@@ -71,11 +74,12 @@ Projects.propTypes = {
   navigation: React.PropTypes.object,
   projects: React.PropTypes.array,
   saveProjectChanges: React.PropTypes.func,
+  features: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { projects } = state;
-  return { projects };
+  const { projects, features } = state;
+  return { projects, features };
 }
 
 const AppScreen = connect(mapStateToProps, {

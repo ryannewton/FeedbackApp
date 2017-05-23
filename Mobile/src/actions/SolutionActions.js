@@ -30,7 +30,7 @@ export const recievedIDForAddSolution = (solutionId, title, projectId) => (
     type: ADD_SOLUTION_TO_STATE,
     solutionId,
     title,
-    projectId
+    projectId,
   }
 );
 

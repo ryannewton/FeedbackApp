@@ -7,7 +7,8 @@ import {
   SAVE_SOLUTION_CHANGES,
   ADD_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_UPVOTE,
-  ADD_SOLUTION_TO_STATE
+  ADD_SOLUTION_TO_STATE,
+  LOG_OUT_USER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -38,8 +39,6 @@ export default (state = INITIAL_STATE, action) => {
       newList[index].votes += 1;
       return { ...state, list: newList };
     }
-    //case ADD_TO_DO_NOT_DISPLAY_LIST:
-    //  return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
     case REMOVE_SOLUTION_UPVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
@@ -48,9 +47,10 @@ export default (state = INITIAL_STATE, action) => {
     }
     case ADD_SOLUTION_TO_STATE: {
       const solution = { type: 'solution', votes: 0, title: action.title, description: '', project_id: action.projectId, id: action.solutionId };
-      console.log(solution);
       return { ...state, list: [...state.list, solution] };
     }
+    case LOG_OUT_USER:
+      return INITIAL_STATE;
     default:
       return state;
   }
