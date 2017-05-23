@@ -9,7 +9,7 @@ import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 // Import tracking
-//import tracker from '../constants';
+import { tracker } from '../constants';
 
 class SplashScreen extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class SplashScreen extends Component {
 
     this.route = this.route.bind(this);
 
-    //tracker.trackScreenView('Loading Screen');
+    tracker.trackScreenView('Loading Screen');
   }
 
   componentDidUpdate() {
@@ -41,10 +41,11 @@ class SplashScreen extends Component {
     } else if (
         this.props.auth.loggedIn === true &&
         this.props.projects !== null &&
-        this.props.enableNewFeedback !== null
+        this.props.features.enableNewFeedback !== null
       ) {
+      tracker.setUser(this.props.features.email);
       // If enableNewFeedback is true then we navigate to new projects as normal
-      if (this.props.enableNewFeedback) {
+      if (this.props.features.enableNewFeedback) {
         this.props.navigation.navigate('NewProjects');
       // If not, then we navigate to Feedback and disable the New Projects tab
       } else {
@@ -68,14 +69,13 @@ class SplashScreen extends Component {
 SplashScreen.propTypes = {
   auth: React.PropTypes.object,
   navigation: React.PropTypes.object,
-  enableNewFeedback: React.PropTypes.bool,
+  features: React.PropTypes.object,
   projects: React.PropTypes.array,
 };
 
 function mapStateToProps(state) {
-  const { auth, projects } = state;
-  const { enableNewFeedback } = state.features;
-  return { auth, enableNewFeedback, projects };
+  const { auth, projects, features } = state;
+  return { auth, features, projects };
 }
 
 export default connect(mapStateToProps)(SplashScreen);

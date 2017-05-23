@@ -9,6 +9,9 @@ import { Card, CardSection, Input, Button, Spinner } from '../components/common'
 import { authorizeUser } from '../actions';
 import styles from '../styles/styles_main';
 
+// Import tracking
+import { tracker } from '../constants';
+
 class Authorize extends Component {
   constructor(props) {
     super(props);
@@ -19,26 +22,28 @@ class Authorize extends Component {
 
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
+
+    tracker.trackScreenView('Authorize');
   }
 
-  componentWilUpdate() {
-    this.route();
+  componentWillReceiveProps(nextProps) {
+    this.route(nextProps);
   }
 
-  route() {
+  route(nextProps) {
     // We want to naviagte when loggedIn is true (we logged in) and we have stored all the data we need in state
     //   - We need projects and enableNewFeedback
     if (
-        this.props.auth.loggedIn === true &&
-        this.props.projects !== null &&
-        this.props.enableNewFeedback !== null
+        nextProps.auth.loggedIn === true &&
+        nextProps.projects !== null &&
+        nextProps.features.enableNewFeedback !== null
       ) {
       // If enableNewFeedback is true then we navigate to new projects as normal
-      if (this.props.enableNewFeedback) {
-        this.props.navigation.navigate('NewProjects');
+      if (nextProps.features.enableNewFeedback) {
+        nextProps.navigation.navigate('NewProjects');
       // If not, then we navigate to Feedback and disable the New Projects tab
       } else {
-        this.props.navigation.navigate('Feedback');
+        nextProps.navigation.navigate('Feedback');
       }
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
@@ -111,14 +116,13 @@ Authorize.propTypes = {
   auth: React.PropTypes.object,
   authorizeUser: React.PropTypes.func,
   navigation: React.PropTypes.object,
-  enableNewFeedback: React.PropTypes.bool,
+  features: React.PropTypes.object,
   projects: React.PropTypes.array,
 };
 
 function mapStateToProps(state) {
-  const { auth, projects } = state;
-  const { enableNewFeedback } = state.features;
-  return { auth, enableNewFeedback, projects };
+  const { auth, projects, features } = state;
+  return { auth, projects, features };
 }
 
 

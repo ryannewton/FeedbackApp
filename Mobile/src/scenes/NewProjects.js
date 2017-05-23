@@ -15,6 +15,9 @@ import styles from '../styles/scenes/NewProjectsStyles';
 import styles2 from '../styles/scenes/FullscreenStyle';
 import fullScreen from '../../images/backgrounds/SwipeInfo.jpg';
 
+// Import tracking
+import { tracker } from '../constants';
+
 const inboxZeroProject = {
   title: "Great job! You've reached inbox zero.",
   votes: 999,
@@ -31,12 +34,20 @@ class NewProjects extends Component {
       ), inboxZeroProject],
     };
 
+    tracker.trackScreenViewWithCustomDimensionValues('New Projects', { domain: props.features.domain, project: String(this.state.projects[0].id) });
+
     this.swipeRight = this.swipeRight.bind(this);
     this.swipeLeft = this.swipeLeft.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);
   }
 
-  swipeRight() {
+  swipeRight(source) {
+    if (source === 'button') {
+      tracker.trackEvent('Project Vote', 'Project UpVote Via New Projects Button', { label: this.props.features.domain });
+    } else {
+      tracker.trackEvent('Project Vote', 'Project UpVote Via Swipe', { label: this.props.features.domain });
+    }
+
     const { user } = this.props;
     const project = this.state.projects[this.state.index];
 
@@ -54,7 +65,13 @@ class NewProjects extends Component {
     }
   }
 
-  swipeLeft() {
+  swipeLeft(source) {
+    if (source === 'button') {
+      tracker.trackEvent('Skip', 'Skip Via New Projects Button', { label: this.props.features.domain });
+    } else {
+      tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.features.domain });
+    }
+
     const project = this.state.projects[this.state.index];
     if (project.id) {
       this.props.addToDoNotDisplayList(project.id);
@@ -93,13 +110,14 @@ class NewProjects extends Component {
               <SwipeCard
                 project={project}
                 right={() => {
-                  this.swipeRight();
+                  this.swipeRight('button');
                   this.deckSwiper._root.swipeRight();
                 }}
                 left={() => {
-                  this.swipeLeft();
+                  this.swipeLeft('button');
                   this.deckSwiper._root.swipeLeft();
                 }}
+                features={this.props.features}
                 navigate={this.props.navigation.navigate}
               />
             }
@@ -120,11 +138,12 @@ NewProjects.propTypes = {
   user: React.PropTypes.object,
   addToDoNotDisplayList: React.PropTypes.func,
   addProjectUpvote: React.PropTypes.func,
+  features: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { user, projects } = state;
-  return { user, projects };
+  const { user, projects, features } = state;
+  return { user, projects, features };
 }
 
 export default connect(mapStateToProps, {

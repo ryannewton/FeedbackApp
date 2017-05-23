@@ -1,5 +1,5 @@
 import axios from 'axios';
-//import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
+import { GoogleAnalyticsTracker } from 'react-native-google-analytics-bridge';
 
 export const ROOT_STORAGE = '@FeedbackApp:';
 // export const ROOT_URL = 'https://feedbackappdev.com';
@@ -11,5 +11,5 @@ export const http = axios.create({
   baseURL: ROOT_URL,
 });
 
-//export const tracker = new GoogleAnalyticsTracker('UA-99660629-1');
+export const tracker = new GoogleAnalyticsTracker('UA-99660629-1', { domain: 1, project: 2 });
 

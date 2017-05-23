@@ -18,6 +18,8 @@ import {
   LOG_OUT_USER,
 } from './types';
 
+import loadOnLaunch from '../reducers/loadOnLaunch';
+
 export const authorizeUserFail = error => (
   {
     type: AUTHORIZE_USER_FAIL,
@@ -58,15 +60,14 @@ export const authorizeUser = (email, code) => (
     // If successful store the token, repull state from the database, and set state to logged-in
     .then((response) => {
       const token = String(response.data);
-      AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
-      dispatch(pullProjects(token));
-      dispatch(pullSolutions(token));
-      dispatch(pullFeatures(token));
-      dispatch(authorizeUserSuccess(token));
+      AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
+      .then(() => {
+        loadOnLaunch();
+      });
     })
     // If not, show an error message
     .catch((error) => {
-      authorizeFail(error.response.data);
+      authorizeUserFail(error.response.data);
     });
   }
 );

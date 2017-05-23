@@ -6,6 +6,7 @@ const multer = require('multer');
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const aws = require('aws-sdk'); // load aws sdk
+
 aws.config.loadFromPath('config.json'); // load aws config
 const WebClient = require('@slack/client').WebClient; // for Slack
 
@@ -19,7 +20,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
-//Slack
+// Slack
 const botToken = process.env.SLACK_API_BOT_TOKEN || '';
 const botWeb = new WebClient(botToken);
 
@@ -569,12 +570,12 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          moderator_approval AS moderatorApproval, show_status AS showStatus, enable_new_feedback AS enableNewFeedback
+          moderator_approval AS moderatorApproval, show_status AS showStatus, enable_new_feedback AS enableNewFeedback, ? AS domain, ? AS email
         FROM
           features
         WHERE
           school=?`;
-      connection.query(connectionString, [getDomain(decoded.email)], (connectionError, rows) => {
+      connection.query(connectionString, [getDomain(decoded.email), decoded.email, getDomain(decoded.email)], (connectionError, rows) => {
         if (connectionError) throw connectionError;
         else res.send(rows);
       });

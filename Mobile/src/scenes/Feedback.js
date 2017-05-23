@@ -16,6 +16,9 @@ import styles from '../styles/styles_main';
 import styles2 from '../styles/scenes/FullscreenStyle';
 import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
+// Import tracking
+import { tracker } from '../constants';
+
 class Feedback extends Component {
   constructor(props, context) {
     super(props, context);
@@ -24,11 +27,14 @@ class Feedback extends Component {
       height: 0,
     };
 
+    tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.features.domain });
+
     this.closeInstructions = this.closeInstructions.bind(this);
   }
 
   submitFeedback() {
     this.props.submitFeedbackToServer(this.props.moderatorApproval);
+    tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.features.domain });
     this.props.navigation.navigate('Submitted');
   }
 
@@ -98,13 +104,14 @@ Feedback.propTypes = {
   user: React.PropTypes.object,
   loading: React.PropTypes.bool,
   navigation: React.PropTypes.object,
+  features: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
   const { feedback, loading } = state.main;
-  const { user } = state;
+  const { user, features } = state;
   const { moderatorApproval } = state.features;
-  return { user, feedback, loading, moderatorApproval };
+  return { user, features, feedback, loading, moderatorApproval };
 }
 
 export default connect(mapStateToProps, {
