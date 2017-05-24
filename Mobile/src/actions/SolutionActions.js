@@ -34,14 +34,16 @@ export const recievedIDForAddSolution = (solutionId, title, projectId) => (
   }
 );
 
-export const submitSolutionToServer = (solution, project_id) => (
+export const submitSolutionToServer = (solution, project_id, moderatorApprovalSolutions) => (
   function (dispatch, getState) {
     const token = getState().auth.token;
 
     dispatch({ type: SUBMIT_SOLUTION });
-    return http.post('/addSolution', { title: solution, project_id, authorization: token })
+    return http.post('/addSolution', { title: solution, project_id, authorization: token, moderatorApprovalSolutions })
       .then((response) => {
-        dispatch(recievedIDForAddSolution(response.data.id, solution, project_id));
+        if (!moderatorApprovalSolutions) {
+          dispatch(recievedIDForAddSolution(response.data.id, solution, project_id));
+        }
         dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
       })
       .catch((err) => {

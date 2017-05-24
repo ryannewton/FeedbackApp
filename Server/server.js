@@ -384,14 +384,23 @@ app.post('/addProject', upload.array(), (req, res) => {
 
 app.post('/addSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
-
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('INSERT INTO project_additions SET ?', { type: 'solution', votes: 0, title: req.body.title || 'Title Here', description: req.body.description || 'Description Here', project_id: req.body.project_id, school: getDomain(decoded.email), email: decoded.email }, (err, result) => {
-        if (err) throw err;
-        res.json({ id: result.insertId });
-      });
+      connection.query('INSERT INTO project_additions SET ?',
+        {
+          type: 'solution',
+          votes: 0,
+          title: req.body.title || 'Title Here',
+          description: req.body.description || 'Description Here',
+          project_id: req.body.project_id,
+          school: getDomain(decoded.email),
+          email: decoded.email,
+          approved: !req.body.moderatorApprovalSolutions,
+        }, (innerError, result) => {
+          if (innerError) throw innerError;
+          res.json({ id: result.insertId });
+        });
     }
   });
 });
@@ -441,9 +450,16 @@ app.post('/saveProjectAdditionChanges', upload.array(), addSubscriber, (req, res
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('UPDATE project_additions SET votes = ?, title = ?, description = ? WHERE id= ?', [req.body.project_addition.votes, req.body.project_addition.title, req.body.project_addition.description, req.body.project_addition.id], function(err) {
-        if (err) throw err;
-      });
+      connection.query('UPDATE project_additions SET votes = ?, title = ?, description = ?, approved = ? WHERE id= ?',
+        [
+          req.body.project_addition.votes,
+          req.body.project_addition.title,
+          req.body.project_addition.description,
+          req.body.project_addition.approved,
+          req.body.project_addition.id,
+        ], (innerError) => {
+          if (innerError) throw innerError;
+        });
       res.sendStatus(200);
     }
   });
@@ -530,7 +546,7 @@ app.post('/pullProjectAdditions', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          id, type, votes, title, description, project_id
+          id, type, votes, title, description, project_id, approved
         FROM
           project_additions
         WHERE
@@ -570,15 +586,22 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          moderator_approval AS moderatorApproval, show_status AS showStatus, enable_new_feedback AS enableNewFeedback, ? AS domain, ? AS email
+          moderator_approval AS moderatorApproval,
+          moderator_approval_solutions AS moderatorApprovalSolutions,
+          show_status AS showStatus,
+          enable_new_feedback AS enableNewFeedback,
+          ? AS domain,
+          ? AS email
         FROM
           features
         WHERE
           school=?`;
-      connection.query(connectionString, [getDomain(decoded.email), decoded.email, getDomain(decoded.email)], (connectionError, rows) => {
-        if (connectionError) throw connectionError;
-        else res.send(rows);
-      });
+      connection.query(connectionString,
+        [getDomain(decoded.email), decoded.email, getDomain(decoded.email)],
+        (connectionError, rows) => {
+          if (connectionError) throw connectionError;
+          else res.send(rows);
+        });
     }
   });
 });

@@ -20,7 +20,7 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case RECEIVED_SOLUTION_LIST:
-      return { ...state, list: action.payload };
+      return { ...state, list: action.payload.filter(s => s.approved === 1) };
     case SUBMIT_SOLUTION:
       return { ...state, loading: true, message: '' };
     case SUBMIT_SOLUTION_SUCCESS:

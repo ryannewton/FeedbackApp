@@ -6,6 +6,7 @@ import {
 
 const INITIAL_STATE = {
   moderatorApproval: true,
+  moderatorApprovalSolutions: true,
   showStatus: true,
   enableNewFeedback: null,
   domain: null,
@@ -18,6 +19,7 @@ export default (state = INITIAL_STATE, action) => {
       return {
         ...state,
         moderatorApproval: Boolean(action.payload.moderatorApproval),
+        moderatorApprovalSolutions: Boolean(action.payload.moderatorApprovalSolutions),
         showStatus: Boolean(action.payload.showStatus),
         enableNewFeedback: Boolean(action.payload.enableNewFeedback),
         domain: action.payload.domain,

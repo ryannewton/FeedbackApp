@@ -41,8 +41,8 @@ class ProjectDetails extends Component {
 
     const formattedSolutions = projectSolutions
       .sort((a, b) => b.votes - a.votes)
-      .map((solution, index) => (
-        <Solution solution={solution} key={index} />
+      .map(solution => (
+        <Solution solution={solution} key={solution.id} />
       ));
 
     return (
@@ -58,7 +58,7 @@ class ProjectDetails extends Component {
   submitSolution() {
     const { solution } = this.props.main;
     const { project } = this.props.navigation.state.params;
-    this.props.submitSolutionToServer(solution, project.id);
+    this.props.submitSolutionToServer(solution, project.id, this.props.features.moderatorApprovalSolutions);
     tracker.trackEvent('Submit', 'Submit Solution', { label: this.props.features.domain, value: project.id });
     Keyboard.dismiss();
   }
