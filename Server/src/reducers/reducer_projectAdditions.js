@@ -26,6 +26,7 @@ export default function projectAdditions(state = null, action) {
         title: 'Title Here',
         description: 'Description Here',
         project_id: action.project_id,
+        approved: 1,
       }];
     case DELETE_PROJECT_ADDITION:
       return state.filter(projectAddition => projectAddition.id !== action.payload);
