@@ -6,7 +6,6 @@ export const LOAD_PROJECT_UPVOTES = 'load_project_upvotes';
 export const LOAD_SOLUTION_UPVOTES = 'load_solution_upvotes';
 export const SAVE_PROJECT_CHANGES = 'save_project_changes';
 export const ADD_PROJECT = 'add_project';
-export const DELETE_PROJECT = 'delete_project';
 export const REQUESTED_PROJECTS = 'requested_projects';
 export const RECEIVED_PROJECTS = 'received_projects';
 export const SUBMIT_FEEDBACK = 'submit_feedback';

@@ -34,33 +34,21 @@ export const recievedIDForAddSolution = (solutionId, title, projectId) => (
   }
 );
 
-export const submitSolutionToServer = (solution, project_id, moderatorApprovalSolutions) => (
-  function (dispatch, getState) {
+export const submitSolutionToServer = (solution, projectId, moderatorApprovalSolutions) => (
+  (dispatch, getState) => {
     const token = getState().auth.token;
 
     dispatch({ type: SUBMIT_SOLUTION });
-    return http.post('/addSolution', { title: solution, project_id, authorization: token, moderatorApprovalSolutions })
-      .then((response) => {
-        if (!moderatorApprovalSolutions) {
-          dispatch(recievedIDForAddSolution(response.data.id, solution, project_id));
-        }
-        dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
-      })
-      .catch((err) => {
-        dispatch({ type: SUBMIT_SOLUTION_FAIL });
-        console.log('submitSolutionToServer() ERROR: ', err);
-      });
-  }
-);
-
-export const pullSolutions = token => (
-  function (dispatch) {
-    return http.post('/pullProjectAdditions', { authorization: token })
+    http.post('/addSolution', { title: solution, project_id: projectId, authorization: token, moderatorApprovalSolutions })
     .then((response) => {
-      dispatch(receivedSolutionList(response.data));
+      if (!moderatorApprovalSolutions) {
+        dispatch(recievedIDForAddSolution(response.data.id, solution, projectId));
+      }
+      dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
     })
     .catch((error) => {
-      console.log('pullSolutions() ERROR: ', error.response.data);
+      console.log('Error in submitSolutionToServer in actions_solutions', error.response.data);
+      dispatch({ type: SUBMIT_SOLUTION_FAIL, payload: error.response.data });
     });
   }
 );
@@ -69,6 +57,32 @@ export const receivedSolutionList = solutions => ({
   type: RECEIVED_SOLUTION_LIST,
   payload: solutions,
 });
+
+export const pullSolutions = token => (
+  (dispatch) => {
+    http.post('/pullProjectAdditions', { authorization: token })
+    .then((response) => {
+      dispatch(receivedSolutionList(response.data));
+    })
+    .catch((error) => {
+      console.log('Error in pullSolutions in actions_solutions', error.response.data);
+    });
+  }
+);
+
+export const saveSolutionChanges = solution => (
+  (dispatch, getState) => {
+    dispatch({ type: SAVE_SOLUTION_CHANGES, payload: solution });
+
+    const { token } = getState().auth;
+
+    // Save the solution change to the server
+    http.post('/saveProjectAdditionChanges', { project_addition: solution, authorization: token })
+    .catch((error) => {
+      console.log('Error in saveSolutionChanges in actions_solutions', error.response.data);
+    });
+  }
+);
 
 export const addSolutionUpvote = solution => (
   (dispatch, getState) => {
@@ -92,20 +106,5 @@ export const removeSolutionUpvote = solution => (
     const { solutionUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
     dispatch(saveSolutionChanges(solution, 'removeUpvote'));
-  }
-);
-
-export const saveSolutionChanges = (solution, changeType) => (
-  (dispatch, getState) => {
-    dispatch({ type: SAVE_SOLUTION_CHANGES, payload: solution });
-
-    // Save the solution change to the server
-    http.post('/saveProjectAdditionChanges', { project_addition: solution, authorization: getState().auth.token }, {
-      headers: { authorization: getState().auth.token },
-    });
-
-    // Subscribe the user to the project
-    // const { token } = getState().auth;
-    // http.post('/addSubscriber', { authorization: token, id: solution.id, type: changeType });
   }
 );
