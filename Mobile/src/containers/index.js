@@ -7,7 +7,7 @@ import store from '../reducers/store';
 import loadOnLaunch from '../reducers/loadOnLaunch';
 
 // Import components, functions, and styles
-import { Root } from './router';
+import Router from './router';
 
 // Defines a high-level (container) component
 class Index extends Component {
@@ -18,7 +18,7 @@ class Index extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Root />
+        <Router />
       </Provider>
     );
   }

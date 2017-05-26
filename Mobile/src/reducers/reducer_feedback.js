@@ -4,15 +4,12 @@ import {
   SUBMIT_FEEDBACK,
   SUBMIT_FEEDBACK_SUCCESS,
   SUBMIT_FEEDBACK_FAIL,
-  SOLUTION_CHANGED,
-  RECEIVED_PROJECTS,
-  SUBMIT_SOLUTION_SUCCESS,
+  LOG_OUT_USER,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   loading: false,
   feedback: '',
-  projectsLoaded: false,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -25,12 +22,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: false, feedback: '' };
     case SUBMIT_FEEDBACK_FAIL:
       return { ...state, loading: false };
-    case SOLUTION_CHANGED:
-      return { ...state, solution: action.payload };
-    case SUBMIT_SOLUTION_SUCCESS:
-      return { ...state, solution: null };
-    case RECEIVED_PROJECTS:
-      return { ...state, projectsLoaded: true };
+    case LOG_OUT_USER:
+      return INITIAL_STATE;
     default:
       return state;
   }

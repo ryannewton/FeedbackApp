@@ -7,25 +7,28 @@ import {
   SAVE_SOLUTION_CHANGES,
   ADD_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_UPVOTE,
-  ADD_SOLUTION_TO_STATE
+  ADD_SOLUTION_TO_STATE,
+  LOG_OUT_USER,
+  SOLUTION_CHANGED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   list: [],
   message: '',
   loading: false,
+  solution: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case RECEIVED_SOLUTION_LIST:
-      return { ...state, list: action.payload };
+      return { ...state, list: action.payload.filter(s => s.approved === 1) };
     case SUBMIT_SOLUTION:
       return { ...state, loading: true, message: '' };
     case SUBMIT_SOLUTION_SUCCESS:
-      return { ...state, loading: false, message: 'Solution successfully submitted' };
+      return { ...state, loading: false, solution: null, message: 'Solution successfully submitted' };
     case SUBMIT_SOLUTION_FAIL:
-      return { ...state, loading: false, message: 'Error. Please try again later' };
+      return { ...state, loading: false, message: action.payload || 'Error. Please try again later' };
     case SAVE_SOLUTION_CHANGES: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
@@ -38,8 +41,6 @@ export default (state = INITIAL_STATE, action) => {
       newList[index].votes += 1;
       return { ...state, list: newList };
     }
-    //case ADD_TO_DO_NOT_DISPLAY_LIST:
-    //  return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
     case REMOVE_SOLUTION_UPVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
@@ -48,9 +49,12 @@ export default (state = INITIAL_STATE, action) => {
     }
     case ADD_SOLUTION_TO_STATE: {
       const solution = { type: 'solution', votes: 0, title: action.title, description: '', project_id: action.projectId, id: action.solutionId };
-      console.log(solution);
       return { ...state, list: [...state.list, solution] };
     }
+    case SOLUTION_CHANGED:
+      return { ...state, solution: action.payload };
+    case LOG_OUT_USER:
+      return INITIAL_STATE;
     default:
       return state;
   }

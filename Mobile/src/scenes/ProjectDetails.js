@@ -9,17 +9,22 @@ import Project from '../components/Project';
 import Solution from '../components/Solution';
 import { Button, Card, CardSection, Spinner } from '../components/common';
 import {
-  addProjectUpvote,
-  removeProjectUpvote,
-  addSolutionUpvote,
-  removeSolutionUpvote,
   solutionChanged,
   submitSolutionToServer,
 } from '../actions';
 
+// Import tracking
+import { tracker } from '../constants';
+
 class ProjectDetails extends Component {
   constructor(props) {
     super(props);
+
+    this.state = {
+      errorMessage: '',
+    };
+
+    tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
 
     this.submitSolution = this.submitSolution.bind(this);
   }
@@ -40,8 +45,8 @@ class ProjectDetails extends Component {
 
     const formattedSolutions = projectSolutions
       .sort((a, b) => b.votes - a.votes)
-      .map((solution, index) => (
-        <Solution solution={solution} key={index} />
+      .map(solution => (
+        <Solution solution={solution} key={solution.id} />
       ));
 
     return (
@@ -55,10 +60,17 @@ class ProjectDetails extends Component {
   }
 
   submitSolution() {
-    const { solution } = this.props.main;
-    const { project } = this.props.navigation.state.params;
-    this.props.submitSolutionToServer(solution, project.id);
-    Keyboard.dismiss();
+    if (this.props.features.bannedWords.test(this.props.solutions.solution)) {
+      // If restricted words then we show an error to the user
+      this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+    } else {
+      this.setState({ errorMessage: '' });
+      const { solution } = this.props.solutions;
+      const { project } = this.props.navigation.state.params;
+      this.props.submitSolutionToServer(solution, project.id, this.props.features.moderatorApprovalSolutions);
+      tracker.trackEvent('Submit', 'Submit Solution', { label: this.props.features.domain, value: project.id });
+      Keyboard.dismiss();
+    }
   }
 
   renderSubmitButton() {
@@ -93,12 +105,18 @@ class ProjectDetails extends Component {
           </TouchableWithoutFeedback>
         </ScrollView>
         {/* Input to submit a new solution */}
+        
+        {/* Error message (blank if no error) */}
+        <Text style={styles.errorTextStyle}>
+          {this.state.errorMessage || this.props.solutions.message}
+        </Text>
+
         <KeyboardAvoidingView behavior={'padding'}>
           <TextInput
             style={inputText}
             placeholder="Enter your idea here!"
             onChangeText={solution => this.props.solutionChanged(solution)}
-            value={this.props.main.solution}
+            value={this.props.solutions.solution}
             returnKeyType={'done'}
           />
           {/* Submit button */}
@@ -113,25 +131,17 @@ ProjectDetails.propTypes = {
   navigation: React.PropTypes.object,
   user: React.PropTypes.object,
   solutions: React.PropTypes.object,
-  main: React.PropTypes.object,
-  addProjectUpvote: React.PropTypes.func,
-  removeProjectUpvote: React.PropTypes.func,
-  addSolutionProjectUpvote: React.PropTypes.func,
-  removeSolutionProjectUpvote: React.PropTypes.func,
+  features: React.PropTypes.object,
   solutionChanged: React.PropTypes.func,
   submitSolutionToServer: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
-  const { user, solutions, main } = state;
-  return { user, solutions, main };
+  const { user, solutions, features } = state;
+  return { user, solutions, features };
 }
 
 const AppScreen = connect(mapStateToProps, {
-  addProjectUpvote,
-  removeProjectUpvote,
-  addSolutionUpvote,
-  removeSolutionUpvote,
   solutionChanged,
   submitSolutionToServer,
 })(ProjectDetails);

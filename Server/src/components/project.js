@@ -95,9 +95,14 @@ class Project extends Component {
 
     let myProjectAdditions = this.props.projectAdditions.filter((projectAddition) => {
       return projectAddition.project_id === project.id;
-    }).map((projectAddition) => {
-      return <ProjectAddition projectAddition={projectAddition} deleteProjectAddition={this.props.deleteProjectAddition} saveProjectAdditionChanges={this.props.saveProjectAdditionChanges} key={projectAddition.id} />;
-    });
+    }).map(projectAddition =>
+      <ProjectAddition
+        projectAddition={projectAddition}
+        deleteProjectAddition={this.props.deleteProjectAddition}
+        saveProjectAdditionChanges={this.props.saveProjectAdditionChanges}
+        key={projectAddition.id}
+      />
+    );
 
     let editButton =
       <button type="button"

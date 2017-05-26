@@ -9,6 +9,9 @@ import styles from '../styles/components/ProjectStyles';
 import { Card } from './common';
 import { addProjectUpvote, removeProjectUpvote } from '../actions';
 
+// Import tracking
+import { tracker } from '../constants';
+
 class Project extends Component {
   constructor(props) {
     super(props);
@@ -25,8 +28,10 @@ class Project extends Component {
     const { project, user } = this.props;
     // If user hasn't upvoted this project, add an upvote
     if (!user.projectUpvotes.includes(project.id)) {
+      tracker.trackEvent('Project Vote', 'Project UpVote Via Project Button', { label: this.props.features.domain });
       this.props.addProjectUpvote(project);
     } else {
+      tracker.trackEvent('Remove Project Vote', 'Remove Project UpVote Via Project Button', { label: this.props.features.domain });
       this.props.removeProjectUpvote(project);
     }
   }
@@ -73,7 +78,7 @@ class Project extends Component {
   }
 
   renderStatusBox() {
-    if (this.props.showStatus) {
+    if (this.props.features.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
           <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
@@ -93,7 +98,7 @@ class Project extends Component {
           underlayColor="#D0D0D0"
           onPress={this.goToDetails.bind(this)}
         >
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between'}}>
+          <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
             {/* First row */}{/* Project title */}
             <View style={{ flex: 5, paddingTop: 5 }}>
               <Text style={projectTitle}>
@@ -107,7 +112,7 @@ class Project extends Component {
               </View>
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
               {/* Upvote Button */}
               <TouchableOpacity onPress={this.upvote}>
@@ -133,12 +138,12 @@ Project.propTypes = {
   user: React.PropTypes.object,
   addProjectUpvote: React.PropTypes.func,
   removeProjectUpvote: React.PropTypes.func,
+  features: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { user } = state;
-  const { showStatus } = state.features;
-  return { user, showStatus };
+  const { user, features } = state;
+  return { user, features };
 };
 
 export default connect(mapStateToProps, { addProjectUpvote, removeProjectUpvote })(Project);

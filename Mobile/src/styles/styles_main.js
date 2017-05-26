@@ -97,7 +97,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     textDecorationLine: 'underline',
   },
-
   errorTextStyle: {
     fontSize: 20,
     alignSelf: 'center',

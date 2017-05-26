@@ -9,13 +9,18 @@ import styles from '../styles/components/SolutionStyles';
 import { CardSection } from '../components/common';
 import { addSolutionUpvote, removeSolutionUpvote } from '../actions';
 
+// Import tracking
+import { tracker } from '../constants';
+
 class Solution extends Component {
   upvoteSolution(solution) {
     const { user } = this.props;
     // If user hasn't upvoted this project, add an upvote
     if (!user.solutionUpvotes.includes(solution.id)) {
+      tracker.trackEvent('Solution Vote', 'Solution UpVote Via Solution Button', { label: this.props.features.domain });
       this.props.addSolutionUpvote(solution);
     } else {
+      tracker.trackEvent('Remove Solution Vote', 'Remove Solution UpVote Via Solution Button', { label: this.props.features.domain });
       this.props.removeSolutionUpvote(solution);
     }
   }
@@ -69,11 +74,12 @@ Solution.propTypes = {
   user: React.PropTypes.object,
   addSolutionUpvote: React.PropTypes.func,
   removeSolutionUpvote: React.PropTypes.func,
+  features: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { user } = state;
-  return { user };
+  const { user, features } = state;
+  return { user, features };
 }
 
 export default connect(mapStateToProps, {

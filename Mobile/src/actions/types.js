@@ -22,7 +22,6 @@ export const SENT_AUTHORIZATION_EMAIL_FAIL = 'sent_authorization_email_fail';
 export const AUTHORIZING_USER = 'authorizing_user';
 export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
 export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
-export const LOAD_STATE_SUCCESS = 'load_state_success';
 export const EMAIL_SAVE_SUCCESS = 'email_save_success';
 export const TOKEN_SAVE_SUCCESS = 'token_save_success';
 export const LOG_OUT_USER = 'log_out_user';

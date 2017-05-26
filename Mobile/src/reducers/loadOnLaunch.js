@@ -11,7 +11,7 @@ async function loadToken() {
     // AsyncStorage.removeItem(`${ROOT_STORAGE}token`);
     const token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
     if (token === null) {
-      store.dispatch(actions.authorizeFail());
+      store.dispatch(actions.authorizeUserFail());
     } else {
       store.dispatch(actions.pullProjects(token));
       store.dispatch(actions.pullSolutions(token));
@@ -62,15 +62,10 @@ async function loadInstructions() {
 
 // Initialize saved state
 const loadOnLaunch = () => {
-  Promise.all([
-    loadUpvotes(),
-    loadDoNotDisplayList(),
-    loadToken(),
-    loadInstructions(),
-  ])
-  .then(() => {
-    store.dispatch(actions.loadStateSuccess());
-  });
+  loadUpvotes();
+  loadDoNotDisplayList();
+  loadToken();
+  loadInstructions();
 };
 
 export default loadOnLaunch;

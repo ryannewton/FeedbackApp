@@ -13,6 +13,7 @@ export default class ProjectAddition extends React.Component {
     this.descriptionChanged = this.descriptionChanged.bind(this);
     this.switchEditMode = this.switchEditMode.bind(this);
     this.deleteProjectAddition = this.deleteProjectAddition.bind(this);
+    this.approveProjectAddition = this.approveProjectAddition.bind(this);
   }
 
   switchEditMode() {
@@ -36,6 +37,13 @@ export default class ProjectAddition extends React.Component {
 
   deleteProjectAddition() {
     this.props.deleteProjectAddition(this.state.projectAddition.id, 'delete project addition');
+  }
+
+  approveProjectAddition() {
+    const projectAddition = this.state.projectAddition;
+    projectAddition.approved = 1;
+    this.setState({ projectAddition });
+    this.props.saveProjectAdditionChanges(projectAddition, 'approve project addition');
   }
 
   render() {
@@ -66,6 +74,7 @@ export default class ProjectAddition extends React.Component {
       >
         Save
       </button>);
+
     const deleteButton = (
       <button
         type="button"
@@ -75,12 +84,23 @@ export default class ProjectAddition extends React.Component {
         Delete
       </button>);
 
+    const approveButton = (
+      <button
+        type="button"
+        className="btn btn-success btn-sm pull-right"
+        onClick={this.approveProjectAddition}
+      >
+        Approve
+      </button>);
+
     return (
       <div className="panel panel-default">
         <div className="panel-heading clearfix" style={{ backgroundImage: 'linear-gradient(to bottom,#dff0d8 0,#dff0d8 100%)', borderColor: '#d6e9c6' }} role="tab">
           <h4 className="panel-title" style={{ color: '#3c763d' }}>
             {title}
-            <a role="button" data-toggle="collapse" href={'#projectAddition' + this.state.projectAddition.id} className="glyphicon glyphicon-menu-down pull-right"></a>
+            {console.log(this.props.projectAddition.approved)}            
+            <a role="button" data-toggle="collapse" href={'#projectAddition' + this.state.projectAddition.id} className="glyphicon glyphicon-menu-down pull-right" />
+            {!this.props.projectAddition.approved ? approveButton : null}
           </h4>
         </div>
         <div id={'projectAddition' + this.state.projectAddition.id} className='panel-collapse collapse' role='tabpanel'>

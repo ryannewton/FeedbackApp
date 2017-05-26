@@ -24,7 +24,7 @@ function settingsButton(navigate) {
   return right;
 }
 
-const FeedbackStack = StackNavigator(
+const FeedbackStackScreens = StackNavigator(
   {
     Feedback: {
       screen: Feedback,
@@ -50,5 +50,16 @@ const FeedbackStack = StackNavigator(
     },
   },
 );
+
+const FeedbackStack = {
+  screen: FeedbackStackScreens,
+  navigationOptions: {
+    tabBarLabel: 'Submit Feedback',
+    tabBarIcon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
+    cardStack: {
+      gesturesEnabled: false,
+    },
+  },
+};
 
 export default FeedbackStack;
