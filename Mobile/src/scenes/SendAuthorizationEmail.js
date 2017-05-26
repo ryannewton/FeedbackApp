@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Text, View, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
