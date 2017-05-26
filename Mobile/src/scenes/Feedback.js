@@ -1,11 +1,11 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, Text } from 'react-native';
+import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuContext } from 'react-native-menu';
 
 // Import actions
-import { feedbackChanged, submitFeedbackToServer, closeInstructions } from '../actions';
+import { submitFeedbackToServer, closeInstructions } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
@@ -25,6 +25,9 @@ class Feedback extends Component {
     this.state = {
       height: 0,
       errorMessage: '',
+      feedback: '',
+      positiveFeedback: '',
+      negativeFeedback: '',
     };
 
     tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.features.domain });
@@ -34,17 +37,32 @@ class Feedback extends Component {
   }
 
   submitFeedback() {
-    // First we search the feedback for restricted words
-    // We actually want to download a list of words from a database and convert those into an RE which we store in feedback and pull in here
-    if (this.props.features.bannedWords.test(this.props.feedback.feedback)) {
-      // If restricted words then we show an error to the user
-      this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+    if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
+      // First we search the feedback for restricted words
+      if (this.props.features.bannedWords.test(this.state.feedback) ||
+          this.props.features.bannedWords.test(this.state.positiveFeedback) ||
+          this.props.features.bannedWords.test(this.state.negativeFeedback)) {
+        // If restricted words then we show an error to the user
+        this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+      } else {
+        // If no restricted words then we continue
+        if (this.state.feedback) {
+          this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.feedback, 'single feedback');
+          this.setState({ feedback: '' });
+        } if (this.state.positiveFeedback) {
+          this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.positiveFeedback, 'positive feedback');
+          this.setState({ feedback: '' });
+        } if (this.state.negativeFeedback) {
+          this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.negativeFeedback, 'negative feedback');
+          this.setState({ feedback: '' });
+        }
+
+        tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.features.domain });
+        this.setState({ errorMessage: '' });
+        this.props.navigation.navigate('Submitted');
+      }
     } else {
-      // If no restricted words then we continue
-      this.props.submitFeedbackToServer(this.props.features.moderatorApproval);
-      tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.features.domain });
-      this.setState({ errorMessage: '' });
-      this.props.navigation.navigate('Submitted');
+      this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
     }
   }
 
@@ -57,7 +75,7 @@ class Feedback extends Component {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
     return (
-      <Button onPress={this.submitFeedback}>
+      <Button onPress={this.submitFeedback} style={{ marginBottom: 10 }}>
         Submit Feedback
       </Button>
     );
@@ -74,31 +92,67 @@ class Feedback extends Component {
       </View>
     );
 
+    const singleFeedbackBox = (
+      <View>
+        <TextInput
+          multiline={Boolean(true)}
+          onChangeText={feedback => this.setState({ feedback })}
+          onContentSizeChange={(event) => {
+            this.setState({ height: event.nativeEvent.contentSize.height });
+          }}
+          style={styles.feedback_input}
+          placeholder={placeholderText}
+          value={this.state.feedback}
+        />
+        {/* Submit button / loading spinner */}
+        {this.renderButton()}
+      </View>
+    );
+
+    const positiveFeedbackBox = (
+      <View>
+        <TextInput
+          multiline={Boolean(true)}
+          onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
+          onContentSizeChange={(event) => {
+            this.setState({ height: event.nativeEvent.contentSize.height });
+          }}
+          style={[styles.feedback_input, styles.positive_feedback_input]}
+          placeholder={'Positives: In this box, you can enter something that positively contributed to sales and conversion last week?'}
+          value={this.state.positiveFeedback}
+        />
+        {/* Submit button / loading spinner */}
+        {this.renderButton()}
+
+        
+        <TextInput
+          multiline={Boolean(true)}
+          onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+          onContentSizeChange={(event) => {
+            this.setState({ height: event.nativeEvent.contentSize.height });
+          }}
+          style={[styles.feedback_input, styles.negative_feedback_input]}
+          placeholder={'Negatives: In this box, you can enter something that negatively impacted sales and conversion last week?'}
+          value={this.state.negativeFeedback}
+        />
+        {/* Submit button / loading spinner */}
+        {this.renderButton()}
+      </View>
+    );
+
     const WriteFeedbackScene = (
       <View style={[styles.container, styles.swiper]}>
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-            <View style={styles.container}>
-              {/* Feedback input box */}
-              <TextInput
-                multiline={Boolean(true)}
-                onChangeText={feedback => this.props.feedbackChanged(feedback)}
-                onContentSizeChange={(event) => {
-                  this.setState({ height: event.nativeEvent.contentSize.height });
-                }}
-                style={styles.feedback_input}
-                placeholder={placeholderText}
-                value={this.props.feedback.feedback}
-              />
-
+            <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
               {/* Error message (blank if no error) */}
               <Text style={styles.errorTextStyle}>
                 {this.state.errorMessage}
               </Text>
 
-              {/* Submit button / loading spinner */}
-              {this.renderButton()}
-            </View>
+              {/* Feedback input box */}
+              {this.props.features.positiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox }
+            </KeyboardAvoidingView>
           </TouchableWithoutFeedback>
         </MenuContext>
       </View>
@@ -113,7 +167,6 @@ Feedback.propTypes = {
   user: React.PropTypes.object,
   features: React.PropTypes.object,
   feedback: React.PropTypes.object,
-  feedbackChanged: React.PropTypes.func,
   submitFeedbackToServer: React.PropTypes.func,
   closeInstructions: React.PropTypes.func,
   navigation: React.PropTypes.object,
@@ -125,7 +178,6 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  feedbackChanged,
   submitFeedbackToServer,
   closeInstructions,
 })(Feedback);

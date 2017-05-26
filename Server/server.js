@@ -590,6 +590,7 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
           moderator_approval_solutions AS moderatorApprovalSolutions,
           show_status AS showStatus,
           enable_new_feedback AS enableNewFeedback,
+          positive_feedback_box AS positiveFeedbackBox,
           ? AS domain,
           ? AS email
         FROM
