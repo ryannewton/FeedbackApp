@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet, Platform } from 'react-native';
+import { View, TouchableOpacity, Image } from 'react-native';
 import { Container, DeckSwiper } from 'native-base';
 import { connect } from 'react-redux';
 

@@ -5,9 +5,6 @@ import { AsyncStorage } from 'react-native';
 import { http, ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
-import { pullProjects } from './FeedbackActions';
-import { pullSolutions } from './SolutionActions';
-import { pullFeatures } from './actions_features';
 import {
   SENDING_AUTHORIZATION_EMAIL,
   SENT_AUTHORIZATION_EMAIL_SUCCESS,

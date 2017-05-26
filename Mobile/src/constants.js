@@ -12,4 +12,3 @@ export const http = axios.create({
 });
 
 export const tracker = new GoogleAnalyticsTracker('UA-99660629-1', { domain: 1, project: 2 });
-

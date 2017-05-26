@@ -62,17 +62,14 @@ export const feedbackChanged = feedback => (
 
 export const addProject = (feedback, feedbackId) => (
   (dispatch, getState) => {
-    console.log('add project called');    
     const feedbackObject = { text: feedback, id: feedbackId };
     http.post('/addProject/', { feedback: feedbackObject, authorization: getState().auth.token })
     .then((response) => {
       dispatch({ type: ADD_PROJECT, payload: { title: feedback, id: response.data.id } });
     })
     .catch((error) => {
-      console.log('add project error');
       console.log('Error in addProject in FeedbackActions', error.response.data);
     });
-    
   }
 );
 
@@ -80,7 +77,7 @@ export const submitFeedbackToServer = moderatorApproval => (
   (dispatch, getState) => {
     dispatch({ type: SUBMIT_FEEDBACK });
 
-    const { feedback } = getState().main;
+    const { feedback } = getState().feedback;
 
     // Post new feedback to server
     http.post('/addFeedback/', { text: feedback, authorization: getState().auth.token })
