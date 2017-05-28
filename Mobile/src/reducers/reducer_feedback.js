@@ -1,6 +1,5 @@
 // Import action types
 import {
-  FEEDBACK_CHANGED,
   SUBMIT_FEEDBACK,
   SUBMIT_FEEDBACK_SUCCESS,
   SUBMIT_FEEDBACK_FAIL,
@@ -9,13 +8,10 @@ import {
 
 const INITIAL_STATE = {
   loading: false,
-  feedback: '',
 };
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case FEEDBACK_CHANGED:
-      return { ...state, feedback: action.payload };
     case SUBMIT_FEEDBACK:
       return { ...state, loading: true };
     case SUBMIT_FEEDBACK_SUCCESS:

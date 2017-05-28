@@ -90,11 +90,17 @@ class Project extends Component {
 
   render() {
     const { buttonText, lowWeight, row, projectTitle } = styles;
+    let updatedRow = row;
+    if (this.props.project.type === 'positive feedback') {
+      updatedRow = [row, { backgroundColor: '#98FB98' }];
+    } else if (this.props.project.type === 'negative feedback') {
+      updatedRow = [row, { backgroundColor: '#F08080' }];
+    }
 
     return (
       <Card>
         <TouchableHighlight
-          style={row}
+          style={updatedRow}
           underlayColor="#D0D0D0"
           onPress={this.goToDetails.bind(this)}
         >
