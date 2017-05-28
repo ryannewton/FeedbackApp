@@ -56,12 +56,12 @@ export const saveProjectChanges = (project, changeType) => (
   }
 );
 
-export const addProject = (feedback, feedbackId) => (
+export const addProject = (feedback, type, feedbackId) => (
   (dispatch, getState) => {
-    const feedbackObject = { text: feedback, id: feedbackId };
+    const feedbackObject = { text: feedback, type, id: feedbackId };
     http.post('/addProject/', { feedback: feedbackObject, authorization: getState().auth.token })
     .then((response) => {
-      dispatch({ type: ADD_PROJECT, payload: { title: feedback, id: response.data.id } });
+      dispatch({ type: ADD_PROJECT, payload: { title: feedback, type, id: response.data.id } });
     })
     .catch((error) => {
       console.log('Error in addProject in actions_projects', error.response.data);

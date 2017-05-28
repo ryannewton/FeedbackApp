@@ -352,7 +352,7 @@ app.post('/addFeedback', upload.array(), (req, res) => {
       const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu'];
       sendEmail(toEmails, defaultFromEmail, 'Feedback: ' + req.body.text, 'Email: ' + decoded.email);
 
-      connection.query('INSERT INTO feedback (text, email, school) VALUES (?, ?, ?)', [req.body.text, decoded.email, school], (err2, result) => {
+      connection.query('INSERT INTO feedback (text, email, school, type) VALUES (?, ?, ?, ?)', [req.body.text, decoded.email, school, req.body.type], (err2, result) => {
         if (err2) throw err2;
         res.json({ id: result.insertId });
       });
@@ -368,7 +368,7 @@ app.post('/addProject', upload.array(), (req, res) => {
       const title = (req.body.feedback.text) ? req.body.feedback.text : 'Blank Title';
       const school = (req.body.feedback.school) ? req.body.feedback.school : getDomain(decoded.email);
 
-      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, stage: 'new', school }, (err2, result) => {
+      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, stage: 'new', school, type: req.body.feedback.type }, (err2, result) => {
         if (err2) throw err2;
         if (req.body.feedback) {
           //sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
@@ -526,7 +526,7 @@ app.post('/pullProjects', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          id, title, votes, description, department, stage
+          id, title, votes, description, department, stage, type
         FROM
           projects
         WHERE

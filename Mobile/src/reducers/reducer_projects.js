@@ -24,7 +24,7 @@ export default (state = null, action) => {
       return newState;
     }
     case ADD_PROJECT: {
-      return [...state, { id: action.payload.id, title: action.payload.title, description: 'Blank Description', votes: 0, stage: 'new' }];
+      return [...state, { id: action.payload.id, title: action.payload.title, description: 'Blank Description', votes: 0, stage: 'new', type: action.payload.type }];
     }
     case ADD_PROJECT_UPVOTE: {
       const index = state.findIndex(project => project.id === action.payload.id);
