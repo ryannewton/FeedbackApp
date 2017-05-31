@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, ListView } from 'react-native';
+import { View, ListView, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import actions
@@ -15,24 +15,23 @@ import { tracker } from '../constants';
 
 class Projects extends Component {
   constructor(props) {
-    super(props);
-
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    this.state = {
-      dataSource: ds.cloneWithRows(props.projects),
-    };
+    super(props);    
+    
+    // this.state = {
+    //   dataSource: ds.cloneWithRows(props.projects),
+    // };
 
     tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.projects && nextProps.projects !== this.props.projects) {
-      const newProjectsList = nextProps.projects.slice();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(newProjectsList),
-      });
-    }
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   if (nextProps.projects && nextProps.projects !== this.props.projects) {
+  //     const newProjectsList = nextProps.projects.slice();
+  //     this.setState({
+  //       dataSource: this.state.dataSource.cloneWithRows(newProjectsList),
+  //     });
+  //   }
+  // }
 
   renderProjects() {
     const projects = this.props.projects
@@ -50,11 +49,14 @@ class Projects extends Component {
   }
 
   render() {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
     return (
       <View style={styles.container}>
         <ListView
-          dataSource={this.state.dataSource}
-          enableEmptySections
+          dataSource={ds.cloneWithRows(this.props.projects)}
+          initialListSize={200}
+          removeClippedSubviews={false}
           renderRow={rowData =>
             <Project
               project={rowData}
@@ -64,7 +66,6 @@ class Projects extends Component {
             />
           }
         />
-
       </View>
     );
   }

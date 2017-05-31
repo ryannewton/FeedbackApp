@@ -51,10 +51,10 @@ class Feedback extends Component {
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
           this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.positiveFeedback, 'positive feedback');
-          this.setState({ feedback: '' });
+          this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
           this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.negativeFeedback, 'negative feedback');
-          this.setState({ feedback: '' });
+          this.setState({ negativeFeedback: '' });
         }
 
         tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.features.domain });

@@ -13,7 +13,7 @@ import { tracker } from '../constants';
 class SwipeCard extends Component {
   constructor(props) {
     super(props);
-    tracker.trackEvent('View', 'Swipe Card', { label: props.features.domain, value: props.project.id });
+    //tracker.trackEvent('View', 'Swipe Card', { label: props.features.domain, value: props.project.id });
   }
 
   render() {
