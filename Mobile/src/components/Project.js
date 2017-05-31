@@ -26,6 +26,7 @@ class Project extends Component {
 
   upvote() {
     const { project, user } = this.props;
+    console.log('project upvote', this.props);
     // If user hasn't upvoted this project, add an upvote
     if (!user.projectUpvotes.includes(project.id)) {
       tracker.trackEvent('Project Vote', 'Project UpVote Via Project Button', { label: this.props.features.domain });
@@ -89,6 +90,7 @@ class Project extends Component {
   }
 
   render() {
+
     const { buttonText, lowWeight, row, projectTitle } = styles;
     let updatedRow = row;
     if (this.props.project.type === 'positive feedback') {

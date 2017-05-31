@@ -127,7 +127,6 @@ class NewProjects extends Component {
     );
 
     const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : newProjectsScene;
-    //const screenToShow = newProjectsScene;
 
     return screenToShow;
   }

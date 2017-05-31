@@ -18,6 +18,7 @@ class Authorize extends Component {
 
     this.state = {
       code: '',
+      cleared: false,
     };
 
     this.route = this.route.bind(this);
@@ -27,7 +28,9 @@ class Authorize extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    this.route(nextProps);
+    if (this.state.cleared === false) {
+      this.route(nextProps);  
+    }    
   }
 
   route(nextProps) {
@@ -45,6 +48,7 @@ class Authorize extends Component {
       } else {
         nextProps.navigation.navigate('Feedback');
       }
+      this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }

@@ -10,7 +10,7 @@ import ProjectsStack from './ProjectsStack';
 const NavTabOptions = {
   swipeEnabled: false,
   backBehavior: 'none',
-  // tabBarPosition: 'bottom',
+  lazy: true,
   tabBarOptions: {
     showIcon: true,
     style: { backgroundColor: 'white' },
@@ -19,9 +19,6 @@ const NavTabOptions = {
     labelStyle: { margin: 0, padding: 0, fontSize: 11 },
     activeTintColor: '#A41034',
     inactiveTintColor: 'grey',
-    // iOS only options
-    // activeBackgroundColor: 'yellow',
-    // inactiveBackgroundColor: 'green',
   },
 };
 

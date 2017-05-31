@@ -24,13 +24,6 @@ app.use(express.static('public'));
 const botToken = process.env.SLACK_API_BOT_TOKEN || '';
 const botWeb = new WebClient(botToken);
 
-// depreciated - admin use only
-const IncomingWebhook = require('@slack/client').IncomingWebhook;
-const token = process.env.SLACK_API_TOKEN || '';
-const web = new WebClient(token);
-const url = process.env.SLACK_WEBHOOK_URL || ''; // see section above on sensitive data
-const webhook = new IncomingWebhook(url);
-
 const connection = mysql.createConnection({
   user: 'root',
   password: 'buechelejedi16',
