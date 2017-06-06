@@ -158,8 +158,8 @@ class Feedback extends Component {
       </View>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
-    return screenToShow;
+    // const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
+    return WriteFeedbackScene;
   }
 }
 
