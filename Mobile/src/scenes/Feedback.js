@@ -118,7 +118,7 @@ class Feedback extends Component {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
           style={[styles.feedback_input, styles.positive_feedback_input]}
-          placeholder={'Positives: In this box, you can enter something that positively contributed to sales and conversion last week?'}
+          placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
           value={this.state.positiveFeedback}
         />
         {/* Submit button / loading spinner */}
@@ -132,7 +132,7 @@ class Feedback extends Component {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
           style={[styles.feedback_input, styles.negative_feedback_input]}
-          placeholder={'Negatives: In this box, you can enter something that negatively impacted sales and conversion last week?'}
+          placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
           value={this.state.negativeFeedback}
         />
         {/* Submit button / loading spinner */}
