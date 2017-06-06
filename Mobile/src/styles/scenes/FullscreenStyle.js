@@ -3,12 +3,14 @@ import { StyleSheet, Platform } from 'react-native';
 
 const styles = StyleSheet.create({
   imageContainer: {
-    alignSelf: 'stretch',
+    flex: 1,
     width: null,
+    height: null,
   },
   image: {
-    alignSelf: 'stretch',
+    flex: 1,
     width: null,
+    height: null,
   },
   touchableOpacityStyle: {
     ...Platform.select({

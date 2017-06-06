@@ -85,9 +85,9 @@ class Feedback extends Component {
     const placeholderText = 'Enter your feedback here!';
 
     const instructionsScreen = (
-      <View style={styles.imageContainer}>
+      <View style={styles2.imageContainer}>
         <TouchableOpacity onPress={this.closeInstructions} style={styles2.touchableOpacityStyle}>
-          <Image style={styles2.image} source={fullScreen} resizeMode="cover" />
+          <Image style={styles2.image} source={fullScreen} resizeMode="stretch" />
         </TouchableOpacity>
       </View>
     );
