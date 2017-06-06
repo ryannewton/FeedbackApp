@@ -5,11 +5,10 @@ import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 // Import Scenes
-import Feedback from '../scenes/Feedback';
+import FeedbackSubmit from '../scenes/FeedbackSubmit';
 import Settings from '../scenes/Settings';
 import Submitted from '../scenes/Submitted';
 import styles from '../styles/common/navStyles';
-
 
 function settingsButton(navigate) {
   const right = (
@@ -24,10 +23,11 @@ function settingsButton(navigate) {
   return right;
 }
 
-const FeedbackStackScreens = StackNavigator(
+// Stack of scenes
+const scenes = StackNavigator(
   {
-    Feedback: {
-      screen: Feedback,
+    FeedbackSubmit: {
+      screen: FeedbackSubmit,
       navigationOptions: ({ navigation }) => ({
         title: 'Submit Feedback',
         headerRight: settingsButton(navigation.navigate),
@@ -51,15 +51,16 @@ const FeedbackStackScreens = StackNavigator(
   },
 );
 
-const FeedbackStack = {
-  screen: FeedbackStackScreens,
-  navigationOptions: {
-    tabBarLabel: 'Submit Feedback',
-    tabBarIcon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
-    cardStack: {
-      gesturesEnabled: false,
-    },
-  },
+// Stack options
+const options = {
+  tabBarLabel: 'Submit Feedback',
+  tabBarIcon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
+  cardStack: { gesturesEnabled: false },
 };
 
-export default FeedbackStack;
+const FeedbackSubmitStack = {
+  screen: scenes,
+  navigationOptions: options,
+};
+
+export default FeedbackSubmitStack;

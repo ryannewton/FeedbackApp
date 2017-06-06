@@ -46,10 +46,10 @@ class SplashScreen extends Component {
       tracker.setUser(this.props.features.email);
       // If enableNewFeedback is true then we navigate to new projects as normal
       if (this.props.features.enableNewFeedback) {
-        this.props.navigation.navigate('NewProjects');
+        this.props.navigation.navigate('FeedbackSwipe');
       // If not, then we navigate to Feedback and disable the New Projects tab
       } else {
-        this.props.navigation.navigate('Feedback');
+        this.props.navigation.navigate('FeedbackSubmit');
       }
       this.setState({ cleared: true });
     }

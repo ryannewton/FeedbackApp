@@ -3,11 +3,19 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 
 // Import Stacks
-import FeedbackStack from './FeedbackStack';
-import NewProjectsStack from './NewProjectsStack';
-import ProjectsStack from './ProjectsStack';
+import FeedbackSubmitStack from './FeedbackSubmitStack';
+import FeedbackSwipeStack from './FeedbackSwipeStack';
+import FeedbackListStack from './FeedbackListStack';
 
-const NavTabOptions = {
+// Stacks for each tab
+const stacks = {
+  FeedbackSubmit: FeedbackSubmitStack,
+  FeedbackSwipe: FeedbackSwipeStack,
+  FeedbackList: FeedbackListStack,
+};
+
+// Tab options
+const options = {
   swipeEnabled: false,
   backBehavior: 'none',
   lazy: true,
@@ -23,12 +31,8 @@ const NavTabOptions = {
 };
 
 const NavTabs = TabNavigator(
-  {
-    Feedback: FeedbackStack,
-    NewProjects: NewProjectsStack,
-    ProjectsStack,
-  },
-  NavTabOptions,
+  stacks,
+  options,
 );
 
 export default NavTabs;

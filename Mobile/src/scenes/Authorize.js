@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
-import { NavigationActions } from 'react-navigation';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
@@ -29,8 +28,8 @@ class Authorize extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.state.cleared === false) {
-      this.route(nextProps);  
-    }    
+      this.route(nextProps);
+    }
   }
 
   route(nextProps) {
@@ -43,10 +42,10 @@ class Authorize extends Component {
       ) {
       // If enableNewFeedback is true then we navigate to new projects as normal
       if (nextProps.features.enableNewFeedback) {
-        nextProps.navigation.navigate('NewProjects');
+        nextProps.navigation.navigate('FeedbackSwipe');
       // If not, then we navigate to Feedback and disable the New Projects tab
       } else {
-        nextProps.navigation.navigate('Feedback');
+        nextProps.navigation.navigate('FeedbackSubmit');
       }
       this.setState({ cleared: true });
     }

@@ -9,7 +9,7 @@ import SwipeCard from '../components/SwipeCard';
 
 // Import actions and styles
 import { addProjectUpvote, addToDoNotDisplayList, closeInstructions } from '../actions';
-import styles from '../styles/scenes/NewProjectsStyles';
+import styles from '../styles/scenes/FeedbackSwipeStyles';
 
 // Import about info image
 import styles2 from '../styles/scenes/FullscreenStyle';
@@ -23,7 +23,7 @@ const inboxZeroProject = {
   votes: 999,
 };
 
-class NewProjects extends Component {
+class FeedbackSwipe extends Component {
   constructor(props) {
     super(props);
 
@@ -97,7 +97,7 @@ class NewProjects extends Component {
       </View>
     );
 
-    const newProjectsScene = (
+    const FeedbackSwipeScene = (
       <Container>
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
@@ -125,13 +125,13 @@ class NewProjects extends Component {
       </Container>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : newProjectsScene;
+    const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : FeedbackSwipeScene;
 
     return screenToShow;
   }
 }
 
-NewProjects.propTypes = {
+FeedbackSwipe.propTypes = {
   projects: React.PropTypes.array,
   user: React.PropTypes.object,
   addToDoNotDisplayList: React.PropTypes.func,
@@ -148,4 +148,4 @@ export default connect(mapStateToProps, {
   addProjectUpvote,
   addToDoNotDisplayList,
   closeInstructions,
-})(NewProjects);
+})(FeedbackSwipe);

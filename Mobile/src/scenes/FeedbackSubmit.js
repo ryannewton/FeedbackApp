@@ -9,16 +9,15 @@ import { submitFeedbackToServer, closeInstructions } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
-import styles from '../styles/styles_main';
 
 // Import about info image
-import styles2 from '../styles/scenes/FullscreenStyle';
+import styles from '../styles/scenes/FullscreenStyle';
 import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
 // Import tracking
 import { tracker } from '../constants';
 
-class Feedback extends Component {
+class FeedbackSubmit extends Component {
   constructor(props, context) {
     super(props, context);
 
@@ -85,9 +84,9 @@ class Feedback extends Component {
     const placeholderText = 'Enter your feedback here!';
 
     const instructionsScreen = (
-      <View style={styles2.imageContainer}>
-        <TouchableOpacity onPress={this.closeInstructions} style={styles2.touchableOpacityStyle}>
-          <Image style={styles2.image} source={fullScreen} resizeMode="stretch" />
+      <View style={styles.imageContainer}>
+        <TouchableOpacity onPress={this.closeInstructions} style={styles.touchableOpacityStyle}>
+          <Image style={styles.image} source={fullScreen} resizeMode="stretch" />
         </TouchableOpacity>
       </View>
     );
@@ -124,7 +123,6 @@ class Feedback extends Component {
         {/* Submit button / loading spinner */}
         {this.renderButton()}
 
-        
         <TextInput
           multiline={Boolean(true)}
           onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
@@ -163,7 +161,7 @@ class Feedback extends Component {
   }
 }
 
-Feedback.propTypes = {
+FeedbackSubmit.propTypes = {
   user: React.PropTypes.object,
   features: React.PropTypes.object,
   feedback: React.PropTypes.object,
@@ -180,4 +178,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
   closeInstructions,
-})(Feedback);
+})(FeedbackSubmit);
