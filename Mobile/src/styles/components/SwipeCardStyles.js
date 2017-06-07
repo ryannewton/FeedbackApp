@@ -7,8 +7,11 @@ import { bodyText } from '../common/textStyles';
 
 const styles = {
   card: {
-    justifyContent: 'space-between',
     backgroundColor: 'white',
+    shadowOffset: {width: 10, height: 10}
+  },
+    cardButton: {
+    alignItems: 'center'
   },
   bodyText: {
     maxHeight: 300,
@@ -19,7 +22,6 @@ const styles = {
   smallText: {
     fontWeight: '300',
     fontSize: 16,
-    textDecorationLine: 'underline',
   },
 };
 

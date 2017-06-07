@@ -31,8 +31,8 @@ class SwipeCard extends Component {
           </CardItem>
         </View>
         <View style={{ justifyContent: 'flex-end' }}>
-          <CardItem style={{ justifyContent: 'space-between' }} >
-            <TouchableOpacity onPress={this.props.left}>
+        <CardItem style={{ justifyContent: 'space-between' }}>
+          <TouchableOpacity onPress={this.props.left} style = {styles.cardButton}>
               <Icon name="skip-next" size={50} color={'#A41034'} />
               <Text>Next</Text>
             </TouchableOpacity>
@@ -41,11 +41,11 @@ class SwipeCard extends Component {
                 tracker.trackEvent('View', 'Project Details Via Swipe Card', { label: this.props.features.domain, value: this.props.project.id });
                 this.props.navigate('Details', { project: this.props.project });
               }
-            }}>
+            }} style = {styles.cardButton}>
               <Icon name="comment" size={50} color={'#b6001e'} />
               <Text>Solutions</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.props.right}>
+            <TouchableOpacity onPress={this.props.right} style = {styles.cardButton}>
               <Icon name="thumb-up" size={50} color={'#A41034'} />
               <Text>Upvote</Text>
             </TouchableOpacity>
