@@ -12,7 +12,7 @@ import { addSolutionUpvote, removeSolutionUpvote } from '../actions';
 // Import tracking
 import { tracker } from '../constants';
 
-class Solution extends Component {
+class SolutionsCardItem extends Component {
   upvoteSolution(solution) {
     const { user } = this.props;
     // If user hasn't upvoted this project, add an upvote
@@ -69,7 +69,7 @@ class Solution extends Component {
   }
 }
 
-Solution.propTypes = {
+SolutionsCardItem.propTypes = {
   solution: React.PropTypes.object,
   user: React.PropTypes.object,
   addSolutionUpvote: React.PropTypes.func,
@@ -85,4 +85,4 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   addSolutionUpvote,
   removeSolutionUpvote,
-})(Solution);
+})(SolutionsCardItem);

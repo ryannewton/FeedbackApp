@@ -15,7 +15,7 @@ import {
   LOG_OUT_USER,
 } from './types';
 
-import loadOnLaunch from '../reducers/loadOnLaunch';
+import loadOnLaunch from '../reducers/load_on_launch';
 
 export const authorizeUserFail = error => (
   {

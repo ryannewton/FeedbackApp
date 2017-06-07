@@ -1,42 +1,28 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, ListView, Text } from 'react-native';
+import { View, ListView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import actions
 import { saveProjectChanges } from '../actions';
 
 // Import components, functions, and styles
-import Project from '../components/Project';
-import styles from '../styles/scenes/ProjectsStyles';
+import FeedbackCard from '../components/FeedbackCard';
+import styles from '../styles/scenes/FeedbackListStyles';
 
 // Import tracking
 import { tracker } from '../constants';
 
-class Projects extends Component {
+class FeedbackList extends Component {
   constructor(props) {
-    super(props);    
-    
-    // this.state = {
-    //   dataSource: ds.cloneWithRows(props.projects),
-    // };
-
+    super(props);
     tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.projects && nextProps.projects !== this.props.projects) {
-  //     const newProjectsList = nextProps.projects.slice();
-  //     this.setState({
-  //       dataSource: this.state.dataSource.cloneWithRows(newProjectsList),
-  //     });
-  //   }
-  // }
-
-  renderProjects() {
+  renderAllFeedback() {
     const projects = this.props.projects
       .map(project => (
-        <Project
+        <FeedbackCard
           project={project}
           key={project.id}
           navigate={this.props.navigation.navigate}
@@ -58,7 +44,7 @@ class Projects extends Component {
           initialListSize={200}
           removeClippedSubviews={false}
           renderRow={rowData =>
-            <Project
+            <FeedbackCard
               project={rowData}
               key={rowData.id}
               navigate={this.props.navigation.navigate}
@@ -71,7 +57,7 @@ class Projects extends Component {
   }
 }
 
-Projects.propTypes = {
+FeedbackList.propTypes = {
   navigation: React.PropTypes.object,
   projects: React.PropTypes.array,
   saveProjectChanges: React.PropTypes.func,
@@ -85,6 +71,6 @@ function mapStateToProps(state) {
 
 const AppScreen = connect(mapStateToProps, {
   saveProjectChanges,
-})(Projects);
+})(FeedbackList);
 
 export default AppScreen;
