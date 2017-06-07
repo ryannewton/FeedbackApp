@@ -98,7 +98,8 @@ class FeedbackSwipe extends Component {
     );
 
     const FeedbackSwipeScene = (
-      <Container>
+      <Container style = {{flexDirection: 'row'}}>
+        <View style = {{flex:7, backgroundColor: '#A41034'}} />
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
             ref={(ds) => { this.deckSwiper = ds; }}
@@ -122,6 +123,7 @@ class FeedbackSwipe extends Component {
             }
           />
         </View>
+        <View style = {{flex:7, backgroundColor: '#A41034'}} />
       </Container>
     );
 

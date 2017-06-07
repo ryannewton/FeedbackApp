@@ -9,11 +9,11 @@ const styles = StyleSheet.create({
   container: {
     ...container,
     backgroundColor: '#A41034',
+    flex: 86,
+    zIndex: 100000
   },
   swiper: {
-    paddingTop: 40,
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingTop: 40
   },
   bodyText: {
     fontSize: 20,
