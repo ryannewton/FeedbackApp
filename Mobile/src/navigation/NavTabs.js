@@ -8,7 +8,7 @@ import FeedbackSwipeStack from './FeedbackSwipeStack';
 import FeedbackListStack from './FeedbackListStack';
 
 // Stacks for each tab
-const stacks = {
+const tabs = {
   FeedbackSubmit: FeedbackSubmitStack,
   FeedbackSwipe: FeedbackSwipeStack,
   FeedbackList: FeedbackListStack,
@@ -30,9 +30,6 @@ const options = {
   },
 };
 
-const NavTabs = TabNavigator(
-  stacks,
-  options,
-);
+const NavTabs = TabNavigator(tabs, options);
 
 export default NavTabs;

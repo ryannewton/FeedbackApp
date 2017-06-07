@@ -7,7 +7,7 @@ import NavTabs from './NavTabs';
 import AuthStack from './AuthStack';
 import SplashScreenStack from './SplashScreenStack';
 
-const tabs = {
+const stack = {
   SplashScreen: { screen: SplashScreenStack },
   Auth: { screen: AuthStack },
   Tabs: { screen: NavTabs },
@@ -16,8 +16,9 @@ const tabs = {
 const options = {
   mode: 'modal',
   headerMode: 'none',
+  navigationOptions: { gesturesEnabled: false },
 };
 
-const Router = StackNavigator(tabs, options);
+const Router = StackNavigator(stack, options);
 
 export default Router;
