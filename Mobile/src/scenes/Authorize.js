@@ -37,7 +37,7 @@ class Authorize extends Component {
     //   - We need projects and enableNewFeedback
     if (
         nextProps.auth.loggedIn === true &&
-        nextProps.projects !== null &&
+        nextProps.projects.lastPulled.getTime() !== 0 &&
         nextProps.features.enableNewFeedback !== null
       ) {
       // If enableNewFeedback is true then we navigate to new projects as normal
@@ -120,7 +120,7 @@ Authorize.propTypes = {
   authorizeUser: React.PropTypes.func,
   navigation: React.PropTypes.object,
   features: React.PropTypes.object,
-  projects: React.PropTypes.array,
+  projects: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {

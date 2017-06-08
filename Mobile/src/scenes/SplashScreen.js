@@ -40,7 +40,7 @@ class SplashScreen extends Component {
     //    - We need projects and enableNewFeedback
     } else if (
         this.props.auth.loggedIn === true &&
-        this.props.projects !== null &&
+        this.props.projects.lastPulled.getTime() !== 0 &&
         this.props.features.enableNewFeedback !== null
       ) {
       tracker.setUser(this.props.features.email);
@@ -59,7 +59,7 @@ class SplashScreen extends Component {
   render() {
     return (
       <Image style={styles.background} source={fullScreen} resizeMode="cover">
-        <Spinner size='large' style={{ marginTop: 200 }} />
+        <Spinner size="large" style={{ marginTop: 200 }} />
         <Text style={styles.text}>COLLABORATIVE FEEDBACK</Text>
       </Image>
     );
@@ -70,7 +70,7 @@ SplashScreen.propTypes = {
   auth: React.PropTypes.object,
   navigation: React.PropTypes.object,
   features: React.PropTypes.object,
-  projects: React.PropTypes.array,
+  projects: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {

@@ -20,18 +20,18 @@ class FeedbackList extends Component {
   }
 
   renderAllFeedback() {
-    const projects = this.props.projects
-      .map(project => (
+    const feedbackList = this.props.projects.list
+      .map(feedbackItem => (
         <FeedbackCard
-          project={project}
-          key={project.id}
+          project={feedbackItem}
+          key={feedbackItem.id}
           navigate={this.props.navigation.navigate}
           saveProjectChanges={this.props.saveProjectChanges}
         />
       ),
     );
 
-    return projects;
+    return feedbackList;
   }
 
   render() {
@@ -40,7 +40,7 @@ class FeedbackList extends Component {
     return (
       <View style={styles.container}>
         <ListView
-          dataSource={ds.cloneWithRows(this.props.projects)}
+          dataSource={ds.cloneWithRows(this.props.projects.list)}
           initialListSize={200}
           removeClippedSubviews={false}
           renderRow={rowData =>
@@ -59,7 +59,7 @@ class FeedbackList extends Component {
 
 FeedbackList.propTypes = {
   navigation: React.PropTypes.object,
-  projects: React.PropTypes.array,
+  projects: React.PropTypes.object,
   saveProjectChanges: React.PropTypes.func,
   features: React.PropTypes.object,
 };
