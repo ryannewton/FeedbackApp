@@ -19,8 +19,7 @@ const styles = StyleSheet.create({
   },
   lowWeight: {
     fontWeight: '300',
-    fontSize: 16,
-    textDecorationLine: 'underline',
+    fontSize: 16
   },
 });
 
