@@ -18,7 +18,7 @@ class Index extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router />
+        <Router onNavigationStateChange={null} />
       </Provider>
     );
   }
