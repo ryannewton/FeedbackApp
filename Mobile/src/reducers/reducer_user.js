@@ -11,10 +11,15 @@ import {
   CLOSE_INSTRUCTIONS,
   LOAD_INSTRUCTIONS_VIEWED,
   LOG_OUT_USER,
+  ADD_PROJECT_DOWNVOTE,
+  ADD_SOLUTION_DOWNVOTE,
+  REMOVE_PROJECT_DOWNVOTE,
+  REMOVE_SOLUTION_DOWNVOTE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
   projectUpvotes: [],
+  projectDownvotes: [],
   doNotDisplayList: [],
   solutionUpvotes: [],
   instructionsViewed: [],
@@ -42,6 +47,14 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, projectUpvotes: action.payload };
     case LOAD_SOLUTION_UPVOTES:
       return { ...state, solutionUpvotes: action.payload };
+    case ADD_PROJECT_DOWNVOTE:
+      return { ...state, projectDownvotes: [...state.projectDownvotes, action.payload.id] };
+    case ADD_SOLUTION_DOWNVOTE:
+      return { ...state, solutionDownvotes: [...state.solutionDownvotes, action.payload.id] };
+    case REMOVE_PROJECT_DOWNVOTE:
+      return { ...state, projectDownvotes: removeItem(state.projectDownvotes, action.payload.id) };
+    case REMOVE_SOLUTION_DOWNVOTE:
+      return { ...state, solutionDownvotes: removeItem(state.solutionDownvotes, action.payload.id) };
     case ADD_TO_DO_NOT_DISPLAY_LIST:
       return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
     case LOAD_DO_NOT_DISPLAY_LIST:

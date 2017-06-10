@@ -7,7 +7,7 @@ import { Icon } from 'react-native-elements';
 // Import componenets, functions, and styles
 import styles from '../styles/components/ProjectStyles';
 import { Card } from './common';
-import { addProjectUpvote, removeProjectUpvote } from '../actions';
+import { addProjectUpvote, removeProjectUpvote, addProjectDownvote, removeProjectDownvote } from '../actions';
 
 // Import tracking
 import { tracker } from '../constants';
@@ -17,6 +17,7 @@ class Project extends Component {
     super(props);
 
     this.upvote = this.upvote.bind(this);
+    this.downvote = this.downvote.bind(this);
     this.renderStatusBox = this.renderStatusBox.bind(this);
   }
 
@@ -35,13 +36,29 @@ class Project extends Component {
       this.props.removeProjectUpvote(project);
     }
   }
-
+  downvote() {
+    const { project, user } = this.props;
+    // If user hasn't downvoted this project, add an downvote
+    if (!user.projectDownvotes.includes(project.id)) {
+      tracker.trackEvent('Project Vote', 'Project DownVote Via Project Button', { label: this.props.features.domain });
+      this.props.addProjectDownvote(project);
+    } else {
+      tracker.trackEvent('Remove Project Vote', 'Remove Project DownVote Via Project Button', { label: this.props.features.domain });
+      this.props.removeProjectDownvote(project);
+    }
+  }
   // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
   renderVoteCount() {
     if (this.props.project === undefined) {
       return '';
     }
-    return `${this.props.project.votes} Votes`;
+    return `${this.props.project.votes}`;
+  }
+  renderDownvoteCount() {
+    if (this.props.project === undefined) {
+      return '';
+    }
+    return `${this.props.project.downvotes}`;
   }
 
   // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
@@ -57,11 +74,24 @@ class Project extends Component {
     let iconColor = 'grey';
     // If user hasn't upvoted this project
     if (user.projectUpvotes.includes(project.id)) {
-      iconColor = '#b6001e';
+      iconColor = 'green';
     }
     return (
       <View>
         <Icon name="thumb-up" size={35} color={iconColor} />
+      </View>
+    );
+  }
+  renderThumbDownButton() {
+    const { project, user } = this.props;
+    let iconColor = 'grey';
+    // If user hasn't upvoted this project
+    if (user.projectDownvotes.includes(project.id)) {
+      iconColor = '#b6001e';
+    }
+    return (
+      <View>
+        <Icon name="thumb-down" size={35} color={iconColor} />
       </View>
     );
   }
@@ -89,7 +119,6 @@ class Project extends Component {
   }
 
   render() {
-
     const { buttonText, lowWeight, row, projectTitle } = styles;
     let updatedRow = row;
     if (this.props.project.type === 'positive feedback') {
@@ -97,7 +126,6 @@ class Project extends Component {
     } else if (this.props.project.type === 'negative feedback') {
       updatedRow = [row, { backgroundColor: '#F08080' }];
     }
-
     return (
       <Card>
         <TouchableHighlight
@@ -112,25 +140,34 @@ class Project extends Component {
                 {this.renderTitle()}
               </Text>
               {/* Vote count */}
-              <View>
-                <Text style={[buttonText, lowWeight]}>
-                  {this.renderVoteCount()}
-                </Text>
-              </View>
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-
-              {/* Upvote Button */}
-              <TouchableOpacity onPress={this.upvote}>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                  <Text style={{ paddingRight: 3 }}>Upvote</Text>
-                  {this.renderButton()}
-                </View>
-              </TouchableOpacity>
-
-              {/* Status box */}
               {this.renderStatusBox()}
+              <View style={{ flexDirection: 'row'  }}>
+                <Text style={[buttonText, lowWeight, { paddingTop: 5, color: 'green', fontSize: 20 }]}>
+                  {this.renderVoteCount()}
+                </Text>
+                <Icon size={18} name='arrow-upward' color= 'green' />
+                <Text style={{fontWeight: '400', fontSize: 18, paddingTop: 5}}>|</Text>
+                <View style={{left:3}}>
+                  <Text style={[buttonText, lowWeight, { paddingTop: 5, color: '#b6001e', fontSize: 20 }]}>
+                    {this.renderDownvoteCount()}
+                  </Text>
+                </View>
+                <Icon size={18} name='arrow-downward' color= 'red' />
+              </View>
+              {/* Upvote Button */}
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
+                  {this.renderThumbDownButton()}
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.upvote}>
+                  {this.renderButton()}
+                </TouchableOpacity>
+              </View>
+              {/* Status box */}
+
             </View>
           </View>
         </TouchableHighlight>
@@ -145,6 +182,8 @@ Project.propTypes = {
   user: React.PropTypes.object,
   addProjectUpvote: React.PropTypes.func,
   removeProjectUpvote: React.PropTypes.func,
+  addProjectDownvote: React.PropTypes.func,
+  removeProjectDownvote: React.PropTypes.func,
   features: React.PropTypes.object,
 };
 
@@ -153,4 +192,4 @@ const mapStateToProps = (state) => {
   return { user, features };
 };
 
-export default connect(mapStateToProps, { addProjectUpvote, removeProjectUpvote })(Project);
+export default connect(mapStateToProps, { addProjectUpvote, removeProjectUpvote, addProjectDownvote, removeProjectDownvote })(Project);

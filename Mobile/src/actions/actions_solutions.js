@@ -4,13 +4,16 @@ import { AsyncStorage } from 'react-native';
 // Import action types
 import {
   LOAD_SOLUTION_UPVOTES,
+  LOAD_SOLUTION_DOWNVOTES,
   RECEIVED_SOLUTION_LIST,
   SOLUTION_CHANGED,
   SUBMIT_SOLUTION,
   SUBMIT_SOLUTION_SUCCESS,
   SUBMIT_SOLUTION_FAIL,
   ADD_SOLUTION_UPVOTE,
+  ADD_SOLUTION_DOWNVOTE,
   REMOVE_SOLUTION_UPVOTE,
+  REMOVE_SOLUTION_DOWNVOTE,
   SAVE_SOLUTION_CHANGES,
   ADD_SOLUTION_TO_STATE,
 } from './types';
@@ -92,6 +95,14 @@ export const addSolutionUpvote = solution => (
     dispatch(saveSolutionChanges(solution, 'addUpvote'));
   }
 );
+export const addSolutionDownvote = solution => (
+  (dispatch, getState) => {
+    dispatch({ type: ADD_SOLUTION_DOWNVOTE, payload: solution });
+    const { solutionDownvotes } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}solutionDownvotes`, JSON.stringify(solutionDownvotes));
+    dispatch(saveSolutionChanges(solution, 'addDownvote'));
+  }
+);
 
 export const loadSolutionUpvotes = solutionUpvotes => (
   {
@@ -100,11 +111,26 @@ export const loadSolutionUpvotes = solutionUpvotes => (
   }
 );
 
+export const loadSolutionDownvotes = solutionDownvotes => (
+  {
+    type: LOAD_SOLUTION_DOWNVOTES,
+    payload: solutionDownvotes,
+  }
+);
 export const removeSolutionUpvote = solution => (
   (dispatch, getState) => {
     dispatch({ type: REMOVE_SOLUTION_UPVOTE, payload: solution });
     const { solutionUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
     dispatch(saveSolutionChanges(solution, 'removeUpvote'));
+  }
+);
+
+export const removeSolutionDownvote = solution => (
+  (dispatch, getState) => {
+    dispatch({ type: REMOVE_SOLUTION_DOWNVOTE, payload: solution });
+    const { solutionDownvotes } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}solutionDownvotes`, JSON.stringify(solutionDownvotes));
+    dispatch(saveSolutionChanges(solution, 'removeDownvote'));
   }
 );

@@ -195,7 +195,7 @@ function getSlots(teamId) {
 function getProjects(slots, teamId) {
   const connectionString = `
     SELECT
-      a.id, title AS text, votes
+      a.id, title AS text, votes, downvotes
     FROM
       projects a
     JOIN
@@ -216,7 +216,7 @@ function getProjects(slots, teamId) {
 // ******* TO DO -- need to save the channel to database too
 function updateBoard(slots, feedback, teamId) {
   //slotsSorted = slots.sort((a, b) => a.ts - b.ts);
-  feedback.sort((a, b) => b.votes - a.votes).forEach((currentValue, index) => {
+  feedback.sort((a, b) => (b.votes - b.downvotes) - (a.votes - a.downvotes)).forEach((currentValue, index) => {
     const text = '*' + currentValue.votes + ' Votes* ' + currentValue.text;
     const channel = 'C5CSA6ECC';
     if (index >= slots.length) {
@@ -361,7 +361,7 @@ app.post('/addProject', upload.array(), (req, res) => {
       const title = (req.body.feedback.text) ? req.body.feedback.text : 'Blank Title';
       const school = (req.body.feedback.school) ? req.body.feedback.school : getDomain(decoded.email);
 
-      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, stage: 'new', school, type: req.body.feedback.type }, (err2, result) => {
+      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, downvotes: 0, stage: 'new', school, type: req.body.feedback.type }, (err2, result) => {
         if (err2) throw err2;
         if (req.body.feedback) {
           //sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
@@ -384,6 +384,7 @@ app.post('/addSolution', upload.array(), (req, res) => {
         {
           type: 'solution',
           votes: 0,
+          downvotes: 0,
           title: req.body.title || 'Title Here',
           description: req.body.description || 'Description Here',
           project_id: req.body.project_id,
@@ -417,7 +418,7 @@ app.post('/saveProjectChanges', upload.array(), (req, res) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('UPDATE projects SET votes = ?, title = ?, description = ? WHERE id= ?', [req.body.project.votes, req.body.project.title, req.body.project.description, req.body.project.id], (err) => {
+      connection.query('UPDATE projects SET votes = ?, downvotes = ?, title = ?, description = ? WHERE id= ?', [req.body.project.votes, req.body.project.downvotes, req.body.project.title, req.body.project.description, req.body.project.id], (err) => {
         if (err) throw err;
       });
       res.sendStatus(200);
@@ -443,9 +444,10 @@ app.post('/saveProjectAdditionChanges', upload.array(), addSubscriber, (req, res
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('UPDATE project_additions SET votes = ?, title = ?, description = ?, approved = ? WHERE id= ?',
+      connection.query('UPDATE project_additions SET votes = ?, downvotes = ?, title = ?, description = ?, approved = ? WHERE id= ?',
         [
           req.body.project_addition.votes,
+          req.body.project_addition.downvotes,
           req.body.project_addition.title,
           req.body.project_addition.description,
           req.body.project_addition.approved,
@@ -519,7 +521,7 @@ app.post('/pullProjects', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          id, title, votes, description, department, stage, type
+          id, title, votes, downvotes, description, department, stage, type
         FROM
           projects
         WHERE
@@ -539,7 +541,7 @@ app.post('/pullProjectAdditions', upload.array(), (req, res) => {
     } else {
       const connectionString = `
         SELECT
-          id, type, votes, title, description, project_id, approved
+          id, type, votes, downvotes, title, description, project_id, approved
         FROM
           project_additions
         WHERE
