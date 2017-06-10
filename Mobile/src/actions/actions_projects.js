@@ -15,9 +15,9 @@ export const requestedProjects = () => ({
   type: REQUESTED_PROJECTS,
 });
 
-export const receivedProjects = projects => ({
+export const receivedProjects = projectsList => ({
   type: RECEIVED_PROJECTS,
-  payload: projects,
+  payload: { list: projectsList, lastPulled: new Date() },
 });
 
 export const pullProjects = token => (

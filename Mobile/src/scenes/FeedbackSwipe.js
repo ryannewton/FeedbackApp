@@ -29,8 +29,8 @@ class FeedbackSwipe extends Component {
 
     this.state = {
       index: 0,
-      projects: [...props.projects.filter(project =>
-        (!props.user.doNotDisplayList.includes(project.id) && project.stage !== 'complete'),
+      projects: [...props.projects.list.filter(feedbackItem =>
+        (!props.user.doNotDisplayList.includes(feedbackItem.id) && feedbackItem.stage !== 'complete'),
       ), inboxZeroProject],
     };
 
@@ -134,7 +134,7 @@ class FeedbackSwipe extends Component {
 }
 
 FeedbackSwipe.propTypes = {
-  projects: React.PropTypes.array,
+  projects: React.PropTypes.object,
   user: React.PropTypes.object,
   addToDoNotDisplayList: React.PropTypes.func,
   addProjectUpvote: React.PropTypes.func,
