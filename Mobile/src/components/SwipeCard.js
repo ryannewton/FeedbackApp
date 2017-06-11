@@ -16,6 +16,10 @@ class SwipeCard extends Component {
     //tracker.trackEvent('View', 'Swipe Card', { label: props.features.domain, value: props.project.id });
   }
 
+  _changeStyle() {
+
+  }
+
   render() {
     const { project } = this.props;
     return (
@@ -26,28 +30,56 @@ class SwipeCard extends Component {
               <Text style={styles.bodyText}>{project.title}</Text>
             </Left>
           </CardItem>
-          <CardItem>
-            <Text style={styles.smallText}>{project.votes} upvotes</Text>
+          <CardItem style={{ justifyContent: 'center', flexDirection: 'row' }}>
+            <Text style={[styles.smallText, { color: 'green' }]}>{project.votes}</Text>
+            <Icon size={18} name='arrow-upward' color= 'green' />
+            <View style={{ paddingRight: 5, paddingLeft: 5}}>
+              <Text style={{fontWeight: '400', fontSize: 18}}>|</Text>
+            </View>
+            <Text style={[styles.smallText, { color: 'red' }]}>{project.downvotes}</Text>
+            <Icon size={18} name='arrow-downward' color= 'red' />
           </CardItem>
         </View>
         <View style={{ justifyContent: 'flex-end' }}>
-        <CardItem style={{ justifyContent: 'space-between' }}>
-          <TouchableOpacity onPress={this.props.left} style = {styles.cardButton}>
-              <Icon name="skip-next" size={50} color={'#A41034'} />
-              <Text>Next</Text>
+          <CardItem style={{ justifyContent: 'space-between' }}>
+            <TouchableOpacity onPress={this.props.left} style={styles.cardButton}>
+              <Icon
+                name="thumb-down"
+                size={50}
+                color={'grey'}
+              />
+              <Text>Disagree</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => {
-              if (this.props.project.id) {
-                tracker.trackEvent('View', 'Project Details Via Swipe Card', { label: this.props.features.domain, value: this.props.project.id });
-                this.props.navigate('Details', { project: this.props.project });
-              }
-            }} style = {styles.cardButton}>
-              <Icon name="comment" size={50} color={'#b6001e'} />
-              <Text>Solutions</Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (this.props.project.id) {
+                  tracker.trackEvent('View', 'Project Details Via Swipe Card', {
+                    label: this.props.features.domain,
+                    value: this.props.project.id,
+                  });
+                  this.props.navigate('Details', { project: this.props.project });
+                }
+              }}
+              style={styles.cardButton}
+            >
+              <Icon name="comment" size={40} color={'grey'} />
+              <Text style={{ fontSize: 16 }}>Details</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.props.right} style = {styles.cardButton}>
-              <Icon name="thumb-up" size={50} color={'#A41034'} />
-              <Text>Upvote</Text>
+            <TouchableOpacity onPress={this.props.skip} style={styles.cardButton}>
+              <Icon
+                name="skip-next"
+                size={40}
+                color={'grey'}
+              />
+              <Text style={{ fontSize: 16 }}>Skip</Text>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.props.right} style={styles.cardButton}>
+              <Icon
+                name="thumb-up"
+                size={50}
+                color={'grey'}
+              />
+              <Text>Agree</Text>
             </TouchableOpacity>
           </CardItem>
         </View>
@@ -62,6 +94,7 @@ SwipeCard.propTypes = {
   left: React.PropTypes.func,
   right: React.PropTypes.func,
   features: React.PropTypes.object,
+  skip: React.PropTypes.func,
 };
 
 export default SwipeCard;

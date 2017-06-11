@@ -7,6 +7,8 @@ import {
   SAVE_SOLUTION_CHANGES,
   ADD_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_UPVOTE,
+  ADD_SOLUTION_DOWNVOTE,
+  REMOVE_SOLUTION_DOWNVOTE,
   ADD_SOLUTION_TO_STATE,
   LOG_OUT_USER,
   SOLUTION_CHANGED,
@@ -41,14 +43,26 @@ export default (state = INITIAL_STATE, action) => {
       newList[index].votes += 1;
       return { ...state, list: newList };
     }
+    case ADD_SOLUTION_DOWNVOTE: {
+      const index = state.list.findIndex(solution => solution.id === action.payload.id);
+      const newList = state.list.slice(0);
+      newList[index].votes -= 1;
+      return { ...state, list: newList };
+    }
     case REMOVE_SOLUTION_UPVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
       newList[index].votes -= 1;
       return { ...state, list: newList };
     }
+    case REMOVE_SOLUTION_DOWNVOTE: {
+      const index = state.list.findIndex(solution => solution.id === action.payload.id);
+      const newList = state.list.slice(0);
+      newList[index].votes += 1;
+      return { ...state, list: newList };
+    }
     case ADD_SOLUTION_TO_STATE: {
-      const solution = { type: 'solution', votes: 0, title: action.title, description: '', project_id: action.projectId, id: action.solutionId };
+      const solution = { type: 'solution', votes: 0, downvotes: 0, title: action.title, description: '', project_id: action.projectId, id: action.solutionId };
       return { ...state, list: [...state.list, solution] };
     }
     case SOLUTION_CHANGED:

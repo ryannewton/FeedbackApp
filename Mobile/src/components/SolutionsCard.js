@@ -34,7 +34,7 @@ class FeedbackDetails extends Component {
 
     // List of solutions
     const formattedSolutions = projectSolutions
-      .sort((a, b) => b.votes - a.votes)
+      .sort((a, b) => (b.votes - b.downvotes) - (a.votes - a.downvotes))
       .map(solution => (
         <SolutionsCardItem solution={solution} key={solution.id} />
       ));

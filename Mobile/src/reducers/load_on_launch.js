@@ -37,10 +37,25 @@ async function loadUpvotes() {
     console.log(error);
   }
 }
+async function loadDownvotes() {
+  try {
+    // Project Upvotes
+    let projectDownvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}downvotes`) || '[]';
+    projectDownvotes = JSON.parse(projectDownvotes);
+    store.dispatch(actions.loadProjectDownvotes(projectDownvotes));
+
+    // Solution Downvotes
+    let solutionDownvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}solutionDownvotes`) || '[]';
+    solutionDownvotes = JSON.parse(solutionDownvotes);
+    store.dispatch(actions.loadSolutionDownvotes(solutionDownvotes));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 async function loadDoNotDisplayList() {
   try {
-    //AsyncStorage.removeItem(`${ROOT_STORAGE}doNotDisplayList`);
+    // AsyncStorage.removeItem(`${ROOT_STORAGE}doNotDisplayList`);
     let doNotDisplayList = await AsyncStorage.getItem(`${ROOT_STORAGE}doNotDisplayList`) || '[]';
     doNotDisplayList = JSON.parse(doNotDisplayList);
     store.dispatch(actions.loadDoNotDisplayList(doNotDisplayList));
@@ -66,6 +81,7 @@ const loadOnLaunch = () => {
   loadDoNotDisplayList();
   loadToken();
   loadInstructions();
+  loadDownvotes();
 };
 
 export default loadOnLaunch;

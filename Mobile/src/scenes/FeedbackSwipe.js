@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SwipeCard from '../components/SwipeCard';
 
 // Import actions and styles
-import { addProjectUpvote, addToDoNotDisplayList, closeInstructions } from '../actions';
+import { addProjectUpvote, addToDoNotDisplayList, closeInstructions, addProjectDownvote } from '../actions';
 import styles from '../styles/scenes/FeedbackSwipeStyles';
 
 // Import about info image
@@ -21,6 +21,7 @@ import { tracker } from '../constants';
 const inboxZeroProject = {
   title: "Great job! You've reached inbox zero.",
   votes: 999,
+  downvotes: 999,
 };
 
 class FeedbackSwipe extends Component {
@@ -72,8 +73,13 @@ class FeedbackSwipe extends Component {
       tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.features.domain });
     }
 
+    const { user } = this.props;
     const project = this.state.projects[this.state.index];
-    if (project.id) {
+
+    // If user hasn't upvoted this project, add an upvote
+    if (project.id && !user.projectUpvotes.includes(project.id)) {
+      this.props.addProjectDownvote(project);
+    } else if (project.id) {
       this.props.addToDoNotDisplayList(project.id);
     }
 
@@ -117,6 +123,7 @@ class FeedbackSwipe extends Component {
                   this.swipeLeft('button');
                   this.deckSwiper._root.swipeLeft();
                 }}
+                skip={() => this.deckSwiper._root.swipeLeft()}
                 features={this.props.features}
                 navigate={this.props.navigation.navigate}
               />
@@ -139,6 +146,7 @@ FeedbackSwipe.propTypes = {
   addToDoNotDisplayList: React.PropTypes.func,
   addProjectUpvote: React.PropTypes.func,
   features: React.PropTypes.object,
+  addProjectUpvote: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -148,6 +156,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   addProjectUpvote,
+  addProjectDownvote,
   addToDoNotDisplayList,
   closeInstructions,
 })(FeedbackSwipe);
