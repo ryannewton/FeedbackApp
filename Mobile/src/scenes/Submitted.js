@@ -9,13 +9,13 @@ import { Button } from '../components/common';
 import styles from '../styles/styles_main';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class Submitted extends Component {
   constructor(props) {
     super(props);
 
-    tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.features.domain });
   }
 
   componentWillMount() {

@@ -15,7 +15,7 @@ import styles from '../styles/scenes/FullscreenStyle';
 import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class FeedbackSubmit extends Component {
   constructor(props, context) {
@@ -29,7 +29,7 @@ class FeedbackSubmit extends Component {
       negativeFeedback: '',
     };
 
-    tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.features.domain });
 
     this.closeInstructions = this.closeInstructions.bind(this);
     this.submitFeedback = this.submitFeedback.bind(this);
@@ -56,7 +56,7 @@ class FeedbackSubmit extends Component {
           this.setState({ negativeFeedback: '' });
         }
 
-        tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.features.domain });
+        // tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.features.domain });
         this.setState({ errorMessage: '' });
         this.props.navigation.navigate('Submitted');
       }

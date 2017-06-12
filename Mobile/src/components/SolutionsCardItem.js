@@ -10,17 +10,17 @@ import { CardSection } from '../components/common';
 import { addSolutionUpvote, removeSolutionUpvote, addSolutionDownvote, removeSolutionDownvote } from '../actions';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class SolutionsCardItem extends Component {
   upvoteSolution(solution) {
     const { user } = this.props;
     // If user hasn't upvoted this project, add an upvote
     if (!user.solutionUpvotes.includes(solution.id)) {
-      tracker.trackEvent('Solution Vote', 'Solution UpVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Solution Vote', 'Solution UpVote Via Solution Button', { label: this.props.features.domain });
       this.props.addSolutionUpvote(solution);
     } else {
-      tracker.trackEvent('Remove Solution Vote', 'Remove Solution UpVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution UpVote Via Solution Button', { label: this.props.features.domain });
       this.props.removeSolutionUpvote(solution);
     }
   }
@@ -28,10 +28,10 @@ class SolutionsCardItem extends Component {
     const { user } = this.props;
     // If user hasn't downvoted this project, add an downvote
     if (!user.solutionUpvotes.includes(solution.id)) {
-      tracker.trackEvent('Solution DownVote', 'Solution DownVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Solution DownVote', 'Solution DownVote Via Solution Button', { label: this.props.features.domain });
       this.props.addSolutionDownvote(solution);
     } else {
-      tracker.trackEvent('Remove Solution Vote', 'Remove Solution DownVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution DownVote Via Solution Button', { label: this.props.features.domain });
       this.props.removeSolutionDownvote(solution);
     }
   }
