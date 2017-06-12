@@ -15,6 +15,7 @@ import {
   ADD_SOLUTION_DOWNVOTE,
   REMOVE_PROJECT_DOWNVOTE,
   REMOVE_SOLUTION_DOWNVOTE,
+  LOAD_SOLUTION_DOWNVOTES,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -22,6 +23,7 @@ const INITIAL_STATE = {
   projectDownvotes: [],
   doNotDisplayList: [],
   solutionUpvotes: [],
+  solutionDownvotes: [],
   instructionsViewed: [],
 };
 
@@ -47,6 +49,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, projectUpvotes: action.payload };
     case LOAD_SOLUTION_UPVOTES:
       return { ...state, solutionUpvotes: action.payload };
+    case LOAD_SOLUTION_DOWNVOTES:
+      return { ...state, solutionDownvotes: action.payload };
     case ADD_PROJECT_DOWNVOTE:
       return { ...state, projectDownvotes: [...state.projectDownvotes, action.payload.id] };
     case ADD_SOLUTION_DOWNVOTE:

@@ -20,7 +20,7 @@ function filterAndOrder(list) {
   const result = list
     .filter(item => item.stage !== 'tabled')
     .sort((a, b) => b.id - a.id)
-    .sort((a, b) => b.votes - a.votes);
+    .sort((a, b) => (b.votes - b.downvotes) - (a.votes - a.downvotes));
   return result;
 }
 
