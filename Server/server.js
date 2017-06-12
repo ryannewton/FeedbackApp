@@ -42,7 +42,7 @@ connection.connect();
 // *Weekly Update*
 
 // TO DO - Implement Weekly Timer
-weeklyUpdate();
+// weeklyUpdate();
 // Called by Timer Each Thursday at 1am PT
 // Gets team info and calls updateBoard for each team
 function weeklyUpdate() {
