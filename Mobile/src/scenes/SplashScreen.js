@@ -9,7 +9,7 @@ import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class SplashScreen extends Component {
   constructor(props) {
@@ -21,7 +21,7 @@ class SplashScreen extends Component {
 
     this.route = this.route.bind(this);
 
-    tracker.trackScreenView('Loading Screen');
+    // tracker.trackScreenView('Loading Screen');
   }
 
   componentDidUpdate() {
@@ -43,7 +43,7 @@ class SplashScreen extends Component {
         this.props.projects.lastPulled.getTime() !== 0 &&
         this.props.features.enableNewFeedback !== null
       ) {
-      tracker.setUser(this.props.features.email);
+      // tracker.setUser(this.props.features.email);
       // If enableNewFeedback is true then we navigate to new projects as normal
       if (this.props.features.enableNewFeedback) {
         this.props.navigation.navigate('FeedbackSwipe');

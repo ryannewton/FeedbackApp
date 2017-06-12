@@ -10,7 +10,7 @@ import { Card } from './common';
 import { addProjectUpvote, removeProjectUpvote, addProjectDownvote, removeProjectDownvote } from '../actions';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class Project extends Component {
   constructor(props) {
@@ -29,10 +29,10 @@ class Project extends Component {
     const { project, user } = this.props;
     // If user hasn't upvoted this project, add an upvote
     if (!user.projectUpvotes.includes(project.id)) {
-      tracker.trackEvent('Project Vote', 'Project UpVote Via Project Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Project Vote', 'Project UpVote Via Project Button', { label: this.props.features.domain });
       this.props.addProjectUpvote(project);
     } else {
-      tracker.trackEvent('Remove Project Vote', 'Remove Project UpVote Via Project Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Remove Project Vote', 'Remove Project UpVote Via Project Button', { label: this.props.features.domain });
       this.props.removeProjectUpvote(project);
     }
   }
@@ -40,10 +40,10 @@ class Project extends Component {
     const { project, user } = this.props;
     // If user hasn't downvoted this project, add an downvote
     if (!user.projectDownvotes.includes(project.id)) {
-      tracker.trackEvent('Project Vote', 'Project DownVote Via Project Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Project Vote', 'Project DownVote Via Project Button', { label: this.props.features.domain });
       this.props.addProjectDownvote(project);
     } else {
-      tracker.trackEvent('Remove Project Vote', 'Remove Project DownVote Via Project Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Remove Project Vote', 'Remove Project DownVote Via Project Button', { label: this.props.features.domain });
       this.props.removeProjectDownvote(project);
     }
   }

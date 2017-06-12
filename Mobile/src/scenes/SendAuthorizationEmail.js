@@ -10,7 +10,7 @@ import styles from '../styles/styles_main';
 import fullScreen from '../../images/backgrounds/EmailInfo.png';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 var styles2 = StyleSheet.create({
   imageContainer: {
@@ -30,7 +30,7 @@ class SendAuthorizationEmail extends Component {
       email: '',
     };
 
-    tracker.trackScreenView('Send Auth Email');
+    // tracker.trackScreenView('Send Auth Email');
 
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);

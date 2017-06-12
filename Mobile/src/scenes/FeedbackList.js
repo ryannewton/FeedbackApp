@@ -11,12 +11,12 @@ import FeedbackCard from '../components/FeedbackCard';
 import styles from '../styles/scenes/FeedbackListStyles';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class FeedbackList extends Component {
   constructor(props) {
     super(props);
-    tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
   }
 
   renderAllFeedback() {

@@ -9,7 +9,7 @@ import { authorizeUser } from '../actions';
 import styles from '../styles/styles_main';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class Authorize extends Component {
   constructor(props) {
@@ -23,7 +23,7 @@ class Authorize extends Component {
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
 
-    tracker.trackScreenView('Authorize');
+    // tracker.trackScreenView('Authorize');
   }
 
   componentWillReceiveProps(nextProps) {

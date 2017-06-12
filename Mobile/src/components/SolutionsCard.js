@@ -9,13 +9,13 @@ import SolutionsCardItem from './SolutionsCardItem';
 import { Card, CardSection } from '../components/common';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class FeedbackDetails extends Component {
   constructor(props) {
     super(props);
 
-    tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
   }
   renderSolutionsList() {
     const { noSolutionsMessage, subheaderText } = styles;

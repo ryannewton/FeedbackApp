@@ -8,12 +8,12 @@ import { Icon } from 'react-native-elements';
 import styles from '../styles/components/SwipeCardStyles';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class SwipeCard extends Component {
   constructor(props) {
     super(props);
-    //tracker.trackEvent('View', 'Swipe Card', { label: props.features.domain, value: props.project.id });
+    // tracker.trackEvent('View', 'Swipe Card', { label: props.features.domain, value: props.project.id });
   }
 
   _changeStyle() {
@@ -53,10 +53,10 @@ class SwipeCard extends Component {
             <TouchableOpacity
               onPress={() => {
                 if (this.props.project.id) {
-                  tracker.trackEvent('View', 'Project Details Via Swipe Card', {
-                    label: this.props.features.domain,
-                    value: this.props.project.id,
-                  });
+                  // tracker.trackEvent('View', 'Project Details Via Swipe Card', {
+                  //   label: this.props.features.domain,
+                  //   value: this.props.project.id,
+                  // });
                   this.props.navigate('Details', { project: this.props.project });
                 }
               }}

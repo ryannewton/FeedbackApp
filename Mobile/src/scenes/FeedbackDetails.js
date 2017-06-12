@@ -14,14 +14,14 @@ import {
 } from '../actions';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 class FeedbackDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = { errorMessage: '' };
-    tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
     this.submitSolution = this.submitSolution.bind(this);
   }
 
@@ -36,7 +36,7 @@ class FeedbackDetails extends Component {
     } else {
       this.setState({ errorMessage: '' });
       this.props.submitSolutionToServer(solution, project.id, moderatorApprovalSolutions);
-      tracker.trackEvent('Submit', 'Submit Solution', { label: domain, value: project.id });
+      // tracker.trackEvent('Submit', 'Submit Solution', { label: domain, value: project.id });
       Keyboard.dismiss();
     }
   }

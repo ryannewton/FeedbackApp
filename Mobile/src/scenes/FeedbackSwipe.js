@@ -16,7 +16,7 @@ import styles2 from '../styles/scenes/FullscreenStyle';
 import fullScreen from '../../images/backgrounds/SwipeInfo.jpg';
 
 // Import tracking
-import { tracker } from '../constants';
+// import { tracker } from '../constants';
 
 const inboxZeroProject = {
   title: "Great job! You've reached inbox zero.",
@@ -34,8 +34,7 @@ class FeedbackSwipe extends Component {
         (!props.user.doNotDisplayList.includes(feedbackItem.id) && feedbackItem.stage !== 'complete'),
       ), inboxZeroProject],
     };
-
-    tracker.trackScreenViewWithCustomDimensionValues('New Projects', { domain: props.features.domain, project: String(this.state.projects[0].id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('New Projects', { domain: props.features.domain, project: String(this.state.projects[0].id) });
 
     this.swipeRight = this.swipeRight.bind(this);
     this.swipeLeft = this.swipeLeft.bind(this);
@@ -44,9 +43,9 @@ class FeedbackSwipe extends Component {
 
   swipeRight(source) {
     if (source === 'button') {
-      tracker.trackEvent('Project Vote', 'Project UpVote Via New Projects Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Project Vote', 'Project UpVote Via New Projects Button', { label: this.props.features.domain });
     } else {
-      tracker.trackEvent('Project Vote', 'Project UpVote Via Swipe', { label: this.props.features.domain });
+      // tracker.trackEvent('Project Vote', 'Project UpVote Via Swipe', { label: this.props.features.domain });
     }
 
     const { user } = this.props;
@@ -68,9 +67,9 @@ class FeedbackSwipe extends Component {
 
   swipeLeft(source) {
     if (source === 'button') {
-      tracker.trackEvent('Skip', 'Skip Via New Projects Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Skip', 'Skip Via New Projects Button', { label: this.props.features.domain });
     } else {
-      tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.features.domain });
+      // tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.features.domain });
     }
 
     const { user } = this.props;
