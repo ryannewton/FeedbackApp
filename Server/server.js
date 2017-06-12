@@ -144,8 +144,7 @@ function postSuggestionsAndDMs(suggestions, bot, teamId) {
 
   channelPosts.then(() => console.log('Published new board for ', teamId));
 
-  // Sends DMs to users asking them to vote on suggestions from last 7 days
-  // Gets the userIds who we should send the DMs to
+  // Sends DMs to users in the suggestions channel asking them to vote on suggestions from last 7 days
   getUsers(bot)
   .then(users => {
     users.slice(0,1).forEach(user => {
@@ -201,8 +200,6 @@ function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCoun
 }
 
 // Gets a list of all the users to send a DM to (for upvoting)
-// TO DO -- switch to users in suggestions channel instead of all users in team (?)
-// consider using channels.info.channel.members
 function getUsers(bot) {
   return new Promise(
     function (resolve, reject) {
@@ -867,74 +864,10 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
   });
 });
 
-// app.listen(8081, () => {
-//  console.log('Example app listening on port 8081!');
-// });
-
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(8081, () => {
+ console.log('Example app listening on port 8081!');
 });
 
-
-
-
-// Graveyard
-
-// // Saves the timestamp in the database (so we know the key for updating)
-// function insertSlot(message, teamId) {
-//   connection.query('INSERT INTO slack_slots (team_id, ts) VALUES (?, ?)', [teamId, message.ts], (err) => {
-//     if (err) throw err;
-//   });
-// }
-
-// // Helper functino for updateBoard -- pull the slack spots for the current team
-// function getSlots(teamId) {
-//   console.log('get slots');
-//   const connectionString = `
-//     SELECT
-//       ts
-//     FROM
-//       slack_slots
-//     WHERE
-//       team_id=?`;
-//   connection.query(connectionString, [teamId], (err, slots) => {
-//     if (err) throw err;
-//     else {
-//       getProjects(slots, teamId);
-//     }
-//   });
-// }
-/*
-// Updates the board to reflect the current status of the database
-// ******* TO DO -- need to save the channel to database too
-function updateBoard() {
-  
-  // Step #1 - Get a list of all the team IDs from the server
-  // Step #2 - For each team update their board
-
-  //slotsSorted = slots.sort((a, b) => a.ts - b.ts);
-  feedback.sort((a, b) => b.votes - a.votes).forEach((currentValue, index) => {
-    const text = '*' + currentValue.votes + ' Votes* ' + currentValue.text;
-    const channel = 'C5CSA6ECC';
-    if (index >= slots.length) {
-      postMessageToSuggestions(text, teamId);
-    } else {
-      botWeb.chat.update(slots[index].ts, channel, text, { as_user: true }, (err) => {
-        if (err) {
-          console.log('Error:', err);
-        }
-      });
-    }
-  });
-}
-
-
-function asyncFunc() {
-  return new Promise(
-    function (resolve, reject) {
-      console.log('test');
-      //resolve('resolve');
-      reject('error');
-    });
-}
-*/
+// app.listen(3000, () => {
+//   console.log('Example app listening on port 3000!');
+// });
