@@ -90,7 +90,10 @@ export const saveSolutionChanges = solution => (
 export const addSolutionUpvote = solution => (
   (dispatch, getState) => {
     dispatch({ type: ADD_SOLUTION_UPVOTE, payload: solution });
-    const { solutionUpvotes } = getState().user;
+    const { solutionUpvotes, solutionDownvotes } = getState().user;
+    if (solutionDownvotes.includes(solution.id)) {
+      dispatch(removeSolutionDownvote(solution));
+    }
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
     dispatch(saveSolutionChanges(solution, 'addUpvote'));
   }
@@ -98,7 +101,10 @@ export const addSolutionUpvote = solution => (
 export const addSolutionDownvote = solution => (
   (dispatch, getState) => {
     dispatch({ type: ADD_SOLUTION_DOWNVOTE, payload: solution });
-    const { solutionDownvotes } = getState().user;
+    const { solutionDownvotes, solutionUpvotes } = getState().user;
+    if (solutionUpvotes.includes(solution.id)) {
+      dispatch(removeSolutionUpvote(solution));
+    }
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionDownvotes`, JSON.stringify(solutionDownvotes));
     dispatch(saveSolutionChanges(solution, 'addDownvote'));
   }

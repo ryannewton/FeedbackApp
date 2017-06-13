@@ -46,7 +46,7 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_SOLUTION_DOWNVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
-      newList[index].votes -= 1;
+      newList[index].downvotes += 1;
       return { ...state, list: newList };
     }
     case REMOVE_SOLUTION_UPVOTE: {
@@ -58,7 +58,7 @@ export default (state = INITIAL_STATE, action) => {
     case REMOVE_SOLUTION_DOWNVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
       const newList = state.list.slice(0);
-      newList[index].votes += 1;
+      newList[index].downvotes -= 1;
       return { ...state, list: newList };
     }
     case ADD_SOLUTION_TO_STATE: {

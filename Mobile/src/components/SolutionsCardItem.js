@@ -27,7 +27,7 @@ class SolutionsCardItem extends Component {
   downvoteSolution(solution) {
     const { user } = this.props;
     // If user hasn't downvoted this project, add an downvote
-    if (!user.solutionUpvotes.includes(solution.id)) {
+    if (!user.solutionDownvotes.includes(solution.id)) {
       // tracker.trackEvent('Solution DownVote', 'Solution DownVote Via Solution Button', { label: this.props.features.domain });
       this.props.addSolutionDownvote(solution);
     } else {
@@ -41,7 +41,7 @@ class SolutionsCardItem extends Component {
     let iconColor = 'grey';
     // If user hasn't upvoted this project
     if (user.solutionUpvotes.includes(solution.id)) {
-      iconColor = '#b6001e';
+      iconColor = 'green';
     }
 
     return (
@@ -56,7 +56,7 @@ class SolutionsCardItem extends Component {
     const { user } = this.props;
     let iconColor = 'grey';
     // If user hasn't downvoted this project
-    if (user.solutionUpvotes.includes(solution.id)) {
+    if (user.solutionDownvotes.includes(solution.id)) {
       iconColor = '#b6001e';
     }
     return (
@@ -78,13 +78,19 @@ class SolutionsCardItem extends Component {
           <Text style={solutionText}>{solution.title}</Text>
 
           {/* Upvote count and button */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
-            <View style={{ flex: 7 }}>
-              <Text style={upvoteCountText}>
-                {`${solution.votes} Votes`}
-              </Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5, justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'column', justifyContent: 'flex-start' }}>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                <Text style={{ fontSize: 18, color: 'green' }}>{solution.votes}</Text>
+                <Icon size={18} name='arrow-upward' color= 'green' />
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                <Text style={{ fontSize: 18, color: 'red' }}> { solution.downvotes }</Text>
+                <Icon size={18} name='arrow-downward' color='red' />
+              </View>
             </View>
             <View style={{ alignItems: 'flex-end', flexDirection: 'row' }}>
+              {this.renderSolutionDownvoteButton(solution)}
               {this.renderSolutionUpvoteButton(solution)}
             </View>
           </View>

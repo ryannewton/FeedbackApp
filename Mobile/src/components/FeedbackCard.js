@@ -122,9 +122,9 @@ class Project extends Component {
     const { buttonText, lowWeight, row, projectTitle } = styles;
     let updatedRow = row;
     if (this.props.project.type === 'positive feedback') {
-      updatedRow = [row, { backgroundColor: '#98FB98' }];
+      updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: {width: 10, height: 10} }];
     } else if (this.props.project.type === 'negative feedback') {
-      updatedRow = [row, { backgroundColor: '#F08080' }];
+      updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: {width: 10, height: 10}}];
     }
     return (
       <Card>
@@ -143,20 +143,21 @@ class Project extends Component {
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              {this.renderStatusBox()}
-              <View style={{ flexDirection: 'row'  }}>
-                <Text style={[buttonText, lowWeight, { paddingTop: 5, color: 'green', fontSize: 20 }]}>
-                  {this.renderVoteCount()}
-                </Text>
-                <Icon size={18} name='arrow-upward' color= 'green' />
-                <Text style={{fontWeight: '400', fontSize: 18, paddingTop: 5}}>|</Text>
-                <View style={{left:3}}>
-                  <Text style={[buttonText, lowWeight, { paddingTop: 5, color: '#b6001e', fontSize: 20 }]}>
-                    {this.renderDownvoteCount()}
-                  </Text>
+                <View style={{ flexDirection: 'column'  }}>
+                  <View style={{flexDirection: 'row', paddingTop: 5, justifyContent: 'flex-end' }}>
+                    <Text style={[buttonText, lowWeight, { color: 'green', fontSize: 20 }]}>
+                      {this.renderVoteCount()}
+                    </Text>
+                    <Icon size={18} name='arrow-upward' color= 'green' />
+                  </View>
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                    <Text style={[buttonText, lowWeight, { color: 'red', fontSize: 20 }]}>
+                      {this.renderDownvoteCount()}
+                    </Text>
+                    <Icon size={18} name='arrow-downward' color= 'red' />
+                  </View>
                 </View>
-                <Icon size={18} name='arrow-downward' color= 'red' />
-              </View>
+              {this.renderStatusBox()}
               {/* Upvote Button */}
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
