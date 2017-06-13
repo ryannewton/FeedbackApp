@@ -30,14 +30,15 @@ class SwipeCard extends Component {
               <Text style={styles.bodyText}>{project.title}</Text>
             </Left>
           </CardItem>
-          <CardItem style={{ justifyContent: 'center', flexDirection: 'row' }}>
-            <Text style={[styles.smallText, { color: 'green' }]}>{project.votes}</Text>
-            <Icon size={18} name='arrow-upward' color= 'green' />
-            <View style={{ paddingRight: 5, paddingLeft: 5}}>
-              <Text style={{fontWeight: '400', fontSize: 18}}>|</Text>
+          <CardItem style={{ justifyContent: 'center', flexDirection: 'column', paddingTop: 0, paddingBottom: 0, marginBottom: 0, marginTop: 0 }}>
+            <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
+              <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{project.votes}</Text>
+              <Icon size={18} name='arrow-upward' color= 'green' />
             </View>
-            <Text style={[styles.smallText, { color: 'red' }]}>{project.downvotes}</Text>
-            <Icon size={18} name='arrow-downward' color= 'red' />
+            <View style={{flexDirection:'row', justifyContent: 'flex-start'}}>
+              <Text style={[styles.smallText, { color: 'red', fontSize: 18 }]}>{project.downvotes}</Text>
+              <Icon size={18} name='arrow-downward' color= 'red' />
+            </View>
           </CardItem>
         </View>
         <View style={{ justifyContent: 'flex-end' }}>

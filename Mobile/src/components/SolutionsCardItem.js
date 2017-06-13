@@ -78,13 +78,16 @@ class SolutionsCardItem extends Component {
           <Text style={solutionText}>{solution.title}</Text>
 
           {/* Upvote count and button */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5 }}>
-            <View style={{ flex: 7, flexDirection: 'row' }}>
-              <Text style={{ fontSize: 18, color: 'green' }}>{solution.votes}</Text>
-              <Icon size={18} name='arrow-upward' color= 'green' />
-              <Text style={{ fontWeight: '400', fontSize: 16}}>|</Text>
-              <Text style={{ fontSize: 18, color: 'red' }}> { solution.downvotes }</Text>
-              <Icon size={18} name='arrow-downward' color= 'red' />
+          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5, justifyContent: 'space-between' }}>
+            <View style={{ flexDirection: 'column', justifyContent: 'flex-start' }}>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                <Text style={{ fontSize: 18, color: 'green' }}>{solution.votes}</Text>
+                <Icon size={18} name='arrow-upward' color= 'green' />
+              </View>
+              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
+                <Text style={{ fontSize: 18, color: 'red' }}> { solution.downvotes }</Text>
+                <Icon size={18} name='arrow-downward' color='red' />
+              </View>
             </View>
             <View style={{ alignItems: 'flex-end', flexDirection: 'row' }}>
               {this.renderSolutionDownvoteButton(solution)}
