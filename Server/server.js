@@ -42,7 +42,7 @@ connection.connect();
 // *Weekly Update*
 
 // TO DO - Implement Weekly Timer
-weeklyUpdate();
+//weeklyUpdate();
 // Called by Timer Each Thursday at 1am PT
 // Gets team info and calls updateBoard for each team
 function weeklyUpdate() {
@@ -146,12 +146,17 @@ function postSuggestionsAndDMs(suggestions, bot, teamInfo) {
   // Sends DMs to users in the suggestions channel asking them to vote on suggestions from last 7 days
   getUsers(bot, teamInfo.channel)
   .then(users => {
+    // Sends the messages as a promise chain to slack
+    newSuggestions = [{text: 'start'}, ...newSuggestions];
     users.forEach(user => {
-      console.log(user);
-      sendDM({text: 'start'}, user, bot);
-      newSuggestions.forEach(suggestion => {
-        sendDM(suggestion, user, bot);
-      });
+      console.log(newSuggestions);
+      let dmPosts = newSuggestions.reduce((promiseChain, suggestion, index, array) => {
+        return promiseChain.then(() => new Promise((resolve) => {
+          sendDM(suggestion, user, bot, resolve);
+        }));
+      }, Promise.resolve());
+
+      dmPosts.then(() => console.log('Sent DMs for ', user));
     });
   })
   .catch(error => {
@@ -223,10 +228,11 @@ function getUsers(bot, channel) {
 }
 
 // Sends each user the text of the suggestion and an upvote button
-function sendDM(suggestion, user, bot) {
+function sendDM(suggestion, user, bot, resolve) {
   if (suggestion.text === 'start') {
     bot.chat.postMessage(user, '\n******************************************************************\n>>>New Suggestions: Week of 6/11/2017', (err) => {
       if (err) console.log('Error:', err);
+      else resolve(200);
     });
   } else {
     const date = new Date(suggestion.date)
@@ -265,6 +271,7 @@ function sendDM(suggestion, user, bot) {
       ],
     }, (err) => {
       if (err) console.log('Error:', err);
+      else resolve(200);
     });
   }
 }
