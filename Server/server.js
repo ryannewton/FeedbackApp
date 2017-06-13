@@ -574,16 +574,16 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
     console.log(code);
 
     // Step #2: Check to see if the user is already in the database
-    let connectionString = 'SELECT groupId FROM users WHERE email=?';
     let groupId;
+    let connectionString = 'SELECT groupId FROM users WHERE email=?';
     connection.query(connectionString, [req.body.email], (err, rows) => {
       if (err) throw err;
-      if (!rows) {
+      if (!rows.length) {
         // Step #2A: If not in database see if it has a default groupId
         connectionString = 'SELECT groupId FROM features WHERE school=?';
         connection.query(connectionString, [getDomain(req.body.email)], (err, rows) => {
           if (err) throw err;
-          if (!rows) {
+          if (!rows.length) {
             res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
           } else {
             groupId = rows[0].groupId;
@@ -591,34 +591,32 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
         });
       } else {
         groupId = rows[0].groupId;
+        // Step #3: Add the email, groupId, code, and timestamp to the database
+        connection.query('INSERT INTO users (email, groupId, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcode_time=NOW()', [req.body.email, groupId, String(code), String(code), groupId], function(err) {
+          if (err) throw err;
+        });
+
+        if (req.body.email.includes('admin_test')) {
+          res.sendStatus(200);
+        } else {
+          console.log('email sent');
+          // Step #3: Send an email with the code to the user (make sure it shows up in notification)
+          sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
+          res.sendStatus(200);
+        }
       }
     });
-    // Step #3: Add the email, groupId, code, and timestamp to the database
-    if (groupId) {
-      connection.query('INSERT INTO users (email, groupId, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcode_time=NOW()', [req.body.email, groupId, String(code), String(code), groupId], function(err) {
-        if (err) throw err;
-      });
-
-      if (req.body.email.includes('admin_test')) {
-        res.sendStatus(200);
-      } else {
-        // Step #3: Send an email with the code to the user (make sure it shows up in notification)
-        sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
-        res.sendStatus(200);
-      }
-    }    
   }
 });
 
-//console.log(jwt.sign({ email: 'test', groupId: 2 }, 'buechelejedi16'));
-
 app.post('/authorizeUser', upload.array(), (req, res) => {
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-  connection.query('SELECT groupId FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
+  const connectionString = (req.body.code === 'apple') ? 'SELECT groupId FROM users WHERE email=?' : 'SELECT groupId FROM users WHERE email=? AND passcode=?';
+  connection.query(connectionString, [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
-    if (rows.length || req.body.code === 'apple') {
+    if (rows.length) {
       const myToken = jwt.sign({ email: req.body.email, groupId: rows[0].groupId }, 'buechelejedi16');
       res.status(200).json(myToken);
     } else {
@@ -825,7 +823,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
         AND
           groupId = ?`;
       connection.query(connectionString, [req.body.startDate, req.body.endDate, decoded.groupId], (err2, rows) => {
-        if (err2) throw err2;
+        if (err2) res.status(400).send('Invalid Token');
         else {
           res.json(rows);
         }
@@ -847,7 +845,7 @@ app.post('/pullProjects', upload.array(), (req, res) => {
         WHERE
           groupId=?`;
       connection.query(connectionString, [decoded.groupId], (err2, rows) => {
-        if (err2) throw err2;
+        if (err2 || !decoded.groupId) res.status(400).send('Invalid Token');
         else res.send(rows);
       });
     }
@@ -867,7 +865,7 @@ app.post('/pullProjectAdditions', upload.array(), (req, res) => {
         WHERE
           groupId=?`;
       connection.query(connectionString, [decoded.groupId], (err2, rows) => {
-        if (err2) throw err2;
+        if (err2) res.status(400).send('Invalid Token');
         else res.send(rows);
       });
     }
@@ -892,12 +890,10 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
           features
         WHERE
           id=?`;
-      connection.query(connectionString,
-        [getDomain(decoded.email), decoded.email, decoded.groupId],
-        (connectionError, rows) => {
-          if (connectionError) throw connectionError;
-          else res.send(rows);
-        });
+      connection.query(connectionString, [getDomain(decoded.email), decoded.email, decoded.groupId], (err2, rows) => {
+        if (err2) res.status(400).send('Invalid Token');
+        else res.send(rows);
+      });
     }
   });
 });
