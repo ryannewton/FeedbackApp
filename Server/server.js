@@ -27,10 +27,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
@@ -565,37 +565,61 @@ function getDomain(email) {
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  const re = /^[a-zA-Z0-9._%+-]+@(?:[a-zA-Z0-9-]+\.)*(?:hbs\.edu|stanford\.edu|gymboree\.com|northwestern\.edu)$/;
+  const re = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
   if (!re.test(req.body.email)) {
-    res.status(400).send('Sorry, your company is not currently supported :(');
+    res.status(400).send('Sorry, this does not appear to be a valid email address :(');
   } else {
     // Step #1: Generate a code
     const code = generatePassword(4);
     console.log(code);
 
-    // Step #2: Add the email, code, and timestamp to the database
-    connection.query('INSERT INTO users (email, passcode) VALUES (?, ?) ON DUPLICATE KEY UPDATE passcode=?, passcode_time=NOW()', [req.body.email, String(code), String(code)], function(err) {
+    // Step #2: Check to see if the user is already in the database
+    let connectionString = 'SELECT groupId FROM users WHERE email=?';
+    let groupId;
+    connection.query(connectionString, [req.body.email], (err, rows) => {
       if (err) throw err;
+      if (!rows) {
+        // Step #2A: If not in database see if it has a default groupId
+        connectionString = 'SELECT groupId FROM features WHERE school=?';
+        connection.query(connectionString, [getDomain(req.body.email)], (err, rows) => {
+          if (err) throw err;
+          if (!rows) {
+            res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
+          } else {
+            groupId = rows[0].groupId;
+          }
+        });
+      } else {
+        groupId = rows[0].groupId;
+      }
     });
+    // Step #3: Add the email, groupId, code, and timestamp to the database
+    if (groupId) {
+      connection.query('INSERT INTO users (email, groupId, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcode_time=NOW()', [req.body.email, groupId, String(code), String(code), groupId], function(err) {
+        if (err) throw err;
+      });
 
-    if (req.body.email.includes('admin_test')) {
-      res.sendStatus(200);
-    } else {
-      // Step #3: Send an email with the code to the user (make sure it shows up in notification)
-      sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
-      res.sendStatus(200);
-    }
+      if (req.body.email.includes('admin_test')) {
+        res.sendStatus(200);
+      } else {
+        // Step #3: Send an email with the code to the user (make sure it shows up in notification)
+        sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
+        res.sendStatus(200);
+      }
+    }    
   }
 });
 
+//console.log(jwt.sign({ email: 'test', groupId: 2 }, 'buechelejedi16'));
+
 app.post('/authorizeUser', upload.array(), (req, res) => {
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-  connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
+  connection.query('SELECT groupId FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
     if (rows.length || req.body.code === 'apple') {
-      const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16');
+      const myToken = jwt.sign({ email: req.body.email, groupId: rows[0].groupId }, 'buechelejedi16');
       res.status(200).json(myToken);
     } else {
       res.status(400).send('Incorrect Code');
@@ -605,12 +629,12 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
 
 app.post('/authorizeAdminUser', upload.array(), (req, res) => {
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-  connection.query('SELECT passcode_time FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
+  connection.query('SELECT groupId FROM users WHERE email=? AND passcode=?', [req.body.email, req.body.code], (err, rows) => {
     if (err) throw err;
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
     if ((rows.length || req.body.code === 'apple') && (req.body.adminCode === 'GSB2017' || req.body.adminCode === 'HBS2017' || req.body.adminCode === 'GYM2017')) {
-      const myToken = jwt.sign({ email: req.body.email }, 'buechelejedi16');
+      const myToken = jwt.sign({ email: req.body.email, groupId: rows[0].groupId }, 'buechelejedi16');
       res.status(200).json(myToken);
     } else {
       res.status(400).send('Incorrect Code');
@@ -627,10 +651,10 @@ app.post('/addFeedback', upload.array(), (req, res) => {
       const school = getDomain(decoded.email);
 
       // Send Email
-      const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu'];
+      const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
       sendEmail(toEmails, defaultFromEmail, 'Feedback: ' + req.body.text, 'Email: ' + decoded.email);
 
-      connection.query('INSERT INTO feedback (text, email, school, type) VALUES (?, ?, ?, ?)', [req.body.text, decoded.email, school, req.body.type], (err2, result) => {
+      connection.query('INSERT INTO feedback (text, email, groupId, school, type) VALUES (?, ?, ?, ?, ?)', [req.body.text, decoded.email, decoded.groupId, school, req.body.type], (err2, result) => {
         if (err2) throw err2;
         res.json({ id: result.insertId });
       });
@@ -645,8 +669,9 @@ app.post('/addProject', upload.array(), (req, res) => {
     } else {
       const title = (req.body.feedback.text) ? req.body.feedback.text : 'Blank Title';
       const school = (req.body.feedback.school) ? req.body.feedback.school : getDomain(decoded.email);
+      const groupId = (req.body.feedback.groupId) ? req.body.feedback.groupId : decoded.groupId;
 
-      connection.query('INSERT INTO projects SET ?', { title, description: 'Blank Description', votes: 0, downvotes: 0, stage: 'new', school, type: req.body.feedback.type }, (err2, result) => {
+      connection.query('INSERT INTO projects SET ?', { title, groupId, description: 'Blank Description', votes: 0, downvotes: 0, stage: 'new', school, type: req.body.feedback.type }, (err2, result) => {
         if (err2) throw err2;
         if (req.body.feedback) {
           //sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
@@ -674,6 +699,7 @@ app.post('/addSolution', upload.array(), (req, res) => {
           description: req.body.description || 'Description Here',
           project_id: req.body.project_id,
           school: getDomain(decoded.email),
+          groupId: decoded.groupId,
           email: decoded.email,
           approved: !req.body.moderatorApprovalSolutions,
         }, (innerError, result) => {
@@ -689,7 +715,12 @@ app.post('/addSubscriber', upload.array(), (req, res) => {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('INSERT INTO subscriptions SET ?', { project_id: req.body.projectId, email: decoded.email, type: req.body.type }, (err2) => {
+      connection.query('INSERT INTO subscriptions SET ?',
+        {
+          project_id: req.body.projectId,
+          email: decoded.email,
+          type: req.body.type
+        }, (err2) => {
         if (err2) throw err2;
         res.sendStatus(200);
       });
@@ -716,7 +747,12 @@ var addSubscriber = function(req, res, next) {
     if (err) {
       res.status(400).send('authorization failed');
     } else {
-      connection.query('INSERT INTO subscriptions SET ?', { project_id: req.body.project_addition.id, email: decoded.email, type: 'up vote solution' }, (err2) => {
+      connection.query('INSERT INTO subscriptions SET ?',
+        {
+          project_id: req.body.project_addition.id,
+          email: decoded.email,
+          type: 'up vote solution'
+        }, (err2) => {
         if (err2) throw err2;
       });
     }
@@ -772,7 +808,6 @@ app.post('/deleteProjectAddition', upload.array(), (req, res) => {
   });
 });
 
-
 // Pull Feedback, Projects, Project Additions, Discussion Posts, and Features
 app.post('/pullFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
@@ -788,8 +823,8 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
           time
             BETWEEN ? AND ?
         AND
-          school = ?`;
-      connection.query(connectionString, [req.body.startDate, req.body.endDate, getDomain(decoded.email)], (err2, rows) => {
+          groupId = ?`;
+      connection.query(connectionString, [req.body.startDate, req.body.endDate, decoded.groupId], (err2, rows) => {
         if (err2) throw err2;
         else {
           res.json(rows);
@@ -810,8 +845,8 @@ app.post('/pullProjects', upload.array(), (req, res) => {
         FROM
           projects
         WHERE
-          school=?`;
-      connection.query(connectionString, [getDomain(decoded.email)], (err2, rows) => {
+          groupId=?`;
+      connection.query(connectionString, [decoded.groupId], (err2, rows) => {
         if (err2) throw err2;
         else res.send(rows);
       });
@@ -830,30 +865,10 @@ app.post('/pullProjectAdditions', upload.array(), (req, res) => {
         FROM
           project_additions
         WHERE
-          school=?`;
-      connection.query(connectionString, [getDomain(decoded.email)], (err2, rows) => {
+          groupId=?`;
+      connection.query(connectionString, [decoded.groupId], (err2, rows) => {
         if (err2) throw err2;
         else res.send(rows);
-      });
-    }
-  });
-});
-
-app.post('/pullDiscussionPosts', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, 'buechelejedi16', (err) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      const connectionString = `
-        SELECT
-          id, point, counter_point, project_addition_id
-        FROM
-          discussion_posts`;
-      connection.query(connectionString, (err2, rows) => {
-        if (err) throw err;
-        else {
-          res.send(rows);
-        }
       });
     }
   });
@@ -876,9 +891,9 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
         FROM
           features
         WHERE
-          school=?`;
+          id=?`;
       connection.query(connectionString,
-        [getDomain(decoded.email), decoded.email, getDomain(decoded.email)],
+        [getDomain(decoded.email), decoded.email, decoded.groupId],
         (connectionError, rows) => {
           if (connectionError) throw connectionError;
           else res.send(rows);
@@ -887,10 +902,10 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
   });
 });
 
-app.listen(8081, () => {
- console.log('Example app listening on port 8081!');
-});
-
-// app.listen(3000, () => {
-//   console.log('Example app listening on port 3000!');
+// app.listen(8081, () => {
+//  console.log('Example app listening on port 8081!');
 // });
+
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!');
+});
