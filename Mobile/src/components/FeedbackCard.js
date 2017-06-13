@@ -111,7 +111,7 @@ class Project extends Component {
     if (this.props.features.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          {/* <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text> */}
+          <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
           {this.renderStatus()}
         </View>
       );
