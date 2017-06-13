@@ -271,7 +271,9 @@ function sendDM(suggestion, user, bot) {
 
 // *Reaction Added / Removed*
 app.post('/slack/events', upload.array(), (req, res) => {
-  //res.json({ challenge: req.body.challenge });
+  if (req.body.type === 'url_verification') {
+    res.json({ challenge: req.body.challenge });
+  }
 
   // Get info from Slack's JSON
   const teamId = req.body.team_id;
@@ -878,10 +880,10 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
   });
 });
 
-// app.listen(8081, () => {
-//  console.log('Example app listening on port 8081!');
-// });
-
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(8081, () => {
+ console.log('Example app listening on port 8081!');
 });
+
+// app.listen(3000, () => {
+//   console.log('Example app listening on port 3000!');
+// });
