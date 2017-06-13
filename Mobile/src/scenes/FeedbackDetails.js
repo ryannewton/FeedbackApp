@@ -73,9 +73,9 @@ class FeedbackDetails extends Component {
         </ScrollView>
 
         {/* Error message (blank if no error) */}
-        <Text style={styles.errorTextStyle}>
+        {/*<Text style={styles.errorTextStyle}>
           {this.state.errorMessage || this.props.solutions.message}
-        </Text>
+        </Text>*/}
 
         {/* Input to submit a new solution */}
         <KeyboardAvoidingView behavior={'padding'}>
