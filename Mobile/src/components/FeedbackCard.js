@@ -19,6 +19,7 @@ class Project extends Component {
     this.upvote = this.upvote.bind(this);
     this.downvote = this.downvote.bind(this);
     this.renderStatusBox = this.renderStatusBox.bind(this);
+    this.goToDetails = this.goToDetails.bind(this);
   }
 
   goToDetails() {
@@ -100,11 +101,11 @@ class Project extends Component {
     const { stage } = this.props.project;
     if (stage && stage === 'complete') {
       return <Icon name="done" size={35} color={'#006400'} />;
-    } else if (stage && stage === 'inprocess') {
-      return <Icon name="sync" size={35} color={'#00008B'} />;
-    } else {
-      return <Icon name="block" size={35} color={'#A9A9A9'} />;
     }
+    if (stage && stage === 'inprocess') {
+      return <Icon name="sync" size={35} color={'#00008B'} />;
+    }
+    return <Icon name="block" size={35} color={'#A9A9A9'} />;
   }
 
   renderStatusBox() {
@@ -116,22 +117,23 @@ class Project extends Component {
         </View>
       );
     }
+    return null;
   }
 
   render() {
     const { buttonText, lowWeight, row, projectTitle } = styles;
     let updatedRow = row;
     if (this.props.project.type === 'positive feedback') {
-      updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: {width: 10, height: 10} }];
+      updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 } }];
     } else if (this.props.project.type === 'negative feedback') {
-      updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: {width: 10, height: 10}}];
+      updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 } }];
     }
     return (
       <Card>
         <TouchableHighlight
           style={updatedRow}
           underlayColor="#D0D0D0"
-          onPress={this.goToDetails.bind(this)}
+          onPress={this.goToDetails}
         >
           <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
             {/* First row */}{/* Project title */}
@@ -143,20 +145,20 @@ class Project extends Component {
             </View>
 
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                <View style={{ flexDirection: 'column'  }}>
-                  <View style={{flexDirection: 'row', paddingTop: 5, justifyContent: 'flex-end' }}>
-                    <Text style={[buttonText, lowWeight, { color: 'green', fontSize: 20 }]}>
-                      {this.renderVoteCount()}
-                    </Text>
-                    <Icon size={18} name='arrow-upward' color= 'green' />
-                  </View>
-                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                    <Text style={[buttonText, lowWeight, { color: 'red', fontSize: 20 }]}>
-                      {this.renderDownvoteCount()}
-                    </Text>
-                    <Icon size={18} name='arrow-downward' color= 'red' />
-                  </View>
+              <View style={{ flexDirection: 'column' }}>
+                <View style={{ flexDirection: 'row', paddingTop: 5, justifyContent: 'flex-end' }}>
+                  <Text style={[buttonText, lowWeight, { color: 'green', fontSize: 20 }]}>
+                    {this.renderVoteCount()}
+                  </Text>
+                  <Icon size={18} name="arrow-upward" color="green" />
                 </View>
+                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
+                  <Text style={[buttonText, lowWeight, { color: 'red', fontSize: 20 }]}>
+                    {this.renderDownvoteCount()}
+                  </Text>
+                  <Icon size={18} name="arrow-downward" color="red" />
+                </View>
+              </View>
               {this.renderStatusBox()}
               {/* Upvote Button */}
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
@@ -193,4 +195,9 @@ const mapStateToProps = (state) => {
   return { user, features };
 };
 
-export default connect(mapStateToProps, { addProjectUpvote, removeProjectUpvote, addProjectDownvote, removeProjectDownvote })(Project);
+export default connect(mapStateToProps, {
+  addProjectUpvote,
+  removeProjectUpvote,
+  addProjectDownvote,
+  removeProjectDownvote,
+})(Project);
