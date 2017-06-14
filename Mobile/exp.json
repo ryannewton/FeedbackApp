@@ -3,7 +3,14 @@
   "description": "No description",
   "slug": "feedbackapp",
   "sdkVersion": "17.0.0",
-  "version": "1.0.0",
+  "ios": {
+    "bundleIdentifier": "com.feedbackapp.feedbackapp",
+    "supportsTablet": true
+  },
+  "android": {
+    "package": "com.feedbackapp.feedbackapp"
+  },
+  "version": "1.0.36",
   "orientation": "portrait",
   "primaryColor": "#cccccc",
   "icon": "https://s3.amazonaws.com/exp-icon-assets/ExpoEmptyManifest_192.png",
