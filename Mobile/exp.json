@@ -10,13 +10,13 @@
   "android": {
     "package": "com.feedbackapp.feedbackapp"
   },
-  "version": "1.0.36",
+  "version": "1.0.38",
   "orientation": "portrait",
   "primaryColor": "#cccccc",
-  "icon": "https://s3.amazonaws.com/exp-icon-assets/ExpoEmptyManifest_192.png",
+  "icon": "https://s3-us-west-2.amazonaws.com/feedback-app-images/iTunesStoreIcon.png",
   "loading": {
-    "icon": "https://s3.amazonaws.com/exp-icon-assets/ExpoEmptyManifest_192.png",
-    "hideExponentText": false
+    "icon": "https://s3-us-west-2.amazonaws.com/feedback-app-images/iTunesStoreIcon.png",
+    "hideExponentText": true
   },
   "packagerOpts": {
     "assetExts": [
