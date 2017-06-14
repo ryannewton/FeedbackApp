@@ -95,7 +95,7 @@ class FeedbackSwipe extends Component {
 
   render() {
     const instructionsScreen = (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <TouchableOpacity onPress={this.closeInstructions}>
           <Image source={fullScreen} resizeMode="stretch" />
         </TouchableOpacity>
@@ -103,8 +103,8 @@ class FeedbackSwipe extends Component {
     );
 
     const FeedbackSwipeScene = (
-      <Container style = {{flexDirection: 'row'}}>
-        <View style = {{flex:7, backgroundColor: '#A41034'}} />
+      <Container style={{ flexDirection: 'row' }}>
+        <View style={{ flex: 7, backgroundColor: '#A41034' }} />
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
             ref={(ds) => { this.deckSwiper = ds; }}
@@ -129,12 +129,12 @@ class FeedbackSwipe extends Component {
             }
           />
         </View>
-        <View style = {{flex:7, backgroundColor: '#A41034'}} />
+        <View style={{ flex: 7, backgroundColor: '#A41034' }} />
       </Container>
     );
 
-    const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : FeedbackSwipeScene;
-    return screenToShow;
+    // const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : FeedbackSwipeScene;
+    return FeedbackSwipeScene;
   }
 }
 
@@ -143,8 +143,11 @@ FeedbackSwipe.propTypes = {
   user: React.PropTypes.object,
   addToDoNotDisplayList: React.PropTypes.func,
   addProjectUpvote: React.PropTypes.func,
+  addProjectDownvote: React.PropTypes.func,
+  closeInstructions: React.PropTypes.func,
   features: React.PropTypes.object,
-  addProjectUpvote: React.PropTypes.func,
+  navigation: React.PropTypes.object,
+
 };
 
 function mapStateToProps(state) {
