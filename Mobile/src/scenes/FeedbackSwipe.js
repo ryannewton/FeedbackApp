@@ -95,9 +95,9 @@ class FeedbackSwipe extends Component {
 
   render() {
     const instructionsScreen = (
-      <View style={styles2.imageContainer}>
-        <TouchableOpacity onPress={this.closeInstructions} style={styles2.touchableOpacityStyle}>
-          <Image style={styles2.image} source={fullScreen} resizeMode="stretch" />
+      <View style={{flex: 1}}>
+        <TouchableOpacity onPress={this.closeInstructions}>
+          <Image source={fullScreen} resizeMode="stretch" />
         </TouchableOpacity>
       </View>
     );
@@ -134,7 +134,6 @@ class FeedbackSwipe extends Component {
     );
 
     const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : FeedbackSwipeScene;
-
     return screenToShow;
   }
 }

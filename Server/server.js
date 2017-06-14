@@ -27,10 +27,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
@@ -587,7 +587,7 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
         // Step #2A: If not in database see if it has a default groupId
         connectionString = 'SELECT id FROM features WHERE school=?';
         connection.query(connectionString, [getDomain(req.body.email)], (err, rows) => {
-          if (err) throw err;
+          if (err) throw res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
           if (!rows.length) {
             res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
           } else {
@@ -621,7 +621,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
   const connectionString = (req.body.code === 'apple') ? 'SELECT groupId FROM users WHERE email=?' : 'SELECT groupId FROM users WHERE email=? AND passcode=?';
   connection.query(connectionString, [req.body.email, req.body.code], (err, rows) => {
-    if (err) throw err;
+    if (err) throw res.status(400).send('Incorrect Code');
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
     if (rows.length) {
