@@ -586,17 +586,17 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
           if (!rows.length) {
             res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
           } else {
-            sendAuthEmailHelper(req, code, rows[0].id);
+            sendAuthEmailHelper(req, res, code, rows[0].id);
           }
         });
       } else {
-        sendAuthEmailHelper(req, code, rows[0].groupId);
+        sendAuthEmailHelper(req, res, code, rows[0].groupId);
       }
     });
   }
 });
 
-function sendAuthEmailHelper(req, code, groupId) {
+function sendAuthEmailHelper(req, res, code, groupId) {
   // Step #3: Add the email, groupId, code, and timestamp to the database
   connection.query('INSERT INTO users (email, groupId, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcode_time=NOW()', [req.body.email, groupId, String(code), String(code), groupId], function(err) {
     if (err) throw err;
