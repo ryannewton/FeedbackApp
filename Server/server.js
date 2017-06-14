@@ -42,7 +42,11 @@ connection.connect();
 // *Weekly Update*
 
 // TO DO - Implement Weekly Timer
-//weeklyUpdate();
+// weeklyUpdate();
+// Interval to repush to Slack
+//const slackInterval = 1000 * 60; // Each Minute
+//setInterval(() => weeklyUpdate(), slackInterval);
+
 // Called by Timer Each Thursday at 1am PT
 // Gets team info and calls updateBoard for each team
 function weeklyUpdate() {
@@ -167,9 +171,10 @@ function postSuggestionsAndDMs(suggestions, bot, teamInfo) {
 function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCount, teamInfo) {
   const teamId = teamInfo.teamId;
   const channel = teamInfo.channel;
+  const date = new Date(Date.now());
 
   if (suggestion.text === 'new refresh') {
-    bot.chat.postMessage(channel, '\n******************************************************************\n>>>Suggestion Box Refresh 6/11/2017', (err, res) => {
+    bot.chat.postMessage(channel, '\n******************************************************************\n>>>Suggestion Box Refresh ' + String(date.getDate()) + '/' + String(date.getMonth()+1) + '/' + String(date.getFullYear()), (err, res) => {
       if (err) return err;
       else resolve(200);
     });
