@@ -75,8 +75,23 @@ async function loadInstructions() {
   }
 }
 
+async function clearAsyncStorage() {
+  try {
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}token`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}upvotes`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}solutionUpvotes`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}downvotes`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}solutionDownvotes`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}doNotDisplayList`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 // Initialize saved state
 const loadOnLaunch = () => {
+  // clearAsyncStorage();
   loadUpvotes();
   loadDoNotDisplayList();
   loadToken();
