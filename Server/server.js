@@ -42,7 +42,11 @@ connection.connect();
 // *Weekly Update*
 
 // TO DO - Implement Weekly Timer
-//weeklyUpdate();
+// weeklyUpdate();
+// Interval to repush to Slack
+//const slackInterval = 1000 * 60; // Each Minute
+//setInterval(() => weeklyUpdate(), slackInterval);
+
 // Called by Timer Each Thursday at 1am PT
 // Gets team info and calls updateBoard for each team
 function weeklyUpdate() {
@@ -167,9 +171,10 @@ function postSuggestionsAndDMs(suggestions, bot, teamInfo) {
 function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCount, teamInfo) {
   const teamId = teamInfo.teamId;
   const channel = teamInfo.channel;
+  const date = new Date(Date.now());
 
   if (suggestion.text === 'new refresh') {
-    bot.chat.postMessage(channel, '\n******************************************************************\n>>>Suggestion Box Refresh 6/11/2017', (err, res) => {
+    bot.chat.postMessage(channel, '\n******************************************************************\n>>>Suggestion Box Refresh ' + String(date.getDate()) + '/' + String(date.getMonth()+1) + '/' + String(date.getFullYear()), (err, res) => {
       if (err) return err;
       else resolve(200);
     });
@@ -565,7 +570,7 @@ function getDomain(email) {
 
 // Authentication
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  const re = /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/;
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!re.test(req.body.email)) {
     res.status(400).send('Sorry, this does not appear to be a valid email address :(');
   } else {
@@ -580,40 +585,43 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
       if (err) throw err;
       if (!rows.length) {
         // Step #2A: If not in database see if it has a default groupId
-        connectionString = 'SELECT groupId FROM features WHERE school=?';
+        connectionString = 'SELECT id FROM features WHERE school=?';
         connection.query(connectionString, [getDomain(req.body.email)], (err, rows) => {
-          if (err) throw err;
+          if (err) throw res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
           if (!rows.length) {
             res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
           } else {
-            groupId = rows[0].groupId;
+            sendAuthEmailHelper(req, res, code, rows[0].id);
           }
         });
       } else {
-        groupId = rows[0].groupId;
-        // Step #3: Add the email, groupId, code, and timestamp to the database
-        connection.query('INSERT INTO users (email, groupId, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcode_time=NOW()', [req.body.email, groupId, String(code), String(code), groupId], function(err) {
-          if (err) throw err;
-        });
-
-        if (req.body.email.includes('admin_test')) {
-          res.sendStatus(200);
-        } else {
-          console.log('email sent');
-          // Step #3: Send an email with the code to the user (make sure it shows up in notification)
-          sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
-          res.sendStatus(200);
-        }
+        sendAuthEmailHelper(req, res, code, rows[0].groupId);
       }
     });
   }
 });
 
+function sendAuthEmailHelper(req, res, code, groupId) {
+  // Step #3: Add the email, groupId, code, and timestamp to the database
+  connection.query('INSERT INTO users (email, groupId, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcode_time=NOW()', [req.body.email, groupId, String(code), String(code), groupId], function(err) {
+    if (err) throw err;
+  });
+
+  if (req.body.email.includes('admin_test')) {
+    res.sendStatus(200);
+  } else {
+    console.log('email sent');
+    // Step #3: Send an email with the code to the user (make sure it shows up in notification)
+    sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
+    res.sendStatus(200);
+  }   
+}
+
 app.post('/authorizeUser', upload.array(), (req, res) => {
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
   const connectionString = (req.body.code === 'apple') ? 'SELECT groupId FROM users WHERE email=?' : 'SELECT groupId FROM users WHERE email=? AND passcode=?';
   connection.query(connectionString, [req.body.email, req.body.code], (err, rows) => {
-    if (err) throw err;
+    if (err) throw res.status(400).send('Incorrect Code');
     // Step #2: Check that it matches the passcode submitted by the user, if not send error
     // Step #3: If it checks out then create a JWT token and send to the user
     if (rows.length) {
@@ -898,10 +906,10 @@ app.post('/pullFeatures', upload.array(), (req, res) => {
   });
 });
 
-// app.listen(8081, () => {
-//  console.log('Example app listening on port 8081!');
-// });
-
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(8081, () => {
+ console.log('Example app listening on port 8081!');
 });
+
+// app.listen(3000, () => {
+//   console.log('Example app listening on port 3000!');
+// });

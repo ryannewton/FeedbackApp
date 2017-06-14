@@ -19,6 +19,7 @@ const options = {
   swipeEnabled: false,
   backBehavior: 'none',
   lazy: true,
+  tabBarPosition: 'bottom',
   tabBarOptions: {
     showIcon: true,
     style: { backgroundColor: 'white' },
