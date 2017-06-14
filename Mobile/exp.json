@@ -10,7 +10,7 @@
   "android": {
     "package": "com.feedbackapp.feedbackapp"
   },
-  "version": "1.0.38",
+  "version": "1.0.40",
   "orientation": "portrait",
   "primaryColor": "#cccccc",
   "icon": "https://s3-us-west-2.amazonaws.com/feedback-app-images/iTunesStoreIcon.png",
