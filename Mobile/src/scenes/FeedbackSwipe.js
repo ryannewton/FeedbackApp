@@ -93,6 +93,19 @@ class FeedbackSwipe extends Component {
     }
   }
 
+  skip() {
+    const project = this.state.projects[this.state.index];
+    if (project.id) {
+      this.props.addToDoNotDisplayList(project.id);
+    }
+
+    if (this.state.index === this.state.projects.length - 1) {
+      this.setState({ index: 0, projects: [inboxZeroProject] });
+    } else {
+      this.setState({ index: this.state.index + 1 });
+    }
+  }
+
   closeInstructions() {
     this.props.closeInstructions('New Projects Scene');
   }
@@ -127,10 +140,7 @@ class FeedbackSwipe extends Component {
                   this.deckSwiper._root.swipeLeft();
                 }}
                 skip={() => {
-                  const project = this.state.projects[this.state.index];
-                  if (project.id) {
-                    this.props.addToDoNotDisplayList(project.id);
-                  }
+                  this.skip();
                   this.deckSwiper._root.swipeLeft();
                 }}
                 features={this.props.features}
