@@ -18,11 +18,10 @@ const styles = StyleSheet.create({
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 4,
-    margin: 3,
-    marginTop: 0,
+    marginTop: 5,
     marginBottom: 5,
     marginHorizontal: 5,
-    paddingTop: 0,
+    paddingTop: 3,
     paddingBottom: 3,
     paddingHorizontal: 8,
     backgroundColor: '#FFFFFF',
@@ -31,6 +30,12 @@ const styles = StyleSheet.create({
       ios: { height: 200 },
       android: { height: 140 },
     }),
+  },
+  positive_feedback_input: {
+    backgroundColor: '#98FB98',
+  },
+  negative_feedback_input: {
+    backgroundColor: '#F08080',
   },
   // New Projects Scene
   swiper: {
@@ -89,15 +94,11 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: '500',
   },
-  project: {
-
-  },
   lowWeight: {
     fontWeight: '300',
     fontSize: 16,
     textDecorationLine: 'underline',
   },
-
   errorTextStyle: {
     fontSize: 20,
     alignSelf: 'center',

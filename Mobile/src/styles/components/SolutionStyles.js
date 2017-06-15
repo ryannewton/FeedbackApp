@@ -7,8 +7,7 @@ const styles = StyleSheet.create({
     color: '#444444',
   },
   upvoteCountText: {
-    textDecorationLine: 'underline',
-    fontSize: 15,
+    fontSize: 15
   },
   buttonStylesNotSelected: {
     height: 23,

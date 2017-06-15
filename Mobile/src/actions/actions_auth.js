@@ -5,9 +5,6 @@ import { AsyncStorage } from 'react-native';
 import { http, ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
-import { pullProjects } from './FeedbackActions';
-import { pullSolutions } from './SolutionActions';
-import { pullFeatures } from './actions_features';
 import {
   SENDING_AUTHORIZATION_EMAIL,
   SENT_AUTHORIZATION_EMAIL_SUCCESS,
@@ -15,9 +12,10 @@ import {
   AUTHORIZING_USER,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
-  LOAD_STATE_SUCCESS,
   LOG_OUT_USER,
 } from './types';
+
+import loadOnLaunch from '../reducers/load_on_launch';
 
 export const authorizeUserFail = error => (
   {
@@ -26,11 +24,11 @@ export const authorizeUserFail = error => (
   }
 );
 
-export const loadStateSuccess = () => (
-  {
-    type: LOAD_STATE_SUCCESS,
-  }
-);
+export const authorizeUserSuccess = token => ({
+  type: AUTHORIZE_USER_SUCCESS,
+  payload: token,
+});
+
 
 export const sendAuthorizationEmail = (email, navigateToNext) => (
   (dispatch) => {
@@ -59,15 +57,14 @@ export const authorizeUser = (email, code) => (
     // If successful store the token, repull state from the database, and set state to logged-in
     .then((response) => {
       const token = String(response.data);
-      AsyncStorage.setItem(`${ROOT_STORAGE}token`, token);
-      dispatch(pullProjects(token));
-      dispatch(pullSolutions(token));
-      dispatch(pullFeatures(token));
-      dispatch(authorizeSuccess(token));
+      AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
+      .then(() => {
+        loadOnLaunch();
+      });
     })
     // If not, show an error message
     .catch((error) => {
-      authorizeFail(error.response.data);
+      authorizeUserFail(error.response.data);
     });
   }
 );
@@ -81,12 +78,3 @@ export const logOut = () => (
   }
 );
 
-export const authorizeSuccess = token => ({
-  type: AUTHORIZE_USER_SUCCESS,
-  payload: token,
-});
-
-export const authorizeFail = err => ({
-  type: AUTHORIZE_USER_FAIL,
-  payload: err,
-});

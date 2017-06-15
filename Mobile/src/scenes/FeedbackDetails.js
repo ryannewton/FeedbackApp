@@ -4,61 +4,41 @@ import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, 
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
-import styles from '../styles/scenes/ProjectDetailsStyles';
-import Project from '../components/Project';
-import Solution from '../components/Solution';
-import { Button, Card, CardSection, Spinner } from '../components/common';
+import styles from '../styles/scenes/FeedbackDetailsStyles';
+import FeedbackCard from '../components/FeedbackCard';
+import SolutionsCard from '../components/SolutionsCard';
+import { Button, Spinner } from '../components/common';
 import {
-  addProjectUpvote,
-  removeProjectUpvote,
-  addSolutionUpvote,
-  removeSolutionUpvote,
   solutionChanged,
   submitSolutionToServer,
 } from '../actions';
 
-class ProjectDetails extends Component {
+// Import tracking
+// import { tracker } from '../constants';
+
+class FeedbackDetails extends Component {
   constructor(props) {
     super(props);
 
+    this.state = { errorMessage: '' };
+    // tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
     this.submitSolution = this.submitSolution.bind(this);
-  }
-  solutionsList() {
-    const { noSolutionsMessage, subheaderText } = styles;
-    const { solutions } = this.props;
-    const { project } = this.props.navigation.state.params;
-    const projectSolutions = solutions.list.filter(solution => solution.project_id === project.id);
-
-    // If no solutions have been submitted
-    if (projectSolutions.length === 0) {
-      return (
-        <CardSection>
-          <Text style={noSolutionsMessage}>{'No solutions (yet)\nBe the first!'}</Text>
-        </CardSection>
-      );
-    }
-
-    const formattedSolutions = projectSolutions
-      .sort((a, b) => b.votes - a.votes)
-      .map((solution, index) => (
-        <Solution solution={solution} key={index} />
-      ));
-
-    return (
-      <View>
-        <CardSection>
-          <Text style={subheaderText}>Suggested solutions</Text>
-        </CardSection>
-        {formattedSolutions}
-      </View>
-    );
   }
 
   submitSolution() {
-    const { solution } = this.props.main;
+    const { domain, bannedWords, moderatorApprovalSolutions } = this.props.features;
+    const { solution } = this.props.solutions;
     const { project } = this.props.navigation.state.params;
-    this.props.submitSolutionToServer(solution, project.id);
-    Keyboard.dismiss();
+
+    if (bannedWords.test(solution)) {
+      // If restricted words then we show an error to the user
+      this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+    } else {
+      this.setState({ errorMessage: '' });
+      this.props.submitSolutionToServer(solution, project.id, moderatorApprovalSolutions);
+      // tracker.trackEvent('Submit', 'Submit Solution', { label: domain, value: project.id });
+      Keyboard.dismiss();
+    }
   }
 
   renderSubmitButton() {
@@ -77,28 +57,33 @@ class ProjectDetails extends Component {
   render() {
     const { container, inputText } = styles;
     const { project } = this.props.navigation.state.params;
+
     return (
       <View style={container}>
         <ScrollView>
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View>
               {/* Project description */}
-              <Project project={project} navigate={() => undefined} />
+              <FeedbackCard project={project} navigate={() => undefined} />
 
               {/* List of submitted solutions */}
-              <Card>
-                {this.solutionsList()}
-              </Card>
+              <SolutionsCard navigation={this.props.navigation} />
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
+
+        {/* Error message (blank if no error) */}
+        {/*<Text style={styles.errorTextStyle}>
+          {this.state.errorMessage || this.props.solutions.message}
+        </Text>*/}
+
         {/* Input to submit a new solution */}
         <KeyboardAvoidingView behavior={'padding'}>
           <TextInput
             style={inputText}
             placeholder="Enter your idea here!"
             onChangeText={solution => this.props.solutionChanged(solution)}
-            value={this.props.main.solution}
+            value={this.props.solutions.solution}
             returnKeyType={'done'}
           />
           {/* Submit button */}
@@ -109,31 +94,22 @@ class ProjectDetails extends Component {
   }
 }
 
-ProjectDetails.propTypes = {
+FeedbackDetails.propTypes = {
   navigation: React.PropTypes.object,
-  user: React.PropTypes.object,
   solutions: React.PropTypes.object,
-  main: React.PropTypes.object,
-  addProjectUpvote: React.PropTypes.func,
-  removeProjectUpvote: React.PropTypes.func,
-  addSolutionProjectUpvote: React.PropTypes.func,
-  removeSolutionProjectUpvote: React.PropTypes.func,
+  features: React.PropTypes.object,
   solutionChanged: React.PropTypes.func,
   submitSolutionToServer: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
-  const { user, solutions, main } = state;
-  return { user, solutions, main };
+  const { solutions, features } = state;
+  return { solutions, features };
 }
 
 const AppScreen = connect(mapStateToProps, {
-  addProjectUpvote,
-  removeProjectUpvote,
-  addSolutionUpvote,
-  removeSolutionUpvote,
   solutionChanged,
   submitSolutionToServer,
-})(ProjectDetails);
+})(FeedbackDetails);
 
 export default AppScreen;

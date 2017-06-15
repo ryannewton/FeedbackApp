@@ -4,10 +4,10 @@ import { Provider } from 'react-redux';
 
 // Import Store
 import store from '../reducers/store';
-import loadOnLaunch from '../reducers/loadOnLaunch';
+import loadOnLaunch from '../reducers/load_on_launch';
 
 // Import components, functions, and styles
-import { Root } from './router';
+import Container from './Container';
 
 // Defines a high-level (container) component
 class Index extends Component {
@@ -18,7 +18,7 @@ class Index extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Root />
+        <Container />
       </Provider>
     );
   }

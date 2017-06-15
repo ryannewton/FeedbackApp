@@ -7,53 +7,42 @@ import { connect } from 'react-redux';
 import { saveProjectChanges } from '../actions';
 
 // Import components, functions, and styles
-import Project from '../components/Project';
-import styles from '../styles/scenes/ProjectsStyles';
+import FeedbackCard from '../components/FeedbackCard';
+import styles from '../styles/scenes/FeedbackListStyles';
 
-class Projects extends Component {
+// Import tracking
+// import { tracker } from '../constants';
+
+class FeedbackList extends Component {
   constructor(props) {
     super(props);
-
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    this.state = {
-      dataSource: ds.cloneWithRows(props.projects),
-    };
+    // tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.projects !== this.props.projects) {
-      const newProjectsList = nextProps.projects.slice();
-      this.setState({
-        dataSource: this.state.dataSource.cloneWithRows(newProjectsList),
-      });
-    }
-  }
-
-  renderProjects() {
-    const projects = this.props.projects
-      .map((project, index) => (
-        <Project
-          project={project}
-          key={index}
+  renderAllFeedback() {
+    const feedbackList = this.props.projects.list
+      .map(feedbackItem => (
+        <FeedbackCard
+          project={feedbackItem}
+          key={feedbackItem.id}
           navigate={this.props.navigation.navigate}
           saveProjectChanges={this.props.saveProjectChanges}
         />
       ),
     );
 
-    return projects;
+    return feedbackList;
   }
 
-
-
   render() {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+
     return (
       <View style={styles.container}>
         <ListView
-          dataSource={this.state.dataSource}
-          enableEmptySections
+          dataSource={ds.cloneWithRows(this.props.projects.list)}
           renderRow={rowData =>
-            <Project
+            <FeedbackCard
               project={rowData}
               key={rowData.id}
               navigate={this.props.navigation.navigate}
@@ -61,25 +50,25 @@ class Projects extends Component {
             />
           }
         />
-
       </View>
     );
   }
 }
 
-Projects.propTypes = {
+FeedbackList.propTypes = {
   navigation: React.PropTypes.object,
-  projects: React.PropTypes.array,
+  projects: React.PropTypes.object,
   saveProjectChanges: React.PropTypes.func,
+  features: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { projects } = state;
-  return { projects };
+  const { projects, features } = state;
+  return { projects, features };
 }
 
 const AppScreen = connect(mapStateToProps, {
   saveProjectChanges,
-})(Projects);
+})(FeedbackList);
 
 export default AppScreen;
