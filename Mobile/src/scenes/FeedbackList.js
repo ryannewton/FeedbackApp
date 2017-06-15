@@ -41,8 +41,6 @@ class FeedbackList extends Component {
       <View style={styles.container}>
         <ListView
           dataSource={ds.cloneWithRows(this.props.projects.list)}
-          initialListSize={200}
-          removeClippedSubviews={false}
           renderRow={rowData =>
             <FeedbackCard
               project={rowData}
