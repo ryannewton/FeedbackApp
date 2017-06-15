@@ -14,14 +14,20 @@ const scenes = StackNavigator({
     screen: FeedbackList,
     navigationOptions: {
       title: 'All Feedback',
-      headerStyle: { height: styles.header.height },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+      },
     },
   },
   Details: {
     screen: FeedbackDetails,
     navigationOptions: {
       title: 'Feedback Details',
-      headerStyle: { height: styles.header.height },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+      },
     },
   },
 });
