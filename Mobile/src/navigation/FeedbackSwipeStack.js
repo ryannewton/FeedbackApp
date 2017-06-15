@@ -19,14 +19,20 @@ const scenes = StackNavigator(
       screen: FeedbackSwipe,
       navigationOptions: {
         title: 'New Feedback',
-        headerStyle: { height: styles.header.height },
+        headerStyle: {
+          height: styles.header.height,
+          marginTop: styles.header.marginTop,
+        },
       },
     },
     Details: {
       screen: FeedbackDetails,
       navigationOptions: {
         title: 'Feedback Details',
-        headerStyle: { height: styles.header.height },
+        headerStyle: {
+          height: styles.header.height,
+          marginTop: styles.header.marginTop,
+        },
       },
     },
   },
