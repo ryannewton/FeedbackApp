@@ -92,6 +92,7 @@ function getSuggestions(teamId) {
           a.id,
           a.text,
           a.date,
+          a.new,
           SUM(CASE WHEN b.voteType = 'agree' THEN 1 ELSE 0 END) AS totalAgrees,
           SUM(CASE WHEN b.voteType = 'disagree' THEN 1 ELSE 0 END) AS totalDisagrees,
           COUNT(DISTINCT (CASE WHEN b.voteType = 'agree' THEN b.userId END)) AS uniqueAgrees,
@@ -119,52 +120,51 @@ function postSuggestionsAndDMs(suggestions, bot, teamInfo) {
 
   // Loads all messages posted over a week ago (which have already been DM'd out) organized by net number of votes
   adjustedSuggestions = [...adjustedSuggestions, ...suggestions
-    .filter(suggestion => {
-      const tempDate = new Date(suggestion.date);
-      return tempDate.getTime() < Date.now() - slackInterval;
-    })
+    .filter(suggestion => !suggestion.new)
     .sort((a, b) => (a.totalAgrees - a.totalDisagrees) - (b.totalAgrees - b.totalDisagrees))];
 
   // Adds the section between old and new feedback
   adjustedSuggestions.push({ text: 'filler' });
 
   // Adds the newer messages organized by date
-  let newSuggestions = suggestions
-    .filter(suggestion => {
-      const tempDate = new Date(suggestion.date);
-      return tempDate.getTime() >= Date.now() - slackInterval;
-    });
+  let newSuggestions = suggestions.filter(suggestion => suggestion.new);
 
   adjustedSuggestions = [...adjustedSuggestions, ...newSuggestions];
 
   // Sends the messages as a promise chain to slack
   let channelPosts = adjustedSuggestions.reduce((promiseChain, item, index, array) => {
     return promiseChain.then(() => new Promise((resolve) => {
-      postsToSuggestions(item, bot, resolve, index, array.length, newSuggestions.length, teamInfo);
+      postsToSuggestions(item, bot, resolve, index, adjustedSuggestions.length, newSuggestions.length, teamInfo);
     }));
   }, Promise.resolve());
 
-  channelPosts.then(() => console.log('Published new board for ', teamInfo.teamId));
+  channelPosts.then(() => {
+    const connectionString = `UPDATE slackSuggestions SET new=0 WHERE teamId=?`;
+    connection.query(connectionString, [teamInfo.teamId], (err) => { if (err) throw err });
+
+    console.log('Published new board for ', teamInfo.teamId);
+  });
 
   // Sends DMs to users in the suggestions channel asking them to vote on suggestions from last 7 days
-  getUsers(bot, teamInfo.channel)
-  .then(users => {
-    // Sends the messages as a promise chain to slack
-    newSuggestions = [{text: 'start'}, ...newSuggestions];
-    users.forEach(user => {
-      console.log(newSuggestions);
-      let dmPosts = newSuggestions.reduce((promiseChain, suggestion, index, array) => {
-        return promiseChain.then(() => new Promise((resolve) => {
-          sendDM(suggestion, user, bot, resolve);
-        }));
-      }, Promise.resolve());
+  if (newSuggestions.length) { //Don't DM if no new suggestions
+    getUsers(bot, teamInfo.channel)
+    .then(users => {
+      // Sends the messages as a promise chain to slack
+      newSuggestions = [{text: 'start'}, ...newSuggestions];
+      users.forEach(user => {
+        let dmPosts = newSuggestions.reduce((promiseChain, suggestion, index, array) => {
+          return promiseChain.then(() => new Promise((resolve) => {
+            sendDM(suggestion, user, bot, resolve);
+          }));
+        }, Promise.resolve());
 
-      dmPosts.then(() => console.log('Sent DMs for ', user));
-    });
-  })
-  .catch(error => {
-    console.log('ERROR in Get Users: ', error);
-  })  
+        dmPosts.then(() => console.log('Sent DMs for ', user));
+      });
+    })
+    .catch(error => {
+      console.log('ERROR in Get Users: ', error);
+    });  
+  }
 }
 
 function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCount, teamInfo) {
@@ -186,8 +186,8 @@ function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCoun
     });
   } else {
     const date = new Date(suggestion.date);
-    const headerPrefix = (index > totalCount - newCount - 1) ? (String(date.getMonth()+1) + '/' + String(date.getDate())) + ' - ' : '#' + String(totalCount-index-newCount-1) + ') ';
-    const header =  headerPrefix + suggestion.text.slice(0,30);
+    const headerPrefix = suggestion.new ? (String(date.getMonth()+1) + '/' + String(date.getDate())) + ' - ' : '#' + String(totalCount-index-newCount-1) + ') ';
+    const header =  headerPrefix + suggestion.text.slice(0,30) + '...';
     
     bot.chat.postMessage(channel,
       '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n' + suggestion.totalAgrees +' :+1: | ' + suggestion.totalDisagrees + ' :-1:   from   ' + suggestion.uniqueAgrees + ' :smiley: | ' + suggestion.uniqueDisagrees + ' :neutral_face:\n', (err, res) => {
@@ -243,7 +243,7 @@ function sendDM(suggestion, user, bot, resolve) {
   } else {
     const date = new Date(suggestion.date)
     const headerPrefix = (String(date.getMonth()+1) + '/' + String(date.getDate())) + ' - ';
-    const header = headerPrefix + suggestion.text.slice(0,30);
+    const header = headerPrefix + suggestion.text.slice(0,30) + '...';
 
     bot.chat.postMessage(user, '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n', {
       attachments: [
@@ -330,7 +330,7 @@ app.post('/slack/events', upload.array(), (req, res) => {
                     if (err) throw err;
                     const bot = new WebClient(resToken[0].botToken);
                     // Update the post                      
-                    const header = rows[0].headerPrefix + suggestion.text.slice(0,30);
+                    const header = rows[0].headerPrefix + suggestion.text.slice(0,30) + '...';
 
                     const text = '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n' + suggestion.totalAgrees +' :+1: | ' + suggestion.totalDisagrees + ' :-1:   from   ' + suggestion.uniqueAgrees + ' :smiley: | ' + suggestion.uniqueDisagrees + ' :neutral_face:\n';
                     bot.chat.update(ts, channel, text, { as_user: true }, (err, res) => { if (err) throw err });
@@ -383,7 +383,6 @@ app.post('/slack/suggestion', upload.array(), (req, res) => {
   const text = req.body.text;
   const userId = req.body.user_id;
   const teamId = req.body.team_id;
-  
   connection.query(`
     INSERT INTO
       slackSuggestions (text, userId, teamId)
@@ -396,9 +395,9 @@ app.post('/slack/suggestion', upload.array(), (req, res) => {
       VALUES (?, ?, 'agree')`, [suggestionId, userId], (err) => {
       
       if (err) throw err;
-      const date = new Date();
+      date = new Date();
       const headerPrefix = (String(date.getMonth()+1) + '/' + String(date.getDate())) + ' - ';
-      const header =  headerPrefix + text.slice(0,30);
+      const header =  headerPrefix + text.slice(0,30) + '...';
       
       connection.query(`
         SELECT botToken, channel FROM slackTeams
@@ -436,7 +435,6 @@ app.post('/slack/suggestion', upload.array(), (req, res) => {
 
 // *Vote Received From DM Button Click*
 app.post('/slack/vote', upload.array(), (req, res) => {
-  console.log(JSON.parse(req.body.payload));
   const payload = JSON.parse(req.body.payload);
   const voteType = payload.actions[0].value;
   const userId = payload.user.id;
@@ -473,7 +471,7 @@ app.post('/slack/vote', upload.array(), (req, res) => {
                 const bot = new WebClient(resToken[0].botToken);
                 // Update the post
                 const headerPrefix = rows[0].headerPrefix;                
-                const header = headerPrefix + suggestion.text.slice(0,30);
+                const header = headerPrefix + suggestion.text.slice(0,30) + '...';
 
                 const text = '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n' + suggestion.totalAgrees +' :+1: | ' + suggestion.totalDisagrees + ' :-1:   from   ' + suggestion.uniqueAgrees + ' :smiley: | ' + suggestion.uniqueDisagrees + ' :neutral_face:\n';
                 bot.chat.update(rows[0].ts, rows[0].channelId, text, { as_user: true }, (err, res) => { if (err) throw err });
@@ -513,7 +511,6 @@ app.get('/slack/auth', (req, res) => {
   };
   request(options, (error, response, body) => {
     const teamInfo = JSON.parse(body);
-    console.log(teamInfo);
     if (!teamInfo.ok) {
       res.send('Error encountered: \n' + JSON.stringify(teamInfo)).status(200).end();
     } else {
