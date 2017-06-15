@@ -3,14 +3,16 @@
   "description": "No description",
   "slug": "feedbackapp",
   "sdkVersion": "17.0.0",
+  "version": "1.0.41",
   "ios": {
     "bundleIdentifier": "com.feedbackapp.feedbackapp",
-    "supportsTablet": true
+    "supportsTablet": true,
+    "buildNumber": "41"
   },
   "android": {
-    "package": "com.feedbackapp.feedbackapp"
+    "package": "com.feedbackapp",
+    "versionCode": 41
   },
-  "version": "1.0.40",
   "orientation": "portrait",
   "primaryColor": "#cccccc",
   "icon": "https://s3-us-west-2.amazonaws.com/feedback-app-images/iTunesStoreIcon.png",
