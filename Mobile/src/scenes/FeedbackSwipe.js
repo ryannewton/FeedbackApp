@@ -54,7 +54,9 @@ class FeedbackSwipe extends Component {
     // If user hasn't upvoted this project, add an upvote
     if (project.id && !user.projectUpvotes.includes(project.id)) {
       this.props.addProjectUpvote(project);
-    } else if (project.id) {
+    }
+
+    if (project.id) {
       this.props.addToDoNotDisplayList(project.id);
     }
 
@@ -75,10 +77,12 @@ class FeedbackSwipe extends Component {
     const { user } = this.props;
     const project = this.state.projects[this.state.index];
 
-    // If user hasn't upvoted this project, add an upvote
-    if (project.id && !user.projectUpvotes.includes(project.id)) {
+    // If user hasn't downvoted this project, add an upvote
+    if (project.id && !user.projectDownvotes.includes(project.id)) {
       this.props.addProjectDownvote(project);
-    } else if (project.id) {
+    }
+
+    if (project.id) {
       this.props.addToDoNotDisplayList(project.id);
     }
 
@@ -122,7 +126,13 @@ class FeedbackSwipe extends Component {
                   this.swipeLeft('button');
                   this.deckSwiper._root.swipeLeft();
                 }}
-                skip={() => this.deckSwiper._root.swipeLeft()}
+                skip={() => {
+                  const project = this.state.projects[this.state.index];
+                  if (project.id) {
+                    this.props.addToDoNotDisplayList(project.id);
+                  }
+                  this.deckSwiper._root.swipeLeft();
+                }}
                 features={this.props.features}
                 navigate={this.props.navigation.navigate}
               />
