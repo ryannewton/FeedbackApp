@@ -12,14 +12,20 @@ const AuthStack = StackNavigator({
     screen: SendAuthorizationEmail,
     navigationOptions: {
       title: 'Verify Your Organization',
-      headerStyle: { height: styles.header.height },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+      },
     },
   },
   AuthCode: {
     screen: Authorize,
     navigationOptions: {
       title: 'Enter Code From Email',
-      headerStyle: { height: styles.header.height },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+      },
     },
   },
 });

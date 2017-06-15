@@ -31,21 +31,30 @@ const scenes = StackNavigator(
       navigationOptions: ({ navigation }) => ({
         title: 'Submit Feedback',
         headerRight: settingsButton(navigation.navigate),
-        headerStyle: { height: styles.header.height },
+        headerStyle: {
+          height: styles.header.height,
+          marginTop: styles.header.marginTop,
+        },
       }),
     },
     Settings: {
       screen: Settings,
       navigationOptions: {
         title: 'Settings',
-        headerStyle: { height: styles.header.height },
+        headerStyle: {
+          height: styles.header.height,
+          marginTop: styles.header.marginTop,
+        },
       },
     },
     Submitted: {
       screen: Submitted,
       navigationOptions: {
         title: 'Feedback Received',
-        headerStyle: { height: styles.header.height },
+        headerStyle: {
+          height: styles.header.height,
+          marginTop: styles.header.marginTop,
+        },
       },
     },
   },
