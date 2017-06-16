@@ -1,5 +1,4 @@
 // Use local .env file for env vars when not deployed
-console.log('*** EB Environment ***', process.env);
 require('dotenv').config();
 const multerS3 = require('multer-s3')
 
@@ -37,6 +36,8 @@ const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
 
+// **Mobile App and Website**
+
 // Image uploading backend
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -44,7 +45,6 @@ const s3 = new aws.S3({
   region: "us-east-1",
 });
 
-// Initialize multers3 with our s3 config and other options
 const uploadPic = multer({
   storage: multerS3({
     s3,
@@ -59,12 +59,11 @@ const uploadPic = multer({
   })
 })
 
-// Expose the /upload endpoint
 app.post('/uploadPhoto', uploadPic.single('photo'), (req, res, next) => {
   res.json(req.file)
-})
+});
 
-// **Mobile App and Website**
+
 function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
   ses.sendEmail({
     Source: fromEmail,
@@ -190,37 +189,15 @@ app.post('/addFeedback', upload.array(), (req, res) => {
       res.status(400).send('authorization failed');
     } else {
       const school = getDomain(decoded.email);
-
-      // Send Email
-      const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-      sendEmail(toEmails, defaultFromEmail, 'Feedback: ' + req.body.text, 'Email: ' + decoded.email);
-
-      connection.query('INSERT INTO feedback (text, email, groupId, school, type) VALUES (?, ?, ?, ?, ?)', [req.body.text, decoded.email, decoded.groupId, school, req.body.type], (err2, result) => {
-        if (err2) throw err2;
-        res.json({ id: result.insertId });
-      });
-    }
-  });
-});
-
-app.post('/addProject', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, 'buechelejedi16', (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      const title = (req.body.feedback.text) ? req.body.feedback.text : 'Blank Title';
-      const school = (req.body.feedback.school) ? req.body.feedback.school : getDomain(decoded.email);
-      const groupId = (req.body.feedback.groupId) ? req.body.feedback.groupId : decoded.groupId;
-
-      connection.query('INSERT INTO projects SET ?', { title, groupId, description: 'Blank Description', votes: 0, downvotes: 0, stage: 'new', school, type: req.body.feedback.type }, (err2, result) => {
-        if (err2) throw err2;
-        if (req.body.feedback) {
-          //sendEmail(['tyler.hannasch@gmail.com'], defaultFromEmail, 'A new project has been created for your feedback', 'The next step is to get people to upvote it so it is selected for action by the department heads');
-          connection.query('UPDATE feedback SET project_id = ? WHERE id = ?', [result.insertId, req.body.feedback.id], (err3) => {
-            if (err3) throw err3;
-          });
-        }
-        res.json({ id: result.insertId });
+      const connectionString = `SELECT moderator_approval FROM features WHERE groupId=?`;
+      connection.query(connectionString, [decoded.groupId], (err, result) => {
+        connection.query('INSERT INTO projects (title, votes, downvotes, description, department, stage, school, type, groupId, photoURL, approved) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [req.body.text, 1, 0, '', '', 'new', school, req.body.type, decoded.groupId, req.body.photoURL, !result[0].moderator_approval], (err, result) => {
+          if (err) throw err;
+          // Send Email
+          const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
+          sendEmail(toEmails, defaultFromEmail, 'Feedback: ' + req.body.text, 'Email: ' + decoded.email);
+          res.json({ id: result.insertId });
+        });
       });
     }
   });
