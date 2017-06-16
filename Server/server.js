@@ -60,7 +60,7 @@ const uploadPic = multer({
 })
 
 // Expose the /upload endpoint
-app.post('/upload', uploadPic.single('photo'), (req, res, next) => {
+app.post('/uploadPhoto', uploadPic.single('photo'), (req, res, next) => {
   res.json(req.file)
 })
 
