@@ -1,6 +1,7 @@
 require('dotenv').config();
 
 const multer = require('multer');
+const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const express = require('express');
 const mysql = require('mysql');
 const WebClient = require('@slack/client').WebClient; // for Slack
@@ -9,6 +10,8 @@ const request = require('request'); // Slack
 const upload = multer(); // for parsing multipart/form-data
 const app = express();
 
+app.use(bodyParser.json()); // for parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
 const connection = mysql.createConnection({
@@ -182,11 +185,6 @@ function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCoun
         if (err) return err;
         else resolve(200);
       });
-
-    // bot.chat.postMessage(channel, '\n*******************************************************************\n*Suggestion Box Refresh* (' + String(date.getMonth()+1) + '/' + String(date.getDate()) + '/' + String(date.getFullYear()) + ')>\nStep #1: You can post suggestions to this channel using the command /idea, /suggest, or /suggestion\nStep #2: Vote for each suggestion by clicking on the thumbs up emoji (if you agree), or the thumbs down icon (if you disagree, or it is not important)\nEach week the board will re-sort based on your votes!', (err, res) => {
-    //   if (err) return err;
-    //   else resolve(200);
-    // });
   }
   else if (suggestion.text === 'filler') {
     const date = new Date(Date.now() - slackInterval)
@@ -297,63 +295,63 @@ app.post('/slack/events', upload.array(), (req, res) => {
   if (req.body.type === 'url_verification') {
     res.json({ challenge: req.body.challenge });
   }
+  else {
+    // Get info from Slack's JSON
+    const teamId = req.body.team_id;
+    const { type, user, reaction } = req.body.event;
+    const { channel, ts } = req.body.event.item;
+    let voteType;
+    if (reaction === '+1') { voteType = "agree" }
+    if (reaction === '-1') { voteType = "disagree" } 
 
-  // Get info from Slack's JSON
-  const teamId = req.body.team_id;
-  const { type, user, reaction } = req.body.event;
-  const { channel, ts } = req.body.event.item;
-  let voteType;
-  if (reaction === '+1') { voteType = "agree" }
-  if (reaction === '-1') { voteType = "disagree" } 
+    
+    // Need to check for bot user id
+    getTeamInfo()
+    .then(teamInfo => { 
+      const matchesBot = teamInfo.filter(info => info.botUserId === user);
+    
+      if (voteType && !matchesBot.length) {
+        // Look for a match in our database (teamId, channel, ts)...
+        connection.query(`
+          SELECT suggestionId, headerPrefix FROM slackCurrentTable
+          WHERE teamId = ? AND channelId = ? AND ts = ?`, [teamId, channel, ts], (err, rows) => {
+            if (err) throw err
+            if (rows.length) {
+              // If there is a match pull the suggestion id...
+              const suggestionId = rows[0].suggestionId;
+              // Insert a vote
+              let connectionString = (type === 'reaction_added') ? `
+                  INSERT INTO slackVotes (suggestionId, userId, voteType)
+                  VALUES (?, ?, ?)` : `
+                  DELETE FROM slackVotes
+                  WHERE suggestionId = ? AND userId = ? AND voteType = ?
+                  LIMIT 1`;
 
-  
-  // Need to check for bot user id
-  getTeamInfo()
-  .then(teamInfo => { 
-    const matchesBot = teamInfo.filter(info => info.botUserId === user);
-  
-    if (voteType && !matchesBot.length) {
-      // Look for a match in our database (teamId, channel, ts)...
-      connection.query(`
-        SELECT suggestionId, headerPrefix FROM slackCurrentTable
-        WHERE teamId = ? AND channelId = ? AND ts = ?`, [teamId, channel, ts], (err, rows) => {
-          if (err) throw err
-          if (rows.length) {
-            // If there is a match pull the suggestion id...
-            const suggestionId = rows[0].suggestionId;
-            // Insert a vote
-            let connectionString = (type === 'reaction_added') ? `
-                INSERT INTO slackVotes (suggestionId, userId, voteType)
-                VALUES (?, ?, ?)` : `
-                DELETE FROM slackVotes
-                WHERE suggestionId = ? AND userId = ? AND voteType = ?
-                LIMIT 1`;
+              connection.query(connectionString, [suggestionId, user, voteType], (errVote) => {
+                if (errVote) throw errVote;
+                // Pull the updated vote information
+                getSuggestion(suggestionId, teamId)
+                .then(suggestion => {
+                  connection.query(`
+                    SELECT botToken FROM slackTeams
+                    WHERE teamId = ?`, [teamId], (err, resToken) => {
+                      if (err) throw err;
+                      const bot = new WebClient(resToken[0].botToken);
+                      // Update the post                      
+                      const header = rows[0].headerPrefix + suggestion.text.slice(0,30) + '...';
 
-            connection.query(connectionString, [suggestionId, user, voteType], (errVote) => {
-              if (errVote) throw errVote;
-              // Pull the updated vote information
-              getSuggestion(suggestionId, teamId)
-              .then(suggestion => {
-                connection.query(`
-                  SELECT botToken FROM slackTeams
-                  WHERE teamId = ?`, [teamId], (err, resToken) => {
-                    if (err) throw err;
-                    const bot = new WebClient(resToken[0].botToken);
-                    // Update the post                      
-                    const header = rows[0].headerPrefix + suggestion.text.slice(0,30) + '...';
-
-                    const text = '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n' + suggestion.totalAgrees +' :+1: | ' + suggestion.totalDisagrees + ' :-1:   from   ' + suggestion.uniqueAgrees + ' :smiley: | ' + suggestion.uniqueDisagrees + ' :neutral_face:\n';
-                    bot.chat.update(ts, channel, text, { as_user: true }, (err, res) => { if (err) throw err });
-                  }
-                );
+                      const text = '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n' + suggestion.totalAgrees +' :+1: | ' + suggestion.totalDisagrees + ' :-1:   from   ' + suggestion.uniqueAgrees + ' :smiley: | ' + suggestion.uniqueDisagrees + ' :neutral_face:\n';
+                      bot.chat.update(ts, channel, text, { as_user: true }, (err, res) => { if (err) throw err });
+                    }
+                  );
+                });
               });
-            });
-          }
-      });
-    }
-  });
-  
-  res.sendStatus(200);
+            }
+        });
+      }
+    });
+    res.sendStatus(200);
+  }
 });
 
 function getSuggestion(suggestionId, teamId) {

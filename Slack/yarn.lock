@@ -223,7 +223,7 @@ bluebird@^3.3.3:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
 
-body-parser@^1.15.2:
+body-parser@^1.17.2:
   version "1.17.2"
   resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.17.2.tgz#f8892abc8f9e627d42aedafbca66bf5ab99104ee"
   dependencies:
