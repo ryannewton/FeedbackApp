@@ -14,9 +14,6 @@ const bodyParser = require('body-parser'); // For uploading longer/complicated t
 const aws = require('aws-sdk'); // load aws sdk
 
 aws.config.loadFromPath('config.json'); // load aws config
-const WebClient = require('@slack/client').WebClient; // for Slack
-
-const request = require('request'); // Slack
 
 const app = express();
 const upload = multer(); // for parsing multipart/form-data
