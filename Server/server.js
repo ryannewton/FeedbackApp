@@ -1,9 +1,6 @@
 // Use local .env file for env vars when not deployed
 console.log('*** EB Environment ***', process.env);
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-}
-
+require('dotenv').config();
 const multerS3 = require('multer-s3')
 
 const express = require('express');
