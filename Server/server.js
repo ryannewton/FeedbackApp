@@ -1,4 +1,10 @@
-require('dotenv').config();
+// Use local .env file for env vars when not deployed
+console.log('*** EB Environment ***', process.env);
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
+const multerS3 = require('multer-s3')
 
 const express = require('express');
 const mysql = require('mysql');
@@ -36,6 +42,33 @@ const connection = mysql.createConnection({
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
+
+// Image uploading backend
+const s3 = new aws.S3({
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: "us-east-1",
+});
+
+// Initialize multers3 with our s3 config and other options
+const uploadPic = multer({
+  storage: multerS3({
+    s3,
+    bucket: process.env.AWS_BUCKET,
+    acl: 'public-read',
+    metadata(req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key(req, file, cb) {
+      cb(null, Date.now().toString() + '.png');
+    }
+  })
+})
+
+// Expose the /upload endpoint
+app.post('/upload', uploadPic.single('photo'), (req, res, next) => {
+  res.json(req.file)
+})
 
 // **Mobile App and Website**
 function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
