@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import styles from '../styles/scenes/FeedbackDetailsStyles';
 import FeedbackCard from '../components/FeedbackCard';
 import SolutionsCard from '../components/SolutionsCard';
+import ResponseCard from '../components/ResponseCard';
 import { Button, Spinner } from '../components/common';
 import {
   solutionChanged,
@@ -66,6 +67,9 @@ class FeedbackDetails extends Component {
               {/* Project description */}
               <FeedbackCard project={project} navigate={() => undefined} />
 
+              {/* Official response */}
+              <ResponseCard navigation={this.props.navigation} />
+
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />
             </View>
@@ -73,7 +77,7 @@ class FeedbackDetails extends Component {
         </ScrollView>
 
         {/* Error message (blank if no error) */}
-        {/*<Text style={styles.errorTextStyle}>
+        {/* <Text style={styles.errorTextStyle}>
           {this.state.errorMessage || this.props.solutions.message}
         </Text>*/}
 
