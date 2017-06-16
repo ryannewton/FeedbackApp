@@ -1,10 +1,10 @@
 // Use local .env file for env vars when not deployed
 require('dotenv').config();
-const multerS3 = require('multer-s3')
 
 const express = require('express');
 const mysql = require('mysql');
 const multer = require('multer');
+const multerS3 = require('multer-s3') // For image uploading
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const aws = require('aws-sdk'); // load aws sdk
@@ -29,7 +29,10 @@ const connection = mysql.createConnection({
   // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+
+  // second development database
+  host: 'aay3x5lrtsjmla.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
@@ -63,7 +66,7 @@ app.post('/uploadPhoto', uploadPic.single('photo'), (req, res, next) => {
   res.json(req.file)
 });
 
-
+// Sends Email from AWS SES
 function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
   ses.sendEmail({
     Source: fromEmail,
@@ -97,13 +100,15 @@ function generatePassword(len) {
   return password;
 }
 
+// May be depreciated
 function getDomain(email) {
   const re = /@\w*\.\w*$|\.\w*\.\w*$/;
   return re.exec(email)[0].slice(1);
 }
 
-// Authentication
+// Authentication Step #1
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
+  //Checks to make sure it is a valid email address
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!re.test(req.body.email)) {
     res.status(400).send('Sorry, this does not appear to be a valid email address :(');
@@ -116,12 +121,12 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
     let groupId;
     let connectionString = 'SELECT groupId FROM users WHERE email=?';
     connection.query(connectionString, [req.body.email], (err, rows) => {
-      if (err) throw err;
+      if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
       if (!rows.length) {
-        // Step #2A: If not in database see if it has a default groupId
-        connectionString = 'SELECT id FROM features WHERE school=?';
+        // Step #2A: If the user's email is not in the user table see if it has a default groupId
+        connectionString = 'SELECT id FROM groups WHERE defaultEmailDomain=?';
         connection.query(connectionString, [getDomain(req.body.email)], (err, rows) => {
-          if (err) res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
+          if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
           if (!rows.length) {
             res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
           } else {
@@ -144,8 +149,7 @@ function sendAuthEmailHelper(req, res, code, groupId) {
   if (req.body.email.includes('admin_test')) {
     res.sendStatus(200);
   } else {
-    console.log('email sent');
-    // Step #3: Send an email with the code to the user (make sure it shows up in notification)
+    // Step #4: Send an email with the code to the user (make sure it shows up in notification)
     sendEmail([req.body.email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
     res.sendStatus(200);
   }   

@@ -1,23 +1,14 @@
 require('dotenv').config();
 
+const multer = require('multer');
 const express = require('express');
 const mysql = require('mysql');
-const multer = require('multer');
-const jwt = require('jsonwebtoken'); // For authentication
-const bodyParser = require('body-parser'); // For uploading longer/complicated texts
-const aws = require('aws-sdk'); // load aws sdk
-
-aws.config.loadFromPath('config.json'); // load aws config
 const WebClient = require('@slack/client').WebClient; // for Slack
-
 const request = require('request'); // Slack
 
-const app = express();
 const upload = multer(); // for parsing multipart/form-data
-const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
+const app = express();
 
-app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
 const connection = mysql.createConnection({
@@ -27,10 +18,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
@@ -41,7 +32,7 @@ connection.connect();
 
 // *Weekly Update*
 
-//weeklyUpdate();
+weeklyUpdate();
 // Interval to repush to Slack
 const slackInterval = 1000 * 60 * 60 * 6; // Every six hours hour
 setInterval(() => weeklyUpdate(), slackInterval);
@@ -99,7 +90,7 @@ function getSuggestions(teamId) {
           COUNT(DISTINCT (CASE WHEN b.voteType = 'disagree' THEN b.userId END)) AS uniqueDisagrees  
         FROM
           slackSuggestions a
-        JOIN
+        LEFT JOIN
           slackVotes b
         ON
           a.id = b.suggestionId
@@ -173,10 +164,29 @@ function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCoun
   
   if (suggestion.text === 'new refresh') {
     const date = new Date(Date.now());
-    bot.chat.postMessage(channel, '\n******************************************************************\n>>>Suggestion Box Refresh ' + String(date.getMonth()+1) + '/' + String(date.getDate()) + '/' + String(date.getFullYear()), (err, res) => {
-      if (err) return err;
-      else resolve(200);
-    });
+    bot.chat.postMessage(channel, '*Suggestion Box Refresh (' + String(date.getMonth()+1) + '/' + String(date.getDate()) + '/' + String(date.getFullYear()) + ')*',
+      {
+        "attachments": [
+          {
+              "fallback": "Suggestion box logo.",
+              "color": "#36a64f",
+              "image_url": "https://s3-us-west-2.amazonaws.com/feedback-app-images/yb_branner.png",
+          },
+          {
+            "fallback": "Suggestion box refresh header.",
+            "color": "#36a64f",
+            "text": "Step #1 - Post suggestions using the /idea command from any channel\nStep #2 - Vote for or against suggestions using the emojis below",      
+          }
+        ],
+      }, (err, res) => {
+        if (err) return err;
+        else resolve(200);
+      });
+
+    // bot.chat.postMessage(channel, '\n*******************************************************************\n*Suggestion Box Refresh* (' + String(date.getMonth()+1) + '/' + String(date.getDate()) + '/' + String(date.getFullYear()) + ')>\nStep #1: You can post suggestions to this channel using the command /idea, /suggest, or /suggestion\nStep #2: Vote for each suggestion by clicking on the thumbs up emoji (if you agree), or the thumbs down icon (if you disagree, or it is not important)\nEach week the board will re-sort based on your votes!', (err, res) => {
+    //   if (err) return err;
+    //   else resolve(200);
+    // });
   }
   else if (suggestion.text === 'filler') {
     const date = new Date(Date.now() - slackInterval)
