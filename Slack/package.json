@@ -1,23 +1,17 @@
 {
-  "name": "Suggestion-Box-Server",
-  "version": "1.1.0",
-  "description": "Back end server for the Suggestion Box",
-  "main": "index.js",
-  "repository": "",
-  "scripts": {
-    "start": "node server.js",
-    "dev-1": "nodemon server.js"
-  },
+  "name": "Suggestion-Box-Slack",
+  "version": "1.0.0",
+  "description": "Back end for the Suggestion Box slack bot",
   "author": "tjonnyc",
   "license": "proprietary",
   "dependencies": {
-    "aws-sdk": "^2.8.0",
+    "@slack/client": "^3.9.0",
     "body-parser": "^1.15.2",
     "dotenv": "^4.0.0",
     "express": "^4.14.0",
-    "jsonwebtoken": "^7.3.0",
     "multer": "^1.2.0",
-    "mysql": "^2.11.1"
+    "mysql": "^2.11.1",
+    "request": "^2.81.0"
   },
   "devDependencies": {
     "eslint": "^3.18.0",
@@ -25,7 +19,6 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
-    "nodemon": "^1.11.0",
-    "webpack": "^2.6.1"
+    "nodemon": "^1.11.0"
   }
 }
