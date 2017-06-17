@@ -65,7 +65,7 @@ class FeedbackDetails extends Component {
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View>
               {/* Project description */}
-              <FeedbackCard project={project} navigate={() => undefined} />
+              <FeedbackCard project={project} navigate={() => undefined } renderStatus />
 
               {/* Official response */}
               <ResponseCard navigation={this.props.navigation} />

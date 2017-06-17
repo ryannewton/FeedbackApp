@@ -19,7 +19,7 @@ const styles = {
     padding: 5,
     justifyContent: 'flex-start',
     flexDirection: 'row',
-    backgroundColor: '#99ccff',
+    backgroundColor: '#fff',
     position: 'relative',
   },
 };
