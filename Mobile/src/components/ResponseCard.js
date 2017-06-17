@@ -13,7 +13,9 @@ class ResponseCard extends Component {
     if (!this.props.navigation.state.params.project.response) {
       return null;
     }
+
     const { response } = this.props.navigation.state.params.project;
+    // const response = {text:'This is a terrible idea!', author:'Boss'}
     const { subheaderText } = styles;
 
     // Are there responses?

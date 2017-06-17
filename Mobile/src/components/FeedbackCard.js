@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
@@ -26,6 +26,20 @@ class Project extends Component {
     this.props.navigate('Details', { project: this.props.project });
   }
 
+  renderImage() {
+    if (this.props.renderImage && this.props.project.imageURL) {
+      const { imageURL } = this.props.project;
+      return (
+        <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
+          <Image
+            source={{ uri: imageURL }}
+            style={{ width: 200, height: 200 }}
+          />
+        </View>
+      );
+    }
+    return null;
+  }
   upvote() {
     const { project, user } = this.props;
     // If user hasn't upvoted this project, add an upvote
@@ -162,7 +176,7 @@ class Project extends Component {
               </Text>
               {/* Vote count */}
             </View>
-
+            {this.renderImage()}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'column' }}>
                 <View style={{ flexDirection: 'row', paddingTop: 5, justifyContent: 'flex-end' }}>
