@@ -39,8 +39,6 @@ const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
 
-// **Mobile App and Website**
-
 // Image uploading backend
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -154,16 +152,19 @@ function sendAuthEmailHelper(req, res, code, groupId) {
   }   
 }
 
+function generateToken(userInfo) {
+  return jwt.sign({ userId: userInfo.id, groupId: userInfo.groupId, groupName: userInfo.groupName }, process.env.JWT_KEY);
+}
+
+// AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {
   // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
   const connectionString = (req.body.code === 'apple') ? 'SELECT id, groupId, groupName FROM users WHERE email=?' : 'SELECT groupId FROM users WHERE email=? AND passcode=?';
   connection.query(connectionString, [req.body.email, req.body.code], (err, rows) => {
-    if (err) res.status(400).send('Incorrect Code');
-    // Step #2: Check that it matches the passcode submitted by the user, if not send error
+    if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
     if (rows.length) {
-      // Step #3: If it checks out then create a JWT token and send to the user
-      const myToken = jwt.sign({ userId: row[0].id, groupId: rows[0].groupId, groupName: rows[0].groupName }, process.env.JWT_KEY);
-      res.status(200).json(myToken);
+      // Step #2: If it checks out then create a JWT token and send to the user
+      res.status(200).json(generateToken(rows[0]));
     } else {
       res.status(400).send('Incorrect Code');
     }
@@ -171,7 +172,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
 });
 
 app.post('/authorizeAdminUser', upload.array(), (req, res) => {
-  // Step #1: Query the database for the groupId associated with the email address in req.body
+  // Step #1: Query the database for the groupId associated with the email address, passcode, and admin passcode in req.body
   const connectionString = `
     SELECT a.groupId
     FROM users a
@@ -180,247 +181,251 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
     WHERE a.email=? AND a.passcode=? AND b.groupAdminCode=?`
   connection.query(connectionString, [req.body.email, req.body.code, req.body.groupAdminCode], (err, rows) => {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - D69S');
-    // Step #2: Check that it matches the passcode submitted by the user, if not send error
     if (rows.length) {
-      // Step #3: If it checks out then create a JWT token and send to the user
-      const myToken = jwt.sign({ userId: row[0].id, groupId: rows[0].groupId, groupName: rows[0].groupName }, process.env.JWT_KEY);
-      res.status(200).json(myToken);
+      // Step #2: If it checks out then create a JWT token and send to the user      
+      res.status(200).json(generateToken(rows[0]));
     } else {
       res.status(400).send('Incorrect Code');
     }
   });
 });
 
-// Submit Suggestions and Solutions
+// SUBMIT
 app.post('/submitSuggestion', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      const connectionString = `SELECT suggestionsRequireApproval FROM groups WHERE groupId=?`;
-      connection.query(connectionString, [decoded.groupId], (err, result) => {
-        connection.query('INSERT INTO suggestions (groupId, submitterId, text, status, type, imageURL, approved) VALUES (?, ?, ?, ?, ?, ?, ?)', [decoded.groupId, ], (err, result) => {
-          if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
-          // Send Email
-          const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-          sendEmail(toEmails, defaultFromEmail, 'Feedback: ' + req.body.text, 'Email: ' + decoded.email);
-          res.json({ id: result.insertId });
-        });
-      });
-    }
-  });
-});
-
-app.post('/addSolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      connection.query('INSERT INTO project_additions SET ?',
-        {
-          type: 'solution',
-          votes: 0,
-          downvotes: 0,
-          title: req.body.title || 'Title Here',
-          description: req.body.description || 'Description Here',
-          project_id: req.body.project_id,
-          school: getDomain(decoded.email),
-          groupId: decoded.groupId,
-          email: decoded.email,
-          approved: !req.body.moderatorApprovalSolutions,
-        }, (innerError, result) => {
-          if (innerError) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 2579');
-          res.json({ id: result.insertId });
-        });
-    }
-  });
-});
-
-app.post('/addSubscriber', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      connection.query('INSERT INTO subscriptions SET ?',
-        {
-          project_id: req.body.projectId,
-          email: decoded.email,
-          type: req.body.type
-        }, (err2) => {
-        if (err2) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
-        res.sendStatus(200);
-      });
-    }
-  });
-});
-
-// Save Project, Project_Addition Changes
-app.post('/saveProjectChanges', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      connection.query('UPDATE projects SET votes = ?, downvotes = ?, title = ?, description = ? WHERE id= ?', [req.body.project.votes, req.body.project.downvotes, req.body.project.title, req.body.project.description, req.body.project.id], (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4928');
-      });
-      res.sendStatus(200);
-    }
-  });
-});
-
-var addSubscriber = function(req, res, next) {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      connection.query('INSERT INTO subscriptions SET ?',
-        {
-          project_id: req.body.project_addition.id,
-          email: decoded.email,
-          type: 'up vote solution'
-        }, (err2) => {
-        if (err2) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 5825');
-      });
-    }
-  });
-  next();
-};
-
-app.post('/saveProjectAdditionChanges', upload.array(), addSubscriber, (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      connection.query('UPDATE project_additions SET votes = ?, downvotes = ?, title = ?, description = ?, approved = ? WHERE id= ?',
-        [
-          req.body.project_addition.votes,
-          req.body.project_addition.downvotes,
-          req.body.project_addition.title,
-          req.body.project_addition.description,
-          req.body.project_addition.approved,
-          req.body.project_addition.id,
-        ], (innerError) => {
-          if (innerError) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 6934');;
-        });
-      res.sendStatus(200);
-    }
-  });
-});
-
-// Delete Projects, Project_Additions
-app.post('/deleteProject', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      connection.query('DELETE FROM projects WHERE id = ?', [req.body.id], (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 7926');;
-      });
-      res.sendStatus(200);
-    }
-  });
-});
-
-app.post('/deleteProjectAddition', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      connection.query('DELETE FROM project_additions WHERE id = ?', [req.body.id], (err2) => {
-        if (err2) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8023');;
-      });
-      res.sendStatus(200);
-    }
-  });
-});
-
-// Pull Feedback, Projects, Project Additions, Discussion Posts, and Features
-app.post('/pullFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      const connectionString = `
-        SELECT
-          *
-        FROM
-          feedback
-        WHERE
-          time
-            BETWEEN ? AND ?
-        AND
-          groupId = ?`;
-      connection.query(connectionString, [req.body.startDate, req.body.endDate, decoded.groupId], (err2, rows) => {
-        if (err2) res.status(400).send('Invalid Token');
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      // Check if the suggestion requires approval
+      const { groupId, userId } = decoded;
+      const connectionString = `SELECT suggestionsRequireApproval, groupName FROM groups WHERE id=?`;
+      connection.query(connectionString, [groupId], (err, rows) => {        
+        if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
-          res.json(rows);
+          // Insert the suggestion into the database          
+          const { text, type, imageURL } = req.body.suggestion;
+          const approved = !rows[0].suggestionsRequireApproval;
+          connectionString = 'INSERT INTO suggestions SET ?';
+          connection.query(connectionString, 
+            {
+              groupId,
+              userId,
+              text,
+              type,
+              imageURL,
+              approved,
+            }, (err, result) => {
+              if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
+              else {
+                // Send Email to Admins
+                const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
+                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + req.body.text, 'Email: ' + decoded.email);
+                res.json({ id: result.insertId });
+              }
+            }
+          );
         }
       });
     }
   });
 });
 
-app.post('/pullProjects', upload.array(), (req, res) => {
+app.post('/submitSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      const connectionString = `
-        SELECT
-          id, title, votes, downvotes, description, department, stage, type
-        FROM
-          projects
-        WHERE
-          groupId=?`;
-      connection.query(connectionString, [decoded.groupId], (err2, rows) => {
-        if (err2 || !decoded.groupId) res.status(400).send('Invalid Token');
-        else res.send(rows);
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      // Check if the solution requires approval
+      const { groupId, userId } = decoded;
+      const connectionString = `SELECT solutionsRequireApproval FROM groups WHERE id=?`;
+      connection.query(connectionString, [groupId], (err, rows) => {        
+        if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 0942');
+        else {
+          // Insert the solution into the database
+          const { suggestionId, text } = req.body.solution;
+          const approved = !rows[0].solutionsRequireApproval;
+          connectionString = 'INSERT INTO solutions SET ?';
+          connection.query(connectionString,
+            {
+              suggestionId,
+              userId,
+              text,
+              approved,
+            }, (err, result) => {
+              if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 2579');
+              else res.json({ id: result.insertId });
+            }
+          );
+        }
       });
     }
   });
 });
 
-app.post('/pullProjectAdditions', upload.array(), (req, res) => {
+// VOTE
+app.post('/submitSuggestionVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
-      const connectionString = `
-        SELECT
-          id, type, votes, downvotes, title, description, project_id, approved
-        FROM
-          project_additions
-        WHERE
-          groupId=?`;
-      connection.query(connectionString, [decoded.groupId], (err2, rows) => {
-        if (err2) res.status(400).send('Invalid Token');
-        else res.send(rows);
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const suggestionId = req.body.suggestion.id;
+      const { upvote, downvote } = req.body;
+      const userId = decoded.userId; 
+      const connectionString = 'INSERT INTO suggestionVotes SET ?'
+      connection.query(connectionString,
+        {
+          suggestionId,
+          userId,
+          upvote,
+          downvote,
+        }, (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
+        else res.sendStatus(200);
       });
     }
   });
 });
 
-app.post('/pullFeatures', upload.array(), (req, res) => {
+app.post('/submitSolutionVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('authorization failed');
-    } else {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const solutionId = req.body.solution.id;
+      const { upvote, downvote } = req.body;
+      const userId = decoded.userId; 
+      const connectionString = 'INSERT INTO solutionVotes SET ?'
+      connection.query(connectionString,
+        {
+          solutionId,
+          userId,
+          upvote,
+          downvote,
+        }, (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8902');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
+// UPDATE
+app.post('/updateSuggestion', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { text, status, imageURL, approved, id } = req.body.suggestion;
+      const connectionString = 'UPDATE suggestions SET ? WHERE ?';
+      connection.query(connectionString,
+        [{
+          text,
+          status,
+          imageURL,
+          approved,       
+        },
+        { id }], (err) => {
+          if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4928');
+          else res.sendStatus(200);
+        }
+      );
+    }
+  });
+});
+
+app.post('/updateSolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { text, approved, id } = req.body.solution;
+      const connectionString = 'UPDATE solutions SET ? WHERE ?';
+      connection.query(connectionString,
+        [{
+          text,
+          approved,       
+        },
+        { id }], (err) => {
+          if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4930');
+          else res.sendStatus(200);
+        }
+      );
+    }
+  });
+});
+
+// DELETE
+app.post('/deleteSuggestion', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const connectionString = 'DELETE FROM suggestions WHERE id = ?';
+      connection.query(connectionString, [req.body.suggestion.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 7926');
+        else res.sendStatus(200);
+      });      
+    }
+  });
+});
+
+app.post('/deleteSolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const connectionString = 'DELETE FROM solutions WHERE id = ?';
+      connection.query(connectionString, [req.body.solution.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 7930');
+        else res.sendStatus(200);
+      });      
+    }
+  });
+});
+
+// PULL
+app.post('/pullSuggestions', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    const { userId, groupName, groupId } = decoded;
+    if (err) res.status(400).send('Authorization failed');    
+    else if (!userId || !groupName || !groupId) res.status(400).send('Token out of date, please re-login');
+    else {
+      const connectionString = `SELECT * FROM suggestions WHERE groupId=?`;
+      connection.query(connectionString, [groupId], (err, rows) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
+
+app.post('/pullSolutions', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    const { userId, groupName, groupId } = decoded;
+    if (err) res.status(400).send('Authorization failed');
+    else if (!userId || !groupName || !groupId) res.status(400).send('Token out of date, please re-login');
+    else {
+      const connectionString = `SELECT * FROM solutions WHERE groupId=?`;
+      connection.query(connectionString, [groupId], (err, rows) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
+
+app.post('/pullGroupInfo', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    const { userId, groupName, groupId } = decoded;
+    if (err) res.status(400).send('Authorization failed');
+    else if (!userId || !groupName || !groupId) res.status(400).send('Token out of date, please re-login');
+    else {
       const connectionString = `
         SELECT
-          moderator_approval AS moderatorApproval,
-          moderator_approval_solutions AS moderatorApprovalSolutions,
-          show_status AS showStatus,
-          enable_new_feedback AS enableNewFeedback,
-          positive_feedback_box AS positiveFeedbackBox,
-          ? AS domain,
-          ? AS email
+          groupName,
+          suggestionsRequireApproval,
+          solutionsRequireApproval,
+          showStatus,
+          includePositiveFeedbackBox
         FROM
-          features
+          groups
         WHERE
-          id=?`;
-      connection.query(connectionString, [getDomain(decoded.email), decoded.email, decoded.groupId], (err2, rows) => {
-        if (err2) res.status(400).send('Invalid Token');
-        else res.send(rows);
+          groupId=?`;
+      connection.query(connectionString, [groupId], (err, rows) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
+        else res.status(200).send(rows);
       });
     }
   });

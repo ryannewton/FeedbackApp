@@ -35,9 +35,9 @@ connection.connect();
 
 // *Weekly Update*
 
-weeklyUpdate();
+//weeklyUpdate();
 // Interval to repush to Slack
-const slackInterval = 1000 * 60 * 60 * 6; // Every six hours hour
+const slackInterval = 1000 * 60 * 60 * 24 * 7; // Every week
 setInterval(() => weeklyUpdate(), slackInterval);
 
 // Called by Timer Each Thursday at 1am PT
