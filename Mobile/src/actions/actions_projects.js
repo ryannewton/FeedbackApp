@@ -6,10 +6,13 @@ import {
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   ADD_PROJECT,
+  SUBMIT_IMAGE,
+  SUBMIT_IMAGE_SUCCESS,
+  SUBMIT_IMAGE_FAIL,
 } from './types';
 
 // Import constants
-import { http } from '../constants';
+import { http, ROOT_URL } from '../constants';
 
 export const requestedProjects = () => ({
   type: REQUESTED_PROJECTS,
@@ -65,6 +68,40 @@ export const addProject = (feedback, type, feedbackId) => (
     })
     .catch((error) => {
       console.log('Error in addProject in actions_projects', error.response.data);
+    });
+  }
+);
+
+export const uploadImage = uri => (
+  (dispatch) => {
+    dispatch({ type: SUBMIT_IMAGE });
+    const apiUrl = `${ROOT_URL}/uploadPhoto/`;
+    const fileType = uri[uri.length - 1];
+
+    const formData = new FormData();
+    formData.append('photo', {
+      uri,
+      name: `photo.${fileType}`,
+      type: `image/${fileType}`,
+    });
+
+    const options = {
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+
+    fetch(apiUrl, options)
+    .then(response => response.json())
+    .then(response => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: response.location }))
+    .catch((err) => {
+      dispatch({ type: SUBMIT_IMAGE_FAIL });
+      alert('Uh-oh, something went wrong :(\nPlease try again.');
+      console.log('Error uploading image');
+      console.log('Error: ', err);
     });
   }
 );
