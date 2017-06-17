@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
@@ -26,6 +26,20 @@ class Project extends Component {
     this.props.navigate('Details', { project: this.props.project });
   }
 
+  renderImage() {
+    if (this.props.renderImage && this.props.project.imageURL) {
+      const { imageURL } = this.props.project;
+      return (
+        <View style={{ justifyContent: 'center', alignItems: 'center', paddingTop: 5, paddingBottom: 5 }}>
+          <Image
+            source={{ uri: imageURL }}
+            style={{ width: 200, height: 200 }}
+          />
+        </View>
+      );
+    }
+    return null;
+  }
   upvote() {
     const { project, user } = this.props;
     // If user hasn't upvoted this project, add an upvote
@@ -47,6 +61,24 @@ class Project extends Component {
       // tracker.trackEvent('Remove Project Vote', 'Remove Project DownVote Via Project Button', { label: this.props.features.domain });
       this.props.removeProjectDownvote(project);
     }
+  }
+  renderOfficialResponseTag() {
+    if (this.props.renderOfficalResponseTag) {
+      const exists = Boolean(this.props.project.response);
+      if (exists) {
+        const wantToRender = Boolean(this.props.responseTag);
+        const responseExists = (this.props.project.response.text !== '');
+
+        if (wantToRender && responseExists) {
+          return (
+            <View style={{ paddingTop: 15 }}>
+              <Icon name="transcribe-close" type="material-community" color="blue" />
+            </View>
+          );
+        }
+      }
+    }
+    return null;
   }
   // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
   renderVoteCount() {
@@ -98,21 +130,22 @@ class Project extends Component {
   }
 
   renderStatus() {
-    const { stage } = this.props.project;
-    if (stage && stage === 'complete') {
-      return <Icon name="done" size={35} color={'#006400'} />;
+    if (this.props.renderStatus) {
+      const { stage } = this.props.project;
+      if (stage && stage === 'complete') {
+        return <Icon name="done" size={35} color={'#006400'} />;
+      }
+      if (stage && stage === 'inprocess') {
+        return <Icon name="sync" size={35} color={'#00008B'} />;
+      }
+      return <Icon name="fiber-new" size={35} color={'#A9A9A9'} />;
     }
-    if (stage && stage === 'inprocess') {
-      return <Icon name="sync" size={35} color={'#00008B'} />;
-    }
-    return <Icon name="block" size={35} color={'#A9A9A9'} />;
   }
 
   renderStatusBox() {
     if (this.props.features.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
           {this.renderStatus()}
         </View>
       );
@@ -143,7 +176,7 @@ class Project extends Component {
               </Text>
               {/* Vote count */}
             </View>
-
+            {this.renderImage()}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
               <View style={{ flexDirection: 'column' }}>
                 <View style={{ flexDirection: 'row', paddingTop: 5, justifyContent: 'flex-end' }}>
@@ -160,6 +193,7 @@ class Project extends Component {
                 </View>
               </View>
               {this.renderStatusBox()}
+              {this.renderOfficialResponseTag()}
               {/* Upvote Button */}
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>

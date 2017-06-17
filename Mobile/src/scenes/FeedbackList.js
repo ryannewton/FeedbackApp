@@ -27,6 +27,9 @@ class FeedbackList extends Component {
           key={feedbackItem.id}
           navigate={this.props.navigation.navigate}
           saveProjectChanges={this.props.saveProjectChanges}
+          responseTag
+          renderStatus
+          renderOfficalResponseTag
         />
       ),
     );
@@ -47,6 +50,9 @@ class FeedbackList extends Component {
               key={rowData.id}
               navigate={this.props.navigation.navigate}
               saveProjectChanges={this.props.saveProjectChanges}
+              responseTag
+              renderStatus
+              renderOfficalResponseTag
             />
           }
         />

@@ -21,6 +21,24 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontSize: 16
   },
+  imageContainer: {
+    alignItems: 'center',
+  },
+  imageFrame: {
+    backgroundColor: 'white',
+    marginTop: 0,
+    marginBottom: 5,
+    width: 210,
+    height: 210,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: 3,
+    elevation: 2,
+    shadowColor: 'rgba(0,0,0,1)',
+    shadowOpacity: 0.2,
+    shadowOffset: { width: 4, height: 4 },
+    shadowRadius: 5,
+  },
 });
 
 export default styles;

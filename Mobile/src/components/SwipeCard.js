@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Image } from 'react-native';
 import { Card, CardItem, Left } from 'native-base';
 import { Icon } from 'react-native-elements';
 
@@ -16,8 +16,46 @@ class SwipeCard extends Component {
     // tracker.trackEvent('View', 'Swipe Card', { label: props.features.domain, value: props.project.id });
   }
 
-  _changeStyle() {
+  renderOfficialResponseTag() {
+    const exists = Boolean(this.props.project.response);
 
+    if (exists) {
+      const responseExists = (this.props.project.response.text !== '');
+      if (responseExists) {
+        return (
+          <View style={{flex: 1, alignItems:'center', justifyContent: 'center' }}>
+            <Icon name="transcribe-close" type="material-community" color="blue" />
+          </View>
+        );
+      }
+    }
+    return null;
+  }
+
+  renderStatus() {
+    const { stage } = this.props.project;
+    if (stage && stage === 'complete') {
+      return <Icon name="done" size={35} color={'#006400'} />;
+    }
+    if (stage && stage === 'inprocess') {
+      return <Icon name="sync" size={35} color={'#00008B'} />;
+    }
+    return <Icon name="fiber-new" size={35} color={'#A9A9A9'} />;
+  }
+  renderImage() {
+    const { project } = this.props;
+
+    if (project.imageURL && project.imageURL !== '') {
+      return (
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Image
+            source={{ uri: project.imageURL }}
+            style={{ width: 50, height: 50, borderColor: 'black', borderWidth: 0.5 }}
+          />
+        </View>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -29,16 +67,27 @@ class SwipeCard extends Component {
             <Left>
               <Text style={styles.bodyText}>{project.title}</Text>
             </Left>
+
           </CardItem>
-          <CardItem style={{ justifyContent: 'center', flexDirection: 'column', paddingTop: 0, paddingBottom: 0, marginBottom: 0, marginTop: 0 }}>
-            <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
-              <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{project.votes}</Text>
-              <Icon size={18} name='arrow-upward' color= 'green' />
+          {this.renderImage()}
+          <CardItem style={{justifyContent:'space-between'}}>
+            <View style={{flex: 1, alignItems:'center' }}>
+              <View style={{justifyContent: 'center', flexDirection: 'column' }}>
+                <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
+                  <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{project.votes}</Text>
+                  <Icon size={18} name='arrow-upward' color= 'green' />
+                </View>
+                <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
+                  <Text style={[styles.smallText, { color: 'red', fontSize: 18 }]}>{project.downvotes}</Text>
+                  <Icon size={18} name='arrow-downward' color= 'red' />
+                </View>
+              </View>
             </View>
-            <View style={{flexDirection:'row', justifyContent: 'flex-start'}}>
-              <Text style={[styles.smallText, { color: 'red', fontSize: 18 }]}>{project.downvotes}</Text>
-              <Icon size={18} name='arrow-downward' color= 'red' />
+            <View style={{flex: 1, alignItems:'center', justifyContent:'center' }}>
+              {this.renderStatus()}
             </View>
+            {this.renderOfficialResponseTag()}
+
           </CardItem>
         </View>
         <View style={{ justifyContent: 'flex-end' }}>
