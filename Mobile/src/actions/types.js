@@ -17,6 +17,9 @@ export const SUBMIT_FEEDBACK_SUCCESS = 'submit_feedback_success';
 export const SUBMIT_FEEDBACK_FAIL = 'submit_feedback_fail';
 export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
+export const SUBMIT_IMAGE = 'submit_image';
+export const SUBMIT_IMAGE_SUCCESS = 'submit_image_success';
+export const SUBMIT_IMAGE_FAIL = 'submit_image_fail';
 
 // AuthActions types
 export const SENDING_AUTHORIZATION_EMAIL = 'sending_authorization_email';

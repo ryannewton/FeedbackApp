@@ -1,17 +1,30 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, TextInput, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, Text, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 import { MenuContext } from 'react-native-menu';
+import { Icon } from 'react-native-elements';
+import { ImagePicker } from 'expo';
+import {
+  View,
+  TextInput,
+  Keyboard,
+  TouchableWithoutFeedback,
+  Image,
+  TouchableOpacity,
+  Text,
+  KeyboardAvoidingView,
+  StyleSheet,
+  ActivityIndicator,
+} from 'react-native';
 
 // Import actions
-import { submitFeedbackToServer, closeInstructions } from '../actions';
+import { submitFeedbackToServer, closeInstructions, uploadImage } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
 
 // Import about info image
-import styles from '../styles/scenes/FullscreenStyle';
+import styles from '../styles/scenes/FeedbackSubmitStyles';
 import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
 // Import tracking
@@ -69,14 +82,74 @@ class FeedbackSubmit extends Component {
     this.props.closeInstructions('Write Feedback Scene');
   }
 
-  renderButton() {
+  addImage = async () => {
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true });
+
+    // If user selects an image
+    if (!pickerResult.cancelled) {
+      this.props.uploadImage(pickerResult.uri);
+    }
+  }
+
+  maybeRenderImage = () => {
+    const { imageURL } = this.props.feedback;
+
+    // If there is no image, don't render anything
+    if (!imageURL) {
+      return null;
+    }
+
+    return (
+      <View style={styles.imageContainer}>
+        <View style={styles.imageFrame}>
+          <View style={{ borderTopRightRadius: 3, borderTopLeftRadius: 3, overflow: 'hidden' }}>
+            <Image
+              source={{ uri: imageURL }}
+              style={{ width: 200, height: 200 }}
+            />
+          </View>
+        </View>
+      </View>
+    );
+  }
+
+  maybeRenderUploadingOverlay = () => {
+    const { loadingImage } = this.props.feedback;
+    if (loadingImage) {
+      return (
+        <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' }]}>
+          <ActivityIndicator
+            color="#fff"
+            animating
+            size="large"
+          />
+          <Text style={{ color: 'white' }}>Uploading photo...</Text>
+        </View>
+      );
+    }
+  }
+
+  renderButtons() {
     if (this.props.feedback.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
+
     return (
-      <Button onPress={this.submitFeedback} style={{ marginBottom: 10 }}>
-        Submit Feedback
-      </Button>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        <View style={{ flex: 5.5 }}>
+          <Button onPress={this.submitFeedback} style={{ marginBottom: 10, flex: 3 }}>
+            Submit Feedback
+          </Button>
+        </View>
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <TouchableOpacity
+            onPress={this.addImage}
+            style={styles.button}
+          >
+            <Icon name="add-a-photo" size={25} color={'black'} />
+          </TouchableOpacity>
+        </View>
+      </View>
     );
   }
 
@@ -84,7 +157,7 @@ class FeedbackSubmit extends Component {
     const placeholderText = 'Enter your feedback here!';
 
     const instructionsScreen = (
-      <View style={styles.imageContainer}>
+      <View style={styles.instructionContainer}>
         <TouchableOpacity onPress={this.closeInstructions} style={styles.touchableOpacityStyle}>
           <Image style={styles.image} source={fullScreen} resizeMode="stretch" />
         </TouchableOpacity>
@@ -103,8 +176,9 @@ class FeedbackSubmit extends Component {
           placeholder={placeholderText}
           value={this.state.feedback}
         />
+        {this.maybeRenderImage()}
         {/* Submit button / loading spinner */}
-        {this.renderButton()}
+        {this.renderButtons()}
       </View>
     );
 
@@ -121,7 +195,7 @@ class FeedbackSubmit extends Component {
           value={this.state.positiveFeedback}
         />
         {/* Submit button / loading spinner */}
-        {this.renderButton()}
+        {this.renderButtons()}
 
         <TextInput
           multiline={Boolean(true)}
@@ -134,7 +208,7 @@ class FeedbackSubmit extends Component {
           value={this.state.negativeFeedback}
         />
         {/* Submit button / loading spinner */}
-        {this.renderButton()}
+        {this.renderButtons()}
       </View>
     );
 
@@ -153,6 +227,7 @@ class FeedbackSubmit extends Component {
             </KeyboardAvoidingView>
           </TouchableWithoutFeedback>
         </MenuContext>
+        {this.maybeRenderUploadingOverlay()}
       </View>
     );
 
@@ -178,4 +253,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
   closeInstructions,
+  uploadImage,
 })(FeedbackSubmit);

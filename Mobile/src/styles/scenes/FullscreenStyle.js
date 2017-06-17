@@ -1,7 +1,7 @@
 // Import Libraries
-import { StyleSheet, Platform } from 'react-native';
+import { Platform } from 'react-native';
 
-const styles = StyleSheet.create({
+const styles = {
   imageContainer: {
     flex: 1,
     width: null,
@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'red',
   },
-});
+};
 
 export default styles;
