@@ -35,10 +35,11 @@ class SwipeCard extends Component {
               <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{project.votes}</Text>
               <Icon size={18} name='arrow-upward' color= 'green' />
             </View>
-            <View style={{flexDirection:'row', justifyContent: 'flex-start'}}>
-              <Text style={[styles.smallText, { color: 'red', fontSize: 18 }]}>{project.downvotes}</Text>
-              <Icon size={18} name='arrow-downward' color= 'red' />
+            <View style={{flex: 1, alignItems:'center', justifyContent:'center' }}>
+              {this.renderStatus()}
             </View>
+            {this.renderOfficialResponseTag()}
+
           </CardItem>
         </View>
         <View style={{ justifyContent: 'flex-end' }}>

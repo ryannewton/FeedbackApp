@@ -48,6 +48,24 @@ class Project extends Component {
       this.props.removeProjectDownvote(project);
     }
   }
+  renderOfficialResponseTag() {
+    if (this.props.renderOfficalResponseTag) {
+      const exists = Boolean(this.props.project.response);
+      if (exists) {
+        const wantToRender = Boolean(this.props.responseTag);
+        const responseExists = (this.props.project.response.text !== '');
+
+        if (wantToRender && responseExists) {
+          return (
+            <View style={{ paddingTop: 15 }}>
+              <Icon name="transcribe-close" type="material-community" color="blue" />
+            </View>
+          );
+        }
+      }
+    }
+    return null;
+  }
   // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
   renderVoteCount() {
     if (this.props.project === undefined) {
@@ -98,21 +116,22 @@ class Project extends Component {
   }
 
   renderStatus() {
-    const { stage } = this.props.project;
-    if (stage && stage === 'complete') {
-      return <Icon name="done" size={35} color={'#006400'} />;
+    if (this.props.renderStatus) {
+      const { stage } = this.props.project;
+      if (stage && stage === 'complete') {
+        return <Icon name="done" size={35} color={'#006400'} />;
+      }
+      if (stage && stage === 'inprocess') {
+        return <Icon name="sync" size={35} color={'#00008B'} />;
+      }
+      return <Icon name="fiber-new" size={35} color={'#A9A9A9'} />;
     }
-    if (stage && stage === 'inprocess') {
-      return <Icon name="sync" size={35} color={'#00008B'} />;
-    }
-    return <Icon name="block" size={35} color={'#A9A9A9'} />;
   }
 
   renderStatusBox() {
     if (this.props.features.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
           {this.renderStatus()}
         </View>
       );
@@ -160,6 +179,7 @@ class Project extends Component {
                 </View>
               </View>
               {this.renderStatusBox()}
+              {this.renderOfficialResponseTag()}
               {/* Upvote Button */}
               <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
