@@ -12,7 +12,7 @@ import Container from './Container';
 // Defines a high-level (container) component
 class Index extends Component {
   componentDidMount() {
-    loadOnLaunch();
+     loadOnLaunch();
   }
 
   render() {

@@ -15,7 +15,7 @@ class Submitted extends Component {
   constructor(props) {
     super(props);
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.group.domain });
   }
 
   componentWillMount() {
@@ -27,7 +27,7 @@ class Submitted extends Component {
       <View style={styles.container}>
         <View style={{ flex: 1, paddingTop: 20 }}>
           {/* To do: To do: Update navigation to use react-navigation */}
-          <Button onPress={() => this.props.navigation.navigate('FeedbackSwipe')}>
+          <Button onPress={() => this.props.navigation.navigate('SuggestionSwipe')}>
             Vote on Feedback!
           </Button>
         </View>
@@ -38,12 +38,12 @@ class Submitted extends Component {
 
 Submitted.propTypes = {
   navigation: React.PropTypes.object,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { features } = state;
-  return { features };
+  const { group } = state;
+  return { group };
 }
 
 export default connect(mapStateToProps)(Submitted);

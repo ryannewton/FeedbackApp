@@ -3,30 +3,26 @@ import React, { Component } from 'react';
 import { View, ListView } from 'react-native';
 import { connect } from 'react-redux';
 
-// Import actions
-import { saveProjectChanges } from '../actions';
-
 // Import components, functions, and styles
-import FeedbackCard from '../components/FeedbackCard';
-import styles from '../styles/scenes/FeedbackListStyles';
+import SuggestionCard from '../components/SuggestionCard';
+import styles from '../styles/scenes/SuggestionListStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-class FeedbackList extends Component {
+class SuggestionList extends Component {
   constructor(props) {
     super(props);
-    // tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.group.domain });
   }
 
-  renderAllFeedback() {
+  renderAllSuggestion() {
     const feedbackList = this.props.projects.list
       .map(feedbackItem => (
-        <FeedbackCard
+        <SuggestionCard
           project={feedbackItem}
           key={feedbackItem.id}
           navigate={this.props.navigation.navigate}
-          saveProjectChanges={this.props.saveProjectChanges}
         />
       ),
     );
@@ -42,11 +38,10 @@ class FeedbackList extends Component {
         <ListView
           dataSource={ds.cloneWithRows(this.props.projects.list)}
           renderRow={rowData =>
-            <FeedbackCard
+            <SuggestionCard
               project={rowData}
               key={rowData.id}
               navigate={this.props.navigation.navigate}
-              saveProjectChanges={this.props.saveProjectChanges}
             />
           }
         />
@@ -55,20 +50,17 @@ class FeedbackList extends Component {
   }
 }
 
-FeedbackList.propTypes = {
+SuggestionList.propTypes = {
   navigation: React.PropTypes.object,
   projects: React.PropTypes.object,
-  saveProjectChanges: React.PropTypes.func,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { projects, features } = state;
-  return { projects, features };
+  const { projects, group } = state;
+  return { projects, group };
 }
 
-const AppScreen = connect(mapStateToProps, {
-  saveProjectChanges,
-})(FeedbackList);
+const AppScreen = connect(mapStateToProps, {})(SuggestionList);
 
 export default AppScreen;

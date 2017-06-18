@@ -3,15 +3,15 @@ import React from 'react';
 import { TabNavigator } from 'react-navigation';
 
 // Import Stacks
-import FeedbackSubmitStack from './FeedbackSubmitStack';
-import FeedbackSwipeStack from './FeedbackSwipeStack';
-import FeedbackListStack from './FeedbackListStack';
+import SuggestionSubmitStack from './SuggestionSubmitStack';
+import SuggestionSwipeStack from './SuggestionSwipeStack';
+import SuggestionListStack from './SuggestionListStack';
 
 // Stacks for each tab
 const tabs = {
-  FeedbackSubmit: FeedbackSubmitStack,
-  FeedbackSwipe: FeedbackSwipeStack,
-  FeedbackList: FeedbackListStack,
+  SuggestionSubmit: SuggestionSubmitStack,
+  SuggestionSwipe: SuggestionSwipeStack,
+  SuggestionList: SuggestionListStack,
 };
 
 // Tab options

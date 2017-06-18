@@ -4,27 +4,27 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
-import styles from '../styles/scenes/FeedbackDetailsStyles';
+import styles from '../styles/scenes/SuggestionDetailsStyles';
 import SolutionsCardItem from './SolutionsCardItem';
 import { Card, CardSection } from '../components/common';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-class FeedbackDetails extends Component {
+class SolutionsCard extends Component {
   constructor(props) {
     super(props);
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('Suggestion Details', { domain: props.group.domain, suggestion: String(props.navigation.state.params.suggestion.id) });
   }
   renderSolutionsList() {
     const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
-    const { project } = this.props.navigation.state.params;
-    const projectSolutions = solutions.list.filter(solution => solution.project_id === project.id);
+    const { suggestion } = this.props.navigation.state.params;
+    const suggestionSolutions = solutions.list.filter(solution => solution.suggestion_id === suggestion.id);
 
     // If no solutions have been submitted
-    if (projectSolutions.length === 0) {
+    if (suggestionSolutions.length === 0) {
       return (
         <CardSection>
           <Text style={noSolutionsMessage}>{'No solutions (yet)\nBe the first!'}</Text>
@@ -33,7 +33,7 @@ class FeedbackDetails extends Component {
     }
 
     // List of solutions
-    const formattedSolutions = projectSolutions
+    const formattedSolutions = suggestionSolutions
       .sort((a, b) => (b.votes - b.downvotes) - (a.votes - a.downvotes))
       .map(solution => (
         <SolutionsCardItem solution={solution} key={solution.id} />
@@ -58,15 +58,15 @@ class FeedbackDetails extends Component {
   }
 }
 
-FeedbackDetails.propTypes = {
+SolutionsCard.propTypes = {
   navigation: React.PropTypes.object,
   solutions: React.PropTypes.object,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { solutions, features } = state;
-  return { solutions, features };
+  const { solutions, group } = state;
+  return { solutions, group };
 }
 
-export default connect(mapStateToProps)(FeedbackDetails);
+export default connect(mapStateToProps)(SolutionsCard);

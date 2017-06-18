@@ -33,20 +33,11 @@ class Authorize extends Component {
   }
 
   route(nextProps) {
-    // We want to naviagte when loggedIn is true (we logged in) and we have stored all the data we need in state
-    //   - We need projects and enableNewFeedback
     if (
-        nextProps.auth.loggedIn === true &&
-        nextProps.projects.lastPulled.getTime() !== 0 &&
-        nextProps.features.enableNewFeedback !== null
-      ) {
-      // If enableNewFeedback is true then we navigate to new projects as normal
-      if (nextProps.features.enableNewFeedback) {
-        nextProps.navigation.navigate('FeedbackSwipe');
-      // If not, then we navigate to Feedback and disable the New Projects tab
-      } else {
-        nextProps.navigation.navigate('FeedbackSubmit');
-      }
+      nextProps.auth.loggedIn === true &&
+      nextProps.suggestions.lastPulled.getTime() !== 0
+    ){
+      nextProps.navigation.navigate('SuggestionSwipe');
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
@@ -119,13 +110,13 @@ Authorize.propTypes = {
   auth: React.PropTypes.object,
   authorizeUser: React.PropTypes.func,
   navigation: React.PropTypes.object,
-  features: React.PropTypes.object,
-  projects: React.PropTypes.object,
+  group: React.PropTypes.object,
+  suggestions: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { auth, projects, features } = state;
-  return { auth, projects, features };
+  const { auth, suggestions, group } = state;
+  return { auth, suggestions, group };
 }
 
 

@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
 // Import componenets, functions, and styles
-import styles from '../styles/components/ProjectStyles';
+import styles from '../styles/components/SuggestionStyles';
 import { Card } from './common';
-import { addProjectUpvote, removeProjectUpvote, addProjectDownvote, removeProjectDownvote } from '../actions';
+import { addSuggestionUpvote, removeSuggestionUpvote, addSuggestionDownvote, removeSuggestionDownvote } from '../actions';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-class Project extends Component {
+class Suggestion extends Component {
   constructor(props) {
     super(props);
 
@@ -23,58 +23,58 @@ class Project extends Component {
   }
 
   goToDetails() {
-    this.props.navigate('Details', { project: this.props.project });
+    this.props.navigate('Details', { suggestion: this.props.suggestion });
   }
 
   upvote() {
-    const { project, user } = this.props;
-    // If user hasn't upvoted this project, add an upvote
-    if (!user.projectUpvotes.includes(project.id)) {
-      // tracker.trackEvent('Project Vote', 'Project UpVote Via Project Button', { label: this.props.features.domain });
-      this.props.addProjectUpvote(project);
+    const { suggestion, user } = this.props;
+    // If user hasn't upvoted this suggestion, add an upvote
+    if (!user.suggestionUpvotes.includes(suggestion.id)) {
+      // tracker.trackEvent('Suggestion Vote', 'Suggestion UpVote Via Suggestion Button', { label: this.props.group.domain });
+      this.props.addSuggestionUpvote(suggestion);
     } else {
-      // tracker.trackEvent('Remove Project Vote', 'Remove Project UpVote Via Project Button', { label: this.props.features.domain });
-      this.props.removeProjectUpvote(project);
+      // tracker.trackEvent('Remove Suggestion Vote', 'Remove Suggestion UpVote Via Suggestion Button', { label: this.props.group.domain });
+      this.props.removeSuggestionUpvote(suggestion);
     }
   }
   downvote() {
-    const { project, user } = this.props;
-    // If user hasn't downvoted this project, add an downvote
-    if (!user.projectDownvotes.includes(project.id)) {
-      // tracker.trackEvent('Project Vote', 'Project DownVote Via Project Button', { label: this.props.features.domain });
-      this.props.addProjectDownvote(project);
+    const { suggestion, user } = this.props;
+    // If user hasn't downvoted this suggestion, add an downvote
+    if (!user.suggestionDownvotes.includes(suggestion.id)) {
+      // tracker.trackEvent('Suggestion Vote', 'Suggestion DownVote Via Suggestion Button', { label: this.props.group.domain });
+      this.props.addSuggestionDownvote(suggestion);
     } else {
-      // tracker.trackEvent('Remove Project Vote', 'Remove Project DownVote Via Project Button', { label: this.props.features.domain });
-      this.props.removeProjectDownvote(project);
+      // tracker.trackEvent('Remove Suggestion Vote', 'Remove Suggestion DownVote Via Suggestion Button', { label: this.props.group.domain });
+      this.props.removeSuggestionDownvote(suggestion);
     }
   }
-  // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
+  // Temporary fix. Async issue is causing this.props.suggestion to be temporarily undefined
   renderVoteCount() {
-    if (this.props.project === undefined) {
+    if (this.props.suggestion === undefined) {
       return '';
     }
-    return `${this.props.project.votes}`;
+    return `${this.props.suggestion.votes}`;
   }
   renderDownvoteCount() {
-    if (this.props.project === undefined) {
+    if (this.props.suggestion === undefined) {
       return '';
     }
-    return `${this.props.project.downvotes}`;
+    return `${this.props.suggestion.downvotes}`;
   }
 
-  // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
+  // Temporary fix. Async issue is causing this.props.suggestion to be temporarily undefined
   renderTitle() {
-    if (this.props.project === undefined) {
+    if (this.props.suggestion === undefined) {
       return '';
     }
-    return this.props.project.title;
+    return this.props.suggestion.title;
   }
 
   renderButton() {
-    const { project, user } = this.props;
+    const { suggestion, user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this project
-    if (user.projectUpvotes.includes(project.id)) {
+    // If user hasn't upvoted this suggestion
+    if (user.suggestionUpvotes.includes(suggestion.id)) {
       iconColor = 'green';
     }
     return (
@@ -84,10 +84,10 @@ class Project extends Component {
     );
   }
   renderThumbDownButton() {
-    const { project, user } = this.props;
+    const { suggestion, user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this project
-    if (user.projectDownvotes.includes(project.id)) {
+    // If user hasn't upvoted this suggestion
+    if (user.suggestionDownvotes.includes(suggestion.id)) {
       iconColor = '#b6001e';
     }
     return (
@@ -98,7 +98,7 @@ class Project extends Component {
   }
 
   renderStatus() {
-    const { stage } = this.props.project;
+    const { stage } = this.props.suggestion;
     if (stage && stage === 'complete') {
       return <Icon name="done" size={35} color={'#006400'} />;
     }
@@ -109,10 +109,10 @@ class Project extends Component {
   }
 
   renderStatusBox() {
-    if (this.props.features.showStatus) {
+    if (this.props.group.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
+          <Text style={{ paddingRight: 3 }}>{this.props.suggestion.stage}</Text>
           {this.renderStatus()}
         </View>
       );
@@ -121,11 +121,11 @@ class Project extends Component {
   }
 
   render() {
-    const { buttonText, lowWeight, row, projectTitle } = styles;
+    const { buttonText, lowWeight, row, suggestionTitle } = styles;
     let updatedRow = row;
-    if (this.props.project.type === 'positive feedback') {
+    if (this.props.suggestion.type === 'positive feedback') {
       updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 } }];
-    } else if (this.props.project.type === 'negative feedback') {
+    } else if (this.props.suggestion.type === 'negative feedback') {
       updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 } }];
     }
     return (
@@ -136,9 +136,9 @@ class Project extends Component {
           onPress={this.goToDetails}
         >
           <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-            {/* First row */}{/* Project title */}
+            {/* First row */}{/* Suggestion title */}
             <View style={{ flex: 5, paddingTop: 5 }}>
-              <Text style={projectTitle}>
+              <Text style={suggestionTitle}>
                 {this.renderTitle()}
               </Text>
               {/* Vote count */}
@@ -179,25 +179,25 @@ class Project extends Component {
   }
 }
 
-Project.propTypes = {
-  project: React.PropTypes.object,
+Suggestion.propTypes = {
+  suggestion: React.PropTypes.object,
   navigate: React.PropTypes.func,
   user: React.PropTypes.object,
-  addProjectUpvote: React.PropTypes.func,
-  removeProjectUpvote: React.PropTypes.func,
-  addProjectDownvote: React.PropTypes.func,
-  removeProjectDownvote: React.PropTypes.func,
-  features: React.PropTypes.object,
+  addSuggestionUpvote: React.PropTypes.func,
+  removeSuggestionUpvote: React.PropTypes.func,
+  addSuggestionDownvote: React.PropTypes.func,
+  removeSuggestionDownvote: React.PropTypes.func,
+  group: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { user, features } = state;
-  return { user, features };
+  const { user, group } = state;
+  return { user, group };
 };
 
 export default connect(mapStateToProps, {
-  addProjectUpvote,
-  removeProjectUpvote,
-  addProjectDownvote,
-  removeProjectDownvote,
-})(Project);
+  addSuggestionUpvote,
+  removeSuggestionUpvote,
+  addSuggestionDownvote,
+  removeSuggestionDownvote,
+})(Suggestion);

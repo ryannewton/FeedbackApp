@@ -15,23 +15,23 @@ import { addSolutionUpvote, removeSolutionUpvote, addSolutionDownvote, removeSol
 class SolutionsCardItem extends Component {
   upvoteSolution(solution) {
     const { user } = this.props;
-    // If user hasn't upvoted this project, add an upvote
+    // If user hasn't upvoted this solution, add an upvote
     if (!user.solutionUpvotes.includes(solution.id)) {
-      // tracker.trackEvent('Solution Vote', 'Solution UpVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Solution Vote', 'Solution UpVote Via Solution Button', { label: this.props.group.domain });
       this.props.addSolutionUpvote(solution);
     } else {
-      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution UpVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution UpVote Via Solution Button', { label: this.props.group.domain });
       this.props.removeSolutionUpvote(solution);
     }
   }
   downvoteSolution(solution) {
     const { user } = this.props;
-    // If user hasn't downvoted this project, add an downvote
+    // If user hasn't downvoted this solution, add an downvote
     if (!user.solutionDownvotes.includes(solution.id)) {
-      // tracker.trackEvent('Solution DownVote', 'Solution DownVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Solution DownVote', 'Solution DownVote Via Solution Button', { label: this.props.group.domain });
       this.props.addSolutionDownvote(solution);
     } else {
-      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution DownVote Via Solution Button', { label: this.props.features.domain });
+      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution DownVote Via Solution Button', { label: this.props.group.domain });
       this.props.removeSolutionDownvote(solution);
     }
   }
@@ -39,7 +39,7 @@ class SolutionsCardItem extends Component {
   renderSolutionUpvoteButton(solution) {
     const { user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this project
+    // If user hasn't upvoted this solution
     if (user.solutionUpvotes.includes(solution.id)) {
       iconColor = 'green';
     }
@@ -55,7 +55,7 @@ class SolutionsCardItem extends Component {
   renderSolutionDownvoteButton(solution) {
     const { user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't downvoted this project
+    // If user hasn't downvoted this solution
     if (user.solutionDownvotes.includes(solution.id)) {
       iconColor = '#b6001e';
     }
@@ -107,12 +107,12 @@ SolutionsCardItem.propTypes = {
   removeSolutionUpvote: React.PropTypes.func,
   addSolutionDownvote: React.PropTypes.func,
   removeSolutionDownvote: React.PropTypes.func,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { user, features } = state;
-  return { user, features };
+  const { user, group } = state;
+  return { user, group };
 }
 
 export default connect(mapStateToProps, {
