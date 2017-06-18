@@ -225,7 +225,7 @@ app.post('/submitSuggestion', upload.array(), (req, res) => {
               else {
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + req.body.text, 'Email: ' + decoded.email);
+                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'Email: ' + userId);
                 res.json({ id: result.insertId });
               }
             }
