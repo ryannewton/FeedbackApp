@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 16,
   },
-  suggestion_input: {
+  suggestionInput: {
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 4,
@@ -31,10 +31,10 @@ const styles = StyleSheet.create({
       android: { height: 140 },
     }),
   },
-  positive_suggestion_input: {
+  positiveSuggestionInput: {
     backgroundColor: '#98FB98',
   },
-  negative_suggestion_input: {
+  negativeSuggestionInput: {
     backgroundColor: '#F08080',
   },
   // New Projects Scene

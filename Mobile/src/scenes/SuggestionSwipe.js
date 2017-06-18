@@ -35,18 +35,18 @@ class SuggestionSwipe extends Component {
       ), inboxZeroSuggestion],
     };
     // tracker.trackScreenViewWithCustomDimensionValues('New Suggestions', { domain: props.group.domain, suggestion: String(this.state.suggestions[0].id) });
-
+    
     this.swipeRight = this.swipeRight.bind(this);
     this.swipeLeft = this.swipeLeft.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);
   }
 
   swipeRight(source) {
-    if (source === 'button') {
-      // tracker.trackEvent('Suggestion Vote', 'Suggestion UpVote Via New Suggestions Button', { label: this.props.group.domain });
-    } else {
-      // tracker.trackEvent('Suggestion Vote', 'Suggestion UpVote Via Swipe', { label: this.props.group.domain });
-    }
+    // if (source === 'button') {
+    //   tracker.trackEvent('Suggestion Vote', 'Suggestion UpVote Via New Suggestions Button', { label: this.props.group.domain });
+    // } else {
+    //   tracker.trackEvent('Suggestion Vote', 'Suggestion UpVote Via Swipe', { label: this.props.group.domain });
+    // }
 
     const { user } = this.props;
     const suggestion = this.state.suggestions[this.state.index];
@@ -68,11 +68,11 @@ class SuggestionSwipe extends Component {
   }
 
   swipeLeft(source) {
-    if (source === 'button') {
-      // tracker.trackEvent('Skip', 'Skip Via New Suggestions Button', { label: this.props.group.domain });
-    } else {
-      // tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.group.domain });
-    }
+    // if (source === 'button') {
+    //   tracker.trackEvent('Skip', 'Skip Via New Suggestions Button', { label: this.props.group.domain });
+    // } else {
+    //   tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.group.domain });
+    // }
 
     const { user } = this.props;
     const suggestion = this.state.suggestions[this.state.index];

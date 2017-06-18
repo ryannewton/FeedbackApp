@@ -11,10 +11,10 @@ import styles from '../styles/components/SwipeCardStyles';
 // import { tracker } from '../constants';
 
 class SwipeCard extends Component {
-  constructor(props) {
-    super(props);
-    // tracker.trackEvent('View', 'Swipe Card', { label: props.group.domain, value: props.suggestion.id });
-  }
+  // constructor(props) {
+  //   super(props);
+  //   tracker.trackEvent('View', 'Swipe Card', { label: props.group.domain, value: props.suggestion.id });
+  // }
 
   render() {
     const { suggestion } = this.props;
@@ -23,12 +23,12 @@ class SwipeCard extends Component {
         <View>
           <CardItem>
             <Left>
-              <Text style={styles.bodyText}>{suggestion.title}</Text>
+              <Text style={styles.bodyText}>{suggestion.text}</Text>
             </Left>
           </CardItem>
           <CardItem style={{ justifyContent: 'center', flexDirection: 'column', paddingTop: 0, paddingBottom: 0, marginBottom: 0, marginTop: 0 }}>
             <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
-              <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{suggestion.votes}</Text>
+              <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{suggestion.upvotes}</Text>
               <Icon size={18} name='arrow-upward' color= 'green' />
             </View>
             <View style={{flexDirection:'row', justifyContent: 'flex-start'}}>

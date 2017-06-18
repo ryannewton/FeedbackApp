@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableWithoutSuggestion, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
@@ -21,12 +21,12 @@ class SuggestionDetails extends Component {
     super(props);
 
     this.state = { errorMessage: '' };
-    // tracker.trackScreenViewWithCustomDimensionValues('Suggestion Details', { domain: props.group.domain, suggestion: String(props.navigation.state.params.suggestion.id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('Suggestion Details', { groupName: props.group.groupName, suggestion: String(props.navigation.state.params.suggestion.id) });
     this.submitSolution = this.submitSolution.bind(this);
   }
 
   submitSolution() {
-    const { domain, bannedWords, solutionsRequireApproval } = this.props.group;
+    const { groupName, bannedWords, solutionsRequireApproval } = this.props.group;
     const { solution } = this.props.solutions;
     const { suggestion } = this.props.navigation.state.params;
 
@@ -36,7 +36,7 @@ class SuggestionDetails extends Component {
     } else {
       this.setState({ errorMessage: '' });
       this.props.submitSolutionToServer(solution, suggestion.id, solutionsRequireApproval);
-      // tracker.trackEvent('Submit', 'Submit Solution', { label: domain, value: suggestion.id });
+      // tracker.trackEvent('Submit', 'Submit Solution', { label: groupName, value: suggestion.id });
       Keyboard.dismiss();
     }
   }
@@ -61,7 +61,7 @@ class SuggestionDetails extends Component {
     return (
       <View style={container}>
         <ScrollView>
-          <TouchableWithoutSuggestion style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View>
               {/* Suggestion description */}
               <SuggestionCard suggestion={suggestion} navigate={() => undefined} />
@@ -69,7 +69,7 @@ class SuggestionDetails extends Component {
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />
             </View>
-          </TouchableWithoutSuggestion>
+          </TouchableWithoutFeedback>
         </ScrollView>
 
         {/* Input to submit a new solution */}

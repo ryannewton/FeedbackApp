@@ -53,7 +53,7 @@ class Suggestion extends Component {
     if (this.props.suggestion === undefined) {
       return '';
     }
-    return `${this.props.suggestion.votes}`;
+    return `${this.props.suggestion.upvotes}`;
   }
   renderDownvoteCount() {
     if (this.props.suggestion === undefined) {
@@ -67,7 +67,7 @@ class Suggestion extends Component {
     if (this.props.suggestion === undefined) {
       return '';
     }
-    return this.props.suggestion.title;
+    return this.props.suggestion.text;
   }
 
   renderButton() {
@@ -98,11 +98,11 @@ class Suggestion extends Component {
   }
 
   renderStatus() {
-    const { stage } = this.props.suggestion;
-    if (stage && stage === 'complete') {
+    const { status } = this.props.suggestion;
+    if (status && status === 'complete') {
       return <Icon name="done" size={35} color={'#006400'} />;
     }
-    if (stage && stage === 'inprocess') {
+    if (status && status === 'inprocess') {
       return <Icon name="sync" size={35} color={'#00008B'} />;
     }
     return <Icon name="block" size={35} color={'#A9A9A9'} />;
@@ -112,7 +112,7 @@ class Suggestion extends Component {
     if (this.props.group.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ paddingRight: 3 }}>{this.props.suggestion.stage}</Text>
+          <Text style={{ paddingRight: 3 }}>{this.props.suggestion.status}</Text>
           {this.renderStatus()}
         </View>
       );

@@ -5,7 +5,7 @@ import {
   SUBMITTING_SUGGESTION,
   SUBMIT_SUGGESTION_SUCCESS,
   SUBMIT_SUGGESTION_FAIL,
-  SUBMIT_IMAGE,
+  SUBMITTING_IMAGE,
   SUBMIT_IMAGE_SUCCESS,
   SUBMIT_IMAGE_FAIL,
   ADD_SUGGESTION_UPVOTE,
@@ -29,7 +29,7 @@ function filterAndOrder(list) {
   const result = list
     .filter(item => item.stage !== 'tabled')
     .sort((a, b) => b.id - a.id)
-    .sort((a, b) => (b.votes - b.downvotes) - (a.votes - a.downvotes));
+    .sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
   return result;
 }
 
@@ -52,7 +52,7 @@ export default (state = INITIAL_STATE, action) => {
     case SUBMIT_SUGGESTION_FAIL:
       return { ...state, loading: false };
 
-    case SUBMIT_IMAGE:
+    case SUBMITTING_IMAGE:
       return { ...state, loadingImage: true };
 
     case SUBMIT_IMAGE_SUCCESS: {
@@ -65,7 +65,7 @@ export default (state = INITIAL_STATE, action) => {
     case ADD_SUGGESTION_UPVOTE: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newState = state.list.slice(0);
-      newState[index].votes += 1;
+      newState[index].upvotes += 1;
       return { ...state, list: newState };
     }
 
@@ -79,7 +79,7 @@ export default (state = INITIAL_STATE, action) => {
     case REMOVE_SUGGESTION_UPVOTE: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newList = state.list.slice(0);
-      newList[index].votes -= 1;
+      newList[index].upvotes -= 1;
       return { ...state, list: newList };
     }
     
@@ -98,8 +98,7 @@ export default (state = INITIAL_STATE, action) => {
     }
 
     case ADD_SUGGESTION_TO_STATE: {
-      const newList = [...state.list, { id: action.payload.id, title: action.payload.title, description: 'Blank Description', votes: 0, downvotes: 0, stage: 'new', type: action.payload.type }];
-      return { ...state, list: newList };
+      return { ...state, list: [...state.list, action.payload.suggestion] };
     }
 
     case LOG_OUT_USER:

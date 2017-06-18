@@ -204,7 +204,7 @@ app.post('/submitSuggestion', upload.array(), (req, res) => {
     else {
       // Check if the suggestion requires approval
       const { groupId, userId } = decoded;
-      const connectionString = `SELECT suggestionsRequireApproval, groupName FROM groups WHERE id=?`;
+      let connectionString = `SELECT suggestionsRequireApproval, groupName FROM groups WHERE id=?`;
       connection.query(connectionString, [groupId], (err, rows) => {        
         if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
@@ -242,7 +242,7 @@ app.post('/submitSolution', upload.array(), (req, res) => {
     else {
       // Check if the solution requires approval
       const { groupId, userId } = decoded;
-      const connectionString = `SELECT solutionsRequireApproval FROM groups WHERE id=?`;
+      let connectionString = `SELECT solutionsRequireApproval FROM groups WHERE id=?`;
       connection.query(connectionString, [groupId], (err, rows) => {        
         if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 0942');
         else {
@@ -440,7 +440,6 @@ app.post('/pullSuggestions', upload.array(), (req, res) => {
             if (!row.downvotes) { row.downvotes = 0 };
             return row;
           });
-          console.log(adjRows);
           res.status(200).send(adjRows);
         }
       });
@@ -463,10 +462,19 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
         GROUP BY solutionId
       ) b
       ON a.id = b.solutionId
-      WHERE groupId=?`;
+      JOIN suggestions c
+      ON a.suggestionId = c.id
+      WHERE c.groupId=?`;
       connection.query(connectionString, [groupId, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
-        else res.status(200).send(rows);
+        else {
+          const adjRows = rows.map((row) => {
+            if (!row.upvotes) { row.upvotes = 0 };
+            if (!row.downvotes) { row.downvotes = 0 };
+            return row;
+          });
+          res.status(200).send(adjRows);
+        }
       });
     }
   });
@@ -480,16 +488,16 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
       const { userId, groupName, groupId } = decoded;
       const connectionString = `
         SELECT
-          '` + userId + `' as userId
+          '` + userId + `' as userId,
           groupName,
           suggestionsRequireApproval,
           solutionsRequireApproval,
           showStatus,
-          includePositiveFeedbackBox
+          includePositiveSuggestionBox
         FROM
           groups
         WHERE
-          groupId=?`;
+          id=?`;
       connection.query(connectionString, [groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
         else res.status(200).send(rows[0]);

@@ -8,7 +8,7 @@ import {
   View,
   TextInput,
   Keyboard,
-  TouchableWithoutSuggestion,
+  TouchableWithoutFeedback,
   Image,
   TouchableOpacity,
   Text,
@@ -59,13 +59,13 @@ class SuggestionSubmit extends Component {
       } else {
         // If no restricted words then we continue
         if (this.state.suggestion) {
-          this.props.submitSuggestionToServer(this.props.group.moderatorApproval, this.state.suggestion, 'single suggestion');
+          this.props.submitSuggestionToServer(this.props.group.suggestionsRequireApproval, this.state.suggestion, 'single suggestion', this.props.suggestions.imageURL);
           this.setState({ suggestion: '' });
         } if (this.state.positiveSuggestion) {
-          this.props.submitSuggestionToServer(this.props.group.moderatorApproval, this.state.positiveSuggestion, 'positive suggestion');
+          this.props.submitSuggestionToServer(this.props.group.suggestionsRequireApproval, this.state.positiveSuggestion, 'positive suggestion', this.props.suggestions.imageURL);
           this.setState({ positiveSuggestion: '' });
         } if (this.state.negativeSuggestion) {
-          this.props.submitSuggestionToServer(this.props.group.moderatorApproval, this.state.negativeSuggestion, 'negative suggestion');
+          this.props.submitSuggestionToServer(this.props.group.suggestionsRequireApproval, this.state.negativeSuggestion, 'negative suggestion', this.props.suggestions.imageURL);
           this.setState({ negativeSuggestion: '' });
         }
 
@@ -92,7 +92,7 @@ class SuggestionSubmit extends Component {
   }
 
   maybeRenderImage = () => {
-    const { imageURL } = this.props.suggestion;
+    const { imageURL } = this.props.suggestions;
 
     // If there is no image, don't render anything
     if (!imageURL) {
@@ -114,7 +114,7 @@ class SuggestionSubmit extends Component {
   }
 
   maybeRenderUploadingOverlay = () => {
-    const { loadingImage } = this.props.suggestion;
+    const { loadingImage } = this.props.suggestions;
     if (loadingImage) {
       return (
         <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' }]}>
@@ -130,7 +130,7 @@ class SuggestionSubmit extends Component {
   }
 
   renderButtons() {
-    if (this.props.suggestion.loading) {
+    if (this.props.suggestions.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
 
@@ -172,7 +172,7 @@ class SuggestionSubmit extends Component {
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={styles.suggestion_input}
+          style={styles.suggestionInput}
           placeholder={placeholderText}
           value={this.state.suggestion}
         />
@@ -190,7 +190,7 @@ class SuggestionSubmit extends Component {
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={[styles.suggestion_input, styles.positive_suggestion_input]}
+          style={[styles.suggestionInput, styles.positiveSuggestionInput]}
           placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
           value={this.state.positiveSuggestion}
         />
@@ -203,7 +203,7 @@ class SuggestionSubmit extends Component {
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={[styles.suggestion_input, styles.negative_suggestion_input]}
+          style={[styles.suggestionInput, styles.negativeSuggestionInput]}
           placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
           value={this.state.negativeSuggestion}
         />
@@ -215,17 +215,16 @@ class SuggestionSubmit extends Component {
     const WriteSuggestionScene = (
       <View style={[styles.container, styles.swiper]}>
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
-          <TouchableWithoutSuggestion style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
-              {/* Error message (blank if no error) */}
+
               <Text style={styles.errorTextStyle}>
                 {this.state.errorMessage}
               </Text>
 
-              {/* Suggestion input box */}
-              {this.props.group.positiveSuggestionBox ? positiveSuggestionBox : singleSuggestionBox }
+              {this.props.group.includePositiveFeedbackBox ? positiveSuggestionBox : singleSuggestionBox}
             </KeyboardAvoidingView>
-          </TouchableWithoutSuggestion>
+          </TouchableWithoutFeedback>
         </MenuContext>
         {this.maybeRenderUploadingOverlay()}
       </View>
@@ -246,8 +245,8 @@ SuggestionSubmit.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user, group, suggestion } = state;
-  return { user, group, suggestion };
+  const { user, group, suggestions } = state;
+  return { user, group, suggestions };
 }
 
 export default connect(mapStateToProps, {

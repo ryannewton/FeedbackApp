@@ -75,13 +75,13 @@ class SolutionsCardItem extends Component {
       <CardSection>
         <View style={{ justifyContent: 'flex-start', flex: 1 }}>
           {/* Solution description */}
-          <Text style={solutionText}>{solution.title}</Text>
+          <Text style={solutionText}>{solution.text}</Text>
 
           {/* Upvote count and button */}
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5, justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'column', justifyContent: 'flex-start' }}>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                <Text style={{ fontSize: 18, color: 'green' }}>{solution.votes}</Text>
+                <Text style={{ fontSize: 18, color: 'green' }}>{solution.upvotes}</Text>
                 <Icon size={18} name='arrow-upward' color= 'green' />
               </View>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>

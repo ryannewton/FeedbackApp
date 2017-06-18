@@ -1,3 +1,6 @@
+// Import libraries
+import { AsyncStorage } from 'react-native';
+
 // Import action types
 import {
   REQUESTED_SUGGESTIONS,
@@ -5,7 +8,7 @@ import {
   SUBMITTING_SUGGESTION,
   SUBMIT_SUGGESTION_SUCCESS,
   SUBMIT_SUGGESTION_FAIL,
-  SUBMIT_IMAGE,
+  SUBMITTING_IMAGE,
   SUBMIT_IMAGE_SUCCESS,
   SUBMIT_IMAGE_FAIL,
   ADD_SUGGESTION_UPVOTE,
@@ -17,7 +20,7 @@ import {
 } from './types';
 
 // Import constants
-import { http, ROOT_URL } from '../constants';
+import { http, ROOT_STORAGE, ROOT_URL } from '../constants';
 
 export const pullSuggestions = token => (
   (dispatch) => {
@@ -68,6 +71,7 @@ export const addSuggestionUpvote = suggestion => (
       dispatch(removeSuggestionDownvote(suggestion));
     }
 
+    const token = getState().auth.token;
     http.post('/submitSuggestionVote', { suggestion, upvote: 1, downvote: 0, authorization: token })
     .catch((error) => console.log('Error in addSuggestionUpvote in actions_suggestions', error.response.data));
   }
@@ -80,6 +84,7 @@ export const removeSuggestionUpvote = suggestion => (
     const { suggestionUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}suggestionUpvotes`, JSON.stringify(suggestionUpvotes));
     
+    const token = getState().auth.token;
     http.post('/removeSuggestionVote', { suggestion, upvote: 1, downvote: 0, authorization: token })
     .catch((error) => console.log('Error in removeSuggestionUpvote in actions_suggestions', error.response.data));
   }
@@ -96,6 +101,7 @@ export const addSuggestionDownvote = suggestion => (
       dispatch(removeSuggestionUpvote(suggestion));
     }
     
+    const token = getState().auth.token;
     http.post('/submitSuggestionVote', { suggestion, upvote: 0, downvote: 1, authorization: token })
     .catch((error) => console.log('Error in addSuggestionDownvote in actions_suggestions', error.response.data));
   }
@@ -106,7 +112,8 @@ export const removeSuggestionDownvote = suggestion => (
     dispatch({ type: REMOVE_SUGGESTION_DOWNVOTE, payload: suggestion });
     const { suggestionDownvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}suggestionDownvotes`, JSON.stringify(suggestionDownvotes));
-        
+    
+    const token = getState().auth.token;
     http.post('/removeSuggestionVote', { suggestion, upvote: 0, downvote: 1, authorization: token })
     .catch((error) => console.log('Error in removeSuggestionDownvote in actions_suggestions', error.response.data));
   }
@@ -114,7 +121,7 @@ export const removeSuggestionDownvote = suggestion => (
 
 export const uploadImage = uri => (
   (dispatch) => {
-    dispatch({ type: SUBMIT_IMAGE });
+    dispatch({ type: SUBMITTING_IMAGE });
     const apiUrl = `${ROOT_URL}/uploadPhoto/`;
     const fileType = uri[uri.length - 1];
 

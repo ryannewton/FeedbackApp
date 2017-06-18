@@ -30,15 +30,14 @@ export const RECEIVED_SUGGESTIONS = 'received_suggestions';
 export const SUBMITTING_SUGGESTION = 'submit_suggestion';
 export const SUBMIT_SUGGESTION_SUCCESS = 'submit_suggestion_success';
 export const SUBMIT_SUGGESTION_FAIL = 'submit_suggestion_fail';
-export const SUBMIT_IMAGE = 'submit_image';
+export const SUBMITTING_IMAGE = 'submitting_image';
 export const SUBMIT_IMAGE_SUCCESS = 'submit_image_success';
 export const SUBMIT_IMAGE_FAIL = 'submit_image_fail';
 export const ADD_SUGGESTION_UPVOTE = 'add_suggestion_upvote';
 export const ADD_SUGGESTION_DOWNVOTE = 'add_suggestion_downvote';
 export const REMOVE_SUGGESTION_UPVOTE = 'remove_suggestion_upvote';
 export const REMOVE_SUGGESTION_DOWNVOTE = 'remove_suggestion_downvote';
-export const SAVE_SUGGESTION_CHANGES = 'save_suggestion_changes';
-export const ADD_SUGGESTION_TO_STATE = 'add_solution_to_state';
+export const ADD_SUGGESTION_TO_STATE = 'add_suggestion_to_state';
 
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';

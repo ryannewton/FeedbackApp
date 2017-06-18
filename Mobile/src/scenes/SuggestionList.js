@@ -11,23 +11,23 @@ import styles from '../styles/scenes/SuggestionListStyles';
 // import { tracker } from '../constants';
 
 class SuggestionList extends Component {
-  constructor(props) {
-    super(props);
-    // tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.group.domain });
-  }
+  // constructor(props) {
+  //   super(props);
+  //   tracker.trackScreenViewWithCustomDimensionValues('Suggestions', { domain: props.group.domain });
+  // }
 
   renderAllSuggestion() {
-    const feedbackList = this.props.projects.list
-      .map(feedbackItem => (
+    const suggestionList = this.props.suggestions.list
+      .map(suggestionItem => (
         <SuggestionCard
-          project={feedbackItem}
-          key={feedbackItem.id}
+          suggestion={suggestionItem}
+          key={suggestionItem.id}
           navigate={this.props.navigation.navigate}
         />
       ),
     );
 
-    return feedbackList;
+    return suggestionList;
   }
 
   render() {
@@ -36,10 +36,10 @@ class SuggestionList extends Component {
     return (
       <View style={styles.container}>
         <ListView
-          dataSource={ds.cloneWithRows(this.props.projects.list)}
+          dataSource={ds.cloneWithRows(this.props.suggestions.list)}
           renderRow={rowData =>
             <SuggestionCard
-              project={rowData}
+              suggestion={rowData}
               key={rowData.id}
               navigate={this.props.navigation.navigate}
             />
@@ -52,13 +52,13 @@ class SuggestionList extends Component {
 
 SuggestionList.propTypes = {
   navigation: React.PropTypes.object,
-  projects: React.PropTypes.object,
+  suggestions: React.PropTypes.object,
   group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { projects, group } = state;
-  return { projects, group };
+  const { suggestions, group } = state;
+  return { suggestions, group };
 }
 
 const AppScreen = connect(mapStateToProps, {})(SuggestionList);

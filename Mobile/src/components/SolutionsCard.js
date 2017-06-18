@@ -12,16 +12,16 @@ import { Card, CardSection } from '../components/common';
 // import { tracker } from '../constants';
 
 class SolutionsCard extends Component {
-  constructor(props) {
-    super(props);
-
-    // tracker.trackScreenViewWithCustomDimensionValues('Suggestion Details', { domain: props.group.domain, suggestion: String(props.navigation.state.params.suggestion.id) });
-  }
+  // constructor(props) {
+  //   super(props);
+  //   tracker.trackScreenViewWithCustomDimensionValues('Suggestion Details', { domain: props.group.domain, suggestion: String(props.navigation.state.params.suggestion.id) });
+  // }
+  
   renderSolutionsList() {
     const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
     const { suggestion } = this.props.navigation.state.params;
-    const suggestionSolutions = solutions.list.filter(solution => solution.suggestion_id === suggestion.id);
+    const suggestionSolutions = solutions.list.filter(solution => solution.suggestionId === suggestion.id);
 
     // If no solutions have been submitted
     if (suggestionSolutions.length === 0) {
@@ -34,7 +34,7 @@ class SolutionsCard extends Component {
 
     // List of solutions
     const formattedSolutions = suggestionSolutions
-      .sort((a, b) => (b.votes - b.downvotes) - (a.votes - a.downvotes))
+      .sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes))
       .map(solution => (
         <SolutionsCardItem solution={solution} key={solution.id} />
       ));
