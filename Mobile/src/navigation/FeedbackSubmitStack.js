@@ -5,7 +5,7 @@ import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 // Import Scenes
-import SuggestionSubmit from '../scenes/SuggestionSubmit';
+import FeedbackSubmit from '../scenes/FeedbackSubmit';
 import Settings from '../scenes/Settings';
 import Submitted from '../scenes/Submitted';
 import styles from '../styles/common/navStyles';
@@ -26,10 +26,10 @@ function settingsButton(navigate) {
 // Stack of scenes
 const scenes = StackNavigator(
   {
-    SuggestionSubmit: {
-      screen: SuggestionSubmit,
+    FeedbackSubmit: {
+      screen: FeedbackSubmit,
       navigationOptions: ({ navigation }) => ({
-        title: 'Submit Suggestion',
+        title: 'Submit Feedback',
         headerRight: settingsButton(navigation.navigate),
         headerStyle: {
           height: styles.header.height,
@@ -50,7 +50,7 @@ const scenes = StackNavigator(
     Submitted: {
       screen: Submitted,
       navigationOptions: {
-        title: 'Suggestion Received',
+        title: 'Feedback Received',
         headerStyle: {
           height: styles.header.height,
           marginTop: styles.header.marginTop,
@@ -62,14 +62,14 @@ const scenes = StackNavigator(
 
 // Stack options
 const options = {
-  tabBarLabel: 'Submit Suggestion',
+  tabBarLabel: 'Submit Feedback',
   tabBarIcon: ({ tintColor }) => <Icon name="create" size={22} color={tintColor} />,
   cardStack: { gesturesEnabled: false },
 };
 
-const SuggestionSubmitStack = {
+const FeedbackSubmitStack = {
   screen: scenes,
   navigationOptions: options,
 };
 
-export default SuggestionSubmitStack;
+export default FeedbackSubmitStack;

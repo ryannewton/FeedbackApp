@@ -4,8 +4,8 @@ import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, 
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
-import styles from '../styles/scenes/SuggestionDetailsStyles';
-import SuggestionCard from '../components/SuggestionCard';
+import styles from '../styles/scenes/FeedbackDetailsStyles';
+import FeedbackCard from '../components/FeedbackCard';
 import SolutionsCard from '../components/SolutionsCard';
 import { Button, Spinner } from '../components/common';
 import {
@@ -16,27 +16,27 @@ import {
 // Import tracking
 // import { tracker } from '../constants';
 
-class SuggestionDetails extends Component {
+class FeedbackDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = { errorMessage: '' };
-    // tracker.trackScreenViewWithCustomDimensionValues('Suggestion Details', { groupName: props.group.groupName, suggestion: String(props.navigation.state.params.suggestion.id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { groupName: props.group.groupName, feedback: String(props.navigation.state.params.feedback.id) });
     this.submitSolution = this.submitSolution.bind(this);
   }
 
   submitSolution() {
     const { groupName, bannedWords, solutionsRequireApproval } = this.props.group;
     const { solution } = this.props.solutions;
-    const { suggestion } = this.props.navigation.state.params;
+    const { feedback } = this.props.navigation.state.params;
 
     if (bannedWords.test(solution)) {
       // If restricted words then we show an error to the user
       this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
     } else {
       this.setState({ errorMessage: '' });
-      this.props.submitSolutionToServer(solution, suggestion.id, solutionsRequireApproval);
-      // tracker.trackEvent('Submit', 'Submit Solution', { label: groupName, value: suggestion.id });
+      this.props.submitSolutionToServer(solution, feedback.id, solutionsRequireApproval);
+      // tracker.trackEvent('Submit', 'Submit Solution', { label: groupName, value: feedback.id });
       Keyboard.dismiss();
     }
   }
@@ -49,22 +49,22 @@ class SuggestionDetails extends Component {
 
     return (
       <Button onPress={this.submitSolution}>
-        Submit Suggestion
+        Submit Feedback
       </Button>
     );
   }
 
   render() {
     const { container, inputText } = styles;
-    const { suggestion } = this.props.navigation.state.params;
+    const { feedback } = this.props.navigation.state.params;
 
     return (
       <View style={container}>
         <ScrollView>
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View>
-              {/* Suggestion description */}
-              <SuggestionCard suggestion={suggestion} navigate={() => undefined} />
+              {/* Feedback description */}
+              <FeedbackCard feedback={feedback} navigate={() => undefined} />
 
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />
@@ -89,7 +89,7 @@ class SuggestionDetails extends Component {
   }
 }
 
-SuggestionDetails.propTypes = {
+FeedbackDetails.propTypes = {
   navigation: React.PropTypes.object,
   solutions: React.PropTypes.object,
   group: React.PropTypes.object,
@@ -105,6 +105,6 @@ function mapStateToProps(state) {
 const AppScreen = connect(mapStateToProps, {
   solutionChanged,
   submitSolutionToServer,
-})(SuggestionDetails);
+})(FeedbackDetails);
 
 export default AppScreen;

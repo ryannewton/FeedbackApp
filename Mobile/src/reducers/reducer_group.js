@@ -6,7 +6,7 @@ import {
 
 const INITIAL_STATE = {
   groupName: '',
-  suggestionsRequireApproval: true,
+  feedbackRequireApproval: true,
   solutionsRequireApproval: true,
   showStatus: true,
   includePositiveFeedbackBox: false,
@@ -18,7 +18,7 @@ export default (state = INITIAL_STATE, action) => {
     case PULL_GROUP_INFO:
       return {...state,
         groupName: action.payload.groupName,
-        suggestionsRequireApproval: Boolean(action.payload.suggestionsRequireApproval),
+        feedbackRequireApproval: Boolean(action.payload.feedbackRequireApproval),
         solutionsRequireApproval: Boolean(action.payload.solutionsRequireApproval),
         showStatus: Boolean(action.payload.showStatus),
         includePositiveFeedbackBox: Boolean(action.payload.includePositiveFeedbackBox),

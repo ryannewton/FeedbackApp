@@ -30,19 +30,19 @@ export const pullSolutions = token => (
   }
 );
 
-export const submitSolutionToServer = (text, suggestionId, solutionsRequireApproval) => (
+export const submitSolutionToServer = (text, feedbackId, solutionsRequireApproval) => (
   (dispatch, getState) => {
     const token = getState().auth.token;
-    let solution = { text, suggestionId };
+    let solution = { text, feedbackId };
 
     dispatch({ type: SUBMITTING_SOLUTION });
     http.post('/submitSolution', { solution, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
       if (!solutionsRequireApproval) {
-        solution = { id: response.data.id, suggestionId, text, approved: 1 };
+        solution = { id: response.data.id, feedbackId, text, approved: 1 };
         dispatch({ type: ADD_SOLUTION_TO_STATE, payload: solution });
-      }      
+      }
     })
     .catch((error) => {
       console.log('Error in submitSolutionToServer in actions_solutions', error.response.data);

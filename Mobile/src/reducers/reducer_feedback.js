@@ -1,19 +1,19 @@
 // Import action types
 import {
-  REQUESTED_SUGGESTIONS,
-  RECEIVED_SUGGESTIONS,
-  SUBMITTING_SUGGESTION,
-  SUBMIT_SUGGESTION_SUCCESS,
-  SUBMIT_SUGGESTION_FAIL,
+  REQUESTED_FEEDBACK,
+  RECEIVED_FEEDBACK,
+  SUBMITTING_FEEDBACK,
+  SUBMIT_FEEDBACK_SUCCESS,
+  SUBMIT_FEEDBACK_FAIL,
   SUBMITTING_IMAGE,
   SUBMIT_IMAGE_SUCCESS,
   SUBMIT_IMAGE_FAIL,
-  ADD_SUGGESTION_UPVOTE,
-  ADD_SUGGESTION_DOWNVOTE,
-  REMOVE_SUGGESTION_UPVOTE,
-  REMOVE_SUGGESTION_DOWNVOTE,
-  SAVE_SUGGESTION_CHANGES,
-  ADD_SUGGESTION_TO_STATE,
+  ADD_FEEDBACK_UPVOTE,
+  ADD_FEEDBACK_DOWNVOTE,
+  REMOVE_FEEDBACK_UPVOTE,
+  REMOVE_FEEDBACK_DOWNVOTE,
+  SAVE_FEEDBACK_CHANGES,
+  ADD_FEEDBACK_TO_STATE,
   LOG_OUT_USER,
 } from '../actions/types';
 
@@ -35,21 +35,21 @@ function filterAndOrder(list) {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case REQUESTED_SUGGESTIONS:
+    case REQUESTED_FEEDBACK:
       return state;
 
-    case RECEIVED_SUGGESTIONS: {
+    case RECEIVED_FEEDBACK: {
       const list = filterAndOrder(action.payload.list);
       return { list, lastPulled: action.payload.lastPulled };
     }
 
-    case SUBMITTING_SUGGESTION:
+    case SUBMITTING_FEEDBACK:
       return { ...state, loading: true };
 
-    case SUBMIT_SUGGESTION_SUCCESS:
+    case SUBMIT_FEEDBACK_SUCCESS:
       return { ...state, loading: false, feedback: '' };
 
-    case SUBMIT_SUGGESTION_FAIL:
+    case SUBMIT_FEEDBACK_FAIL:
       return { ...state, loading: false };
 
     case SUBMITTING_IMAGE:
@@ -62,43 +62,43 @@ export default (state = INITIAL_STATE, action) => {
     case SUBMIT_IMAGE_FAIL:
       return { ...state, loadingImage: false };
 
-    case ADD_SUGGESTION_UPVOTE: {
+    case ADD_FEEDBACK_UPVOTE: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newState = state.list.slice(0);
       newState[index].upvotes += 1;
       return { ...state, list: newState };
     }
 
-    case ADD_SUGGESTION_DOWNVOTE: {
-      const index = state.list.findIndex(project => project.id === action.payload.id);
+    case ADD_FEEDBACK_DOWNVOTE: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newState = state.list.slice(0);
       newState[index].downvotes += 1;
       return { ...state, list: newState };
     }
 
-    case REMOVE_SUGGESTION_UPVOTE: {
+    case REMOVE_FEEDBACK_UPVOTE: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newList = state.list.slice(0);
       newList[index].upvotes -= 1;
       return { ...state, list: newList };
     }
-    
-    case REMOVE_SUGGESTION_DOWNVOTE: {
-      const index = state.list.findIndex(project => project.id === action.payload.id);
+
+    case REMOVE_FEEDBACK_DOWNVOTE: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newState = state.list.slice(0);
       newState[index].downvotes -= 1;
       return { ...state, list: newState };
     }
 
-    case SAVE_SUGGESTION_CHANGES: {
+    case SAVE_FEEDBACK_CHANGES: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newList = state.list.slice(0);
       newList.splice(index, 1, action.payload);
       return { ...state, list: newList };
     }
 
-    case ADD_SUGGESTION_TO_STATE: {
-      return { ...state, list: [...state.list, action.payload.suggestion] };
+    case ADD_FEEDBACK_TO_STATE: {
+      return { ...state, list: [...state.list, action.payload.feedback] };
     }
 
     case LOG_OUT_USER:

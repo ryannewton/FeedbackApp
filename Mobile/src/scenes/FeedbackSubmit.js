@@ -18,68 +18,68 @@ import {
 } from 'react-native';
 
 // Import actions
-import { submitSuggestionToServer, closeInstructions, uploadImage } from '../actions';
+import { submitFeedbackToServer, closeInstructions, uploadImage } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
 
 // Import about info image
-import styles from '../styles/scenes/SuggestionSubmitStyles';
-import fullScreen from '../../images/backgrounds/SuggestionInfo.jpg';
+import styles from '../styles/scenes/FeedbackSubmitStyles';
+import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-class SuggestionSubmit extends Component {
+class FeedbackSubmit extends Component {
   constructor(props, context) {
     super(props, context);
 
     this.state = {
       height: 0,
       errorMessage: '',
-      suggestion: '',
-      positiveSuggestion: '',
-      negativeSuggestion: '',
+      feedback: '',
+      positiveFeedback: '',
+      negativeFeedback: '',
     };
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Suggestion', { domain: props.group.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
 
     this.closeInstructions = this.closeInstructions.bind(this);
-    this.submitSuggestion = this.submitSuggestion.bind(this);
+    this.submitFeedback = this.submitFeedback.bind(this);
   }
 
-  submitSuggestion() {
-    if (this.state.suggestion || this.state.positiveSuggestion || this.state.negativeSuggestion) {
-      // First we search the suggestion for restricted words
-      if (this.props.group.bannedWords.test(this.state.suggestion) ||
-          this.props.group.bannedWords.test(this.state.positiveSuggestion) ||
-          this.props.group.bannedWords.test(this.state.negativeSuggestion)) {
+  submitFeedback() {
+    if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
+      // First we search the feedback for restricted words
+      if (this.props.group.bannedWords.test(this.state.feedback) ||
+          this.props.group.bannedWords.test(this.state.positiveFeedback) ||
+          this.props.group.bannedWords.test(this.state.negativeFeedback)) {
         // If restricted words then we show an error to the user
-        this.setState({ errorMessage: 'One or more words in your suggestion is restricted by your administrator. Please edit and resubmit.' });
+        this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
       } else {
         // If no restricted words then we continue
-        if (this.state.suggestion) {
-          this.props.submitSuggestionToServer(this.props.group.suggestionsRequireApproval, this.state.suggestion, 'single suggestion', this.props.suggestions.imageURL);
-          this.setState({ suggestion: '' });
-        } if (this.state.positiveSuggestion) {
-          this.props.submitSuggestionToServer(this.props.group.suggestionsRequireApproval, this.state.positiveSuggestion, 'positive suggestion', this.props.suggestions.imageURL);
-          this.setState({ positiveSuggestion: '' });
-        } if (this.state.negativeSuggestion) {
-          this.props.submitSuggestionToServer(this.props.group.suggestionsRequireApproval, this.state.negativeSuggestion, 'negative suggestion', this.props.suggestions.imageURL);
-          this.setState({ negativeSuggestion: '' });
+        if (this.state.feedback) {
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL);
+          this.setState({ feedback: '' });
+        } if (this.state.positiveFeedback) {
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.imageURL);
+          this.setState({ positiveFeedback: '' });
+        } if (this.state.negativeFeedback) {
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.imageURL);
+          this.setState({ negativeFeedback: '' });
         }
 
-        // tracker.trackEvent('Submit', 'Submit Suggestion', { label: this.props.group.domain });
+        // tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.group.domain });
         this.setState({ errorMessage: '' });
         this.props.navigation.navigate('Submitted');
       }
     } else {
-      this.setState({ errorMessage: 'Suggestion box cannot be blank. Sorry!' });
+      this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
     }
   }
 
   closeInstructions() {
-    this.props.closeInstructions('Write Suggestion Scene');
+    this.props.closeInstructions('Write Feedback Scene');
   }
 
   addImage = async () => {
@@ -92,7 +92,7 @@ class SuggestionSubmit extends Component {
   }
 
   maybeRenderImage = () => {
-    const { imageURL } = this.props.suggestions;
+    const { imageURL } = this.props.feedback;
 
     // If there is no image, don't render anything
     if (!imageURL) {
@@ -114,7 +114,7 @@ class SuggestionSubmit extends Component {
   }
 
   maybeRenderUploadingOverlay = () => {
-    const { loadingImage } = this.props.suggestions;
+    const { loadingImage } = this.props.feedback;
     if (loadingImage) {
       return (
         <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' }]}>
@@ -130,15 +130,15 @@ class SuggestionSubmit extends Component {
   }
 
   renderButtons() {
-    if (this.props.suggestions.loading) {
+    if (this.props.feedback.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
 
     return (
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <View style={{ flex: 5.5 }}>
-          <Button onPress={this.submitSuggestion} style={{ marginBottom: 10, flex: 3 }}>
-            Submit Suggestion
+          <Button onPress={this.submitFeedback} style={{ marginBottom: 10, flex: 3 }}>
+            Submit Feedback
           </Button>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -154,7 +154,7 @@ class SuggestionSubmit extends Component {
   }
 
   render() {
-    const placeholderText = 'Enter your suggestion here!';
+    const placeholderText = 'Enter your feedback here!';
 
     const instructionsScreen = (
       <View style={styles.instructionContainer}>
@@ -164,17 +164,17 @@ class SuggestionSubmit extends Component {
       </View>
     );
 
-    const singleSuggestionBox = (
+    const singleFeedbackBox = (
       <View>
         <TextInput
           multiline={Boolean(true)}
-          onChangeText={suggestion => this.setState({ suggestion })}
+          onChangeText={feedback => this.setState({ feedback })}
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={styles.suggestionInput}
+          style={styles.feedbackInput}
           placeholder={placeholderText}
-          value={this.state.suggestion}
+          value={this.state.feedback}
         />
         {this.maybeRenderImage()}
         {/* Submit button / loading spinner */}
@@ -182,37 +182,37 @@ class SuggestionSubmit extends Component {
       </View>
     );
 
-    const positiveSuggestionBox = (
+    const positiveFeedbackBox = (
       <View>
         <TextInput
           multiline={Boolean(true)}
-          onChangeText={positiveSuggestion => this.setState({ positiveSuggestion })}
+          onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={[styles.suggestionInput, styles.positiveSuggestionInput]}
+          style={[styles.feedbackInput, styles.positiveFeedbackInput]}
           placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
-          value={this.state.positiveSuggestion}
+          value={this.state.positiveFeedback}
         />
         {/* Submit button / loading spinner */}
         {this.renderButtons()}
 
         <TextInput
           multiline={Boolean(true)}
-          onChangeText={negativeSuggestion => this.setState({ negativeSuggestion })}
+          onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={[styles.suggestionInput, styles.negativeSuggestionInput]}
+          style={[styles.feedbackInput, styles.negativeFeedbackInput]}
           placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-          value={this.state.negativeSuggestion}
+          value={this.state.negativeFeedback}
         />
         {/* Submit button / loading spinner */}
         {this.renderButtons()}
       </View>
     );
 
-    const WriteSuggestionScene = (
+    const WriteFeedbackScene = (
       <View style={[styles.container, styles.swiper]}>
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
@@ -222,7 +222,7 @@ class SuggestionSubmit extends Component {
                 {this.state.errorMessage}
               </Text>
 
-              {this.props.group.includePositiveFeedbackBox ? positiveSuggestionBox : singleSuggestionBox}
+              {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
             </KeyboardAvoidingView>
           </TouchableWithoutFeedback>
         </MenuContext>
@@ -230,27 +230,27 @@ class SuggestionSubmit extends Component {
       </View>
     );
 
-    // const screenToShow = (!this.props.user.instructionsViewed.includes('Write Suggestion Scene')) ? instructionsScreen : WriteSuggestionScene;
-    return WriteSuggestionScene;
+    // const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
+    return WriteFeedbackScene;
   }
 }
 
-SuggestionSubmit.propTypes = {
+FeedbackSubmit.propTypes = {
   user: React.PropTypes.object,
   group: React.PropTypes.object,
-  suggestion: React.PropTypes.object,
-  submitSuggestionToServer: React.PropTypes.func,
+  feedback: React.PropTypes.object,
+  submitFeedbackToServer: React.PropTypes.func,
   closeInstructions: React.PropTypes.func,
   navigation: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { user, group, suggestions } = state;
-  return { user, group, suggestions };
+  const { user, group, feedback } = state;
+  return { user, group, feedback };
 }
 
 export default connect(mapStateToProps, {
-  submitSuggestionToServer,
+  submitFeedbackToServer,
   closeInstructions,
   uploadImage,
-})(SuggestionSubmit);
+})(FeedbackSubmit);

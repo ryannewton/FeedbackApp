@@ -5,8 +5,8 @@ import { AsyncStorage } from 'react-native';
 import {
   CLOSE_INSTRUCTIONS,
   LOAD_INSTRUCTIONS_VIEWED,
-  LOAD_SUGGESTION_UPVOTES,
-  LOAD_SUGGESTION_DOWNVOTES,
+  LOAD_FEEDBACK_UPVOTES,
+  LOAD_FEEDBACK_DOWNVOTES,
   LOAD_SOLUTION_UPVOTES,
   LOAD_SOLUTION_DOWNVOTES,
   LOAD_DO_NOT_DISPLAY_LIST,
@@ -31,17 +31,17 @@ export const loadInstructionsViewed = list => (
   }
 );
 
-export const loadSuggestionUpvotes = suggestionUpvotes => (
+export const loadFeedbackUpvotes = feedbackUpvotes => (
   {
-    type: LOAD_SUGGESTION_UPVOTES,
-    payload: suggestionUpvotes,
+    type: LOAD_FEEDBACK_UPVOTES,
+    payload: feedbackUpvotes,
   }
 );
 
-export const loadSuggestionDownvotes = suggestionDownvotes => (
+export const loadFeedbackDownvotes = feedbackDownvotes => (
   {
-    type: LOAD_SUGGESTION_DOWNVOTES,
-    payload: suggestionDownvotes,
+    type: LOAD_FEEDBACK_DOWNVOTES,
+    payload: feedbackDownvotes,
   }
 );
 
@@ -66,9 +66,9 @@ export const loadDoNotDisplayList = list => (
   }
 );
 
-export const addToDoNotDisplayList = suggestionId => (
+export const addToDoNotDisplayList = feedbackId => (
   (dispatch, getState) => {
-    dispatch({ type: ADD_TO_DO_NOT_DISPLAY_LIST, payload: suggestionId });
+    dispatch({ type: ADD_TO_DO_NOT_DISPLAY_LIST, payload: feedbackId });
     const { doNotDisplayList } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}doNotDisplayList`, JSON.stringify(doNotDisplayList));
   }

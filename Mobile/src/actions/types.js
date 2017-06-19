@@ -24,26 +24,26 @@ export const REMOVE_SOLUTION_DOWNVOTE = 'remove_solution_downvote';
 export const ADD_SOLUTION_TO_STATE = 'add_solution_to_state';
 export const SOLUTION_CHANGED = 'solution_changed';
 
-// Suggestions
-export const REQUESTED_SUGGESTIONS = 'requested_suggestions';
-export const RECEIVED_SUGGESTIONS = 'received_suggestions';
-export const SUBMITTING_SUGGESTION = 'submit_suggestion';
-export const SUBMIT_SUGGESTION_SUCCESS = 'submit_suggestion_success';
-export const SUBMIT_SUGGESTION_FAIL = 'submit_suggestion_fail';
+// Feedback
+export const REQUESTED_FEEDBACK = 'requested_feedback';
+export const RECEIVED_FEEDBACK = 'received_feedback';
+export const SUBMITTING_FEEDBACK = 'submit_feedback';
+export const SUBMIT_FEEDBACK_SUCCESS = 'submit_feedback_success';
+export const SUBMIT_FEEDBACK_FAIL = 'submit_feedback_fail';
 export const SUBMITTING_IMAGE = 'submitting_image';
 export const SUBMIT_IMAGE_SUCCESS = 'submit_image_success';
 export const SUBMIT_IMAGE_FAIL = 'submit_image_fail';
-export const ADD_SUGGESTION_UPVOTE = 'add_suggestion_upvote';
-export const ADD_SUGGESTION_DOWNVOTE = 'add_suggestion_downvote';
-export const REMOVE_SUGGESTION_UPVOTE = 'remove_suggestion_upvote';
-export const REMOVE_SUGGESTION_DOWNVOTE = 'remove_suggestion_downvote';
-export const ADD_SUGGESTION_TO_STATE = 'add_suggestion_to_state';
+export const ADD_FEEDBACK_UPVOTE = 'add_feedback_upvote';
+export const ADD_FEEDBACK_DOWNVOTE = 'add_feedback_downvote';
+export const REMOVE_FEEDBACK_UPVOTE = 'remove_feedback_upvote';
+export const REMOVE_FEEDBACK_DOWNVOTE = 'remove_feedback_downvote';
+export const ADD_FEEDBACK_TO_STATE = 'add_feedback_to_state';
 
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
 export const LOAD_INSTRUCTIONS_VIEWED = 'load_instructions_viewed';
-export const LOAD_SUGGESTION_UPVOTES = 'load_suggestion_upvotes';
-export const LOAD_SUGGESTION_DOWNVOTES = 'load_suggestion_downvotes';
+export const LOAD_FEEDBACK_UPVOTES = 'load_feedback_upvotes';
+export const LOAD_FEEDBACK_DOWNVOTES = 'load_feedback_downvotes';
 export const LOAD_SOLUTION_UPVOTES = 'load_solution_upvotes';
 export const LOAD_SOLUTION_DOWNVOTES = 'load_solution_downvotes';
 export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';

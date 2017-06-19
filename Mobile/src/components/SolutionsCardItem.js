@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
 // Import styles, components, and action creators
-import styles from '../styles/components/SolutionStyles';
+import styles from '../styles/components/SolutionCardItemStyles';
 import { CardSection } from '../components/common';
 import { addSolutionUpvote, removeSolutionUpvote, addSolutionDownvote, removeSolutionDownvote } from '../actions';
 

@@ -198,20 +198,20 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
 });
 
 // SUBMIT
-app.post('/submitSuggestion', upload.array(), (req, res) => {
+app.post('/submitFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      // Check if the suggestion requires approval
+      // Check if the feedback requires approval
       const { groupId, userId } = decoded;
-      let connectionString = `SELECT suggestionsRequireApproval, groupName FROM groups WHERE id=?`;
+      let connectionString = `SELECT feedbackRequireApproval, groupName FROM groups WHERE id=?`;
       connection.query(connectionString, [groupId], (err, rows) => {        
         if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
-          // Insert the suggestion into the database          
-          const { text, type, imageURL } = req.body.suggestion;
-          const approved = !rows[0].suggestionsRequireApproval;
-          connectionString = 'INSERT INTO suggestions SET ?';
+          // Insert the feedback into the database          
+          const { text, type, imageURL } = req.body.feedback;
+          const approved = !rows[0].feedbackRequireApproval;
+          connectionString = 'INSERT INTO feedback SET ?';
           connection.query(connectionString, 
             {
               groupId,
@@ -247,12 +247,12 @@ app.post('/submitSolution', upload.array(), (req, res) => {
         if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 0942');
         else {
           // Insert the solution into the database
-          const { suggestionId, text } = req.body.solution;
+          const { feedbackId, text } = req.body.solution;
           const approved = !rows[0].solutionsRequireApproval;
           connectionString = 'INSERT INTO solutions SET ?';
           connection.query(connectionString,
             {
-              suggestionId,
+              feedbackId,
               userId,
               text,
               approved,
@@ -268,17 +268,17 @@ app.post('/submitSolution', upload.array(), (req, res) => {
 });
 
 // SUBMIT VOTE
-app.post('/submitSuggestionVote', upload.array(), (req, res) => {
+app.post('/submitFeedbackVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      const suggestionId = req.body.suggestion.id;
+      const feedbackId = req.body.feedback.id;
       const { upvote, downvote } = req.body;
       const userId = decoded.userId; 
-      const connectionString = 'INSERT INTO suggestionVotes SET ?'
+      const connectionString = 'INSERT INTO feedbackVotes SET ?'
       connection.query(connectionString,
         {
-          suggestionId,
+          feedbackId,
           userId,
           upvote,
           downvote,
@@ -313,15 +313,15 @@ app.post('/submitSolutionVote', upload.array(), (req, res) => {
 });
 
 // DELETE VOTE
-app.post('/removeSuggestionVote', upload.array(), (req, res) => {
+app.post('/removeFeedbackVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      const suggestionId = req.body.suggestion.id;
+      const feedbackId = req.body.feedback.id;
       const userId = decoded.userId; 
       const { upvote, downvote } = req.body;      
-      const connectionString = 'DELETE FROM suggestionVotes WHERE suggestionId=? AND userId=? AND upvote=? AND downvote=?'
-      connection.query(connectionString, [suggestionId, userId, upvote, downvote], (err) => {
+      const connectionString = 'DELETE FROM feedbackVotes WHERE feedbackId=? AND userId=? AND upvote=? AND downvote=?'
+      connection.query(connectionString, [feedbackId, userId, upvote, downvote], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8912');
         else res.sendStatus(200);
       });
@@ -346,12 +346,12 @@ app.post('/removeSolutionVote', upload.array(), (req, res) => {
 });
 
 // UPDATE
-app.post('/updateSuggestion', upload.array(), (req, res) => {
+app.post('/updateFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      const { text, status, imageURL, approved, id } = req.body.suggestion;
-      const connectionString = 'UPDATE suggestions SET ? WHERE ?';
+      const { text, status, imageURL, approved, id } = req.body.feedback;
+      const connectionString = 'UPDATE feedback SET ? WHERE ?';
       connection.query(connectionString,
         [{
           text,
@@ -389,12 +389,12 @@ app.post('/updateSolution', upload.array(), (req, res) => {
 });
 
 // DELETE
-app.post('/deleteSuggestion', upload.array(), (req, res) => {
+app.post('/deleteFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      const connectionString = 'DELETE FROM suggestions WHERE id = ?';
-      connection.query(connectionString, [req.body.suggestion.id], (err) => {
+      const connectionString = 'DELETE FROM feedback WHERE id = ?';
+      connection.query(connectionString, [req.body.feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 7926');
         else res.sendStatus(200);
       });      
@@ -416,7 +416,7 @@ app.post('/deleteSolution', upload.array(), (req, res) => {
 });
 
 // PULL
-app.post('/pullSuggestions', upload.array(), (req, res) => {
+app.post('/pullFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');    
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
@@ -424,13 +424,13 @@ app.post('/pullSuggestions', upload.array(), (req, res) => {
       const { userId, groupName, groupId } = decoded;
       const connectionString = `
       SELECT *
-      FROM suggestions a
+      FROM feedback a
       LEFT JOIN (
-        SELECT suggestionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
-        FROM suggestionVotes
-        GROUP BY suggestionId
+        SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
+        FROM feedbackVotes
+        GROUP BY feedbackId
       ) b
-      ON a.id = b.suggestionId
+      ON a.id = b.feedbackId
       WHERE groupId=?`;
       connection.query(connectionString, [groupId, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
@@ -462,8 +462,8 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
         GROUP BY solutionId
       ) b
       ON a.id = b.solutionId
-      JOIN suggestions c
-      ON a.suggestionId = c.id
+      JOIN feedback c
+      ON a.feedbackId = c.id
       WHERE c.groupId=?`;
       connection.query(connectionString, [groupId, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
@@ -490,10 +490,10 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
         SELECT
           '` + userId + `' as userId,
           groupName,
-          suggestionsRequireApproval,
+          feedbackRequireApproval,
           solutionsRequireApproval,
           showStatus,
-          includePositiveSuggestionBox
+          includePositiveFeedbackBox
         FROM
           groups
         WHERE

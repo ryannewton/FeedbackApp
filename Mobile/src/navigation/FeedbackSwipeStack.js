@@ -4,21 +4,21 @@ import { Image } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 
 // Import Scenes
-import SuggestionSwipe from '../scenes/SuggestionSwipe';
-import SuggestionDetails from '../scenes/SuggestionDetails';
+import FeedbackSwipe from '../scenes/FeedbackSwipe';
+import FeedbackDetails from '../scenes/FeedbackDetails';
 import styles from '../styles/common/navStyles';
 
 // Import icons
-import SuggestionSwipeSelected from '../../images/icons/newprojects2-selected_100px.png';
-import SuggestionSwipeNotSelected from '../../images/icons/newprojects2-notselected_100px.png';
+import FeedbackSwipeSelected from '../../images/icons/feedbackswipe-selected_100px.png';
+import FeedbackSwipeNotSelected from '../../images/icons/feedbackswipe-notselected_100px.png';
 
 // Stack of scenes
 const scenes = StackNavigator(
   {
-    SuggestionSwipe: {
-      screen: SuggestionSwipe,
+    FeedbackSwipe: {
+      screen: FeedbackSwipe,
       navigationOptions: {
-        title: 'New Suggestion',
+        title: 'New Feedback',
         headerStyle: {
           height: styles.header.height,
           marginTop: styles.header.marginTop,
@@ -26,9 +26,9 @@ const scenes = StackNavigator(
       },
     },
     Details: {
-      screen: SuggestionDetails,
+      screen: FeedbackDetails,
       navigationOptions: {
-        title: 'Suggestion Details',
+        title: 'Feedback Details',
         headerStyle: {
           height: styles.header.height,
           marginTop: styles.header.marginTop,
@@ -40,21 +40,21 @@ const scenes = StackNavigator(
 
 // Stack options
 const options = {
-  tabBarLabel: 'New Suggestion',
+  tabBarLabel: 'New Feedback',
   tabBarIcon: ({ tintColor }) => {
     if (tintColor === 'grey') {
-      return <Image source={SuggestionSwipeNotSelected} style={{ width: 22, height: 22 }} />;
+      return <Image source={FeedbackSwipeNotSelected} style={{ width: 22, height: 22 }} />;
     }
-    return <Image source={SuggestionSwipeSelected} style={{ width: 22, height: 22 }} />;
+    return <Image source={FeedbackSwipeSelected} style={{ width: 22, height: 22 }} />;
   },
   cardStack: {
     gesturesEnabled: false,
   },
 };
 
-const SuggestionSwipeStack = {
+const FeedbackSwipeStack = {
   screen: scenes,
   navigationOptions: options,
 };
 
-export default SuggestionSwipeStack;
+export default FeedbackSwipeStack;

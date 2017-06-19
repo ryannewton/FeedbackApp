@@ -9,7 +9,7 @@ import { logOut } from '../actions';
 
 // Import componenets, functions, and styles
 import { Button } from '../components/common';
-import styles from '../styles/settings_styles';
+import styles from '../styles/scenes/SettingsStyles';
 
 // Import tracking
 // import { tracker } from '../constants';

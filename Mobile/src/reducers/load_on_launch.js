@@ -12,7 +12,7 @@ async function loadToken() {
     if (token === null) {
       store.dispatch(actions.authorizeUserFail());
     } else {
-      store.dispatch(actions.pullSuggestions(token));
+      store.dispatch(actions.pullFeedback(token));
       store.dispatch(actions.pullSolutions(token));
       store.dispatch(actions.pullGroupInfo(token));
     }
@@ -23,15 +23,15 @@ async function loadToken() {
 
 async function loadVotes() {
   try {
-    // Suggestion Upvotes
-    let suggestionUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}suggestionUpvotes`) || '[]';
-    suggestionUpvotes = JSON.parse(suggestionUpvotes);
-    store.dispatch(actions.loadSuggestionUpvotes(suggestionUpvotes));
+    // Feedback Upvotes
+    let feedbackUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}feedbackUpvotes`) || '[]';
+    feedbackUpvotes = JSON.parse(feedbackUpvotes);
+    store.dispatch(actions.loadFeedbackUpvotes(feedbackUpvotes));
 
-    // Suggestion Downvotes
-    let suggestionDownvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}suggestionDownvotes`) || '[]';
-    suggestionDownvotes = JSON.parse(suggestionDownvotes);
-    store.dispatch(actions.loadSuggestionDownvotes(suggestionDownvotes));
+    // Feedback Downvotes
+    let feedbackDownvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}feedbackDownvotes`) || '[]';
+    feedbackDownvotes = JSON.parse(feedbackDownvotes);
+    store.dispatch(actions.loadFeedbackDownvotes(feedbackDownvotes));
 
     // Solution Upvotes
     let solutionUpvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}solutionUpvotes`) || '[]';
@@ -70,8 +70,8 @@ async function loadInstructions() {
 async function clearAsyncStorage() {
   try {
     await AsyncStorage.removeItem(`${ROOT_STORAGE}token`);
-    await AsyncStorage.removeItem(`${ROOT_STORAGE}suggestionUpvotes`);
-    await AsyncStorage.removeItem(`${ROOT_STORAGE}suggestionDownvotes`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}feedbackUpvotes`);
+    await AsyncStorage.removeItem(`${ROOT_STORAGE}feedbackDownvotes`);
     await AsyncStorage.removeItem(`${ROOT_STORAGE}solutionUpvotes`);
     await AsyncStorage.removeItem(`${ROOT_STORAGE}solutionDownvotes`);
     await AsyncStorage.removeItem(`${ROOT_STORAGE}doNotDisplayList`);

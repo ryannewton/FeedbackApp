@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { authorizeUser } from '../actions';
-import styles from '../styles/styles_main';
+import styles from '../styles/scenes/AuthorizeStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
@@ -35,9 +35,9 @@ class Authorize extends Component {
   route(nextProps) {
     if (
       nextProps.auth.loggedIn === true &&
-      nextProps.suggestions.lastPulled.getTime() !== 0
-    ){
-      nextProps.navigation.navigate('SuggestionSwipe');
+      nextProps.feedback.lastPulled.getTime() !== 0
+    ) {
+      nextProps.navigation.navigate('FeedbackSwipe');
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
@@ -111,12 +111,12 @@ Authorize.propTypes = {
   authorizeUser: React.PropTypes.func,
   navigation: React.PropTypes.object,
   group: React.PropTypes.object,
-  suggestions: React.PropTypes.object,
+  feedback: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { auth, suggestions, group } = state;
-  return { auth, suggestions, group };
+  const { auth, feedback, group } = state;
+  return { auth, feedback, group };
 }
 
 

@@ -5,13 +5,13 @@ import { combineReducers } from 'redux';
 import auth from './reducer_auth';
 import group from './reducer_group';
 import solutions from './reducer_solutions';
-import suggestions from './reducer_suggestions';
+import feedback from './reducer_feedback';
 import user from './reducer_user';
 
 export default combineReducers({
   auth,
   group,
   solutions,
-  suggestions,
+  feedback,
   user,
 });

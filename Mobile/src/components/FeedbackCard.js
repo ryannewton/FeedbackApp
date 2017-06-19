@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
 // Import componenets, functions, and styles
-import styles from '../styles/components/SuggestionStyles';
+import styles from '../styles/components/FeedbackCardStyles';
 import { Card } from './common';
-import { addSuggestionUpvote, removeSuggestionUpvote, addSuggestionDownvote, removeSuggestionDownvote } from '../actions';
+import { addFeedbackUpvote, removeFeedbackUpvote, addFeedbackDownvote, removeFeedbackDownvote } from '../actions';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-class Suggestion extends Component {
+class Feedback extends Component {
   constructor(props) {
     super(props);
 
@@ -23,58 +23,58 @@ class Suggestion extends Component {
   }
 
   goToDetails() {
-    this.props.navigate('Details', { suggestion: this.props.suggestion });
+    this.props.navigate('Details', { feedback: this.props.feedback });
   }
 
   upvote() {
-    const { suggestion, user } = this.props;
-    // If user hasn't upvoted this suggestion, add an upvote
-    if (!user.suggestionUpvotes.includes(suggestion.id)) {
-      // tracker.trackEvent('Suggestion Vote', 'Suggestion UpVote Via Suggestion Button', { label: this.props.group.domain });
-      this.props.addSuggestionUpvote(suggestion);
+    const { feedback, user } = this.props;
+    // If user hasn't upvoted this feedback, add an upvote
+    if (!user.feedbackUpvotes.includes(feedback.id)) {
+      // tracker.trackEvent('Feedback Vote', 'Feedback UpVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.addFeedbackUpvote(feedback);
     } else {
-      // tracker.trackEvent('Remove Suggestion Vote', 'Remove Suggestion UpVote Via Suggestion Button', { label: this.props.group.domain });
-      this.props.removeSuggestionUpvote(suggestion);
+      // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback UpVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.removeFeedbackUpvote(feedback);
     }
   }
   downvote() {
-    const { suggestion, user } = this.props;
-    // If user hasn't downvoted this suggestion, add an downvote
-    if (!user.suggestionDownvotes.includes(suggestion.id)) {
-      // tracker.trackEvent('Suggestion Vote', 'Suggestion DownVote Via Suggestion Button', { label: this.props.group.domain });
-      this.props.addSuggestionDownvote(suggestion);
+    const { feedback, user } = this.props;
+    // If user hasn't downvoted this feedback, add an downvote
+    if (!user.feedbackDownvotes.includes(feedback.id)) {
+      // tracker.trackEvent('Feedback Vote', 'Feedback DownVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.addFeedbackDownvote(feedback);
     } else {
-      // tracker.trackEvent('Remove Suggestion Vote', 'Remove Suggestion DownVote Via Suggestion Button', { label: this.props.group.domain });
-      this.props.removeSuggestionDownvote(suggestion);
+      // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback DownVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.removeFeedbackDownvote(feedback);
     }
   }
-  // Temporary fix. Async issue is causing this.props.suggestion to be temporarily undefined
+  // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
   renderVoteCount() {
-    if (this.props.suggestion === undefined) {
+    if (this.props.feedback === undefined) {
       return '';
     }
-    return `${this.props.suggestion.upvotes}`;
+    return `${this.props.feedback.upvotes}`;
   }
   renderDownvoteCount() {
-    if (this.props.suggestion === undefined) {
+    if (this.props.feedback === undefined) {
       return '';
     }
-    return `${this.props.suggestion.downvotes}`;
+    return `${this.props.feedback.downvotes}`;
   }
 
-  // Temporary fix. Async issue is causing this.props.suggestion to be temporarily undefined
+  // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
   renderTitle() {
-    if (this.props.suggestion === undefined) {
+    if (this.props.feedback === undefined) {
       return '';
     }
-    return this.props.suggestion.text;
+    return this.props.feedback.text;
   }
 
   renderButton() {
-    const { suggestion, user } = this.props;
+    const { feedback, user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this suggestion
-    if (user.suggestionUpvotes.includes(suggestion.id)) {
+    // If user hasn't upvoted this feedback
+    if (user.feedbackUpvotes.includes(feedback.id)) {
       iconColor = 'green';
     }
     return (
@@ -84,10 +84,10 @@ class Suggestion extends Component {
     );
   }
   renderThumbDownButton() {
-    const { suggestion, user } = this.props;
+    const { feedback, user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this suggestion
-    if (user.suggestionDownvotes.includes(suggestion.id)) {
+    // If user hasn't upvoted this feedback
+    if (user.feedbackDownvotes.includes(feedback.id)) {
       iconColor = '#b6001e';
     }
     return (
@@ -98,7 +98,7 @@ class Suggestion extends Component {
   }
 
   renderStatus() {
-    const { status } = this.props.suggestion;
+    const { status } = this.props.feedback;
     if (status && status === 'complete') {
       return <Icon name="done" size={35} color={'#006400'} />;
     }
@@ -112,7 +112,7 @@ class Suggestion extends Component {
     if (this.props.group.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ paddingRight: 3 }}>{this.props.suggestion.status}</Text>
+          <Text style={{ paddingRight: 3 }}>{this.props.feedback.status}</Text>
           {this.renderStatus()}
         </View>
       );
@@ -121,11 +121,11 @@ class Suggestion extends Component {
   }
 
   render() {
-    const { buttonText, lowWeight, row, suggestionTitle } = styles;
+    const { buttonText, lowWeight, row, feedbackTitle } = styles;
     let updatedRow = row;
-    if (this.props.suggestion.type === 'positive feedback') {
+    if (this.props.feedback.type === 'positive feedback') {
       updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 } }];
-    } else if (this.props.suggestion.type === 'negative feedback') {
+    } else if (this.props.feedback.type === 'negative feedback') {
       updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 } }];
     }
     return (
@@ -136,9 +136,9 @@ class Suggestion extends Component {
           onPress={this.goToDetails}
         >
           <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-            {/* First row */}{/* Suggestion title */}
+            {/* First row */}{/* Feedback title */}
             <View style={{ flex: 5, paddingTop: 5 }}>
-              <Text style={suggestionTitle}>
+              <Text style={feedbackTitle}>
                 {this.renderTitle()}
               </Text>
               {/* Vote count */}
@@ -179,14 +179,14 @@ class Suggestion extends Component {
   }
 }
 
-Suggestion.propTypes = {
-  suggestion: React.PropTypes.object,
+Feedback.propTypes = {
+  feedback: React.PropTypes.object,
   navigate: React.PropTypes.func,
   user: React.PropTypes.object,
-  addSuggestionUpvote: React.PropTypes.func,
-  removeSuggestionUpvote: React.PropTypes.func,
-  addSuggestionDownvote: React.PropTypes.func,
-  removeSuggestionDownvote: React.PropTypes.func,
+  addFeedbackUpvote: React.PropTypes.func,
+  removeFeedbackUpvote: React.PropTypes.func,
+  addFeedbackDownvote: React.PropTypes.func,
+  removeFeedbackDownvote: React.PropTypes.func,
   group: React.PropTypes.object,
 };
 
@@ -196,8 +196,8 @@ const mapStateToProps = (state) => {
 };
 
 export default connect(mapStateToProps, {
-  addSuggestionUpvote,
-  removeSuggestionUpvote,
-  addSuggestionDownvote,
-  removeSuggestionDownvote,
-})(Suggestion);
+  addFeedbackUpvote,
+  removeFeedbackUpvote,
+  addFeedbackDownvote,
+  removeFeedbackDownvote,
+})(Feedback);

@@ -4,30 +4,30 @@ import { View, ListView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components, functions, and styles
-import SuggestionCard from '../components/SuggestionCard';
-import styles from '../styles/scenes/SuggestionListStyles';
+import FeedbackCard from '../components/FeedbackCard';
+import styles from '../styles/scenes/FeedbackListStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-class SuggestionList extends Component {
+class FeedbackList extends Component {
   // constructor(props) {
   //   super(props);
-  //   tracker.trackScreenViewWithCustomDimensionValues('Suggestions', { domain: props.group.domain });
+  //   tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
   // }
 
-  renderAllSuggestion() {
-    const suggestionList = this.props.suggestions.list
-      .map(suggestionItem => (
-        <SuggestionCard
-          suggestion={suggestionItem}
-          key={suggestionItem.id}
+  renderAllFeedback() {
+    const feedbackList = this.props.feedback.list
+      .map(feedbackItem => (
+        <FeedbackCard
+          feedback={feedbackItem}
+          key={feedbackItem.id}
           navigate={this.props.navigation.navigate}
         />
       ),
     );
 
-    return suggestionList;
+    return feedbackList;
   }
 
   render() {
@@ -36,10 +36,10 @@ class SuggestionList extends Component {
     return (
       <View style={styles.container}>
         <ListView
-          dataSource={ds.cloneWithRows(this.props.suggestions.list)}
+          dataSource={ds.cloneWithRows(this.props.feedback.list)}
           renderRow={rowData =>
-            <SuggestionCard
-              suggestion={rowData}
+            <FeedbackCard
+              feedback={rowData}
               key={rowData.id}
               navigate={this.props.navigation.navigate}
             />
@@ -50,17 +50,17 @@ class SuggestionList extends Component {
   }
 }
 
-SuggestionList.propTypes = {
+FeedbackList.propTypes = {
   navigation: React.PropTypes.object,
-  suggestions: React.PropTypes.object,
+  feedback: React.PropTypes.object,
   group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { suggestions, group } = state;
-  return { suggestions, group };
+  const { feedback, group } = state;
+  return { feedback, group };
 }
 
-const AppScreen = connect(mapStateToProps, {})(SuggestionList);
+const AppScreen = connect(mapStateToProps, {})(FeedbackList);
 
 export default AppScreen;

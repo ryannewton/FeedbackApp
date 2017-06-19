@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
-import styles from '../styles/scenes/SuggestionDetailsStyles';
+import styles from '../styles/components/SolutionCardStyles';
 import SolutionsCardItem from './SolutionsCardItem';
 import { Card, CardSection } from '../components/common';
 
@@ -14,17 +14,17 @@ import { Card, CardSection } from '../components/common';
 class SolutionsCard extends Component {
   // constructor(props) {
   //   super(props);
-  //   tracker.trackScreenViewWithCustomDimensionValues('Suggestion Details', { domain: props.group.domain, suggestion: String(props.navigation.state.params.suggestion.id) });
+  //   tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { domain: props.group.domain, feedback: String(props.navigation.state.params.feedback.id) });
   // }
   
   renderSolutionsList() {
     const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
-    const { suggestion } = this.props.navigation.state.params;
-    const suggestionSolutions = solutions.list.filter(solution => solution.suggestionId === suggestion.id);
+    const { feedback } = this.props.navigation.state.params;
+    const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
 
     // If no solutions have been submitted
-    if (suggestionSolutions.length === 0) {
+    if (feedbackSolutions.length === 0) {
       return (
         <CardSection>
           <Text style={noSolutionsMessage}>{'No solutions (yet)\nBe the first!'}</Text>
@@ -33,7 +33,7 @@ class SolutionsCard extends Component {
     }
 
     // List of solutions
-    const formattedSolutions = suggestionSolutions
+    const formattedSolutions = feedbackSolutions
       .sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes))
       .map(solution => (
         <SolutionsCardItem solution={solution} key={solution.id} />

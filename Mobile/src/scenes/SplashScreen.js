@@ -31,7 +31,7 @@ class SplashScreen extends Component {
   }
 
   route() {
-    console.log(this.props.suggestions.lastPulled.getTime());
+    console.log(this.props.feedback.lastPulled.getTime());
     // There are two options where we want to naviagte
     // 1) loggedIn is false meaning that we failed to login
     if (this.props.auth.loggedIn === false) {
@@ -40,10 +40,10 @@ class SplashScreen extends Component {
     // 2) loggedIn is true (we logged in) and we have stored all the data we need in state
     } else if (
         this.props.auth.loggedIn === true &&
-        this.props.suggestions.lastPulled.getTime() !== 0
+        this.props.feedback.lastPulled.getTime() !== 0
       ) {
       // tracker.setUser(this.props.group.email);
-      this.props.navigation.navigate('SuggestionSwipe');
+      this.props.navigation.navigate('FeedbackSwipe');
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
@@ -63,12 +63,12 @@ SplashScreen.propTypes = {
   auth: React.PropTypes.object,
   navigation: React.PropTypes.object,
   group: React.PropTypes.object,
-  suggestions: React.PropTypes.object,
+  feedback: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { auth, group, suggestions } = state;
-  return { auth, group, suggestions };
+  const { auth, group, feedback } = state;
+  return { auth, group, feedback };
 }
 
 export default connect(mapStateToProps)(SplashScreen);

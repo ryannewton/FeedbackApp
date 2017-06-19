@@ -4,16 +4,16 @@ import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 // Import Scenes
-import SuggestionList from '../scenes/SuggestionList';
-import SuggestionDetails from '../scenes/SuggestionDetails';
+import FeedbackList from '../scenes/FeedbackList';
+import FeedbackDetails from '../scenes/FeedbackDetails';
 import styles from '../styles/common/navStyles';
 
 // Stack of scenes
 const scenes = StackNavigator({
-  SuggestionList: {
-    screen: SuggestionList,
+  FeedbackList: {
+    screen: FeedbackList,
     navigationOptions: {
-      title: 'All Suggestion',
+      title: 'All Feedback',
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
@@ -21,9 +21,9 @@ const scenes = StackNavigator({
     },
   },
   Details: {
-    screen: SuggestionDetails,
+    screen: FeedbackDetails,
     navigationOptions: {
-      title: 'Suggestion Details',
+      title: 'Feedback Details',
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
@@ -34,14 +34,14 @@ const scenes = StackNavigator({
 
 // Stack options
 const options = {
-  tabBarLabel: 'All Suggestion',
+  tabBarLabel: 'All Feedback',
   tabBarIcon: ({ tintColor }) => <Icon name="view-list" size={22} color={tintColor} />,
   cardStack: { gesturesEnabled: false },
 };
 
-const SuggestionListStack = {
+const FeedbackListStack = {
   screen: scenes,
   navigationOptions: options,
 };
 
-export default SuggestionListStack;
+export default FeedbackListStack;

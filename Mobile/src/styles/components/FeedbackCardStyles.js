@@ -7,7 +7,7 @@ import { bodyText } from '../common/textStyles';
 
 const styles = StyleSheet.create({
   buttonText,
-  projectTitle: bodyText,
+  feedbackTitle: bodyText,
   row: {
     paddingLeft: 10,
     paddingRight: 10,
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   lowWeight: {
     fontWeight: '300',
-    fontSize: 16
+    fontSize: 16,
   },
 });
 

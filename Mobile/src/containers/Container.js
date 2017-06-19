@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Router from '../navigation/router';
 
 // Import actions
-import { pullSuggestions } from '../actions';
+import { pullFeedback } from '../actions';
 
 // Update every 5 minutes (value in milliseconds)
 const UPDATE_FREQUENCY = 5 * 60 * 1000;
@@ -15,14 +15,14 @@ const CHECK_FREQUENCY = 1 * 60 * 1000;
 
 class Container extends Component {
   componentDidMount() {
-    setInterval(this.updateSuggestionsFromServer, CHECK_FREQUENCY);
+    setInterval(this.updateFeedbackFromServer, CHECK_FREQUENCY);
   }
 
-  updateSuggestionsFromServer = () => {
+  updateFeedbackFromServer = () => {
     const now = new Date();
-    const { lastPulled } = this.props.suggestions;
+    const { lastPulled } = this.props.feedback;
     if (now.getTime() - lastPulled.getTime() > UPDATE_FREQUENCY) {
-      this.props.pullSuggestions(this.props.auth.token);
+      this.props.pullFeedback(this.props.auth.token);
     }
   }
 
@@ -34,13 +34,13 @@ class Container extends Component {
 }
 
 Container.propTypes = {
-  suggestions: React.PropTypes.object,
+  feedback: React.PropTypes.object,
   auth: React.PropTypes.object,
-  pullSuggestions: React.PropTypes.func,
+  pullFeedback: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps, { pullSuggestions })(Container);
+export default connect(mapStateToProps, { pullFeedback })(Container);
