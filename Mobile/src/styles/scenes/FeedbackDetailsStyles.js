@@ -19,14 +19,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     flex: 1,
     color: '#555555',
-    textAlign: 'center',
     fontWeight: '500',
   },
   inputText: {
     ...inputText,
     height: 60,
     marginTop: 5,
-    marginBottom: 5
+    marginBottom: 5,
   },
   solutionText: {
     fontSize: 18,

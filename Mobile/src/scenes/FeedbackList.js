@@ -3,9 +3,6 @@ import React, { Component } from 'react';
 import { View, ListView } from 'react-native';
 import { connect } from 'react-redux';
 
-// Import actions
-import { saveProjectChanges } from '../actions';
-
 // Import components, functions, and styles
 import FeedbackCard from '../components/FeedbackCard';
 import styles from '../styles/scenes/FeedbackListStyles';
@@ -14,19 +11,18 @@ import styles from '../styles/scenes/FeedbackListStyles';
 // import { tracker } from '../constants';
 
 class FeedbackList extends Component {
-  constructor(props) {
-    super(props);
-    // tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
-  }
+  // constructor(props) {
+  //   super(props);
+  //   tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
+  // }
 
   renderAllFeedback() {
-    const feedbackList = this.props.projects.list
+    const feedbackList = this.props.feedback.list
       .map(feedbackItem => (
         <FeedbackCard
-          project={feedbackItem}
+          feedback={feedbackItem}
           key={feedbackItem.id}
           navigate={this.props.navigation.navigate}
-          saveProjectChanges={this.props.saveProjectChanges}
         />
       ),
     );
@@ -40,13 +36,12 @@ class FeedbackList extends Component {
     return (
       <View style={styles.container}>
         <ListView
-          dataSource={ds.cloneWithRows(this.props.projects.list)}
+          dataSource={ds.cloneWithRows(this.props.feedback.list)}
           renderRow={rowData =>
             <FeedbackCard
-              project={rowData}
+              feedback={rowData}
               key={rowData.id}
               navigate={this.props.navigation.navigate}
-              saveProjectChanges={this.props.saveProjectChanges}
             />
           }
         />
@@ -57,18 +52,15 @@ class FeedbackList extends Component {
 
 FeedbackList.propTypes = {
   navigation: React.PropTypes.object,
-  projects: React.PropTypes.object,
-  saveProjectChanges: React.PropTypes.func,
-  features: React.PropTypes.object,
+  feedback: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { projects, features } = state;
-  return { projects, features };
+  const { feedback, group } = state;
+  return { feedback, group };
 }
 
-const AppScreen = connect(mapStateToProps, {
-  saveProjectChanges,
-})(FeedbackList);
+const AppScreen = connect(mapStateToProps, {})(FeedbackList);
 
 export default AppScreen;

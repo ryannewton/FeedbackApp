@@ -49,7 +49,5 @@ fastlane/Preview.html
 fastlane/screenshots
 
 .DS_Store
-../.DS_Store
 
 .expo/
-../.expo/

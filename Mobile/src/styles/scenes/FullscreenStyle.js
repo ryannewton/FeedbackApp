@@ -17,7 +17,7 @@ const styles = {
       ios: { flex: 1 },
     }),
   },
-  feedback_input: {
+  feedbackInput: {
     borderColor: 'gray',
     borderWidth: 1,
     borderRadius: 4,
@@ -34,10 +34,10 @@ const styles = {
       android: { height: 140 },
     }),
   },
-  positive_feedback_input: {
+  positiveFeedbackInput: {
     backgroundColor: '#98FB98',
   },
-  negative_feedback_input: {
+  negativeFeedbackInput: {
     backgroundColor: '#F08080',
   },
   swiper: {

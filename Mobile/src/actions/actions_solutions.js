@@ -3,51 +3,46 @@ import { AsyncStorage } from 'react-native';
 
 // Import action types
 import {
-  LOAD_SOLUTION_UPVOTES,
-  LOAD_SOLUTION_DOWNVOTES,
   RECEIVED_SOLUTION_LIST,
-  SOLUTION_CHANGED,
-  SUBMIT_SOLUTION,
+  SUBMITTING_SOLUTION,
   SUBMIT_SOLUTION_SUCCESS,
   SUBMIT_SOLUTION_FAIL,
+  ADD_SOLUTION_TO_STATE,
   ADD_SOLUTION_UPVOTE,
   ADD_SOLUTION_DOWNVOTE,
   REMOVE_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_DOWNVOTE,
-  SAVE_SOLUTION_CHANGES,
-  ADD_SOLUTION_TO_STATE,
+  SOLUTION_CHANGED,
 } from './types';
 
 // Import constants
 import { http, ROOT_STORAGE } from '../constants';
 
-export const solutionChanged = solution => (
-  {
-    type: SOLUTION_CHANGED,
-    payload: solution,
+export const pullSolutions = token => (
+  (dispatch) => {
+    http.post('/pullSolutions', { authorization: token })
+    .then((response) => {
+      dispatch({ type: RECEIVED_SOLUTION_LIST, payload: response.data });
+    })
+    .catch((error) => {
+      console.log('Error in pullSolutions in actions_solutions', error.response.data);
+    });
   }
 );
 
-export const recievedIDForAddSolution = (solutionId, title, projectId) => (
-  {
-    type: ADD_SOLUTION_TO_STATE,
-    solutionId,
-    title,
-    projectId,
-  }
-);
-
-export const submitSolutionToServer = (solution, projectId, moderatorApprovalSolutions) => (
+export const submitSolutionToServer = (text, feedbackId, solutionsRequireApproval) => (
   (dispatch, getState) => {
     const token = getState().auth.token;
+    let solution = { text, feedbackId };
 
-    dispatch({ type: SUBMIT_SOLUTION });
-    http.post('/addSolution', { title: solution, project_id: projectId, authorization: token, moderatorApprovalSolutions })
+    dispatch({ type: SUBMITTING_SOLUTION });
+    http.post('/submitSolution', { solution, authorization: token })
     .then((response) => {
-      if (!moderatorApprovalSolutions) {
-        dispatch(recievedIDForAddSolution(response.data.id, solution, projectId));
-      }
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
+      if (!solutionsRequireApproval) {
+        solution = { id: response.data.id, feedbackId, text, approved: 1 };
+        dispatch({ type: ADD_SOLUTION_TO_STATE, payload: solution });
+      }
     })
     .catch((error) => {
       console.log('Error in submitSolutionToServer in actions_solutions', error.response.data);
@@ -56,79 +51,49 @@ export const submitSolutionToServer = (solution, projectId, moderatorApprovalSol
   }
 );
 
-export const receivedSolutionList = solutions => ({
-  type: RECEIVED_SOLUTION_LIST,
-  payload: solutions,
-});
-
-export const pullSolutions = token => (
-  (dispatch) => {
-    http.post('/pullProjectAdditions', { authorization: token })
-    .then((response) => {
-      dispatch(receivedSolutionList(response.data));
-    })
-    .catch((error) => {
-      console.log('Error in pullSolutions in actions_solutions', error.response.data);
-    });
-  }
-);
-
-export const saveSolutionChanges = solution => (
-  (dispatch, getState) => {
-    dispatch({ type: SAVE_SOLUTION_CHANGES, payload: solution });
-
-    const { token } = getState().auth;
-
-    // Save the solution change to the server
-    http.post('/saveProjectAdditionChanges', { project_addition: solution, authorization: token })
-    .catch((error) => {
-      console.log('Error in saveSolutionChanges in actions_solutions', error.response.data);
-    });
-  }
-);
-
 export const addSolutionUpvote = solution => (
   (dispatch, getState) => {
     dispatch({ type: ADD_SOLUTION_UPVOTE, payload: solution });
     const { solutionUpvotes, solutionDownvotes } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
+
+    // If downvote exists remove it
     if (solutionDownvotes.includes(solution.id)) {
       dispatch(removeSolutionDownvote(solution));
     }
-    AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
-    dispatch(saveSolutionChanges(solution, 'addUpvote'));
+    
+    const token = getState().auth.token;
+    http.post('/submitSolutionVote', { solution, upvote: 1, downvote: 0, authorization: token })
+    .catch((error) => console.log('Error in addSolutionUpvote in actions_solutions', error.response.data));
   }
 );
+
 export const addSolutionDownvote = solution => (
   (dispatch, getState) => {
     dispatch({ type: ADD_SOLUTION_DOWNVOTE, payload: solution });
     const { solutionDownvotes, solutionUpvotes } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}solutionDownvotes`, JSON.stringify(solutionDownvotes));
+
+    // If upvote exists remove it
     if (solutionUpvotes.includes(solution.id)) {
       dispatch(removeSolutionUpvote(solution));
     }
-    AsyncStorage.setItem(`${ROOT_STORAGE}solutionDownvotes`, JSON.stringify(solutionDownvotes));
-    dispatch(saveSolutionChanges(solution, 'addDownvote'));
+
+    const token = getState().auth.token;
+    http.post('/submitSolutionVote', { solution, upvote: 0, downvote: 1, authorization: token })
+    .catch((error) => console.log('Error in addSolutionDownvote in actions_solutions', error.response.data));
   }
 );
 
-export const loadSolutionUpvotes = solutionUpvotes => (
-  {
-    type: LOAD_SOLUTION_UPVOTES,
-    payload: solutionUpvotes,
-  }
-);
-
-export const loadSolutionDownvotes = solutionDownvotes => (
-  {
-    type: LOAD_SOLUTION_DOWNVOTES,
-    payload: solutionDownvotes,
-  }
-);
 export const removeSolutionUpvote = solution => (
   (dispatch, getState) => {
     dispatch({ type: REMOVE_SOLUTION_UPVOTE, payload: solution });
     const { solutionUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
-    dispatch(saveSolutionChanges(solution, 'removeUpvote'));
+
+    const token = getState().auth.token;
+    http.post('/removeSolutionVote', { solution, upvote: 1, downvote: 0, authorization: token })
+    .catch((error) => console.log('Error in removeSolutionUpvote in actions_solutions', error.response.data));
   }
 );
 
@@ -137,6 +102,16 @@ export const removeSolutionDownvote = solution => (
     dispatch({ type: REMOVE_SOLUTION_DOWNVOTE, payload: solution });
     const { solutionDownvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionDownvotes`, JSON.stringify(solutionDownvotes));
-    dispatch(saveSolutionChanges(solution, 'removeDownvote'));
+
+    const token = getState().auth.token;
+    http.post('/removeSolutionVote', { solution, upvote: 0, downvote: 1, authorization: token })
+    .catch((error) => console.log('Error in removeSolutionDownvote in actions_solutions', error.response.data));
+  }
+);
+
+export const solutionChanged = solution => (
+  {
+    type: SOLUTION_CHANGED,
+    payload: solution,
   }
 );

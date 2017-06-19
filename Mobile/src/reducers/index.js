@@ -2,18 +2,16 @@
 import { combineReducers } from 'redux';
 
 // Import reducers
-import feedback from './reducer_feedback';
-import projects from './reducer_projects';
 import auth from './reducer_auth';
-import user from './reducer_user';
+import group from './reducer_group';
 import solutions from './reducer_solutions';
-import features from './reducer_features';
+import feedback from './reducer_feedback';
+import user from './reducer_user';
 
 export default combineReducers({
-  feedback,
-  projects,
-  solutions,
   auth,
+  group,
+  solutions,
+  feedback,
   user,
-  features,
 });

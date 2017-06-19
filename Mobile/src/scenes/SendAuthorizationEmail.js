@@ -6,21 +6,11 @@ import { connect } from 'react-redux';
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { sendAuthorizationEmail, authorizeUserFail, closeInstructions } from '../actions';
-import styles from '../styles/styles_main';
+import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 import fullScreen from '../../images/backgrounds/EmailInfo.png';
 
 // Import tracking
 // import { tracker } from '../constants';
-
-var styles2 = StyleSheet.create({
-  imageContainer: {
-    flex: 1,
-    alignItems: 'stretch',
-  },
-  image: {
-    flex: 1,
-  },
-});
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -111,7 +101,7 @@ class SendAuthorizationEmail extends Component {
     const instructionsScreen = (
       <View style={styles.imageContainer}>
         <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
-          <Image style={styles2.background} source={fullScreen} resizeMode="cover" />
+          <Image style={styles.background} source={fullScreen} resizeMode="cover" />
         </TouchableOpacity>
       </View>
     );

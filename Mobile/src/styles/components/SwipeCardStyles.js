@@ -8,10 +8,10 @@ import { bodyText } from '../common/textStyles';
 const styles = {
   card: {
     backgroundColor: 'white',
-    shadowOffset: {width: 10, height: 10}
+    shadowOffset: { width: 10, height: 10 },
   },
-    cardButton: {
-    alignItems: 'center'
+  cardButton: {
+    alignItems: 'center',
   },
   bodyText: {
     maxHeight: 300,

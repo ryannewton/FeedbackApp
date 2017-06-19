@@ -5,14 +5,14 @@ import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
 // Import componenets, functions, and styles
-import styles from '../styles/components/ProjectStyles';
+import styles from '../styles/components/FeedbackCardStyles';
 import { Card } from './common';
-import { addProjectUpvote, removeProjectUpvote, addProjectDownvote, removeProjectDownvote } from '../actions';
+import { addFeedbackUpvote, removeFeedbackUpvote, addFeedbackDownvote, removeFeedbackDownvote } from '../actions';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-class Project extends Component {
+class Feedback extends Component {
   constructor(props) {
     super(props);
 
@@ -23,58 +23,58 @@ class Project extends Component {
   }
 
   goToDetails() {
-    this.props.navigate('Details', { project: this.props.project });
+    this.props.navigate('Details', { feedback: this.props.feedback });
   }
 
   upvote() {
-    const { project, user } = this.props;
-    // If user hasn't upvoted this project, add an upvote
-    if (!user.projectUpvotes.includes(project.id)) {
-      // tracker.trackEvent('Project Vote', 'Project UpVote Via Project Button', { label: this.props.features.domain });
-      this.props.addProjectUpvote(project);
+    const { feedback, user } = this.props;
+    // If user hasn't upvoted this feedback, add an upvote
+    if (!user.feedbackUpvotes.includes(feedback.id)) {
+      // tracker.trackEvent('Feedback Vote', 'Feedback UpVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.addFeedbackUpvote(feedback);
     } else {
-      // tracker.trackEvent('Remove Project Vote', 'Remove Project UpVote Via Project Button', { label: this.props.features.domain });
-      this.props.removeProjectUpvote(project);
+      // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback UpVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.removeFeedbackUpvote(feedback);
     }
   }
   downvote() {
-    const { project, user } = this.props;
-    // If user hasn't downvoted this project, add an downvote
-    if (!user.projectDownvotes.includes(project.id)) {
-      // tracker.trackEvent('Project Vote', 'Project DownVote Via Project Button', { label: this.props.features.domain });
-      this.props.addProjectDownvote(project);
+    const { feedback, user } = this.props;
+    // If user hasn't downvoted this feedback, add an downvote
+    if (!user.feedbackDownvotes.includes(feedback.id)) {
+      // tracker.trackEvent('Feedback Vote', 'Feedback DownVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.addFeedbackDownvote(feedback);
     } else {
-      // tracker.trackEvent('Remove Project Vote', 'Remove Project DownVote Via Project Button', { label: this.props.features.domain });
-      this.props.removeProjectDownvote(project);
+      // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback DownVote Via Feedback Button', { label: this.props.group.domain });
+      this.props.removeFeedbackDownvote(feedback);
     }
   }
-  // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
+  // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
   renderVoteCount() {
-    if (this.props.project === undefined) {
+    if (this.props.feedback === undefined) {
       return '';
     }
-    return `${this.props.project.votes}`;
+    return `${this.props.feedback.upvotes}`;
   }
   renderDownvoteCount() {
-    if (this.props.project === undefined) {
+    if (this.props.feedback === undefined) {
       return '';
     }
-    return `${this.props.project.downvotes}`;
+    return `${this.props.feedback.downvotes}`;
   }
 
-  // Temporary fix. Async issue is causing this.props.project to be temporarily undefined
+  // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
   renderTitle() {
-    if (this.props.project === undefined) {
+    if (this.props.feedback === undefined) {
       return '';
     }
-    return this.props.project.title;
+    return this.props.feedback.text;
   }
 
   renderButton() {
-    const { project, user } = this.props;
+    const { feedback, user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this project
-    if (user.projectUpvotes.includes(project.id)) {
+    // If user hasn't upvoted this feedback
+    if (user.feedbackUpvotes.includes(feedback.id)) {
       iconColor = 'green';
     }
     return (
@@ -84,10 +84,10 @@ class Project extends Component {
     );
   }
   renderThumbDownButton() {
-    const { project, user } = this.props;
+    const { feedback, user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this project
-    if (user.projectDownvotes.includes(project.id)) {
+    // If user hasn't upvoted this feedback
+    if (user.feedbackDownvotes.includes(feedback.id)) {
       iconColor = '#b6001e';
     }
     return (
@@ -98,21 +98,21 @@ class Project extends Component {
   }
 
   renderStatus() {
-    const { stage } = this.props.project;
-    if (stage && stage === 'complete') {
+    const { status } = this.props.feedback;
+    if (status && status === 'complete') {
       return <Icon name="done" size={35} color={'#006400'} />;
     }
-    if (stage && stage === 'inprocess') {
+    if (status && status === 'inprocess') {
       return <Icon name="sync" size={35} color={'#00008B'} />;
     }
     return <Icon name="block" size={35} color={'#A9A9A9'} />;
   }
 
   renderStatusBox() {
-    if (this.props.features.showStatus) {
+    if (this.props.group.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ paddingRight: 3 }}>{this.props.project.stage}</Text>
+          <Text style={{ paddingRight: 3 }}>{this.props.feedback.status}</Text>
           {this.renderStatus()}
         </View>
       );
@@ -121,11 +121,11 @@ class Project extends Component {
   }
 
   render() {
-    const { buttonText, lowWeight, row, projectTitle } = styles;
+    const { buttonText, lowWeight, row, feedbackTitle } = styles;
     let updatedRow = row;
-    if (this.props.project.type === 'positive feedback') {
+    if (this.props.feedback.type === 'positive feedback') {
       updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 } }];
-    } else if (this.props.project.type === 'negative feedback') {
+    } else if (this.props.feedback.type === 'negative feedback') {
       updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 } }];
     }
     return (
@@ -136,9 +136,9 @@ class Project extends Component {
           onPress={this.goToDetails}
         >
           <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-            {/* First row */}{/* Project title */}
+            {/* First row */}{/* Feedback title */}
             <View style={{ flex: 5, paddingTop: 5 }}>
-              <Text style={projectTitle}>
+              <Text style={feedbackTitle}>
                 {this.renderTitle()}
               </Text>
               {/* Vote count */}
@@ -179,25 +179,25 @@ class Project extends Component {
   }
 }
 
-Project.propTypes = {
-  project: React.PropTypes.object,
+Feedback.propTypes = {
+  feedback: React.PropTypes.object,
   navigate: React.PropTypes.func,
   user: React.PropTypes.object,
-  addProjectUpvote: React.PropTypes.func,
-  removeProjectUpvote: React.PropTypes.func,
-  addProjectDownvote: React.PropTypes.func,
-  removeProjectDownvote: React.PropTypes.func,
-  features: React.PropTypes.object,
+  addFeedbackUpvote: React.PropTypes.func,
+  removeFeedbackUpvote: React.PropTypes.func,
+  addFeedbackDownvote: React.PropTypes.func,
+  removeFeedbackDownvote: React.PropTypes.func,
+  group: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { user, features } = state;
-  return { user, features };
+  const { user, group } = state;
+  return { user, group };
 };
 
 export default connect(mapStateToProps, {
-  addProjectUpvote,
-  removeProjectUpvote,
-  addProjectDownvote,
-  removeProjectDownvote,
-})(Project);
+  addFeedbackUpvote,
+  removeFeedbackUpvote,
+  addFeedbackDownvote,
+  removeFeedbackDownvote,
+})(Feedback);

@@ -1,7 +1,5 @@
-// Import Libraries
+// Import Libraries, components & constants
 import { AsyncStorage } from 'react-native';
-
-// Import components & constants
 import { http, ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
@@ -10,25 +8,12 @@ import {
   SENT_AUTHORIZATION_EMAIL_SUCCESS,
   SENT_AUTHORIZATION_EMAIL_FAIL,
   AUTHORIZING_USER,
-  AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   LOG_OUT_USER,
 } from './types';
 
+//Import functions
 import loadOnLaunch from '../reducers/load_on_launch';
-
-export const authorizeUserFail = error => (
-  {
-    type: AUTHORIZE_USER_FAIL,
-    payload: error,
-  }
-);
-
-export const authorizeUserSuccess = token => ({
-  type: AUTHORIZE_USER_SUCCESS,
-  payload: token,
-});
-
 
 export const sendAuthorizationEmail = (email, navigateToNext) => (
   (dispatch) => {
@@ -58,13 +43,11 @@ export const authorizeUser = (email, code) => (
     .then((response) => {
       const token = String(response.data);
       AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
-      .then(() => {
-        loadOnLaunch();
-      });
+      .then(() => loadOnLaunch());
     })
     // If not, show an error message
     .catch((error) => {
-      authorizeUserFail(error.response.data);
+      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.response.data });
     });
   }
 );
