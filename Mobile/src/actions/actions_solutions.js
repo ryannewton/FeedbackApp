@@ -40,7 +40,7 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
     .then((response) => {
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
       if (!solutionsRequireApproval) {
-        solution = { id: response.data.id, feedbackId, text, approved: 1 };
+        solution = { id: response.data.id, feedbackId, text, upvotes: 0, downvotes: 0, approved: 1 };
         dispatch({ type: ADD_SOLUTION_TO_STATE, payload: solution });
       }
     })

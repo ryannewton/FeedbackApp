@@ -49,7 +49,7 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
       if (!feedbackRequireApproval) {
-        feedback = { id: response.data.id, text, status: 'new', type, imageURL, approved: 1 };
+        feedback = { id: response.data.id, text, status: 'new', type, imageURL, upvotes: 0, downvotes: 0, approved: 1 };
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
       }
     })

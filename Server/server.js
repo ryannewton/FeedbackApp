@@ -240,6 +240,7 @@ app.post('/submitSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
+      console.log({ decoded, body: req.body });
       // Check if the solution requires approval
       const { groupId, userId } = decoded;
       let connectionString = `SELECT solutionsRequireApproval FROM groups WHERE id=?`;
@@ -454,7 +455,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
     else {
       const { userId, groupName, groupId } = decoded;
       const connectionString = `
-      SELECT *
+      SELECT a.id, a.feedbackId, a.userId, a.text, a.approved, b.upvotes, b.downvotes
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
@@ -473,6 +474,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
             if (!row.downvotes) { row.downvotes = 0 };
             return row;
           });
+          console.log(adjRows);
           res.status(200).send(adjRows);
         }
       });
@@ -490,7 +492,7 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
         SELECT
           '` + userId + `' as userId,
           groupName,
-          feedbackRequireApproval,
+          feedbackRequiresApproval,
           solutionsRequireApproval,
           showStatus,
           includePositiveFeedbackBox
