@@ -1,12 +1,13 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
 import styles from '../styles/scenes/FeedbackDetailsStyles';
 import FeedbackCard from '../components/FeedbackCard';
 import SolutionsCard from '../components/SolutionsCard';
+import ResponseCard from '../components/ResponseCard';
 import { Button, Spinner } from '../components/common';
 import {
   solutionChanged,
@@ -64,7 +65,15 @@ class FeedbackDetails extends Component {
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View>
               {/* Feedback description */}
-              <FeedbackCard feedback={feedback} navigate={() => undefined} />
+              <FeedbackCard
+                feedback={feedback}
+                navigate={() => undefined}
+                showImage
+                showResponseTag={Boolean(false)}
+              />
+
+              {/* Offical Response card */}
+              <ResponseCard navigation={this.props.navigation} />
 
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />
@@ -81,6 +90,7 @@ class FeedbackDetails extends Component {
             value={this.props.solutions.solution}
             returnKeyType={'done'}
           />
+
           {/* Submit button */}
           {this.renderSubmitButton()}
         </KeyboardAvoidingView>

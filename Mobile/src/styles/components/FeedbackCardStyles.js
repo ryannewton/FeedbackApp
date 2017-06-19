@@ -21,6 +21,45 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontSize: 16,
   },
+  rowViewStyle: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  voteCountStyle: {
+    flexDirection: 'column',
+  },
+  upvoteCountStyle: {
+    flexDirection: 'row',
+    paddingTop: 5,
+    justifyContent: 'flex-end',
+  },
+  upvoteTextStyle: {
+    color: 'green',
+    fontSize: 20,
+  },
+  downvoteTextStyle: {
+    color: 'red',
+    fontSize: 20,
+  },
+  downvoteCountStyle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+  },
+  thumbStyle: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+  },
+  imageStyle: {
+    width: 200,
+    height: 200,
+  },
+  imageViewStyle: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 5,
+    paddingBottom: 5,
+  },
 });
 
 export default styles;

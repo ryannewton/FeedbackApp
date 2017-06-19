@@ -23,6 +23,7 @@ class FeedbackList extends Component {
           feedback={feedbackItem}
           key={feedbackItem.id}
           navigate={this.props.navigation.navigate}
+          showResponseTag={Boolean(true)}
         />
       ),
     );
@@ -42,6 +43,7 @@ class FeedbackList extends Component {
               feedback={rowData}
               key={rowData.id}
               navigate={this.props.navigation.navigate}
+              showResponseTag={Boolean(true)}
             />
           }
         />

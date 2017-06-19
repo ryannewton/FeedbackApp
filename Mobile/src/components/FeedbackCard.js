@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
@@ -70,7 +70,7 @@ class Feedback extends Component {
     return this.props.feedback.text;
   }
 
-  renderButton() {
+  renderThumbUpButton() {
     const { feedback, user } = this.props;
     let iconColor = 'grey';
     // If user hasn't upvoted this feedback
@@ -105,29 +105,78 @@ class Feedback extends Component {
     if (status && status === 'inprocess') {
       return <Icon name="sync" size={35} color={'#00008B'} />;
     }
-    return <Icon name="block" size={35} color={'#A9A9A9'} />;
+    return <Icon name="fiber-new" size={35} color={'#A9A9A9'} />;
   }
 
   renderStatusBox() {
     if (this.props.group.showStatus) {
       return (
         <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-          <Text style={{ paddingRight: 3 }}>{this.props.feedback.status}</Text>
           {this.renderStatus()}
         </View>
       );
     }
     return null;
   }
+  renderOfficialResponseTag() {
+    const { feedback, showResponseTag } = this.props;
+    if (!showResponseTag) {
+      return null;
+    }
+    // Has the server been updated to include a response object?
+    const exists = feedback.response && feedback.response.text !== '';
+    if (!exists) {
+      return null;
+    }
+    return (
+      <View style={{ paddingTop: 15 }}>
+        <Icon name="verified-user" color="blue" />
+      </View>
+    );
+  }
+
+  renderImage() {
+    const { imageURL } = this.props.feedback;
+    const { showImage } = this.props;
+    const { imageStyle, imageViewStyle } = styles;
+    if (!showImage) {
+      return null;
+    }
+
+    // If feedback doesn't have a photo
+    if (!imageURL) {
+      return null;
+    }
+    return (
+      <View style={imageViewStyle}>
+        <Image
+          source={{ uri: imageURL }}
+          style={imageStyle}
+        />
+      </View>
+    );
+  }
 
   render() {
-    const { buttonText, lowWeight, row, feedbackTitle } = styles;
+    const {
+      row,
+      feedbackTitle,
+      rowViewStyle,
+      voteCountStyle,
+      upvoteCountStyle,
+      upvoteTextStyle,
+      downvoteTextStyle,
+      downvoteCountStyle,
+      thumbStyle,
+    } = styles;
+
     let updatedRow = row;
     if (this.props.feedback.type === 'positive feedback') {
       updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 } }];
     } else if (this.props.feedback.type === 'negative feedback') {
       updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 } }];
     }
+
     return (
       <Card>
         <TouchableHighlight
@@ -136,40 +185,48 @@ class Feedback extends Component {
           onPress={this.goToDetails}
         >
           <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
-            {/* First row */}{/* Feedback title */}
+            {/* First row */}{/* Project title */}
             <View style={{ flex: 5, paddingTop: 5 }}>
               <Text style={feedbackTitle}>
                 {this.renderTitle()}
               </Text>
-              {/* Vote count */}
             </View>
 
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-              <View style={{ flexDirection: 'column' }}>
-                <View style={{ flexDirection: 'row', paddingTop: 5, justifyContent: 'flex-end' }}>
-                  <Text style={[buttonText, lowWeight, { color: 'green', fontSize: 20 }]}>
+            {/* Render image*/}
+            {this.renderImage()}
+
+            {/* Vote count */}
+            <View style={rowViewStyle}>
+              <View style={voteCountStyle}>
+                <View style={upvoteCountStyle}>
+                  <Text style={upvoteTextStyle}>
                     {this.renderVoteCount()}
                   </Text>
                   <Icon size={18} name="arrow-upward" color="green" />
                 </View>
-                <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-                  <Text style={[buttonText, lowWeight, { color: 'red', fontSize: 20 }]}>
+                <View style={downvoteCountStyle}>
+                  <Text style={downvoteTextStyle}>
                     {this.renderDownvoteCount()}
                   </Text>
                   <Icon size={18} name="arrow-downward" color="red" />
                 </View>
               </View>
+
+              {/* Render Status icon */}
               {this.renderStatusBox()}
-              {/* Upvote Button */}
-              <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+
+              {/* Render official response tag */}
+              {this.renderOfficialResponseTag()}
+
+              {/* Upvote Button and Downvote */}
+              <View style={thumbStyle}>
                 <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
                   {this.renderThumbDownButton()}
                 </TouchableOpacity>
                 <TouchableOpacity onPress={this.upvote}>
-                  {this.renderButton()}
+                  {this.renderThumbUpButton()}
                 </TouchableOpacity>
               </View>
-              {/* Status box */}
 
             </View>
           </View>
@@ -188,6 +245,8 @@ Feedback.propTypes = {
   addFeedbackDownvote: React.PropTypes.func,
   removeFeedbackDownvote: React.PropTypes.func,
   group: React.PropTypes.object,
+  showResponseTag: React.PropTypes.bool,
+  showImage: React.PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
