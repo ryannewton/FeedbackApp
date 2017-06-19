@@ -204,13 +204,13 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
     else {
       // Check if the feedback requires approval
       const { groupId, userId } = decoded;
-      let connectionString = `SELECT feedbackRequireApproval, groupName FROM groups WHERE id=?`;
+      let connectionString = `SELECT feedbackRequiresApproval, groupName FROM groups WHERE id=?`;
       connection.query(connectionString, [groupId], (err, rows) => {        
         if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
           // Insert the feedback into the database          
           const { text, type, imageURL } = req.body.feedback;
-          const approved = !rows[0].feedbackRequireApproval;
+          const approved = !rows[0].feedbackRequiresApproval;
           connectionString = 'INSERT INTO feedback SET ?';
           connection.query(connectionString, 
             {
@@ -240,7 +240,6 @@ app.post('/submitSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      console.log({ decoded, body: req.body });
       // Check if the solution requires approval
       const { groupId, userId } = decoded;
       let connectionString = `SELECT solutionsRequireApproval FROM groups WHERE id=?`;
@@ -474,7 +473,6 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
             if (!row.downvotes) { row.downvotes = 0 };
             return row;
           });
-          console.log(adjRows);
           res.status(200).send(adjRows);
         }
       });

@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 
 // Import action types
 import {
+  ADD_FEEDBACK_TO_STATE,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
@@ -49,12 +50,13 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
       if (!feedbackRequireApproval) {
+        console.log(response.data);
         feedback = { id: response.data.id, text, status: 'new', type, imageURL, upvotes: 0, downvotes: 0, approved: 1 };
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
       }
     })
     .catch((error) => {
-      console.log('Error in submitFeedbackToServer in actions_suggections', error.response.data);
+      console.log('Error in submitFeedbackToServer in actions_feedback', error);
       dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: error.response.data });
     });
   }
