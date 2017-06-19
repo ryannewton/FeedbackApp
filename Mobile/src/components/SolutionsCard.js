@@ -12,10 +12,11 @@ import { Card, CardSection } from '../components/common';
 // import { tracker } from '../constants';
 
 class SolutionsCard extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { domain: props.group.domain, feedback: String(props.navigation.state.params.feedback.id) });
-  // }
+  constructor(props) {
+    console.log(props.solutions.list);
+    super(props);
+    //tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { domain: props.group.domain, feedback: String(props.navigation.state.params.feedback.id) });
+  }
   
   renderSolutionsList() {
     const { noSolutionsMessage, subheaderText } = styles;

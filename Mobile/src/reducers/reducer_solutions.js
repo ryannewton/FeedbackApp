@@ -55,7 +55,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newList };
     }
     case ADD_SOLUTION_TO_STATE: {
-      return { ...state, list: [...state.list, action.payload.solution] };
+      return { ...state, list: [...state.list, action.payload] };
     }
     case SOLUTION_CHANGED:
       return { ...state, solution: action.payload };
