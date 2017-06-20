@@ -7,11 +7,11 @@
   "ios": {
     "bundleIdentifier": "com.feedbackapp.feedbackapp",
     "supportsTablet": true,
-    "buildNumber": "41"
+    "buildNumber": "43"
   },
   "android": {
     "package": "com.feedbackapp",
-    "versionCode": 41
+    "versionCode": 43
   },
   "orientation": "portrait",
   "primaryColor": "#cccccc",

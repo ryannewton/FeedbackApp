@@ -47,7 +47,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
 
     case SUBMIT_FEEDBACK_SUCCESS:
-      return { ...state, loading: false, feedback: '' };
+      return { ...state, loading: false, feedback: '', imageURL: '' };
 
     case SUBMIT_FEEDBACK_FAIL:
       return { ...state, loading: false };
