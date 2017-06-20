@@ -17,29 +17,6 @@ const styles = {
       ios: { flex: 1 },
     }),
   },
-  feedbackInput: {
-    borderColor: 'gray',
-    borderWidth: 1,
-    borderRadius: 4,
-    marginTop: 5,
-    marginBottom: 5,
-    marginHorizontal: 5,
-    paddingTop: 3,
-    paddingBottom: 3,
-    paddingHorizontal: 8,
-    backgroundColor: '#FFFFFF',
-    fontSize: 18,
-    ...Platform.select({
-      ios: { height: 200 },
-      android: { height: 140 },
-    }),
-  },
-  positiveFeedbackInput: {
-    backgroundColor: '#98FB98',
-  },
-  negativeFeedbackInput: {
-    backgroundColor: '#F08080',
-  },
   swiper: {
     paddingTop: 10,
   },
@@ -48,7 +25,7 @@ const styles = {
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#A41034',
+    backgroundColor: '#f0f0f0',
   },
   errorTextStyle: {
     fontSize: 20,
