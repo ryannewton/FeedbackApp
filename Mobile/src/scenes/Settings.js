@@ -22,14 +22,14 @@ class Settings extends Component {
   }
 
   render() {
-    const { container } = styles;
+    const { container, signoutButton } = styles;
 
     return (
       <View style={container}>
         {/* To do: add change password option*/}
 
         {/* Sign-out button */}
-        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+        <View style={signoutButton}>
           <Button
             onPress={() => {
               // tracker.trackEvent('Auth', 'Logged Out', { label: this.props.group.domain });

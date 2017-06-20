@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#A41034',
+    backgroundColor: '#00A2FF',
   },
   text: {
     fontSize: 16,

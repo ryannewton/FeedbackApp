@@ -1,4 +1,4 @@
-// Import Libraries
+/*// Import Libraries
 import { StyleSheet } from 'react-native';
 
 // Import Styles
@@ -8,7 +8,7 @@ import { bodyText } from '../common/textStyles';
 const styles = StyleSheet.create({
   container: {
     ...container,
-    backgroundColor: '#A41034',
+    backgroundColor: '#00A2FF',
   },
   swiper: {
     paddingTop: 40,
@@ -28,3 +28,4 @@ const styles = StyleSheet.create({
 });
 
 export default styles;
+*/

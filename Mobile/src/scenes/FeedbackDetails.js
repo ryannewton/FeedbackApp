@@ -42,21 +42,8 @@ class FeedbackDetails extends Component {
     }
   }
 
-  renderSubmitButton() {
-    // If waiting for response from server, show a spinner
-    if (this.props.solutions.loading) {
-      return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
-    }
-
-    return (
-      <Button onPress={this.submitSolution}>
-        Submit Feedback
-      </Button>
-    );
-  }
-
   render() {
-    const { container, inputText } = styles;
+    const { container, inputText, submitButton } = styles;
     const { feedback } = this.props.navigation.state.params;
 
     return (
@@ -92,7 +79,15 @@ class FeedbackDetails extends Component {
           />
 
           {/* Submit button */}
-          {this.renderSubmitButton()}
+          {// If waiting for response from server, show a spinner
+            if (this.props.solutions.loading) {
+              <Spinner size="large" style={submitButton} />;
+            } else {
+              <Button onPress={this.submitSolution}>
+                Submit Feedback
+              </Button>
+            };
+          }
         </KeyboardAvoidingView>
       </View>
     );
