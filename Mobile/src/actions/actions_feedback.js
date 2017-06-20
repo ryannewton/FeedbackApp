@@ -30,7 +30,7 @@ export const pullFeedback = token => (
     http.post('/pullFeedback', { authorization: token })
     .then((response) => {
       dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
-      dispatch({ type: RECEIVED_FEEDBACK, payload: { list: response.data, lastPulled: new Date() }});
+      dispatch({ type: RECEIVED_FEEDBACK, payload: { list: response.data, lastPulled: new Date() } });
     })
     .catch((error) => {
       console.log('Error in pullFeedback in actions_feedback', error.response.data);
@@ -50,7 +50,6 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
       if (!feedbackRequireApproval) {
-        console.log(response.data);
         feedback = { id: response.data.id, text, status: 'new', type, imageURL, upvotes: 0, downvotes: 0, approved: 1 };
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
       }
@@ -68,14 +67,14 @@ export const addFeedbackUpvote = feedback => (
     const { feedbackUpvotes, feedbackDownvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
 
-    //If downvote exists remove it
+    // If downvote exists remove it
     if (feedbackDownvotes.includes(feedback.id)) {
       dispatch(removeFeedbackDownvote(feedback));
     }
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, authorization: token })
-    .catch((error) => console.log('Error in addFeedbackUpvote in actions_feedback', error.response.data));
+    .catch(error => console.log('Error in addFeedbackUpvote in actions_feedback', error.response.data));
   }
 );
 
@@ -85,10 +84,10 @@ export const removeFeedbackUpvote = feedback => (
     dispatch({ type: REMOVE_FEEDBACK_UPVOTE, payload: feedback });
     const { feedbackUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
-    
+
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, upvote: 1, downvote: 0, authorization: token })
-    .catch((error) => console.log('Error in removeFeedbackUpvote in actions_feedback', error.response.data));
+    .catch(error => console.log('Error in removeFeedbackUpvote in actions_feedback', error.response.data));
   }
 );
 
@@ -97,15 +96,15 @@ export const addFeedbackDownvote = feedback => (
     dispatch({ type: ADD_FEEDBACK_DOWNVOTE, payload: feedback });
     const { feedbackDownvotes, feedbackUpvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackDownvotes`, JSON.stringify(feedbackDownvotes));
-    
-    //If upvote exists remove it
+
+    // If upvote exists remove it
     if (feedbackUpvotes.includes(feedback.id)) {
       dispatch(removeFeedbackUpvote(feedback));
     }
-    
+
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 0, downvote: 1, authorization: token })
-    .catch((error) => console.log('Error in addFeedbackDownvote in actions_feedback', error.response.data));
+    .catch(error => console.log('Error in addFeedbackDownvote in actions_feedback', error.response.data));
   }
 );
 
@@ -114,10 +113,10 @@ export const removeFeedbackDownvote = feedback => (
     dispatch({ type: REMOVE_FEEDBACK_DOWNVOTE, payload: feedback });
     const { feedbackDownvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackDownvotes`, JSON.stringify(feedbackDownvotes));
-    
+
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, upvote: 0, downvote: 1, authorization: token })
-    .catch((error) => console.log('Error in removeFeedbackDownvote in actions_feedback', error.response.data));
+    .catch(error => console.log('Error in removeFeedbackDownvote in actions_feedback', error.response.data));
   }
 );
 

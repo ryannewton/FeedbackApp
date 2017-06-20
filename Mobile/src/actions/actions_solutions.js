@@ -40,7 +40,14 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
     .then((response) => {
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
       if (!solutionsRequireApproval) {
-        solution = { id: response.data.id, feedbackId, text, upvotes: 0, downvotes: 0, approved: 1 };
+        solution = {
+          id: response.data.id,
+          feedbackId,
+          text,
+          upvotes: 0,
+          downvotes: 0,
+          approved: 1,
+        };
         dispatch({ type: ADD_SOLUTION_TO_STATE, payload: solution });
       }
     })
@@ -61,10 +68,10 @@ export const addSolutionUpvote = solution => (
     if (solutionDownvotes.includes(solution.id)) {
       dispatch(removeSolutionDownvote(solution));
     }
-    
+
     const token = getState().auth.token;
     http.post('/submitSolutionVote', { solution, upvote: 1, downvote: 0, authorization: token })
-    .catch((error) => console.log('Error in addSolutionUpvote in actions_solutions', error.response.data));
+    .catch(error => console.log('Error in addSolutionUpvote in actions_solutions', error.response.data));
   }
 );
 
@@ -81,7 +88,7 @@ export const addSolutionDownvote = solution => (
 
     const token = getState().auth.token;
     http.post('/submitSolutionVote', { solution, upvote: 0, downvote: 1, authorization: token })
-    .catch((error) => console.log('Error in addSolutionDownvote in actions_solutions', error.response.data));
+    .catch(error => console.log('Error in addSolutionDownvote in actions_solutions', error.response.data));
   }
 );
 
@@ -93,7 +100,7 @@ export const removeSolutionUpvote = solution => (
 
     const token = getState().auth.token;
     http.post('/removeSolutionVote', { solution, upvote: 1, downvote: 0, authorization: token })
-    .catch((error) => console.log('Error in removeSolutionUpvote in actions_solutions', error.response.data));
+    .catch(error => console.log('Error in removeSolutionUpvote in actions_solutions', error.response.data));
   }
 );
 
@@ -105,7 +112,7 @@ export const removeSolutionDownvote = solution => (
 
     const token = getState().auth.token;
     http.post('/removeSolutionVote', { solution, upvote: 0, downvote: 1, authorization: token })
-    .catch((error) => console.log('Error in removeSolutionDownvote in actions_solutions', error.response.data));
+    .catch(error => console.log('Error in removeSolutionDownvote in actions_solutions', error.response.data));
   }
 );
 

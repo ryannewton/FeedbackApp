@@ -31,7 +31,6 @@ class SplashScreen extends Component {
   }
 
   route() {
-    console.log(this.props.feedback.lastPulled.getTime());
     // There are two options where we want to naviagte
     // 1) loggedIn is false meaning that we failed to login
     if (this.props.auth.loggedIn === false) {

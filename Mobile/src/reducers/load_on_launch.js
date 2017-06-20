@@ -17,7 +17,7 @@ async function loadToken() {
       store.dispatch(actions.pullGroupInfo(token));
     }
   } catch (error) {
-    console.log(error);
+    console.log('Error running loadToken(): ', error);
   }
 }
 
@@ -43,7 +43,7 @@ async function loadVotes() {
     solutionDownvotes = JSON.parse(solutionDownvotes);
     store.dispatch(actions.loadSolutionDownvotes(solutionDownvotes));
   } catch (error) {
-    console.log(error);
+    console.log('Error running loadVotes(): ', error);
   }
 }
 
@@ -53,7 +53,7 @@ async function loadDoNotDisplayList() {
     doNotDisplayList = JSON.parse(doNotDisplayList);
     store.dispatch(actions.loadDoNotDisplayList(doNotDisplayList));
   } catch (error) {
-    console.log(error);
+    console.log('Error running loadDoNotDisplayList(): ', error);
   }
 }
 
@@ -63,7 +63,7 @@ async function loadInstructions() {
     instructionsViewed = JSON.parse(instructionsViewed);
     store.dispatch(actions.loadInstructionsViewed(instructionsViewed));
   } catch (error) {
-    console.log(error);
+    console.log('Error running loadInstructions(): ', error);
   }
 }
 
@@ -77,7 +77,7 @@ async function clearAsyncStorage() {
     await AsyncStorage.removeItem(`${ROOT_STORAGE}doNotDisplayList`);
     await AsyncStorage.removeItem(`${ROOT_STORAGE}instructionsViewed`);
   } catch (error) {
-    console.log(error);
+    console.log('Error running clearAsyncStorage(): ', error);
   }
 }
 
