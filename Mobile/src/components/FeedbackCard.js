@@ -1,8 +1,10 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity, Image } from 'react-native';
+import { View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
+import Image from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Bar';
 
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
@@ -151,10 +153,34 @@ class Feedback extends Component {
       <View style={imageViewStyle}>
         <Image
           source={{ uri: imageURL }}
-          style={imageStyle}
+          indicator={ProgressBar}
+          indicatorProps={{
+            size: 80,
+            borderWidth: 0,
+            color: 'rgba(150, 150, 150, 1)',
+            unfilledColor: 'rgba(200, 200, 200, 0.2)',
+          }}
+          style={{
+            width: 250,
+            height: 250,
+          }}
         />
       </View>
     );
+  }
+
+  renderImageIcon() {
+    const { imageURL } = this.props.feedback;
+
+    // Check if there is an image and we are not currently showing the image
+    if (imageURL && !this.props.showImage) {
+      return (
+        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="image" color='#A9A9A9' />
+        </View>
+      );
+    }
+    return null;
   }
 
   render() {
@@ -214,6 +240,9 @@ class Feedback extends Component {
 
               {/* Render Status icon */}
               {this.renderStatusBox()}
+
+              {/* Render image icon */}
+              {this.renderImageIcon()}
 
               {/* Render official response tag */}
               {this.renderOfficialResponseTag()}

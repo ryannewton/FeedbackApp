@@ -16,21 +16,6 @@ class FeedbackList extends Component {
   //   tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
   // }
 
-  renderAllFeedback() {
-    const feedbackList = this.props.feedback.list
-      .map(feedbackItem => (
-        <FeedbackCard
-          feedback={feedbackItem}
-          key={feedbackItem.id}
-          navigate={this.props.navigation.navigate}
-          showResponseTag={Boolean(true)}
-        />
-      ),
-    );
-
-    return feedbackList;
-  }
-
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
