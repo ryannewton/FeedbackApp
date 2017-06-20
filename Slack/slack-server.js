@@ -1,20 +1,14 @@
 require('dotenv').config();
 
+const multer = require('multer');
+const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const express = require('express');
 const mysql = require('mysql');
-const multer = require('multer');
-const jwt = require('jsonwebtoken'); // For authentication
-const bodyParser = require('body-parser'); // For uploading longer/complicated texts
-const aws = require('aws-sdk'); // load aws sdk
-
-aws.config.loadFromPath('config.json'); // load aws config
 const WebClient = require('@slack/client').WebClient; // for Slack
-
 const request = require('request'); // Slack
 
-const app = express();
 const upload = multer(); // for parsing multipart/form-data
-const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
+const app = express();
 
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
@@ -41,9 +35,9 @@ connection.connect();
 
 // *Weekly Update*
 
-weeklyUpdate();
+//weeklyUpdate();
 // Interval to repush to Slack
-const slackInterval = 1000 * 60 * 60; // Every hour
+const slackInterval = 1000 * 60 * 60 * 24 * 7; // Every week
 setInterval(() => weeklyUpdate(), slackInterval);
 
 // Called by Timer Each Thursday at 1am PT
@@ -99,7 +93,7 @@ function getSuggestions(teamId) {
           COUNT(DISTINCT (CASE WHEN b.voteType = 'disagree' THEN b.userId END)) AS uniqueDisagrees  
         FROM
           slackSuggestions a
-        JOIN
+        LEFT JOIN
           slackVotes b
         ON
           a.id = b.suggestionId
@@ -173,10 +167,24 @@ function postsToSuggestions(suggestion, bot, resolve, index, totalCount, newCoun
   
   if (suggestion.text === 'new refresh') {
     const date = new Date(Date.now());
-    bot.chat.postMessage(channel, '\n******************************************************************\n>>>Suggestion Box Refresh ' + String(date.getMonth()+1) + '/' + String(date.getDate()) + '/' + String(date.getFullYear()), (err, res) => {
-      if (err) return err;
-      else resolve(200);
-    });
+    bot.chat.postMessage(channel, '*Suggestion Box Refresh (' + String(date.getMonth()+1) + '/' + String(date.getDate()) + '/' + String(date.getFullYear()) + ')*',
+      {
+        "attachments": [
+          {
+              "fallback": "Suggestion box logo.",
+              "color": "#36a64f",
+              "image_url": "https://s3-us-west-2.amazonaws.com/feedback-app-images/yb_branner.png",
+          },
+          {
+            "fallback": "Suggestion box refresh header.",
+            "color": "#36a64f",
+            "text": "Step #1 - Post suggestions using the /idea command from any channel\nStep #2 - Vote for or against suggestions using the emojis below",      
+          }
+        ],
+      }, (err, res) => {
+        if (err) return err;
+        else resolve(200);
+      });
   }
   else if (suggestion.text === 'filler') {
     const date = new Date(Date.now() - slackInterval)
@@ -287,63 +295,63 @@ app.post('/slack/events', upload.array(), (req, res) => {
   if (req.body.type === 'url_verification') {
     res.json({ challenge: req.body.challenge });
   }
+  else {
+    // Get info from Slack's JSON
+    const teamId = req.body.team_id;
+    const { type, user, reaction } = req.body.event;
+    const { channel, ts } = req.body.event.item;
+    let voteType;
+    if (reaction === '+1') { voteType = "agree" }
+    if (reaction === '-1') { voteType = "disagree" } 
 
-  // Get info from Slack's JSON
-  const teamId = req.body.team_id;
-  const { type, user, reaction } = req.body.event;
-  const { channel, ts } = req.body.event.item;
-  let voteType;
-  if (reaction === '+1') { voteType = "agree" }
-  if (reaction === '-1') { voteType = "disagree" } 
+    
+    // Need to check for bot user id
+    getTeamInfo()
+    .then(teamInfo => { 
+      const matchesBot = teamInfo.filter(info => info.botUserId === user);
+    
+      if (voteType && !matchesBot.length) {
+        // Look for a match in our database (teamId, channel, ts)...
+        connection.query(`
+          SELECT suggestionId, headerPrefix FROM slackCurrentTable
+          WHERE teamId = ? AND channelId = ? AND ts = ?`, [teamId, channel, ts], (err, rows) => {
+            if (err) throw err
+            if (rows.length) {
+              // If there is a match pull the suggestion id...
+              const suggestionId = rows[0].suggestionId;
+              // Insert a vote
+              let connectionString = (type === 'reaction_added') ? `
+                  INSERT INTO slackVotes (suggestionId, userId, voteType)
+                  VALUES (?, ?, ?)` : `
+                  DELETE FROM slackVotes
+                  WHERE suggestionId = ? AND userId = ? AND voteType = ?
+                  LIMIT 1`;
 
-  
-  // Need to check for bot user id
-  getTeamInfo()
-  .then(teamInfo => { 
-    const matchesBot = teamInfo.filter(info => info.botUserId === user);
-  
-    if (voteType && !matchesBot.length) {
-      // Look for a match in our database (teamId, channel, ts)...
-      connection.query(`
-        SELECT suggestionId, headerPrefix FROM slackCurrentTable
-        WHERE teamId = ? AND channelId = ? AND ts = ?`, [teamId, channel, ts], (err, rows) => {
-          if (err) throw err
-          if (rows.length) {
-            // If there is a match pull the suggestion id...
-            const suggestionId = rows[0].suggestionId;
-            // Insert a vote
-            let connectionString = (type === 'reaction_added') ? `
-                INSERT INTO slackVotes (suggestionId, userId, voteType)
-                VALUES (?, ?, ?)` : `
-                DELETE FROM slackVotes
-                WHERE suggestionId = ? AND userId = ? AND voteType = ?
-                LIMIT 1`;
+              connection.query(connectionString, [suggestionId, user, voteType], (errVote) => {
+                if (errVote) throw errVote;
+                // Pull the updated vote information
+                getSuggestion(suggestionId, teamId)
+                .then(suggestion => {
+                  connection.query(`
+                    SELECT botToken FROM slackTeams
+                    WHERE teamId = ?`, [teamId], (err, resToken) => {
+                      if (err) throw err;
+                      const bot = new WebClient(resToken[0].botToken);
+                      // Update the post                      
+                      const header = rows[0].headerPrefix + suggestion.text.slice(0,30) + '...';
 
-            connection.query(connectionString, [suggestionId, user, voteType], (errVote) => {
-              if (errVote) throw errVote;
-              // Pull the updated vote information
-              getSuggestion(suggestionId, teamId)
-              .then(suggestion => {
-                connection.query(`
-                  SELECT botToken FROM slackTeams
-                  WHERE teamId = ?`, [teamId], (err, resToken) => {
-                    if (err) throw err;
-                    const bot = new WebClient(resToken[0].botToken);
-                    // Update the post                      
-                    const header = rows[0].headerPrefix + suggestion.text.slice(0,30) + '...';
-
-                    const text = '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n' + suggestion.totalAgrees +' :+1: | ' + suggestion.totalDisagrees + ' :-1:   from   ' + suggestion.uniqueAgrees + ' :smiley: | ' + suggestion.uniqueDisagrees + ' :neutral_face:\n';
-                    bot.chat.update(ts, channel, text, { as_user: true }, (err, res) => { if (err) throw err });
-                  }
-                );
+                      const text = '\n---------------------------------------------------------\n*' + header + '*\n```' + suggestion.text + '```\n\n' + suggestion.totalAgrees +' :+1: | ' + suggestion.totalDisagrees + ' :-1:   from   ' + suggestion.uniqueAgrees + ' :smiley: | ' + suggestion.uniqueDisagrees + ' :neutral_face:\n';
+                      bot.chat.update(ts, channel, text, { as_user: true }, (err, res) => { if (err) throw err });
+                    }
+                  );
+                });
               });
-            });
-          }
-      });
-    }
-  });
-  
-  res.sendStatus(200);
+            }
+        });
+      }
+    });
+    res.sendStatus(200);
+  }
 });
 
 function getSuggestion(suggestionId, teamId) {

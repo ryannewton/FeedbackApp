@@ -6,7 +6,6 @@ import {
   AUTHORIZING_USER,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
-  LOAD_TOKEN,
   LOG_OUT_USER,
 } from '../actions/types';
 
@@ -33,8 +32,6 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, sentAuthorizationEmail: false, loading: false, loggedIn: true, token: action.payload, error: false };
     case AUTHORIZE_USER_FAIL:
       return { ...state, loading: false, loggedIn: false, error: action.payload };
-    case LOAD_TOKEN:
-      return { ...state, token: action.payload };
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:

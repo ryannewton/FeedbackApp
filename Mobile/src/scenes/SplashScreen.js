@@ -37,20 +37,12 @@ class SplashScreen extends Component {
       this.props.navigation.navigate('SubmitEmail');
       this.setState({ cleared: true });
     // 2) loggedIn is true (we logged in) and we have stored all the data we need in state
-    //    - We need projects and enableNewFeedback
     } else if (
         this.props.auth.loggedIn === true &&
-        this.props.projects.lastPulled.getTime() !== 0 &&
-        this.props.features.enableNewFeedback !== null
+        this.props.feedback.lastPulled.getTime() !== 0
       ) {
-      // tracker.setUser(this.props.features.email);
-      // If enableNewFeedback is true then we navigate to new projects as normal
-      if (this.props.features.enableNewFeedback) {
-        this.props.navigation.navigate('FeedbackSwipe');
-      // If not, then we navigate to Feedback and disable the New Projects tab
-      } else {
-        this.props.navigation.navigate('FeedbackSubmit');
-      }
+      // tracker.setUser(this.props.group.email);
+      this.props.navigation.navigate('FeedbackSwipe');
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
@@ -69,13 +61,13 @@ class SplashScreen extends Component {
 SplashScreen.propTypes = {
   auth: React.PropTypes.object,
   navigation: React.PropTypes.object,
-  features: React.PropTypes.object,
-  projects: React.PropTypes.object,
+  group: React.PropTypes.object,
+  feedback: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { auth, projects, features } = state;
-  return { auth, features, projects };
+  const { auth, group, feedback } = state;
+  return { auth, group, feedback };
 }
 
 export default connect(mapStateToProps)(SplashScreen);

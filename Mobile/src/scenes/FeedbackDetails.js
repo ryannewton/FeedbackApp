@@ -1,12 +1,13 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native';
+import { View, TextInput, TouchableWithoutFeedback, Keyboard, ScrollView, KeyboardAvoidingView } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import componenets, functions, and styles
 import styles from '../styles/scenes/FeedbackDetailsStyles';
 import FeedbackCard from '../components/FeedbackCard';
 import SolutionsCard from '../components/SolutionsCard';
+import ResponseCard from '../components/ResponseCard';
 import { Button, Spinner } from '../components/common';
 import {
   solutionChanged,
@@ -21,22 +22,22 @@ class FeedbackDetails extends Component {
     super(props);
 
     this.state = { errorMessage: '' };
-    // tracker.trackScreenViewWithCustomDimensionValues('Project Details', { domain: props.features.domain, project: String(props.navigation.state.params.project.id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { groupName: props.group.groupName, feedback: String(props.navigation.state.params.feedback.id) });
     this.submitSolution = this.submitSolution.bind(this);
   }
 
   submitSolution() {
-    const { domain, bannedWords, moderatorApprovalSolutions } = this.props.features;
+    const { groupName, bannedWords, solutionsRequireApproval } = this.props.group;
     const { solution } = this.props.solutions;
-    const { project } = this.props.navigation.state.params;
+    const { feedback } = this.props.navigation.state.params;
 
     if (bannedWords.test(solution)) {
       // If restricted words then we show an error to the user
       this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
     } else {
       this.setState({ errorMessage: '' });
-      this.props.submitSolutionToServer(solution, project.id, moderatorApprovalSolutions);
-      // tracker.trackEvent('Submit', 'Submit Solution', { label: domain, value: project.id });
+      this.props.submitSolutionToServer(solution, feedback.id, solutionsRequireApproval);
+      // tracker.trackEvent('Submit', 'Submit Solution', { label: groupName, value: feedback.id });
       Keyboard.dismiss();
     }
   }
@@ -49,33 +50,36 @@ class FeedbackDetails extends Component {
 
     return (
       <Button onPress={this.submitSolution}>
-        Submit Suggestion
+        Submit Feedback
       </Button>
     );
   }
 
   render() {
     const { container, inputText } = styles;
-    const { project } = this.props.navigation.state.params;
+    const { feedback } = this.props.navigation.state.params;
 
     return (
       <View style={container}>
         <ScrollView>
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <View>
-              {/* Project description */}
-              <FeedbackCard project={project} navigate={() => undefined} />
+              {/* Feedback description */}
+              <FeedbackCard
+                feedback={feedback}
+                navigate={() => undefined}
+                showImage
+                showResponseTag={Boolean(false)}
+              />
+
+              {/* Offical Response card */}
+              <ResponseCard navigation={this.props.navigation} />
 
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />
             </View>
           </TouchableWithoutFeedback>
         </ScrollView>
-
-        {/* Error message (blank if no error) */}
-        {/*<Text style={styles.errorTextStyle}>
-          {this.state.errorMessage || this.props.solutions.message}
-        </Text>*/}
 
         {/* Input to submit a new solution */}
         <KeyboardAvoidingView behavior={'padding'}>
@@ -86,6 +90,7 @@ class FeedbackDetails extends Component {
             value={this.props.solutions.solution}
             returnKeyType={'done'}
           />
+
           {/* Submit button */}
           {this.renderSubmitButton()}
         </KeyboardAvoidingView>
@@ -97,14 +102,14 @@ class FeedbackDetails extends Component {
 FeedbackDetails.propTypes = {
   navigation: React.PropTypes.object,
   solutions: React.PropTypes.object,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
   solutionChanged: React.PropTypes.func,
   submitSolutionToServer: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
-  const { solutions, features } = state;
-  return { solutions, features };
+  const { solutions, group } = state;
+  return { solutions, group };
 }
 
 const AppScreen = connect(mapStateToProps, {

@@ -9,7 +9,7 @@ import { logOut } from '../actions';
 
 // Import componenets, functions, and styles
 import { Button } from '../components/common';
-import styles from '../styles/settings_styles';
+import styles from '../styles/scenes/SettingsStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
@@ -18,7 +18,7 @@ class Settings extends Component {
   constructor(props) {
     super(props);
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Settings', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Settings', { domain: props.group.domain });
   }
 
   render() {
@@ -32,7 +32,7 @@ class Settings extends Component {
         <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
           <Button
             onPress={() => {
-              // tracker.trackEvent('Auth', 'Logged Out', { label: this.props.features.domain });
+              // tracker.trackEvent('Auth', 'Logged Out', { label: this.props.group.domain });
               this.props.logOut();
               this.props.navigation.navigate('Auth');
             }}
@@ -49,12 +49,12 @@ class Settings extends Component {
 Settings.propTypes = {
   logOut: React.PropTypes.func,
   navigation: React.PropTypes.object,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { features } = state;
-  return { features };
+  const { group } = state;
+  return { group };
 }
 
 export default connect(mapStateToProps, { logOut })(Settings);

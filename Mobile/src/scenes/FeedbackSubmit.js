@@ -42,7 +42,7 @@ class FeedbackSubmit extends Component {
       negativeFeedback: '',
     };
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
 
     this.closeInstructions = this.closeInstructions.bind(this);
     this.submitFeedback = this.submitFeedback.bind(this);
@@ -51,25 +51,25 @@ class FeedbackSubmit extends Component {
   submitFeedback() {
     if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
       // First we search the feedback for restricted words
-      if (this.props.features.bannedWords.test(this.state.feedback) ||
-          this.props.features.bannedWords.test(this.state.positiveFeedback) ||
-          this.props.features.bannedWords.test(this.state.negativeFeedback)) {
+      if (this.props.group.bannedWords.test(this.state.feedback) ||
+          this.props.group.bannedWords.test(this.state.positiveFeedback) ||
+          this.props.group.bannedWords.test(this.state.negativeFeedback)) {
         // If restricted words then we show an error to the user
         this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
       } else {
         // If no restricted words then we continue
         if (this.state.feedback) {
-          this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.feedback, 'single feedback');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '');
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.positiveFeedback, 'positive feedback');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.imageURL || '');
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.submitFeedbackToServer(this.props.features.moderatorApproval, this.state.negativeFeedback, 'negative feedback');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.imageURL || '');
           this.setState({ negativeFeedback: '' });
         }
 
-        // tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.features.domain });
+        // tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.group.domain });
         this.setState({ errorMessage: '' });
         this.props.navigation.navigate('Submitted');
       }
@@ -172,7 +172,7 @@ class FeedbackSubmit extends Component {
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={styles.feedback_input}
+          style={styles.feedbackInput}
           placeholder={placeholderText}
           value={this.state.feedback}
         />
@@ -190,7 +190,7 @@ class FeedbackSubmit extends Component {
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={[styles.feedback_input, styles.positive_feedback_input]}
+          style={[styles.feedbackInput, styles.positiveFeedbackInput]}
           placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
           value={this.state.positiveFeedback}
         />
@@ -203,7 +203,7 @@ class FeedbackSubmit extends Component {
           onContentSizeChange={(event) => {
             this.setState({ height: event.nativeEvent.contentSize.height });
           }}
-          style={[styles.feedback_input, styles.negative_feedback_input]}
+          style={[styles.feedbackInput, styles.negativeFeedbackInput]}
           placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
           value={this.state.negativeFeedback}
         />
@@ -217,13 +217,12 @@ class FeedbackSubmit extends Component {
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
             <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
-              {/* Error message (blank if no error) */}
+
               <Text style={styles.errorTextStyle}>
                 {this.state.errorMessage}
               </Text>
 
-              {/* Feedback input box */}
-              {this.props.features.positiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox }
+              {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
             </KeyboardAvoidingView>
           </TouchableWithoutFeedback>
         </MenuContext>
@@ -238,7 +237,7 @@ class FeedbackSubmit extends Component {
 
 FeedbackSubmit.propTypes = {
   user: React.PropTypes.object,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
   feedback: React.PropTypes.object,
   submitFeedbackToServer: React.PropTypes.func,
   closeInstructions: React.PropTypes.func,
@@ -246,8 +245,8 @@ FeedbackSubmit.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user, features, feedback } = state;
-  return { user, features, feedback };
+  const { user, group, feedback } = state;
+  return { user, group, feedback };
 }
 
 export default connect(mapStateToProps, {

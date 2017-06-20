@@ -9,8 +9,8 @@ import FeedbackDetails from '../scenes/FeedbackDetails';
 import styles from '../styles/common/navStyles';
 
 // Import icons
-import FeedbackSwipeSelected from '../../images/icons/newprojects2-selected_100px.png';
-import FeedbackSwipeNotSelected from '../../images/icons/newprojects2-notselected_100px.png';
+import FeedbackSwipeSelected from '../../images/icons/feedbackswipe-selected_100px.png';
+import FeedbackSwipeNotSelected from '../../images/icons/feedbackswipe-notselected_100px.png';
 
 // Stack of scenes
 const scenes = StackNavigator(

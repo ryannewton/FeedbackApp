@@ -1,7 +1,5 @@
-// Import Libraries
+// Import Libraries, components & constants
 import { AsyncStorage } from 'react-native';
-
-// Import components & constants
 import { http, ROOT_STORAGE } from '../constants';
 
 // Import types & other action creators
@@ -10,25 +8,15 @@ import {
   SENT_AUTHORIZATION_EMAIL_SUCCESS,
   SENT_AUTHORIZATION_EMAIL_FAIL,
   AUTHORIZING_USER,
-  AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
+  AUTHORIZE_USER_SUCCESS,
   LOG_OUT_USER,
 } from './types';
 
-import loadOnLaunch from '../reducers/load_on_launch';
-
-export const authorizeUserFail = error => (
-  {
-    type: AUTHORIZE_USER_FAIL,
-    payload: error,
-  }
-);
-
-export const authorizeUserSuccess = token => ({
-  type: AUTHORIZE_USER_SUCCESS,
-  payload: token,
-});
-
+// Import functions
+import { pullFeedback } from './actions_feedback';
+import { pullSolutions } from './actions_solutions';
+import { pullGroupInfo } from './actions_group';
 
 export const sendAuthorizationEmail = (email, navigateToNext) => (
   (dispatch) => {
@@ -48,6 +36,20 @@ export const sendAuthorizationEmail = (email, navigateToNext) => (
   }
 );
 
+export const authorizeUserFail = error => ({
+  type: AUTHORIZE_USER_FAIL,
+  payload: error,
+});
+
+export const authorizeUserSuccess = token => (
+  (dispatch) => {
+    dispatch(pullFeedback(token));
+    dispatch(pullSolutions(token));
+    dispatch(pullGroupInfo(token));
+    return { type: AUTHORIZE_USER_SUCCESS, payload: token };
+  }
+);
+
 export const authorizeUser = (email, code) => (
   (dispatch) => {
     dispatch({ type: AUTHORIZING_USER });
@@ -59,12 +61,12 @@ export const authorizeUser = (email, code) => (
       const token = String(response.data);
       AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
       .then(() => {
-        loadOnLaunch();
+        dispatch(authorizeUserSuccess(token));
       });
     })
     // If not, show an error message
     .catch((error) => {
-      authorizeUserFail(error.response.data);
+      dispatch(authorizeUserFail(error.response.data));
     });
   }
 );
