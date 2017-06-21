@@ -16,7 +16,7 @@ function settingsButton(navigate) {
       style={{ width: 50 }}
       onPress={() => navigate('Settings')}
     >
-      <Icon name="settings" size={25} />
+      <Icon name="settings" size={25} color="white" />
     </TouchableOpacity>
   );
 
@@ -31,30 +31,42 @@ const scenes = StackNavigator(
       navigationOptions: ({ navigation }) => ({
         title: 'Submit Feedback',
         headerRight: settingsButton(navigation.navigate),
-        headerStyle: {
-          height: styles.header.height,
-          marginTop: styles.header.marginTop,
-        },
+      headerTitleStyle: {
+        color: '#fff'
+      },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
+      },
       }),
     },
     Settings: {
       screen: Settings,
       navigationOptions: {
         title: 'Settings',
-        headerStyle: {
-          height: styles.header.height,
-          marginTop: styles.header.marginTop,
-        },
+      headerTitleStyle: {
+        color: '#fff'
+      },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
+      },
       },
     },
     Submitted: {
       screen: Submitted,
       navigationOptions: {
         title: 'Feedback Received',
-        headerStyle: {
-          height: styles.header.height,
-          marginTop: styles.header.marginTop,
-        },
+      headerTitleStyle: {
+        color: '#fff'
+      },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
+      },
       },
     },
   },

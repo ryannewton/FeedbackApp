@@ -1,31 +1,18 @@
 // Import Libraries
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 // Import Styles
 import { button } from '../common/button_styles';
-import FullscreenStyle from './FullscreenStyle';
+import standardStyles from '../common/standard_styles';
 
 const {
-  imageContainer,
+  instructionContainer,
   image,
-  feedbackInput,
-  positiveFeedbackInput,
-  negativeFeedbackInput,
-  swiper,
   container,
   errorTextStyle,
-} = FullscreenStyle;
+} = standardStyles;
 
 const styles = {
-  button,
-  instructionContainer: imageContainer,
-  image,
-  feedbackInput,
-  positiveFeedbackInput,
-  negativeFeedbackInput,
-  swiper,
-  container,
-  errorTextStyle,
   imageContainer: {
     alignItems: 'center',
   },
@@ -44,6 +31,39 @@ const styles = {
     shadowOffset: { width: 4, height: 4 },
     shadowRadius: 5,
   },
+  feedbackInput: {
+    borderColor: '#00A2FF',
+    borderWidth: 1,
+    borderRadius: 4,
+    marginTop: 5,
+    marginBottom: 5,
+    marginHorizontal: 5,
+    paddingTop: 3,
+    paddingBottom: 3,
+    paddingHorizontal: 8,
+    backgroundColor: '#FFFFFF',
+    fontSize: 18,
+    ...Platform.select({
+      ios: { height: 200 },
+      android: { height: 140 },
+    }),
+  },
+  positiveFeedbackInput: {
+    borderColor: '#98FB98',
+    borderWidth: 2,
+  },
+  negativeFeedbackInput: {
+    borderColor: '#F08080',
+    borderWidth: 2,
+  },
+  feedbackSceneContainer: {
+    paddingTop: 10,
+  },
+  button,
+  instructionContainer,
+  image,
+  container,
+  errorTextStyle,
 };
 
 export default styles;

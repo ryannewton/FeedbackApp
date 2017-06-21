@@ -41,7 +41,7 @@ class SolutionsCardItem extends Component {
     let iconColor = 'grey';
     // If user hasn't upvoted this solution
     if (user.solutionUpvotes.includes(solution.id)) {
-      iconColor = 'green';
+      iconColor = '#48D2A0';
     }
 
     return (
@@ -57,7 +57,7 @@ class SolutionsCardItem extends Component {
     let iconColor = 'grey';
     // If user hasn't downvoted this solution
     if (user.solutionDownvotes.includes(solution.id)) {
-      iconColor = '#b6001e';
+      iconColor = '#F54B5E';
     }
     return (
       <TouchableOpacity onPress={() => this.downvoteSolution(solution)}>
@@ -81,12 +81,12 @@ class SolutionsCardItem extends Component {
           <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5, justifyContent: 'space-between' }}>
             <View style={{ flexDirection: 'column', justifyContent: 'flex-start' }}>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                <Text style={{ fontSize: 18, color: 'green' }}>{solution.upvotes}</Text>
-                <Icon size={18} name='arrow-upward' color= 'green' />
+                <Text style={{ fontSize: 18, color: '#48D2A0' }}>{solution.upvotes}</Text>
+                <Icon size={18} name='arrow-upward' color= '#48D2A0' />
               </View>
               <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                <Text style={{ fontSize: 18, color: 'red' }}> { solution.downvotes }</Text>
-                <Icon size={18} name='arrow-downward' color='red' />
+                <Text style={{ fontSize: 18, color: '#F54B5E' }}> { solution.downvotes }</Text>
+                <Icon size={18} name='arrow-downward' color='#F54B5E' />
               </View>
             </View>
             <View style={{ alignItems: 'flex-end', flexDirection: 'row' }}>

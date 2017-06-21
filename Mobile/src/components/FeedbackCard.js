@@ -77,7 +77,7 @@ class Feedback extends Component {
     let iconColor = 'grey';
     // If user hasn't upvoted this feedback
     if (user.feedbackUpvotes.includes(feedback.id)) {
-      iconColor = 'green';
+      iconColor = '#48D2A0';
     }
     return (
       <View>
@@ -90,7 +90,7 @@ class Feedback extends Component {
     let iconColor = 'grey';
     // If user hasn't upvoted this feedback
     if (user.feedbackDownvotes.includes(feedback.id)) {
-      iconColor = '#b6001e';
+      iconColor = '#F54B5E';
     }
     return (
       <View>
@@ -102,12 +102,12 @@ class Feedback extends Component {
   renderStatus() {
     const { status } = this.props.feedback;
     if (status && status === 'complete') {
-      return <Icon name="done" size={35} color={'#006400'} />;
+      return <Icon name="done" size={35} color={'#48D2A0'} />;
     }
     if (status && status === 'inprocess') {
-      return <Icon name="sync" size={35} color={'#00008B'} />;
+      return <Icon name="sync" size={35} color={'#F8C61C'} />;
     }
-    return <Icon name="fiber-new" size={35} color={'#A9A9A9'} />;
+    return <Icon name="fiber-new" size={35} color={'#00A2FF'} />;
   }
 
   renderStatusBox() {
@@ -198,9 +198,9 @@ class Feedback extends Component {
 
     let updatedRow = row;
     if (this.props.feedback.type === 'positive feedback') {
-      updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 }}];
+      updatedRow = [row, { borderColor: '#48D2A0', shadowOffset: { width: 10, height: 10 } }];
     } else if (this.props.feedback.type === 'negative feedback') {
-      updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 }}];
+      updatedRow = [row, { borderColor: '#F54B5E', shadowOffset: { width: 10, height: 10 } }];
     }
 
     return (
@@ -224,13 +224,13 @@ class Feedback extends Component {
                   <Text style={upvoteTextStyle}>
                     {this.renderVoteCount()}
                   </Text>
-                  <Icon size={18} name="arrow-upward" color="green" />
+                  <Icon size={18} name="arrow-upward" color="#48D2A0" />
                 </View>
                 <View style={downvoteCountStyle}>
                   <Text style={downvoteTextStyle}>
                     {this.renderDownvoteCount()}
                   </Text>
-                  <Icon size={18} name="arrow-downward" color="red" />
+                  <Icon size={18} name="arrow-downward" color="#F54B5E" />
                 </View>
               </View>
 

@@ -11,16 +11,15 @@ import SwipeCard from '../components/SwipeCard';
 import { addFeedbackUpvote, addToDoNotDisplayList, closeInstructions, addFeedbackDownvote } from '../actions';
 import styles from '../styles/scenes/FeedbackSwipeStyles';
 
-// Import about info image
-import styles2 from '../styles/scenes/FullscreenStyle';
+// Import info image
 import fullScreen from '../../images/backgrounds/SwipeInfo.jpg';
 
 // Import tracking
 // import { tracker } from '../constants';
 
 const inboxZeroFeedback = {
-  title: "Great job! You've reached inbox zero.",
-  votes: 999,
+  text: "Great job! You've reached inbox zero.",
+  upvotes: 999,
   downvotes: 999,
 };
 
@@ -121,7 +120,7 @@ class FeedbackSwipe extends Component {
 
     const FeedbackSwipeScene = (
       <Container style={{ flexDirection: 'row' }}>
-        <View style={{ flex: 7, backgroundColor: '#A41034' }} />
+        <View style={{ flex: 7, backgroundColor: '#00A2FF' }} />
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
             ref={(ds) => { this.deckSwiper = ds; }}
@@ -149,7 +148,7 @@ class FeedbackSwipe extends Component {
             }
           />
         </View>
-        <View style={{ flex: 7, backgroundColor: '#A41034' }} />
+        <View style={{ flex: 7, backgroundColor: '#00A2FF' }} />
       </Container>
     );
 

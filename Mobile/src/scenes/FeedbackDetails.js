@@ -51,7 +51,7 @@ class FeedbackDetails extends Component {
       Keyboard.dismiss();
     }
   }
-
+  
   renderErrorMessage() {
     if (this.state.errorMessage !== '') {
       return (
@@ -62,22 +62,18 @@ class FeedbackDetails extends Component {
     }
     return null;
   }
-  renderSubmitButton() {
-    // If waiting for response from server, show a spinner
-    if (this.props.solutions.loading) {
-      return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
-    }
-
-    return (
-      <Button onPress={this.submitSolution}>
-        Submit Feedback
-      </Button>
-    );
-  }
 
   render() {
-    const { container, inputText } = styles;
+    const { container, inputText, submitButton } = styles;
     const { feedback } = this.props.navigation.state.params;
+    const showSpinner = (
+      <Spinner size="large" style={{ marginTop: 20 }} />
+    );
+    const showSubmitButton = (
+      <Button onPress={this.submitSolution}>
+       Submit Feedback
+      </Button>
+    );
 
     return (
       <View style={container}>
@@ -115,7 +111,8 @@ class FeedbackDetails extends Component {
           />
 
           {/* Submit button */}
-          {this.renderSubmitButton()}
+          {this.props.solutions.loading ? showSpinner : showSubmitButton}
+
         </KeyboardAvoidingView>
       </View>
     );

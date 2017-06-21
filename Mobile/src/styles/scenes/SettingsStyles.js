@@ -4,10 +4,10 @@ export default StyleSheet.create({
 
   // Settings Scene
   container: {
-    backgroundColor: '#A41034',
+    backgroundColor: '#f0f0f0',
     flex: 1,
   },
-  normalMargin: {
+  /*normalMargin: {
     marginTop: 5,
     marginBottom: 5,
     marginLeft: 5,
@@ -15,8 +15,13 @@ export default StyleSheet.create({
   textDisplay: {
     fontWeight: 'bold',
     fontSize: 18,
+  },*/
+  signoutButton: {
+    flex: 1,
+    flexDirection: 'column',
+    alignItems: 'center',
   },
-  textInput: {
+  /*textInput: {
     fontSize: 18,
     ...Platform.select({
       ios: {
@@ -28,5 +33,5 @@ export default StyleSheet.create({
         height: 40,
       },
     }),
-  },
+  },*/
 });
