@@ -19,8 +19,8 @@ import fullScreen from '../../images/backgrounds/SwipeInfo.jpg';
 // import { tracker } from '../constants';
 
 const inboxZeroFeedback = {
-  title: "Great job! You've reached inbox zero.",
-  votes: 999,
+  text: "Great job! You've reached inbox zero.",
+  upvotes: 999,
   downvotes: 999,
 };
 
