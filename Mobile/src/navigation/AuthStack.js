@@ -12,9 +12,13 @@ const AuthStack = StackNavigator({
     screen: SendAuthorizationEmail,
     navigationOptions: {
       title: 'Verify Your Organization',
+      headerTitleStyle: {
+        color: '#fff'
+      },
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
       },
     },
   },
@@ -22,9 +26,13 @@ const AuthStack = StackNavigator({
     screen: Authorize,
     navigationOptions: {
       title: 'Enter Code From Email',
+      headerTitleStyle: {
+        color: '#fff'
+      },
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
       },
     },
   },

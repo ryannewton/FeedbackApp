@@ -22,18 +22,16 @@ class SwipeCard extends Component {
       <Card style={styles.card}>
         <View>
           <CardItem>
-            <Left>
-              <Text style={styles.bodyText}>{feedback.text}</Text>
-            </Left>
+            <Text style={styles.bodyText}>{feedback.text}</Text>
           </CardItem>
-          <CardItem style={{ justifyContent: 'center', flexDirection: 'column', paddingTop: 0, paddingBottom: 0, marginBottom: 0, marginTop: 0 }}>
+          <CardItem>
             <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
-              <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{feedback.upvotes}</Text>
-              <Icon size={18} name='arrow-upward' color= 'green' />
+              <Text style={[styles.smallText, { color: '#48D2A0', fontSize: 18 }]}>{feedback.upvotes}</Text>
+              <Icon size={18} name='arrow-upward' color= '#48D2A0' />
             </View>
             <View style={{flexDirection:'row', justifyContent: 'flex-start'}}>
-              <Text style={[styles.smallText, { color: 'red', fontSize: 18 }]}>{feedback.downvotes}</Text>
-              <Icon size={18} name='arrow-downward' color= 'red' />
+              <Text style={[styles.smallText, { color: '#F54B5E', fontSize: 18 }]}>{feedback.downvotes}</Text>
+              <Icon size={18} name='arrow-downward' color= '#F54B5E' />
             </View>
           </CardItem>
         </View>

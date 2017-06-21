@@ -1,5 +1,5 @@
 // Import Libraries
-import { StyleSheet } from 'react-native';
+import { Platform, StyleSheet } from 'react-native';
 
 // Import Styles
 import { button } from '../common/button_styles';
@@ -32,7 +32,7 @@ const styles = {
     shadowRadius: 5,
   },
   feedbackInput: {
-    borderColor: 'gray',
+    borderColor: '#00A2FF',
     borderWidth: 1,
     borderRadius: 4,
     marginTop: 5,
@@ -49,14 +49,16 @@ const styles = {
     }),
   },
   positiveFeedbackInput: {
-    backgroundColor: '#98FB98',
+    borderColor: '#98FB98',
+    borderWidth: 2,
   },
   negativeFeedbackInput: {
-    backgroundColor: '#F08080',
+    borderColor: '#F08080',
+    borderWidth: 2,
   },
   feedbackSceneContainer: {
     paddingTop: 10,
-  }
+  },
   button,
   instructionContainer,
   image,

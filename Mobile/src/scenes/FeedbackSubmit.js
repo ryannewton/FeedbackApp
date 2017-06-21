@@ -178,7 +178,9 @@ class FeedbackSubmit extends Component {
         />
         {this.maybeRenderImage()}
         {/* Submit button / loading spinner */}
-        {this.renderButtons()}
+          <View style={{paddingTop:10}}>
+          {this.renderButtons()}
+          </View>
       </View>
     );
 
@@ -196,19 +198,20 @@ class FeedbackSubmit extends Component {
         />
         {/* Submit button / loading spinner */}
         {this.renderButtons()}
-
-        <TextInput
-          multiline={Boolean(true)}
-          onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-          onContentSizeChange={(event) => {
-            this.setState({ height: event.nativeEvent.contentSize.height });
-          }}
-          style={[styles.feedbackInput, styles.negativeFeedbackInput]}
-          placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-          value={this.state.negativeFeedback}
-        />
-        {/* Submit button / loading spinner */}
-        {this.renderButtons()}
+        <View style={{paddingTop:50}}>
+          <TextInput
+            multiline={Boolean(true)}
+            onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+            onContentSizeChange={(event) => {
+              this.setState({ height: event.nativeEvent.contentSize.height });
+            }}
+            style={[styles.feedbackInput, styles.negativeFeedbackInput]}
+            placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+            value={this.state.negativeFeedback}
+          />
+          {/* Submit button / loading spinner */}
+          {this.renderButtons()}
+          </View>
       </View>
     );
 

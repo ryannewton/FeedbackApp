@@ -45,6 +45,14 @@ class FeedbackDetails extends Component {
   render() {
     const { container, inputText, submitButton } = styles;
     const { feedback } = this.props.navigation.state.params;
+    const showSpinner = (
+      <Spinner size="large" style={{ marginTop: 20 }} />
+    );
+    const showSubmitButton = (
+      <Button onPress={this.submitSolution}>
+       Submit Feedback
+      </Button>
+    );
 
     return (
       <View style={container}>
@@ -79,15 +87,8 @@ class FeedbackDetails extends Component {
           />
 
           {/* Submit button */}
-          {// If waiting for response from server, show a spinner
-            if (this.props.solutions.loading) {
-              <Spinner size="large" style={submitButton} />;
-            } else {
-              <Button onPress={this.submitSolution}>
-                Submit Feedback
-              </Button>
-            };
-          }
+          {this.props.solutions.loading ? showSpinner : showSubmitButton}
+
         </KeyboardAvoidingView>
       </View>
     );

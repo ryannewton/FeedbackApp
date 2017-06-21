@@ -27,7 +27,7 @@ Button.propTypes = {
 const defaultStyles = {
   textStyle: {
     alignSelf: 'center',
-    color: '#A41034',
+    color: '#fff',
     fontSize: 16,
     fontWeight: '600',
   },
@@ -35,10 +35,10 @@ const defaultStyles = {
     flex: 1,
     alignSelf: 'stretch',
     justifyContent: 'center',
-    backgroundColor: '#fff',
+    backgroundColor: '#00A2FF',
     borderRadius: 5,
     borderWidth: 1,
-    borderColor: '#A41034',
+    borderColor: '#00A2FF',
     marginLeft: 5,
     marginRight: 5,
     height: 40,

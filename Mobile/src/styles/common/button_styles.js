@@ -24,5 +24,5 @@ export const button = {
 
 export const upvoteButtonHighlight = {
   ...upvoteButton,
-  backgroundColor: '#007aff',
+  backgroundColor: '#00A2FF',
 };
