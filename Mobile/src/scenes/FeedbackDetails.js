@@ -51,7 +51,7 @@ class FeedbackDetails extends Component {
       Keyboard.dismiss();
     }
   }
-  
+
   renderErrorMessage() {
     if (this.state.errorMessage !== '') {
       return (
@@ -71,7 +71,7 @@ class FeedbackDetails extends Component {
     );
     const showSubmitButton = (
       <Button onPress={this.submitSolution}>
-       Submit Feedback
+       Submit Solution
       </Button>
     );
 

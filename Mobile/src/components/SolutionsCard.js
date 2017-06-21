@@ -16,7 +16,7 @@ class SolutionsCard extends Component {
   //   super(props);
   //   tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { domain: props.group.domain, feedback: String(props.navigation.state.params.feedback.id) });
   // }
-  
+
   renderSolutionsList() {
     const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
@@ -42,7 +42,7 @@ class SolutionsCard extends Component {
     return (
       <View>
         <CardSection>
-          <Text style={subheaderText}>Suggested solutions</Text>
+          <Text style={subheaderText}>Proposed solutions</Text>
         </CardSection>
         {formattedSolutions}
       </View>
