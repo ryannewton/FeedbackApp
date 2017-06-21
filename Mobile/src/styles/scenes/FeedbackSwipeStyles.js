@@ -8,14 +8,14 @@ import { bodyText } from '../common/textStyles';
 const styles = StyleSheet.create({
   container: {
     ...container,
-    backgroundColor: '#A41034',
+    backgroundColor: '#00A2FF',
     flex: 86,
     zIndex: 100000
   },
   swiper: {
     paddingTop: 40
   },
-  bodyText: {
+  /*bodyText: {
     fontSize: 20,
     fontWeight: '400',
     color: 'black',
@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     fontWeight: '300',
     fontSize: 16,
     textDecorationLine: 'underline',
-  },
+  },*/
 });
 
 export default styles;

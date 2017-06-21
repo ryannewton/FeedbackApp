@@ -34,11 +34,11 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
   },
   upvoteTextStyle: {
-    color: 'green',
+    color: '#48D2A0',
     fontSize: 20,
   },
   downvoteTextStyle: {
-    color: 'red',
+    color: '#F54B5E',
     fontSize: 20,
   },
   downvoteCountStyle: {
