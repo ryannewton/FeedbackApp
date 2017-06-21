@@ -252,9 +252,9 @@ class Feedback extends Component {
                   {this.renderThumbUpButton()}
                 </TouchableOpacity>
               </View>
-              </View>
             </View>
           </View>
+        </View>
       </Card>
     );
   }
