@@ -205,11 +205,7 @@ class Feedback extends Component {
 
     return (
       <Card>
-        <TouchableHighlight
-          style={updatedRow}
-          underlayColor="#D0D0D0"
-          onPress={this.goToDetails}
-        >
+        <View style ={updatedRow}>
           <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
             {/* First row */}{/* Project title */}
             <View style={{ flex: 5, paddingTop: 5 }}>
@@ -256,10 +252,9 @@ class Feedback extends Component {
                   {this.renderThumbUpButton()}
                 </TouchableOpacity>
               </View>
-
             </View>
           </View>
-        </TouchableHighlight>
+        </View>
       </Card>
     );
   }
