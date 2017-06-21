@@ -1,0 +1,28 @@
+{
+  "name": "SuggestionBox",
+  "description": "No description",
+  "slug": "feedbackapp",
+  "sdkVersion": "17.0.0",
+  "version": "1.1.0",
+  "ios": {
+    "bundleIdentifier": "com.feedbackapp.feedbackapp",
+    "supportsTablet": true,
+    "buildNumber": "43"
+  },
+  "android": {
+    "package": "com.feedbackapp",
+    "versionCode": 43
+  },
+  "orientation": "portrait",
+  "primaryColor": "#cccccc",
+  "icon": "https://s3-us-west-2.amazonaws.com/feedback-app-images/LOGO.png",
+  "loading": {
+    "icon": "https://s3-us-west-2.amazonaws.com/feedback-app-images/LOGO.png",
+    "hideExponentText": true
+  },
+  "packagerOpts": {
+    "assetExts": [
+      "ttf"
+    ]
+  }
+}
