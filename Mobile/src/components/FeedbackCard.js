@@ -198,18 +198,14 @@ class Feedback extends Component {
 
     let updatedRow = row;
     if (this.props.feedback.type === 'positive feedback') {
-      updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 } }];
+      updatedRow = [row, { backgroundColor: '#98FB98', shadowOffset: { width: 10, height: 10 }}];
     } else if (this.props.feedback.type === 'negative feedback') {
-      updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 } }];
+      updatedRow = [row, { backgroundColor: '#F08080', shadowOffset: { width: 10, height: 10 }}];
     }
 
     return (
       <Card>
-        <TouchableHighlight
-          style={updatedRow}
-          underlayColor="#D0D0D0"
-          onPress={this.goToDetails}
-        >
+        <View style ={updatedRow}>
           <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
             {/* First row */}{/* Project title */}
             <View style={{ flex: 5, paddingTop: 5 }}>
@@ -256,10 +252,9 @@ class Feedback extends Component {
                   {this.renderThumbUpButton()}
                 </TouchableOpacity>
               </View>
-
+              </View>
             </View>
           </View>
-        </TouchableHighlight>
       </Card>
     );
   }
