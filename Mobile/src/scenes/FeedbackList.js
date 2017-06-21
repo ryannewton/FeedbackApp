@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, ListView, TouchableOpacity, Text } from 'react-native';
+import { View, ListView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 
 // Import components, functions, and styles
