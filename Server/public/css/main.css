@@ -177,9 +177,38 @@ a:hover {
     color: #187F90;
     text-decoration: none;
 }
+.table-1 {
+  background: url(../img/retail.jpg) no-repeat scroll 0 0;
+  background-size: cover;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+.table-2 {
+  background: url(../img/school.jpg) no-repeat scroll 0 0;
+  background-size: cover;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+.table-3 {
+  background: url(../img/HR.jpg) no-repeat scroll 0 0;
+  background-size: cover;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
 .single-intro {
     margin: 30px 25px;
 }
+
+#intro p {
+    color: #000;
+}
+
 .intro-title {
     color: #00A2FF;
 }
