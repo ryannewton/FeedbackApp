@@ -13,12 +13,15 @@ import styles from '../styles/scenes/SettingsStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
+
 
 class Settings extends Component {
   constructor(props) {
     super(props);
 
     // tracker.trackScreenViewWithCustomDimensionValues('Settings', { domain: props.group.domain });
+    this.props.sendGoogleAnalytics('Settings')
   }
 
   render() {
@@ -57,4 +60,4 @@ function mapStateToProps(state) {
   return { group };
 }
 
-export default connect(mapStateToProps, { logOut })(Settings);
+export default connect(mapStateToProps, { logOut, sendGoogleAnalytics })(Settings);

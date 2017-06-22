@@ -177,9 +177,38 @@ a:hover {
     color: #187F90;
     text-decoration: none;
 }
+.table-1 {
+  background: url(../img/retail.jpg) no-repeat scroll 0 0;
+  background-size: cover;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+.table-2 {
+  background: url(../img/school.jpg) no-repeat scroll 0 0;
+  background-size: cover;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
+.table-3 {
+  background: url(../img/HR.jpg) no-repeat scroll 0 0;
+  background-size: cover;
+  border-radius: 10px;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+}
 .single-intro {
     margin: 30px 25px;
 }
+
+#intro p {
+    color: #000;
+}
+
 .intro-title {
     color: #00A2FF;
 }
@@ -230,8 +259,8 @@ a:hover {
     background: #00A2FF;
     background-size: cover;
     background-position: 0% 80%;
-    padding-top: 40px;
-    padding-bottom: 30px;
+    padding-top: 50px;
+    padding-bottom: 0px;
 }
 #newsletter .form-control {
     border: none;
@@ -241,7 +270,7 @@ a:hover {
     padding-left: 20px;
 }
 #newsletter h2 {
-    margin-top: 50px;
+    margin-top: 30px;
     color: #fff;
 }
 #newsletter p {
@@ -281,10 +310,7 @@ a:hover {
     margin: 0 auto;
 }
 .single-testimonial img {
-    max-width: 200px;
-    max-height: 200px;
-    border-radius: 100%;
-    border: 2px solid #efefef;
+    max-height: 50px;
 }
 .single-testimonial p {
     margin-top: 30px;

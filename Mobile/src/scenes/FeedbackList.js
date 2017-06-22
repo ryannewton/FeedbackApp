@@ -9,8 +9,16 @@ import styles from '../styles/scenes/FeedbackListStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
+
 
 class FeedbackList extends Component {
+  constructor(props) {
+    super(props);
+
+    // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.group.domain });
+    this.props.sendGoogleAnalytics('FeedbackList', this.props.group.groupName)
+  }
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
@@ -47,6 +55,6 @@ function mapStateToProps(state) {
   return { feedback, group };
 }
 
-const AppScreen = connect(mapStateToProps, {})(FeedbackList);
+const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics })(FeedbackList);
 
 export default AppScreen;
