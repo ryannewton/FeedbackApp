@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import SwipeCard from '../components/SwipeCard';
 
 // Import actions and styles
-import { addFeedbackUpvote, addToDoNotDisplayList, closeInstructions, addFeedbackDownvote } from '../actions';
+import { addFeedbackUpvote, addToDoNotDisplayList, closeInstructions, addFeedbackDownvote, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/FeedbackSwipeStyles';
 
 // Import info image
@@ -34,10 +34,11 @@ class FeedbackSwipe extends Component {
       ), inboxZeroFeedback],
     };
     // tracker.trackScreenViewWithCustomDimensionValues('New Feedback', { domain: props.group.domain, feedback: String(this.state.feedback[0].id) });
-    
+
     this.swipeRight = this.swipeRight.bind(this);
     this.swipeLeft = this.swipeLeft.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);
+    this.props.sendGoogleAnalytics('FeedbackSwipe')
   }
 
   swipeRight(source) {
@@ -179,4 +180,5 @@ export default connect(mapStateToProps, {
   addFeedbackDownvote,
   addToDoNotDisplayList,
   closeInstructions,
+  sendGoogleAnalytics
 })(FeedbackSwipe);

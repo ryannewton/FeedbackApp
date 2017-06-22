@@ -10,6 +10,7 @@ import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
 
 class SplashScreen extends Component {
   constructor(props) {
@@ -22,6 +23,7 @@ class SplashScreen extends Component {
     this.route = this.route.bind(this);
 
     // tracker.trackScreenView('Loading Screen');
+    this.props.sendGoogleAnalytics('LoadingScreen')
   }
 
   componentDidUpdate() {
@@ -70,4 +72,4 @@ function mapStateToProps(state) {
   return { auth, group, feedback };
 }
 
-export default connect(mapStateToProps)(SplashScreen);
+export default connect(mapStateToProps, { sendGoogleAnalytics })(SplashScreen);

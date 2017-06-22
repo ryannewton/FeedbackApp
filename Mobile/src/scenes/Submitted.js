@@ -9,12 +9,14 @@ import styles from '../styles/scenes/SubmittedStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
 
 class Submitted extends Component {
   constructor(props) {
     super(props);
 
     // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.group.domain });
+    this.props.sendGoogleAnalytics('Submitted')
   }
 
   componentWillMount() {
@@ -45,4 +47,4 @@ function mapStateToProps(state) {
   return { group };
 }
 
-export default connect(mapStateToProps)(Submitted);
+export default connect(mapStateToProps, { sendGoogleAnalytics })(Submitted);

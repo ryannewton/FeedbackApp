@@ -10,6 +10,7 @@ import styles from '../styles/scenes/AuthorizeStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
 
 class Authorize extends Component {
   constructor(props) {
@@ -24,6 +25,7 @@ class Authorize extends Component {
     this.authorizeUser = this.authorizeUser.bind(this);
 
     // tracker.trackScreenView('Authorize');
+    this.props.sendGoogleAnalytics('Authorize')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -120,4 +122,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { authorizeUser })(Authorize);
+export default connect(mapStateToProps, { authorizeUser, sendGoogleAnalytics })(Authorize);

@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
-import { sendAuthorizationEmail, authorizeUserFail, closeInstructions } from '../actions';
+import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 import fullScreen from '../../images/backgrounds/EmailInfo.png';
 
@@ -20,6 +20,7 @@ class SendAuthorizationEmail extends Component {
       email: '',
     };
 
+    this.props.sendGoogleAnalytics('SendAuthEmail')
     // tracker.trackScreenView('Send Auth Email');
 
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
@@ -130,4 +131,5 @@ export default connect(mapStateToProps, {
   sendAuthorizationEmail,
   authorizeUserFail,
   closeInstructions,
+  sendGoogleAnalytics
 })(SendAuthorizationEmail);
