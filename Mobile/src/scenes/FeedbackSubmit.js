@@ -29,6 +29,7 @@ import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
 
 class FeedbackSubmit extends Component {
   constructor(props, context) {
@@ -43,6 +44,7 @@ class FeedbackSubmit extends Component {
     };
 
     // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
+    this.props.sendGoogleAnalytics('FeedbackSubmit')
 
     this.closeInstructions = this.closeInstructions.bind(this);
     this.submitFeedback = this.submitFeedback.bind(this);
@@ -256,4 +258,5 @@ export default connect(mapStateToProps, {
   submitFeedbackToServer,
   closeInstructions,
   uploadImage,
+  sendGoogleAnalytics
 })(FeedbackSubmit);

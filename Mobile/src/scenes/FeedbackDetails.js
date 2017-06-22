@@ -24,6 +24,7 @@ import {
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
 
 class FeedbackDetails extends Component {
   constructor(props) {
@@ -32,6 +33,7 @@ class FeedbackDetails extends Component {
     this.state = { errorMessage: '' };
     // tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { groupName: props.group.groupName, feedback: String(props.navigation.state.params.feedback.id) });
     this.submitSolution = this.submitSolution.bind(this);
+    this.props.sendGoogleAnalytics('FeedbackDetails', this.props.group.groupName, this.props.navigation.state.params.feedback.feedbackId)
   }
 
   submitSolution() {
@@ -56,7 +58,7 @@ class FeedbackDetails extends Component {
     if (this.state.errorMessage !== '') {
       return (
         <View style={{ alignItems: 'center' }}>
-          <Text style={{ color: 'white', fontWeight: 'bold' }}>{this.state.errorMessage}</Text>
+          <Text style={{ color: 'red', fontWeight: 'bold' }}>{this.state.errorMessage}</Text>
         </View>
       );
     }
@@ -135,6 +137,7 @@ function mapStateToProps(state) {
 const AppScreen = connect(mapStateToProps, {
   solutionChanged,
   submitSolutionToServer,
+  sendGoogleAnalytics
 })(FeedbackDetails);
 
 export default AppScreen;

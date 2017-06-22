@@ -1,5 +1,6 @@
 // Import libraries
 import { AsyncStorage } from 'react-native';
+import Expo from 'expo';
 
 // Import action types
 import {
@@ -74,3 +75,17 @@ export const addToDoNotDisplayList = feedbackId => (
   }
 );
 
+export const sendGoogleAnalytics = (page, groupID = 0, feedbackID = 0) => (
+  (dispatch) => {
+    let options = {
+      method: 'POST',
+      headers: {
+        'User-Agent': 'SuggestionBox'
+      }
+    }
+
+    const googleURL = 'https://www.google-analytics.com/collect?v=1&t=screenview&tid=UA-99660629-1&cid=' + String(Expo.Constants.deviceId) + '&cd=' + String(page) + '&cd1=' + String(groupID) + '&cd2=' + String(feedbackID) + '&an=Suggestion%20Box'
+    fetch(googleURL, options)
+      .catch((error) => console.log('Error caught in sendGoogleAnalytics', error ))
+  }
+);
