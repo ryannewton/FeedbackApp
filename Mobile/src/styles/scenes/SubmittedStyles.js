@@ -7,7 +7,7 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     justifyContent: 'flex-start',
     alignItems: 'stretch',
-    backgroundColor: '#00A2FF',
+    backgroundColor: '#fff',
   },
 });
 

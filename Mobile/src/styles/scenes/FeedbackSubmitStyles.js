@@ -33,7 +33,7 @@ const styles = {
   },
   feedbackInput: {
     borderColor: '#00A2FF',
-    borderWidth: 1,
+    borderWidth: 2,
     borderRadius: 4,
     marginTop: 5,
     marginBottom: 5,
@@ -41,7 +41,7 @@ const styles = {
     paddingTop: 3,
     paddingBottom: 3,
     paddingHorizontal: 8,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#fff',
     fontSize: 18,
     ...Platform.select({
       ios: { height: 200 },
