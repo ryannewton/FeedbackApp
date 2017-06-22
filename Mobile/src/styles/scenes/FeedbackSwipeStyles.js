@@ -15,16 +15,6 @@ const styles = StyleSheet.create({
   swiper: {
     paddingTop: 40
   },
-  /*bodyText: {
-    fontSize: 20,
-    fontWeight: '400',
-    color: 'black',
-  },
-  smallText: {
-    fontWeight: '300',
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },*/
 });
 
 export default styles;

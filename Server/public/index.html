@@ -1,44 +1,315 @@
 <!DOCTYPE html>
-<html>
-	<head>
-		<!-- ****** faviconit.com favicons ****** -->
-		<title>CF: Admin Console</title>
-		<link rel="shortcut icon" href="./images/favicon/favicon.ico">
-		<link rel="icon" sizes="16x16 32x32 64x64" href="./images/favicon/favicon.ico">
-		<link rel="icon" type="image/png" sizes="196x196" href="./images/favicon/favicon-192.png">
-		<link rel="icon" type="image/png" sizes="160x160" href="./images/favicon/favicon-160.png">
-		<link rel="icon" type="image/png" sizes="96x96" href="./images/favicon/favicon-96.png">
-		<link rel="icon" type="image/png" sizes="64x64" href="./images/favicon/favicon-64.png">
-		<link rel="icon" type="image/png" sizes="32x32" href="./images/favicon/favicon-32.png">
-		<link rel="icon" type="image/png" sizes="16x16" href="./images/favicon/favicon-16.png">
-		<link rel="apple-touch-icon" href="./images/favicon/favicon-57.png">
-		<link rel="apple-touch-icon" sizes="114x114" href="./images/favicon/favicon-114.png">
-		<link rel="apple-touch-icon" sizes="72x72" href="./images/favicon/favicon-72.png">
-		<link rel="apple-touch-icon" sizes="144x144" href="./images/favicon/favicon-144.png">
-		<link rel="apple-touch-icon" sizes="60x60" href="./images/favicon/favicon-60.png">
-		<link rel="apple-touch-icon" sizes="120x120" href="./images/favicon/favicon-120.png">
-		<link rel="apple-touch-icon" sizes="76x76" href="./images/favicon/favicon-76.png">
-		<link rel="apple-touch-icon" sizes="152x152" href="./images/favicon/favicon-152.png">
-		<link rel="apple-touch-icon" sizes="180x180" href="./images/favicon/favicon-180.png">
-		<meta name="msapplication-TileColor" content="#FFFFFF">
-		<meta name="msapplication-TileImage" content="./images/favicon/favicon-144.png">
-		<meta name="msapplication-config" content="./images/favicon/browserconfig.xml">
-		<!-- ****** faviconit.com favicons ****** -->
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<!--<![endif]-->
 
-		<script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha256-cCueBR6CsyA4/9szpPfrX3s49M9vUU5BgtiJj06wt/s=" crossorigin="anonymous"></script>
-		
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<!-- Template I used: https://shapebootstrap.net/item/1524923-appponsive-portfolio-landing-page -->
 
-		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+<head>
+    <meta charset="utf-8">
+    <title>Suggestion Box | Landing Page</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-		<link rel="stylesheet" href="style.css">		
-	</head>
-	<body>
-		<div class="app"></div>
-	</body>
-	<script src="bundle.js"></script>
-</html>
+    <!-- Google fonts - which you want to use - (rest you can just remove) -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Raleway:100,200,300,400,500,600,700,800,900' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Roboto:400,100,100italic,300,300italic,400italic,500,500italic,700,700italic' rel='stylesheet' type='text/css'>
+
+    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/font-awesome.min.css">
+    <link rel="stylesheet" href="css/animate.css">
+    <link rel="stylesheet" href="css/prettyPhoto.css">
+    <link rel="stylesheet" href="css/owl.carousel.css">
+    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+</head>
+
+<body id="top">
+    <!--[if lt IE 7]>
+        <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade ybrowser</a> to improve your experience.</p>
+    <![endif]-->
+
+    <header>
+        <!-- NAVIGATION -->
+        <nav class="navbar navbar-default navbar-fixed-top">
+            <div class="container">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header page-scroll">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+
+                    <!-- LOGO -->
+                    <a class="navbar-brand page-scroll" href="#page-top">
+                        <img class="col-md-11" src="img/logo.png" alt="logo" >
+                    </a>
+                    <!-- END LOGO -->
+
+                </div>
+
+                <!-- TOGGLE NAV -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="hidden">
+                            <a href="#page-top"></a>
+                        </li>
+                        <li><a class="page-scroll" href="#top">Home</a>
+                        </li>
+                        <li><a class="page-scroll" href="#intro">Example Use Cases</a>
+                        </li>
+                        <li><a class="page-scroll" href="#services">Services</a>
+                        </li>
+                        <li><a class="page-scroll" href="#testimonial">Current Clients</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- TOGGLE NAV -->
+
+            </div>
+            <!-- /.container -->
+        </nav>
+        <!-- END NAVIGATION -->
+    </header>
+
+    <!-- HOME -->
+    <div id="home-area">
+        <div class="overlay">
+            <div class="container">
+                <div class="row">
+
+                    <!-- HOME CONTENT -->
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="home-content wow fadeInLeft" data-wow-duration="1s" data-wow-delay="0s">
+                            <h1>Suggestion Box</h1>
+                            <p>Easily crowdsource ideas and infomation from your community.</p>
+                            <h4>Get Started:
+                            <a class="button home" href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556">ios</a>
+                            <a class="button home" href="https://play.google.com/store/apps/details?id=com.feedbackapp">Android</a>
+                            <a class="button home" href="https://slack.com/oauth/authorize?&client_id=149702699123.179991369169&scope=commands,bot,channels:read,chat:write:bot,reactions:read,channels:write">Slack</a>
+                            </h4>
+                        </div>
+                    </div>
+                    <!-- END HOME CONTENT -->
+
+                    <!-- HOME FEATURE IMAGE -->
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <div class="home-feature pull-right center-block wow bounceIn" data-wow-duration="1s" data-wow-delay="1s">
+                            <img class="img-responsive" src="img/app.png" alt="">
+                        </div>
+                    </div>
+                    <!-- END HOME FEATURE IMAGE -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- END HOME -->
+
+    <!-- INTRO -->
+    <section id="intro" class="section text-center">
+        <h2 class="section-title">Example Use Cases</h2>
+        <div class="container">
+
+                <!-- SINGLE INTRO -->
+                <div class="item col-md-4 col-sm-6">
+                    <div class="single-intro">
+                        <p class="wow fadeInDown" data-wow-duration="1s">
+                            <strong>Retail: Aggregate what your store associates are hearing from customers</strong><br /><br />
+                            It's the sales review meeting and the South Texas district is struggling. Looking at the numbers it's not clear why... so you pull up South Texas in the 'Suggestion Box' dashboard and look at the customer feedback that your district store associates reported over the last week. Bingo! Apparently, a local news story came out about a material in your product and it is scaring customers. You respond to the store associates who reported this issue with the information they need to reassure customers.
+                        </p>
+                    </div>
+                </div>
+                <!-- END SINGLE INTRO -->
+
+                <!-- SINGLE INTRO -->
+                <div class="item col-md-4 col-sm-6">
+                    <div class="single-intro">
+                        <p class="wow fadeInDown" data-wow-duration="1s">
+                            <strong>Schools: Improve community communications by responding directly to parents who submit or agree with a piece of feedback</strong><br /><br />
+                            There are thousands of parents and community members with ideas for how your schools should be run. Often the ideas are conflicting, it's not clear if the feedback is one person's opinion or something everyone agrees on, a lot of the time it's a misunderstanding that you have an answer to, but don't know which parents need to be told.
+                            <br /><br />
+                            The Suggestion Box can help:
+                            <br />
+                            The community can vote that they agree or disagree with feedback, so when there are conflicting opinions or it is just one person's opinion that becomes clear to the community.<br />
+                            If there is a misunderstanding, you can respond to the specific community members who submitted (or said they agree) with a piece of feedback.<br />
+                            If similar feedback is submitted again, Suggestion Box can auto-respond for you.
+                        </p>
+                    </div>
+                </div>
+                <!-- END SINGLE INTRO -->
+
+                <!-- SINGLE INTRO -->
+                <div class="item col-md-4 col-sm-6">
+                    <div class="single-intro">
+                        <p class="wow fadeInDown" data-wow-duration="1s">
+                            <strong>HR: Enable your employees to organically identify, prioritize, and craft great ideas for improving your business</strong><br /><br />
+                            You know your employees have a wealth of knowledge about your business, if you could just tap it...<br />
+                            With Suggestion Box its easy for an employee, in product for example, to submit an idea for improving their product. Sales would love to have it so they 'agree' with the idea and it shoots up the board. But manufacturing knows there are going to be problems producing the new product so they list 'concerns' in the idea details. Product proposes changes to the original idea, which resolves the concern. Without much management oversight, the idea has been identified, prioritized, and fleshed out.
+                        </p>
+                    </div>
+                </div>
+                <!-- END SINGLE INTRO -->
+
+        </div>
+        <!--/.container -->
+    </section>
+    <!-- END CLIENTS -->
+
+     <!-- SERVICES -->
+    <section id="services" class="section text-center">
+        <div class="container">
+            <h2 class="section-title wow fadeIn">Services</h2>
+            <div class="row">
+
+                <div class="col-md-1 col-sm-0">
+                </div>
+                <!-- SINGLE SERVICE -->
+                <div class="col-md-5 col-sm-6">
+                    <div class="single-service text-left wow fadeInRight" data-wow-duration="1s" data-wow-delay="0s">
+                        <div class="service-title">
+                            <i class="fa fa-mobile-phone fa-3x"></i>
+                        </div>
+                        <div class="service-content">
+                            <h3>the suggestion box</h3>
+                            <p>Insanely easy feedback submission<br />
+                            Vote to agree or disagree with a click (or swipe)<br />
+                            Collaborate to flesh out feedback details and solutions<br />
+                            On any device</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SINGLE SERVICE -->
+
+                <!-- SINGLE SERVICE -->
+                <div class="col-md-5 col-sm-6">
+                    <div class="single-service text-left wow fadeInRight" data-wow-duration="1s" data-wow-delay=".3s">
+                        <div class="service-title">
+                            <i class="fa fa-desktop fa-3x"></i>
+                        </div>
+                        <div class="service-content">
+                            <h3>Administration tools</h3>
+                            <p>Moderation<br />
+                            Reporting<br />
+                            Auto respond</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- END SINGLE SERVICE -->
+                <div class="col-md-1 col-sm-0">
+                </div>
+
+            </div>
+            <!--.row-->
+        </div>
+        <!--/.container -->
+    </section>
+    <!-- END SERVICES -->
+
+    <!-- CLIENTS -->
+    <section id="testimonial" class="section text-center">
+        <h2 class="section-title">Current Clients</h2>
+        <div class="container">
+
+                <!-- SINGLE CLIENTS -->
+                <div class="item col-md-6">
+                    <div class="single-testimonial">
+                        <img class="wow fadeInDown" data-wow-duration="1s" src="img/client2.png" alt="Client">
+                    </div>
+                </div>
+                <!-- END SINGLE CLIENTS -->
+
+                <!-- SINGLE CLIENTS -->
+                <div class="item col-md-6">
+                    <div class="single-testimonial">
+                        <img class=" wow fadeInDown" data-wow-duration="1s" src="img/client3.png" alt="Client">
+                    </div>
+                </div>
+                <!-- END SINGLE CLIENTS -->
+
+        </div>
+        <!--/.container -->
+    </section>
+    <!-- END CLIENTS -->
+
+    <!-- NEWSLETTER -->
+    <section id="newsletter" class="section text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    <div class="newsletter-content wow fadeInDown" data-wow-duration="1s">
+                        <h2>Request a Demo</h2>
+                    </div>
+                    <div class="form-group wow fadeInUp" data-wow-duration="1s">
+                        <input type="email" class="form-control" placeholder="Your Email Address">
+                        <input type="submit" class="pull-right button newsletter">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- END NEWSLETTER -->
+
+    <!-- FOOTER -->
+    <footer>
+        <div class="container">
+            <div class="row">
+
+                <!-- FOOTER MENU -->
+                <div class="col-md-6">
+                    <div class="footer-menu">
+                        <ul class="list-inline">
+                            <li><a href="#">Home</a>
+                            </li>
+                            <li><a href="#intro">Example Use Cases</a>
+                            </li>
+                            <li><a href="#services">Services</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <!-- END FOOTER MENU -->
+
+                <!-- FOOTER CONTENT -->
+                <div class="col-md-6">
+                    <div class="footer-content text-right">
+                        <p>&copy; 2017 All Rights Reserved, <a>CollaborativeFeedback</a>
+                        </p>
+                    </div>
+                </div>
+                <!-- END FOOTER CONTENT -->
+
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- ./container -->
+    </footer>
+    <!-- END FOOTER -->
+
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-58035815-1', 'auto');
+      ga('send', 'pageview');
+    </script>
+    <!-- js files -->
+    <script src="js/vendor/jquery-1.10.2.min.js"></script>
+    <script src="js/plugins.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/wow.min.js"></script>
+    <script src="js/prettyPhoto.js"></script>
+    <script src="js/owl.carousel.min.js"></script>
+    <script src="js/main.js"></script>
+</body>

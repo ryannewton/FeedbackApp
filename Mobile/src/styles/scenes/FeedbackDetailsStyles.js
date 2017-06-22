@@ -7,18 +7,6 @@ import { inputText } from '../common/input_styles';
 //import { buttonText } from '../common/button_styles';
 
 const styles = StyleSheet.create({
- /* lowWeight: {
-    fontWeight: '300',
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },
-  subheaderText: {
-    fontSize: 17,
-    textAlign: 'center',
-    flex: 1,
-    color: '#555555',
-    fontWeight: '500',
-  },*/
   inputText: {
     ...inputText,
     height: 60,
@@ -29,17 +17,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-start',
     marginTop: 20,
   },
-  /*solutionText: {
-    fontSize: 18,
-    color: '#444444',
-  },
-  noSolutionsMessage: {
-    fontSize: 18,
-    textAlign: 'center',
-    flex: 1,
-    color: '#595959',
-    fontWeight: '500',
-  },*/
   container,
 });
 
