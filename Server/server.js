@@ -30,9 +30,6 @@ const connection = mysql.createConnection({
 
   // development database
   host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
-
-  // second development database
-  // host: 'aay3x5lrtsjmla.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
