@@ -317,8 +317,8 @@
                         <h2>Request a Demo</h2>
                     </div>
                     <div class="col-md-5 form-group wow fadeInUp" data-wow-duration="1s">
-                        <input type="email" class="form-control" placeholder="Your Email Address">
-                        <input type="submit" class="pull-right button newsletter">
+                        <input id="email" type="email" class="form-control" placeholder="Your Email Address">
+                        <button onclick="saveEmail()" class="pull-right button newsletter">Submit</button>
                     </div>
                 </div>
             </div>
@@ -362,17 +362,19 @@
     </footer>
     <!-- END FOOTER -->
 
-
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-      ga('create', 'UA-58035815-1', 'auto');
-      ga('send', 'pageview');
-    </script>
     <!-- js files -->
+    <script type="text/javascript">
+        function saveEmail(event) {
+            var email = document.getElementById("email").value
+            var xhttp = new XMLHttpRequest();            
+            xhttp.open("POST", "/saveEmailForDemo", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            var params = "email=" + email;
+            xhttp.send(params);
+
+            document.getElementById("email").value = "";
+        }
+    </script>
     <script src="js/vendor/jquery-1.10.2.min.js"></script>
     <script src="js/plugins.js"></script>
     <script src="js/bootstrap.min.js"></script>
