@@ -57,6 +57,15 @@ const uploadPic = multer({
   })
 });
 
+app.post('/saveEmailForDemo', (req, res) => {
+  console.log('save email', req.body.email);
+  const email = req.body.email;
+  const connectionString = 'INSERT INTO demoRequest (email) VALUES (?) ON DUPLICATE KEY UPDATE email=?';
+  connection.query(connectionString, [email, email], function(err) {
+    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 9GT5');    
+  });
+});
+
 app.post('/uploadPhoto', uploadPic.single('photo'), (req, res, next) => {
   res.json(req.file)
 });
