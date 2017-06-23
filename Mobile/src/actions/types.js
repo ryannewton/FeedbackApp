@@ -11,6 +11,7 @@ export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
 
 // Group
 export const PULL_GROUP_INFO = 'pull_group_info';
+export const SAVE_GROUP_CODE = 'save_group_code';
 
 // Solutions
 export const RECEIVED_SOLUTION_LIST = 'received_solution_list';

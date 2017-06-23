@@ -53,9 +53,9 @@ class FeedbackSubmit extends Component {
   submitFeedback() {
     if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
       // First we search the feedback for restricted words
-      if (this.props.group.bannedWords.test(this.state.feedback) ||
-          this.props.group.bannedWords.test(this.state.positiveFeedback) ||
-          this.props.group.bannedWords.test(this.state.negativeFeedback)) {
+      if (this.props.group.bannedWords.test(this.state.feedback.toLowerCase()) ||
+          this.props.group.bannedWords.test(this.state.positiveFeedback.toLowerCase()) ||
+          this.props.group.bannedWords.test(this.state.negativeFeedback.toLowerCase())) {
         // If restricted words then we show an error to the user
         this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
       } else {

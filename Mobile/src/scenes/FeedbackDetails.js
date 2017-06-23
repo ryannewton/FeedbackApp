@@ -41,7 +41,7 @@ class FeedbackDetails extends Component {
     const { solution } = this.props.solutions;
     const { feedback } = this.props.navigation.state.params;
 
-    if (bannedWords.test(solution)) {
+    if (bannedWords.test(solution.toLowerCase())) {
       // If restricted words then we show an error to the user
       this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
     } else if (solution === ''){
