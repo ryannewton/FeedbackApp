@@ -19,6 +19,7 @@ class Authorize extends Component {
     this.state = {
       code: '',
       cleared: false,
+      groupCode: ''
     };
 
     this.route = this.route.bind(this);
@@ -46,7 +47,7 @@ class Authorize extends Component {
   }
 
   authorizeUser() {
-    this.props.authorizeUser(this.props.auth.email, this.state.code);
+    this.props.authorizeUser(this.props.auth.email, this.state.code, this.props.group.groupAuthCode || this.state.groupCode);
   }
 
   renderSignupButton() {
@@ -69,6 +70,41 @@ class Authorize extends Component {
     );
   }
 
+  renderGroup() {
+    if (this.props.group.groupAuthCode) {
+      return (
+        <View>
+          <CardSection>
+            <Input
+              label="Group Code: "
+              placeholder = {String(this.props.group.groupAuthCode)}
+              editable = {false}
+            />
+          </CardSection>
+        </View>
+      );
+    } else {
+      return (
+        <View>
+          <CardSection>
+            <Input
+              label="Group Code: "
+              placeholder="Enter group code here"
+              value={this.state.groupCode}
+              onChangeText={text => this.setState({ groupCode: text })}
+              keyboardType="phone-pad"
+            />
+          </CardSection>
+          <CardSection>
+            <Text style={styles.text}>
+                Your email was not automatically recognized.{'\n'}
+                Please enter your group code.
+            </Text>
+          </CardSection>
+        </View>
+      );
+    }
+  }
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
@@ -91,15 +127,16 @@ class Authorize extends Component {
             </Text>
 
             {/* Confirmation button, and 'go to login' button */}
-            <CardSection>
-              {this.renderButtons()}
-            </CardSection>
 
             <CardSection>
               <Text style={styles.text}>
                   We sent you an email with a 4 digit code.{'\n'}
                   Please enter it here to verify your email address{'\n'}
               </Text>
+            </CardSection>
+            {this.renderGroup()}
+            <CardSection>
+              {this.renderButtons()}
             </CardSection>
           </Card>
         </View>

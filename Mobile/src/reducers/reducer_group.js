@@ -2,9 +2,11 @@
 import {
   PULL_GROUP_INFO,
   LOG_OUT_USER,
+  SAVE_GROUP_CODE
 } from '../actions/types';
 
 const INITIAL_STATE = {
+  groupAuthCode: 0,
   groupName: '',
   feedbackRequireApproval: true,
   solutionsRequireApproval: true,
@@ -22,7 +24,10 @@ export default (state = INITIAL_STATE, action) => {
         solutionsRequireApproval: Boolean(action.payload.solutionsRequireApproval),
         showStatus: Boolean(action.payload.showStatus),
         includePositiveFeedbackBox: Boolean(action.payload.includePositiveFeedbackBox),
+        groupAuthCode: action.payload.groupAuthCode,
       };
+    case SAVE_GROUP_CODE:
+      return {...state, groupAuthCode: action.payload}
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:
