@@ -11,33 +11,27 @@ import styles from '../styles/components/SwipeCardStyles';
 // import { tracker } from '../constants';
 
 class SwipeCard extends Component {
-  constructor(props) {
-    super(props);
-    // tracker.trackEvent('View', 'Swipe Card', { label: props.features.domain, value: props.project.id });
-  }
-
-  _changeStyle() {
-
-  }
+  // constructor(props) {
+  //   super(props);
+  //   tracker.trackEvent('View', 'Swipe Card', { label: props.group.domain, value: props.feedback.id });
+  // }
 
   render() {
-    const { project } = this.props;
+    const { feedback } = this.props;
     return (
       <Card style={styles.card}>
         <View>
           <CardItem>
-            <Left>
-              <Text style={styles.bodyText}>{project.title}</Text>
-            </Left>
+            <Text style={styles.bodyText}>{feedback.text}</Text>
           </CardItem>
-          <CardItem style={{ justifyContent: 'center', flexDirection: 'column', paddingTop: 0, paddingBottom: 0, marginBottom: 0, marginTop: 0 }}>
+          <CardItem>
             <View style={{flexDirection:'row', justifyContent: 'flex-end'}}>
-              <Text style={[styles.smallText, { color: 'green', fontSize: 18 }]}>{project.votes}</Text>
-              <Icon size={18} name='arrow-upward' color= 'green' />
+              <Text style={[styles.smallText, { color: '#48D2A0', fontSize: 18 }]}>{feedback.upvotes}</Text>
+              <Icon size={18} name='arrow-upward' color= '#48D2A0' />
             </View>
             <View style={{flexDirection:'row', justifyContent: 'flex-start'}}>
-              <Text style={[styles.smallText, { color: 'red', fontSize: 18 }]}>{project.downvotes}</Text>
-              <Icon size={18} name='arrow-downward' color= 'red' />
+              <Text style={[styles.smallText, { color: '#F54B5E', fontSize: 18 }]}>{feedback.downvotes}</Text>
+              <Icon size={18} name='arrow-downward' color= '#F54B5E' />
             </View>
           </CardItem>
         </View>
@@ -53,12 +47,12 @@ class SwipeCard extends Component {
             </TouchableOpacity>
             <TouchableOpacity
               onPress={() => {
-                if (this.props.project.id) {
-                  // tracker.trackEvent('View', 'Project Details Via Swipe Card', {
-                  //   label: this.props.features.domain,
-                  //   value: this.props.project.id,
+                if (this.props.feedback.id) {
+                  // tracker.trackEvent('View', 'Feedback Details Via Swipe Card', {
+                  //   label: this.props.group.domain,
+                  //   value: this.props.feedback.id,
                   // });
-                  this.props.navigate('Details', { project: this.props.project });
+                  this.props.navigate('Details', { feedback: this.props.feedback });
                 }
               }}
               style={styles.cardButton}
@@ -90,11 +84,11 @@ class SwipeCard extends Component {
 }
 
 SwipeCard.propTypes = {
-  project: React.PropTypes.object,
+  feedback: React.PropTypes.object,
   navigate: React.PropTypes.func,
   left: React.PropTypes.func,
   right: React.PropTypes.func,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
   skip: React.PropTypes.func,
 };
 

@@ -9,30 +9,33 @@ import { logOut } from '../actions';
 
 // Import componenets, functions, and styles
 import { Button } from '../components/common';
-import styles from '../styles/settings_styles';
+import styles from '../styles/scenes/SettingsStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
+
 
 class Settings extends Component {
   constructor(props) {
     super(props);
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Settings', { domain: props.features.domain });
+    // tracker.trackScreenViewWithCustomDimensionValues('Settings', { domain: props.group.domain });
+    this.props.sendGoogleAnalytics('Settings')
   }
 
   render() {
-    const { container } = styles;
+    const { container, signoutButton } = styles;
 
     return (
       <View style={container}>
         {/* To do: add change password option*/}
 
         {/* Sign-out button */}
-        <View style={{ flex: 1, flexDirection: 'column', alignItems: 'center' }}>
+        <View style={signoutButton}>
           <Button
             onPress={() => {
-              // tracker.trackEvent('Auth', 'Logged Out', { label: this.props.features.domain });
+              // tracker.trackEvent('Auth', 'Logged Out', { label: this.props.group.domain });
               this.props.logOut();
               this.props.navigation.navigate('Auth');
             }}
@@ -49,12 +52,12 @@ class Settings extends Component {
 Settings.propTypes = {
   logOut: React.PropTypes.func,
   navigation: React.PropTypes.object,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { features } = state;
-  return { features };
+  const { group } = state;
+  return { group };
 }
 
-export default connect(mapStateToProps, { logOut })(Settings);
+export default connect(mapStateToProps, { logOut, sendGoogleAnalytics })(Settings);

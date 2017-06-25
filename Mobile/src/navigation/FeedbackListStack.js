@@ -14,9 +14,13 @@ const scenes = StackNavigator({
     screen: FeedbackList,
     navigationOptions: {
       title: 'All Feedback',
+      headerTitleStyle: {
+        color: '#fff'
+      },
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
       },
     },
   },
@@ -24,9 +28,13 @@ const scenes = StackNavigator({
     screen: FeedbackDetails,
     navigationOptions: {
       title: 'Feedback Details',
+      headerTitleStyle: {
+        color: '#fff'
+      },
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
       },
     },
   },

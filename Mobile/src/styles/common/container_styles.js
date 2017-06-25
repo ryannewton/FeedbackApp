@@ -3,5 +3,5 @@ export const container = {
   flexDirection: 'column',
   justifyContent: 'flex-start',
   alignItems: 'stretch',
-  backgroundColor: '#A41034',
+  backgroundColor: '#fff',
 };

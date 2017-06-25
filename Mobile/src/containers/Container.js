@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import Router from '../navigation/router';
 
 // Import actions
-import { pullProjects } from '../actions';
+import { pullFeedback } from '../actions';
 
 // Update every 5 minutes (value in milliseconds)
 const UPDATE_FREQUENCY = 5 * 60 * 1000;
@@ -20,9 +20,9 @@ class Container extends Component {
 
   updateFeedbackFromServer = () => {
     const now = new Date();
-    const { lastPulled } = this.props.projects;
+    const { lastPulled } = this.props.feedback;
     if (now.getTime() - lastPulled.getTime() > UPDATE_FREQUENCY) {
-      this.props.pullProjects(this.props.auth.token);
+      this.props.pullFeedback(this.props.auth.token);
     }
   }
 
@@ -34,13 +34,13 @@ class Container extends Component {
 }
 
 Container.propTypes = {
-  projects: React.PropTypes.object,
+  feedback: React.PropTypes.object,
   auth: React.PropTypes.object,
-  pullProjects: React.PropTypes.func,
+  pullFeedback: React.PropTypes.func,
 };
 
 function mapStateToProps(state) {
   return state;
 }
 
-export default connect(mapStateToProps, { pullProjects })(Container);
+export default connect(mapStateToProps, { pullFeedback })(Container);

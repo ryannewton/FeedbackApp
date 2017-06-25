@@ -1,10 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, ListView } from 'react-native';
+import { View, ListView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
-
-// Import actions
-import { saveProjectChanges } from '../actions';
 
 // Import components, functions, and styles
 import FeedbackCard from '../components/FeedbackCard';
@@ -12,42 +9,34 @@ import styles from '../styles/scenes/FeedbackListStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
+
 
 class FeedbackList extends Component {
   constructor(props) {
     super(props);
-    // tracker.trackScreenViewWithCustomDimensionValues('Projects', { domain: props.features.domain });
+
+    // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.group.domain });
+    this.props.sendGoogleAnalytics('FeedbackList', this.props.group.groupName)
   }
-
-  renderAllFeedback() {
-    const feedbackList = this.props.projects.list
-      .map(feedbackItem => (
-        <FeedbackCard
-          project={feedbackItem}
-          key={feedbackItem.id}
-          navigate={this.props.navigation.navigate}
-          saveProjectChanges={this.props.saveProjectChanges}
-        />
-      ),
-    );
-
-    return feedbackList;
-  }
-
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
 
     return (
       <View style={styles.container}>
         <ListView
-          dataSource={ds.cloneWithRows(this.props.projects.list)}
+          dataSource={ds.cloneWithRows(this.props.feedback.list)}
           renderRow={rowData =>
-            <FeedbackCard
-              project={rowData}
-              key={rowData.id}
-              navigate={this.props.navigation.navigate}
-              saveProjectChanges={this.props.saveProjectChanges}
-            />
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
+              >
+              <FeedbackCard
+                feedback={rowData}
+                key={rowData.id}
+                navigate={this.props.navigation.navigate}
+                showResponseTag={Boolean(true)}
+              />
+            </TouchableOpacity>
           }
         />
       </View>
@@ -57,18 +46,15 @@ class FeedbackList extends Component {
 
 FeedbackList.propTypes = {
   navigation: React.PropTypes.object,
-  projects: React.PropTypes.object,
-  saveProjectChanges: React.PropTypes.func,
-  features: React.PropTypes.object,
+  feedback: React.PropTypes.object,
+  group: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { projects, features } = state;
-  return { projects, features };
+  const { feedback, group } = state;
+  return { feedback, group };
 }
 
-const AppScreen = connect(mapStateToProps, {
-  saveProjectChanges,
-})(FeedbackList);
+const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics })(FeedbackList);
 
 export default AppScreen;

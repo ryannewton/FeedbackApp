@@ -6,10 +6,12 @@ import { connect } from 'react-redux';
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { authorizeUser } from '../actions';
-import styles from '../styles/styles_main';
+ import loadOnLaunch from '../reducers/load_on_launch';
+import styles from '../styles/scenes/AuthorizeStyles';
 
 // Import tracking
 // import { tracker } from '../constants';
+import { sendGoogleAnalytics } from '../actions';
 
 class Authorize extends Component {
   constructor(props) {
@@ -18,12 +20,14 @@ class Authorize extends Component {
     this.state = {
       code: '',
       cleared: false,
+      groupCode: ''
     };
 
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
 
     // tracker.trackScreenView('Authorize');
+    this.props.sendGoogleAnalytics('Authorize')
   }
 
   componentWillReceiveProps(nextProps) {
@@ -33,27 +37,19 @@ class Authorize extends Component {
   }
 
   route(nextProps) {
-    // We want to naviagte when loggedIn is true (we logged in) and we have stored all the data we need in state
-    //   - We need projects and enableNewFeedback
     if (
-        nextProps.auth.loggedIn === true &&
-        nextProps.projects.lastPulled.getTime() !== 0 &&
-        nextProps.features.enableNewFeedback !== null
-      ) {
-      // If enableNewFeedback is true then we navigate to new projects as normal
-      if (nextProps.features.enableNewFeedback) {
-        nextProps.navigation.navigate('FeedbackSwipe');
-      // If not, then we navigate to Feedback and disable the New Projects tab
-      } else {
-        nextProps.navigation.navigate('FeedbackSubmit');
-      }
+      nextProps.auth.loggedIn === true &&
+      nextProps.feedback.lastPulled.getTime() !== 0
+    ) {
+      nextProps.navigation.navigate('FeedbackSwipe');
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
   authorizeUser() {
-    this.props.authorizeUser(this.props.auth.email, this.state.code);
+    this.props.authorizeUser(this.props.auth.email, this.state.code, this.props.group.groupAuthCode || this.state.groupCode);
+    loadOnLaunch();
   }
 
   renderSignupButton() {
@@ -72,6 +68,33 @@ class Authorize extends Component {
     return (
       <View style={{ flex: 1 }}>
         {this.renderSignupButton()}
+      </View>
+    );
+  }
+
+  renderGroup() {
+    if (this.props.group.groupAuthCode) {
+      return null;
+    }
+
+    // User enters group code if email is not in the server
+    return (
+      <View>
+        <CardSection>
+          <Input
+            label="Group Code: "
+            placeholder="Enter group code here"
+            value={this.state.groupCode}
+            onChangeText={text => this.setState({ groupCode: text })}
+            keyboardType="phone-pad"
+          />
+        </CardSection>
+        <CardSection>
+          <Text style={styles.text}>
+              Your email was not automatically recognized.{'\n'}
+              Please enter your group code.
+          </Text>
+        </CardSection>
       </View>
     );
   }
@@ -98,15 +121,16 @@ class Authorize extends Component {
             </Text>
 
             {/* Confirmation button, and 'go to login' button */}
-            <CardSection>
-              {this.renderButtons()}
-            </CardSection>
 
             <CardSection>
               <Text style={styles.text}>
                   We sent you an email with a 4 digit code.{'\n'}
                   Please enter it here to verify your email address{'\n'}
               </Text>
+            </CardSection>
+            {this.renderGroup()}
+            <CardSection>
+              {this.renderButtons()}
             </CardSection>
           </Card>
         </View>
@@ -119,14 +143,14 @@ Authorize.propTypes = {
   auth: React.PropTypes.object,
   authorizeUser: React.PropTypes.func,
   navigation: React.PropTypes.object,
-  features: React.PropTypes.object,
-  projects: React.PropTypes.object,
+  group: React.PropTypes.object,
+  feedback: React.PropTypes.object,
 };
 
 function mapStateToProps(state) {
-  const { auth, projects, features } = state;
-  return { auth, projects, features };
+  const { auth, feedback, group } = state;
+  return { auth, feedback, group };
 }
 
 
-export default connect(mapStateToProps, { authorizeUser })(Authorize);
+export default connect(mapStateToProps, { authorizeUser, sendGoogleAnalytics })(Authorize);

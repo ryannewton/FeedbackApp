@@ -8,19 +8,18 @@ import { connect } from 'react-redux';
 import SwipeCard from '../components/SwipeCard';
 
 // Import actions and styles
-import { addProjectUpvote, addToDoNotDisplayList, closeInstructions, addProjectDownvote } from '../actions';
+import { addFeedbackUpvote, addToDoNotDisplayList, closeInstructions, addFeedbackDownvote, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/FeedbackSwipeStyles';
 
-// Import about info image
-import styles2 from '../styles/scenes/FullscreenStyle';
+// Import info image
 import fullScreen from '../../images/backgrounds/SwipeInfo.jpg';
 
 // Import tracking
 // import { tracker } from '../constants';
 
-const inboxZeroProject = {
-  title: "Great job! You've reached inbox zero.",
-  votes: 999,
+const inboxZeroFeedback = {
+  text: "Great job! You've reached inbox zero.",
+  upvotes: 999,
   downvotes: 999,
 };
 
@@ -30,84 +29,85 @@ class FeedbackSwipe extends Component {
 
     this.state = {
       index: 0,
-      projects: [...props.projects.list.filter(feedbackItem =>
+      feedback: [...props.feedback.list.filter(feedbackItem =>
         (!props.user.doNotDisplayList.includes(feedbackItem.id) && feedbackItem.stage !== 'complete'),
-      ), inboxZeroProject],
+      ), inboxZeroFeedback],
     };
-    // tracker.trackScreenViewWithCustomDimensionValues('New Projects', { domain: props.features.domain, project: String(this.state.projects[0].id) });
+    // tracker.trackScreenViewWithCustomDimensionValues('New Feedback', { domain: props.group.domain, feedback: String(this.state.feedback[0].id) });
 
     this.swipeRight = this.swipeRight.bind(this);
     this.swipeLeft = this.swipeLeft.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);
+    this.props.sendGoogleAnalytics('FeedbackSwipe')
   }
 
   swipeRight(source) {
-    if (source === 'button') {
-      // tracker.trackEvent('Project Vote', 'Project UpVote Via New Projects Button', { label: this.props.features.domain });
-    } else {
-      // tracker.trackEvent('Project Vote', 'Project UpVote Via Swipe', { label: this.props.features.domain });
-    }
+    // if (source === 'button') {
+    //   tracker.trackEvent('Feedback Vote', 'Feedback UpVote Via New Feedback Button', { label: this.props.group.domain });
+    // } else {
+    //   tracker.trackEvent('Feedback Vote', 'Feedback UpVote Via Swipe', { label: this.props.group.domain });
+    // }
 
     const { user } = this.props;
-    const project = this.state.projects[this.state.index];
+    const feedback = this.state.feedback[this.state.index];
 
-    // If user hasn't upvoted this project, add an upvote
-    if (project.id && !user.projectUpvotes.includes(project.id)) {
-      this.props.addProjectUpvote(project);
+    // If user hasn't upvoted this feedback, add an upvote
+    if (feedback.id && !user.feedbackUpvotes.includes(feedback.id)) {
+      this.props.addFeedbackUpvote(feedback);
     }
 
-    if (project.id) {
-      this.props.addToDoNotDisplayList(project.id);
+    if (feedback.id) {
+      this.props.addToDoNotDisplayList(feedback.id);
     }
 
-    if (this.state.index === this.state.projects.length - 1) {
-      this.setState({ index: 0, projects: [inboxZeroProject] });
+    if (this.state.index === this.state.feedback.length - 1) {
+      this.setState({ index: 0, feedback: [inboxZeroFeedback] });
     } else {
       this.setState({ index: this.state.index + 1 });
     }
   }
 
   swipeLeft(source) {
-    if (source === 'button') {
-      // tracker.trackEvent('Skip', 'Skip Via New Projects Button', { label: this.props.features.domain });
-    } else {
-      // tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.features.domain });
-    }
+    // if (source === 'button') {
+    //   tracker.trackEvent('Skip', 'Skip Via New Feedback Button', { label: this.props.group.domain });
+    // } else {
+    //   tracker.trackEvent('Skip', 'Skip Via Swipe', { label: this.props.group.domain });
+    // }
 
     const { user } = this.props;
-    const project = this.state.projects[this.state.index];
+    const feedback = this.state.feedback[this.state.index];
 
-    // If user hasn't downvoted this project, add an upvote
-    if (project.id && !user.projectDownvotes.includes(project.id)) {
-      this.props.addProjectDownvote(project);
+    // If user hasn't downvoted this feedback, add an upvote
+    if (feedback.id && !user.feedbackDownvotes.includes(feedback.id)) {
+      this.props.addFeedbackDownvote(feedback);
     }
 
-    if (project.id) {
-      this.props.addToDoNotDisplayList(project.id);
+    if (feedback.id) {
+      this.props.addToDoNotDisplayList(feedback.id);
     }
 
-    if (this.state.index === this.state.projects.length - 1) {
-      this.setState({ index: 0, projects: [inboxZeroProject] });
+    if (this.state.index === this.state.feedback.length - 1) {
+      this.setState({ index: 0, feedback: [inboxZeroFeedback] });
     } else {
       this.setState({ index: this.state.index + 1 });
     }
   }
 
   skip() {
-    const project = this.state.projects[this.state.index];
-    if (project.id) {
-      this.props.addToDoNotDisplayList(project.id);
+    const feedback = this.state.feedback[this.state.index];
+    if (feedback.id) {
+      this.props.addToDoNotDisplayList(feedback.id);
     }
 
-    if (this.state.index === this.state.projects.length - 1) {
-      this.setState({ index: 0, projects: [inboxZeroProject] });
+    if (this.state.index === this.state.feedback.length - 1) {
+      this.setState({ index: 0, feedback: [inboxZeroFeedback] });
     } else {
       this.setState({ index: this.state.index + 1 });
     }
   }
 
   closeInstructions() {
-    this.props.closeInstructions('New Projects Scene');
+    this.props.closeInstructions('New Feedback Scene');
   }
 
   render() {
@@ -121,16 +121,16 @@ class FeedbackSwipe extends Component {
 
     const FeedbackSwipeScene = (
       <Container style={{ flexDirection: 'row' }}>
-        <View style={{ flex: 7, backgroundColor: '#A41034' }} />
+        <View style={{ flex: 7, backgroundColor: '#00A2FF' }} />
         <View style={[styles.container, styles.swiper]}>
           <DeckSwiper
             ref={(ds) => { this.deckSwiper = ds; }}
-            dataSource={this.state.projects}
+            dataSource={this.state.feedback}
             onSwipeRight={this.swipeRight}
             onSwipeLeft={this.swipeLeft}
-            renderItem={project =>
+            renderItem={feedback =>
               <SwipeCard
-                project={project}
+                feedback={feedback}
                 right={() => {
                   this.swipeRight('button');
                   this.deckSwiper._root.swipeRight();
@@ -143,41 +143,42 @@ class FeedbackSwipe extends Component {
                   this.skip();
                   this.deckSwiper._root.swipeLeft();
                 }}
-                features={this.props.features}
+                group={this.props.group}
                 navigate={this.props.navigation.navigate}
               />
             }
           />
         </View>
-        <View style={{ flex: 7, backgroundColor: '#A41034' }} />
+        <View style={{ flex: 7, backgroundColor: '#00A2FF' }} />
       </Container>
     );
 
-    // const screenToShow = (!this.props.user.instructionsViewed.includes('New Projects Scene')) ? instructionsScreen : FeedbackSwipeScene;
+    // const screenToShow = (!this.props.user.instructionsViewed.includes('New Feedback Scene')) ? instructionsScreen : FeedbackSwipeScene;
     return FeedbackSwipeScene;
   }
 }
 
 FeedbackSwipe.propTypes = {
-  projects: React.PropTypes.object,
+  feedback: React.PropTypes.object,
   user: React.PropTypes.object,
   addToDoNotDisplayList: React.PropTypes.func,
-  addProjectUpvote: React.PropTypes.func,
-  addProjectDownvote: React.PropTypes.func,
+  addFeedbackUpvote: React.PropTypes.func,
+  addFeedbackDownvote: React.PropTypes.func,
   closeInstructions: React.PropTypes.func,
-  features: React.PropTypes.object,
+  group: React.PropTypes.object,
   navigation: React.PropTypes.object,
 
 };
 
 function mapStateToProps(state) {
-  const { user, projects, features } = state;
-  return { user, projects, features };
+  const { user, feedback, group } = state;
+  return { user, feedback, group };
 }
 
 export default connect(mapStateToProps, {
-  addProjectUpvote,
-  addProjectDownvote,
+  addFeedbackUpvote,
+  addFeedbackDownvote,
   addToDoNotDisplayList,
   closeInstructions,
+  sendGoogleAnalytics
 })(FeedbackSwipe);
