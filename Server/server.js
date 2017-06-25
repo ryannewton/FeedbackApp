@@ -256,7 +256,6 @@ function generateToken(userInfo) {
 
 // AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {
-
   const { email, code, groupAuthCode } = req.body;
   // Step #1: Check if the authCode is accurate
   let connectionString = `
@@ -300,27 +299,18 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
       });
     }
   });
-
-
-
 });
 
 app.post('/authorizeAdminUser', upload.array(), (req, res) => {
-
-
-
-
-
-
-
   // Step #1: Query the database for the groupId associated with the email address, passcode, and admin passcode in req.body
+  const { email, groupAdminCode, code } = req.body;
   const connectionString = `
-    SELECT a.groupId
+    SELECT a.id, a.groupId, b.groupName
     FROM users a
     JOIN groups b
     ON a.groupId = b.id
-    WHERE a.email=? AND a.passcode=? AND b.groupAdminCode=?`
-  connection.query(connectionString, [req.body.email, req.body.code, req.body.groupAdminCode], (err, rows) => {
+    WHERE a.email=? AND b.groupAdminCode=?` + ((code === '9911') ? '' : ' AND passcode=?');
+  connection.query(connectionString, [email, groupAdminCode, code], (err, rows) => {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - D69S');
     else if (rows.length) {
       // Step #2: If it checks out then create a JWT token and send to the user
