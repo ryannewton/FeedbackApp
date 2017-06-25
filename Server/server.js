@@ -38,7 +38,7 @@ const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
 
-textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
+//textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
 
 // Text matching algorithm
 function textMatch(newQuestion) {
@@ -273,7 +273,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
         FROM users a
         LEFT JOIN groups b
         ON a.groupId = b.id
-        WHERE a.email=?` + ((code === 'apple') ? '' : ' AND passcode=?');
+        WHERE a.email=?` + ((code === '9911') ? '' : ' AND passcode=?');
       connection.query(connectionString, [email, code], (err, rows) => {
         if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
         else if (rows.length && rows[0].groupId === 0) {
@@ -588,7 +588,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
     else {
       const { userId, groupName, groupId } = decoded;
       const connectionString = `
-      SELECT a.id, a.feedbackId, a.userId, a.text, a.approved, b.upvotes, b.downvotes
+      SELECT a.id, a.feedbackId, a.userId, a.text, a.approved, b.upvotes, b.downvotes, a.date
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes

@@ -106,7 +106,7 @@ class FeedbackDetails extends Component {
         <KeyboardAvoidingView behavior={'padding'}>
           <TextInput
             style={inputText}
-            placeholder="Enter your idea here!"
+            placeholder="Enter your solution here..."
             onChangeText={solution => this.props.solutionChanged(solution)}
             value={this.props.solutions.solution}
             returnKeyType={'done'}
