@@ -26,10 +26,10 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // second development database
   // host: 'aay3x5lrtsjmla.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
@@ -118,39 +118,42 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
 
     // Step #2: Check to see if the user is already in the database
     let groupId;
-    let connectionString = 'SELECT groupId FROM users WHERE email=?';
+    let connectionString = `
+      SELECT a.groupId, b.groupSignupCode
+      FROM users a
+      JOIN groups b
+      ON a.groupId = b.id
+      WHERE a.email=?`;
     connection.query(connectionString, [email], (err, rows) => {
       if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
       else if (!rows.length) {
         // Step #2A: If the user's email is not in the user table see if it has a default groupId
-        connectionString = 'SELECT id FROM groups WHERE defaultEmailDomain=?';
+        connectionString = 'SELECT id, groupSignupCode FROM groups WHERE defaultEmailDomain=?';
         connection.query(connectionString, [getDomain(email)], (err, rows) => {
           if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
           else if (!rows.length) {
-            res.status(400).send('Sorry, this email does not appear to be set up in our system :(');
+            sendAuthEmailHelper(res, 0, email, code, 0);
           } else {
-            sendAuthEmailHelper(res, rows[0].id, email, code);
+            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode);
           }
         });
       } else {
-        sendAuthEmailHelper(res, rows[0].groupId, email, code);
+        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode);
       }
     });
   }
 });
 
-function sendAuthEmailHelper(res, groupId, email, code) {
+function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
   // Step #3: Add the email, groupId, code, and timestamp to the database
   const connectionString = 'INSERT INTO users (groupId, email, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcodeTime=NOW()';
   connection.query(connectionString, [groupId, email, String(code), String(code), groupId], function(err) {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
-    else if (email.includes('admin_test')) {
-      res.sendStatus(200);
-    } else {
+    else if (!email.includes('admin_test')) {
       // Step #4: Send an email with the code to the user (make sure it shows up in notification)
       sendEmail([email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
-      res.sendStatus(200);
     }
+    res.status(200).json(groupSignupCode);
   });
 }
 
@@ -160,25 +163,63 @@ function generateToken(userInfo) {
 
 // AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {
-  // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-  const connectionString = `
-    SELECT a.id, a.groupId, b.groupName
-    FROM users a
-    JOIN groups b
-    ON a.groupId = b.id
-    WHERE a.email=?` + ((req.body.code === 'apple') ? '' : ' AND passcode=?');
-  connection.query(connectionString, [req.body.email, req.body.code], (err, rows) => {
-    if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
-    else if (rows.length) {
-      // Step #2: If it checks out then create a JWT token and send to the user
-      res.status(200).json(generateToken(rows[0]));
-    } else {
-      res.status(400).send('Incorrect Code');
+
+  const { email, code, groupAuthCode } = req.body;
+  // Step #1: Check if the authCode is accurate
+  let connectionString = `
+    SELECT id, groupName
+    FROM groups
+    WHERE groupSignupCode=?`
+  connection.query(connectionString, [groupAuthCode], (err, groupIdRows) => {
+    if (err) res.status(400).send('Sorry the server is experiencing an error - 2D6T');
+    else if (!groupIdRows.length) res.status(400).send('Sorry, the Group Authorization Code is incorrect');
+    else {
+      // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
+     connectionString = `
+        SELECT a.id, a.groupId, b.groupName
+        FROM users a
+        LEFT JOIN groups b
+        ON a.groupId = b.id
+        WHERE a.email=?` + ((code === 'apple') ? '' : ' AND passcode=?');
+      connection.query(connectionString, [email, code], (err, rows) => {
+        if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
+        else if (rows.length && rows[0].groupId === 0) {
+          connectionString = `
+            UPDATE users
+            SET groupId=?
+            WHERE email=?`
+          connection.query(connectionString, [groupIdRows[0].id, email], (err) => {
+            if (err) res.status(400).send('Sorry, the server is experiencing an error - 41H1');
+            else {
+              const groupInfo = rows[0];
+              groupInfo.groupId = groupIdRows[0].id;
+              groupInfo.groupName = groupIdRows[0].groupName;
+              res.status(200).json(generateToken(groupInfo));
+            }
+          })
+        }
+        else if (rows.length) {
+          // Step #2: If it checks out then create a JWT token and send to the user
+          res.status(200).json(generateToken(rows[0]));
+        } else {
+          res.status(400).send('Incorrect Code');
+        }
+      });
     }
   });
+
+
+
 });
 
 app.post('/authorizeAdminUser', upload.array(), (req, res) => {
+
+
+
+
+
+
+
   // Step #1: Query the database for the groupId associated with the email address, passcode, and admin passcode in req.body
   const connectionString = `
     SELECT a.groupId
