@@ -1,17 +1,17 @@
 {
-  "name": "SuggestionBox",
+  "name": "Suggestion",
   "description": "No description",
   "slug": "feedbackapp",
   "sdkVersion": "17.0.0",
-  "version": "1.1.0",
+  "version": "1.1.01",
   "ios": {
     "bundleIdentifier": "com.feedbackapp.feedbackapp",
     "supportsTablet": true,
-    "buildNumber": "43"
+    "buildNumber": "46"
   },
   "android": {
     "package": "com.feedbackapp",
-    "versionCode": 43
+    "versionCode": 46
   },
   "orientation": "portrait",
   "primaryColor": "#cccccc",
