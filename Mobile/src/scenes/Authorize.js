@@ -74,39 +74,31 @@ class Authorize extends Component {
 
   renderGroup() {
     if (this.props.group.groupAuthCode) {
-      return (
-        <View>
-          <CardSection>
-            <Input
-              label="Group Code: "
-              placeholder = {String(this.props.group.groupAuthCode)}
-              editable = {false}
-            />
-          </CardSection>
-        </View>
-      );
-    } else {
-      return (
-        <View>
-          <CardSection>
-            <Input
-              label="Group Code: "
-              placeholder="Enter group code here"
-              value={this.state.groupCode}
-              onChangeText={text => this.setState({ groupCode: text })}
-              keyboardType="phone-pad"
-            />
-          </CardSection>
-          <CardSection>
-            <Text style={styles.text}>
-                Your email was not automatically recognized.{'\n'}
-                Please enter your group code.
-            </Text>
-          </CardSection>
-        </View>
-      );
+      return null;
     }
+
+    // User enters group code if email is not in the server
+    return (
+      <View>
+        <CardSection>
+          <Input
+            label="Group Code: "
+            placeholder="Enter group code here"
+            value={this.state.groupCode}
+            onChangeText={text => this.setState({ groupCode: text })}
+            keyboardType="phone-pad"
+          />
+        </CardSection>
+        <CardSection>
+          <Text style={styles.text}>
+              Your email was not automatically recognized.{'\n'}
+              Please enter your group code.
+          </Text>
+        </CardSection>
+      </View>
+    );
   }
+
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
