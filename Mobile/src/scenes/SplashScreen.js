@@ -54,7 +54,7 @@ class SplashScreen extends Component {
     return (
       <Image style={styles.background} source={fullScreen} resizeMode="cover">
         <Spinner size="large" style={{ marginTop: 200 }} />
-        <Text style={styles.text}>COLLABORATIVE FEEDBACK</Text>
+        <Text style={styles.text}>SUGGESTION BOX</Text>
       </Image>
     );
   }
