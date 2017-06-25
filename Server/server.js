@@ -19,6 +19,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
+var stopwords = require("stopwords").english;
+
 const connection = mysql.createConnection({
   user: 'root',
   password: process.env.JWT_KEY,
@@ -26,15 +28,100 @@ const connection = mysql.createConnection({
   database: 'feedbackappdb',
 
   // production database
-  host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 
   // development database
-  // host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
+
+textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
+
+// Text matching algorithm
+function textMatch(newQuestion) {
+  // Step #1 - Pull the previous questions
+  const connectionString = `
+    SELECT question
+    FROM similarFeedback`
+  connection.query(connectionString, (err, questions) => {
+    if (err) console.log('Error in Text Match - #1');
+    else {
+      // Step #2 - Add the newQuestion at the beginning of the array
+      const allQuestions = [{ question: newQuestion}, ...questions];
+
+      // Step #2 - Identify the wordspace (previous + new)
+      const cleanQues = cleanQuestions(allQuestions);
+      const allWords = cleanQues.reduce((acc, question) => {
+        return [...acc, ...question];
+      }, []);
+      const wordsWithoutDuplicates = removeDuplicateWords(allWords);
+      const wordspace = removeStopwords(wordsWithoutDuplicates);
+      // Step #3 - Map all questions (prev + new) to the wordspace
+      const occurances = cleanQues.map(question => {
+        return wordspace.map(wordspaceWord => {
+          return question.filter(questionWord => { return wordspaceWord === questionWord }).length;
+        });
+      })
+      console.log(removeStopwords(removeDuplicateWords(cleanQues[0])));
+      console.log(occurances[0].reduce((acc, num) => { return acc + num }, 0));
+
+      // Step #4 - Calculate the cosine for each previous question (maybe a reduce)
+      const allTops = occurances.map(occuranceArray => {
+        return occuranceArray.reduce((top, value, index) => {
+          return top + occurances[0][index] * value;
+        }, 0);
+      });
+
+      const allBottomLeft = occurances.map(occuranceArray => {
+        return occuranceArray.reduce((bottomLeft, value) => {
+          return bottomLeft + value * value;
+        }, 0);
+      });
+
+      const bottomRight = occurances[0].reduce((bottomRight, value) => {
+        return bottomRight + value * value;
+      }, 0);
+
+      const cosines = occurances.map((occ, index) => {
+        return allTops[index] / (Math.sqrt(allBottomLeft[index]) * Math.sqrt(bottomRight));
+      });
+
+      console.log(cosines);
+
+      // Step #5 - Console log the most similar question
+      //console.log(cosines.indexOf(Math.max(...cosines)));
+    }
+  });
+}
+
+// Cleans up questions (remove punctuation, extra spaces, lowercase everything) and converts them to arrays of words
+function cleanQuestions(questions) {
+  return questions.reduce((acc, row) => {
+    return [...acc,
+      row.question
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
+        .replace(/[\s]{2,}/g, ' ')
+        .toLowerCase()
+        .split(' ')];
+  }, []);
+}
+
+// Remove duplicates
+function removeDuplicateWords(wordsWithDuplicates) {
+  return wordsWithDuplicates.filter((item, index, array) => {
+    return array.indexOf(item) === index;
+  });
+}
+
+// Remove stopwords
+function removeStopwords(words) {
+  return words.filter((item, index, array) => {
+    return !stopwords.includes(item);
+  });
+}
 
 // Image uploading backend
 const s3 = new aws.S3({
