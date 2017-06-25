@@ -18,7 +18,8 @@
     "jsonwebtoken": "^7.3.0",
     "multer": "^1.2.0",
     "multer-s3": "^2.7.0",
-    "mysql": "^2.11.1"
+    "mysql": "^2.11.1",
+    "stopwords": "^0.0.5"
   },
   "devDependencies": {
     "eslint": "^3.18.0",
