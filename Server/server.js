@@ -19,6 +19,8 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
+var stopwords = require("stopwords").english;
+
 const connection = mysql.createConnection({
   user: 'root',
   password: process.env.JWT_KEY,
@@ -30,14 +32,96 @@ const connection = mysql.createConnection({
 
   // development database
   host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
-
-  // second development database
-  // host: 'aay3x5lrtsjmla.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
+
+//textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
+
+// Text matching algorithm
+function textMatch(newQuestion) {
+  // Step #1 - Pull the previous questions
+  const connectionString = `
+    SELECT question
+    FROM similarFeedback`
+  connection.query(connectionString, (err, questions) => {
+    if (err) console.log('Error in Text Match - #1');
+    else {
+      // Step #2 - Add the newQuestion at the beginning of the array
+      const allQuestions = [{ question: newQuestion}, ...questions];
+
+      // Step #2 - Identify the wordspace (previous + new)
+      const cleanQues = cleanQuestions(allQuestions);
+      const allWords = cleanQues.reduce((acc, question) => {
+        return [...acc, ...question];
+      }, []);
+      const wordsWithoutDuplicates = removeDuplicateWords(allWords);
+      const wordspace = removeStopwords(wordsWithoutDuplicates);
+      // Step #3 - Map all questions (prev + new) to the wordspace
+      const occurances = cleanQues.map(question => {
+        return wordspace.map(wordspaceWord => {
+          return question.filter(questionWord => { return wordspaceWord === questionWord }).length;
+        });
+      })
+      console.log(removeStopwords(removeDuplicateWords(cleanQues[0])));
+      console.log(occurances[0].reduce((acc, num) => { return acc + num }, 0));
+
+      // Step #4 - Calculate the cosine for each previous question (maybe a reduce)
+      const allTops = occurances.map(occuranceArray => {
+        return occuranceArray.reduce((top, value, index) => {
+          return top + occurances[0][index] * value;
+        }, 0);
+      });
+
+      const allBottomLeft = occurances.map(occuranceArray => {
+        return occuranceArray.reduce((bottomLeft, value) => {
+          return bottomLeft + value * value;
+        }, 0);
+      });
+
+      const bottomRight = occurances[0].reduce((bottomRight, value) => {
+        return bottomRight + value * value;
+      }, 0);
+
+      const cosines = occurances.map((occ, index) => {
+        return allTops[index] / (Math.sqrt(allBottomLeft[index]) * Math.sqrt(bottomRight));
+      });
+
+      console.log(cosines);
+
+      // Step #5 - Console log the most similar question
+      //console.log(cosines.indexOf(Math.max(...cosines)));
+    }
+  });
+}
+
+// Cleans up questions (remove punctuation, extra spaces, lowercase everything) and converts them to arrays of words
+function cleanQuestions(questions) {
+  return questions.reduce((acc, row) => {
+    return [...acc,
+      row.question
+        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
+        .replace(/[\s]{2,}/g, ' ')
+        .toLowerCase()
+        .split(' ')];
+  }, []);
+}
+
+// Remove duplicates
+function removeDuplicateWords(wordsWithDuplicates) {
+  return wordsWithDuplicates.filter((item, index, array) => {
+    return array.indexOf(item) === index;
+  });
+}
+
+// Remove stopwords
+function removeStopwords(words) {
+  return words.filter((item, index, array) => {
+    return !stopwords.includes(item);
+  });
+}
 
 // Image uploading backend
 const s3 = new aws.S3({
@@ -58,6 +142,15 @@ const uploadPic = multer({
       cb(null, Date.now().toString() + '.png');
     }
   })
+});
+
+app.post('/saveEmailForDemo', (req, res) => {
+  console.log('save email', req.body.email);
+  const email = req.body.email;
+  const connectionString = 'INSERT INTO demoRequest (email) VALUES (?) ON DUPLICATE KEY UPDATE email=?';
+  connection.query(connectionString, [email, email], function(err) {
+    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 9GT5');    
+  });
 });
 
 app.post('/uploadPhoto', uploadPic.single('photo'), (req, res, next) => {
@@ -180,7 +273,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
         FROM users a
         LEFT JOIN groups b
         ON a.groupId = b.id
-        WHERE a.email=?` + ((code === 'apple') ? '' : ' AND passcode=?');
+        WHERE a.email=?` + ((code === '9911') ? '' : ' AND passcode=?');
       connection.query(connectionString, [email, code], (err, rows) => {
         if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
         else if (rows.length && rows[0].groupId === 0) {
@@ -495,7 +588,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
     else {
       const { userId, groupName, groupId } = decoded;
       const connectionString = `
-      SELECT a.id, a.feedbackId, a.userId, a.text, a.approved, b.upvotes, b.downvotes
+      SELECT a.id, a.feedbackId, a.userId, a.text, a.approved, b.upvotes, b.downvotes, a.date
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
