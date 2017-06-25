@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { authorizeUser } from '../actions';
+ import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
 
 // Import tracking
@@ -48,6 +49,7 @@ class Authorize extends Component {
 
   authorizeUser() {
     this.props.authorizeUser(this.props.auth.email, this.state.code, this.props.group.groupAuthCode || this.state.groupCode);
+    loadOnLaunch();
   }
 
   renderSignupButton() {
