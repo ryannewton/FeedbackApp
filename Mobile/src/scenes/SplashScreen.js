@@ -1,7 +1,9 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, Image } from 'react-native';
+import { Text, Image, Linking, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
+import Expo from 'expo';
+import axios from 'axios';
 
 // Import image and styles
 import { Spinner } from '../components/common';
@@ -26,10 +28,54 @@ class SplashScreen extends Component {
     this.props.sendGoogleAnalytics('LoadingScreen')
   }
 
+  componentDidMount() {
+    if (Platform.OS === 'ios') {
+      axios.get('http://itunes.apple.com/lookup?bundleId=com.feedbackapp.feedbackapp', { method: 'GET' })
+        .then(response => this.forceUpdate(response));
+    } else {
+      axios.request('https://play.google.com/store/apps/details?id=com.feedbackapp', { method: 'GET' })
+        .then(response => this.forceUpdate(response));
+    }
+  }
   componentDidUpdate() {
     if (this.state.cleared === false) {
       this.route();
     }
+  }
+
+  forceUpdate(response) {
+    const currentVersion = String(Expo.Constants.manifest.version).split('.')[1];
+    // Check if number after the first decimal place is the same as our current version's
+    if (Platform.OS === 'ios' && String(response.data.results[0].version).split('.')[1] !== currentVersion) {
+      return this.updateAlert('https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556e');
+    } else if (Platform.OS === 'android') {
+      // Scrape android webpage for the current version
+      // 'itemprop="softwareVersion">' is a unique string in the html that always comes before the version
+      const versionStart = response.data.search('itemprop="softwareVersion">') + 28;
+      const versionEnd = versionStart + 5;
+      // The '5' and '28' are a product of the scraping process to isolate the version
+      const version = String(response.data.substring(versionStart, versionEnd)).split('.')[1];
+      if (currentVersion !== version) {
+        return this.updateAlert('https://play.google.com/store/apps/details?id=com.feedbackapp');
+      }
+    }
+    return null;
+  }
+
+  updateAlert(url) {
+    return (
+      Alert.alert(
+        'New version available!',
+        'We are constantly updating to help you voice your ideas.\n\n\nNote: Running older versions may affect your ability to use the application.',
+        // 'Not updating may affect your ability to run the application.',
+        [
+          { text: 'Cancel' },
+          { text: 'Update!', onPress: () => Linking.openURL(url) },
+
+        ],
+        { cancelable: true },
+      )
+    );
   }
 
   route() {
