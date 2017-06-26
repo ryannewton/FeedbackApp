@@ -209,6 +209,7 @@ class FeedbackSubmit extends Component {
           placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
           value={this.state.negativeFeedback}
         />
+        {this.maybeRenderImage()}
         {/* Submit button / loading spinner */}
         {this.renderButtons()}          
       </View>
