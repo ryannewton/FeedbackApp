@@ -1,26 +1,13 @@
 // Import Libraries
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Card } from './common';
 
+// Import Actions
+import { approveFeedback, clarifyFeedback, rejectFeedback } from '../actions';
+
 class ApproveFeedbackCard extends Component {
-  approveFeedback = () => {
-    console.log('Approving feedback');
-    console.log('feedback: ', this.props.feedback.text);
-  }
-
-  clarifyFeedback = () => {
-    console.log('Clarifying feedback');
-    console.log('feedback: ', this.props.feedback.text);
-
-  }
-
-  rejectFeedback = () => {
-    console.log('Rejecting feedback');
-    console.log('feedback: ', this.props.feedback.text);
-
-  }
-
   renderFeedbackText() {
     const timestamp = new Date(this.props.feedback.date);
     return (
@@ -36,25 +23,26 @@ class ApproveFeedbackCard extends Component {
   }
 
   renderButtons() {
+    const { feedback, approveFeedback, clarifyFeedback, rejectFeedback } = this.props;
     return (
       <div style={{ marginTop: 20, marginBottom: 5 }}>
         <button
           type='button'
-          onClick={this.approveSolution}
+          onClick={() => approveFeedback(feedback)}
           style={{ ...buttonStyles, backgroundColor: '#6ECFA2' }}
         >
           APPROVE
         </button>
         <button
           type='button'
-          onClick={this.clarifySolution}
+          onClick={() => clarifyFeedback(feedback)}
           style={{ ...buttonStyles, backgroundColor: '#F2C63B' }}
         >
           CLARIFY
         </button>
         <button
           type='button'
-          onClick={this.rejectSolution}
+          onClick={() => rejectFeedback(feedback)}
           style={{ ...buttonStyles, backgroundColor: '#E5575F' }}
         >
           REJECT
@@ -84,4 +72,8 @@ const buttonStyles = {
   fontSize: 10,
 }
 
-export default ApproveFeedbackCard;
+export default connect(null, {
+  approveFeedback,
+  clarifyFeedback,
+  rejectFeedback
+})(ApproveFeedbackCard);

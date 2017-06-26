@@ -11,6 +11,16 @@ export const SIGNOUT_USER = "signout_user";
 export const REQUEST_FEEDBACK = "requested_feedback";
 export const REQUEST_FEEDBACK_SUCCESS = "request_feedback_success";
 
+export const APPROVE_FEEDBACK = "approve_feedback";
+export const APPROVE_FEEDBACK_SUCCESS = "approve_feedback_success";
+export const APPROVE_FEEDBACK_FAIL = "approve_feedback_fail";
+export const CLARIFY_FEEDBACK = "clarify_feedback";
+export const CLARIFY_FEEDBACK_SUCCESS = "clarify_feedback_success";
+export const CLARIFY_FEEDBACK_FAIL = "clarify_feedback_fail";
+export const REJECT_FEEDBACK = "reject_feedback";
+export const REJECT_FEEDBACK_SUCCESS = "reject_feedback_success";
+export const REJECT_FEEDBACK_FAIL = "reject_feedback_fail";
+
 // Solutions Actions
 export const REQUEST_SOLUTIONS = "request_solutions";
 export const REQUEST_SOLUTIONS_SUCCESS = "request_solutions_success";

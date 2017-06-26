@@ -57,7 +57,7 @@ class ApproveFeedback extends Component {
    render() {
     return (
       <div>
-        <h5>Feedback Approval Needed:</h5>
+        <h5>Feedback Approval Needed: (currently shows approved feedback)</h5>
         {this.listFeedback()}
       </div>
     );
