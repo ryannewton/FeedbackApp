@@ -24,3 +24,12 @@ export const REJECT_FEEDBACK_FAIL = "reject_feedback_fail";
 // Solutions Actions
 export const REQUEST_SOLUTIONS = "request_solutions";
 export const REQUEST_SOLUTIONS_SUCCESS = "request_solutions_success";
+export const APPROVE_SOLUTION = "approve_solution";
+export const APPROVE_SOLUTION_SUCCESS = "approve_solution_success";
+export const APPROVE_SOLUTION_FAIL = "approve_solution_fail";
+export const CLARIFY_SOLUTION = "clarify_solution";
+export const CLARIFY_SOLUTION_SUCCESS = "clarify_solution_success";
+export const CLARIFY_SOLUTION_FAIL = "clarify_solution_fail";
+export const REJECT_SOLUTION = "reject_solution";
+export const REJECT_SOLUTION_SUCCESS = "reject_solution_success";
+export const REJECT_SOLUTION_FAIL = "reject_solution_fail";

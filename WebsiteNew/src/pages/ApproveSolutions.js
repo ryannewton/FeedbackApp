@@ -62,7 +62,7 @@ class ApproveSolutions extends Component {
    render() {
     return (
       <div>
-        <h5>Solution Approval Needed:</h5>
+        <h5>Solution Approval Needed: (currently shows approved solutions)</h5>
         {this.listSolutions()}
       </div>
     );
