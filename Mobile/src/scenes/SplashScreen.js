@@ -67,7 +67,6 @@ class SplashScreen extends Component {
       Alert.alert(
         'New version available!',
         'We are constantly updating to help you voice your ideas.\n\n\nNote: Running older versions may affect your ability to use the application.',
-        // 'Not updating may affect your ability to run the application.',
         [
           { text: 'Cancel' },
           { text: 'Update!', onPress: () => Linking.openURL(url) },
