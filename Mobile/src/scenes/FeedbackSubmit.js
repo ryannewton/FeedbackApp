@@ -199,21 +199,18 @@ class FeedbackSubmit extends Component {
           value={this.state.positiveFeedback}
         />
         {/* Submit button / loading spinner */}
-        {this.renderButtons()}
-        <View style={{paddingTop:50}}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-            onContentSizeChange={(event) => {
-              this.setState({ height: event.nativeEvent.contentSize.height });
-            }}
-            style={[styles.feedbackInput, styles.negativeFeedbackInput]}
-            placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-            value={this.state.negativeFeedback}
-          />
-          {/* Submit button / loading spinner */}
-          {this.renderButtons()}
-          </View>
+        <TextInput
+          multiline={Boolean(true)}
+          onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+          onContentSizeChange={(event) => {
+            this.setState({ height: event.nativeEvent.contentSize.height });
+          }}
+          style={[styles.feedbackInput, styles.negativeFeedbackInput]}
+          placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+          value={this.state.negativeFeedback}
+        />
+        {/* Submit button / loading spinner */}
+        {this.renderButtons()}          
       </View>
     );
 
