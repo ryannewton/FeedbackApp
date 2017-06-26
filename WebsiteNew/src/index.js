@@ -11,7 +11,6 @@ import Landing from './pages/Landing';
 import SendCode from './pages/SendCode';
 import AuthorizeUser from './pages/AuthorizeUser';
 import Signout from './pages/Signout';
-import Feature from './pages/Feature';
 import ApproveFeedback from './pages/ApproveFeedback';
 import ApproveSolutions from './pages/ApproveSolutions';
 import ManageFeedback from './pages/ManageFeedback';

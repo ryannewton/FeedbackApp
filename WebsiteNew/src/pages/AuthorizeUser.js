@@ -9,11 +9,13 @@ import LogoHeader from '../components/LogoHeader';
 class AuthorizeUser extends Component {
   constructor(props) {
     super(props);
-    this.state = { code: '' };
+    this.state = { authCode: '', adminCode: '' };
   }
 
   handleSubmit = () => {
-    this.props.authorizeUser(this.props.email, this.state.code);
+    const { email } = this.props;
+    const { authCode, adminCode } = this.state;
+    this.props.authorizeUser(email, authCode, adminCode);
   }
 
   render() {
@@ -22,23 +24,47 @@ class AuthorizeUser extends Component {
         <SigninDescription />
         <LogoHeader />
 
-        <div>
-          <label>Authorization Code:</label>
-          <input
-            type='text'
-            className='form-control'
-            placeholder='Authorization code'
-            value={this.state.code}
-            style={{ width: 300 }}
-            onChange={event => this.setState({ code: event.target.value }) }
-          />
-          <button
-            type='button'
-            className='btn btn-primary'
-            onClick={this.handleSubmit}
-          >
-            Sign in
-          </button>
+        {/* Email input */}
+        <div className="panel panel-default">
+          <div className="panel-heading">
+            <h3 className="panel-title">Verify Your University Affiliation</h3>
+          </div>
+          <div className="panel-body">
+            <div className="input-group" style={{ marginTop: 10 }}>
+              <span className="input-group-addon">
+                Authentication Code (check your email)
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Authentication code"
+                value={this.state.authCode}
+                onChange={event => this.setState({ authCode: event.target.value })}
+                style={{ width: 300 }}
+              />
+            </div>
+            <div className="input-group">
+              <span className="input-group-addon">
+                Admin Code
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Admin code"
+                value={this.state.adminCode}
+                onChange={event => this.setState({ adminCode: event.target.value })}
+                style={{ width: 300 }}
+              />
+            </div>
+            <button
+              type="button"
+              onClick={this.handleSubmit}
+              className="btn btn-primary"
+              style={{ marginTop: 5 }}
+            >
+              Login
+            </button>
+          </div>
         </div>
       </div>
     );

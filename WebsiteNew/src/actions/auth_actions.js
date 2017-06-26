@@ -39,23 +39,22 @@ export const sendAuthorizationEmail = (email) => (
     .then(() => {
       // Change the in-authorization flag in state so we update the component
       dispatch({ type: SEND_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
-      console.log('sendAuthorizationEmail Success');
       browserHistory.push('/authorize');
     })
     .catch((error) => {
-      dispatch({ type: SEND_AUTHORIZATION_EMAIL_FAIL, payload: error.response.data });
+      dispatch({ type: SEND_AUTHORIZATION_EMAIL_FAIL });
       console.log('sendAuthorizationEmail() fail');
       console.log('error: ', error);
     });
   }
 );
 
-export const authorizeUser = (email, code) => (
+export const authorizeUser = (email, authCode, adminCode) => (
   (dispatch) => {
     dispatch({ type: AUTHORIZE_USER });
 
     // Submits the code the user entered from their email
-    return http.post('/authorizeUser/', { email, code })
+    return http.post('/authorizeAdminUser/', { email, code: authCode, groupAdminCode: adminCode })
     // If successful store the token, repull state from the database, and set state to logged-in
     .then((response) => {
       const token = String(response.data);
@@ -64,6 +63,7 @@ export const authorizeUser = (email, code) => (
     // If not, show an error message
     .catch((error) => {
       console.log('Bag Login Info');
+      console.log('error: ', error.response.data);
       dispatch(authorizeUserFail(error.response.data));
     });
   }
