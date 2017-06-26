@@ -28,7 +28,7 @@ const scenes = StackNavigator(
     Details: {
       screen: FeedbackDetails,
       navigationOptions: {
-        title: 'Feedback Details',
+        title: 'Proposed Solutions',
         headerStyle: {
           height: styles.header.height,
           marginTop: styles.header.marginTop,
