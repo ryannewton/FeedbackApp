@@ -85,7 +85,7 @@ class FeedbackSubmit extends Component {
   }
 
   addImage = async () => {
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({ allowsEditing: true });
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
 
     // If user selects an image
     if (!pickerResult.cancelled) {
@@ -104,12 +104,10 @@ class FeedbackSubmit extends Component {
     return (
       <View style={styles.imageContainer}>
         <View style={styles.imageFrame}>
-          <View style={{ borderTopRightRadius: 3, borderTopLeftRadius: 3, overflow: 'hidden' }}>
-            <Image
-              source={{ uri: imageURL }}
-              style={{ width: 200, height: 200 }}
-            />
-          </View>
+          <Image
+            source={{ uri: imageURL }}
+            style={{width: 200, height: 200, resizeMode: 'contain'}}
+          />
         </View>
       </View>
     );
@@ -189,43 +187,42 @@ class FeedbackSubmit extends Component {
 
     const positiveFeedbackBox = (
       <View>
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-            onContentSizeChange={(event) => {
-              this.setState({ height: event.nativeEvent.contentSize.height });
-            }}
-            style={[styles.feedbackInput, styles.positiveFeedbackInput]}
-            placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
-            placeholderTextColor="#d0d0d0"
-            value={this.state.positiveFeedback}
-          />
-          {/* Submit button / loading spinner */}
-          {this.renderButtons()}
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 1 }}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
+              onContentSizeChange={(event) => {
+                this.setState({ height: event.nativeEvent.contentSize.height });
+              }}
+              style={[styles.feedbackInput, styles.positiveFeedbackInput]}
+              placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.positiveFeedback}
+            />
+            {/* Submit button / loading spinner */}
+            {this.renderButtons()}
+          </View>
+          <View style={{ flex: 1 }}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+              onContentSizeChange={(event) => {
+                this.setState({ height: event.nativeEvent.contentSize.height });
+              }}
+              style={[styles.feedbackInput, styles.negativeFeedbackInput]}
+              placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.negativeFeedback}
+            />
+            {/* Submit button / loading spinner */}
+            {this.renderButtons()}       
+          </View>
         </View>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-            onContentSizeChange={(event) => {
-              this.setState({ height: event.nativeEvent.contentSize.height });
-            }}
-            style={[styles.feedbackInput, styles.negativeFeedbackInput]}
-            placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-            placeholderTextColor="#d0d0d0"
-            value={this.state.negativeFeedback}
-          />
-          {/* Submit button / loading spinner */}
-          {this.renderButtons()}       
+        <View>
+          {this.maybeRenderImage()}
         </View>
       </View>
-      <View>
-        {this.maybeRenderImage()}
-      </View>
-      </View>
-
     );
 
     const WriteFeedbackScene = (

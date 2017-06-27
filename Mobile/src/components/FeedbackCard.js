@@ -9,7 +9,13 @@ import ProgressBar from 'react-native-progress/Bar';
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
 import { Card } from './common';
-import { addFeedbackUpvote, removeFeedbackUpvote, addFeedbackDownvote, removeFeedbackDownvote } from '../actions';
+import {
+  addFeedbackUpvote,
+  removeFeedbackUpvote,
+  addFeedbackDownvote,
+  removeFeedbackDownvote,
+  addToDoNotDisplayList,
+} from '../actions';
 
 // Import tracking
 // import { tracker } from '../constants';
@@ -38,6 +44,7 @@ class Feedback extends Component {
       // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback UpVote Via Feedback Button', { label: this.props.group.domain });
       this.props.removeFeedbackUpvote(feedback);
     }
+    this.props.addToDoNotDisplayList(feedback.id)
   }
   downvote() {
     const { feedback, user } = this.props;
@@ -49,6 +56,7 @@ class Feedback extends Component {
       // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback DownVote Via Feedback Button', { label: this.props.group.domain });
       this.props.removeFeedbackDownvote(feedback);
     }
+    this.props.addToDoNotDisplayList(feedback.id)
   }
   // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
   renderVoteCount() {
@@ -163,6 +171,7 @@ class Feedback extends Component {
           style={{
             width: 250,
             height: 250,
+            resizeMode: 'contain',
           }}
         />
       </View>
@@ -283,4 +292,5 @@ export default connect(mapStateToProps, {
   removeFeedbackUpvote,
   addFeedbackDownvote,
   removeFeedbackDownvote,
+  addToDoNotDisplayList,
 })(Feedback);

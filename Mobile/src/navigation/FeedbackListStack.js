@@ -27,7 +27,7 @@ const scenes = StackNavigator({
   Details: {
     screen: FeedbackDetails,
     navigationOptions: {
-      title: 'Feedback Details',
+      title: 'Proposed Solutions',
       headerTitleStyle: {
         color: '#fff'
       },
