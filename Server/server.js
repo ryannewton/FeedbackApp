@@ -436,6 +436,21 @@ app.post('/submitSolutionVote', upload.array(), (req, res) => {
   });
 });
 
+// SUBMIT OFFICIAL REPLY
+app.post('/submitOfficialReply', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { feedback, officialReply } = req.body;
+      const connectionString = 'UPDATE feedback SET officialReply = ? WHERE feedbackId = ?';
+      connection.query(connectionString, [officialReply, feedback.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
 // DELETE VOTE
 app.post('/removeFeedbackVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
@@ -630,10 +645,10 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
   });
 });
 
-//app.listen(8081, () => {
- //console.log('Example app listening on port 8081!');
-// });
-
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(8081, () => {
+ console.log('Example app listening on port 8081!');
 });
+
+// app.listen(3000, () => {
+//   console.log('Example app listening on port 3000!');
+// });
