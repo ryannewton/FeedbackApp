@@ -110,12 +110,12 @@ class Feedback extends Component {
   renderStatus() {
     const { status } = this.props.feedback;
     if (status && status === 'complete') {
-      return <Icon name="done" size={35} color={'#48D2A0'} />;
+      return <Icon name="done" size={30} color={'#48D2A0'} />;
     }
     if (status && status === 'inprocess') {
-      return <Icon name="sync" size={35} color={'#F8C61C'} />;
+      return <Icon name="sync" size={30} color={'#F8C61C'} />;
     }
-    return <Icon name="fiber-new" size={35} color={'#00A2FF'} />;
+    return <Icon name="fiber-new" size={30} color={'#00A2FF'} />;
   }
 
   renderStatusBox() {
@@ -176,6 +176,19 @@ class Feedback extends Component {
         />
       </View>
     );
+  }
+
+  renderSolutionsTag() {
+    const { solutions, feedback } = this.props;
+    const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
+    if (feedbackSolutions.length) {
+      return (
+        <View style={{ paddingTop: 15 }}>
+          <Icon name="question-answer" color="grey" />
+        </View>
+      );
+    }
+    return null;
   }
 
   renderImageIcon() {
@@ -252,6 +265,7 @@ class Feedback extends Component {
               {/* Render official response tag */}
               {this.renderOfficialResponseTag()}
 
+              {this.renderSolutionsTag()}
               {/* Upvote Button and Downvote */}
               <View style={thumbStyle}>
                 <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
@@ -280,11 +294,12 @@ Feedback.propTypes = {
   group: React.PropTypes.object,
   showResponseTag: React.PropTypes.bool,
   showImage: React.PropTypes.bool,
+  solutions: React.PropTypes.object,
 };
 
 const mapStateToProps = (state) => {
-  const { user, group } = state;
-  return { user, group };
+  const { user, group, solutions } = state;
+  return { user, group, solutions };
 };
 
 export default connect(mapStateToProps, {
