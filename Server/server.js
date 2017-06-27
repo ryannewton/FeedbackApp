@@ -451,6 +451,36 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
   });
 });
 
+// APPROVE FEEDBACK
+app.post('/approveFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { feedback } = req.body;
+      const connectionString = 'UPDATE feedback SET approved=1 WHERE feedbackId = ?';
+      connection.query(connectionString, [feedback.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
+// APPROVE SOLUTION
+app.post('/approveSolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { solution } = req.body;
+      const connectionString = 'UPDATE solutions SET approved=1 WHERE solutionId = ?';
+      connection.query(connectionString, [solution.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8261');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
 // DELETE VOTE
 app.post('/removeFeedbackVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
