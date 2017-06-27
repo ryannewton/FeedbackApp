@@ -198,9 +198,9 @@ class Feedback extends Component {
 
     let updatedRow = row;
     if (this.props.feedback.type === 'positive feedback') {
-      updatedRow = [row, { borderColor: '#48D2A0', borderWidth: 2 }];
+      updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
     } else if (this.props.feedback.type === 'negative feedback') {
-      updatedRow = [row, { borderColor: '#F54B5E', borderWidth: 2 }];
+      updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
     }
 
     return (
