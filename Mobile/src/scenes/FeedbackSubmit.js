@@ -174,6 +174,7 @@ class FeedbackSubmit extends Component {
           }}
           style={styles.feedbackInput}
           placeholder={placeholderText}
+          placeholderTextColor="#d0d0d0"f
           value={this.state.feedback}
         />
         {this.maybeRenderImage()}
@@ -186,30 +187,41 @@ class FeedbackSubmit extends Component {
 
     const positiveFeedbackBox = (
       <View>
-        <TextInput
-          multiline={Boolean(true)}
-          onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-          onContentSizeChange={(event) => {
-            this.setState({ height: event.nativeEvent.contentSize.height });
-          }}
-          style={[styles.feedbackInput, styles.positiveFeedbackInput]}
-          placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
-          value={this.state.positiveFeedback}
-        />
-        {/* Submit button / loading spinner */}
-        <TextInput
-          multiline={Boolean(true)}
-          onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-          onContentSizeChange={(event) => {
-            this.setState({ height: event.nativeEvent.contentSize.height });
-          }}
-          style={[styles.feedbackInput, styles.negativeFeedbackInput]}
-          placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-          value={this.state.negativeFeedback}
-        />
-        {this.maybeRenderImage()}
-        {/* Submit button / loading spinner */}
-        {this.renderButtons()}
+        <View style={{ flex: 1, flexDirection: 'row' }}>
+          <View style={{ flex: 1 }}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
+              onContentSizeChange={(event) => {
+                this.setState({ height: event.nativeEvent.contentSize.height });
+              }}
+              style={[styles.feedbackInput, styles.positiveFeedbackInput]}
+              placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.positiveFeedback}
+            />
+            {/* Submit button / loading spinner */}
+            {this.renderButtons()}
+          </View>
+          <View style={{ flex: 1 }}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+              onContentSizeChange={(event) => {
+                this.setState({ height: event.nativeEvent.contentSize.height });
+              }}
+              style={[styles.feedbackInput, styles.negativeFeedbackInput]}
+              placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.negativeFeedback}
+            />
+            {/* Submit button / loading spinner */}
+            {this.renderButtons()}       
+          </View>
+        </View>
+        <View>
+          {this.maybeRenderImage()}
+        </View>
       </View>
     );
 
