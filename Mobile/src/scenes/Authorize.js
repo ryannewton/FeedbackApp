@@ -41,7 +41,7 @@ class Authorize extends Component {
       nextProps.auth.loggedIn === true &&
       nextProps.feedback.lastPulled.getTime() !== 0
     ) {
-      nextProps.navigation.navigate('FeedbackSwipe');
+      nextProps.navigation.navigate('FeedbackList');
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
