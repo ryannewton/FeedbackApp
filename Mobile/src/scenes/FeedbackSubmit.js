@@ -25,10 +25,8 @@ import { Button, Spinner } from '../components/common';
 
 // Import about info image
 import styles from '../styles/scenes/FeedbackSubmitStyles';
-import fullScreen from '../../images/backgrounds/FeedbackInfo.jpg';
 
 // Import tracking
-// import { tracker } from '../constants';
 import { sendGoogleAnalytics } from '../actions';
 
 class FeedbackSubmit extends Component {
@@ -163,14 +161,6 @@ class FeedbackSubmit extends Component {
   render() {
     const placeholderText = 'Enter your feedback here!';
 
-    const instructionsScreen = (
-      <View style={styles.instructionContainer}>
-        <TouchableOpacity onPress={this.closeInstructions}>
-          <Image style={styles.image} source={fullScreen} resizeMode="stretch" />
-        </TouchableOpacity>
-      </View>
-    );
-
     const singleFeedbackBox = (
       <View>
         <TextInput
@@ -251,7 +241,6 @@ class FeedbackSubmit extends Component {
       </View>
     );
 
-    // const screenToShow = (!this.props.user.instructionsViewed.includes('Write Feedback Scene')) ? instructionsScreen : WriteFeedbackScene;
     return WriteFeedbackScene;
   }
 }
