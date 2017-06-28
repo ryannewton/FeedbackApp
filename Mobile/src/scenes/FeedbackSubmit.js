@@ -106,11 +106,23 @@ class FeedbackSubmit extends Component {
       return <View />;
     }
 
-    return (      
-      <Image
-        source={{ uri: imageURL }}
-        style={{width: width*0.45, height: width*0.45, resizeMode: 'contain'}}
-      />
+    return (    
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch'}}>  
+        <Image
+          source={{ uri: imageURL }}
+          style={{
+            flex: 1,
+            maxWidth: 300,
+            maxHeight: 300,
+            resizeMode: 'cover',
+            shadowColor: 'rgba(0,0,0,1)',
+            shadowOpacity: 0.5,
+            shadowOffset: { width: 4, height: 4 },
+            shadowRadius: 5,
+            marginTop: 20,
+          }}
+        />
+      </View>
     );
   }
 
@@ -177,25 +189,18 @@ class FeedbackSubmit extends Component {
 
     const positiveFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
           <TextInput
             multiline={Boolean(true)}
             onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-            onContentSizeChange={(event) => {
-              this.setState({ height: event.nativeEvent.contentSize.height });
-            }}
             style={[styles.feedbackInput, styles.positiveFeedbackInput]}
             placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
             placeholderTextColor="#d0d0d0"
             value={this.state.positiveFeedback}
           />
           {/* Submit button / loading spinner */}
-          <View>
-            {this.renderButtons('positive')}
-          </View>
-          <View>
-            {this.maybeRenderImage('positive')}
-          </View>
+          {this.renderButtons('positive')}
+          {this.maybeRenderImage('positive')}
         </View>
         <View style={{ flex: 1 }}>
           <TextInput
@@ -213,7 +218,7 @@ class FeedbackSubmit extends Component {
           <View>
             {this.renderButtons('negative')}
           </View>
-          <View style={{alignItems: 'center'}}>
+          <View>
             {this.maybeRenderImage('negative')}
           </View>
         </View>
