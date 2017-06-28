@@ -41,14 +41,10 @@ export const pullFeedback = () => (
 
 export const approveFeedback = (feedback) => (
   (dispatch) => {
-    console.log('approveFeedback() needs to be tested');
     dispatch({ type: APPROVE_FEEDBACK });
 
     const token = localStorage.getItem('token');
-    http.post('/updateFeedback', {
-      authorization: token,
-      feedback: { ...feedback, approved: 1 },
-    })
+    http.post('/approveFeedback', { authorization: token, feedback })
     .then((response) => {
       dispatch({ type: APPROVE_FEEDBACK_SUCCESS, payload: feedback });
     })

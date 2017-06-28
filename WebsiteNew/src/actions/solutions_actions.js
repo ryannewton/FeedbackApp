@@ -35,19 +35,15 @@ export const pullSolutions = () => (
 
 export const approveSolution = (solution) => (
   (dispatch) => {
-    console.log('approveSolution() needs to be tested');
     dispatch({ type: APPROVE_SOLUTION, payload: solution });
 
     const token = localStorage.getItem('token');
-    http.post('/updateSolution', {
-      authorization: token,
-      solution: { ...solution, approved: 1 },
-    })
+    http.post('/approveSolution', { authorization: token, solution })
     .then((response) => {
       dispatch({ type: APPROVE_SOLUTION_SUCCESS, payload: solution });
     })
     .catch((error) => {
-      console.log('approveSOlution() Fail');
+      console.log('approveSolution() Fail');
       console.log('Error: ', error);
       dispatch({ type: APPROVE_SOLUTION_FAIL, payload: solution });
     })
