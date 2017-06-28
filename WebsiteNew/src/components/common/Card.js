@@ -1,7 +1,7 @@
 import React from 'react';
 
 const Card = props => (
-  <div style={styles.containerStyle}>
+  <div style={{ ...styles.containerStyle, ...props.style}}>
     {props.children}
   </div>
 );
