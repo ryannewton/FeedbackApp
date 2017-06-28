@@ -51,3 +51,4 @@ fastlane/screenshots
 .DS_Store
 
 .expo/
+src/constants.js
