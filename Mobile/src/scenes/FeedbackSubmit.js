@@ -35,7 +35,6 @@ class FeedbackSubmit extends Component {
     super(props, context);
 
     this.state = {
-      height: 0,
       errorMessage: '',
       feedback: '',
       positiveFeedback: '',
@@ -104,18 +103,14 @@ class FeedbackSubmit extends Component {
 
     // If there is no image, don't render anything
     if (!imageURL) {
-      return null;
+      return <View />;
     }
 
-    return (
-      <View style={styles.imageContainer, { flex:1, justifyContent: 'flex-start'}}>
-        <View style={styles.imageFrame}>
-          <Image
-            source={{ uri: imageURL }}
-            style={{width: width*0.45, height: width*0.45, resizeMode: 'contain'}}
-          />
-        </View>
-      </View>
+    return (      
+      <Image
+        source={{ uri: imageURL }}
+        style={{width: width*0.45, height: width*0.45, resizeMode: 'contain'}}
+      />
     );
   }
 
@@ -142,9 +137,9 @@ class FeedbackSubmit extends Component {
     }
 
     return (
-      <View style={{ flex: 1, flexDirection: 'row', paddingTop:10 }}>
-        <View style={{ flex: 5.5 }}>
-          <Button onPress={this.submitFeedback} style={{ marginBottom: 10, flex: 3 }}>
+      <View style={{ flexDirection: 'row', paddingTop:10 }}>
+        <View style={{ flex: 3.5 }}>
+          <Button onPress={this.submitFeedback}>
             Submit Feedback
           </Button>
         </View>
@@ -164,24 +159,19 @@ class FeedbackSubmit extends Component {
     const placeholderText = 'Enter your feedback here!';
 
     const singleFeedbackBox = (
-      <View>
-        <TextInput
-          multiline={Boolean(true)}
-          onChangeText={feedback => this.setState({ feedback })}
-          onContentSizeChange={(event) => {
-            this.setState({ height: event.nativeEvent.contentSize.height });
-          }}
-          style={styles.feedbackInput}
-          placeholder={placeholderText}
-          placeholderTextColor="#d0d0d0"f
-          value={this.state.feedback}
-        />
-        {/* Submit button / loading spinner */}
-          {this.renderButtons()}
-        {/* image */}
-        {/*<View style={{alignItems:'center'}}>*/}
-            {this.maybeRenderImage()}
-        {/*</View>*/}
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row'}}>
+          <TextInput
+            multiline={Boolean(true)}
+            onChangeText={feedback => this.setState({ feedback })}
+            style={[styles.feedbackInput, { flex: 1 }]}
+            placeholder={placeholderText}
+            placeholderTextColor="#d0d0d0"f
+            value={this.state.feedback}
+          />
+        </View>
+        {this.renderButtons()}
+        {this.maybeRenderImage()}
       </View>
     );
 
@@ -231,17 +221,15 @@ class FeedbackSubmit extends Component {
     );
 
     const WriteFeedbackScene = (
-      <View style={[styles.container, styles.feedbackSceneContainer]}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-            <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
-
+            <View style={{ flex: 1 }}>
               <Text style={styles.errorTextStyle}>
                 {this.state.errorMessage}
               </Text>
-
               {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
-            </KeyboardAvoidingView>
+            </View>
           </TouchableWithoutFeedback>
         </MenuContext>
         {this.maybeRenderUploadingOverlay()}
