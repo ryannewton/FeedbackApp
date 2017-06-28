@@ -436,6 +436,51 @@ app.post('/submitSolutionVote', upload.array(), (req, res) => {
   });
 });
 
+// SUBMIT OFFICIAL REPLY
+app.post('/submitOfficialReply', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { feedback, officialReply } = req.body;
+      const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
+      connection.query(connectionString, [officialReply, feedback.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
+// APPROVE FEEDBACK
+app.post('/approveFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { feedback } = req.body;
+      const connectionString = 'UPDATE feedback SET approved=1 WHERE feedbackId = ?';
+      connection.query(connectionString, [feedback.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
+// APPROVE SOLUTION
+app.post('/approveSolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { solution } = req.body;
+      const connectionString = 'UPDATE solutions SET approved=1 WHERE solutionId = ?';
+      connection.query(connectionString, [solution.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8261');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
 // DELETE VOTE
 app.post('/removeFeedbackVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
@@ -630,10 +675,10 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
   });
 });
 
-//app.listen(8081, () => {
- //console.log('Example app listening on port 8081!');
-// });
-
-app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+app.listen(8081, () => {
+ console.log('Example app listening on port 8081!');
 });
+
+// app.listen(3000, () => {
+//   console.log('Example app listening on port 3000!');
+// });

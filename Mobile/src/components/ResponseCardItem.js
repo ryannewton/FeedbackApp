@@ -1,7 +1,9 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 
+// Import components
 import { CardSection } from '../components/common';
+import styles from '../styles/components/ResponseCardItemStyles';
 
 const ResponseCardItem = ({ text, author }) => {
   // Requires a text and author prop given to it!
@@ -18,22 +20,6 @@ const ResponseCardItem = ({ text, author }) => {
       </View>
     </CardSection>
   );
-};
-
-const styles = {
-  responseStyle: {
-    fontSize: 18,
-    color: '#444444',
-    fontWeight: 'bold',
-  },
-  authorStyle: {
-    justifyContent: 'flex-end',
-    alignItems: 'flex-end',
-  },
-  containerStyle: {
-    justifyContent: 'flex-start',
-    flex: 1,
-  },
 };
 
 export default ResponseCardItem;
