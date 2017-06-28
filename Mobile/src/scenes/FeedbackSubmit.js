@@ -15,6 +15,7 @@ import {
   KeyboardAvoidingView,
   StyleSheet,
   ActivityIndicator,
+  Dimensions,
 } from 'react-native';
 
 // Import actions
@@ -92,6 +93,7 @@ class FeedbackSubmit extends Component {
   }
 
   maybeRenderImage = (type) => {
+    const { width, height } = Dimensions.get('window')
     let imageURL;
     if (!type)
       imageURL = this.props.feedback.imageURL;
@@ -106,11 +108,11 @@ class FeedbackSubmit extends Component {
     }
 
     return (
-      <View style={styles.imageContainer}>
+      <View style={styles.imageContainer, { flex:1, justifyContent: 'flex-start'}}>
         <View style={styles.imageFrame}>
           <Image
             source={{ uri: imageURL }}
-            style={{width: 200, height: 200, resizeMode: 'contain'}}
+            style={{width: width*0.45, height: width*0.45, resizeMode: 'contain'}}
           />
         </View>
       </View>
@@ -140,7 +142,7 @@ class FeedbackSubmit extends Component {
     }
 
     return (
-      <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={{ flex: 1, flexDirection: 'row', paddingTop:10 }}>
         <View style={{ flex: 5.5 }}>
           <Button onPress={this.submitFeedback} style={{ marginBottom: 10, flex: 3 }}>
             Submit Feedback
@@ -174,11 +176,12 @@ class FeedbackSubmit extends Component {
           placeholderTextColor="#d0d0d0"f
           value={this.state.feedback}
         />
-        {this.maybeRenderImage()}
         {/* Submit button / loading spinner */}
-          <View style={{paddingTop:10}}>
           {this.renderButtons()}
-          </View>
+        {/* image */}
+        {/*<View style={{alignItems:'center'}}>*/}
+            {this.maybeRenderImage()}
+        {/*</View>*/}
       </View>
     );
 
@@ -197,7 +200,9 @@ class FeedbackSubmit extends Component {
             value={this.state.positiveFeedback}
           />
           {/* Submit button / loading spinner */}
-          {this.renderButtons('positive')}
+          <View>
+            {this.renderButtons('positive')}
+          </View>
           <View>
             {this.maybeRenderImage('positive')}
           </View>
@@ -215,8 +220,10 @@ class FeedbackSubmit extends Component {
             value={this.state.negativeFeedback}
           />
           {/* Submit button / loading spinner */}
-          {this.renderButtons('negative')}
           <View>
+            {this.renderButtons('negative')}
+          </View>
+          <View style={{alignItems: 'center'}}>
             {this.maybeRenderImage('negative')}
           </View>
         </View>
