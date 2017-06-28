@@ -5,6 +5,7 @@ import RequireAuth from '../components/RequireAuth';
 
 // Import Components
 import ApproveFeedbackCard from '../components/ApproveFeedbackCard';
+import ErrorMessage from '../components/ErrorMessage';
 
 class ApproveFeedback extends Component {
   componentDidMount() {
@@ -15,6 +16,10 @@ class ApproveFeedback extends Component {
   }
 
   listFeedback = () => {
+    if (this.props.feedback.error) {
+      return <ErrorMessage />
+    }
+
     if (this.props.feedback.loading) {
       return this.renderLoadingScreen();
     }
