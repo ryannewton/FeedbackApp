@@ -2,7 +2,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
+
+// Import Components
 import { Card } from './common';
+import OfficialReplyCard from './OfficialReplyCard';
 
 // Import Actions
 import { submitOfficialReply } from '../actions';
@@ -39,7 +42,7 @@ class ManageFeedbackCard extends Component {
     }
 
     return (
-      <div>{officialReply}</div>
+      <OfficialReplyCard text={this.props.feedback.officialReply} />
     );
   }
 
