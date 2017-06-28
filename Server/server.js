@@ -457,7 +457,7 @@ app.post('/approveFeedback', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback } = req.body;
-      const connectionString = 'UPDATE feedback SET approved=1 WHERE feedbackId = ?';
+      const connectionString = 'UPDATE feedback SET approved=1 WHERE id = ?';
       connection.query(connectionString, [feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
         else res.sendStatus(200);
@@ -472,7 +472,7 @@ app.post('/approveSolution', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { solution } = req.body;
-      const connectionString = 'UPDATE solutions SET approved=1 WHERE solutionId = ?';
+      const connectionString = 'UPDATE solutions SET approved=1 WHERE id = ?';
       connection.query(connectionString, [solution.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8261');
         else res.sendStatus(200);
