@@ -36,7 +36,7 @@ class SplashScreen extends Component {
     // There are two options where we want to naviagte
     // 1) loggedIn is false meaning that we failed to login
     if (this.props.auth.loggedIn === false) {
-      this.props.navigation.navigate('SubmitEmail');
+      this.props.navigation.navigate('Welcome');
       this.setState({ cleared: true });
     // 2) loggedIn is true (we logged in) and we have stored all the data we need in state
     } else if (
