@@ -1,5 +1,5 @@
 // Import Libraries
-import { Platform, StyleSheet } from 'react-native';
+import { Platform, StyleSheet, Dimensions } from 'react-native';
 
 // Import Styles
 import { button } from '../common/button_styles';
@@ -12,16 +12,18 @@ const {
   errorTextStyle,
 } = standardStyles;
 
+const { width, height } = Dimensions.get('window')
 const styles = {
   imageContainer: {
     alignItems: 'center',
+    justifyContent: 'center',
   },
   imageFrame: {
     backgroundColor: 'white',
     marginTop: 0,
     marginBottom: 5,
-    width: 210,
-    height: 210,
+    width: width*0.48,
+    height: width*0.48,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 3,
@@ -51,10 +53,18 @@ const styles = {
   positiveFeedbackInput: {
     borderColor: '#98FB98',
     borderWidth: 2,
+    ...Platform.select({
+      ios: { height: 300 },
+      android: { height: 240 },
+    }),
   },
   negativeFeedbackInput: {
     borderColor: '#F08080',
     borderWidth: 2,
+    ...Platform.select({
+      ios: { height: 300 },
+      android: { height: 240 },
+    }),
   },
   feedbackSceneContainer: {
     paddingTop: 10,

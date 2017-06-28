@@ -23,11 +23,11 @@ class ResponseCard extends Component {
         <Card>
           <CardSection>
             <Text style={subheaderText}>
-            Offical Response
-            <View style={{ width: 25, height: 20 }}>
+              Offical Response
+            </Text>
+            <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
               <Icon name="verified-user" color="blue" />
             </View>
-            </Text>
           </CardSection>
           <ResponseCardItem text={officialReply} author={''} />
         </Card>
