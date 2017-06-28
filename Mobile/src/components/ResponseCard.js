@@ -4,21 +4,21 @@ import { Icon } from 'react-native-elements';
 
 import { CardSection, Card } from '../components/common';
 import ResponseCardItem from './ResponseCardItem';
-import styles from '../styles/scenes/FeedbackDetailsStyles';
+import styles from '../styles/components/ResponseCardStyles';
 
 class ResponseCard extends Component {
   render() {
     // Has the server been updated to include a response object?
     // (this is technically checked twice but done for good measure)
-    if (!this.props.navigation.state.params.feedback.response) {
+    if (!this.props.navigation.state.params.feedback.officialReply) {
       return null;
     }
 
-    const { response } = this.props.navigation.state.params.feedback;
+    const { officialReply } = this.props.navigation.state.params.feedback;
     const { subheaderText } = styles;
 
     // Is there a response?
-    if (response.text !== '') {
+    if (officialReply.text !== '') {
       return (
         <Card>
           <CardSection>
@@ -29,7 +29,7 @@ class ResponseCard extends Component {
             </View>
             </Text>
           </CardSection>
-          <ResponseCardItem text={response.text} author={response.author} />
+          <ResponseCardItem text={officialReply} author={''} />
         </Card>
       );
     }
