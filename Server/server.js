@@ -442,7 +442,7 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback, officialReply } = req.body;
-      const connectionString = 'UPDATE feedback SET officialReply = ? WHERE feedbackId = ?';
+      const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
       connection.query(connectionString, [officialReply, feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
         else res.sendStatus(200);
