@@ -28,7 +28,7 @@ class Submitted extends Component {
       <View style={styles.container}>
         <View style={{ flex: 1, paddingTop: 20 }}>
           {/* To do: To do: Update navigation to use react-navigation */}
-          <Button onPress={() => this.props.navigation.navigate('FeedbackSwipe')}>
+          <Button onPress={() => this.props.navigation.navigate('FeedbackList')}>
             Vote on Feedback!
           </Button>
         </View>

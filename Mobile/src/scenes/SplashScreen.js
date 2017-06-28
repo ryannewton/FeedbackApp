@@ -89,7 +89,7 @@ class SplashScreen extends Component {
         this.props.feedback.lastPulled.getTime() !== 0
       ) {
       // tracker.setUser(this.props.group.email);
-      this.props.navigation.navigate('FeedbackSwipe');
+      this.props.navigation.navigate('FeedbackList');
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
