@@ -134,7 +134,7 @@ class Feedback extends Component {
       return null;
     }
     // Has the server been updated to include a response object?
-    const exists = feedback.response && feedback.response.text !== '';
+    const exists = feedback.officialReply && feedback.officialReply.text !== '';
     if (!exists) {
       return null;
     }
