@@ -84,17 +84,23 @@ class FeedbackSubmit extends Component {
     this.props.closeInstructions('Write Feedback Scene');
   }
 
-  addImage = async () => {
+  addImage = async (type) => {
     const pickerResult = await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
 
     // If user selects an image
     if (!pickerResult.cancelled) {
-      this.props.uploadImage(pickerResult.uri);
+      this.props.uploadImage(pickerResult.uri, type);
     }
   }
 
-  maybeRenderImage = () => {
-    const { imageURL } = this.props.feedback;
+  maybeRenderImage = (type) => {
+    let imageURL;
+    if (!type)
+      imageURL = this.props.feedback.imageURL;
+    else if (type === 'positive')
+      imageURL = this.props.feedback.positiveImageURL;
+    else if (type === 'negative')
+      imageURL = this.props.feedback.negativeImageURL;
 
     // If there is no image, don't render anything
     if (!imageURL) {
@@ -115,6 +121,7 @@ class FeedbackSubmit extends Component {
 
   maybeRenderUploadingOverlay = () => {
     const { loadingImage } = this.props.feedback;
+
     if (loadingImage) {
       return (
         <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' }]}>
@@ -129,7 +136,7 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  renderButtons() {
+  renderButtons(type) {
     if (this.props.feedback.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
@@ -143,7 +150,7 @@ class FeedbackSubmit extends Component {
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
           <TouchableOpacity
-            onPress={this.addImage}
+            onPress={() => this.addImage(type)}
             style={styles.button}
           >
             <Icon name="add-a-photo" size={25} color={'white'} />
@@ -186,41 +193,42 @@ class FeedbackSubmit extends Component {
     );
 
     const positiveFeedbackBox = (
-      <View>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
-          <View style={{ flex: 1 }}>
-            <TextInput
-              multiline={Boolean(true)}
-              onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-              onContentSizeChange={(event) => {
-                this.setState({ height: event.nativeEvent.contentSize.height });
-              }}
-              style={[styles.feedbackInput, styles.positiveFeedbackInput]}
-              placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
-              placeholderTextColor="#d0d0d0"
-              value={this.state.positiveFeedback}
-            />
-            {/* Submit button / loading spinner */}
-            {this.renderButtons()}
-          </View>
-          <View style={{ flex: 1 }}>
-            <TextInput
-              multiline={Boolean(true)}
-              onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-              onContentSizeChange={(event) => {
-                this.setState({ height: event.nativeEvent.contentSize.height });
-              }}
-              style={[styles.feedbackInput, styles.negativeFeedbackInput]}
-              placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-              placeholderTextColor="#d0d0d0"
-              value={this.state.negativeFeedback}
-            />
-            {/* Submit button / loading spinner */}
-            {this.renderButtons()}       
+      <View style={{ flex: 1, flexDirection: 'row' }}>
+        <View style={{ flex: 1 }}>
+          <TextInput
+            multiline={Boolean(true)}
+            onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
+            onContentSizeChange={(event) => {
+              this.setState({ height: event.nativeEvent.contentSize.height });
+            }}
+            style={[styles.feedbackInput, styles.positiveFeedbackInput]}
+            placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
+            placeholderTextColor="#d0d0d0"
+            value={this.state.positiveFeedback}
+          />
+          {/* Submit button / loading spinner */}
+          {this.renderButtons('positive')}
+          <View>
+            {this.maybeRenderImage('positive')}
           </View>
         </View>
-        <View>
-          {this.maybeRenderImage()}
+        <View style={{ flex: 1 }}>
+          <TextInput
+            multiline={Boolean(true)}
+            onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+            onContentSizeChange={(event) => {
+              this.setState({ height: event.nativeEvent.contentSize.height });
+            }}
+            style={[styles.feedbackInput, styles.negativeFeedbackInput]}
+            placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+            placeholderTextColor="#d0d0d0"
+            value={this.state.negativeFeedback}
+          />
+          {/* Submit button / loading spinner */}
+          {this.renderButtons('negative')}
+          <View>
+            {this.maybeRenderImage('negative')}
+          </View>
         </View>
       </View>
     );

@@ -51,10 +51,18 @@ const styles = {
   positiveFeedbackInput: {
     borderColor: '#98FB98',
     borderWidth: 2,
+    ...Platform.select({
+      ios: { height: 300 },
+      android: { height: 240 },
+    }),
   },
   negativeFeedbackInput: {
     borderColor: '#F08080',
     borderWidth: 2,
+    ...Platform.select({
+      ios: { height: 300 },
+      android: { height: 240 },
+    }),
   },
   feedbackSceneContainer: {
     paddingTop: 10,
