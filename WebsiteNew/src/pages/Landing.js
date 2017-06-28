@@ -1,8 +1,10 @@
 import React from 'react';
+// import htmlContent from '../splash.html';
+    // <div dangerouslySetInnerHTML={ {__html: htmlContent} }></div>
 
 const Landing = () => {
   return (
-    <div>Welcome to our awesome website!</div>
+    <div>Replace with landing page</div>
   );
 }
 

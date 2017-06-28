@@ -13,6 +13,9 @@ import {
   REJECT_FEEDBACK,
   REJECT_FEEDBACK_SUCCESS,
   REJECT_FEEDBACK_FAIL,
+  SUBMIT_OFFICIAL_REPLY,
+  SUBMIT_OFFICIAL_REPLY_SUCCESS,
+  SUBMIT_OFFICIAL_REPLY_FAIL,
 } from './types';
 
 // Import constants
@@ -94,5 +97,21 @@ export const rejectFeedback = (feedback) => (
     //   console.log('Error: ', error);
     //   dispatch({ type: REJECT_FEEDBACK_FAIL, payload: feedback });
     // })
+  }
+);
+
+export const submitOfficialReply = ({ feedback, officialReply }) => (
+  (dispatch) => {
+    dispatch({ type: SUBMIT_OFFICIAL_REPLY });
+
+    const token = localStorage.getItem('token');
+    http.post('/submitOfficialReply', { authorization: token, feedback, officialReply })
+    .then((response) => {
+      dispatch({ type: SUBMIT_OFFICIAL_REPLY_SUCCESS, payload: { feedback, officialReply } });
+    })
+    .catch((error) => {
+      console.log('submitOfficialReply() FAIL');
+      dispatch({ type: SUBMIT_OFFICIAL_REPLY_FAIL });
+    });
   }
 );

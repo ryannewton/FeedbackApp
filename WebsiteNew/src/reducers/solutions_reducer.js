@@ -2,6 +2,7 @@
 import {
   REQUEST_SOLUTIONS,
   REQUEST_SOLUTIONS_SUCCESS,
+  REQUEST_SOLUTIONS_FAIL,
   SIGNOUT_USER,
 } from '../actions/types';
 
@@ -9,6 +10,7 @@ const INITIAL_STATE = {
   loading: false,
   list: [],
   lastPulled: new Date(0),
+  error: false,
 };
 
 function filterAndOrder(list) {
@@ -26,8 +28,11 @@ export default (state = INITIAL_STATE, action) => {
 
     case REQUEST_SOLUTIONS_SUCCESS: {
       const list = filterAndOrder(action.payload.list);
-      return { ...state, list, lastPulled: action.payload.lastPulled, loading: false };
+      return { ...state, list, lastPulled: action.payload.lastPulled, loading: false, error: false };
     }
+
+    case REQUEST_SOLUTIONS_FAIL:
+      return { ...state, loading: false, error: true };
 
     case SIGNOUT_USER:
       return INITIAL_STATE;
