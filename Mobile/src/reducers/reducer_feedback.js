@@ -24,6 +24,8 @@ const INITIAL_STATE = {
   loading: false,
   loadingImage: false,
   imageURL: '',
+  positiveImageURL: '',
+  negativeImageURL: '',
   list: [],
   lastPulled: new Date(0),
   filterMethod: 'all',
@@ -62,7 +64,12 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loadingImage: true };
 
     case SUBMIT_IMAGE_SUCCESS: {
-      return { ...state, loadingImage: false, imageURL: action.payload };
+      if (!action.payload.type)
+        return { ...state, loadingImage: false, imageURL: action.payload.location };
+      else if (action.payload.type === 'positive')
+        return { ...state, loadingImage: false, positiveImageURL: action.payload.location };
+      else if (action.payload.type === 'negative')
+        return { ...state, loadingImage: false, negativeImageURL: action.payload.location };
     }
 
     case SEARCH_IN_PROGRESS: {

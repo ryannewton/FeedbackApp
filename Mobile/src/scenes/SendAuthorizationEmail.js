@@ -7,10 +7,6 @@ import { connect } from 'react-redux';
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
-import fullScreen from '../../images/backgrounds/EmailInfo.png';
-
-// Import tracking
-// import { tracker } from '../constants';
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -21,7 +17,6 @@ class SendAuthorizationEmail extends Component {
     };
 
     this.props.sendGoogleAnalytics('SendAuthEmail')
-    // tracker.trackScreenView('Send Auth Email');
 
     this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
     this.closeInstructions = this.closeInstructions.bind(this);
@@ -99,18 +94,7 @@ class SendAuthorizationEmail extends Component {
       </TouchableWithoutFeedback>
     );
 
-    const instructionsScreen = (
-      <View style={styles.imageContainer}>
-        <TouchableOpacity onPress={this.closeInstructions} style={{ flex: 1 }}>
-          <Image style={styles.background} source={fullScreen} resizeMode="cover" />
-        </TouchableOpacity>
-      </View>
-    );
-
-    //const screenToShow = (!this.props.user.instructionsViewed.includes('Send Email Scene')) ? instructionsScreen : SendEmailScene;
-    const screenToShow = SendEmailScene;
-
-    return screenToShow;
+    return SendEmailScene;
   }
 }
 

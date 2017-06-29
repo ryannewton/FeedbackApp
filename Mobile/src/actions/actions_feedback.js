@@ -144,7 +144,7 @@ export const setSearchQuery = query => (
   }
 );
 
-export const uploadImage = uri => (
+export const uploadImage = (uri, type) => (
   (dispatch) => {
     dispatch({ type: SUBMITTING_IMAGE });
     const apiUrl = `${ROOT_URL}/uploadPhoto/`;
@@ -168,7 +168,7 @@ export const uploadImage = uri => (
 
     fetch(apiUrl, options)
     .then(response => response.json())
-    .then(response => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: response.location }))
+    .then(response => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: { location: response.location, type } }))
     .catch((err) => {
       dispatch({ type: SUBMIT_IMAGE_FAIL });
       alert('Uh-oh, something went wrong :(\nPlease try again.');
