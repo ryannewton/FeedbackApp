@@ -62,10 +62,10 @@ class FeedbackSubmit extends Component {
           this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '');
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.imageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '');
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.imageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '');
           this.setState({ negativeFeedback: '' });
         }
 
@@ -94,36 +94,58 @@ class FeedbackSubmit extends Component {
   maybeRenderImage = (type) => {
     const { width, height } = Dimensions.get('window')
     let imageURL;
-    if (!type)
+    let sizeConstraint;
+    if (!type) {
       imageURL = this.props.feedback.imageURL;
-    else if (type === 'positive')
+      sizeConstraint = this.state.sizeConstraint;
+    }
+    else if (type === 'positive') {
       imageURL = this.props.feedback.positiveImageURL;
-    else if (type === 'negative')
+      sizeConstraint = this.state.positiveSizeConstraint;
+    }
+    else if (type === 'negative') {
       imageURL = this.props.feedback.negativeImageURL;
+      sizeConstraint = this.state.negativeSizeConstraint;
+    }
 
     // If there is no image, don't render anything
     if (!imageURL) {
       return <View />;
     }
 
-    return (    
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'center', alignItems: 'stretch'}}>  
+    Image.getSize(imageURL, (width, height) => { 
+      let sizeConstraint = {};
+      if (width > height) {
+        sizeConstraint = { width: 350, height: height/width*350 }
+      } else {
+        sizeConstraint = { height: 450, width: width/height*450 }
+      }
+      if (!type) {
+        this.setState({ sizeConstraint });
+      }
+      else if (type === 'positive') {
+        this.setState({ positiveSizeConstraint: sizeConstraint });
+      }
+      else if (type === 'negative') {
+        this.setState({ negativeSizeConstraint: sizeConstraint });
+      }             
+    });  
+    
+    if (sizeConstraint) {
+      return (
         <Image
           source={{ uri: imageURL }}
-          style={{
-            flex: 1,
-            maxWidth: 300,
-            maxHeight: 300,
-            resizeMode: 'cover',
+          style={[{
+            resizeMode: 'contain',
             shadowColor: 'rgba(0,0,0,1)',
             shadowOpacity: 0.5,
             shadowOffset: { width: 4, height: 4 },
             shadowRadius: 5,
-            marginTop: 20,
-          }}
+            marginTop: 10,
+          }, sizeConstraint]}
         />
-      </View>
-    );
+      );
+    }
   }
 
   maybeRenderUploadingOverlay = () => {
@@ -199,7 +221,7 @@ class FeedbackSubmit extends Component {
             value={this.state.positiveFeedback}
           />
           {/* Submit button / loading spinner */}
-          {this.renderButtons('positive')}
+          {this.renderButtons('positive')}          
           {this.maybeRenderImage('positive')}
         </View>
         <View style={{ flex: 1 }}>
@@ -215,12 +237,8 @@ class FeedbackSubmit extends Component {
             value={this.state.negativeFeedback}
           />
           {/* Submit button / loading spinner */}
-          <View>
-            {this.renderButtons('negative')}
-          </View>
-          <View>
-            {this.maybeRenderImage('negative')}
-          </View>
+          {this.renderButtons('negative')}
+          {this.maybeRenderImage('negative')}
         </View>
       </View>
     );
