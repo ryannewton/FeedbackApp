@@ -18,6 +18,9 @@ import {
   REMOVE_FEEDBACK_DOWNVOTE,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
+  CHANGE_FILTER_METHOD,
+  SET_SEARCH_QUERY,
+  SEARCH_IN_PROGRESS,
 } from './types';
 
 // Import constants
@@ -50,7 +53,7 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
       if (!feedbackRequireApproval) {
-        feedback = { id: response.data.id, text, status: 'new', type, imageURL, upvotes: 0, downvotes: 0, approved: 1 };
+        feedback = { id: response.data.id, text, status: 'new', type, imageURL, upvotes: 0, downvotes: 0, approved: 1, date: Date.now() };
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
       }
     })
@@ -117,6 +120,27 @@ export const removeFeedbackDownvote = feedback => (
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, upvote: 0, downvote: 1, authorization: token })
     .catch(error => console.log('Error in removeFeedbackDownvote in actions_feedback', error.response.data));
+  }
+);
+
+export const searchInProgress = bool => (
+  {
+    type: SEARCH_IN_PROGRESS,
+    payload: bool,
+  }
+);
+
+export const changeFilterMethod = method => (
+  {
+    type: CHANGE_FILTER_METHOD,
+    payload: method,
+  }
+);
+
+export const setSearchQuery = query => (
+  {
+    type: SET_SEARCH_QUERY,
+    payload: query,
   }
 );
 

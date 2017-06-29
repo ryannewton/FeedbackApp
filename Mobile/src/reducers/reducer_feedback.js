@@ -15,6 +15,9 @@ import {
   SAVE_FEEDBACK_CHANGES,
   ADD_FEEDBACK_TO_STATE,
   LOG_OUT_USER,
+  CHANGE_FILTER_METHOD,
+  SET_SEARCH_QUERY,
+  SEARCH_IN_PROGRESS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -23,6 +26,9 @@ const INITIAL_STATE = {
   imageURL: '',
   list: [],
   lastPulled: new Date(0),
+  filterMethod: 'all',
+  searchQuery: 'Search',
+  searchInProgress: false,
 };
 
 function filterAndOrder(list) {
@@ -59,6 +65,13 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loadingImage: false, imageURL: action.payload };
     }
 
+    case SEARCH_IN_PROGRESS: {
+      return { ...state, searchInProgress: action.payload };
+    }
+
+    case CHANGE_FILTER_METHOD:
+      return { ...state, filterMethod: action.payload };
+
     case SUBMIT_IMAGE_FAIL:
       return { ...state, loadingImage: false };
 
@@ -89,6 +102,9 @@ export default (state = INITIAL_STATE, action) => {
       newState[index].downvotes -= 1;
       return { ...state, list: newState };
     }
+
+    case SET_SEARCH_QUERY:
+      return { ...state, searchQuery: action.payload };
 
     case SAVE_FEEDBACK_CHANGES: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
