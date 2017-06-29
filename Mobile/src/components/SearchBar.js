@@ -154,13 +154,6 @@ class SearchBar extends Component {
               >
                 <Text>Today</Text>
               </MenuOption>
-              <MenuOption
-                value="my_feedback"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('my_feedback')}
-              >
-                <Text>My Feedback</Text>
-              </MenuOption>
             </MenuOptions>
           </Menu>
         </MenuContext>
