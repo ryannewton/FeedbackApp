@@ -113,12 +113,12 @@ class FeedbackSubmit extends Component {
       return <View />;
     }
 
-    Image.getSize(imageURL, (width, height) => { 
+    Image.getSize(imageURL, (iwidth, iheight) => { 
       let sizeConstraint = {};
-      if (width > height) {
-        sizeConstraint = { width: 350, height: height/width*350 }
+      if (iwidth > iheight) {
+        sizeConstraint = { width: width*0.45, height: iheight/iwidth*width*0.45 }
       } else {
-        sizeConstraint = { height: 450, width: width/height*450 }
+        sizeConstraint = { height: width*0.6, width: iwidth/iheight*width*0.6 }
       }
       if (!type) {
         this.setState({ sizeConstraint });
@@ -135,14 +135,15 @@ class FeedbackSubmit extends Component {
       return (
         <Image
           source={{ uri: imageURL }}
-          style={[{
-            resizeMode: 'contain',
+          style={[
+            sizeConstraint, {
             shadowColor: 'rgba(0,0,0,1)',
             shadowOpacity: 0.5,
             shadowOffset: { width: 4, height: 4 },
             shadowRadius: 5,
             marginTop: 10,
-          }, sizeConstraint]}
+            alignSelf: 'center'
+          }]}
         />
       );
     }
