@@ -2,6 +2,7 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
+import SearchBar from '../components/SearchBar';
 
 // Import Scenes
 import FeedbackList from '../scenes/FeedbackList';
@@ -13,15 +14,7 @@ const scenes = StackNavigator({
   FeedbackList: {
     screen: FeedbackList,
     navigationOptions: {
-      title: 'All Feedback',
-      headerTitleStyle: {
-        color: '#fff'
-      },
-      headerStyle: {
-        height: styles.header.height,
-        marginTop: styles.header.marginTop,
-        backgroundColor: '#00A2FF',
-      },
+      header: (<SearchBar />),
     },
   },
   Details: {
@@ -29,7 +22,7 @@ const scenes = StackNavigator({
     navigationOptions: {
       title: 'Proposed Solutions',
       headerTitleStyle: {
-        color: '#fff'
+        color: '#fff',
       },
       headerStyle: {
         height: styles.header.height,

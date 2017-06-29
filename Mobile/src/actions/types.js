@@ -49,3 +49,6 @@ export const LOAD_SOLUTION_UPVOTES = 'load_solution_upvotes';
 export const LOAD_SOLUTION_DOWNVOTES = 'load_solution_downvotes';
 export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';
 export const ADD_TO_INSTRUCTIONS_VIEWED = 'add_to_instructions_viewed';
+export const CHANGE_FILTER_METHOD = 'change_filter_method';
+export const SET_SEARCH_QUERY = 'set_search_query';
+export const SEARCH_IN_PROGRESS = 'search_in_progress';

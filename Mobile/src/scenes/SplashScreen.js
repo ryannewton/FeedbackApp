@@ -25,7 +25,7 @@ class SplashScreen extends Component {
     this.route = this.route.bind(this);
 
     // tracker.trackScreenView('Loading Screen');
-    this.props.sendGoogleAnalytics('LoadingScreen')
+    this.props.sendGoogleAnalytics('LoadingScreen');
   }
 
   componentDidMount() {
