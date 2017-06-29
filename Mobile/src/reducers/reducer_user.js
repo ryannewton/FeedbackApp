@@ -54,7 +54,6 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, solutionUpvotes: action.payload };
     case LOAD_SOLUTION_DOWNVOTES:
       return { ...state, solutionDownvotes: action.payload };
-
     case ADD_TO_DO_NOT_DISPLAY_LIST:
       return { ...state, doNotDisplayList: [...state.doNotDisplayList, action.payload] };
     case ADD_TO_INSTRUCTIONS_VIEWED:
@@ -67,16 +66,14 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, solutionUpvotes: [...state.solutionUpvotes, action.payload.id] };
     case ADD_SOLUTION_DOWNVOTE:
       return { ...state, solutionDownvotes: [...state.solutionDownvotes, action.payload.id] };
-    
     case REMOVE_FEEDBACK_UPVOTE:
       return { ...state, feedbackUpvotes: removeItem(state.feedbackUpvotes, action.payload.id) };
     case REMOVE_FEEDBACK_DOWNVOTE:
-      return { ...state, feedbackDownvotes: removeItem(state.feedbackDownvotes, action.payload.id) };    
+      return { ...state, feedbackDownvotes: removeItem(state.feedbackDownvotes, action.payload.id) };
     case REMOVE_SOLUTION_UPVOTE:
       return { ...state, solutionUpvotes: removeItem(state.solutionUpvotes, action.payload.id) };
     case REMOVE_SOLUTION_DOWNVOTE:
       return { ...state, solutionDownvotes: removeItem(state.solutionDownvotes, action.payload.id) };
-    
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:
