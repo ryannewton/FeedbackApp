@@ -101,10 +101,10 @@ class SearchBar extends Component {
       </View>
     );
   }
-            // this.props.searchInProgress(false);
-            // this.setState({ filterMethod: 'search' });
+
 
   hasDisabledStyle(value) {
+    // Should we indicate that this is the method you are currently seeing?
     if (this.state.filterMethod === value) {
       return { backgroundColor: '#ccc' };
     }
