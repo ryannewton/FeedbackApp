@@ -12,7 +12,7 @@ import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 // Import tracking
 // import { tracker } from '../constants';
-import { sendGoogleAnalytics, changeFilterMethod } from '../actions';
+import { sendGoogleAnalytics } from '../actions';
 
 class SplashScreen extends Component {
   constructor(props) {
@@ -117,4 +117,4 @@ function mapStateToProps(state) {
   return { auth, group, feedback };
 }
 
-export default connect(mapStateToProps, { sendGoogleAnalytics, changeFilterMethod })(SplashScreen);
+export default connect(mapStateToProps, { sendGoogleAnalytics })(SplashScreen);
