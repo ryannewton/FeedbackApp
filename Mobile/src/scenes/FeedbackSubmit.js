@@ -19,7 +19,7 @@ import {
 } from 'react-native';
 
 // Import actions
-import { submitFeedbackToServer, closeInstructions, uploadImage } from '../actions';
+import { submitFeedbackToServer, uploadImage } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
@@ -44,7 +44,6 @@ class FeedbackSubmit extends Component {
     // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
     this.props.sendGoogleAnalytics('FeedbackSubmit')
 
-    this.closeInstructions = this.closeInstructions.bind(this);
     this.submitFeedback = this.submitFeedback.bind(this);
   }
 
@@ -76,10 +75,6 @@ class FeedbackSubmit extends Component {
     } else {
       this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
     }
-  }
-
-  closeInstructions() {
-    this.props.closeInstructions('Write Feedback Scene');
   }
 
   addImage = async (type) => {
@@ -269,7 +264,6 @@ FeedbackSubmit.propTypes = {
   group: React.PropTypes.object,
   feedback: React.PropTypes.object,
   submitFeedbackToServer: React.PropTypes.func,
-  closeInstructions: React.PropTypes.func,
   navigation: React.PropTypes.object,
 };
 
@@ -280,7 +274,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
-  closeInstructions,
   uploadImage,
   sendGoogleAnalytics
 })(FeedbackSubmit);
