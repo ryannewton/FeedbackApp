@@ -25,6 +25,7 @@
     "react-native-image-progress": "^0.6.0",
     "react-native-menu": "^0.20.2",
     "react-native-progress": "^3.2.1",
+    "react-native-textinput-effects": "^0.3.1",
     "react-navigation": "^1.0.0-beta.11",
     "react-redux": "^5.0.1",
     "redux": "^3.6.0",

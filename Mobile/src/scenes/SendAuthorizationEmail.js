@@ -8,6 +8,9 @@ import { Card, CardSection, Input, Button, Spinner } from '../components/common'
 import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 
+import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import { Sae } from 'react-native-textinput-effects';
+
 class SendAuthorizationEmail extends Component {
   constructor(props) {
     super(props);
@@ -59,37 +62,28 @@ class SendAuthorizationEmail extends Component {
   render() {
     const SendEmailScene = (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.container}>
-          <Card>
+        <View style={styles.container, {backgroundColor: '#00A2FF', flex:1}}>
             {/* Email input */}
-            <CardSection>
-              <Input
-                label="Your Email"
-                placeholder="tyler@collaborativefeedback.com"
-                value={this.state.email}
-                onChangeText={text => this.setState({ email: text })}
-                keyboardType="email-address"
-              />
-            </CardSection>
-
+            <Sae
+              label={'Email Address'}
+              iconClass={FontAwesomeIcon}
+              iconName={'pencil'}
+              iconColor={'white'}
+              value={this.state.email}
+              // TextInput props
+              autoCapitalize={'none'}
+              autoCorrect={false}
+              style={{margin:20}}
+            />
             {/* Error message (blank if no error) */}
             <Text style={styles.errorTextStyle}>
               {this.props.auth.error}
             </Text>
 
             {/* Confirmation button, and 'go to login' button */}
-            <CardSection>
+            <View>
               {this.renderButtons()}
-            </CardSection>
-
-            <CardSection>
-              <Text style={styles.text}>
-                  Why do we need your email? Two reasons:{'\n'}
-                  1) We need to confirm you are member of your organization{'\n'}
-                  2) We will keep you updated as changes are made based on your feedback
-              </Text>
-            </CardSection>
-          </Card>
+            </View>
         </View>
       </TouchableWithoutFeedback>
     );
