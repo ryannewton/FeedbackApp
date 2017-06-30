@@ -43,7 +43,10 @@ class ManageFeedbackCard extends Component {
     }
 
     return (
-      <OfficialReplyCard text={this.props.feedback.officialReply} />
+      <div>
+        Official Reply:
+        <OfficialReplyCard text={this.props.feedback.officialReply} />
+      </div>
     );
   }
 
