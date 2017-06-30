@@ -152,6 +152,9 @@ class FeedbackList extends Component {
           const oneDayAgo = Date.now() - (60000 * 60 * 24);
           return feedbackDate >= oneDayAgo;
         }
+        case 'my_feedback': {
+          return item.userId == this.props.user.userId;
+        }
         default:
           return true;
       }
@@ -192,8 +195,8 @@ FeedbackList.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { feedback, group } = state;
-  return { feedback, group };
+  const { feedback, group, user } = state;
+  return { feedback, group, user };
 }
 
 const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics })(FeedbackList);
