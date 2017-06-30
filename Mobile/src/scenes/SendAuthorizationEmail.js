@@ -66,6 +66,7 @@ class SendAuthorizationEmail extends Component {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
             {/* Email input */}
+<<<<<<< HEAD
             <Makiko
               label={'Email Address'}
               iconClass={FontAwesomeIcon}
@@ -80,6 +81,19 @@ class SendAuthorizationEmail extends Component {
               autoCorrect={false}
               style={{marginLeft:20, marginRight:20, marginTop:100}}
             />
+=======
+            <CardSection>
+              <Input
+                label="Your Email"
+                placeholder="tyler@collaborativefeedback.com"
+                value={this.state.email}
+                onChangeText={text => this.setState({ email: text })}
+                keyboardType="email-address"
+                maxLength={100}
+              />
+            </CardSection>
+
+>>>>>>> Adds max character limits to inputs
             {/* Error message (blank if no error) */}
             <Text style={styles.errorTextStyle}>
               {this.props.auth.error}
