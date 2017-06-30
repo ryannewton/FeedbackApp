@@ -73,7 +73,6 @@ class FeedbackSubmit extends Component {
           this.setState({ negativeFeedback: '' });
         }
 
-        // tracker.trackEvent('Submit', 'Submit Feedback', { label: this.props.group.domain });
         this.setState({ errorMessage: '' });
         this.props.navigation.navigate('Submitted');
       }

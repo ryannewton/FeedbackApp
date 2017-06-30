@@ -18,7 +18,7 @@ class FeedbackList extends Component {
     super(props);
 
     // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.group.domain });
-    this.props.sendGoogleAnalytics('FeedbackList', this.props.group.groupName)
+    props.sendGoogleAnalytics('FeedbackList', this.props.group.groupName);
 
     // Create the initial wordspace and occurance table once for future search queries
     const { cleanQues, wordspace } = this.wordspace();
@@ -34,9 +34,7 @@ class FeedbackList extends Component {
     const allQuestions = this.props.feedback.list;
 
     const cleanQues = this.cleanQuestions(allQuestions);
-    const allWords = cleanQues.reduce((acc, question) => {
-      return [...acc, ...question];
-    }, []);
+    const allWords = cleanQues.reduce((acc, question) => [...acc, ...question], []);
 
     const wordsWithoutDuplicates = this.removeDuplicateWords(allWords);
     const wordspace = this.removeStopwords(wordsWithoutDuplicates);
