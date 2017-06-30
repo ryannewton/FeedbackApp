@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
+import fullScreen from '../../images/icons/default.jpg';
 
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
@@ -89,7 +90,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-up" size={35} color={iconColor} />
+        <Icon name="thumb-up" size={25} color={iconColor} />
       </View>
     );
   }
@@ -102,7 +103,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-down" size={35} color={iconColor} />
+        <Icon name="thumb-down" size={25} color={iconColor} />
       </View>
     );
   }
@@ -121,7 +122,7 @@ class Feedback extends Component {
   renderStatusBox() {
     if (this.props.group.showStatus) {
       return (
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
           {this.renderStatus()}
         </View>
       );
@@ -139,7 +140,7 @@ class Feedback extends Component {
       return null;
     }
     return (
-      <View style={{ paddingTop: 15 }}>
+      <View style={{ paddingRight: 10 }}>
         <Icon name="verified-user" color="blue" />
       </View>
     );
@@ -178,12 +179,55 @@ class Feedback extends Component {
     );
   }
 
+  renderSmallImage() {
+    const { imageURL } = this.props.feedback;
+    const { showImage } = this.props;
+    const { imageStyle, imageViewStyle } = styles;
+    const { status } = this.props.feedback;
+    if (showImage) {
+      return null;
+    }
+
+    // If feedback doesn't have a photo
+    if (!imageURL) {
+    if (status && status === 'complete') {
+      return <Icon name="done" size={100} color={'#48D2A0'} />;
+    }
+    if (status && status === 'inprocess') {
+      return <Icon name="sync" size={100} color={'#F8C61C'} />;
+    }
+    return <Icon name="fiber-new" size={100} color={'#00A2FF'} />;
+    }
+    return (
+      <View style={imageViewStyle}>
+        <Image
+          source={{ uri: imageURL }}
+          indicator={ProgressBar}
+          indicatorProps={{
+            size: 80,
+            borderWidth: 0,
+            color: 'rgba(150, 150, 150, 1)',
+            unfilledColor: 'rgba(200, 200, 200, 0.2)',
+          }}
+          style={{
+            width: 100,
+            height: 100,
+            resizeMode: 'cover',
+          }}
+        >
+          {/* Render Status icon */}
+          {this.renderStatusBox()}
+        </Image>
+      </View>
+    );
+  }
+
   renderSolutionsTag() {
     const { solutions, feedback } = this.props;
     const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
     if (feedbackSolutions.length) {
       return (
-        <View style={{ paddingTop: 15 }}>
+        <View>
           <Icon name="question-answer" color="grey" />
         </View>
       );
@@ -226,11 +270,15 @@ class Feedback extends Component {
     }
 
     return (
-      <Card>
         <View style={updatedRow}>
-          <View style={{ flexDirection: 'column', justifyContent: 'space-between' }}>
+        <View style={{ flexDirection: 'row'}}>
+          <View style={{ alignSelf: 'center' }}>
+                      {/* Render image*/}
+            {this.renderSmallImage()}
+          </View>
+          <View style={{ flex: 8, flexDirection: 'column', justifyContent: 'space-between' }}>
             {/* First row */}{/* Project title */}
-            <View style={{ flex: 5, paddingTop: 5 }}>
+            <View style={{ flex: 5, paddingTop: 10, paddingLeft: 12 }}>
               <Text style={feedbackTitle}>
                 {this.renderTitle()}
               </Text>
@@ -238,47 +286,32 @@ class Feedback extends Component {
 
             {/* Render image*/}
             {this.renderImage()}
-
-            {/* Vote count */}
-            <View style={rowViewStyle}>
-              <View style={voteCountStyle}>
-                <View style={upvoteCountStyle}>
-                  <Text style={upvoteTextStyle}>
-                    {this.renderVoteCount()}
-                  </Text>
-                  <Icon size={18} name="arrow-upward" color="#48D2A0" />
-                </View>
-                <View style={downvoteCountStyle}>
-                  <Text style={downvoteTextStyle}>
-                    {this.renderDownvoteCount()}
-                  </Text>
-                  <Icon size={18} name="arrow-downward" color="#F54B5E" />
-                </View>
-              </View>
-
-              {/* Render Status icon */}
-              {this.renderStatusBox()}
-
-              {/* Render image icon */}
-              {this.renderImageIcon()}
-
+            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{flexDirection: 'row', paddingLeft: 15, paddingBottom: 10}}>
               {/* Render official response tag */}
               {this.renderOfficialResponseTag()}
-
               {this.renderSolutionsTag()}
+            </View>
+            {/* Vote count */}
+            <View style={{flexDirection: 'row', paddingBottom: 10}}>
               {/* Upvote Button and Downvote */}
-              <View style={thumbStyle}>
                 <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
                   {this.renderThumbDownButton()}
                 </TouchableOpacity>
-                <TouchableOpacity onPress={this.upvote}>
+                <Text style={downvoteTextStyle, {paddingRight: 12, paddingTop: 7}}>
+                  {this.renderDownvoteCount()}
+                </Text>
+                <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 5 }}>
                   {this.renderThumbUpButton()}
                 </TouchableOpacity>
-              </View>
+                <Text style={upvoteTextStyle, {paddingRight: 1, paddingTop: 7}}>
+                  {this.renderVoteCount()}
+                </Text>
+            </View>
             </View>
           </View>
         </View>
-      </Card>
+        </View>
     );
   }
 }
