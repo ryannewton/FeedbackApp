@@ -8,6 +8,7 @@ import {
   LOAD_INSTRUCTIONS_VIEWED,
   LOAD_FEEDBACK_UPVOTES,
   LOAD_FEEDBACK_DOWNVOTES,
+  LOAD_FEEDBACK_NO_OPINIONS,
   LOAD_SOLUTION_UPVOTES,
   LOAD_SOLUTION_DOWNVOTES,
   LOAD_DO_NOT_DISPLAY_LIST,
@@ -43,6 +44,13 @@ export const loadFeedbackDownvotes = feedbackDownvotes => (
   {
     type: LOAD_FEEDBACK_DOWNVOTES,
     payload: feedbackDownvotes,
+  }
+);
+
+export const loadFeedbackNoOpinions = feedbackNoOpinions => (
+  {
+    type: LOAD_FEEDBACK_NO_OPINIONS,
+    payload: feedbackNoOpinions,
   }
 );
 

@@ -5,16 +5,19 @@ import {
   LOAD_INSTRUCTIONS_VIEWED,
   LOAD_FEEDBACK_UPVOTES,
   LOAD_FEEDBACK_DOWNVOTES,
+  LOAD_FEEDBACK_NO_OPINIONS,
   LOAD_SOLUTION_UPVOTES,
   LOAD_SOLUTION_DOWNVOTES,
   ADD_TO_DO_NOT_DISPLAY_LIST,
   ADD_TO_INSTRUCTIONS_VIEWED,
   ADD_FEEDBACK_UPVOTE,
   ADD_FEEDBACK_DOWNVOTE,
+  ADD_FEEDBACK_NO_OPINION,
   ADD_SOLUTION_UPVOTE,
   ADD_SOLUTION_DOWNVOTE,
   REMOVE_FEEDBACK_UPVOTE,
   REMOVE_FEEDBACK_DOWNVOTE,
+  REMOVE_FEEDBACK_NO_OPINION,
   REMOVE_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_DOWNVOTE,
   LOG_OUT_USER,
@@ -28,6 +31,7 @@ const INITIAL_STATE = {
   feedbackDownvotes: [],
   solutionUpvotes: [],
   solutionDownvotes: [],
+  feedbackNoOpinions: [],
 };
 
 const removeItem = (arr, item) => {
@@ -50,6 +54,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, feedbackUpvotes: action.payload };
     case LOAD_FEEDBACK_DOWNVOTES:
       return { ...state, feedbackDownvotes: action.payload };
+    case LOAD_FEEDBACK_NO_OPINIONS:
+      return { ...state, feedbackNoOpinions: action.payload };
     case LOAD_SOLUTION_UPVOTES:
       return { ...state, solutionUpvotes: action.payload };
     case LOAD_SOLUTION_DOWNVOTES:
@@ -62,6 +68,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, feedbackUpvotes: [...state.feedbackUpvotes, action.payload.id] };
     case ADD_FEEDBACK_DOWNVOTE:
       return { ...state, feedbackDownvotes: [...state.feedbackDownvotes, action.payload.id] };
+    case ADD_FEEDBACK_NO_OPINION:
+      return { ...state, feedbackNoOpinions: [...state.feedbackNoOpinions, action.payload.id] };
     case ADD_SOLUTION_UPVOTE:
       return { ...state, solutionUpvotes: [...state.solutionUpvotes, action.payload.id] };
     case ADD_SOLUTION_DOWNVOTE:
@@ -70,6 +78,8 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, feedbackUpvotes: removeItem(state.feedbackUpvotes, action.payload.id) };
     case REMOVE_FEEDBACK_DOWNVOTE:
       return { ...state, feedbackDownvotes: removeItem(state.feedbackDownvotes, action.payload.id) };
+    case REMOVE_FEEDBACK_NO_OPINION:
+      return { ...state, feedbackNoOpinions: removeItem(state.feedbackNoOpinions, action.payload.id) };
     case REMOVE_SOLUTION_UPVOTE:
       return { ...state, solutionUpvotes: removeItem(state.solutionUpvotes, action.payload.id) };
     case REMOVE_SOLUTION_DOWNVOTE:
