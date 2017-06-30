@@ -92,7 +92,9 @@ class Feedback extends Component {
   renderTitle() {
     if (this.props.feedback === undefined) {
       return '';
-    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) || this.props.user.feedbackDownvotes.includes(this.props.feedback.id)) {
+    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
+              this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
+              this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
       return (
         <Text
           style={{
@@ -317,7 +319,9 @@ class Feedback extends Component {
       updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
     } else if (this.props.feedback.type === 'negative feedback') {
       updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
-    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) || this.props.user.feedbackDownvotes.includes(this.props.feedback.id)) {
+    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
+              this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
+              this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
       updatedRow = [row, { backgroundColor: 'rgba(248, 248, 248, 248)', borderWidth: 2, borderColor: '#fff' }];
     }
 
