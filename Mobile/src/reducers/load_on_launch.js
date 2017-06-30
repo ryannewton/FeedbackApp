@@ -83,7 +83,7 @@ async function clearAsyncStorage() {
 
 // Initialize saved state
 const loadOnLaunch = () => {
-  // clearAsyncStorage();
+  //clearAsyncStorage();
   loadToken();
   loadVotes();
   loadDoNotDisplayList();

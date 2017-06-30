@@ -4,14 +4,12 @@ import { TabNavigator } from 'react-navigation';
 
 // Import Stacks
 import FeedbackSubmitStack from './FeedbackSubmitStack';
-//import FeedbackSwipeStack from './FeedbackSwipeStack';
 import FeedbackListStack from './FeedbackListStack';
 
 // Stacks for each tab
 const tabs = {
-  FeedbackSubmit: FeedbackSubmitStack,
-  //FeedbackSwipe: FeedbackSwipeStack,
   FeedbackList: FeedbackListStack,
+  FeedbackSubmit: FeedbackSubmitStack,  
 };
 
 // Tab options
