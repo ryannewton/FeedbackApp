@@ -16,6 +16,8 @@ import {
   ADD_FEEDBACK_DOWNVOTE,
   REMOVE_FEEDBACK_UPVOTE,
   REMOVE_FEEDBACK_DOWNVOTE,
+  ADD_FEEDBACK_NO_OPINION,
+  REMOVE_FEEDBACK_NO_OPINION,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   CHANGE_FILTER_METHOD,
@@ -53,7 +55,7 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
       if (!feedbackRequireApproval) {
-        feedback = { id: response.data.id, text, status: 'new', type, imageURL, upvotes: 0, downvotes: 0, approved: 1, date: Date.now() };
+        feedback = { id: response.data.id, text, status: 'new', type, imageURL, upvotes: 0, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now() };
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
       }
     })
@@ -67,20 +69,56 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
 export const addFeedbackUpvote = feedback => (
   (dispatch, getState) => {
     dispatch({ type: ADD_FEEDBACK_UPVOTE, payload: feedback });
-    const { feedbackUpvotes, feedbackDownvotes } = getState().user;
+    const { feedbackUpvotes, feedbackDownvotes, feedbackNoOpinions } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
 
     // If downvote exists remove it
     if (feedbackDownvotes.includes(feedback.id)) {
       dispatch(removeFeedbackDownvote(feedback));
     }
+    if (feedbackNoOpinions.includes(feedback.id)) {
+      dispatch(removeFeedbackNoOpinion(feedback));
+    }
 
     const token = getState().auth.token;
-    http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, authorization: token })
+    http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
     .catch(error => console.log('Error in addFeedbackUpvote in actions_feedback', error.response.data));
   }
 );
 
+export const addFeedbackNoOpinion = feedback => (
+  (dispatch, getState) => {
+    dispatch({ type: ADD_FEEDBACK_NO_OPINION, payload: feedback });
+    const { feedbackUpvotes, feedbackDownvotes, feedbackNoOpinions } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}feedbackNoOpinions`, JSON.stringify(feedbackNoOpinions));
+
+    // If downvote exists remove it
+    if (feedbackDownvotes.includes(feedback.id)) {
+      dispatch(removeFeedbackDownvote(feedback));
+    }
+
+    // If upvote exists remove it
+    if (feedbackUpvotes.includes(feedback.id)) {
+      dispatch(removeFeedbackUpvote(feedback));
+    }
+
+    const token = getState().auth.token;
+    http.post('/submitFeedbackVote', { feedback, noOpinion: 1, upvote: 0, downvote: 0, authorization: token })
+    .catch(error => console.log('Error in addFeedbackNoOpinion in actions_feedback', error.response.data));
+  }
+);
+
+export const removeFeedbackNoOpinion = feedback => (
+  (dispatch, getState) => {
+    dispatch({ type: REMOVE_FEEDBACK_NO_OPINION, payload: feedback });
+    const { feedbackNoOpinions } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}feedbackNoOpinions`, JSON.stringify(feedbackNoOpinions));
+
+    const token = getState().auth.token;
+    http.post('/removeFeedbackVote', { feedback, noOpinion: 1, upvote: 0, downvote: 0, authorization: token })
+    .catch(error => console.log('Error in removeFeedbackNoOpinion in actions_feedback', error.response.data));
+  }
+);
 
 export const removeFeedbackUpvote = feedback => (
   (dispatch, getState) => {
@@ -89,7 +127,7 @@ export const removeFeedbackUpvote = feedback => (
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
 
     const token = getState().auth.token;
-    http.post('/removeFeedbackVote', { feedback, upvote: 1, downvote: 0, authorization: token })
+    http.post('/removeFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
     .catch(error => console.log('Error in removeFeedbackUpvote in actions_feedback', error.response.data));
   }
 );
@@ -97,16 +135,19 @@ export const removeFeedbackUpvote = feedback => (
 export const addFeedbackDownvote = feedback => (
   (dispatch, getState) => {
     dispatch({ type: ADD_FEEDBACK_DOWNVOTE, payload: feedback });
-    const { feedbackDownvotes, feedbackUpvotes } = getState().user;
+    const { feedbackDownvotes, feedbackUpvotes, feedbackNoOpinions } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackDownvotes`, JSON.stringify(feedbackDownvotes));
 
     // If upvote exists remove it
     if (feedbackUpvotes.includes(feedback.id)) {
       dispatch(removeFeedbackUpvote(feedback));
     }
+    if (feedbackNoOpinions.includes(feedback.id)) {
+      dispatch(removeFeedbackNoOpinion(feedback));
+    }
 
     const token = getState().auth.token;
-    http.post('/submitFeedbackVote', { feedback, upvote: 0, downvote: 1, authorization: token })
+    http.post('/submitFeedbackVote', { feedback, upvote: 0, downvote: 1, noOpinion: 0, authorization: token })
     .catch(error => console.log('Error in addFeedbackDownvote in actions_feedback', error.response.data));
   }
 );
@@ -118,7 +159,7 @@ export const removeFeedbackDownvote = feedback => (
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackDownvotes`, JSON.stringify(feedbackDownvotes));
 
     const token = getState().auth.token;
-    http.post('/removeFeedbackVote', { feedback, upvote: 0, downvote: 1, authorization: token })
+    http.post('/removeFeedbackVote', { feedback, upvote: 0, downvote: 1, noOpinion: 0, authorization: token })
     .catch(error => console.log('Error in removeFeedbackDownvote in actions_feedback', error.response.data));
   }
 );
@@ -177,4 +218,3 @@ export const uploadImage = (uri, type) => (
     });
   }
 );
-

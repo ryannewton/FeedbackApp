@@ -39,6 +39,9 @@ export const ADD_FEEDBACK_DOWNVOTE = 'add_feedback_downvote';
 export const REMOVE_FEEDBACK_UPVOTE = 'remove_feedback_upvote';
 export const REMOVE_FEEDBACK_DOWNVOTE = 'remove_feedback_downvote';
 export const ADD_FEEDBACK_TO_STATE = 'add_feedback_to_state';
+export const ADD_FEEDBACK_NO_OPINION = 'add_feedback_no_opinion';
+export const REMOVE_FEEDBACK_NO_OPINION = 'remove_feedback_no_opinion';
+
 
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
@@ -46,6 +49,7 @@ export const LOAD_INSTRUCTIONS_VIEWED = 'load_instructions_viewed';
 export const LOAD_FEEDBACK_UPVOTES = 'load_feedback_upvotes';
 export const LOAD_FEEDBACK_DOWNVOTES = 'load_feedback_downvotes';
 export const LOAD_SOLUTION_UPVOTES = 'load_solution_upvotes';
+export const LOAD_FEEDBACK_NO_OPINIONS = 'load_feedback_no_opinions';
 export const LOAD_SOLUTION_DOWNVOTES = 'load_solution_downvotes';
 export const ADD_TO_DO_NOT_DISPLAY_LIST = 'add_to_do_not_display_list';
 export const ADD_TO_INSTRUCTIONS_VIEWED = 'add_to_instructions_viewed';

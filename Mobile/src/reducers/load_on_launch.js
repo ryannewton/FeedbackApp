@@ -28,6 +28,11 @@ async function loadVotes() {
     feedbackUpvotes = JSON.parse(feedbackUpvotes);
     store.dispatch(actions.loadFeedbackUpvotes(feedbackUpvotes));
 
+    // Feedback No Opinions
+    let feedbackNoOpinions = await AsyncStorage.getItem(`${ROOT_STORAGE}feedbackNoOpinions`) || '[]';
+    feedbackNoOpinions = JSON.parse(feedbackNoOpinions);
+    store.dispatch(actions.loadFeedbackNoOpinions(feedbackNoOpinions));
+
     // Feedback Downvotes
     let feedbackDownvotes = await AsyncStorage.getItem(`${ROOT_STORAGE}feedbackDownvotes`) || '[]';
     feedbackDownvotes = JSON.parse(feedbackDownvotes);

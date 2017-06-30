@@ -16,6 +16,8 @@ import {
   addFeedbackDownvote,
   removeFeedbackDownvote,
   addToDoNotDisplayList,
+  addFeedbackNoOpinion,
+  removeFeedbackNoOpinion,
 } from '../actions';
 
 // Import tracking
@@ -29,10 +31,21 @@ class Feedback extends Component {
     this.downvote = this.downvote.bind(this);
     this.renderStatusBox = this.renderStatusBox.bind(this);
     this.goToDetails = this.goToDetails.bind(this);
+    this.addNoOpinion = this.addNoOpinion.bind(this);
   }
 
   goToDetails() {
     this.props.navigate('Details', { feedback: this.props.feedback });
+  }
+
+  addNoOpinion() {
+    const { feedback, user } = this.props;
+    console.log(feedback)
+    if (!user.feedbackNoOpinions.includes(feedback.id)) {
+      this.props.addFeedbackNoOpinion(feedback);
+    } else {
+      this.props.removeFeedbackNoOpinion(feedback);
+    }
   }
 
   upvote() {
@@ -59,6 +72,8 @@ class Feedback extends Component {
     }
     this.props.addToDoNotDisplayList(feedback.id)
   }
+
+
   // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
   renderVoteCount() {
     if (this.props.feedback === undefined) {
@@ -77,10 +92,45 @@ class Feedback extends Component {
   renderTitle() {
     if (this.props.feedback === undefined) {
       return '';
+    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) || this.props.user.feedbackDownvotes.includes(this.props.feedback.id)) {
+      return (
+        <Text
+          style={{
+            fontSize: 18,
+            color: 'black',
+            fontWeight: '400',
+          }}
+        >
+          {this.props.feedback.text}
+        </Text>
+      );
     }
-    return this.props.feedback.text;
+    return (
+      <Text
+        style={{
+          fontSize: 18,
+          color: 'black',
+          fontWeight: 'bold',
+        }}
+      >
+        {this.props.feedback.text}
+      </Text>
+    );
   }
 
+  renderNoOpinionButton() {
+    const { feedback, user } = this.props;
+    let iconColor = 'grey';
+    // If user hasn't upvoted this feedback
+    if (user.feedbackNoOpinions.includes(feedback.id)) {
+      iconColor = '#F8C61C';
+    }
+    return (
+      <View>
+        <Icon name="thumb-up" size={35} color={iconColor} />
+      </View>
+    );
+  }
   renderThumbUpButton() {
     const { feedback, user } = this.props;
     let iconColor = 'grey';
@@ -242,7 +292,7 @@ class Feedback extends Component {
     if (imageURL && !this.props.showImage) {
       return (
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="image" color='#A9A9A9' />
+          <Icon name="image" color="#A9A9A9" />
         </View>
       );
     }
@@ -267,6 +317,8 @@ class Feedback extends Component {
       updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
     } else if (this.props.feedback.type === 'negative feedback') {
       updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
+    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) || this.props.user.feedbackDownvotes.includes(this.props.feedback.id)) {
+      updatedRow = [row, { backgroundColor: 'rgba(248, 248, 248, 248)', borderWidth: 2, borderColor: '#fff' }];
     }
 
     return (
@@ -278,10 +330,8 @@ class Feedback extends Component {
           </View>
           <View style={{ flex: 8, flexDirection: 'column', justifyContent: 'space-between' }}>
             {/* First row */}{/* Project title */}
-            <View style={{ flex: 5, paddingTop: 10, paddingLeft: 12 }}>
-              <Text style={feedbackTitle}>
-                {this.renderTitle()}
-              </Text>
+            <View style={{ flex: 5, paddingTop: 5 }}>
+              {this.renderTitle()}
             </View>
 
             {/* Render image*/}
@@ -301,6 +351,9 @@ class Feedback extends Component {
                 <Text style={downvoteTextStyle, {paddingRight: 12, paddingTop: 7}}>
                   {this.renderDownvoteCount()}
                 </Text>
+                <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 5 }}>
+                  {this.renderNoOpinionButton()}
+                </TouchableOpacity>
                 <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 5 }}>
                   {this.renderThumbUpButton()}
                 </TouchableOpacity>
@@ -341,4 +394,6 @@ export default connect(mapStateToProps, {
   addFeedbackDownvote,
   removeFeedbackDownvote,
   addToDoNotDisplayList,
+  addFeedbackNoOpinion,
+  removeFeedbackNoOpinion,
 })(Feedback);

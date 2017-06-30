@@ -10,6 +10,8 @@ import {
   SUBMIT_IMAGE_FAIL,
   ADD_FEEDBACK_UPVOTE,
   ADD_FEEDBACK_DOWNVOTE,
+  ADD_FEEDBACK_NO_OPINION,
+  REMOVE_FEEDBACK_NO_OPINION,
   REMOVE_FEEDBACK_UPVOTE,
   REMOVE_FEEDBACK_DOWNVOTE,
   SAVE_FEEDBACK_CHANGES,
@@ -94,6 +96,20 @@ export default (state = INITIAL_STATE, action) => {
       const newState = state.list.slice(0);
       newState[index].downvotes += 1;
       return { ...state, list: newState };
+    }
+
+    case ADD_FEEDBACK_NO_OPINION: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      const newState = state.list.slice(0);
+      newState[index].noOpinions += 1;
+      return { ...state, list: newState };
+    }
+
+    case REMOVE_FEEDBACK_NO_OPINION: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      const newList = state.list.slice(0);
+      newList[index].noOpinions -= 1;
+      return { ...state, list: newList };
     }
 
     case REMOVE_FEEDBACK_UPVOTE: {
