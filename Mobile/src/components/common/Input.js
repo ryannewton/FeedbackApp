@@ -1,8 +1,18 @@
 // Import libraries
 import React from 'react';
 import { TextInput, View, Text } from 'react-native';
+import PropTypes from 'prop-types';
 
-const Input = ({ label, keyboardType, value, onChangeText, placeholder, secureTextEntry, editable = true, maxLength }) => {
+const Input = (
+  {
+    label,
+    keyboardType,
+    value,
+    onChangeText,
+    placeholder,
+    secureTextEntry,
+    editable = true,
+    maxLength }) => {
   const { inputStyle, labelStyle, containerStyle } = styles;
 
   return (
@@ -24,11 +34,14 @@ const Input = ({ label, keyboardType, value, onChangeText, placeholder, secureTe
 };
 
 Input.propTypes = {
-  label: React.PropTypes.string,
-  value: React.PropTypes.string,
-  onChangeText: React.PropTypes.func,
-  placeholder: React.PropTypes.string,
-  secureTextEntry: React.PropTypes.bool,
+  label: PropTypes.string,
+  value: PropTypes.string,
+  onChangeText: PropTypes.func,
+  placeholder: PropTypes.string,
+  secureTextEntry: PropTypes.bool,
+  keyboardType: PropTypes.string,
+  editable: PropTypes.bool,
+  maxLength: PropTypes.number,
 };
 
 const styles = {
