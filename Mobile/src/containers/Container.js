@@ -21,7 +21,7 @@ class Container extends Component {
   updateFeedbackFromServer = () => {
     const now = new Date();
     const { lastPulled } = this.props.feedback;
-    if (now.getTime() - lastPulled.getTime() > UPDATE_FREQUENCY) {
+    if ((now.getTime() - lastPulled.getTime() > UPDATE_FREQUENCY) && (this.props.feedback.list.length)) {
       this.props.pullFeedback(this.props.auth.token);
     }
   }
