@@ -110,6 +110,7 @@ class FeedbackDetails extends Component {
             onChangeText={solution => this.props.solutionChanged(solution)}
             value={this.props.solutions.solution}
             returnKeyType={'done'}
+            maxLength={200}
           />
 
           {/* Submit button */}

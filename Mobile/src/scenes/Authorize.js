@@ -95,6 +95,7 @@ class Authorize extends Component {
             value={this.state.groupCode}
             onChangeText={text => this.setState({ groupCode: text })}
             keyboardType="phone-pad"
+            maxLength={10}
           />
         </CardSection>
         <CardSection>
@@ -120,6 +121,7 @@ class Authorize extends Component {
                 value={this.state.code}
                 onChangeText={text => this.setState({ code: text })}
                 keyboardType="phone-pad"
+                maxLength={10}
               />
             </CardSection>
 

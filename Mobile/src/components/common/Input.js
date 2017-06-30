@@ -2,7 +2,7 @@
 import React from 'react';
 import { TextInput, View, Text } from 'react-native';
 
-const Input = ({ label, keyboardType, value, onChangeText, placeholder, secureTextEntry, editable = true }) => {
+const Input = ({ label, keyboardType, value, onChangeText, placeholder, secureTextEntry, editable = true, maxLength }) => {
   const { inputStyle, labelStyle, containerStyle } = styles;
 
   return (
@@ -16,7 +16,8 @@ const Input = ({ label, keyboardType, value, onChangeText, placeholder, secureTe
         value={value}
         onChangeText={onChangeText}
         keyboardType={keyboardType}
-        editable = {editable}
+        editable={editable}
+        maxLength={maxLength}
       />
     </View>
   );

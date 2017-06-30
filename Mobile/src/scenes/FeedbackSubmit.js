@@ -198,6 +198,7 @@ class FeedbackSubmit extends Component {
             placeholder={placeholderText}
             placeholderTextColor="#d0d0d0"f
             value={this.state.feedback}
+            maxLength={500}
           />
         </View>
         {this.renderButtons()}
@@ -216,6 +217,7 @@ class FeedbackSubmit extends Component {
               placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
               placeholderTextColor="#d0d0d0"
               value={this.state.positiveFeedback}
+              maxLength={500}
             />
           </View>
           {/* Submit button / loading spinner */}
@@ -234,6 +236,7 @@ class FeedbackSubmit extends Component {
               placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
               placeholderTextColor="#d0d0d0"
               value={this.state.negativeFeedback}
+              maxLength={500}
             />
           </View>
           {/* Submit button / loading spinner */}

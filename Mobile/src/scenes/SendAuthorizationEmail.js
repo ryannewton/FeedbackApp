@@ -69,6 +69,7 @@ class SendAuthorizationEmail extends Component {
                 value={this.state.email}
                 onChangeText={text => this.setState({ email: text })}
                 keyboardType="email-address"
+                maxLength={100}
               />
             </CardSection>
 
