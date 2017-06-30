@@ -208,30 +208,34 @@ class FeedbackSubmit extends Component {
     const positiveFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'row' }}>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-            style={[styles.feedbackInput, styles.positiveFeedbackInput]}
-            placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
-            placeholderTextColor="#d0d0d0"
-            value={this.state.positiveFeedback}
-          />
+          <View style={{ flexDirection: 'row'}}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
+              style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1 }]}
+              placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.positiveFeedback}
+            />
+          </View>
           {/* Submit button / loading spinner */}
           {this.renderButtons('positive')}          
           {this.maybeRenderImage('positive')}
         </View>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-            onContentSizeChange={(event) => {
-              this.setState({ height: event.nativeEvent.contentSize.height });
-            }}
-            style={[styles.feedbackInput, styles.negativeFeedbackInput]}
-            placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-            placeholderTextColor="#d0d0d0"
-            value={this.state.negativeFeedback}
-          />
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row'}}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+              onContentSizeChange={(event) => {
+                this.setState({ height: event.nativeEvent.contentSize.height });
+              }}
+              style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1 }]}
+              placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.negativeFeedback}
+            />
+          </View>
           {/* Submit button / loading spinner */}
           {this.renderButtons('negative')}
           {this.maybeRenderImage('negative')}
