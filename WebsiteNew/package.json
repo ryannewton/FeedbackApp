@@ -38,6 +38,7 @@
     "javascript-time-ago": "^0.4.9",
     "lodash": "^3.10.1",
     "react": "^0.14.3",
+    "react-bootstrap": "^0.31.0",
     "react-dom": "^0.14.3",
     "react-icons": "^2.2.5",
     "react-redux": "^4.0.0",

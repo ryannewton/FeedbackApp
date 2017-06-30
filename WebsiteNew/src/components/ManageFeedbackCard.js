@@ -6,6 +6,7 @@ import TimeAgo from 'react-timeago';
 // Import Components
 import { Card } from './common';
 import OfficialReplyCard from './OfficialReplyCard';
+import { Button, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
 // Import Actions
 import { submitOfficialReply } from '../actions';
@@ -69,20 +70,12 @@ class ManageFeedbackCard extends Component {
     }
 
     return (
-      <div>
-        <div>
-          <div>Enter an official reply.</div>
-          <small>Note: This will be viewable to all users.</small>
-        </div>
-        <div className="col-md-10">
-          <input
-            type="text"
-            className="form-control"
-            placeholder="Official Reply"
-            value={this.state.officialReply}
-            onChange={event => this.setState({ officialReply: event.target.value })}
-            style={{ height: 120, marginRight: 0 }}
-          />
+      <div style = {{flexDirection:'row'}}>
+        <div className="col-md-10" style={{ marginTop:10 }} >
+          <FormGroup controlId="formControlsTextarea">
+            <ControlLabel>Enter an official reply.</ControlLabel>
+            <FormControl componentClass="textarea" placeholder="Enter your reply here. Note that this will be viewable to all users" onChange={event => this.setState({ officialReply: event.target.value })}/>
+          </FormGroup>
         </div>
         <div>
           <button
@@ -93,7 +86,7 @@ class ManageFeedbackCard extends Component {
               this.props.submitOfficialReply({ feedback, officialReply });
               this.setState({ showOfficialReplyInput: false });
             }}
-            style={{ ...buttonStyles, backgroundColor: '#00A2FF' }}
+            style={{ ...buttonStyles, backgroundColor: '#00A2FF', marginTop:35 }}
           >
             SUBMIT REPLY
           </button>
@@ -113,14 +106,16 @@ class ManageFeedbackCard extends Component {
 
   render() {
     return (
-      <Card>
-        {this.renderFeedbackText()}
+      <div className="card col-xs-12" style={{paddingLeft:50, paddingRight:50, paddingTop:10, paddingBottom:10}}>
+          {this.renderFeedbackText()}
+        <div>
+          {this.renderOfficialReplyText()}
+          {this.renderOfficialReplyInput()}
+        </div>
         <div style={{ float: 'right' }}>
           {this.renderOfficialReplyButton()}
         </div>
-        {this.renderOfficialReplyText()}
-        {this.renderOfficialReplyInput()}
-      </Card>
+      </div>
     );
   }
 }
