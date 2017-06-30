@@ -397,7 +397,7 @@ app.post('/submitFeedbackVote', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const feedbackId = req.body.feedback.id;
-      const { upvote, downvote } = req.body;
+      const { upvote, downvote, noOpinion } = req.body;
       const userId = decoded.userId;
       const connectionString = 'INSERT INTO feedbackVotes SET ?'
       connection.query(connectionString,
@@ -406,6 +406,7 @@ app.post('/submitFeedbackVote', upload.array(), (req, res) => {
           userId,
           upvote,
           downvote,
+          noOpinion,
         }, (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
         else res.sendStatus(200);
@@ -625,7 +626,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       SELECT *
       FROM feedback a
       LEFT JOIN (
-        SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
+        SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes, SUM(noOpinion) as noOpinions
         FROM feedbackVotes
         GROUP BY feedbackId
       ) b
