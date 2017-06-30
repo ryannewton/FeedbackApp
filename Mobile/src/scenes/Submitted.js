@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { View, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
 
 // Import components, functions, and styles
 import { Button } from '../components/common';
@@ -24,11 +25,18 @@ class Submitted extends Component {
   }
 
   render() {
+    const navToFeedbackList = NavigationActions.reset({
+      index: 0,
+      key: null,
+      actions: [
+        NavigationActions.navigate({ routeName: 'Tabs'})
+      ]
+    });
     return (
       <View style={styles.container}>
         <View style={{ flex: 1, paddingTop: 20 }}>
           {/* To do: To do: Update navigation to use react-navigation */}
-          <Button onPress={() => this.props.navigation.navigate('FeedbackList')}>
+          <Button onPress={() => this.props.navigation.dispatch(navToFeedbackList)}>
             Vote on Feedback!
           </Button>
         </View>

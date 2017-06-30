@@ -4,6 +4,7 @@ import { Text, Image, Linking, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import Expo from 'expo';
 import axios from 'axios';
+import { NavigationActions } from 'react-navigation';
 
 // Import image and styles
 import { Spinner } from '../components/common';
@@ -81,15 +82,28 @@ class SplashScreen extends Component {
     // There are two options where we want to naviagte
     // 1) loggedIn is false meaning that we failed to login
     if (this.props.auth.loggedIn === false) {
-      this.props.navigation.navigate('Welcome');
+      const navToWelcome = NavigationActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Welcome'})
+        ]
+      });
+      this.props.navigation.dispatch(navToWelcome);
       this.setState({ cleared: true });
     // 2) loggedIn is true (we logged in) and we have stored all the data we need in state
     } else if (
         this.props.auth.loggedIn === true &&
         this.props.feedback.lastPulled.getTime() !== 0
       ) {
-      // tracker.setUser(this.props.group.email);
-      this.props.navigation.navigate('FeedbackList');
+      const navToFeedbackList = NavigationActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Tabs'})
+        ]
+      });
+      this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true

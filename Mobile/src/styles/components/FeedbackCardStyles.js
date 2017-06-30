@@ -11,8 +11,8 @@ const styles = StyleSheet.create({
   row: {
     paddingLeft: 10,
     paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 8,
+    paddingTop: 0,
+    paddingBottom: 0,
     backgroundColor: 'white',
     borderBottomWidth: 1 / PixelRatio.get(),
     borderBottomColor: '#CDCDCD',

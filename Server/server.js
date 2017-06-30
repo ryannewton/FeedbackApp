@@ -397,7 +397,7 @@ app.post('/submitFeedbackVote', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const feedbackId = req.body.feedback.id;
-      const { upvote, downvote } = req.body;
+      const { upvote, downvote, noOpinion } = req.body;
       const userId = decoded.userId;
       const connectionString = 'INSERT INTO feedbackVotes SET ?'
       connection.query(connectionString,
@@ -406,6 +406,7 @@ app.post('/submitFeedbackVote', upload.array(), (req, res) => {
           userId,
           upvote,
           downvote,
+          noOpinion,
         }, (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
         else res.sendStatus(200);
@@ -445,6 +446,36 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
       const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
       connection.query(connectionString, [officialReply, feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
+// APPROVE FEEDBACK
+app.post('/approveFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { feedback } = req.body;
+      const connectionString = 'UPDATE feedback SET approved=1 WHERE feedbackId = ?';
+      connection.query(connectionString, [feedback.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
+// APPROVE SOLUTION
+app.post('/approveSolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { solution } = req.body;
+      const connectionString = 'UPDATE solutions SET approved=1 WHERE solutionId = ?';
+      connection.query(connectionString, [solution.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8261');
         else res.sendStatus(200);
       });
     }
@@ -595,7 +626,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       SELECT *
       FROM feedback a
       LEFT JOIN (
-        SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
+        SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes, SUM(noOpinion) as noOpinions
         FROM feedbackVotes
         GROUP BY feedbackId
       ) b

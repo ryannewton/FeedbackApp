@@ -8,6 +8,7 @@ import { Card, CardSection, Input, Button, Spinner } from '../components/common'
 import { authorizeUser } from '../actions';
  import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
+import { NavigationActions } from 'react-navigation';
 
 // Import tracking
 // import { tracker } from '../constants';
@@ -41,7 +42,14 @@ class Authorize extends Component {
       nextProps.auth.loggedIn === true &&
       nextProps.feedback.lastPulled.getTime() !== 0
     ) {
-      nextProps.navigation.navigate('FeedbackList');
+      const navToFeedbackList = NavigationActions.reset({
+        index: 0,
+        key: null,
+        actions: [
+          NavigationActions.navigate({ routeName: 'Tabs'})
+        ]
+      });
+      this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true

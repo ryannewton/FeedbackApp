@@ -5733,6 +5733,10 @@ statuses@~1.2.1:
   version "1.2.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.2.1.tgz#dded45cc18256d51ed40aec142489d5c61026d28"
 
+stopwords@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/stopwords/-/stopwords-0.0.5.tgz#59ad9dceb96ea0fa27459e1cefe0ee0e6ddfd514"
+
 stream-buffers@~2.2.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/stream-buffers/-/stream-buffers-2.2.0.tgz#91d5f5130d1cef96dcfa7f726945188741d09ee4"

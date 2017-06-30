@@ -19,7 +19,7 @@ import {
 } from 'react-native';
 
 // Import actions
-import { submitFeedbackToServer, closeInstructions, uploadImage } from '../actions';
+import { submitFeedbackToServer, uploadImage } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
@@ -35,7 +35,6 @@ class FeedbackSubmit extends Component {
     super(props, context);
 
     this.state = {
-      height: 0,
       errorMessage: '',
       feedback: '',
       positiveFeedback: '',
@@ -45,7 +44,6 @@ class FeedbackSubmit extends Component {
     // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
     this.props.sendGoogleAnalytics('FeedbackSubmit')
 
-    this.closeInstructions = this.closeInstructions.bind(this);
     this.submitFeedback = this.submitFeedback.bind(this);
   }
 
@@ -63,10 +61,10 @@ class FeedbackSubmit extends Component {
           this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '');
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.imageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '');
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.imageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '');
           this.setState({ negativeFeedback: '' });
         }
 
@@ -77,10 +75,6 @@ class FeedbackSubmit extends Component {
     } else {
       this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
     }
-  }
-
-  closeInstructions() {
-    this.props.closeInstructions('Write Feedback Scene');
   }
 
   addImage = async (type) => {
@@ -95,28 +89,59 @@ class FeedbackSubmit extends Component {
   maybeRenderImage = (type) => {
     const { width, height } = Dimensions.get('window')
     let imageURL;
-    if (!type)
+    let sizeConstraint;
+    if (!type) {
       imageURL = this.props.feedback.imageURL;
-    else if (type === 'positive')
+      sizeConstraint = this.state.sizeConstraint;
+    }
+    else if (type === 'positive') {
       imageURL = this.props.feedback.positiveImageURL;
-    else if (type === 'negative')
+      sizeConstraint = this.state.positiveSizeConstraint;
+    }
+    else if (type === 'negative') {
       imageURL = this.props.feedback.negativeImageURL;
+      sizeConstraint = this.state.negativeSizeConstraint;
+    }
 
     // If there is no image, don't render anything
     if (!imageURL) {
-      return null;
+      return <View />;
     }
 
-    return (
-      <View style={styles.imageContainer, { flex:1, justifyContent: 'flex-start'}}>
-        <View style={styles.imageFrame}>
-          <Image
-            source={{ uri: imageURL }}
-            style={{width: width*0.45, height: width*0.45, resizeMode: 'contain'}}
-          />
-        </View>
-      </View>
-    );
+    Image.getSize(imageURL, (iwidth, iheight) => { 
+      let sizeConstraint = {};
+      if (iwidth > iheight) {
+        sizeConstraint = { width: width*0.45, height: iheight/iwidth*width*0.45 }
+      } else {
+        sizeConstraint = { height: width*0.6, width: iwidth/iheight*width*0.6 }
+      }
+      if (!type) {
+        this.setState({ sizeConstraint });
+      }
+      else if (type === 'positive') {
+        this.setState({ positiveSizeConstraint: sizeConstraint });
+      }
+      else if (type === 'negative') {
+        this.setState({ negativeSizeConstraint: sizeConstraint });
+      }             
+    });  
+    
+    if (sizeConstraint) {
+      return (
+        <Image
+          source={{ uri: imageURL }}
+          style={[
+            sizeConstraint, {
+            shadowColor: 'rgba(0,0,0,1)',
+            shadowOpacity: 0.5,
+            shadowOffset: { width: 4, height: 4 },
+            shadowRadius: 5,
+            marginTop: 10,
+            alignSelf: 'center'
+          }]}
+        />
+      );
+    }
   }
 
   maybeRenderUploadingOverlay = () => {
@@ -142,9 +167,9 @@ class FeedbackSubmit extends Component {
     }
 
     return (
-      <View style={{ flex: 1, flexDirection: 'row', paddingTop:10 }}>
-        <View style={{ flex: 5.5 }}>
-          <Button onPress={this.submitFeedback} style={{ marginBottom: 10, flex: 3 }}>
+      <View style={{ flexDirection: 'row', paddingTop:10 }}>
+        <View style={{ flex: 3.5 }}>
+          <Button onPress={this.submitFeedback}>
             Submit Feedback
           </Button>
         </View>
@@ -164,84 +189,70 @@ class FeedbackSubmit extends Component {
     const placeholderText = 'Enter your feedback here!';
 
     const singleFeedbackBox = (
-      <View>
-        <TextInput
-          multiline={Boolean(true)}
-          onChangeText={feedback => this.setState({ feedback })}
-          onContentSizeChange={(event) => {
-            this.setState({ height: event.nativeEvent.contentSize.height });
-          }}
-          style={styles.feedbackInput}
-          placeholder={placeholderText}
-          placeholderTextColor="#d0d0d0"f
-          value={this.state.feedback}
-        />
-        {/* Submit button / loading spinner */}
-          {this.renderButtons()}
-        {/* image */}
-        {/*<View style={{alignItems:'center'}}>*/}
-            {this.maybeRenderImage()}
-        {/*</View>*/}
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+        <View style={{ flexDirection: 'row'}}>
+          <TextInput
+            multiline={Boolean(true)}
+            onChangeText={feedback => this.setState({ feedback })}
+            style={[styles.feedbackInput, { flex: 1 }]}
+            placeholder={placeholderText}
+            placeholderTextColor="#d0d0d0"f
+            value={this.state.feedback}
+          />
+        </View>
+        {this.renderButtons()}
+        {this.maybeRenderImage()}
       </View>
     );
 
     const positiveFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-            onContentSizeChange={(event) => {
-              this.setState({ height: event.nativeEvent.contentSize.height });
-            }}
-            style={[styles.feedbackInput, styles.positiveFeedbackInput]}
-            placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
-            placeholderTextColor="#d0d0d0"
-            value={this.state.positiveFeedback}
-          />
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row'}}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
+              style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1 }]}
+              placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.positiveFeedback}
+            />
+          </View>
           {/* Submit button / loading spinner */}
-          <View>
-            {this.renderButtons('positive')}
-          </View>
-          <View>
-            {this.maybeRenderImage('positive')}
-          </View>
+          {this.renderButtons('positive')}          
+          {this.maybeRenderImage('positive')}
         </View>
-        <View style={{ flex: 1 }}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-            onContentSizeChange={(event) => {
-              this.setState({ height: event.nativeEvent.contentSize.height });
-            }}
-            style={[styles.feedbackInput, styles.negativeFeedbackInput]}
-            placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
-            placeholderTextColor="#d0d0d0"
-            value={this.state.negativeFeedback}
-          />
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+          <View style={{ flexDirection: 'row'}}>
+            <TextInput
+              multiline={Boolean(true)}
+              onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
+              onContentSizeChange={(event) => {
+                this.setState({ height: event.nativeEvent.contentSize.height });
+              }}
+              style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1 }]}
+              placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+              placeholderTextColor="#d0d0d0"
+              value={this.state.negativeFeedback}
+            />
+          </View>
           {/* Submit button / loading spinner */}
-          <View>
-            {this.renderButtons('negative')}
-          </View>
-          <View style={{alignItems: 'center'}}>
-            {this.maybeRenderImage('negative')}
-          </View>
+          {this.renderButtons('negative')}
+          {this.maybeRenderImage('negative')}
         </View>
       </View>
     );
 
     const WriteFeedbackScene = (
-      <View style={[styles.container, styles.feedbackSceneContainer]}>
+      <View style={{ flex: 1, backgroundColor: '#fff' }}>
         <MenuContext style={{ flex: 1 }} ref="MenuContext">
           <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-            <KeyboardAvoidingView behavior={'padding'} style={styles.container}>
-
+            <View style={{ flex: 1 }}>
               <Text style={styles.errorTextStyle}>
                 {this.state.errorMessage}
               </Text>
-
               {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
-            </KeyboardAvoidingView>
+            </View>
           </TouchableWithoutFeedback>
         </MenuContext>
         {this.maybeRenderUploadingOverlay()}
@@ -257,7 +268,6 @@ FeedbackSubmit.propTypes = {
   group: React.PropTypes.object,
   feedback: React.PropTypes.object,
   submitFeedbackToServer: React.PropTypes.func,
-  closeInstructions: React.PropTypes.func,
   navigation: React.PropTypes.object,
 };
 
@@ -268,7 +278,6 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
-  closeInstructions,
   uploadImage,
   sendGoogleAnalytics
 })(FeedbackSubmit);
