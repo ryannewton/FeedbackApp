@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
 const Header = ({ children }) => {
   const { textStyle, viewStyle } = styles;
@@ -14,7 +15,7 @@ const Header = ({ children }) => {
 };
 
 Header.propTypes = {
-  children: React.PropTypes.string,
+  children: PropTypes.string,
 };
 
 const styles = {

@@ -1,7 +1,8 @@
 import React from 'react';
 import { View } from 'react-native';
+import PropTypes from 'prop-types';
 
-const CardSection = props => {
+const CardSection = (props) => {
   return (
     <View style={styles.containerStyle}>
       {props.children}
@@ -10,7 +11,7 @@ const CardSection = props => {
 };
 
 CardSection.propTypes = {
-  children: React.PropTypes.node,
+  children: PropTypes.node,
 };
 
 const styles = {

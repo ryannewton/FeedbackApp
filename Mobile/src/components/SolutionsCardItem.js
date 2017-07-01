@@ -3,47 +3,41 @@ import React, { Component } from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
+import PropTypes from 'prop-types';
 
 // Import styles, components, and action creators
 import styles from '../styles/components/SolutionCardItemStyles';
 import { CardSection } from '../components/common';
 import { addSolutionUpvote, removeSolutionUpvote, addSolutionDownvote, removeSolutionDownvote } from '../actions';
 
-// Import tracking
-// import { tracker } from '../constants';
-
 class SolutionsCardItem extends Component {
-  upvoteSolution(solution) {
+
+  upvoteSolution = (solution) => {
     const { user } = this.props;
-    // If user hasn't upvoted this solution, add an upvote
     if (!user.solutionUpvotes.includes(solution.id)) {
-      // tracker.trackEvent('Solution Vote', 'Solution UpVote Via Solution Button', { label: this.props.group.domain });
       this.props.addSolutionUpvote(solution);
     } else {
-      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution UpVote Via Solution Button', { label: this.props.group.domain });
       this.props.removeSolutionUpvote(solution);
     }
   }
-  downvoteSolution(solution) {
+
+  downvoteSolution = (solution) => {
     const { user } = this.props;
     // If user hasn't downvoted this solution, add an downvote
     if (!user.solutionDownvotes.includes(solution.id)) {
-      // tracker.trackEvent('Solution DownVote', 'Solution DownVote Via Solution Button', { label: this.props.group.domain });
       this.props.addSolutionDownvote(solution);
     } else {
-      // tracker.trackEvent('Remove Solution Vote', 'Remove Solution DownVote Via Solution Button', { label: this.props.group.domain });
       this.props.removeSolutionDownvote(solution);
     }
   }
 
-  renderSolutionUpvoteButton(solution) {
+  renderSolutionUpvoteButton = (solution) => {
     const { user } = this.props;
     let iconColor = 'grey';
-    // If user hasn't upvoted this solution
+
     if (user.solutionUpvotes.includes(solution.id)) {
       iconColor = '#48D2A0';
     }
-
     return (
       <TouchableOpacity onPress={() => this.upvoteSolution(solution)}>
         <View>
@@ -52,7 +46,8 @@ class SolutionsCardItem extends Component {
       </TouchableOpacity>
     );
   }
-  renderSolutionDownvoteButton(solution) {
+
+  renderSolutionDownvoteButton = (solution) => {
     const { user } = this.props;
     let iconColor = 'grey';
     // If user hasn't downvoted this solution
@@ -67,6 +62,7 @@ class SolutionsCardItem extends Component {
       </TouchableOpacity>
     );
   }
+
   render() {
     const { solution } = this.props;
     const { solutionText, upvoteCountText } = styles;
@@ -101,13 +97,13 @@ class SolutionsCardItem extends Component {
 }
 
 SolutionsCardItem.propTypes = {
-  solution: React.PropTypes.object,
-  user: React.PropTypes.object,
-  addSolutionUpvote: React.PropTypes.func,
-  removeSolutionUpvote: React.PropTypes.func,
-  addSolutionDownvote: React.PropTypes.func,
-  removeSolutionDownvote: React.PropTypes.func,
-  group: React.PropTypes.object,
+  solution: PropTypes.object,
+  user: PropTypes.object,
+  addSolutionUpvote: PropTypes.func,
+  removeSolutionUpvote: PropTypes.func,
+  addSolutionDownvote: PropTypes.func,
+  removeSolutionDownvote: PropTypes.func,
+  group: PropTypes.object,
 };
 
 function mapStateToProps(state) {

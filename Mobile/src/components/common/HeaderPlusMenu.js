@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
 import Menu, {
   MenuOptions,
@@ -33,8 +34,8 @@ class HeaderPlusMenu extends React.Component {
 }
 
 HeaderPlusMenu.propTypes = {
-  navigate: React.PropTypes.func,
-  children: React.PropTypes.string,
+  navigate: PropTypes.func,
+  children: PropTypes.string,
 };
 
 const styles = {
