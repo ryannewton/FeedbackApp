@@ -19,6 +19,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     color: 'red',
   },
+  background: {
+    flex: 1,
+    width: null,
+  },
 });
 
 export default styles;
