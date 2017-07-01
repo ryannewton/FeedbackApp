@@ -51,7 +51,7 @@ class SendAuthorizationEmail extends Component {
   }
 
   render() {
-    const SendEmailScene = (
+    return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <View style={styles.container}>
           <Card>
@@ -88,8 +88,6 @@ class SendAuthorizationEmail extends Component {
         </View>
       </TouchableWithoutFeedback>
     );
-
-    return SendEmailScene;
   }
 }
 

@@ -238,7 +238,7 @@ class FeedbackSubmit extends Component {
       </View>
     );
 
-    const WriteFeedbackScene = (
+    return (
       <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
           <Text style={styles.errorTextStyle}>
@@ -249,8 +249,6 @@ class FeedbackSubmit extends Component {
         </View>          
       </TouchableWithoutFeedback>
     );
-
-    return WriteFeedbackScene;
   }
 }
 
