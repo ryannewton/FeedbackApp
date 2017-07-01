@@ -89,7 +89,7 @@ class FeedbackDetails extends Component {
               />
 
               {/* Offical Response card */}
-              <ResponseCard navigation={this.props.navigation} />
+              <ResponseCard navigation={this.props.navigation} feedback={feedback} />
 
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />

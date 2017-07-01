@@ -1,17 +1,19 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
-import fullScreen from '../../images/icons/default.jpg';
-import noOpinionY from '../../images/icons/meh_y.png';
-import noOpinionG from '../../images/icons/meh_g2.png';
+import PropTypes from 'prop-types';
 
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
 import { Card, CardSection } from './common';
+import fullScreen from '../../images/icons/default.jpg';
+import noOpinionY from '../../images/icons/meh_y.png';
+import noOpinionG from '../../images/icons/meh_g2.png';
+
 import {
   addFeedbackUpvote,
   removeFeedbackUpvote,
@@ -22,25 +24,12 @@ import {
   removeFeedbackNoOpinion,
 } from '../actions';
 
-// Import tracking
-// import { tracker } from '../constants';
-
 class Feedback extends Component {
-  constructor(props) {
-    super(props);
-
-    this.upvote = this.upvote.bind(this);
-    this.downvote = this.downvote.bind(this);
-    this.renderStatusBox = this.renderStatusBox.bind(this);
-    this.goToDetails = this.goToDetails.bind(this);
-    this.addNoOpinion = this.addNoOpinion.bind(this);
-  }
-
-  goToDetails() {
+  goToDetails = () => {
     this.props.navigate('Details', { feedback: this.props.feedback });
   }
 
-  addNoOpinion() {
+  addNoOpinion = () => {
     const { feedback, user } = this.props;
     if (!user.feedbackNoOpinions.includes(feedback.id)) {
       this.props.addFeedbackNoOpinion(feedback);
@@ -49,48 +38,29 @@ class Feedback extends Component {
     }
   }
 
-  upvote() {
+  // If user hasn't upvoted this feedback, add an upvote - if they have, remove it
+  upvote = () => {
     const { feedback, user } = this.props;
-    // If user hasn't upvoted this feedback, add an upvote
     if (!user.feedbackUpvotes.includes(feedback.id)) {
-      // tracker.trackEvent('Feedback Vote', 'Feedback UpVote Via Feedback Button', { label: this.props.group.domain });
       this.props.addFeedbackUpvote(feedback);
     } else {
-      // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback UpVote Via Feedback Button', { label: this.props.group.domain });
       this.props.removeFeedbackUpvote(feedback);
     }
     this.props.addToDoNotDisplayList(feedback.id)
   }
-  downvote() {
-    const { feedback, user } = this.props;
-    // If user hasn't downvoted this feedback, add an downvote
+
+  // If user hasn't downvoted this feedback, add an downvote - if they have, remove it
+  downvote = () => {
+    const { feedback, user } = this.props;    
     if (!user.feedbackDownvotes.includes(feedback.id)) {
-      // tracker.trackEvent('Feedback Vote', 'Feedback DownVote Via Feedback Button', { label: this.props.group.domain });
       this.props.addFeedbackDownvote(feedback);
     } else {
-      // tracker.trackEvent('Remove Feedback Vote', 'Remove Feedback DownVote Via Feedback Button', { label: this.props.group.domain });
       this.props.removeFeedbackDownvote(feedback);
     }
     this.props.addToDoNotDisplayList(feedback.id)
   }
 
-
-  // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
-  renderVoteCount() {
-    if (this.props.feedback === undefined) {
-      return '';
-    }
-    return `${this.props.feedback.upvotes}`;
-  }
-  renderDownvoteCount() {
-    if (this.props.feedback === undefined) {
-      return '';
-    }
-    return `${this.props.feedback.downvotes}`;
-  }
-
-  // Temporary fix. Async issue is causing this.props.feedback to be temporarily undefined
-  renderTitle() {
+  renderTitle = () => {
     if (this.props.feedback === undefined) {
       return '';
     } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
@@ -121,7 +91,7 @@ class Feedback extends Component {
     );
   }
 
-  renderNoOpinionButton() {
+  renderNoOpinionButton = () => {
     const { feedback, user } = this.props;
     let noOpinionN = noOpinionG;
     // If user hasn't upvoted this feedback
@@ -140,7 +110,8 @@ class Feedback extends Component {
       </View>
     );
   }
-  renderThumbUpButton() {
+
+  renderThumbUpButton = () => {
     const { feedback, user } = this.props;
     let iconColor = 'grey';
     // If user hasn't upvoted this feedback
@@ -153,7 +124,7 @@ class Feedback extends Component {
       </View>
     );
   }
-  renderThumbDownButton() {
+  renderThumbDownButton = () => {
     const { feedback, user } = this.props;
     let iconColor = 'grey';
     // If user hasn't upvoted this feedback
@@ -167,7 +138,7 @@ class Feedback extends Component {
     );
   }
 
-  renderStatus() {
+  renderStatus = () => {
     const { status } = this.props.feedback;
     if (status && status === 'complete') {
       return <Icon name="done" size={30} color={'#48D2A0'} />;
@@ -178,7 +149,7 @@ class Feedback extends Component {
     return <Icon name="fiber-new" size={30} color={'#00A2FF'} />;
   }
 
-  renderStatusBox() {
+  renderStatusBox = () => {
     if (this.props.group.showStatus) {
       return (
         <View style={{ paddingRight: 10 }}>
@@ -188,7 +159,8 @@ class Feedback extends Component {
     }
     return null;
   }
-  renderOfficialResponseTag() {
+
+  renderOfficialResponseTag = () => {
     const { feedback, showResponseTag } = this.props;
     if (!showResponseTag) {
       return null;
@@ -205,7 +177,7 @@ class Feedback extends Component {
     );
   }
 
-  renderImage() {
+  renderImage = () => {
     const { imageURL } = this.props.feedback;
     const { showImage } = this.props;
     const { imageStyle, imageViewStyle } = styles;
@@ -238,7 +210,7 @@ class Feedback extends Component {
     );
   }
 
-  renderSmallImage() {
+  renderSmallImage = () => {
     const { imageURL } = this.props.feedback;
     const { showImage } = this.props;
     const { imageStyle, imageViewStyle } = styles;
@@ -273,7 +245,7 @@ class Feedback extends Component {
     );
   }
 
-  renderSolutionsTag() {
+  renderSolutionsTag = () => {
     const { solutions, feedback } = this.props;
     const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
     if (feedbackSolutions.length) {
@@ -286,7 +258,7 @@ class Feedback extends Component {
     return null;
   }
 
-  renderImageIcon() {
+  renderImageIcon = () => {
     const { imageURL } = this.props.feedback;
 
     // Check if there is an image and we are not currently showing the image
@@ -326,6 +298,7 @@ class Feedback extends Component {
 
     return (
         <View style={updatedRow}>
+<<<<<<< HEAD
           <View style={{ flexDirection: 'column'}}>
 
 
@@ -342,6 +315,44 @@ class Feedback extends Component {
               <View style={{ alignSelf: 'center' }}>
                           {/* Render image*/}
                 {this.renderSmallImage()}
+=======
+          <View style={{ flexDirection: 'row'}}>
+            <View style={{ alignSelf: 'center' }}>
+              {this.renderSmallImage()}
+            </View>
+            <View style={{ flex: 8, flexDirection: 'column', justifyContent: 'space-between' }}>
+              {/* First row */}{/* Project title */}
+              <View style={{ flex: 5, paddingTop: 10, paddingLeft: 12 }}>
+                <Text style={feedbackTitle}>
+                  {this.renderTitle()}
+                </Text>
+              </View>
+
+              {/* Render image*/}
+              {this.renderImage()}
+              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{flexDirection: 'row', paddingLeft: 15, paddingBottom: 10}}>
+                  {/* Render official response tag */}
+                  {this.renderOfficialResponseTag()}
+                  {this.renderSolutionsTag()}
+                </View>
+                {/* Vote count */}
+                <View style={{flexDirection: 'row', paddingBottom: 10}}>
+                  {/* Upvote Button and Downvote */}
+                    <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
+                      {this.renderThumbDownButton()}
+                    </TouchableOpacity>
+                    <Text style={downvoteTextStyle, {paddingRight: 12, paddingTop: 7}}>
+                      {this.props.feedback.downvotes}
+                    </Text>
+                    <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 5 }}>
+                      {this.renderThumbUpButton()}
+                    </TouchableOpacity>
+                    <Text style={upvoteTextStyle, {paddingRight: 1, paddingTop: 7}}>
+                      {this.props.feedback.upvotes}
+                    </Text>
+                </View>
+>>>>>>> Pat clean up #3
               </View>
             </View>
 
@@ -379,17 +390,17 @@ class Feedback extends Component {
 }
 
 Feedback.propTypes = {
-  feedback: React.PropTypes.object,
-  navigate: React.PropTypes.func,
-  user: React.PropTypes.object,
-  addFeedbackUpvote: React.PropTypes.func,
-  removeFeedbackUpvote: React.PropTypes.func,
-  addFeedbackDownvote: React.PropTypes.func,
-  removeFeedbackDownvote: React.PropTypes.func,
-  group: React.PropTypes.object,
-  showResponseTag: React.PropTypes.bool,
-  showImage: React.PropTypes.bool,
-  solutions: React.PropTypes.object,
+  feedback: PropTypes.object,
+  navigate: PropTypes.func,
+  user: PropTypes.object,
+  addFeedbackUpvote: PropTypes.func,
+  removeFeedbackUpvote: PropTypes.func,
+  addFeedbackDownvote: PropTypes.func,
+  removeFeedbackDownvote: PropTypes.func,
+  group: PropTypes.object,
+  showResponseTag: PropTypes.bool,
+  showImage: PropTypes.bool,
+  solutions: PropTypes.object,
 };
 
 const mapStateToProps = (state) => {

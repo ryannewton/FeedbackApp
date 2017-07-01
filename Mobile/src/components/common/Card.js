@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Platform } from 'react-native';
+import PropTypes from 'prop-types';
 
 const Card = props => (
   <View style={styles.containerStyle}>
@@ -8,9 +9,9 @@ const Card = props => (
 );
 
 Card.propTypes = {
-  children: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.array,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.array,
   ]),
 };
 

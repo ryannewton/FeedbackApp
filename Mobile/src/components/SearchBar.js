@@ -1,3 +1,4 @@
+// Import libraries
 import React, { Component } from 'react';
 import {
   Text,
@@ -9,6 +10,7 @@ import Menu, { MenuOptions, MenuOption, MenuTrigger, MenuContext } from 'react-n
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 
+// Import components, styles, and actions
 import { changeFilterMethod, setSearchQuery, searchInProgress } from '../actions';
 import Search from './SearchInput';
 import styles from '../styles/components/SearchBarStyles';
@@ -17,16 +19,17 @@ class SearchBar extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      searchPressed: this.props.feedback.searchInProgress,
-      filterMethod: this.props.feedback.filterMethod,
-      placeholderText: this.props.feedback.searchQuery,
+      searchPressed: props.feedback.searchInProgress,
+      filterMethod: props.feedback.filterMethod,
+      placeholderText: props.feedback.searchQuery,
     };
   }
 
   componentWillUpdate() {
     LayoutAnimation.spring();
   }
-  renderFilterMethodTitle(method) {
+
+  renderFilterMethodTitle = (method) => {
     switch (method) {
       case 'this_week':
         return "This Week's Feedback";
@@ -41,7 +44,7 @@ class SearchBar extends Component {
     }
   }
 
-  renderTitleHelper() {
+  renderTitleHelper = () => {
     // Temporary fix to weird bug with reducer
     if (!this.props.feedback.filterMethod) {
       return 'All Feedback';
@@ -49,7 +52,7 @@ class SearchBar extends Component {
     return this.renderFilterMethodTitle(this.props.feedback.filterMethod);
   }
 
-  renderSearchBar() {
+  renderSearchBar = () => {
     const {
       spacingStyle,
       layoutStyle,
@@ -103,7 +106,7 @@ class SearchBar extends Component {
   }
 
 
-  hasDisabledStyle(value) {
+  hasDisabledStyle = (value) => {
     // Should we indicate that this is the method you are currently seeing?
     if (this.state.filterMethod === value) {
       return { backgroundColor: '#ccc' };
@@ -112,7 +115,7 @@ class SearchBar extends Component {
   }
 
 
-  renderPicker() {
+  renderPicker = () => {
     const renderTouchable = () => <TouchableOpacity />;
     const {
       menuOptions,

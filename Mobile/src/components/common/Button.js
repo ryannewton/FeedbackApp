@@ -1,5 +1,6 @@
 import React from 'react';
 import { Text, View, TouchableOpacity } from 'react-native';
+import PropTypes from 'prop-types';
 
 const Button = ({ onPress, children, style, textStyle }) => (
   <View style={[{ flexDirection: 'row' }]}>
@@ -12,15 +13,15 @@ const Button = ({ onPress, children, style, textStyle }) => (
 );
 
 Button.propTypes = {
-  onPress: React.PropTypes.func,
-  children: React.PropTypes.string,
-  style: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.number,
+  onPress: PropTypes.func,
+  children: PropTypes.string,
+  style: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.number,
   ]),
-  textStyle: React.PropTypes.oneOfType([
-    React.PropTypes.object,
-    React.PropTypes.number,
+  textStyle: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.number,
   ]),
 };
 
