@@ -1,7 +1,8 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
@@ -16,13 +17,10 @@ class SendAuthorizationEmail extends Component {
       email: '',
     };
 
-    this.props.sendGoogleAnalytics('SendAuthEmail')
-
-    this.sendAuthorizationEmail = this.sendAuthorizationEmail.bind(this);
-    this.closeInstructions = this.closeInstructions.bind(this);
+    props.sendGoogleAnalytics('SendAuthEmail');
   }
 
-  sendAuthorizationEmail() {
+  sendAuthorizationEmail = () => {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
       Keyboard.dismiss();
@@ -32,11 +30,7 @@ class SendAuthorizationEmail extends Component {
     }
   }
 
-  closeInstructions() {
-    this.props.closeInstructions('Send Email Scene');
-  }
-
-  renderSignupButton() {
+  renderSignupButton = () => {
     return (
       <Button onPress={this.sendAuthorizationEmail}>
         Send Authorization Email
@@ -44,7 +38,7 @@ class SendAuthorizationEmail extends Component {
     );
   }
 
-  renderButtons() {
+  renderButtons = () => {
     if (this.props.auth.loading) {
       return <Spinner />;
     }
@@ -100,11 +94,12 @@ class SendAuthorizationEmail extends Component {
 }
 
 SendAuthorizationEmail.propTypes = {
-  auth: React.PropTypes.object,
-  sendAuthorizationEmail: React.PropTypes.func,
-  authorizeUserFail: React.PropTypes.func,
-  user: React.PropTypes.object,
-  navigation: React.PropTypes.object,
+  auth: PropTypes.object,
+  sendAuthorizationEmail: PropTypes.func,
+  authorizeUserFail: PropTypes.func,
+  user: PropTypes.object,
+  navigation: PropTypes.object,
+  sendGoogleAnalytics: PropTypes.func,
 };
 
 const mapStateToProps = (state) => {
@@ -115,6 +110,5 @@ const mapStateToProps = (state) => {
 export default connect(mapStateToProps, {
   sendAuthorizationEmail,
   authorizeUserFail,
-  closeInstructions,
   sendGoogleAnalytics
 })(SendAuthorizationEmail);

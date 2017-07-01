@@ -2,17 +2,14 @@
 import React, { Component } from 'react';
 import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
+import { NavigationActions } from 'react-navigation';
+import PropTypes from 'prop-types';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
-import { authorizeUser } from '../actions';
- import loadOnLaunch from '../reducers/load_on_launch';
+import { authorizeUser, sendGoogleAnalytics } from '../actions';
+import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
-import { NavigationActions } from 'react-navigation';
-
-// Import tracking
-// import { tracker } from '../constants';
-import { sendGoogleAnalytics } from '../actions';
 
 class Authorize extends Component {
   constructor(props) {
@@ -21,14 +18,14 @@ class Authorize extends Component {
     this.state = {
       code: '',
       cleared: false,
-      groupCode: ''
+      groupCode: '',
     };
 
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
 
     // tracker.trackScreenView('Authorize');
-    this.props.sendGoogleAnalytics('Authorize')
+    props.sendGoogleAnalytics('Authorize');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,9 +42,7 @@ class Authorize extends Component {
       const navToFeedbackList = NavigationActions.reset({
         index: 0,
         key: null,
-        actions: [
-          NavigationActions.navigate({ routeName: 'Tabs'})
-        ]
+        actions: [NavigationActions.navigate({ routeName: 'Tabs' })],
       });
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
@@ -56,7 +51,10 @@ class Authorize extends Component {
   }
 
   authorizeUser() {
-    this.props.authorizeUser(this.props.auth.email, this.state.code, this.props.group.groupAuthCode || this.state.groupCode);
+    this.props.authorizeUser(
+      this.props.auth.email,
+      this.state.code,
+      this.props.group.groupAuthCode || this.state.groupCode);
     loadOnLaunch();
   }
 
@@ -150,11 +148,12 @@ class Authorize extends Component {
 }
 
 Authorize.propTypes = {
-  auth: React.PropTypes.object,
-  authorizeUser: React.PropTypes.func,
-  navigation: React.PropTypes.object,
-  group: React.PropTypes.object,
-  feedback: React.PropTypes.object,
+  auth: PropTypes.object,
+  authorizeUser: PropTypes.func,
+  navigation: PropTypes.object,
+  group: PropTypes.object,
+  feedback: PropTypes.object,
+  sendGoogleAnalytics: PropTypes.func,
 };
 
 function mapStateToProps(state) {
