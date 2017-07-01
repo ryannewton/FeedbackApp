@@ -6,10 +6,12 @@ import { Icon } from 'react-native-elements';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
 import fullScreen from '../../images/icons/default.jpg';
+import noOpinionY from '../../images/icons/meh_y.png';
+import noOpinionG from '../../images/icons/meh_g2.png';
 
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
-import { Card } from './common';
+import { Card, CardSection } from './common';
 import {
   addFeedbackUpvote,
   removeFeedbackUpvote,
@@ -122,14 +124,20 @@ class Feedback extends Component {
 
   renderNoOpinionButton() {
     const { feedback, user } = this.props;
-    let iconColor = 'grey';
+    let noOpinionN = noOpinionG;
     // If user hasn't upvoted this feedback
     if (user.feedbackNoOpinions.includes(feedback.id)) {
-      iconColor = '#F8C61C';
+      noOpinionN = noOpinionY;
     }
     return (
       <View>
-        <Icon name="thumb-up" size={35} color={iconColor} />
+        <Image
+          source={noOpinionN}
+          style={{
+            height: 17,
+            resizeMode: 'contain',
+          }}
+        />
       </View>
     );
   }
@@ -142,7 +150,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-up" size={25} color={iconColor} />
+        <Icon name="thumb-up" size={30} color={iconColor} />
       </View>
     );
   }
@@ -155,7 +163,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-down" size={25} color={iconColor} />
+        <Icon name="thumb-down" size={30} color={iconColor} />
       </View>
     );
   }
@@ -174,7 +182,7 @@ class Feedback extends Component {
   renderStatusBox() {
     if (this.props.group.showStatus) {
       return (
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+        <View style={{ paddingRight: 10 }}>
           {this.renderStatus()}
         </View>
       );
@@ -192,7 +200,7 @@ class Feedback extends Component {
       return null;
     }
     return (
-      <View style={{ paddingRight: 10 }}>
+      <View style={{ paddingRight: 10, paddingTop: 10 }}>
         <Icon name="verified-user" color="blue" />
       </View>
     );
@@ -242,13 +250,7 @@ class Feedback extends Component {
 
     // If feedback doesn't have a photo
     if (!imageURL) {
-    if (status && status === 'complete') {
-      return <Icon name="done" size={100} color={'#48D2A0'} />;
-    }
-    if (status && status === 'inprocess') {
-      return <Icon name="sync" size={100} color={'#F8C61C'} />;
-    }
-    return <Icon name="fiber-new" size={100} color={'#00A2FF'} />;
+      return null;
     }
     return (
       <View style={imageViewStyle}>
@@ -262,13 +264,11 @@ class Feedback extends Component {
             unfilledColor: 'rgba(200, 200, 200, 0.2)',
           }}
           style={{
-            width: 100,
-            height: 100,
+            width: 80,
+            height: 80,
             resizeMode: 'cover',
           }}
         >
-          {/* Render Status icon */}
-          {this.renderStatusBox()}
         </Image>
       </View>
     );
@@ -327,47 +327,53 @@ class Feedback extends Component {
 
     return (
         <View style={updatedRow}>
-        <View style={{ flexDirection: 'row'}}>
-          <View style={{ alignSelf: 'center' }}>
-                      {/* Render image*/}
-            {this.renderSmallImage()}
-          </View>
-          <View style={{ flex: 8, flexDirection: 'column', justifyContent: 'space-between' }}>
-            {/* First row */}{/* Project title */}
-            <View style={{ flex: 5, paddingTop: 5 }}>
-              {this.renderTitle()}
+          <View style={{ flexDirection: 'column'}}>
+
+
+            <View style={{ flexDirection: 'row'}}>
+              <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+                {/* First row */}{/* Project title */}
+                <View style={{  paddingTop: 5 }}>
+                  {this.renderTitle()}
+                </View>
+
+                {/* Render image*/}
+                {this.renderImage()}
+              </View>
+              <View style={{ alignSelf: 'center' }}>
+                          {/* Render image*/}
+                {this.renderSmallImage()}
+              </View>
             </View>
 
-            {/* Render image*/}
-            {this.renderImage()}
-            <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{flexDirection: 'row', paddingLeft: 15, paddingBottom: 10}}>
-              {/* Render official response tag */}
-              {this.renderOfficialResponseTag()}
-              {this.renderSolutionsTag()}
-            </View>
-            {/* Vote count */}
-            <View style={{flexDirection: 'row', paddingBottom: 10}}>
-              {/* Upvote Button and Downvote */}
-                <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
-                  {this.renderThumbDownButton()}
-                </TouchableOpacity>
-                <Text style={downvoteTextStyle, {paddingRight: 12, paddingTop: 7}}>
-                  {this.renderDownvoteCount()}
-                </Text>
-                <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 5 }}>
-                  {this.renderNoOpinionButton()}
-                </TouchableOpacity>
-                <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 5 }}>
-                  {this.renderThumbUpButton()}
-                </TouchableOpacity>
-                <Text style={upvoteTextStyle, {paddingRight: 1, paddingTop: 7}}>
-                  {this.renderVoteCount()}
-                </Text>
-            </View>
-            </View>
+              <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
+                  {this.renderStatusBox()}
+                  {this.renderOfficialResponseTag()}
+                  {this.renderSolutionsTag()}
+                </View>
+                {/* Vote count */}
+                <View style={{ flex: 1, flexDirection: 'row'}}>
+                  {/* Upvote Button and Downvote */}
+                    <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 0 }}>
+                      {this.renderThumbDownButton()}
+                    </TouchableOpacity>
+                    <Text style={downvoteTextStyle, { paddingTop: 7}}>
+                      {this.renderDownvoteCount()}
+                    </Text>
+                    <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingTop: 5 }}>
+                      {this.renderNoOpinionButton()}
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 0 }}>
+                      {this.renderThumbUpButton()}
+                    </TouchableOpacity>
+                    <Text style={upvoteTextStyle, {paddingRight: 0, paddingTop: 7}}>
+                      {this.renderVoteCount()}
+                    </Text>
+                </View>
+              </View>
+
           </View>
-        </View>
         </View>
     );
   }

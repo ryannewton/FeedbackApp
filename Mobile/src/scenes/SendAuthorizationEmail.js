@@ -9,7 +9,9 @@ import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogl
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import { Sae } from 'react-native-textinput-effects';
+import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
+import { Sae, Fumi, Kohana, Makiko, Akira } from 'react-native-textinput-effects';
+import fullScreen from '../../images/backgrounds/auth6.jpg';
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -62,18 +64,21 @@ class SendAuthorizationEmail extends Component {
   render() {
     const SendEmailScene = (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.container, {backgroundColor: '#00A2FF', flex:1}}>
+        <Image style={styles.background} source={fullScreen} resizeMode="cover">
             {/* Email input */}
-            <Sae
+            <Makiko
               label={'Email Address'}
               iconClass={FontAwesomeIcon}
-              iconName={'pencil'}
-              iconColor={'white'}
-              value={this.state.email}
+              iconName={'envelope'}
+              iconColor={'#00A2FF'}
+              inputStyle={{ color: 'black' }}
+                            value={this.state.email}
+              onChangeText={text => this.setState({ email: text })}
+              keyboardType="email-address"
               // TextInput props
               autoCapitalize={'none'}
               autoCorrect={false}
-              style={{margin:20}}
+              style={{marginLeft:20, marginRight:20, marginTop:100}}
             />
             {/* Error message (blank if no error) */}
             <Text style={styles.errorTextStyle}>
@@ -81,10 +86,10 @@ class SendAuthorizationEmail extends Component {
             </Text>
 
             {/* Confirmation button, and 'go to login' button */}
-            <View>
+            <View style={{marginLeft:15, marginRight:15, marginTop:5}}>
               {this.renderButtons()}
             </View>
-        </View>
+        </Image>
       </TouchableWithoutFeedback>
     );
 
