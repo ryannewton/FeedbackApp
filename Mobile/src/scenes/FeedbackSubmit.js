@@ -47,6 +47,11 @@ class FeedbackSubmit extends Component {
     this.submitFeedback = this.submitFeedback.bind(this);
   }
 
+  componentDidMount() {
+    const { groupAuthCode } = this.props.group;
+    this.props.navigation.setParams({ groupAuthCode });
+  }
+
   submitFeedback() {
     if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
       // First we search the feedback for restricted words
@@ -108,7 +113,7 @@ class FeedbackSubmit extends Component {
       return <View />;
     }
 
-    Image.getSize(imageURL, (iwidth, iheight) => { 
+    Image.getSize(imageURL, (iwidth, iheight) => {
       let sizeConstraint = {};
       if (iwidth > iheight) {
         sizeConstraint = { width: width*0.45, height: iheight/iwidth*width*0.45 }
@@ -123,9 +128,9 @@ class FeedbackSubmit extends Component {
       }
       else if (type === 'negative') {
         this.setState({ negativeSizeConstraint: sizeConstraint });
-      }             
-    });  
-    
+      }
+    });
+
     if (sizeConstraint) {
       return (
         <Image
@@ -219,7 +224,7 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          {this.renderButtons('positive')}          
+          {this.renderButtons('positive')}
           {this.maybeRenderImage('positive')}
         </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>

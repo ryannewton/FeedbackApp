@@ -443,7 +443,7 @@ app.post('/submitSolutionVote', upload.array(), (req, res) => {
 
 // SUBMIT OFFICIAL REPLY
 app.post('/submitOfficialReply', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback, officialReply } = req.body;
@@ -458,7 +458,7 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
 
 // APPROVE FEEDBACK
 app.post('/approveFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback } = req.body;
@@ -473,7 +473,7 @@ app.post('/approveFeedback', upload.array(), (req, res) => {
 
 // APPROVE SOLUTION
 app.post('/approveSolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { solution } = req.body;
@@ -488,7 +488,7 @@ app.post('/approveSolution', upload.array(), (req, res) => {
 
 // APPROVE FEEDBACK
 app.post('/approveFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback } = req.body;
@@ -503,7 +503,7 @@ app.post('/approveFeedback', upload.array(), (req, res) => {
 
 // APPROVE SOLUTION
 app.post('/approveSolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {    
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { solution } = req.body;
@@ -694,6 +694,7 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
         SELECT
           '` + userId + `' as userId,
           groupName,
+          groupSignupCode as groupAuthCode,
           feedbackRequiresApproval,
           solutionsRequireApproval,
           showStatus,
