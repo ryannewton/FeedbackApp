@@ -17,18 +17,14 @@ import {
   ActivityIndicator,
   Dimensions,
 } from 'react-native';
+import PropTypes from 'prop-types';
 
 // Import actions
-import { submitFeedbackToServer, uploadImage } from '../actions';
+import { submitFeedbackToServer, uploadImage, sendGoogleAnalytics } from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
-
-// Import about info image
 import styles from '../styles/scenes/FeedbackSubmitStyles';
-
-// Import tracking
-import { sendGoogleAnalytics } from '../actions';
 
 class FeedbackSubmit extends Component {
   constructor(props, context) {
@@ -41,10 +37,7 @@ class FeedbackSubmit extends Component {
       negativeFeedback: '',
     };
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Feedback', { domain: props.group.domain });
-    this.props.sendGoogleAnalytics('FeedbackSubmit')
-
-    this.submitFeedback = this.submitFeedback.bind(this);
+    props.sendGoogleAnalytics('FeedbackSubmit')
   }
 
   componentDidMount() {
@@ -52,7 +45,7 @@ class FeedbackSubmit extends Component {
     this.props.navigation.setParams({ groupAuthCode });
   }
 
-  submitFeedback() {
+  submitFeedback = () => {
     if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
       // First we search the feedback for restricted words
       if (this.props.group.bannedWords.test(this.state.feedback.toLowerCase()) ||
@@ -165,7 +158,7 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  renderButtons(type) {
+  renderButtons = (type) => {
     if (this.props.feedback.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
@@ -271,11 +264,11 @@ class FeedbackSubmit extends Component {
 }
 
 FeedbackSubmit.propTypes = {
-  user: React.PropTypes.object,
-  group: React.PropTypes.object,
-  feedback: React.PropTypes.object,
-  submitFeedbackToServer: React.PropTypes.func,
-  navigation: React.PropTypes.object,
+  user: PropTypes.object,
+  group: PropTypes.object,
+  feedback: PropTypes.object,
+  submitFeedbackToServer: PropTypes.func,
+  navigation: PropTypes.object,
 };
 
 function mapStateToProps(state) {

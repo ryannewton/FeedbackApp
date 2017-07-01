@@ -2,13 +2,13 @@
 import React, { Component } from 'react';
 import { View, ListView, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Import components, functions, and styles
 import FeedbackCard from '../components/FeedbackCard';
 import styles from '../styles/scenes/FeedbackListStyles';
 
 // Import tracking
-// import { tracker } from '../constants';
 import { sendGoogleAnalytics } from '../actions';
 
 const stopwords = require('stopwords').english;
@@ -17,8 +17,7 @@ class FeedbackList extends Component {
   constructor(props) {
     super(props);
 
-    // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.group.domain });
-    props.sendGoogleAnalytics('FeedbackList', this.props.group.groupName);
+    props.sendGoogleAnalytics('FeedbackList', props.group.groupName);
 
     // Create the initial wordspace and occurance table once for future search queries
     const { cleanQues, wordspace } = this.wordspace();
@@ -29,7 +28,7 @@ class FeedbackList extends Component {
     };
   }
 
-  wordspace() {
+  wordspace = () => {
     // Creates a wordspace for a given set array of strings
     const allQuestions = this.props.feedback.list;
 
@@ -41,18 +40,17 @@ class FeedbackList extends Component {
     return { cleanQues, wordspace };
   }
 
-  wordspaceOccuranceTable(cleanQues, wordspace) {
+  wordspaceOccuranceTable = (cleanQues, wordspace) => {
     // Create an occurance table for a given wordspace
-    const occurances = cleanQues.map((question) => {
-      return wordspace.map((wordspaceWord) => {
-        return question.filter(questionWord => wordspaceWord === questionWord).length;
-      });
-    });
+    const occurances = cleanQues.map(question =>
+      wordspace.map(wordspaceWord =>
+        question.filter(questionWord => wordspaceWord === questionWord).length));
+
     return occurances;
   }
 
   // Helper function that cleans multiple questions
-  cleanQuestions(questions) {
+  cleanQuestions = (questions) => {
     return questions.reduce((acc, row) => {
       return [...acc,
         row.text
@@ -64,7 +62,7 @@ class FeedbackList extends Component {
   }
 
   // Helper function that cleans a single string and returns an array
-  cleanQuestion(question) {
+  cleanQuestion = (question) => {
     return question
             .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
             .replace(/[\s]{2,}/g, ' ')
@@ -73,21 +71,21 @@ class FeedbackList extends Component {
   }
 
   // Remove duplicates
-  removeDuplicateWords(wordsWithDuplicates) {
+  removeDuplicateWords = (wordsWithDuplicates) => {
     return wordsWithDuplicates.filter((item, index, array) => {
       return array.indexOf(item) === index;
     });
   }
 
   // Remove stopwords
-  removeStopwords(words) {
+  removeStopwords = (words) => {
     return words.filter((item) => {
       return !stopwords.includes(item);
     });
   }
 
   // Calculate the similarity between the query and every other piece of feedback
-  cosineSimilarity(query) {
+  cosineSimilarity = (query) => {
     // Clean up the query and create a query specific occurance table
     const cleanQuery = this.removeStopwords(this.removeDuplicateWords(this.cleanQuestion(query)));
     const queryOccurance = this.state.wordspace.map((wordspaceWord) => {
@@ -129,7 +127,7 @@ class FeedbackList extends Component {
     return topResults;
   }
 
-  curateFeedbackList() {
+  curateFeedbackList = () => {
     // Return a list of feedback given the filter/search value
     if (this.props.feedback.filterMethod === 'search') {
       return this.cosineSimilarity(this.props.feedback.searchQuery);
@@ -190,9 +188,10 @@ class FeedbackList extends Component {
 }
 
 FeedbackList.propTypes = {
-  navigation: React.PropTypes.object,
-  feedback: React.PropTypes.object,
-  group: React.PropTypes.object,
+  navigation: PropTypes.object,
+  feedback: PropTypes.object,
+  group: PropTypes.object,
+  sendGoogleAnalytics: PropTypes.func,
 };
 
 function mapStateToProps(state) {

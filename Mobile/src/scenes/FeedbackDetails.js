@@ -10,6 +10,7 @@ import {
   Text,
 } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Import componenets, functions, and styles
 import styles from '../styles/scenes/FeedbackDetailsStyles';
@@ -32,7 +33,7 @@ class FeedbackDetails extends Component {
     props.sendGoogleAnalytics('FeedbackDetails', this.props.group.groupName, this.props.navigation.state.params.feedback.feedbackId);
   }
 
-  submitSolution() {
+  submitSolution = () => {
     const { bannedWords, solutionsRequireApproval } = this.props.group;
     const { solution } = this.props.solutions;
     const { feedback } = this.props.navigation.state.params;
@@ -50,7 +51,7 @@ class FeedbackDetails extends Component {
     }
   }
 
-  renderErrorMessage() {
+  renderErrorMessage = () => {
     if (this.state.errorMessage !== '') {
       return (
         <View style={{ alignItems: 'center' }}>
@@ -119,11 +120,12 @@ class FeedbackDetails extends Component {
 }
 
 FeedbackDetails.propTypes = {
-  navigation: React.PropTypes.object,
-  solutions: React.PropTypes.object,
-  group: React.PropTypes.object,
-  solutionChanged: React.PropTypes.func,
-  submitSolutionToServer: React.PropTypes.func,
+  navigation: PropTypes.object,
+  solutions: PropTypes.object,
+  group: PropTypes.object,
+  solutionChanged: PropTypes.func,
+  submitSolutionToServer: PropTypes.func,
+  sendGoogleAnalytics: PropTypes.func,
 };
 
 function mapStateToProps(state) {
