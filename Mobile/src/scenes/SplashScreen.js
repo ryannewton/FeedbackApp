@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Expo from 'expo';
 import axios from 'axios';
 import { NavigationActions } from 'react-navigation';
+import PropTypes from 'prop-types';
 
 // Import image and styles
 import { Spinner } from '../components/common';
@@ -12,7 +13,6 @@ import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
 // Import tracking
-// import { tracker } from '../constants';
 import { sendGoogleAnalytics } from '../actions';
 
 class SplashScreen extends Component {
@@ -23,10 +23,7 @@ class SplashScreen extends Component {
       cleared: false,
     };
 
-    this.route = this.route.bind(this);
-
-    // tracker.trackScreenView('Loading Screen');
-    this.props.sendGoogleAnalytics('LoadingScreen');
+    props.sendGoogleAnalytics('LoadingScreen');
   }
 
   componentDidMount() {
@@ -44,7 +41,7 @@ class SplashScreen extends Component {
     }
   }
 
-  forceUpdate(response) {
+  forceUpdate = (response) => {
     const currentVersion = String(Expo.Constants.manifest.version).split('.')[1];
     // Check if number after the first decimal place is the same as our current version's
     if (Platform.OS === 'ios' && String(response.data.results[0].version).split('.')[1] !== currentVersion) {
@@ -63,7 +60,7 @@ class SplashScreen extends Component {
     return null;
   }
 
-  updateAlert(url) {
+  updateAlert = (url) => {
     return (
       Alert.alert(
         'New version available!',
@@ -78,16 +75,14 @@ class SplashScreen extends Component {
     );
   }
 
-  route() {
+  route = () => {
     // There are two options where we want to naviagte
     // 1) loggedIn is false meaning that we failed to login
     if (this.props.auth.loggedIn === false) {
       const navToWelcome = NavigationActions.reset({
         index: 0,
         key: null,
-        actions: [
-          NavigationActions.navigate({ routeName: 'Welcome'})
-        ]
+        actions: [NavigationActions.navigate({ routeName: 'Welcome' })],
       });
       this.props.navigation.dispatch(navToWelcome);
       this.setState({ cleared: true });
@@ -99,9 +94,7 @@ class SplashScreen extends Component {
       const navToFeedbackList = NavigationActions.reset({
         index: 0,
         key: null,
-        actions: [
-          NavigationActions.navigate({ routeName: 'Tabs'})
-        ]
+        actions: [NavigationActions.navigate({ routeName: 'Tabs' })],
       });
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
@@ -120,10 +113,10 @@ class SplashScreen extends Component {
 }
 
 SplashScreen.propTypes = {
-  auth: React.PropTypes.object,
-  navigation: React.PropTypes.object,
-  group: React.PropTypes.object,
-  feedback: React.PropTypes.object,
+  auth: PropTypes.object,
+  navigation: PropTypes.object,
+  group: PropTypes.object,
+  feedback: PropTypes.object,
 };
 
 function mapStateToProps(state) {

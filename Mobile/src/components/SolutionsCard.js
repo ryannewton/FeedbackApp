@@ -2,29 +2,24 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Import componenets, functions, and styles
 import styles from '../styles/components/SolutionCardStyles';
 import SolutionsCardItem from './SolutionsCardItem';
 import { Card, CardSection } from '../components/common';
 
-// Import tracking
-// import { tracker } from '../constants';
-
 class SolutionsCard extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { domain: props.group.domain, feedback: String(props.navigation.state.params.feedback.id) });
-  // }
 
-  renderSolutionsList() {
+  renderSolutionsList = () => {
     const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
     const { feedback } = this.props.navigation.state.params;
-    const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
+    const feedbackSolutions = solutions.list
+      .filter(solution => solution.feedbackId === feedback.id);
 
     // If no solutions have been submitted
-    if (feedbackSolutions.length === 0) {
+    if (!feedbackSolutions.length) {
       return (
         <CardSection>
           <Text style={noSolutionsMessage}>{'No solutions (yet)\nBe the first!'}</Text>
@@ -59,9 +54,9 @@ class SolutionsCard extends Component {
 }
 
 SolutionsCard.propTypes = {
-  navigation: React.PropTypes.object,
-  solutions: React.PropTypes.object,
-  group: React.PropTypes.object,
+  navigation: PropTypes.object,
+  solutions: PropTypes.object,
+  group: PropTypes.object,
 };
 
 function mapStateToProps(state) {

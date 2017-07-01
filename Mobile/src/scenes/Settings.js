@@ -2,26 +2,20 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
 
 // Import actions
-import { logOut } from '../actions';
+import { logOut, sendGoogleAnalytics } from '../actions';
 
 // Import componenets, functions, and styles
 import { Button } from '../components/common';
 import styles from '../styles/scenes/SettingsStyles';
 
-// Import tracking
-// import { tracker } from '../constants';
-import { sendGoogleAnalytics } from '../actions';
-
-
 class Settings extends Component {
   constructor(props) {
     super(props);
-
-    // tracker.trackScreenViewWithCustomDimensionValues('Settings', { domain: props.group.domain });
-    this.props.sendGoogleAnalytics('Settings')
+    props.sendGoogleAnalytics('Settings');
   }
 
   render() {
@@ -37,7 +31,12 @@ class Settings extends Component {
             onPress={() => {
               // tracker.trackEvent('Auth', 'Logged Out', { label: this.props.group.domain });
               this.props.logOut();
-              this.props.navigation.navigate('Auth');
+              const navToAuth = NavigationActions.reset({
+                index: 0,
+                key: null,
+                actions: [NavigationActions.navigate({ routeName: 'Auth' })],
+              });
+              this.props.navigation.dispatch(navToAuth);
             }}
             style={{ marginTop: 10 }}
           >
@@ -50,9 +49,10 @@ class Settings extends Component {
 }
 
 Settings.propTypes = {
-  logOut: React.PropTypes.func,
-  navigation: React.PropTypes.object,
-  group: React.PropTypes.object,
+  logOut: PropTypes.func,
+  navigation: PropTypes.object,
+  group: PropTypes.object,
+  sendGoogleAnalytics: PropTypes.func,
 };
 
 function mapStateToProps(state) {

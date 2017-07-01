@@ -3,21 +3,19 @@ import React, { Component } from 'react';
 import { View, Keyboard } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
+import PropTypes from 'prop-types';
 
 // Import components, functions, and styles
 import { Button } from '../components/common';
 import styles from '../styles/scenes/SubmittedStyles';
 
 // Import tracking
-// import { tracker } from '../constants';
 import { sendGoogleAnalytics } from '../actions';
 
 class Submitted extends Component {
   constructor(props) {
     super(props);
-
-    // tracker.trackScreenViewWithCustomDimensionValues('Submitted', { domain: props.group.domain });
-    this.props.sendGoogleAnalytics('Submitted')
+    props.sendGoogleAnalytics('Submitted');
   }
 
   componentWillMount() {
@@ -28,9 +26,7 @@ class Submitted extends Component {
     const navToFeedbackList = NavigationActions.reset({
       index: 0,
       key: null,
-      actions: [
-        NavigationActions.navigate({ routeName: 'Tabs'})
-      ]
+      actions: [NavigationActions.navigate({ routeName: 'Tabs' })],
     });
     return (
       <View style={styles.container}>
@@ -46,8 +42,9 @@ class Submitted extends Component {
 }
 
 Submitted.propTypes = {
-  navigation: React.PropTypes.object,
-  group: React.PropTypes.object,
+  navigation: PropTypes.object,
+  group: PropTypes.object,
+  sendGoogleAnalytics: PropTypes.func,
 };
 
 function mapStateToProps(state) {

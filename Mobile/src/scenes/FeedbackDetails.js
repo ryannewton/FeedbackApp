@@ -7,9 +7,10 @@ import {
   Keyboard,
   ScrollView,
   KeyboardAvoidingView,
-  Text ,
-      } from 'react-native';
+  Text,
+} from 'react-native';
 import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 
 // Import componenets, functions, and styles
 import styles from '../styles/scenes/FeedbackDetailsStyles';
@@ -20,32 +21,28 @@ import { Button, Spinner } from '../components/common';
 import {
   solutionChanged,
   submitSolutionToServer,
+  sendGoogleAnalytics,
 } from '../actions';
-
-// Import tracking
-// import { tracker } from '../constants';
-import { sendGoogleAnalytics } from '../actions';
 
 class FeedbackDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = { errorMessage: '' };
-    // tracker.trackScreenViewWithCustomDimensionValues('Feedback Details', { groupName: props.group.groupName, feedback: String(props.navigation.state.params.feedback.id) });
     this.submitSolution = this.submitSolution.bind(this);
-    this.props.sendGoogleAnalytics('FeedbackDetails', this.props.group.groupName, this.props.navigation.state.params.feedback.feedbackId)
+    props.sendGoogleAnalytics('FeedbackDetails', this.props.group.groupName, this.props.navigation.state.params.feedback.feedbackId);
   }
 
-  submitSolution() {
-    const { groupName, bannedWords, solutionsRequireApproval } = this.props.group;
+  submitSolution = () => {
+    const { bannedWords, solutionsRequireApproval } = this.props.group;
     const { solution } = this.props.solutions;
     const { feedback } = this.props.navigation.state.params;
 
     if (bannedWords.test(solution.toLowerCase())) {
       // If restricted words then we show an error to the user
       this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
-    } else if (solution === ''){
-      this.setState({ errorMessage: 'Sorry, solutions cannot be blank.' })
+    } else if (solution === '') {
+      this.setState({ errorMessage: 'Sorry, solutions cannot be blank.' });
     } else {
       this.setState({ errorMessage: '' });
       this.props.submitSolutionToServer(solution, feedback.id, solutionsRequireApproval);
@@ -54,7 +51,7 @@ class FeedbackDetails extends Component {
     }
   }
 
-  renderErrorMessage() {
+  renderErrorMessage = () => {
     if (this.state.errorMessage !== '') {
       return (
         <View style={{ alignItems: 'center' }}>
@@ -66,7 +63,7 @@ class FeedbackDetails extends Component {
   }
 
   render() {
-    const { container, inputText, submitButton } = styles;
+    const { container, inputText } = styles;
     const { feedback } = this.props.navigation.state.params;
     const showSpinner = (
       <Spinner size="large" style={{ marginTop: 20 }} />
@@ -92,7 +89,7 @@ class FeedbackDetails extends Component {
               />
 
               {/* Offical Response card */}
-              <ResponseCard navigation={this.props.navigation} />
+              <ResponseCard navigation={this.props.navigation} feedback={feedback} />
 
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />
@@ -110,6 +107,7 @@ class FeedbackDetails extends Component {
             onChangeText={solution => this.props.solutionChanged(solution)}
             value={this.props.solutions.solution}
             returnKeyType={'done'}
+            maxLength={200}
           />
 
           {/* Submit button */}
@@ -122,11 +120,12 @@ class FeedbackDetails extends Component {
 }
 
 FeedbackDetails.propTypes = {
-  navigation: React.PropTypes.object,
-  solutions: React.PropTypes.object,
-  group: React.PropTypes.object,
-  solutionChanged: React.PropTypes.func,
-  submitSolutionToServer: React.PropTypes.func,
+  navigation: PropTypes.object,
+  solutions: PropTypes.object,
+  group: PropTypes.object,
+  solutionChanged: PropTypes.func,
+  submitSolutionToServer: PropTypes.func,
+  sendGoogleAnalytics: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -137,7 +136,7 @@ function mapStateToProps(state) {
 const AppScreen = connect(mapStateToProps, {
   solutionChanged,
   submitSolutionToServer,
-  sendGoogleAnalytics
+  sendGoogleAnalytics,
 })(FeedbackDetails);
 
 export default AppScreen;

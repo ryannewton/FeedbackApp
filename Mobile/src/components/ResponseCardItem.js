@@ -1,7 +1,9 @@
+// Import Libraries
 import React from 'react';
 import { View, Text } from 'react-native';
+import PropTypes from 'prop-types';
 
-// Import components
+// Import components and styles
 import { CardSection } from '../components/common';
 import styles from '../styles/components/ResponseCardItemStyles';
 
@@ -21,5 +23,11 @@ const ResponseCardItem = ({ text, author }) => {
     </CardSection>
   );
 };
+
+ResponseCardItem.propTypes = {
+  text: PropTypes.string,
+  author: PropTypes.string,
+};
+
 
 export default ResponseCardItem;

@@ -1,6 +1,8 @@
+// Import Libraries
 import React, { Component } from 'react';
 import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
 import { Button } from 'react-native-elements';
+import PropTypes from 'prop-types';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -85,8 +87,8 @@ const styles = {
 };
 
 IntroSlides.propTypes = {
-  data: React.PropTypes.array,
-  onComplete: React.PropTypes.func,
+  data: PropTypes.array,
+  onComplete: PropTypes.func,
 };
 
 export default IntroSlides;
