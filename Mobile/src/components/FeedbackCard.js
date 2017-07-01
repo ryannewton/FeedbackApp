@@ -40,7 +40,6 @@ class Feedback extends Component {
 
   addNoOpinion() {
     const { feedback, user } = this.props;
-    console.log(feedback)
     if (!user.feedbackNoOpinions.includes(feedback.id)) {
       this.props.addFeedbackNoOpinion(feedback);
     } else {
