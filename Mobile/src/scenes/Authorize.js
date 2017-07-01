@@ -10,15 +10,8 @@ import { Card, CardSection, Input, Button, Spinner } from '../components/common'
 import { authorizeUser, sendGoogleAnalytics } from '../actions';
 import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
-<<<<<<< HEAD
-=======
-import { NavigationActions } from 'react-navigation';
 
-// Import tracking
-// import { tracker } from '../constants';
-import { sendGoogleAnalytics } from '../actions';
 import fullScreen from '../../images/backgrounds/auth3.jpg';
->>>>>>> change login style and feedback card style
 
 class Authorize extends Component {
   constructor(props) {
