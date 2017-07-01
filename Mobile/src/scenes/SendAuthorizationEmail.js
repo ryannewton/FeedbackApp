@@ -56,7 +56,7 @@ class SendAuthorizationEmail extends Component {
   }
 
   render() {
-    const SendEmailScene = (
+    return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
             {/* Email input */}
@@ -100,8 +100,6 @@ class SendAuthorizationEmail extends Component {
         </Image>
       </TouchableWithoutFeedback>
     );
-
-    return SendEmailScene;
   }
 }
 
