@@ -244,19 +244,15 @@ class FeedbackSubmit extends Component {
     );
 
     const WriteFeedbackScene = (
-      <View style={{ flex: 1, backgroundColor: '#fff' }}>
-        <MenuContext style={{ flex: 1 }} ref="MenuContext">
-          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-            <View style={{ flex: 1 }}>
-              <Text style={styles.errorTextStyle}>
-                {this.state.errorMessage}
-              </Text>
-              {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
-            </View>
-          </TouchableWithoutFeedback>
-        </MenuContext>
-        {this.maybeRenderUploadingOverlay()}
-      </View>
+      <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+        <View style={{ flex: 1, backgroundColor: '#fff' }}>
+          <Text style={styles.errorTextStyle}>
+            {this.state.errorMessage}
+          </Text>
+          {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
+          {this.maybeRenderUploadingOverlay()}
+        </View>          
+      </TouchableWithoutFeedback>
     );
 
     return WriteFeedbackScene;
