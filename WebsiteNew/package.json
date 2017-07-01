@@ -6,6 +6,7 @@
   "repository": "",
   "scripts": {
     "start": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js",
+    "build": "webpack",
     "test": "mocha --compilers js:babel-core/register --require ./test/test_helper.js --recursive ./test",
     "test:watch": "npm run test -- --watch"
   },
@@ -37,6 +38,7 @@
     "javascript-time-ago": "^0.4.9",
     "lodash": "^3.10.1",
     "react": "^0.14.3",
+    "react-bootstrap": "^0.31.0",
     "react-dom": "^0.14.3",
     "react-icons": "^2.2.5",
     "react-redux": "^4.0.0",

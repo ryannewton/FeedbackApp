@@ -15,6 +15,10 @@ const app = express();
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 
+// Uncomment for development server
+// const cors = require('cors');
+// app.use(cors());
+
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
@@ -458,7 +462,7 @@ app.post('/approveFeedback', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback } = req.body;
-      const connectionString = 'UPDATE feedback SET approved=1 WHERE feedbackId = ?';
+      const connectionString = 'UPDATE feedback SET approved=1 WHERE id = ?';
       connection.query(connectionString, [feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
         else res.sendStatus(200);
@@ -473,7 +477,7 @@ app.post('/approveSolution', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { solution } = req.body;
-      const connectionString = 'UPDATE solutions SET approved=1 WHERE solutionId = ?';
+      const connectionString = 'UPDATE solutions SET approved=1 WHERE id = ?';
       connection.query(connectionString, [solution.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8261');
         else res.sendStatus(200);
@@ -706,10 +710,10 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
   });
 });
 
-app.listen(8081, () => {
- console.log('Example app listening on port 8081!');
-});
-
-// app.listen(3000, () => {
-//   console.log('Example app listening on port 3000!');
+// app.listen(8081, () => {
+//  console.log('Example app listening on port 8081!');
 // });
+
+app.listen(3000, () => {
+  console.log('Example app listening on port 3000!');
+});

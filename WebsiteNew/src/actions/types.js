@@ -20,6 +20,9 @@ export const CLARIFY_FEEDBACK_FAIL = "clarify_feedback_fail";
 export const REJECT_FEEDBACK = "reject_feedback";
 export const REJECT_FEEDBACK_SUCCESS = "reject_feedback_success";
 export const REJECT_FEEDBACK_FAIL = "reject_feedback_fail";
+export const SUBMIT_OFFICIAL_REPLY = "submit_official_reply";
+export const SUBMIT_OFFICIAL_REPLY_SUCCESS = "submit_official_reply_success";
+export const SUBMIT_OFFICIAL_REPLY_FAIL = "submit_official_reply_fail";
 
 // Solutions Actions
 export const REQUEST_SOLUTIONS = "request_solutions";

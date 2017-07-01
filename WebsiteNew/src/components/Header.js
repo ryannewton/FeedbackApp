@@ -9,7 +9,7 @@ class Header extends Component {
       return [
         <li className='nav-item'>
           <Link className='nav-link' style={style.link} to='/managefeedback'>
-            Manage Feedback
+            Add Replies
           </Link>
         </li>,
         <li className='nav-item'>
