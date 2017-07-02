@@ -59,44 +59,32 @@ class SendAuthorizationEmail extends Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
-            {/* Email input */}
-<<<<<<< HEAD
-            <Makiko
-              label={'Email Address'}
-              iconClass={FontAwesomeIcon}
-              iconName={'envelope'}
-              iconColor={'#00A2FF'}
-              inputStyle={{ color: 'black' }}
-                            value={this.state.email}
-              onChangeText={text => this.setState({ email: text })}
-              keyboardType="email-address"
-              // TextInput props
-              autoCapitalize={'none'}
-              autoCorrect={false}
-              style={{marginLeft:20, marginRight:20, marginTop:100}}
-            />
-=======
-            <CardSection>
-              <Input
-                label="Your Email"
-                placeholder="tyler@collaborativefeedback.com"
-                value={this.state.email}
-                onChangeText={text => this.setState({ email: text })}
-                keyboardType="email-address"
-                maxLength={100}
-              />
-            </CardSection>
+          {/* Email input */}
+          <Makiko
+            label={'Email Address'}
+            iconClass={FontAwesomeIcon}
+            iconName={'envelope'}
+            iconColor={'#00A2FF'}
+            inputStyle={{ color: 'black' }}
+                          value={this.state.email}
+            onChangeText={text => this.setState({ email: text })}
+            keyboardType="email-address"
+            // TextInput props
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            style={{marginLeft:20, marginRight:20, marginTop:100}}
+            maxLength={100}
+          />
+          
+          {/* Error message (blank if no error) */}
+          <Text style={styles.errorTextStyle}>
+            {this.props.auth.error}
+          </Text>
 
->>>>>>> Adds max character limits to inputs
-            {/* Error message (blank if no error) */}
-            <Text style={styles.errorTextStyle}>
-              {this.props.auth.error}
-            </Text>
-
-            {/* Confirmation button, and 'go to login' button */}
-            <View style={{marginLeft:15, marginRight:15, marginTop:5}}>
-              {this.renderButtons()}
-            </View>
+          {/* Confirmation button, and 'go to login' button */}
+          <View style={{marginLeft:15, marginRight:15, marginTop:5}}>
+            {this.renderButtons()}
+          </View>
         </Image>
       </TouchableWithoutFeedback>
     );
