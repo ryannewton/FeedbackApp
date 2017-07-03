@@ -26,7 +26,8 @@ const styles = StyleSheet.create({
   // Unsure what goes here. SendAuthorizationEmail calls it but it didn't exist
   // Wasn't throwing an error because it supports the overlay that wasn't being used
   background: {
-
+    flex: 1,
+    width: null,
   },
 });
 

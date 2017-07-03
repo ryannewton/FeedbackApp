@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback, Image } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -10,6 +10,8 @@ import { Card, CardSection, Input, Button, Spinner } from '../components/common'
 import { authorizeUser, sendGoogleAnalytics } from '../actions';
 import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
+
+import fullScreen from '../../images/backgrounds/auth3.jpg';
 
 class Authorize extends Component {
   constructor(props) {
@@ -109,7 +111,7 @@ class Authorize extends Component {
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.container}>
+        <Image style={styles.background} source={fullScreen} resizeMode="cover">
           <Card>
             {/* Email input */}
             <CardSection>
@@ -141,7 +143,7 @@ class Authorize extends Component {
               {this.renderButtons()}
             </CardSection>
           </Card>
-        </View>
+        </Image>
       </TouchableWithoutFeedback>
     );
   }

@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Keyboard, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -8,6 +8,10 @@ import PropTypes from 'prop-types';
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
 import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
+
+import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
+import { Makiko } from 'react-native-textinput-effects';
+import fullScreen from '../../images/backgrounds/auth6.jpg';
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -53,39 +57,34 @@ class SendAuthorizationEmail extends Component {
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <View style={styles.container}>
-          <Card>
-            {/* Email input */}
-            <CardSection>
-              <Input
-                label="Your Email"
-                placeholder="tyler@collaborativefeedback.com"
-                value={this.state.email}
-                onChangeText={text => this.setState({ email: text })}
-                keyboardType="email-address"
-                maxLength={100}
-              />
-            </CardSection>
+        <Image style={styles.background} source={fullScreen} resizeMode="cover">
+          {/* Email input */}
+          <Makiko
+            label={'Email Address'}
+            iconClass={FontAwesomeIcon}
+            iconName={'envelope'}
+            iconColor={'#00A2FF'}
+            inputStyle={{ color: 'black' }}
+            value={this.state.email}
+            onChangeText={text => this.setState({ email: text })}
+            keyboardType="email-address"
+            // TextInput props
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 100 }}
+            maxLength={100}
+          />
+          
+          {/* Error message (blank if no error) */}
+          <Text style={styles.errorTextStyle}>
+            {this.props.auth.error}
+          </Text>
 
-            {/* Error message (blank if no error) */}
-            <Text style={styles.errorTextStyle}>
-              {this.props.auth.error}
-            </Text>
-
-            {/* Confirmation button, and 'go to login' button */}
-            <CardSection>
-              {this.renderButtons()}
-            </CardSection>
-
-            <CardSection>
-              <Text style={styles.text}>
-                  Why do we need your email? Two reasons:{'\n'}
-                  1) We need to confirm you are member of your organization{'\n'}
-                  2) We will keep you updated as changes are made based on your feedback
-              </Text>
-            </CardSection>
-          </Card>
-        </View>
+          {/* Confirmation button, and 'go to login' button */}
+          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 5 }}>
+            {this.renderButtons()}
+          </View>
+        </Image>
       </TouchableWithoutFeedback>
     );
   }
