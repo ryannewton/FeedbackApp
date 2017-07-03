@@ -291,17 +291,14 @@ class Feedback extends Component {
     } else if (this.props.feedback.type === 'negative feedback') {
       updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
     } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
-              this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
-              this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
+      this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
+      this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
       updatedRow = [row, { backgroundColor: 'rgba(248, 248, 248, 248)', borderWidth: 2, borderColor: '#fff' }];
     }
 
     return (
         <View style={updatedRow}>
-<<<<<<< HEAD
           <View style={{ flexDirection: 'column'}}>
-
-
             <View style={{ flexDirection: 'row'}}>
               <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
                 {/* First row */}{/* Project title */}
@@ -315,47 +312,8 @@ class Feedback extends Component {
               <View style={{ alignSelf: 'center' }}>
                           {/* Render image*/}
                 {this.renderSmallImage()}
-=======
-          <View style={{ flexDirection: 'row'}}>
-            <View style={{ alignSelf: 'center' }}>
-              {this.renderSmallImage()}
-            </View>
-            <View style={{ flex: 8, flexDirection: 'column', justifyContent: 'space-between' }}>
-              {/* First row */}{/* Project title */}
-              <View style={{ flex: 5, paddingTop: 10, paddingLeft: 12 }}>
-                <Text style={feedbackTitle}>
-                  {this.renderTitle()}
-                </Text>
-              </View>
-
-              {/* Render image*/}
-              {this.renderImage()}
-              <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-                <View style={{flexDirection: 'row', paddingLeft: 15, paddingBottom: 10}}>
-                  {/* Render official response tag */}
-                  {this.renderOfficialResponseTag()}
-                  {this.renderSolutionsTag()}
-                </View>
-                {/* Vote count */}
-                <View style={{flexDirection: 'row', paddingBottom: 10}}>
-                  {/* Upvote Button and Downvote */}
-                    <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 5 }}>
-                      {this.renderThumbDownButton()}
-                    </TouchableOpacity>
-                    <Text style={downvoteTextStyle, {paddingRight: 12, paddingTop: 7}}>
-                      {this.props.feedback.downvotes}
-                    </Text>
-                    <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 5 }}>
-                      {this.renderThumbUpButton()}
-                    </TouchableOpacity>
-                    <Text style={upvoteTextStyle, {paddingRight: 1, paddingTop: 7}}>
-                      {this.props.feedback.upvotes}
-                    </Text>
-                </View>
->>>>>>> Pat clean up #3
               </View>
             </View>
-
               <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                 <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between'}}>
                   {this.renderStatusBox()}
@@ -369,20 +327,22 @@ class Feedback extends Component {
                       {this.renderThumbDownButton()}
                     </TouchableOpacity>
                     <Text style={downvoteTextStyle, { paddingTop: 7}}>
-                      {this.renderDownvoteCount()}
+                      {this.props.feedback.downvotes}
                     </Text>
                     <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingTop: 5 }}>
                       {this.renderNoOpinionButton()}
                     </TouchableOpacity>
+                    <Text style={upvoteTextStyle, {paddingRight: 0, paddingTop: 7}}>
+                      {this.props.feedback.noOpinions}
+                    </Text>
                     <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 0 }}>
                       {this.renderThumbUpButton()}
                     </TouchableOpacity>
                     <Text style={upvoteTextStyle, {paddingRight: 0, paddingTop: 7}}>
-                      {this.renderVoteCount()}
+                      {this.props.feedback.upvotes}
                     </Text>
                 </View>
               </View>
-
           </View>
         </View>
     );

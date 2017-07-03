@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Text, View, Keyboard, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -9,9 +9,8 @@ import { Card, CardSection, Input, Button, Spinner } from '../components/common'
 import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 
-import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
-import MaterialsIcon from 'react-native-vector-icons/MaterialIcons';
-import { Sae, Fumi, Kohana, Makiko, Akira } from 'react-native-textinput-effects';
+import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
+import { Makiko } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth6.jpg';
 
 class SendAuthorizationEmail extends Component {
@@ -66,13 +65,13 @@ class SendAuthorizationEmail extends Component {
             iconName={'envelope'}
             iconColor={'#00A2FF'}
             inputStyle={{ color: 'black' }}
-                          value={this.state.email}
+            value={this.state.email}
             onChangeText={text => this.setState({ email: text })}
             keyboardType="email-address"
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{marginLeft:20, marginRight:20, marginTop:100}}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 100 }}
             maxLength={100}
           />
           
@@ -82,7 +81,7 @@ class SendAuthorizationEmail extends Component {
           </Text>
 
           {/* Confirmation button, and 'go to login' button */}
-          <View style={{marginLeft:15, marginRight:15, marginTop:5}}>
+          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 5 }}>
             {this.renderButtons()}
           </View>
         </Image>
