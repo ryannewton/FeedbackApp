@@ -323,24 +323,24 @@ class Feedback extends Component {
             {/* Vote count */}
             <View style={{ flex: 1, flexDirection: 'row'}}>
               {/* Upvote Button and Downvote */}
-                <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 0 }}>
-                  {this.renderThumbDownButton()}
-                </TouchableOpacity>
-                <Text style={downvoteTextStyle, { paddingTop: 7}}>
-                  {this.props.feedback.downvotes}
-                </Text>
-                <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingTop: 5 }}>
-                  {this.renderNoOpinionButton()}
-                </TouchableOpacity>
-                <Text style={upvoteTextStyle, {paddingRight: 0, paddingTop: 7}}>
-                  {this.props.feedback.noOpinions}
-                </Text>
-                <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 0 }}>
-                  {this.renderThumbUpButton()}
-                </TouchableOpacity>
-                <Text style={upvoteTextStyle, {paddingRight: 0, paddingTop: 7}}>
-                  {this.props.feedback.upvotes}
-                </Text>
+              <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 0 }}>
+                {this.renderThumbDownButton()}
+              </TouchableOpacity>
+              <Text style={downvoteTextStyle, { paddingTop: 7}}>
+                {this.props.feedback.downvotes}
+              </Text>
+              <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingTop: 5 }}>
+                {this.renderNoOpinionButton()}
+              </TouchableOpacity>
+              <Text style={upvoteTextStyle, {paddingRight: 0, paddingTop: 7}}>
+                {this.props.feedback.noOpinions}
+              </Text>
+              <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 0 }}>
+                {this.renderThumbUpButton()}
+              </TouchableOpacity>
+              <Text style={upvoteTextStyle, {paddingRight: 0, paddingTop: 7}}>
+                {this.props.feedback.upvotes}
+              </Text>
             </View>
           </View>
         </View>
