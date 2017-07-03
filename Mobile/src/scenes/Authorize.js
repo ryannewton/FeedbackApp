@@ -11,7 +11,9 @@ import { authorizeUser, sendGoogleAnalytics } from '../actions';
 import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
 
-import fullScreen from '../../images/backgrounds/auth3.jpg';
+import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
+import { Makiko } from 'react-native-textinput-effects';
+import fullScreen from '../../images/backgrounds/auth2.jpg';
 
 class Authorize extends Component {
   constructor(props) {
@@ -88,65 +90,65 @@ class Authorize extends Component {
     // User enters group code if email is not in the server
     return (
       <View>
-        <CardSection>
-          <Input
-            label="Group Code: "
-            placeholder="Enter group code here"
+        <Makiko
+            label={'Your Group Code'}
+            iconClass={FontAwesomeIcon}
+            iconName={'user-circle'}
+            iconColor={'#00A2FF'}
+            inputStyle={{ color: 'black' }}
             value={this.state.groupCode}
             onChangeText={text => this.setState({ groupCode: text })}
             keyboardType="phone-pad"
             maxLength={10}
+            // TextInput props
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 0 }}
+            maxLength={100}
           />
-        </CardSection>
-        <CardSection>
-          <Text style={styles.text}>
-              Your email was not automatically recognized.{'\n'}
-              Please enter your group code.
-          </Text>
-        </CardSection>
       </View>
     );
   }
+
 
   render() {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
-          <Card>
-            {/* Email input */}
-            <CardSection>
-              <Input
-                label="Code: "
-                placeholder="Enter code here"
-                value={this.state.code}
-                onChangeText={text => this.setState({ code: text })}
-                keyboardType="phone-pad"
-                maxLength={10}
-              />
-            </CardSection>
+          {/* Email input */}
+          <Makiko
+            label={'Code Received by Email'}
+            iconClass={FontAwesomeIcon}
+            iconName={'envelope-open'}
+            iconColor={'#00A2FF'}
+            inputStyle={{ color: 'black' }}
+            value={this.state.code}
+            onChangeText={text => this.setState({ code: text })}
+            keyboardType="phone-pad"
+            maxLength={10}
+            // TextInput props
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 80 }}
+            maxLength={100}
+          />
+          
+          {/* Error message (blank if no error) */}
+          <Text style={styles.errorTextStyle}>
+            {this.props.auth.error}
+          </Text>
 
-            {/* Error message (blank if no error) */}
-            <Text style={styles.errorTextStyle}>
-              {this.props.auth.error}
-            </Text>
+          {this.renderGroup()}
 
-            {/* Confirmation button, and 'go to login' button */}
-
-            <CardSection>
-              <Text style={styles.text}>
-                  We sent you an email with a 4 digit code.{'\n'}
-                  Please enter it here to verify your email address{'\n'}
-              </Text>
-            </CardSection>
-            {this.renderGroup()}
-            <CardSection>
-              {this.renderButtons()}
-            </CardSection>
-          </Card>
+          {/* Confirmation button, and 'go to login' button */}
+          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
+            {this.renderButtons()}
+          </View>
         </Image>
       </TouchableWithoutFeedback>
     );
   }
+
 }
 
 Authorize.propTypes = {
