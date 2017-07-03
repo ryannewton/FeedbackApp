@@ -642,6 +642,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
           const adjRows = rows.map((row) => {
             if (!row.upvotes) { row.upvotes = 0 };
             if (!row.downvotes) { row.downvotes = 0 };
+            if (!row.noOpinions) { row.noOpinions = 0 };
             return row;
           });
           res.status(200).send(adjRows);
