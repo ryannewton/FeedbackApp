@@ -11,7 +11,7 @@ import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Makiko } from 'react-native-textinput-effects';
-import fullScreen from '../../images/backgrounds/auth6.jpg';
+import fullScreen from '../../images/backgrounds/auth1.jpg';
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -71,7 +71,7 @@ class SendAuthorizationEmail extends Component {
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 100 }}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 80 }}
             maxLength={100}
           />
           
@@ -81,7 +81,7 @@ class SendAuthorizationEmail extends Component {
           </Text>
 
           {/* Confirmation button, and 'go to login' button */}
-          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 5 }}>
+          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
             {this.renderButtons()}
           </View>
         </Image>
