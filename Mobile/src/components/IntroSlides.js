@@ -34,7 +34,7 @@ class IntroSlides extends Component {
   renderSlides() {
     return this.props.data.map((slide, index) => {
       return (
-        <View key={slide.text} style={styles.slideStyle}>
+        <View key={slide.text} style={styles.slideStyle, {backgroundColor:'#00A2FF'}}>
           <Image source={slide.image} style={styles.backgroundImageStyle}>
             {this.renderText(slide.text)}
             {this.renderLastSlide(index)}
