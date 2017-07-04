@@ -218,7 +218,7 @@ class Feedback extends Component {
   }
 
   renderSmallImage = () => {
-    const { imageURL } = this.props.feedback;
+    const imageURL = this.props.feedback.thumbnailURL;
     const { showImage } = this.props;
     const { imageStyle, imageViewStyle } = styles;
     const { status } = this.props.feedback;
