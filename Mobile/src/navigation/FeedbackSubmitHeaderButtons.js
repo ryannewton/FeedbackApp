@@ -1,12 +1,12 @@
 // Import Libraries
 import React from 'react';
-import { TouchableOpacity, View, Alert, Linking } from 'react-native';
+import { TouchableOpacity, View, Alert, Linking, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 
-const TEXT_INTRO = 'sms:&body=Join me on Suggestion Box!\n\nGROUP CODE: ';
+const TEXT_INTRO = 'Join me on Suggestion Box!\n\nGROUP CODE: ';
 const APP_STORE_URL = 'https://appurl.io/j4kj90r2';
 
-function FeedbackSubmitButtons(navigation) {
+function FeedbackSubmitHeaderButtons(navigation) {
   return (
     <View style={{ flexDirection: 'row' }}>
       {shareAppButton(navigation)}
@@ -28,6 +28,7 @@ function shareAppButton(navigation) {
 
 function shareAppAlert(navigation) {
   const { groupAuthCode } = navigation.state.params;
+  const textLink = buildTextLink(groupAuthCode);
 
   return (
     Alert.alert(
@@ -35,12 +36,30 @@ function shareAppAlert(navigation) {
       'Help others in your community voice their feedback through Suggestion Box.',
       [
         { text: 'Dismiss' },
-        { text: 'Share', onPress: () => Linking.openURL(`${TEXT_INTRO}${groupAuthCode}\n${APP_STORE_URL}`) },
-
+        {
+          text: 'Share',
+          onPress: () => {
+            Linking.openURL(textLink)
+            .catch(error => console.log('Error running shareAppAlert(): ', error));
+          },
+        },
       ],
       { cancelable: true },
     )
   );
+}
+
+function buildTextLink(groupAuthCode) {
+  let textLink = '';
+  const message = `${TEXT_INTRO}${groupAuthCode}\n\n `;
+
+  // Use percent-encoding for Android
+  if (Platform.OS === 'android') {
+    textLink = `sms:?body=${encodeURIComponent(message)}${APP_STORE_URL}`;
+  } else {
+    textLink = `sms:&body=${message}${APP_STORE_URL}`;
+  }
+  return textLink;
 }
 
 function settingsButton(navigation) {
@@ -54,4 +73,4 @@ function settingsButton(navigation) {
   );
 }
 
-export default FeedbackSubmitButtons;
+export default FeedbackSubmitHeaderButtons;
