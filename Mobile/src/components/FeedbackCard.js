@@ -242,6 +242,7 @@ class Feedback extends Component {
             resizeMode: 'cover',
             paddingLeft: 5, 
             paddingBottom: 5,
+            borderRadius: 4,
           }}
         >
         </Image>
