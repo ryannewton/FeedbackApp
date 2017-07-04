@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Icon } from 'react-native-elements';
 
 // Import componenets, functions, and styles
 import styles from '../styles/components/SolutionCardStyles';
@@ -38,6 +39,9 @@ class SolutionsCard extends Component {
       <View>
         <CardSection>
           <Text style={subheaderText}>Proposed solutions</Text>
+            <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
+              <Icon name="question-answer" color="#bdbdbd" />
+            </View>
         </CardSection>
         {formattedSolutions}
       </View>
