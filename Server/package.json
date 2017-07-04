@@ -17,9 +17,10 @@
     "dotenv": "^4.0.0",
     "exponent-server-sdk": "^2.3.1",
     "express": "^4.14.0",
+    "file-type": "^5.2.0",
+    "jimp": "^0.2.28",
     "jsonwebtoken": "^7.3.0",
     "multer": "^1.2.0",
-    "multer-s3": "^2.7.0",
     "mysql": "^2.11.1",
     "stopwords": "^0.0.5"
   },

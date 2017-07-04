@@ -26,6 +26,7 @@ const INITIAL_STATE = {
   loading: false,
   loadingImage: false,
   imageURL: '',
+  thumbnailURL: '',
   positiveImageURL: '',
   negativeImageURL: '',
   list: [],
@@ -67,11 +68,11 @@ export default (state = INITIAL_STATE, action) => {
 
     case SUBMIT_IMAGE_SUCCESS: {
       if (!action.payload.type)
-        return { ...state, loadingImage: false, imageURL: action.payload.location };
+        return { ...state, loadingImage: false, imageURL: action.payload.locations[0], thumbnailURL: action.payload.locations[1] };
       else if (action.payload.type === 'positive')
-        return { ...state, loadingImage: false, positiveImageURL: action.payload.location };
+        return { ...state, loadingImage: false, positiveImageURL: action.payload.locations[0], thumbnailURL: action.payload.locations[1] };
       else if (action.payload.type === 'negative')
-        return { ...state, loadingImage: false, negativeImageURL: action.payload.location };
+        return { ...state, loadingImage: false, negativeImageURL: action.payload.locations[0], thumbnailURL: action.payload.locations[1] };
     }
 
     case SEARCH_IN_PROGRESS: {

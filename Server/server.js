@@ -4,11 +4,15 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql');
 const multer = require('multer');
-const multerS3 = require('multer-s3') // For image uploading
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
+
+//For image processing
+const Jimp = require('jimp')
+//    ,Promise = require('bluebird')
+const fileType = require('file-type');
 
 aws.config.loadFromPath('config.json'); // load aws config
 
@@ -132,21 +136,7 @@ function removeStopwords(words) {
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: "us-east-1",
-});
-
-const uploadPic = multer({
-  storage: multerS3({
-    s3,
-    bucket: process.env.AWS_BUCKET,
-    acl: 'public-read',
-    metadata(req, file, cb) {
-      cb(null, {fieldName: file.fieldname});
-    },
-    key(req, file, cb) {
-      cb(null, Date.now().toString() + '.png');
-    }
-  })
+  region: "us-west-2",
 });
 
 app.post('/saveEmailForDemo', (req, res) => {
@@ -158,9 +148,69 @@ app.post('/saveEmailForDemo', (req, res) => {
   });
 });
 
-app.post('/uploadPhoto', uploadPic.single('photo'), (req, res, next) => {
-  res.json(req.file)
+app.post('/uploadPhoto', upload.single('photo'), (req, res, next) => {
+
+  const uploadName = Date.now().toString() + '.png';
+  
+  //Call the convertImgs method and pass the image files as its argument
+  convertImgs(req.file).then((largeImage)=>{
+    s3.putObject({
+      Bucket: process.env.AWS_BUCKET_LARGE_IMAGES,
+      Key: uploadName,
+      Body: largeImage,
+      ACL: 'public-read'
+    }, function (resp) {
+      console.log(arguments);
+      console.log('Successfully uploaded large image');
+
+      res.json(
+        [
+          'https://s3-us-west-2.amazonaws.com/feedback-app-user-thumbnails/' + uploadName,
+          'https://feedback-app-user-images.s3.amazonaws.com/' + uploadName,          
+        ]
+      );      
+    });
+  });
+
+  convertImgs(req.file).then((thumbnailImage)=>{
+    s3.putObject({
+      Bucket: process.env.AWS_BUCKET_THUMBNAILS,
+      Key: uploadName,
+      Body: thumbnailImage,
+      ACL: 'public-read'
+    }, function (resp) {
+      console.log(arguments);
+      console.log('Successfully uploaded thumbnail');      
+    });
+  });
 });
+
+function convertImgs(file) {
+  //Create a new promise for each image processing
+  let promise = new Promise((resolve, reject)=>{
+
+  //Resolve image file type
+  let type = fileType(file.buffer);
+
+  //Create a jimp instance for this image
+  new Jimp(file.buffer, (err, image)=>{
+
+      //Resize this image
+      image.resize(512, 512)
+          //lower the quality by 90%
+          .quality(10)
+          .getBuffer(type.mime, (err, buffer)=>{
+              //Transfer image file buffer to base64 string
+              let base64Image = buffer.toString('base64');
+              let imgSrcString = "data:" + type.mime + ';base64, ' + base64Image;
+              //Resolve base94 string
+              resolve(imgSrcString);
+          });
+      })
+  });
+
+  return promise;
+}
 
 // Sends Email from AWS SES
 function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
