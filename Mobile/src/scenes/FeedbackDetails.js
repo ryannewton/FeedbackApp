@@ -76,8 +76,8 @@ class FeedbackDetails extends Component {
 
     return (
       <View style={container}>
-        <ScrollView>
-          <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+        <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
+          <ScrollView>
             <View>
               {/* Feedback description */}
 
@@ -94,13 +94,13 @@ class FeedbackDetails extends Component {
               {/* List of submitted solutions */}
               <SolutionsCard navigation={this.props.navigation} />
             </View>
-          </TouchableWithoutFeedback>
-        </ScrollView>
+          </ScrollView>
+        </TouchableWithoutFeedback>
 
         {this.renderErrorMessage()}
 
         {/* Input to submit a new solution */}
-        <KeyboardAvoidingView behavior={'padding'}>
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-64}>
           <TextInput
             style={inputText}
             placeholder="Enter your solution here..."
@@ -112,7 +112,6 @@ class FeedbackDetails extends Component {
 
           {/* Submit button */}
           {this.props.solutions.loading ? showSpinner : showSubmitButton}
-
         </KeyboardAvoidingView>
       </View>
     );
