@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   LayoutAnimation,
+  Platform,
 } from 'react-native';
 import Menu, { MenuOptions, MenuOption, MenuTrigger, MenuContext } from 'react-native-menu';
 import { connect } from 'react-redux';
@@ -115,7 +116,9 @@ class SearchBar extends Component {
   }
 
 
-  renderPicker = () => {
+  if (Platform.OS == 'android') {
+      return null;
+    }
     const renderTouchable = () => <TouchableOpacity />;
     const {
       menuOptions,
@@ -170,7 +173,7 @@ class SearchBar extends Component {
       </View>
     );
   }
-
+  
   render() {
     return (
       <View style={{ height: 60, backgroundColor: '#00A2FF' }}>
