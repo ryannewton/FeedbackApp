@@ -5,6 +5,7 @@ import {
   View,
   TouchableOpacity,
   LayoutAnimation,
+  Platform,
 } from 'react-native';
 import Menu, { MenuOptions, MenuOption, MenuTrigger, MenuContext } from 'react-native-menu';
 import { connect } from 'react-redux';
@@ -116,59 +117,62 @@ class SearchBar extends Component {
 
 
   renderPicker = () => {
-    const renderTouchable = () => <TouchableOpacity />;
-    const {
-      menuOptions,
-      divider,
-      pickerStyle,
-    } = styles;
-    return (
-      <View style={pickerStyle}>
-        <MenuContext>
-          <Menu
-            onSelect={(filterMethod) => {
-              this.setState({ filterMethod });
-              this.props.changeFilterMethod(filterMethod);
-            }}
-          >
-            <MenuTrigger renderTouchable={renderTouchable}>
-              <Icon name="filter" type="font-awesome" size={25} color="white" />
-            </MenuTrigger>
-            <MenuOptions style={menuOptions}>
-              <MenuOption
-                value="all"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('all')}
-              >
-                <Text>All</Text>
-              </MenuOption>
-              <View style={divider} />
-              <MenuOption
-                value="this_week"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('this_week')}
-              >
-                <Text>This week</Text>
-              </MenuOption>
-              <MenuOption
-                value="today"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('today')}
-              >
-                <Text>Today</Text>
-              </MenuOption>
-              <MenuOption
-                value="my_feedback"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('my_feedback')}
-              >
-                <Text>My Feedback</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
-        </MenuContext>
-      </View>
-    );
+    if (Platform.OS == 'ios') {
+      const renderTouchable = () => <TouchableOpacity />;
+      const {
+        menuOptions,
+        divider,
+        pickerStyle,
+      } = styles;
+      return (
+        <View style={pickerStyle}>
+          <MenuContext>
+            <Menu
+              onSelect={(filterMethod) => {
+                this.setState({ filterMethod });
+                this.props.changeFilterMethod(filterMethod);
+              }}
+            >
+              <MenuTrigger renderTouchable={renderTouchable}>
+                <Icon name="filter" type="font-awesome" size={25} color="white" />
+              </MenuTrigger>
+              <MenuOptions style={menuOptions}>
+                <MenuOption
+                  value="all"
+                  renderTouchable={renderTouchable}
+                  style={this.hasDisabledStyle('all')}
+                >
+                  <Text>All</Text>
+                </MenuOption>
+                <View style={divider} />
+                <MenuOption
+                  value="this_week"
+                  renderTouchable={renderTouchable}
+                  style={this.hasDisabledStyle('this_week')}
+                >
+                  <Text>This week</Text>
+                </MenuOption>
+                <MenuOption
+                  value="today"
+                  renderTouchable={renderTouchable}
+                  style={this.hasDisabledStyle('today')}
+                >
+                  <Text>Today</Text>
+                </MenuOption>
+                <MenuOption
+                  value="my_feedback"
+                  renderTouchable={renderTouchable}
+                  style={this.hasDisabledStyle('my_feedback')}
+                >
+                  <Text>My Feedback</Text>
+                </MenuOption>
+              </MenuOptions>
+            </Menu>
+          </MenuContext>
+        </View>
+      );
+    }
+    return null;
   }
 
   render() {
