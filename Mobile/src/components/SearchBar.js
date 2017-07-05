@@ -115,16 +115,15 @@ class SearchBar extends Component {
     return {};
   }
 
-
-  if (Platform.OS == 'android') {
+  renderPicker = () => {
+    // Exclude on Android, library doesn't work
+    if (Platform.OS == 'android') {
       return null;
     }
+
     const renderTouchable = () => <TouchableOpacity />;
-    const {
-      menuOptions,
-      divider,
-      pickerStyle,
-    } = styles;
+    const { menuOptions, divider, pickerStyle } = styles;
+
     return (
       <View style={pickerStyle}>
         <MenuContext>
