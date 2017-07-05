@@ -713,9 +713,9 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
 });
 
 // app.listen(8081, () => {
-//  console.log('Example app listening on port 8081!');
+//  console.log('Suggestion Box Server listening on port 8081!');
 // });
 
 app.listen(3000, () => {
-  console.log('Example app listening on port 3000!');
+  console.log('Suggestion Box Server listening on port 3000!');
 });
