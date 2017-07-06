@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, ListView, TouchableOpacity } from 'react-native';
+import { Image, View, ListView, TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -12,7 +12,10 @@ import registerForNotifications from '../services/push_notifications';
 // Import tracking
 import { sendGoogleAnalytics } from '../actions';
 
+import SearchBar from '../components/SearchBar'
+
 const stopwords = require('stopwords').english;
+import great from '../../images/backgrounds/great.jpg';
 
 class FeedbackList extends Component {
   constructor(props) {
@@ -164,29 +167,79 @@ class FeedbackList extends Component {
     return filteredFeedbackList;
   }
 
-  render() {
+  unreadFeedbackList = () => {
+    const filteredFeedbackList = this.props.feedback.list.filter((item) => {
+          return !(this.props.user.feedbackUpvotes.includes(item.id) || this.props.user.feedbackDownvotes.includes(item.id) || this.props.user.feedbackNoOpinions.includes(item.id));
+    });
+    return filteredFeedbackList;
+  }
+
+  renderUnread() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    const filteredFeedbackList = this.curateFeedbackList();
-    if (!filteredFeedbackList.length) {
-      return <View style={styles.container} />
+    const unreadFeedbackListTop = this.unreadFeedbackList();
+    if (!unreadFeedbackListTop.length) {
+      return <View style={styles.container}> 
+      <Image style={styles.background} source={great} resizeMode="cover" />
+      </View>
     }
     return (
+      <ListView
+        dataSource={ds.cloneWithRows(unreadFeedbackListTop)}
+        renderRow={rowData =>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
+          >
+          <FeedbackCard
+            feedback={rowData}
+            key={rowData.id}
+            navigate={this.props.navigation.navigate}
+            showResponseTag={Boolean(true)}
+          />
+          </TouchableOpacity>
+        }
+      />
+    ); 
+  }
+
+  renderEverything() {
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    const filteredFeedbackList = this.curateFeedbackList();
+    const unreadFeedbackListTop = this.unreadFeedbackList();
+    if (!filteredFeedbackList.length) {
+      return <View style={styles.container, {zIndex: -1}} />
+    }
+    return (
+      <ListView
+        style = {{zIndex: -1}}
+        dataSource={ds.cloneWithRows(filteredFeedbackList)}
+        renderRow={rowData =>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
+          >
+            <FeedbackCard
+              feedback={rowData}
+              key={rowData.id}
+              navigate={this.props.navigation.navigate}
+              showResponseTag={Boolean(true)}
+            />
+          </TouchableOpacity>
+        }
+      />
+    );
+  }
+          // <Text style={{padding:10, backgroundColor:'#66CAFF', color:'white', fontSize: 18, fontWeight: 'bold'}}>Everything</Text>
+
+  render() {
+    return (
       <View style={styles.container}>
-        <ListView
-          dataSource={ds.cloneWithRows(filteredFeedbackList)}
-          renderRow={rowData =>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
-            >
-              <FeedbackCard
-                feedback={rowData}
-                key={rowData.id}
-                navigate={this.props.navigation.navigate}
-                showResponseTag={Boolean(true)}
-              />
-            </TouchableOpacity>
-          }
-        />
+        <View style={styles.container, {height:243}}>
+          <Text style={{padding:10, backgroundColor:'#66CAFF', color:'white', fontSize: 15, fontWeight: 'bold'}}>Unread Feedback</Text>
+          {this.renderUnread()}
+        </View>
+        <View style={styles.container}>
+          <SearchBar />
+          {this.renderEverything()}
+        </View>
       </View>
     );
   }

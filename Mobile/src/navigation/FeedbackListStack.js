@@ -14,7 +14,15 @@ const scenes = StackNavigator({
   FeedbackList: {
     screen: FeedbackList,
     navigationOptions: {
-      header: (<SearchBar />),
+      title: 'Suggestion Inbox',
+      headerTitleStyle: {
+        color: '#fff',
+      },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
+      },
     },
   },
   Details: {
