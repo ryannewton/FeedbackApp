@@ -71,7 +71,7 @@ class SendAuthorizationEmail extends Component {
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 80 }}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 80, backgroundColor:'white' }}
             maxLength={100}
           />
           
