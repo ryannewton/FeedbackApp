@@ -384,7 +384,7 @@ class Search extends Component {
 
 const styles = {
   container: {
-    backgroundColor: '#00A2FF',
+    backgroundColor: '#66CAFF',
     height: containerHeight,
     flexDirection: 'row',
     justifyContent: 'flex-start',
