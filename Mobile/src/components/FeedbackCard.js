@@ -62,6 +62,7 @@ class Feedback extends Component {
   }
 
   renderTitle = () => {
+    const { showImage } = this.props;
     if (this.props.feedback === undefined) {
       return '';
     } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
@@ -74,6 +75,7 @@ class Feedback extends Component {
             color: 'black',
             fontWeight: '400',
           }}
+          numberOfLines={(showImage?null:2)}
         >
           {this.props.feedback.text}
         </Text>
@@ -82,7 +84,7 @@ class Feedback extends Component {
     return (
       <Text
         style={{
-          fontSize: 18,
+          fontSize: 15,
           color: 'black',
           fontWeight: 'bold',
         }}
@@ -105,7 +107,7 @@ class Feedback extends Component {
           source={noOpinionN}
           style={{
             height: 17,
-            width: 35,
+            width: 28,
             resizeMode: 'contain',
           }}
         />
@@ -122,7 +124,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-up" size={30} color={iconColor} />
+        <Icon name="thumb-up" size={25} color={iconColor} />
       </View>
     );
   }
@@ -135,20 +137,23 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-down" size={30} color={iconColor} />
+        <Icon name="thumb-down" size={25} color={iconColor} />
       </View>
     );
   }
 
   renderStatus = () => {
     const { status } = this.props.feedback;
+    if (status && status === 'compliment') {
+      return <Icon name="heart" type='font-awesome' size={20} color={'#F54B5E'} />;
+    }
     if (status && status === 'complete') {
-      return <Icon name="done" size={30} color={'#48D2A0'} />;
+      return <Icon name="done" size={20} color={'#48D2A0'} />;
     }
     if (status && status === 'inprocess') {
-      return <Icon name="sync" size={30} color={'#F8C61C'} />;
+      return <Icon name="sync" size={20} color={'#F8C61C'} />;
     }
-    return <Icon name="fiber-new" size={30} color={'#00A2FF'} />;
+    return <Icon name="fiber-new" size={20} color={'#00A2FF'} />;
   }
 
   renderStatusBox = () => {
@@ -174,7 +179,7 @@ class Feedback extends Component {
     }
     return (
       <View style={{ paddingRight: 10, paddingTop: 2 }}>
-        <Icon name="verified-user" color="blue" />
+        <Icon name="verified-user" size={20} color="blue" />
       </View>
     );
   }
@@ -226,21 +231,20 @@ class Feedback extends Component {
       return null;
     }
     return (
-      <View style={imageViewStyle}>
+      <View style={imageViewStyle, {paddingLeft: 20}}>
         <Image
           source={{ uri: imageURL }}
           indicator={ProgressBar}
           indicatorProps={{
-            size: 80,
+            size: 60,
             borderWidth: 0,
             color: 'rgba(150, 150, 150, 1)',
             unfilledColor: 'rgba(200, 200, 200, 0.2)',
           }}
           style={{
-            width: 80,
-            height: 80,
+            width: 60,
+            height: 60,
             resizeMode: 'cover',
-            paddingLeft: 5, 
             paddingBottom: 5,
             borderRadius: 4,
           }}
@@ -255,8 +259,8 @@ class Feedback extends Component {
     const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
     if (feedbackSolutions.length) {
       return (
-        <View style={{paddingTop:5}}>
-          <Icon name="question-answer" color="#bdbdbd" />
+        <View style={{paddingTop:2}}>
+          <Icon name="question-answer" size={20} color="#bdbdbd" />
         </View>
       );
     }
@@ -278,6 +282,7 @@ class Feedback extends Component {
   }
 
   render() {
+    const { showImage } = this.props;
     const {
       row,
       feedbackTitle,
@@ -303,7 +308,7 @@ class Feedback extends Component {
 
     return (
       <View style={updatedRow}>
-        <View style={{ flexDirection: 'column', padding: 5}}>
+        <View style={{ flexDirection: 'column', padding: 5, height:(showImage?null:100)}}>
           <View style={{ flexDirection: 'row'}}>
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
               {/* First row */}{/* Project title */}

@@ -42,7 +42,7 @@ class FeedbackDetails extends Component {
       // If restricted words then we show an error to the user
       this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
     } else if (solution === '') {
-      this.setState({ errorMessage: 'Sorry, solutions cannot be blank.' });
+      this.setState({ errorMessage: 'Sorry, solutions and comments cannot be blank.' });
     } else {
       this.setState({ errorMessage: '' });
       this.props.submitSolutionToServer(solution, feedback.id, solutionsRequireApproval);
@@ -65,12 +65,13 @@ class FeedbackDetails extends Component {
   render() {
     const { container, inputText } = styles;
     const { feedback } = this.props.navigation.state.params;
+    const { status } = feedback;
     const showSpinner = (
       <Spinner size="large" style={{ marginTop: 20 }} />
     );
     const showSubmitButton = (
       <Button onPress={this.submitSolution}>
-       Submit Solution
+       {(status && status === 'compliment')?'Submit Comment':'Submit Solution'}
       </Button>
     );
 
@@ -103,7 +104,7 @@ class FeedbackDetails extends Component {
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-64}>
           <TextInput
             style={inputText}
-            placeholder="Enter your solution here..."
+            placeholder={((status && status === 'compliment')?"Enter your comment here...":"Enter your solution here...")}
             onChangeText={solution => this.props.solutionChanged(solution)}
             value={this.props.solutions.solution}
             returnKeyType={'done'}

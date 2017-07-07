@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     flexDirection: 'row',
     flex: 1,
-    paddingRight: 5,
+    padding: 10,
   },
   topbar: {
     flexDirection: 'row',
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
   },
   pickerStyle: {
     justifyContent: 'flex-end',
-    paddingRight: 17,
+    paddingRight: 16,
   },
   searchBarStyle: {
     justifyContent: 'flex-end',
