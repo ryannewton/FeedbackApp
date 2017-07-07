@@ -144,6 +144,9 @@ class Feedback extends Component {
 
   renderStatus = () => {
     const { status } = this.props.feedback;
+    if (status && status === 'compliment') {
+      return <Icon name="heart" type='font-awesome' size={20} color={'#F54B5E'} />;
+    }
     if (status && status === 'complete') {
       return <Icon name="done" size={20} color={'#48D2A0'} />;
     }
