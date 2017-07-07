@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 // Import components, functions, and styles
 import FeedbackCard from '../components/FeedbackCard';
 import styles from '../styles/scenes/FeedbackListStyles';
+import registerForNotifications from '../services/push_notifications';
 
 // Import tracking
 import { sendGoogleAnalytics } from '../actions';
@@ -26,6 +27,10 @@ class FeedbackList extends Component {
       wordspace,
       occuranceTable,
     };
+  }
+
+  componentDidMount() {
+    registerForNotifications(this.props.token);
   }
 
   wordspace = () => {
@@ -195,8 +200,8 @@ FeedbackList.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { feedback, group, user } = state;
-  return { feedback, group, user };
+  const { feedback, group, user, auth: { token } } = state;
+  return { feedback, group, user, token };
 }
 
 const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics })(FeedbackList);
