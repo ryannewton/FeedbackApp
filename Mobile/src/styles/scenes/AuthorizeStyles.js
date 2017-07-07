@@ -15,9 +15,10 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   errorTextStyle: {
-    fontSize: 20,
+    fontSize: 17,
     alignSelf: 'center',
-    color: 'red',
+    color: '#F54B5E',
+    backgroundColor: 'rgba(0,0,0,0)',
   },
   background: {
     flex: 1,
