@@ -16,6 +16,7 @@ class SolutionsCard extends Component {
     const { noSolutionsMessage, subheaderText } = styles;
     const { solutions } = this.props;
     const { feedback } = this.props.navigation.state.params;
+    const { status } = feedback;
     const feedbackSolutions = solutions.list
       .filter(solution => solution.feedbackId === feedback.id);
 
@@ -23,7 +24,7 @@ class SolutionsCard extends Component {
     if (!feedbackSolutions.length) {
       return (
         <CardSection>
-          <Text style={noSolutionsMessage}>{'No solutions (yet)\nBe the first!'}</Text>
+          <Text style={noSolutionsMessage}>{((status && status === 'compliment')?'No comments (yet)\nBe the first!':'No solutions (yet)\nBe the first!')}</Text>
         </CardSection>
       );
     }
