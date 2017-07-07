@@ -11,7 +11,7 @@ import {
   AUTHORIZE_USER_FAIL,
   AUTHORIZE_USER_SUCCESS,
   LOG_OUT_USER,
-  SAVE_GROUP_CODE
+  SAVE_GROUP_CODE,
 } from './types';
 
 // Import functions
@@ -29,7 +29,7 @@ export const sendAuthorizationEmail = (email, navigateToNext) => (
     .then((response) => {
       // Change the in-authorization flag in state so we update the component
       dispatch({ type: SENT_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
-      dispatch({ type: SAVE_GROUP_CODE, payload: response.data})
+      dispatch({ type: SAVE_GROUP_CODE, payload: response.data });
       navigateToNext();
     })
     .catch((error) => {

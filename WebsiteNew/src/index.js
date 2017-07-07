@@ -37,7 +37,7 @@ if (token) {
 ReactDOM.render(
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path='/' component={App}>
+      <Route path='/admin.html' component={App}>
         <IndexRoute component = {Landing} />
         <Route path='sendcode' component={SendCode} />
         <Route path='authorize' component={AuthorizeUser} />

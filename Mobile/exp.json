@@ -3,15 +3,15 @@
   "description": "No description",
   "slug": "feedbackapp",
   "sdkVersion": "17.0.0",
-  "version": "1.1.01",
+  "version": "1.1.02",
   "ios": {
     "bundleIdentifier": "com.feedbackapp.feedbackapp",
     "supportsTablet": true,
-    "buildNumber": "46"
+    "buildNumber": "47"
   },
   "android": {
     "package": "com.feedbackapp",
-    "versionCode": 46
+    "versionCode": 47
   },
   "orientation": "portrait",
   "primaryColor": "#cccccc",
