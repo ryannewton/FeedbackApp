@@ -7,6 +7,7 @@ const multer = require('multer');
 const multerS3 = require('multer-s3') // For image uploading
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
+const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
 
 aws.config.loadFromPath('config.json'); // load aws config
@@ -256,6 +257,50 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
 
 function generateToken(userInfo) {
   return jwt.sign({ userId: userInfo.id, groupId: userInfo.groupId, groupName: userInfo.groupName }, process.env.JWT_KEY);
+}
+
+// SAVE PUSH NOTIFICATION TOKEN
+app.post('/savePushToken', upload.array(), (req, res) => {
+  const { pushToken, authorization } = req.body;
+  jwt.verify(authorization, process.env.JWT_KEY, (err, decoded) => {
+    if (err) {
+      res.status(400).send('Authorization failed');
+    } else {
+      // ** To Do **
+      // Save pushToken to user table
+    }
+
+});
+
+// SEND PUSH NOTIFICATION
+app.post('/sendPushNotification', upload.array(), (req, res) => {
+  const { authorization, message } = req.body;
+  // 1. Check requester has admin permissions
+  // ** To Do **
+
+  // 2. Find pushToken of user
+  // ** To Do **
+
+  // 3. Send notification
+  let isPushToken = Expo.isExponentPushToken(pushToken);
+
+  let expo = new Expo();
+
+  (async function() {
+    try {
+      let receipts = await expo.sendPushNotificationsAsync([{
+        to: pushToken,
+        sound: 'default',
+        body: message,
+        data: { withSome: 'data' }, // Filler; server requires non-empty object
+      }]);
+      res.status(200).json({ receipts });
+      console.log(receipts);
+    } catch (error) {
+      res.status(400).send(error);
+    }
+  })
+
 }
 
 // AUTH
