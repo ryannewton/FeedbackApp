@@ -4,6 +4,7 @@ import { Text, View, Keyboard, TouchableWithoutFeedback, Image } from 'react-nat
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
+import { Icon } from 'react-native-elements';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner } from '../components/common';
@@ -62,6 +63,14 @@ class Authorize extends Component {
     loadOnLaunch();
   }
 
+  renderReportButton() {
+    return (
+      <Button onPress={this.authorizeUser}>
+        ?
+      </Button>
+    );
+  }
+
   renderSignupButton() {
     return (
       <Button onPress={this.authorizeUser}>
@@ -76,8 +85,13 @@ class Authorize extends Component {
     }
 
     return (
-      <View style={{ flex: 1 }}>
-        {this.renderSignupButton()}
+      <View style={{ flex: 1, flexDirection:'row' }}>
+        <View style={{ flex: 1 }}>
+          {this.renderReportButton()}
+        </View>
+        <View style={{ flex: 5 }}>
+          {this.renderSignupButton()}
+        </View>
       </View>
     );
   }
@@ -115,9 +129,12 @@ class Authorize extends Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
+          <Text style={{padding:20, backgroundColor:'rgba(0,0,0,0)', fontSize:18, color:'white'}}>
+            We have just sent an Email with 4-digit code to {this.props.auth.email}!
+          </Text>
           {/* Email input */}
           <Makiko
-            label={'Code Received by Email'}
+            label={'Code from Email'}
             iconClass={FontAwesomeIcon}
             iconName={'envelope-open'}
             iconColor={'#00A2FF'}
@@ -129,10 +146,10 @@ class Authorize extends Component {
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 80, backgroundColor:'white' }}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
             maxLength={100}
           />
-          
+
           {/* Error message (blank if no error) */}
           <Text style={styles.errorTextStyle}>
             {this.props.auth.error}
@@ -141,7 +158,7 @@ class Authorize extends Component {
           {this.renderGroup()}
 
           {/* Confirmation button, and 'go to login' button */}
-          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
+          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15, zIndex:5 }}>
             {this.renderButtons()}
           </View>
         </Image>
