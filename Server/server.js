@@ -260,47 +260,57 @@ function generateToken(userInfo) {
 }
 
 // SAVE PUSH NOTIFICATION TOKEN
-app.post('/savePushToken', upload.array(), (req, res) => {
-  const { pushToken, authorization } = req.body;
-  jwt.verify(authorization, process.env.JWT_KEY, (err, decoded) => {
+app.post('/savePushToken', upload.array(), (req, res) => {  
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) {
       res.status(400).send('Authorization failed');
     } else {
-      // ** To Do **
-      // Save pushToken to user table
+      const { pushToken } = req.body;
+      const { userId } = decoded;
+      const connectionString = 'UPDATE users SET pushToken=? WHERE id=?';
+      connection.query(connectionString, [pushToken, userId], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem with the server - 3611');
+        else res.sendStatus(200);
+      });
     }
-
 });
 
 // SEND PUSH NOTIFICATION
 app.post('/sendPushNotification', upload.array(), (req, res) => {
-  const { authorization, message } = req.body;
-  // 1. Check requester has admin permissions
-  // ** To Do **
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    const { message, userId } = req.body;
+    // 1. Check requester has admin permissions
+    // ** To Do **
 
-  // 2. Find pushToken of user
-  // ** To Do **
+    // 2. Find pushToken of user
+    const connectionString = 'SELECT pushToken FROM users WHERE userId=?';
+    connection.query(connectionString, [userId], (err, rows) => {
+      if (err) res.status(400).send('Sorry, there was a problem with the server - 4511');
+      else if (!rows[0].pushToken) res.status(400).send('Sorry, notifications have not been set up for this user');
+      else {
+        // 3. Send notification
+        const pushToken = rows[0].pushToken;
+        let isPushToken = Expo.isExponentPushToken(pushToken);
 
-  // 3. Send notification
-  let isPushToken = Expo.isExponentPushToken(pushToken);
+        let expo = new Expo();
 
-  let expo = new Expo();
-
-  (async function() {
-    try {
-      let receipts = await expo.sendPushNotificationsAsync([{
-        to: pushToken,
-        sound: 'default',
-        body: message,
-        data: { withSome: 'data' }, // Filler; server requires non-empty object
-      }]);
-      res.status(200).json({ receipts });
-      console.log(receipts);
-    } catch (error) {
-      res.status(400).send(error);
-    }
-  })
-
+        (async function() {
+          try {
+            let receipts = await expo.sendPushNotificationsAsync([{
+              to: pushToken,
+              sound: 'default',
+              body: message,
+              data: { withSome: 'data' }, // Filler; server requires non-empty object
+            }]);
+            res.status(200).json({ receipts });
+            console.log(receipts);
+          } catch (error) {
+            res.status(400).send(error);
+          }
+        })
+      }
+    });    
+  }
 }
 
 // AUTH
