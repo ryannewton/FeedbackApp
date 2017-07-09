@@ -47,89 +47,68 @@ const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
 
-// textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
-
 // Text matching algorithm
 function textMatch(newQuestion) {
   // Step #1 - Pull the previous questions
   const connectionString = `
     SELECT question
-    FROM similarFeedback`
+    FROM similarFeedback`;
   connection.query(connectionString, (err, questions) => {
     if (err) console.log('Error in Text Match - #1');
     else {
       // Step #2 - Add the newQuestion at the beginning of the array
-      const allQuestions = [{ question: newQuestion}, ...questions];
+      const allQuestions = [{ question: newQuestion }, ...questions];
 
       // Step #2 - Identify the wordspace (previous + new)
       const cleanQues = cleanQuestions(allQuestions);
-      const allWords = cleanQues.reduce((acc, question) => {
-        return [...acc, ...question];
-      }, []);
+      const allWords = cleanQues.reduce((acc, question) => [...acc, ...question], []);
       const wordsWithoutDuplicates = removeDuplicateWords(allWords);
       const wordspace = removeStopwords(wordsWithoutDuplicates);
       // Step #3 - Map all questions (prev + new) to the wordspace
-      const occurances = cleanQues.map(question => {
-        return wordspace.map(wordspaceWord => {
-          return question.filter(questionWord => { return wordspaceWord === questionWord }).length;
-        });
-      })
-      console.log(removeStopwords(removeDuplicateWords(cleanQues[0])));
-      console.log(occurances[0].reduce((acc, num) => { return acc + num }, 0));
+      const occurances = cleanQues
+        .map(question => wordspace
+          .map(wordspaceWord => question
+            .filter(questionWord => wordspaceWord === questionWord).length));
 
       // Step #4 - Calculate the cosine for each previous question (maybe a reduce)
-      const allTops = occurances.map(occuranceArray => {
-        return occuranceArray.reduce((top, value, index) => {
-          return top + occurances[0][index] * value;
-        }, 0);
-      });
+      const allTops = occurances
+        .map(occuranceArray => occuranceArray
+          .reduce((top, value, index) => top + (occurances[0][index] * value), 0));
 
-      const allBottomLeft = occurances.map(occuranceArray => {
-        return occuranceArray.reduce((bottomLeft, value) => {
-          return bottomLeft + value * value;
-        }, 0);
-      });
+      const allBottomLeft = occurances
+        .map(occuranceArray => occuranceArray
+          .reduce((bottomLeft, value) => bottomLeft + (value * value), 0));
 
-      const bottomRight = occurances[0].reduce((bottomRight, value) => {
-        return bottomRight + value * value;
-      }, 0);
+      const bottomRight = occurances[0].reduce((br, value) => br + (value * value), 0);
 
-      const cosines = occurances.map((occ, index) => {
-        return allTops[index] / (Math.sqrt(allBottomLeft[index]) * Math.sqrt(bottomRight));
-      });
+      const cosines = occurances
+        .map((occ, index) =>
+          allTops[index] / (Math.sqrt(allBottomLeft[index]) * Math.sqrt(bottomRight)));
 
       console.log(cosines);
-
-      // Step #5 - Console log the most similar question
-      //console.log(cosines.indexOf(Math.max(...cosines)));
+      // console.log(cosines.indexOf(Math.max(...cosines)));
     }
   });
 }
 
-// Cleans up questions (remove punctuation, extra spaces, lowercase everything) and converts them to arrays of words
+// Cleans up questions (remove punctuation, extra spaces, lowercase everything)
+// and converts them to arrays of words
 function cleanQuestions(questions) {
-  return questions.reduce((acc, row) => {
-    return [...acc,
+  return questions.reduce((acc, row) =>
+    [...acc,
       row.question
         .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
         .replace(/[\s]{2,}/g, ' ')
         .toLowerCase()
-        .split(' ')];
-  }, []);
+        .split(' ')], []);
 }
 
-// Remove duplicates
 function removeDuplicateWords(wordsWithDuplicates) {
-  return wordsWithDuplicates.filter((item, index, array) => {
-    return array.indexOf(item) === index;
-  });
+  return wordsWithDuplicates.filter((item, index, array) => array.indexOf(item) === index);
 }
 
-// Remove stopwords
 function removeStopwords(words) {
-  return words.filter((item, index, array) => {
-    return !stopwords.includes(item);
-  });
+  return words.filter(item => !stopwords.includes(item));
 }
 
 // Image uploading backend
@@ -143,12 +122,12 @@ app.post('/saveEmailForDemo', (req, res) => {
   const email = req.body.email;
   const connectionString = 'INSERT INTO demoRequest (email) VALUES (?) ON DUPLICATE KEY UPDATE email=?';
   connection.query(connectionString, [email, email], (err) => {
-    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 9GT5');    
+    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 9GT5');
   });
 });
 
 app.post('/uploadPhoto', upload.single('photo'), (req, res) => {
-  const uploadName = Date.now().toString() + '.jpg';
+  const uploadName = `${Date.now().toString()}.jpg`;
 
   // Call the convertImgs method and pass the image files as its argument
   convertImgs(req.file, 30).then((image) => {
@@ -159,29 +138,22 @@ app.post('/uploadPhoto', upload.single('photo'), (req, res) => {
         Body: image,
         ACL: 'public-read',
       },
-      () => res.json('https://s3-us-west-2.amazonaws.com/feedback-app-user-images/' + uploadName)
-    );
+      () => res.json('https://s3-us-west-2.amazonaws.com/feedback-app-user-images/' + uploadName));
   });
 });
 
 function convertImgs(file, quality) {
-  // Create a new promise for each image processing
-  const promise = new Promise((resolve, reject)=> {
-
-    // Resolve image file type
-    const type = fileType(file.buffer);
-    console.log('type: ', type);
-
-    // Create a jimp instance for this image
-    new Jimp(file.buffer, (err, image)=> {
+  const promise = new Promise((resolve, reject) => {
+    new Jimp(file.buffer, (err, image) => {
       if (err) reject(err);
-      else
+      else {
         image
         .quality(quality)
-        .getBuffer(Jimp.MIME_JPEG, (err, buffer) => {
-          if (err) reject(err);
+        .getBuffer(Jimp.MIME_JPEG, (bufferErr, buffer) => {
+          if (bufferErr) reject(bufferErr);
           else resolve(buffer);
         });
+      }
     });
   });
 
@@ -205,7 +177,6 @@ function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
     },
   }
   , (err) => {
-    //if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 2153');
     if (err) console.log(err);
   });
 }
@@ -230,7 +201,7 @@ function getDomain(email) {
 
 // Authentication Step #1
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  //Checks to make sure it is a valid email address
+  // Checks to make sure it is a valid email address
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
   if (!re.test(req.body.email)) {
     res.status(400).send('Sorry, this does not appear to be a valid email address :(');
@@ -241,7 +212,6 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
     console.log(code);
 
     // Step #2: Check to see if the user is already in the database
-    let groupId;
     let connectionString = `
       SELECT a.groupId, b.groupSignupCode
       FROM users a
@@ -271,7 +241,7 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
 function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
   // Step #3: Add the email, groupId, code, and timestamp to the database
   const connectionString = 'INSERT INTO users (groupId, email, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcodeTime=NOW()';
-  connection.query(connectionString, [groupId, email, String(code), String(code), groupId], function(err) {
+  connection.query(connectionString, [groupId, email, String(code), String(code), groupId], (err) => {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
     else if (!email.includes('admin_test')) {
       // Step #4: Send an email with the code to the user (make sure it shows up in notification)
@@ -282,7 +252,13 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
 }
 
 function generateToken(userInfo) {
-  return jwt.sign({ userId: userInfo.id, groupId: userInfo.groupId, groupName: userInfo.groupName }, process.env.JWT_KEY);
+  return jwt.sign(
+    {
+      userId: userInfo.id,
+      groupId: userInfo.groupId,
+      groupName: userInfo.groupName,
+    },
+    process.env.JWT_KEY);
 }
 
 // SAVE PUSH NOTIFICATION TOKEN
@@ -303,42 +279,42 @@ app.post('/savePushToken', upload.array(), (req, res) => {
 });
 
 // SEND PUSH NOTIFICATION
-app.post('/sendPushNotification', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    const { message, userId } = req.body;
-    // 1. Check requester has admin permissions
-    // ** To Do **
+// app.post('/sendPushNotification', upload.array(), (req, res) => {
+//   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+//     const { message, userId } = req.body;
+//     // 1. Check requester has admin permissions
+//     // ** To Do **
 
-    // 2. Find pushToken of user
-    const connectionString = 'SELECT pushToken FROM users WHERE userId=?';
-    connection.query(connectionString, [userId], (err, rows) => {
-      if (err) res.status(400).send('Sorry, there was a problem with the server - 4511');
-      else if (!rows[0].pushToken) res.status(400).send('Sorry, notifications have not been set up for this user');
-      else {
-        // 3. Send notification
-        const pushToken = rows[0].pushToken;
-        let isPushToken = Expo.isExponentPushToken(pushToken);
+//     // 2. Find pushToken of user
+//     const connectionString = 'SELECT pushToken FROM users WHERE userId=?';
+//     connection.query(connectionString, [userId], (err, rows) => {
+//       if (err) res.status(400).send('Sorry, there was a problem with the server - 4511');
+//       else if (!rows[0].pushToken) res.status(400).send('Sorry, notifications have not been set up for this user');
+//       else {
+//         // 3. Send notification
+//         const pushToken = rows[0].pushToken;
+//         let isPushToken = Expo.isExponentPushToken(pushToken);
 
-        let expo = new Expo();
+//         let expo = new Expo();
 
-        (async function() {
-          try {
-            let receipts = await expo.sendPushNotificationsAsync([{
-              to: pushToken,
-              sound: 'default',
-              body: message,
-              data: { withSome: 'data' }, // Filler; server requires non-empty object
-            }]);
-            res.status(200).json({ receipts });
-            console.log(receipts);
-          } catch (error) {
-            res.status(400).send(error);
-          }
-        })
-      }
-    });    
-  });
-});
+//         (async function() {
+//           try {
+//             let receipts = await expo.sendPushNotificationsAsync([{
+//               to: pushToken,
+//               sound: 'default',
+//               body: message,
+//               data: { withSome: 'data' }, // Filler; server requires non-empty object
+//             }]);
+//             res.status(200).json({ receipts });
+//             console.log(receipts);
+//           } catch (error) {
+//             res.status(400).send(error);
+//           }
+//         })
+//       }
+//     });    
+//   });
+// });
 
 // AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {
@@ -347,13 +323,13 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
   let connectionString = `
     SELECT id, groupName
     FROM groups
-    WHERE groupSignupCode=?`
+    WHERE groupSignupCode=?`;
   connection.query(connectionString, [groupAuthCode], (err, groupIdRows) => {
     if (err) res.status(400).send('Sorry the server is experiencing an error - 2D6T');
     else if (!groupIdRows.length) res.status(400).send('Sorry, the Group Authorization Code is incorrect');
     else {
-      // Step #1: Query the database for the passcode and passcode_time associated with the email address in req.body
-     connectionString = `
+      // Step #1: Query the database for the userinfo associated with the email
+      connectionString = `
         SELECT a.id, a.groupId, b.groupName
         FROM users a
         LEFT JOIN groups b
@@ -365,7 +341,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
           connectionString = `
             UPDATE users
             SET groupId=?
-            WHERE email=?`
+            WHERE email=?`;
           connection.query(connectionString, [groupIdRows[0].id, email], (err) => {
             if (err) res.status(400).send('Sorry, the server is experiencing an error - 41H1');
             else {
@@ -374,7 +350,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
               groupInfo.groupName = groupIdRows[0].groupName;
               res.status(200).json(generateToken(groupInfo));
             }
-          })
+          });
         }
         else if (rows.length) {
           // Step #2: If it checks out then create a JWT token and send to the user
@@ -469,8 +445,7 @@ app.post('/submitSolution', upload.array(), (req, res) => {
             }, (err, result) => {
               if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 2579');
               else res.json({ id: result.insertId });
-            }
-          );
+            });
         }
       });
     }
@@ -485,7 +460,7 @@ app.post('/submitFeedbackVote', upload.array(), (req, res) => {
       const feedbackId = req.body.feedback.id;
       const { upvote, downvote, noOpinion } = req.body;
       const userId = decoded.userId;
-      const connectionString = 'INSERT INTO feedbackVotes SET ?'
+      const connectionString = 'INSERT INTO feedbackVotes SET ?';
       connection.query(connectionString,
         {
           feedbackId,
@@ -494,9 +469,9 @@ app.post('/submitFeedbackVote', upload.array(), (req, res) => {
           downvote,
           noOpinion,
         }, (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
-        else res.sendStatus(200);
-      });
+          if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
+          else res.sendStatus(200);
+        });
     }
   });
 });
@@ -508,7 +483,7 @@ app.post('/submitSolutionVote', upload.array(), (req, res) => {
       const solutionId = req.body.solution.id;
       const { upvote, downvote } = req.body;
       const userId = decoded.userId;
-      const connectionString = 'INSERT INTO solutionVotes SET ?'
+      const connectionString = 'INSERT INTO solutionVotes SET ?';
       connection.query(connectionString,
         {
           solutionId,
@@ -516,16 +491,17 @@ app.post('/submitSolutionVote', upload.array(), (req, res) => {
           upvote,
           downvote,
         }, (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8902');
-        else res.sendStatus(200);
-      });
+          if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8902');
+          else res.sendStatus(200);
+        }
+      );
     }
   });
 });
 
 // SUBMIT OFFICIAL REPLY
 app.post('/submitOfficialReply', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback, officialReply } = req.body;
@@ -540,7 +516,7 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
 
 // APPROVE FEEDBACK
 app.post('/approveFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback } = req.body;
@@ -555,7 +531,7 @@ app.post('/approveFeedback', upload.array(), (req, res) => {
 
 // APPROVE SOLUTION
 app.post('/approveSolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { solution } = req.body;
@@ -570,7 +546,7 @@ app.post('/approveSolution', upload.array(), (req, res) => {
 
 // APPROVE FEEDBACK
 app.post('/approveFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback } = req.body;
@@ -585,7 +561,7 @@ app.post('/approveFeedback', upload.array(), (req, res) => {
 
 // APPROVE SOLUTION
 app.post('/approveSolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { solution } = req.body;
@@ -606,7 +582,7 @@ app.post('/removeFeedbackVote', upload.array(), (req, res) => {
       const feedbackId = req.body.feedback.id;
       const userId = decoded.userId;
       const { upvote, downvote } = req.body;
-      const connectionString = 'DELETE FROM feedbackVotes WHERE feedbackId=? AND userId=? AND upvote=? AND downvote=?'
+      const connectionString = 'DELETE FROM feedbackVotes WHERE feedbackId=? AND userId=? AND upvote=? AND downvote=?';
       connection.query(connectionString, [feedbackId, userId, upvote, downvote], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8912');
         else res.sendStatus(200);
@@ -622,7 +598,7 @@ app.post('/removeSolutionVote', upload.array(), (req, res) => {
       const solutionId = req.body.solution.id;
       const userId = decoded.userId;
       const { upvote, downvote } = req.body;
-      const connectionString = 'DELETE FROM solutionVotes WHERE solutionId=? AND userId=? AND upvote=? AND downvote=?'
+      const connectionString = 'DELETE FROM solutionVotes WHERE solutionId=? AND userId=? AND upvote=? AND downvote=?';
       connection.query(connectionString, [solutionId, userId, upvote, downvote], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8911');
         else res.sendStatus(200);
@@ -739,7 +715,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
-      const { userId, groupName, groupId } = decoded;
+      const { groupId } = decoded;
       const connectionString = `
       SELECT a.id, a.feedbackId, a.userId, a.text, a.approved, b.upvotes, b.downvotes, a.date
       FROM solutions a
@@ -756,8 +732,8 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         else {
           const adjRows = rows.map((row) => {
-            if (!row.upvotes) { row.upvotes = 0 };
-            if (!row.downvotes) { row.downvotes = 0 };
+            if (!row.upvotes) { row.upvotes = 0; }
+            if (!row.downvotes) { row.downvotes = 0; }
             return row;
           });
           res.status(200).send(adjRows);
@@ -772,7 +748,7 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
-      const { userId, groupName, groupId } = decoded;
+      const { userId, groupId } = decoded;
       const connectionString = `
         SELECT
           '` + userId + `' as userId,
