@@ -9,4 +9,4 @@ config.json
 ../.idea
 ../.expo
 /public/bundle.js
-/public/server.js
+production.js
