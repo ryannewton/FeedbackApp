@@ -6,7 +6,7 @@
   "repository": "",
   "scripts": {
     "start": "nodemon server.js --exec babel-node",
-    "build": "babel server.js -d public",
+    "build": "babel server.js -o production.js",
     "serve": "node public/server.js"
   },
   "author": "tjonnyc",
