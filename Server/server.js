@@ -273,6 +273,7 @@ app.post('/savePushToken', upload.array(), (req, res) => {
         else res.sendStatus(200);
       });
     }
+  });
 });
 
 // SEND PUSH NOTIFICATION
@@ -310,8 +311,8 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
         })
       }
     });    
-  }
-}
+  });
+});
 
 // AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {
