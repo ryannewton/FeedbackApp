@@ -4,11 +4,15 @@ require('dotenv').config();
 const express = require('express');
 const mysql = require('mysql');
 const multer = require('multer');
-const multerS3 = require('multer-s3') // For image uploading
 const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
+
+// For image processing
+const Jimp = require('jimp');
+//    ,Promise = require('bluebird')
+const fileType = require('file-type');
 
 aws.config.loadFromPath('config.json'); // load aws config
 
@@ -18,13 +22,13 @@ const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 
 // Uncomment for development server
 const cors = require('cors');
-app.use(cors());
 
+app.use(cors());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
-var stopwords = require("stopwords").english;
+const stopwords = require('stopwords').english;
 
 const connection = mysql.createConnection({
   user: 'root',
@@ -43,7 +47,7 @@ const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
 
-//textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
+// textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
 
 // Text matching algorithm
 function textMatch(newQuestion) {
@@ -132,35 +136,57 @@ function removeStopwords(words) {
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: "us-east-1",
-});
-
-const uploadPic = multer({
-  storage: multerS3({
-    s3,
-    bucket: process.env.AWS_BUCKET,
-    acl: 'public-read',
-    metadata(req, file, cb) {
-      cb(null, {fieldName: file.fieldname});
-    },
-    key(req, file, cb) {
-      cb(null, Date.now().toString() + '.png');
-    }
-  })
+  region: 'us-west-2',
 });
 
 app.post('/saveEmailForDemo', (req, res) => {
-  console.log('save email', req.body.email);
   const email = req.body.email;
   const connectionString = 'INSERT INTO demoRequest (email) VALUES (?) ON DUPLICATE KEY UPDATE email=?';
-  connection.query(connectionString, [email, email], function(err) {
+  connection.query(connectionString, [email, email], (err) => {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 9GT5');    
   });
 });
 
-app.post('/uploadPhoto', uploadPic.single('photo'), (req, res, next) => {
-  res.json(req.file)
+app.post('/uploadPhoto', upload.single('photo'), (req, res) => {
+  const uploadName = Date.now().toString() + '.jpg';
+
+  // Call the convertImgs method and pass the image files as its argument
+  convertImgs(req.file, 30).then((image) => {
+    s3.putObject(
+      {
+        Bucket: process.env.AWS_BUCKET,
+        Key: uploadName,
+        Body: image,
+        ACL: 'public-read',
+      },
+      () => res.json('https://s3-us-west-2.amazonaws.com/feedback-app-user-images/' + uploadName)
+    );
+  });
 });
+
+function convertImgs(file, quality) {
+  // Create a new promise for each image processing
+  const promise = new Promise((resolve, reject)=> {
+
+    // Resolve image file type
+    const type = fileType(file.buffer);
+    console.log('type: ', type);
+
+    // Create a jimp instance for this image
+    new Jimp(file.buffer, (err, image)=> {
+      if (err) reject(err);
+      else
+        image
+        .quality(quality)
+        .getBuffer(Jimp.MIME_JPEG, (err, buffer) => {
+          if (err) reject(err);
+          else resolve(buffer);
+        });
+    });
+  });
+
+  return promise;
+}
 
 // Sends Email from AWS SES
 function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
@@ -260,7 +286,7 @@ function generateToken(userInfo) {
 }
 
 // SAVE PUSH NOTIFICATION TOKEN
-app.post('/savePushToken', upload.array(), (req, res) => {  
+app.post('/savePushToken', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) {
       res.status(400).send('Authorization failed');
@@ -273,6 +299,7 @@ app.post('/savePushToken', upload.array(), (req, res) => {
         else res.sendStatus(200);
       });
     }
+  });
 });
 
 // SEND PUSH NOTIFICATION
@@ -310,8 +337,8 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
         })
       }
     });    
-  }
-}
+  });
+});
 
 // AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {
@@ -680,7 +707,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
-      const { userId, groupName, groupId } = decoded;
+      const { groupId } = decoded;
       const connectionString = `
       SELECT *
       FROM feedback a
@@ -770,7 +797,3 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
 app.listen(8081, () => {
  console.log('Suggestion Box Server listening on port 8081!');
 });
-
-// app.listen(3000, () => {
-//   console.log('Suggestion Box Server listening on port 3000!');
-// });

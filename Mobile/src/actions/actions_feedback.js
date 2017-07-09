@@ -209,7 +209,7 @@ export const uploadImage = (uri, type) => (
 
     fetch(apiUrl, options)
     .then(response => response.json())
-    .then(response => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: { location: response.location, type } }))
+    .then(response => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: { location: response, type } }))
     .catch((err) => {
       dispatch({ type: SUBMIT_IMAGE_FAIL });
       alert('Uh-oh, something went wrong :(\nPlease try again.');

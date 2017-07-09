@@ -52,3 +52,5 @@ fastlane/screenshots
 
 .expo/
 src/constants.js
+
+yarn.lock
