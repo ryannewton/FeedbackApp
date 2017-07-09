@@ -9,8 +9,8 @@ const bodyParser = require('body-parser'); // For uploading longer/complicated t
 const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
 
-//For image processing
-const Jimp = require('jimp')
+// For image processing
+const Jimp = require('jimp');
 //    ,Promise = require('bluebird')
 const fileType = require('file-type');
 
@@ -22,13 +22,13 @@ const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 
 // Uncomment for development server
 const cors = require('cors');
-app.use(cors());
 
+app.use(cors());
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
-var stopwords = require("stopwords").english;
+const stopwords = require('stopwords').english;
 
 const connection = mysql.createConnection({
   user: 'root',
@@ -47,7 +47,7 @@ const defaultFromEmail = 'moderator@collaborativefeedback.com';
 
 connection.connect();
 
-//textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
+// textMatch('I read through the entire 191 page PDF document but could not find any reference to Gifted and Talented students. Could you perhaps shed some light on the plan to address the needs of this important constituency?');
 
 // Text matching algorithm
 function textMatch(newQuestion) {
@@ -136,77 +136,53 @@ function removeStopwords(words) {
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-  region: "us-west-2",
+  region: 'us-west-2',
 });
 
 app.post('/saveEmailForDemo', (req, res) => {
-  console.log('save email', req.body.email);
   const email = req.body.email;
   const connectionString = 'INSERT INTO demoRequest (email) VALUES (?) ON DUPLICATE KEY UPDATE email=?';
-  connection.query(connectionString, [email, email], function(err) {
+  connection.query(connectionString, [email, email], (err) => {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 9GT5');    
   });
 });
 
-app.post('/uploadPhoto', upload.single('photo'), (req, res, next) => {
+app.post('/uploadPhoto', upload.single('photo'), (req, res) => {
+  const uploadName = Date.now().toString() + '.jpg';
 
-  const uploadName = Date.now().toString() + '.png';
-  
-  //Call the convertImgs method and pass the image files as its argument
-  convertImgs(req.file).then((largeImage)=>{
-    s3.putObject({
-      Bucket: process.env.AWS_BUCKET_LARGE_IMAGES,
-      Key: uploadName,
-      Body: largeImage,
-      ACL: 'public-read'
-    }, function (resp) {
-      console.log(arguments);
-      console.log('Successfully uploaded large image');
-
-      res.json(
-        [
-          'https://s3-us-west-2.amazonaws.com/feedback-app-user-thumbnails/' + uploadName,
-          'https://feedback-app-user-images.s3.amazonaws.com/' + uploadName,          
-        ]
-      );      
-    });
-  });
-
-  convertImgs(req.file).then((thumbnailImage)=>{
-    s3.putObject({
-      Bucket: process.env.AWS_BUCKET_THUMBNAILS,
-      Key: uploadName,
-      Body: thumbnailImage,
-      ACL: 'public-read'
-    }, function (resp) {
-      console.log(arguments);
-      console.log('Successfully uploaded thumbnail');      
-    });
+  // Call the convertImgs method and pass the image files as its argument
+  convertImgs(req.file, 30).then((image) => {
+    s3.putObject(
+      {
+        Bucket: process.env.AWS_BUCKET,
+        Key: uploadName,
+        Body: image,
+        ACL: 'public-read',
+      },
+      () => res.json('https://s3-us-west-2.amazonaws.com/feedback-app-user-images/' + uploadName)
+    );
   });
 });
 
-function convertImgs(file) {
-  //Create a new promise for each image processing
-  let promise = new Promise((resolve, reject)=>{
+function convertImgs(file, quality) {
+  // Create a new promise for each image processing
+  const promise = new Promise((resolve, reject)=> {
 
-  //Resolve image file type
-  let type = fileType(file.buffer);
+    // Resolve image file type
+    const type = fileType(file.buffer);
+    console.log('type: ', type);
 
-  //Create a jimp instance for this image
-  new Jimp(file.buffer, (err, image)=>{
-
-      //Resize this image
-      image.resize(512, 512)
-          //lower the quality by 90%
-          .quality(10)
-          .getBuffer(type.mime, (err, buffer)=>{
-              //Transfer image file buffer to base64 string
-              let base64Image = buffer.toString('base64');
-              let imgSrcString = "data:" + type.mime + ';base64, ' + base64Image;
-              //Resolve base94 string
-              resolve(imgSrcString);
-          });
-      })
+    // Create a jimp instance for this image
+    new Jimp(file.buffer, (err, image)=> {
+      if (err) reject(err);
+      else
+        image
+        .quality(quality)
+        .getBuffer(Jimp.MIME_JPEG, (err, buffer) => {
+          if (err) reject(err);
+          else resolve(buffer);
+        });
+    });
   });
 
   return promise;
@@ -310,7 +286,7 @@ function generateToken(userInfo) {
 }
 
 // SAVE PUSH NOTIFICATION TOKEN
-app.post('/savePushToken', upload.array(), (req, res) => {  
+app.post('/savePushToken', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) {
       res.status(400).send('Authorization failed');
@@ -323,6 +299,7 @@ app.post('/savePushToken', upload.array(), (req, res) => {
         else res.sendStatus(200);
       });
     }
+  });
 });
 
 // SEND PUSH NOTIFICATION
@@ -360,8 +337,8 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
         })
       }
     });    
-  }
-}
+  });
+});
 
 // AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {
@@ -730,7 +707,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
-      const { userId, groupName, groupId } = decoded;
+      const { groupId } = decoded;
       const connectionString = `
       SELECT *
       FROM feedback a
@@ -820,7 +797,3 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
 app.listen(8081, () => {
  console.log('Suggestion Box Server listening on port 8081!');
 });
-
-// app.listen(3000, () => {
-//   console.log('Suggestion Box Server listening on port 3000!');
-// });
