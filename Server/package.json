@@ -5,8 +5,9 @@
   "main": "index.js",
   "repository": "",
   "scripts": {
-    "start": "node server.js",
-    "dev-1": "nodemon server.js"
+    "start": "nodemon server.js --exec babel-node",
+    "build": "babel server.js -d public",
+    "serve": "node public/server.js"
   },
   "author": "tjonnyc",
   "license": "proprietary",
@@ -25,6 +26,9 @@
     "stopwords": "^0.0.5"
   },
   "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-stage-2": "^6.24.1",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
