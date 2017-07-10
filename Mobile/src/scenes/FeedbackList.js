@@ -192,43 +192,30 @@ class FeedbackList extends Component {
     );
   }
 
-  renderEverything() {
+  render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     const filteredFeedbackList = this.curateFeedbackList();
     if (!filteredFeedbackList.length) {
       return <View style={styles.container, {zIndex: -1}} />
     }
     return (
-      <ListView
-        style = {{zIndex: -1}}
-        dataSource={ds.cloneWithRows(filteredFeedbackList)}
-        renderRow={rowData =>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
-          >
-            <FeedbackCard
-              feedback={rowData}
-              key={rowData.id}
-              navigate={this.props.navigation.navigate}
-              showResponseTag={Boolean(true)}
-            />
-          </TouchableOpacity>
-        }
-      />
-    );
-  }
-
-  render() {
-    return (
       <View style={styles.container}>
-        <View style={styles.container, { height: 135 }}>
-          <Text style={{padding:10, backgroundColor:'#66CAFF', color:'white', fontSize: 15, fontWeight: 'bold'}}>Unread Feedback</Text>
-          {this.renderUnread()}
-        </View>
-        <View style={styles.container}>
-          <SearchBar />
-          {this.renderEverything()}
-        </View>
+        <ListView
+          style = {{zIndex: -1}}
+          dataSource={ds.cloneWithRows(filteredFeedbackList)}
+          renderRow={rowData =>
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
+            >
+              <FeedbackCard
+                feedback={rowData}
+                key={rowData.id}
+                navigate={this.props.navigation.navigate}
+                showResponseTag={Boolean(true)}
+              />
+            </TouchableOpacity>
+          }
+        />
       </View>
     );
   }
