@@ -301,20 +301,18 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
     // Send notification
     const pushToken = rows[0].pushToken;
     const expo = new Expo();
-
-    (async function() {
-      try {
-        const receipts = await expo.sendPushNotificationsAsync([{
-          to: pushToken,
-          sound: 'default',
-          body: message,
-          data: { withSome: 'data' }, // Filler; server requires non-empty object
-        }]);
-        res.status(200).json({ receipts });
-      } catch (error) {
-        res.status(400).send(error);
-      }
-    })();
+    expo.sendPushNotificationsAsync([{
+      to: pushToken,
+      sound: 'default',
+      body: message,
+      data: { withSome: 'data' }, // Filler; server requires non-empty object
+    }])
+    .then((receipts) => {
+      res.status(200).json({ receipts });
+    })
+    .catch((error) => {
+      res.status(400).send(error);
+    });
   });
 });
 
