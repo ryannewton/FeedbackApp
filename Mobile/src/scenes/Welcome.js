@@ -12,10 +12,10 @@ import pageFourImage from '../../images/backgrounds/4_n.jpg';
 
 
 const SLIDE_DATA = [
-  { text: 'Welcome to Suggestion Box', image: pageOneImage, color: '#03A9F4' },
-  { text: 'Anonymously submit feedback to management', image: pageTwoImage, color: '#009688' },
-  { text: 'Vote on feedback to help issues get visibility', image: pageThreeImage, color: '#03A9F4' },
-  { text: 'Get official responses on top feedback', image: pageFourImage, color: '#009688' },
+  { text: 'Welcome to the Suggestion Box!', image: pageOneImage, color: '#03A9F4' },
+  { text: 'Anonymously submit feedback for your community...', image: pageTwoImage, color: '#009688' },
+  { text: "...and prioritize other members' feedback by voting.", image: pageThreeImage, color: '#03A9F4' },
+  { text: "Top feedback will either be addressed or receive an official response", image: pageFourImage, color: '#009688' },
 ];
 
 class WelcomeScreen extends Component {

@@ -136,11 +136,11 @@ class Authorize extends Component {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
           <Text style={{padding:20, backgroundColor:'rgba(0,0,0,0)', fontSize:18, color:'white'}}>
-            We have just sent an Email with 4-digit code to {this.props.auth.email}!
+            Great! We sent an email with a 4-digit code to {this.props.auth.email}!
           </Text>
           {/* Email input */}
           <Makiko
-            label={'Code from Email'}
+            label={'Enter Code from Email'}
             iconClass={FontAwesomeIcon}
             iconName={'envelope-open'}
             iconColor={'#00A2FF'}

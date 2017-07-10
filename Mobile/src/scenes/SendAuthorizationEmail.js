@@ -60,7 +60,7 @@ class SendAuthorizationEmail extends Component {
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
           {/* Email input */}
           <Makiko
-            label={'Email Address'}
+            label={'Enter Your Email Address'}
             iconClass={FontAwesomeIcon}
             iconName={'envelope'}
             iconColor={'#00A2FF'}
