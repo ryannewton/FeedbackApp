@@ -17,12 +17,11 @@ export default async (authToken) => {
   }
 
   const pushToken = await Notifications.getExponentPushTokenAsync();
-  // await http.post('/savePushToken', {
-  //   pushToken,
-  //   authorization: authToken,
-  // });
+  await http.post('/savePushToken', {
+    pushToken,
+    authorization: authToken,
+  });
 
   AsyncStorage.setItem(`${ROOT_STORAGE}pushToken`, pushToken);
-  // console.log('pushToken: ', pushToken);
   return status;
 };
