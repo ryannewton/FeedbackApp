@@ -281,10 +281,11 @@ app.post('/savePushToken', upload.array(), (req, res) => {
 // SEND PUSH NOTIFICATION
 app.post('/sendPushNotification', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    const { message, id } = req.body;
+    const { userId } = decoded;
+    const { message } = req.body;
     const connectionString = 'SELECT pushToken FROM users WHERE id=?';
 
-    connection.query(connectionString, [id], (err, rows) => {
+    connection.query(connectionString, [userId], (err, rows) => {
       if (err) {
         res.status(400).send('Sorry, there was a problem with the server - 4511');
       } else if (!rows[0].pushToken) {
