@@ -27,6 +27,7 @@ const scenes = StackNavigator(
           marginTop: styles.header.marginTop,
           backgroundColor: '#00A2FF',
         },
+        headerTintColor: 'white',
       }),
     },
     Settings: {
@@ -39,6 +40,7 @@ const scenes = StackNavigator(
           marginTop: styles.header.marginTop,
           backgroundColor: '#00A2FF',
         },
+        headerTintColor: 'white',
       },
     },
     Submitted: {
@@ -51,6 +53,7 @@ const scenes = StackNavigator(
           marginTop: styles.header.marginTop,
           backgroundColor: '#00A2FF',
         },
+        headerTintColor: 'white',
       },
     },
   },

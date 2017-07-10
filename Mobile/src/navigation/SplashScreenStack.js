@@ -12,6 +12,7 @@ const SplashScreenStack = StackNavigator(
       screen: SplashScreen,
       navigationOptions: {
         header: null,
+        headerTintColor: 'white',
       },
     },
   },

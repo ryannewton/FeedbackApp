@@ -13,13 +13,14 @@ const AuthStack = StackNavigator({
     navigationOptions: {
       title: 'Verify Your Organization',
       headerTitleStyle: {
-        color: '#fff'
+        color: '#fff',
       },
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
         backgroundColor: '#00A2FF',
       },
+      headerTintColor: 'white',
     },
   },
   AuthCode: {
@@ -27,13 +28,14 @@ const AuthStack = StackNavigator({
     navigationOptions: {
       title: 'Enter Code From Email',
       headerTitleStyle: {
-        color: '#fff'
+        color: '#fff',
       },
       headerStyle: {
         height: styles.header.height,
         marginTop: styles.header.marginTop,
         backgroundColor: '#00A2FF',
       },
+      headerTintColor: 'white',
     },
   },
 });
