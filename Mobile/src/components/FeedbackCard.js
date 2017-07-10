@@ -84,10 +84,11 @@ class Feedback extends Component {
     return (
       <Text
         style={{
-          fontSize: 15,
+          fontSize: 18,
           color: 'black',
           fontWeight: 'bold',
         }}
+        numberOfLines={(showImage?null:2)}
       >
         {this.props.feedback.text}
       </Text>

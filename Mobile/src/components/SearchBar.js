@@ -67,16 +67,18 @@ class SearchBar extends Component {
     if (!this.state.searchPressed) {
       return (
         <View>
+          <View style={spacingStyle} />
           <View style={layoutStyle}>
-            <View>
-              <Text style={{padding:10, backgroundColor:'#66CAFF', color:'white', fontSize: 15, fontWeight: 'bold'}}>
+            <View style={{ flex: 1 }} />
+            <View style={titleViewStyle}>
+              <Text style={titleStyle}>
                 {this.renderTitleHelper()}
               </Text>
             </View>
             <View style={iconLayout}>
               {this.renderPicker()}
               <TouchableOpacity onPress={() => this.setState({ searchPressed: true })} >
-                <Icon name="search" size={20} color="white" />
+                <Icon name="search" size={30} color="white" />
               </TouchableOpacity>
             </View>
           </View>
@@ -85,6 +87,7 @@ class SearchBar extends Component {
     }
     return (
       <View>
+        <View style={{ height: 20, backgroundColor: '#00A2FF' }} />
         <Search
           onCancel={() => {
             this.setState({ searchPressed: false });
@@ -131,7 +134,7 @@ class SearchBar extends Component {
             }}
           >
             <MenuTrigger renderTouchable={renderTouchable}>
-              <Icon name="filter" type="font-awesome" size={18} color="white" />
+              <Icon name="filter" type="font-awesome" size={25} color="white" />
             </MenuTrigger>
             <MenuOptions style={menuOptions}>
               <MenuOption
@@ -172,7 +175,7 @@ class SearchBar extends Component {
   
   render() {
     return (
-      <View style={{ backgroundColor: '#66CAFF' }}>
+      <View style={{ height: 60, backgroundColor: '#00A2FF' }}>
         {this.renderSearchBar()}
       </View>
     );
