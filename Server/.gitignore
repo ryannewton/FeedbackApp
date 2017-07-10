@@ -10,3 +10,6 @@ config.json
 ../.expo
 /public/bundle.js
 production.js
+
+package-lock.json
+yarn.lock

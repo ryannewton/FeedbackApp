@@ -279,42 +279,42 @@ app.post('/savePushToken', upload.array(), (req, res) => {
 });
 
 // SEND PUSH NOTIFICATION
-// app.post('/sendPushNotification', upload.array(), (req, res) => {
-//   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-//     const { message, userId } = req.body;
-//     // 1. Check requester has admin permissions
-//     // ** To Do **
+app.post('/sendPushNotification', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    const { message, userId } = req.body;
+    // 1. Check requester has admin permissions
+    // ** To Do **
 
-//     // 2. Find pushToken of user
-//     const connectionString = 'SELECT pushToken FROM users WHERE userId=?';
-//     connection.query(connectionString, [userId], (err, rows) => {
-//       if (err) res.status(400).send('Sorry, there was a problem with the server - 4511');
-//       else if (!rows[0].pushToken) res.status(400).send('Sorry, notifications have not been set up for this user');
-//       else {
-//         // 3. Send notification
-//         const pushToken = rows[0].pushToken;
-//         let isPushToken = Expo.isExponentPushToken(pushToken);
+    // 2. Find pushToken of user
+    const connectionString = 'SELECT pushToken FROM users WHERE userId=?';
+    connection.query(connectionString, [userId], (err, rows) => {
+      if (err) res.status(400).send('Sorry, there was a problem with the server - 4511');
+      else if (!rows[0].pushToken) res.status(400).send('Sorry, notifications have not been set up for this user');
+      else {
+        // 3. Send notification
+        const pushToken = rows[0].pushToken;
+        let isPushToken = Expo.isExponentPushToken(pushToken);
 
-//         let expo = new Expo();
+        let expo = new Expo();
 
-//         (async function() {
-//           try {
-//             let receipts = await expo.sendPushNotificationsAsync([{
-//               to: pushToken,
-//               sound: 'default',
-//               body: message,
-//               data: { withSome: 'data' }, // Filler; server requires non-empty object
-//             }]);
-//             res.status(200).json({ receipts });
-//             console.log(receipts);
-//           } catch (error) {
-//             res.status(400).send(error);
-//           }
-//         })
-//       }
-//     });    
-//   });
-// });
+        (async function() {
+          try {
+            let receipts = await expo.sendPushNotificationsAsync([{
+              to: pushToken,
+              sound: 'default',
+              body: message,
+              data: { withSome: 'data' }, // Filler; server requires non-empty object
+            }]);
+            res.status(200).json({ receipts });
+            console.log(receipts);
+          } catch (error) {
+            res.status(400).send(error);
+          }
+        });
+      }
+    });
+  });
+});
 
 // AUTH
 app.post('/authorizeUser', upload.array(), (req, res) => {

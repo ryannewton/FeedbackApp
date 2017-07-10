@@ -6,8 +6,8 @@
   "repository": "",
   "scripts": {
     "start": "nodemon server.js --exec babel-node",
-    "build": "babel server.js -o production.js",
-    "serve": "node public/server.js"
+    "build": "node_modules/.bin/babel server.js -o production.js",
+    "serve": "node production.js"
   },
   "author": "tjonnyc",
   "license": "proprietary",
