@@ -110,7 +110,7 @@ class Feedback extends Component {
     return (
       <View>
         <Image
-          source={noOpinionN}
+          source={biggerCard?noOpinionY:noOpinionN}
           style={{
             paddingTop:biggerCard?32:3,
             height: 17,
@@ -131,7 +131,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-up" size={biggerCard?35:20} color={iconColor} />
+        <Icon name="thumb-up" size={biggerCard?35:20} color={biggerCard?'#48D2A0':iconColor} />
       </View>
     );
   }
@@ -144,7 +144,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-down" size={biggerCard?35:20} color={iconColor} />
+        <Icon name="thumb-down" size={biggerCard?35:20} color={biggerCard?'#F54B5E':iconColor} />
       </View>
     );
   }
