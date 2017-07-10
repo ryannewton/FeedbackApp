@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import Image from 'react-native-image-progress';
@@ -14,6 +14,8 @@ import noOpinionG from '../../images/icons/meh_g1.png';
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
 import { Card, CardSection } from './common';
+
+const SCREEN_WIDTH = Dimensions.get('window').width;
 
 import {
   addFeedbackUpvote,
@@ -62,7 +64,10 @@ class Feedback extends Component {
   }
 
   renderTitle = () => {
-    const { showImage } = this.props;
+    const { showImage, biggerCard } = this.props;
+    if (biggerCard) {
+      return null;
+    } 
     if (this.props.feedback === undefined) {
       return '';
     } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
@@ -71,11 +76,11 @@ class Feedback extends Component {
       return (
         <Text
           style={{
-            fontSize: 18,
+            fontSize: 15,
             color: 'black',
             fontWeight: '400',
           }}
-          numberOfLines={(showImage?null:2)}
+          numberOfLines={(showImage?null:3)}
         >
           {this.props.feedback.text}
         </Text>
@@ -84,11 +89,11 @@ class Feedback extends Component {
     return (
       <Text
         style={{
-          fontSize: 18,
+          fontSize: 15,
           color: 'black',
           fontWeight: 'bold',
         }}
-        numberOfLines={(showImage?null:2)}
+        numberOfLines={(showImage?null:3)}
       >
         {this.props.feedback.text}
       </Text>
@@ -96,7 +101,7 @@ class Feedback extends Component {
   }
 
   renderNoOpinionButton = () => {
-    const { feedback, user } = this.props;
+    const { feedback, user, biggerCard } = this.props;
     let noOpinionN = noOpinionG;
     // If user hasn't upvoted this feedback
     if (user.feedbackNoOpinions.includes(feedback.id)) {
@@ -107,8 +112,9 @@ class Feedback extends Component {
         <Image
           source={noOpinionN}
           style={{
+            paddingTop:biggerCard?32:3,
             height: 17,
-            width: 28,
+            width: biggerCard?35:20,
             resizeMode: 'contain',
           }}
         />
@@ -117,7 +123,7 @@ class Feedback extends Component {
   }
 
   renderThumbUpButton = () => {
-    const { feedback, user } = this.props;
+    const { feedback, user, biggerCard } = this.props;
     let iconColor = '#bdbdbd';
     // If user hasn't upvoted this feedback
     if (user.feedbackUpvotes.includes(feedback.id)) {
@@ -125,12 +131,12 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-up" size={25} color={iconColor} />
+        <Icon name="thumb-up" size={biggerCard?35:20} color={iconColor} />
       </View>
     );
   }
   renderThumbDownButton = () => {
-    const { feedback, user } = this.props;
+    const { feedback, user, biggerCard } = this.props;
     let iconColor = '#bdbdbd';
     // If user hasn't upvoted this feedback
     if (user.feedbackDownvotes.includes(feedback.id)) {
@@ -138,7 +144,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-down" size={25} color={iconColor} />
+        <Icon name="thumb-down" size={biggerCard?35:20} color={iconColor} />
       </View>
     );
   }
@@ -220,10 +226,10 @@ class Feedback extends Component {
 
   renderSmallImage = () => {
     const { imageURL } = this.props.feedback;
-    const { showImage } = this.props;
+    const { showImage, biggerCard } = this.props;
     const { imageStyle, imageViewStyle } = styles;
     const { status } = this.props.feedback;
-    if (showImage) {
+    if (showImage||biggerCard) {
       return null;
     }
 
@@ -255,6 +261,40 @@ class Feedback extends Component {
     );
   }
 
+  renderTitleImage = () => {
+    const { imageURL } = this.props.feedback;
+    const { biggerCard } = this.props;
+    const { imageStyle, imageViewStyle } = styles;
+    const { status } = this.props.feedback;
+    if (!biggerCard) {
+      return null;
+    }
+
+    // If feedback doesn't have a photo
+    if (!imageURL) {
+      return null;
+    }
+return (
+      <View style={imageViewStyle}>
+        <Image
+          source={{ uri: imageURL }}
+          indicator={ProgressBar}
+          indicatorProps={{
+            size: 80,
+            borderWidth: 0,
+            color: 'rgba(150, 150, 150, 1)',
+            unfilledColor: 'rgba(200, 200, 200, 0.2)',
+          }}
+          style={{
+            width: SCREEN_WIDTH-10,
+            height: 180,
+            resizeMode: 'cover',
+          }}
+        />
+      </View>
+    );
+  }
+
   renderSolutionsTag = () => {
     const { solutions, feedback } = this.props;
     const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
@@ -282,8 +322,105 @@ class Feedback extends Component {
     return null;
   }
 
+  renderUnreadTitle = () => {
+    const { showImage, biggerCard } = this.props;
+    const {
+      voteCountStyle,
+      upvoteCountStyle,
+      upvoteTextStyle,
+      downvoteTextStyle,
+      downvoteCountStyle,
+      thumbStyle,
+    } = styles;
+    if (this.props.feedback === undefined) {
+      return '';
+    } 
+    if (!biggerCard) {
+      return null;
+    } 
+    return (
+      <View>
+        <Text
+          style={{
+            fontSize: 15,
+            color: 'black',
+            fontWeight: '500',
+            paddingTop: 5,
+            paddingBottom:10,
+          }}
+          numberOfLines={(showImage?null:2)}
+        >
+          {this.props.feedback.text}
+        </Text>
+          {/* Vote count */}
+        <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
+          {/* Upvote Button and Downvote */}
+          <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
+            {this.renderThumbDownButton()}
+          </TouchableOpacity>
+          <Text style={downvoteTextStyle, { paddingTop: 7, paddingBottom:20, paddingRight: 12, color:'#bdbdbd'}}>
+            {this.props.feedback.downvotes}
+          </Text>
+          <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 3 }}>
+            {this.renderNoOpinionButton()}
+          </TouchableOpacity>
+          <Text style={upvoteTextStyle, {paddingRight: 12, paddingTop: 7, color:'#bdbdbd'}}>
+            {this.props.feedback.noOpinions}
+          </Text>
+          <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 3 }}>
+            {this.renderThumbUpButton()}
+          </TouchableOpacity>
+          <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
+            {this.props.feedback.upvotes}
+          </Text>
+        </View>
+      </View>
+    );
+  }
+
+renderVoteCount = () => {
+    const { showImage, biggerCard } = this.props;
+    const {
+      voteCountStyle,
+      upvoteCountStyle,
+      upvoteTextStyle,
+      downvoteTextStyle,
+      downvoteCountStyle,
+      thumbStyle,
+    } = styles;
+    if (this.props.feedback === undefined) {
+      return '';
+    } 
+    if (biggerCard) {
+      return null;
+    } 
+    return (
+      <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
+        {/* Upvote Button and Downvote */}
+        <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
+          {this.renderThumbDownButton()}
+        </TouchableOpacity>
+        <Text style={downvoteTextStyle, { paddingTop: 7, paddingRight: 8, color:'#bdbdbd'}}>
+          {this.props.feedback.downvotes}
+        </Text>
+        <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 2 }}>
+          {this.renderNoOpinionButton()}
+        </TouchableOpacity>
+        <Text style={upvoteTextStyle, {paddingRight: 8, paddingTop: 7, color:'#bdbdbd'}}>
+          {this.props.feedback.noOpinions}
+        </Text>
+        <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 2 }}>
+          {this.renderThumbUpButton()}
+        </TouchableOpacity>
+        <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
+          {this.props.feedback.upvotes}
+        </Text>
+      </View>
+    );
+  }
+
   render() {
-    const { showImage } = this.props;
+    const { showImage, biggerCard } = this.props;
     const {
       row,
       feedbackTitle,
@@ -309,9 +446,10 @@ class Feedback extends Component {
 
     return (
       <View style={updatedRow}>
-        <View style={{ flexDirection: 'column', padding: 5, height:(showImage?null:100)}}>
+        <View style={{ flexDirection: 'column', padding:5, height:((showImage||biggerCard)?null:100)}}>
           <View style={{ flexDirection: 'row'}}>
             <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+              {this.renderTitleImage()}
               {/* First row */}{/* Project title */}
               <View style={{  paddingTop: 5 }}>
                 {this.renderTitle()}
@@ -331,27 +469,10 @@ class Feedback extends Component {
               {this.renderSolutionsTag()}
             </View>
             {/* Vote count */}
-            <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
-              {/* Upvote Button and Downvote */}
-              <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
-                {this.renderThumbDownButton()}
-              </TouchableOpacity>
-              <Text style={downvoteTextStyle, { paddingTop: 7, paddingRight: 8, color:'#bdbdbd'}}>
-                {this.props.feedback.downvotes}
-              </Text>
-              <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingTop: 5, paddingRight: 2 }}>
-                {this.renderNoOpinionButton()}
-              </TouchableOpacity>
-              <Text style={upvoteTextStyle, {paddingRight: 8, paddingTop: 7, color:'#bdbdbd'}}>
-                {this.props.feedback.noOpinions}
-              </Text>
-              <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 2 }}>
-                {this.renderThumbUpButton()}
-              </TouchableOpacity>
-              <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
-                {this.props.feedback.upvotes}
-              </Text>
-            </View>
+            {this.renderVoteCount()}
+          </View>
+          <View>
+            {this.renderUnreadTitle()}
           </View>
         </View>
       </View>

@@ -20,6 +20,7 @@ const scenes = StackNavigator(
         headerRight: FeedbackSubmitHeaderButtons(navigation),
         headerTitleStyle: {
           color: '#fff',
+          fontWeight: 'bold',
         },
         headerStyle: {
           height: styles.header.height,
