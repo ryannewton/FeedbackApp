@@ -35,12 +35,7 @@ const connection = mysql.createConnection({
   password: process.env.JWT_KEY,
   port: '3306',
   database: 'feedbackappdb',
-
-  // production database
-  // host: 'aa1q5328xs707wa.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
-
-  // development database
-  host: 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
+  host: process.env.db || 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
 const defaultFromEmail = 'moderator@collaborativefeedback.com';
