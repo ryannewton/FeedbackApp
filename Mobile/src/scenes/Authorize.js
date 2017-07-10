@@ -85,15 +85,21 @@ class Authorize extends Component {
     }
 
     return (
-      <View style={{ flex: 1, flexDirection:'row' }}>
-        <View style={{ flex: 1 }}>
-          {this.renderReportButton()}
-        </View>
-        <View style={{ flex: 5 }}>
-          {this.renderSignupButton()}
-        </View>
+      <View style={{ flex: 1 }}>
+        {this.renderSignupButton()}
       </View>
     );
+
+    // return (
+    //   <View style={{ flex: 1, flexDirection:'row' }}>
+    //     <View style={{ flex: 1 }}>
+    //       {this.renderReportButton()}
+    //     </View>
+    //     <View style={{ flex: 5 }}>
+    //       {this.renderSignupButton()}
+    //     </View>
+    //   </View>
+    // );
   }
 
   renderGroup() {
@@ -158,7 +164,8 @@ class Authorize extends Component {
           {this.renderGroup()}
 
           {/* Confirmation button, and 'go to login' button */}
-          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15, zIndex:5 }}>
+          {/*<View style={{ marginLeft: 15, marginRight: 15, marginTop: 15, zIndex:5 }}>*/}
+          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
             {this.renderButtons()}
           </View>
         </Image>

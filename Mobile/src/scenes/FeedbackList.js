@@ -167,44 +167,34 @@ class FeedbackList extends Component {
     return filteredFeedbackList;
   }
 
-  unreadFeedbackList = () => {
-    const filteredFeedbackList = this.props.feedback.list.filter((item) => {
-          return !(this.props.user.feedbackUpvotes.includes(item.id) || this.props.user.feedbackDownvotes.includes(item.id) || this.props.user.feedbackNoOpinions.includes(item.id));
+  renderUnread = () => {
+    const unreadFeedback = this.props.feedback.list.filter((item) => {
+      return !(this.props.user.feedbackUpvotes.includes(item.id) || this.props.user.feedbackDownvotes.includes(item.id) || this.props.user.feedbackNoOpinions.includes(item.id));
     });
-    return filteredFeedbackList;
-  }
 
-  renderUnread() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    const unreadFeedbackListTop = this.unreadFeedbackList();
-    if (!unreadFeedbackListTop.length) {
+    if (!unreadFeedback.length) {
       return <View style={styles.container}> 
-      <Image style={styles.background} source={great} resizeMode="cover" />
+        <Image style={styles.background} source={great} resizeMode="cover" />
       </View>
     }
+
     return (
-      <ListView
-        dataSource={ds.cloneWithRows(unreadFeedbackListTop)}
-        renderRow={rowData =>
-          <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
-          >
-          <FeedbackCard
-            feedback={rowData}
-            key={rowData.id}
-            navigate={this.props.navigation.navigate}
-            showResponseTag={Boolean(true)}
-          />
-          </TouchableOpacity>
-        }
-      />
-    ); 
+      <TouchableOpacity
+        onPress={() => this.props.navigation.navigate('Details', { feedback: unreadFeedback[0] })}
+      >
+        <FeedbackCard
+          feedback={unreadFeedback[0]}
+          key={unreadFeedback[0].id}
+          navigate={this.props.navigation.navigate}
+          showResponseTag={Boolean(true)}
+        />
+      </TouchableOpacity>
+    );
   }
 
   renderEverything() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     const filteredFeedbackList = this.curateFeedbackList();
-    const unreadFeedbackListTop = this.unreadFeedbackList();
     if (!filteredFeedbackList.length) {
       return <View style={styles.container, {zIndex: -1}} />
     }
@@ -227,12 +217,11 @@ class FeedbackList extends Component {
       />
     );
   }
-          // <Text style={{padding:10, backgroundColor:'#66CAFF', color:'white', fontSize: 18, fontWeight: 'bold'}}>Everything</Text>
 
   render() {
     return (
       <View style={styles.container}>
-        <View style={styles.container, {height:243}}>
+        <View style={styles.container, { height: 135 }}>
           <Text style={{padding:10, backgroundColor:'#66CAFF', color:'white', fontSize: 15, fontWeight: 'bold'}}>Unread Feedback</Text>
           {this.renderUnread()}
         </View>
