@@ -15,6 +15,7 @@ const scenes = StackNavigator({
     screen: FeedbackList,
     navigationOptions: {
       header: (<SearchBar />),
+      headerTintColor: 'white',
     },
   },
   Details: {
@@ -29,6 +30,7 @@ const scenes = StackNavigator({
         marginTop: styles.header.marginTop,
         backgroundColor: '#00A2FF',
       },
+      headerTintColor: 'white',
     },
   },
 });
