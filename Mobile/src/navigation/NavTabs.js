@@ -5,9 +5,11 @@ import { TabNavigator } from 'react-navigation';
 // Import Stacks
 import FeedbackSubmitStack from './FeedbackSubmitStack';
 import FeedbackListStack from './FeedbackListStack';
+import UnreadFeedbackListStack from './UnreadFeedbackListStack';
 
 // Stacks for each tab
 const tabs = {
+  UnreadFeedbackList: UnreadFeedbackListStack,
   FeedbackList: FeedbackListStack,
   FeedbackSubmit: FeedbackSubmitStack,  
 };

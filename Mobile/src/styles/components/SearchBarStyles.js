@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
     bottom: 30,
   },
   titleStyle: {
-    fontSize: 20,
+    fontSize: 18,
     color: 'white',
     fontWeight: 'bold',
   },

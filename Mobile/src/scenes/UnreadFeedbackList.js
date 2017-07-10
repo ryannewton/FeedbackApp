@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Image, View, ListView, TouchableOpacity, Text } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { CardSection, Card } from '../components/common';
 
 // Import components, functions, and styles
 import FeedbackCard from '../components/FeedbackCard';
@@ -136,42 +137,20 @@ class FeedbackList extends Component {
   }
 
   curateFeedbackList = () => {
-    // Return a list of feedback given the filter/search value
-    if (this.props.feedback.filterMethod === 'search') {
-      return this.cosineSimilarity(this.props.feedback.searchQuery);
-    }
-    // Switch through filter methods
-    const filteredFeedbackList = this.props.feedback.list.filter((item) => {
-      const { filterMethod } = this.props.feedback;
-      const { date } = item;
-      const feedbackDate = new Date(date).getTime();
-      switch (filterMethod) {
-        case 'all':
-          return true;
-        case 'this_week': {
-          const oneWeekAgo = Date.now() - (60000 * 60 * 24 * 7);
-          return feedbackDate >= oneWeekAgo;
-        }
-        case 'today': {
-          const oneDayAgo = Date.now() - (60000 * 60 * 24);
-          return feedbackDate >= oneDayAgo;
-        }
-        case 'my_feedback': {
-          return item.userId == this.props.user.userId;
-        }
-        default:
-          return true;
-      }
+    const unreadFeedback = this.props.feedback.list.filter((item) => {
+      return !(this.props.user.feedbackUpvotes.includes(item.id) || this.props.user.feedbackDownvotes.includes(item.id) || this.props.user.feedbackNoOpinions.includes(item.id));
     });
 
-    return filteredFeedbackList;
+    return unreadFeedback;
   }
 
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     const filteredFeedbackList = this.curateFeedbackList();
     if (!filteredFeedbackList.length) {
-      return <View style={styles.container, {zIndex: -1}} />
+      return <View style={styles.container}> 
+        <Image style={styles.background} source={great} resizeMode="cover" />
+      </View>
     }
     return (
       <View style={styles.container}>
@@ -182,12 +161,15 @@ class FeedbackList extends Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
             >
+            <Card>
               <FeedbackCard
                 feedback={rowData}
                 key={rowData.id}
                 navigate={this.props.navigation.navigate}
+                biggerCard
                 showResponseTag={Boolean(true)}
               />
+            </Card>
             </TouchableOpacity>
           }
         />
