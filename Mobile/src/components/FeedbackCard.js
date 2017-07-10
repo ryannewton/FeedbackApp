@@ -340,41 +340,41 @@ return (
     } 
     return (
       <View>
-      <Text
-        style={{
-          fontSize: 15,
-          color: 'black',
-          fontWeight: '500',
-          paddingTop: 5,
-          paddingBottom:10,
-        }}
-        numberOfLines={(showImage?null:2)}
-      >
-        {this.props.feedback.text}
-      </Text>
-                  {/* Vote count */}
-            <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
-              {/* Upvote Button and Downvote */}
-              <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
-                {this.renderThumbDownButton()}
-              </TouchableOpacity>
-              <Text style={downvoteTextStyle, { paddingTop: 7, paddingBottom:20, paddingRight: 12, color:'#bdbdbd'}}>
-                {this.props.feedback.downvotes}
-              </Text>
-              <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 3 }}>
-                {this.renderNoOpinionButton()}
-              </TouchableOpacity>
-              <Text style={upvoteTextStyle, {paddingRight: 12, paddingTop: 7, color:'#bdbdbd'}}>
-                {this.props.feedback.noOpinions}
-              </Text>
-              <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 3 }}>
-                {this.renderThumbUpButton()}
-              </TouchableOpacity>
-              <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
-                {this.props.feedback.upvotes}
-              </Text>
-            </View>
-            </View>
+        <Text
+          style={{
+            fontSize: 15,
+            color: 'black',
+            fontWeight: '500',
+            paddingTop: 5,
+            paddingBottom:10,
+          }}
+          numberOfLines={(showImage?null:2)}
+        >
+          {this.props.feedback.text}
+        </Text>
+          {/* Vote count */}
+        <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
+          {/* Upvote Button and Downvote */}
+          <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
+            {this.renderThumbDownButton()}
+          </TouchableOpacity>
+          <Text style={downvoteTextStyle, { paddingTop: 7, paddingBottom:20, paddingRight: 12, color:'#bdbdbd'}}>
+            {this.props.feedback.downvotes}
+          </Text>
+          <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 3 }}>
+            {this.renderNoOpinionButton()}
+          </TouchableOpacity>
+          <Text style={upvoteTextStyle, {paddingRight: 12, paddingTop: 7, color:'#bdbdbd'}}>
+            {this.props.feedback.noOpinions}
+          </Text>
+          <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 3 }}>
+            {this.renderThumbUpButton()}
+          </TouchableOpacity>
+          <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
+            {this.props.feedback.upvotes}
+          </Text>
+        </View>
+      </View>
     );
   }
 
@@ -395,27 +395,27 @@ renderVoteCount = () => {
       return null;
     } 
     return (
-            <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
-              {/* Upvote Button and Downvote */}
-              <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
-                {this.renderThumbDownButton()}
-              </TouchableOpacity>
-              <Text style={downvoteTextStyle, { paddingTop: 7, paddingRight: 8, color:'#bdbdbd'}}>
-                {this.props.feedback.downvotes}
-              </Text>
-              <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 2 }}>
-                {this.renderNoOpinionButton()}
-              </TouchableOpacity>
-              <Text style={upvoteTextStyle, {paddingRight: 8, paddingTop: 7, color:'#bdbdbd'}}>
-                {this.props.feedback.noOpinions}
-              </Text>
-              <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 2 }}>
-                {this.renderThumbUpButton()}
-              </TouchableOpacity>
-              <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
-                {this.props.feedback.upvotes}
-              </Text>
-            </View>
+      <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
+        {/* Upvote Button and Downvote */}
+        <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
+          {this.renderThumbDownButton()}
+        </TouchableOpacity>
+        <Text style={downvoteTextStyle, { paddingTop: 7, paddingRight: 8, color:'#bdbdbd'}}>
+          {this.props.feedback.downvotes}
+        </Text>
+        <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 2 }}>
+          {this.renderNoOpinionButton()}
+        </TouchableOpacity>
+        <Text style={upvoteTextStyle, {paddingRight: 8, paddingTop: 7, color:'#bdbdbd'}}>
+          {this.props.feedback.noOpinions}
+        </Text>
+        <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 2 }}>
+          {this.renderThumbUpButton()}
+        </TouchableOpacity>
+        <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
+          {this.props.feedback.upvotes}
+        </Text>
+      </View>
     );
   }
 
