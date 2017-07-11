@@ -13,10 +13,10 @@ import styles from '../styles/common/navStyles';
 const scenes = StackNavigator({
   FeedbackList: {
     screen: FeedbackList,
-    navigationOptions: {
-      header: (<FeedbackListHeader />),
+    navigationOptions: ({ navigation }) => ({
+      header: <FeedbackListHeader navigation={navigation} />,
       headerTintColor: 'white',
-    },
+    }),
   },
   Details: {
     screen: FeedbackDetails,

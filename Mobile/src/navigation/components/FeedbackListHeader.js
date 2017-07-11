@@ -7,7 +7,8 @@ import { Icon } from 'react-native-elements';
 
 // Import components, styles, and actions
 import { changeFilterMethod, setSearchQuery, searchInProgress } from '../../actions';
-import Search from './SearchInput';
+import SearchInput from './SearchInput';
+import SendInviteTextButton from './SendInviteTextButton';
 import styles from '../../styles/components/SearchBarStyles';
 
 class FeedbackSubmitHeader extends Component {
@@ -46,6 +47,7 @@ class FeedbackSubmitHeader extends Component {
             </Text>
           </View>
           <View style={iconLayout}>
+            <SendInviteTextButton navigation={this.props.navigation} />
             {this.renderPicker()}
             <TouchableOpacity onPress={() => this.setState({ searchPressed: true })} >
               <Icon name="search" size={30} color="white" />
@@ -60,7 +62,7 @@ class FeedbackSubmitHeader extends Component {
     return (
       <View>
         <View style={{ height: 20, backgroundColor: '#00A2FF' }} />
-        <Search
+        <SearchInput
           onCancel={() => {
             this.setState({ searchPressed: false });
             this.setState({ filterMethod: 'all' });

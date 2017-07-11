@@ -40,11 +40,6 @@ class FeedbackSubmit extends Component {
     props.sendGoogleAnalytics('FeedbackSubmit')
   }
 
-  componentDidMount() {
-    const { groupAuthCode } = this.props.group;
-    this.props.navigation.setParams({ groupAuthCode });
-  }
-
   submitFeedback = () => {
     if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
       // First we search the feedback for restricted words
