@@ -8,27 +8,22 @@ const jwt = require('jsonwebtoken'); // For authentication
 const bodyParser = require('body-parser'); // For uploading longer/complicated texts
 const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
-
-// For image processing
-const Jimp = require('jimp');
-//    ,Promise = require('bluebird')
-const fileType = require('file-type');
+const Jimp = require('jimp'); // For image processing
+const stopwords = require('stopwords').english;
 
 aws.config.loadFromPath('config.json'); // load aws config
-
-const app = express();
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 
-// Uncomment for development server
-const cors = require('cors');
-
-app.use(cors());
+const app = express();
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
 
-const stopwords = require('stopwords').english;
+if (!process.env.db) {
+  const cors = require('cors'); // Uncomment for development server
+  app.use(cors());
+}
 
 const connection = mysql.createConnection({
   user: 'root',
@@ -38,7 +33,7 @@ const connection = mysql.createConnection({
   host: process.env.db || 'aa6pcegqv7f2um.c4qm3ggfpzph.us-west-2.rds.amazonaws.com',
 });
 
-const defaultFromEmail = 'moderator@collaborativefeedback.com';
+const defaultFromEmail = 'SuggestionBox@suggestionboxapp.com';
 
 connection.connect();
 
