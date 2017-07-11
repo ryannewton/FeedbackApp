@@ -8,6 +8,7 @@ export const SENT_AUTHORIZATION_EMAIL_FAIL = 'sent_authorization_email_fail';
 export const AUTHORIZING_USER = 'authorizing_user';
 export const AUTHORIZE_USER_SUCCESS = 'authorize_user_success';
 export const AUTHORIZE_USER_FAIL = 'authorize_user_fail';
+export const NEEDS_GROUP_CODE = 'needs_group_code';
 
 // Group
 export const PULL_GROUP_INFO = 'pull_group_info';

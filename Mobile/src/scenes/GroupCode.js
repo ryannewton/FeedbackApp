@@ -112,8 +112,6 @@ class Authorize extends Component {
             {this.props.auth.error}
           </Text>
 
-          {this.renderGroup()}
-
           {/* Confirmation button, and 'go to login' button */}
           {/*<View style={{ marginLeft: 15, marginRight: 15, marginTop: 15, zIndex:5 }}>*/}
           <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>

@@ -12,6 +12,7 @@ import {
   AUTHORIZE_USER_SUCCESS,
   LOG_OUT_USER,
   SAVE_GROUP_CODE,
+  NEEDS_GROUP_CODE,
 } from './types';
 
 // Import functions
@@ -45,12 +46,27 @@ export const authorizeUserFail = error => ({
 
 export const authorizeUserSuccess = token => (
   (dispatch) => {
-    dispatch(pullFeedback(token));
-    dispatch(pullSolutions(token));
-    dispatch(pullGroupInfo(token));
+    loadOnLaunch();
     return { type: AUTHORIZE_USER_SUCCESS, payload: token };
   }
 );
+
+export const verifyEmail = (email, code) => (
+    (dispatch) => {
+      return http.post('/verifyUser', { email, code })
+
+      .then((response) => {
+        if (response.groupCode) {
+          dispatch(authorizeUser(email, code, response.groupCode));
+        } else {
+          dispatch({ type: NEEDS_GROUP_CODE, payload: code });
+        }
+      })
+      .catch((error) => {
+        dispatch(authorizeUserFail(error.response.data));
+      });
+    }
+  );
 
 export const authorizeUser = (email, code, groupAuthCode) => (
   (dispatch) => {

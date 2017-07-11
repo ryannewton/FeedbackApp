@@ -4,6 +4,7 @@ import { StackNavigator } from 'react-navigation';
 
 // Import Scenes and styles
 import Authorize from '../scenes/Authorize';
+import GroupCode from '../scenes/GroupCode';
 import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
 import styles from '../styles/common/navStyles';
 
@@ -27,6 +28,21 @@ const AuthStack = StackNavigator({
     screen: Authorize,
     navigationOptions: {
       title: 'Enter Code From Email',
+      headerTitleStyle: {
+        color: '#fff',
+      },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
+      },
+      headerTintColor: 'white',
+    },
+  },
+  AuthGroupCode: {
+    screen: GroupCode,
+    navigationOptions: {
+      title: 'Enter Group Code',
       headerTitleStyle: {
         color: '#fff',
       },

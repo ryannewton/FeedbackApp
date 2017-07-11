@@ -4,12 +4,10 @@ import { Text, View, Keyboard, TouchableWithoutFeedback, Image } from 'react-nat
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
-import { Icon } from 'react-native-elements';
 
 // Import components and action creators
-import { Card, CardSection, Input, Button, Spinner } from '../components/common';
-import { authorizeUser, sendGoogleAnalytics } from '../actions';
-import loadOnLaunch from '../reducers/load_on_launch';
+import { Button, Spinner } from '../components/common';
+import { verifyUser, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
@@ -51,21 +49,21 @@ class Authorize extends Component {
       });
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
+    } else if (nextProps.auth.needsGroupCode === true) {
+      this.props.navigation.navigate('AuthGroupCode');
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
-  authorizeUser() {
-    this.props.authorizeUser(
+  verifyUser() {
+    this.props.verifyUser(
       this.props.auth.email,
-      this.state.code,
-      this.props.group.groupAuthCode || this.state.groupCode);
-    loadOnLaunch();
+      this.state.code);
   }
 
   renderSignupButton() {
     return (
-      <Button onPress={this.authorizeUser}>
+      <Button onPress={this.verifyUser}>
         Verify Email
       </Button>
     );
@@ -140,4 +138,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { authorizeUser, sendGoogleAnalytics })(Authorize);
+export default connect(mapStateToProps, { verifyUser, sendGoogleAnalytics })(Authorize);
