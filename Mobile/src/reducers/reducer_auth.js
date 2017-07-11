@@ -4,6 +4,7 @@ import {
   SENT_AUTHORIZATION_EMAIL_SUCCESS,
   SENT_AUTHORIZATION_EMAIL_FAIL,
   AUTHORIZING_USER,
+  VERIFY_EMAIL,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   LOG_OUT_USER,
@@ -31,12 +32,14 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, sentAuthorizationEmail: false, loading: false, error: action.payload };
     case AUTHORIZING_USER:
       return { ...state, loading: true };
+    case VERIFY_EMAIL:
+      return { ...state, loading: true };
     case AUTHORIZE_USER_SUCCESS:
       return { ...state, sentAuthorizationEmail: false, loading: false, loggedIn: true, token: action.payload, error: false };
     case AUTHORIZE_USER_FAIL:
       return { ...state, loading: false, loggedIn: false, error: action.payload };
     case NEEDS_GROUP_CODE:
-      return { ...state, needsGroupCode: true, code: action.payload };
+      return { ...state, needsGroupCode: true, loading: false, code: action.payload };
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:
