@@ -14,7 +14,6 @@ import TodoListViewConnected from './todoListView/TodoListView';
 import BreadcrumbViewConnected from './breadcrumb/Breadcrumb';
 import StatViewConnected from './stat/Stat';
 import BasicProgressBarConnected from './basicProgressBar/BasicProgressBar';
-import TabPanelConnected from './tabPanel/TabPanel';
 import StripedProgressBarConnected from './stripedProgressBar/StripedProgressBar';
 import AlertConnected from './alert/Alert';
 import PaginationViewConnected from './pagination/Pagination';
@@ -36,7 +35,6 @@ export {
   BreadcrumbViewConnected,
   StatViewConnected,
   BasicProgressBarConnected,
-  TabPanelConnected,
   StripedProgressBarConnected,
   AlertConnected,
   PaginationViewConnected

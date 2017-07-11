@@ -5,26 +5,18 @@ import React, {
 import {
   AnimatedView,
   Panel,
-  TabPanel as TabPanelComponent,
-  TabPanelHeader as TabPanelHeaderComponent,
-  TabPanelBody as TabPanelBodyComponent,
-  TabPanelBodyContent as TabPanelBodyContentComponent
 }                         from '../../components';
 import shallowCompare     from 'react-addons-shallow-compare';
 import Highlight          from 'react-highlight';
+import SigninDescription from '../../components/SigninDescription';
+import LogoHeader from '../../components/LogoHeader';
+import { authorizeUser } from '../../actions';
+import { connect } from 'react-redux';
+import { Link } from 'react-router'
+
 
 
 class TabPanel extends Component {
-
-  state = {
-    mockHeader: [
-      {name: 'Home', tablink: 'home', isActive: true},
-      {name: 'About', tablink: 'about', isActive: false},
-      {name: 'Profile', tablink: 'profile', isActive: false},
-      {name: 'Contact', tablink: 'contact', isActive: false}
-    ]
-  };
-
   componentWillMount() {
     const { actions: { enterTabPanel } } = this.props;
     enterTabPanel();
@@ -39,93 +31,109 @@ class TabPanel extends Component {
     leaveTabPanel();
   }
 
+  constructor(props) {
+    super(props);
+    this.state = { authCode: '', adminCode: '' };
+  }
+
+  handleSubmit = () => {
+    const { email } = this.props;
+    const { authCode, adminCode } = this.state;
+    this.props.authorizeUser(email, authCode, adminCode);
+  }
+
+  renderAuth() {
+    console.log(this.props)
+    const { emailSentSuccess, loading } = this.props;
+    if (loading) {
+      return (
+        <div>
+          loading
+        </div>
+      );
+    }
+    if (emailSentSuccess) {
+      return (
+        <div style={{paddingLeft: 50}}>
+          <SigninDescription />
+          <LogoHeader />
+
+          {/* Email input */}
+          <div className="panel panel-default">
+            <div className="panel-heading">
+              <h3 className="panel-title">Verify Your University Affiliation</h3>
+            </div>
+            <div className="panel-body">
+              <div className="input-group" style={{ marginTop: 10 }}>
+                <span className="input-group-addon">
+                  Authentication Code (check your email)
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Authentication code"
+                  value={this.state.authCode}
+                  onChange={event => this.setState({ authCode: event.target.value })}
+                  style={{ width: 300 }}
+                />
+              </div>
+              <hr />
+              <div className="input-group">
+                <span className="input-group-addon">
+                  Admin Code
+                </span>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Admin code"
+                  value={this.state.adminCode}
+                  onChange={event => this.setState({ adminCode: event.target.value })}
+                  style={{ width: 300 }}
+                />
+              </div>
+              <Link to={'/'}>
+                <button
+                  type="button"
+                  onClick={this.handleSubmit}
+                  className="btn btn-primary"
+                  style={{ marginTop: 5 }}
+                >
+                  Login
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return (
+      <div>
+        Authentication failed! Please try again.
+        <Link to={'/Dashboard/workProgress'}>
+          <button
+            type='button'
+            className='btn btn-primary'
+            onClick={this.handleSubmit}
+          >
+          Login again!
+        </button>
+        </Link>
+      </div>
+    );
+  }
+
   render() {
-    const { mockHeader } = this.state;
-
-    const source = `
-      // import
-      import {
-        TabPanel,
-        TabPanelHeader,
-        TabPanelBody,
-        TabPanelBodyContent
-      } from './_SOMEWHERE_/components';
-
-      // tab headers (in state for example):
-      state = {
-        headers: [
-          {name: 'Home', tablink: 'home', isActive: true},
-          {name: 'About', tablink: 'about', isActive: false},
-          {name: 'Profile', tablink: 'profile', isActive: false},
-          {name: 'Contact', tablink: 'contact', isActive: false}
-        ]
-      };
-
-      // in render():
-        <TabPanel>
-          <TabPanelHeader tabItems={this.state.headers}/>
-          <TabPanelBody>
-            <TabPanelBodyContent id="home">
-              &nbsp;Home
-            </TabPanelBodyContent>
-            <TabPanelBodyContent id="about">
-              &nbsp;About
-            </TabPanelBodyContent>
-            <TabPanelBodyContent id="profile">
-              &nbsp;Profile
-            </TabPanelBodyContent>
-          </TabPanelBody>
-        </TabPanel>
-      `;
-
-    return(
-      <AnimatedView>
-        {/* preview: */}
-        <div className="row">
-          <div className="col-xs-6 col-xs-offset-3">
-            <Panel
-              title="TabPanel"
-              hasTitle={true}
-              bodyBackGndColor={'#F4F5F6'}>
-              <TabPanelComponent>
-                <TabPanelHeaderComponent tabItems={mockHeader}/>
-                <TabPanelBodyComponent>
-                  <TabPanelBodyContentComponent id="home" isActive>
-                    <h3>
-                      Home
-                    </h3>
-                  </TabPanelBodyContentComponent>
-                  <TabPanelBodyContentComponent id="about">
-                    <h3>
-                      About
-                    </h3>
-                  </TabPanelBodyContentComponent>
-                  <TabPanelBodyContentComponent id="profile">
-                    <h3>
-                      Profile
-                    </h3>
-                  </TabPanelBodyContentComponent>
-                </TabPanelBodyComponent>
-              </TabPanelComponent>
-            </Panel>
-          </div>
-        </div>
-        {/* source: */}
-        <div className="row">
-          <div className="col-xs-12">
-            <Panel
-              title="Source"
-              hasTitle={true}>
-              <Highlight className="javascript">
-                {source}
-              </Highlight>
-            </Panel>
-          </div>
-        </div>
-      </AnimatedView>
+    return (
+      this.renderAuth()
     );
   }
 }
+
+function mapStateToProps(state) {
+  const { email, emailSentSuccess, loading } = state.auth;
+  return { email, emailSentSuccess, loading };
+}
+
 
 TabPanel.propTypes= {
   actions: PropTypes.shape({
@@ -134,4 +142,4 @@ TabPanel.propTypes= {
   })
 };
 
-export default TabPanel;
+export default connect(mapStateToProps, { authorizeUser })(TabPanel);
