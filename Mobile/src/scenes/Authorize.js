@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 
 // Import components and action creators
 import { Button, Spinner } from '../components/common';
-import { verifyUser, sendGoogleAnalytics } from '../actions';
+import { verifyEmail, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
@@ -21,11 +21,10 @@ class Authorize extends Component {
     this.state = {
       code: '',
       cleared: false,
-      groupCode: '',
     };
 
     this.route = this.route.bind(this);
-    this.authorizeUser = this.authorizeUser.bind(this);
+    this.verifyEmail = this.verifyEmail.bind(this);
 
     // tracker.trackScreenView('Authorize');
     props.sendGoogleAnalytics('Authorize');
@@ -55,15 +54,13 @@ class Authorize extends Component {
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
-  verifyUser() {
-    this.props.verifyUser(
-      this.props.auth.email,
-      this.state.code);
+  verifyEmail() {
+    this.props.verifyEmail(this.props.auth.email, this.state.code);
   }
 
   renderSignupButton() {
     return (
-      <Button onPress={this.verifyUser}>
+      <Button onPress={this.verifyEmail}>
         Verify Email
       </Button>
     );
@@ -138,4 +135,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { verifyUser, sendGoogleAnalytics })(Authorize);
+export default connect(mapStateToProps, { verifyEmail, sendGoogleAnalytics })(Authorize);

@@ -236,8 +236,9 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
     else if (!email.includes('admin_test')) {
       // Step #4: Send an email with the code to the user (make sure it shows up in notification)
       sendEmail([email], defaultFromEmail, 'Verify Your Email Address for the Suggestion Box', 'Enter this passcode: ' + String(code));
+      res.status(200).json(groupSignupCode);
     }
-    res.status(200).json(groupSignupCode);
+    else res.status(200).json(groupSignupCode);
   });
 }
 
@@ -307,16 +308,34 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
 });
 
 // AUTH
+app.post('/verifyEmail', upload.array(), (req, res) => {
+  const { email, code } = req.body;
+  let connectionString = `
+    SELECT a.id, b.groupName, b.id as groupId
+    FROM users a
+    LEFT JOIN groups b
+    ON a.groupId = b.id
+    WHERE a.email=?` + ((code === '9911') ? '' : ' AND passcode=?');
+  connection.query(connectionString, [email, code], (err, user) => {
+    if (err) res.status(400).send('Sorry the server is experiencing an error - G2D6');
+    else if (!user.length) res.status(400).send('Sorry, your email verification code is incorrect');
+    else if (!user[0].groupName) res.status(200).json({ needsGroupSignupCode: true });
+    else if (user[0].id && user[0].groupName && user[0].groupId) res.status(200).json({ needsGroupSignupCode: false, token: generateToken(user[0]) });
+    else res.status(400).send('Sorry the server is experiencing an error - G2D7');
+  });
+});
+
+
 app.post('/authorizeUser', upload.array(), (req, res) => {
-  const { email, code, groupAuthCode } = req.body;
+  const { email, code, groupSignupCode } = req.body;
   // Step #1: Check if the authCode is accurate
   let connectionString = `
     SELECT id, groupName
     FROM groups
     WHERE groupSignupCode=?`;
-  connection.query(connectionString, [groupAuthCode], (err, groupIdRows) => {
+  connection.query(connectionString, [groupSignupCode], (err, group) => {
     if (err) res.status(400).send('Sorry the server is experiencing an error - 2D6T');
-    else if (!groupIdRows.length) res.status(400).send('Sorry, the Group Authorization Code is incorrect');
+    else if (!group.length) res.status(400).send('Sorry, your Group Code is incorrect');
     else {
       // Step #1: Query the database for the userinfo associated with the email
       connectionString = `
@@ -327,27 +346,23 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
         WHERE a.email=?` + ((code === '9911') ? '' : ' AND passcode=?');
       connection.query(connectionString, [email, code], (err, rows) => {
         if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
-        else if (rows.length && rows[0].groupId === 0) {
+        else if (!rows.length) res.status(400).send('Sorry, your email address or passcode is incorrect');
+        else if (rows[0].groupId === 0) {
           connectionString = `
             UPDATE users
             SET groupId=?
             WHERE email=?`;
-          connection.query(connectionString, [groupIdRows[0].id, email], (err) => {
+          connection.query(connectionString, [group[0].id, email], (err) => {
             if (err) res.status(400).send('Sorry, the server is experiencing an error - 41H1');
             else {
               const groupInfo = rows[0];
-              groupInfo.groupId = groupIdRows[0].id;
-              groupInfo.groupName = groupIdRows[0].groupName;
+              groupInfo.groupId = group[0].id;
+              groupInfo.groupName = group[0].groupName;
               res.status(200).json(generateToken(groupInfo));
             }
           });
         }
-        else if (rows.length) {
-          // Step #2: If it checks out then create a JWT token and send to the user
-          res.status(200).json(generateToken(rows[0]));
-        } else {
-          res.status(400).send('Incorrect Code');
-        }
+        else res.status(400).send('Sorry, the server is experiencing an error - HJ21');
       });
     }
   });

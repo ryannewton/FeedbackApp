@@ -21,16 +21,15 @@ class Authorize extends Component {
     super(props);
 
     this.state = {
-      code: '',
+      groupSignupCode: '',
       cleared: false,
-      groupCode: '',
     };
 
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
 
     // tracker.trackScreenView('Authorize');
-    props.sendGoogleAnalytics('Authorize');
+    props.sendGoogleAnalytics('GroupSignupCode');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,9 +57,9 @@ class Authorize extends Component {
   authorizeUser() {
     this.props.authorizeUser(
       this.props.auth.email,
-      this.state.code,
-      this.props.group.groupAuthCode || this.state.groupCode);
-    loadOnLaunch();
+      this.props.auth.code,
+      this.state.groupSignupCode
+    );
   }
 
   renderSignupButton() {
@@ -97,8 +96,8 @@ class Authorize extends Component {
             iconName={'user-circle'}
             iconColor={'#00A2FF'}
             inputStyle={{ color: 'black' }}
-            value={this.state.groupCode}
-            onChangeText={text => this.setState({ groupCode: text })}
+            value={this.state.groupSignupCode}
+            onChangeText={text => this.setState({ groupSignupCode: text })}
             keyboardType="phone-pad"
             // TextInput props
             autoCapitalize={'none'}
