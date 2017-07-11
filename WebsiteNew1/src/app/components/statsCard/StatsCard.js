@@ -1,22 +1,23 @@
 import React, { PropTypes } from 'react';
+import { Panel } from 'react-bootstrap';
+import { Link } from 'react-router';
 
 const StatsCard = ({ statValue, statLabel, icon, backColor }) => {
   const colorClass = `sm-st-icon st-${backColor}`;
-
-  return (
-    <div className="sm-st clearfix">
-      <span className={ colorClass }>
-        { icon }
-      </span>
-      <div className="sm-st-info">
-        <span>
-          { statValue }
+    return (
+      <div className="sm-st clearfix">
+        <span className={ colorClass }>
+          { icon }
         </span>
-        <div>
-          { statLabel }
+        <div className="sm-st-info">
+          <span>
+            { statValue }
+          </span>
+          <div>
+            { statLabel }
+          </div>
         </div>
       </div>
-    </div>
   );
 };
 

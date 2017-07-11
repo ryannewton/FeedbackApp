@@ -17,6 +17,8 @@ import SigninDescription from '../../components/SigninDescription';
 import LogoHeader from '../../components/LogoHeader';
 import { sendAuthorizationEmail } from '../../actions';
 import { connect } from 'react-redux';
+import { Link }             from 'react-router';
+
 
 
 
@@ -51,7 +53,7 @@ class WorkProgress extends Component {
 
   render() {
     return (
-      <div>
+      <div style={{paddingLeft: 50}}>
         <SigninDescription />
         <LogoHeader />
 
@@ -65,13 +67,15 @@ class WorkProgress extends Component {
             style={{ width: 300 }}
             onChange={event => this.setState({ email: event.target.value }) }
           />
-          <button
-            type='button'
-            className='btn btn-primary'
-            onClick={this.handleSubmit}
-          >
-            Get Code
-          </button>
+            <Link to={'/general/tabPanels'}>
+              <button
+                type='button'
+                className='btn btn-primary'
+                onClick={this.handleSubmit}
+              >
+              Get Code
+            </button>
+          </Link>
         </div>
       </div>
     );

@@ -51,7 +51,7 @@ class TeamMatesView extends Component {
     return (
       <div>
         {this.props.solutions.list
-          .filter(solution => solution.approved)
+          .filter(solution => !solution.approved)
           .map(solution => {
             let feedback = this.props.feedback.list.find(feedback => {
               return feedback.id === solution.feedbackId;

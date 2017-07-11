@@ -58,7 +58,7 @@ class TodoListView extends Component {
     return (
       <div>
         {this.props.feedback.list
-          .filter(feedback => feedback.approved)
+          .filter(feedback => !feedback.approved)
           .map(feedback => {
             return (
               <div className='col-md-10 col-md-offset-1'>

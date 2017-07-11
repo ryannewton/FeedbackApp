@@ -1,24 +1,26 @@
 /* eslint no-console: 0 */
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import cx         from 'classnames';
 import UserPanel  from './userPanel/UserPanel';
 import SearchForm from './searchForm/SearchForm';
 import Horloge    from '../../horloge/Horloge';
 import Menu       from './menu/Menu';
+import { connect } from 'react-redux';
 
 
-const AsideLeft = (props) => {
-  const {
+class AsideLeft extends Component {
+  render() {
+    const {
     connectionStatus,
     userIsConnected,
     username,
     helloWord,
     userPicture,
     showPicture
-  } = props;
+  } = this.props;
 
   const token = localStorage.getItem('token');
-  const sideMenu = (token) ? props.sideMenu : [
+  const sideMenu = (token) ? this.props.sideMenu : [
     // group menu #1
     {
       id: 1,
@@ -32,12 +34,12 @@ const AsideLeft = (props) => {
       ]
     }
   ];
-  const currentView = (token) ? props.currentView: 'WorkProgress';
+  const currentView = (this.props.authenticated) ? this.props.currentView: 'WorkProgress';
 
   const {
     isAnimated,
     isCollapsed,
-  } = props;
+  } = this.props;
 
   return (
     <aside className={
@@ -56,19 +58,8 @@ const AsideLeft = (props) => {
         position: 'fixed'
       }}>
         <section className="sidebar">
-          <UserPanel
-            hello={helloWord}
-            username={username}
-            connectionStatus={connectionStatus}
-            online={userIsConnected}
-            userPicture={userPicture}
-            showUserPicture={showPicture}
-          />
           <Horloge />
 
-          <SearchForm
-            onSearchSubmit={(value) => console.log('searching: ', value)}
-          />
           {
             sideMenu.map(
               ({id, group, menus}, menuIdx) => {
@@ -88,7 +79,7 @@ const AsideLeft = (props) => {
         </section>
     </aside>
 
-  );
+  );}
 };
 
 AsideLeft.propTypes = {
@@ -123,5 +114,19 @@ AsideLeft.defaultProps = {
   isAnimated: false,
   isCollapsed: false
 };
-
-export default AsideLeft;
+// <SearchForm
+//   onSearchSubmit={(value) => console.log('searching: ', value)}
+// />
+// <UserPanel
+//   hello={helloWord}
+//   username={username}
+//   connectionStatus={connectionStatus}
+//   online={userIsConnected}
+//   userPicture={userPicture}
+//   showUserPicture={showPicture}
+// />
+function mapStateToProps(state) {
+  const { email, emailSentSuccess, loading, authenticated } = state.auth;
+  return { email, emailSentSuccess, loading, authenticated };
+}
+export default connect(mapStateToProps, {})(AsideLeft);

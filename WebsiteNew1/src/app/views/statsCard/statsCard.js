@@ -13,7 +13,7 @@ import Highlight          from 'react-highlight';
 import { connect } from 'react-redux';
 import { pullFeedback } from '../../actions';
 import ErrorMessage from '../../components/ErrorMessage';
-
+import ApproveFeedbackCard from '../../components/ApproveFeedbackCard';
 
 class StatsCard extends Component {
   componentWillMount() {

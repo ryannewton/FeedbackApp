@@ -30,20 +30,20 @@ jest.mock(
 //     }
 //   ]
 // }
-const sideMenus = [
-    // group menu #1
-    {
-      id: 1,
-      group: 'Dashboard  ',
-      menus: [
-        {
-          name: 'Sign In',
-          linkTo: '/Dashboard/workProgress',
-          faIconName: 'fa-check'
-        },
-      ]
-    }
-  ]
+// const sideMenus = [
+//     // group menu #1
+//     {
+//       id: 1,
+//       group: 'Dashboard  ',
+//       menus: [
+//         {
+//           name: 'Sign In',
+//           linkTo: '/Dashboard/workProgress',
+//           faIconName: 'fa-check'
+//         },
+//       ]
+//     }
+//   ]
 
 describe('AsideLeft component', () => {
   function createNodeMock() {

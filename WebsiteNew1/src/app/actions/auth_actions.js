@@ -1,3 +1,4 @@
+import React from 'react';
 import axios from 'axios';
 import { browserHistory } from 'react-router';
 import {
@@ -9,6 +10,11 @@ import {
   SEND_AUTHORIZATION_EMAIL_FAIL,
   SIGNOUT_USER,
 } from './types';
+// import { Link, Redirect }             from 'react-router';
+// import { Redirect } from 'react-router';
+import { push } from 'react-router-redux';
+
+
 
 import { http } from '../constants';
 // const ROOT_URL = 'http://localhost:3090';
@@ -16,7 +22,6 @@ import { http } from '../constants';
 export const authorizeUserSuccess = token => (
   (dispatch) => {
     localStorage.setItem('token', token);
-    browserHistory.push('/approvefeedback');
     return {
       type: AUTHORIZE_USER_SUCCESS,
       payload: token,
@@ -31,7 +36,6 @@ export const authorizeUserFail = error => ({
 
 export const sendAuthorizationEmail = (email) => (
   (dispatch) => {
-    console.log('action sent!')
     dispatch({ type: SEND_AUTHORIZATION_EMAIL });
 
     // Add a new user to our database (or update the passcode of the user)
@@ -40,11 +44,9 @@ export const sendAuthorizationEmail = (email) => (
     .then(() => {
       // Change the in-authorization flag in state so we update the component
       dispatch({ type: SEND_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
-      browserHistory.push('#/Dashboard/statsCard');
     })
     .catch((error) => {
       dispatch({ type: SEND_AUTHORIZATION_EMAIL_FAIL });
-      browserHistory.push('#/Dashboard/statsCard');
       console.log('sendAuthorizationEmail() fail');
       console.log('error: ', error);
     });
@@ -59,8 +61,8 @@ export const authorizeUser = (email, authCode, adminCode) => (
     return http.post('/authorizeAdminUser/', { email, code: authCode, groupAdminCode: adminCode })
     // If successful store the token, repull state from the database, and set state to logged-in
     .then((response) => {
-      const token = String(response.data);
-      dispatch(authorizeUserSuccess(token));
+      dispatch({type: AUTHORIZE_USER_SUCCESS})
+      dispatch(authorizeUserSuccess(String(response.data)));
     })
     // If not, show an error message
     .catch((error) => {

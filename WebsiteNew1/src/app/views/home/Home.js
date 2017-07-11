@@ -27,7 +27,9 @@ import {
   Panel
 }                         from '../../components';
 import Autosuggest from 'react-autosuggest';
-
+import { connect } from 'react-redux';
+import { Link } from 'react-router'
+import { browserHistory } from 'react-router';
 
 const dataHelper = [
   {ID: 1, NAME: 'North', PARENT: 0},
@@ -219,6 +221,7 @@ class Home extends PureComponent {
       </div>
     );
   }
+
   static propTypes = {
     earningGraphLabels: PropTypes.array,
     earningGraphDatasets: PropTypes.array,
@@ -262,108 +265,157 @@ class Home extends PureComponent {
     leaveHome();
   }
 
-  render() {
-    const {
-      teamMates,
-      teamMatesIsFetching,
-      earningGraphLabels,
-      earningGraphDatasets
-    } = this.props;
-    const { value, regions } = this.state;
-    const inputProps = {
-      placeholder: 'Type a region',
-      value,
-      onChange: this.onChange,
-    };
-
-    return(
-      <AnimatedView>
-
-        <div
-          className="row"
-          style={{marginBottom: '5px'}}>
-          <div className="col-md-3">
-            <StatsCard
-              statValue={'12'}
-              statLabel={<a>New Feedback!</a>}
-              icon={<i className="fa fa-comments-o"></i>}
-              backColor={'red'}
-            />
-          </div>
-          <div className="col-md-3">
-            <StatsCard
-              statValue={'20'}
-              statLabel={<a>New solutions!</a>}
-              icon={<i className="fa fa-tasks"></i>}
-              backColor={'violet'}
-            />
-          </div>
-          <div className="col-md-3">
-            <StatsCard
-              statValue={'64'}
-              statLabel={<a>Finished feedback</a>}
-              icon={<i className="fa fa-check"></i>}
-              backColor={'blue'}
-            />
-          </div>
-          <div className="col-md-3">
-            <StatsCard
-              statValue={'6'}
-              statLabel={<a>Feedback in progress</a>}
-              icon={<i className="fa fa-spinner"></i>}
-              backColor={'green'}
-            />
-          </div>
+  renderHome() {
+    const { loading, authenticated } = this.props;
+    const token = localStorage.getItem('token');
+    if (loading) {
+      return (
+        <div>
+          loading
         </div>
-
-        <hr style={{border: "1px solid blue"}}/>
-
-        <div className="row">
-          <div className="col-lg-8">
-            <div className="input-group custom-search-form">
-              <Autosuggest
-                suggestions={regions}
-                onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-                onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-                getSuggestionValue={getSuggestionValue}
-                renderSuggestion={renderSuggestion}
-                inputProps={inputProps}
-                className="form-control"
-                theme={{input: {width: 750, height: 35}}}
-              />
-              <span className="input-group-btn">
-                <button className="btn btn-default" type="button">
-                  <i className="fa fa-search" />
-                </button>
-              </span>
-            </div>
-            <div style={{ paddingTop: 10}}>
-              <div className="row">
-                {this.renderTreeButtons(0)}
-              </div>
-              {this.renderTilesHelper4(this.state.opened)}
-            </div>
-          </div>
-          <div className="col-lg-4 pull-right">
-            <Panel
-              title="Top Feedback"
-              hasTitle={true}
+      )
+    }
+    if (!token) {
+      return (
+        <div>
+          Please login!
+          <Link to={'/Dashboard/workProgress'}>
+            <button
+              type='button'
+              className='btn btn-primary'
+              onClick={this.handleSubmit}
             >
-              <div>
-                <p>Feedbackcards go here
-                </p>
-              </div>
-            </Panel>
-          </div>
+            Login again!
+          </button>
+          </Link>
         </div>
+      )
+    }
+    if (authenticated) {
+      const {
+        teamMates,
+        teamMatesIsFetching,
+        earningGraphLabels,
+        earningGraphDatasets
+      } = this.props;
+      const { value, regions } = this.state;
+      const inputProps = {
+        placeholder: 'Type a region',
+        value,
+        onChange: this.onChange,
+      };
 
+      return(
+        <AnimatedView>
 
-      </AnimatedView>
+          <div
+            className="row"
+            style={{marginBottom: '5px'}}>
+            <div className="col-md-3">
+              <StatsCard
+                statValue={'12'}
+                statLabel={<a>New Feedback!</a>}
+                icon={<i className="fa fa-comments-o"></i>}
+                backColor={'red'}
+              />
+            </div>
+            <div className="col-md-3">
+              <StatsCard
+                statValue={'20'}
+                statLabel={<a>New solutions!</a>}
+                icon={<i className="fa fa-tasks"></i>}
+                backColor={'violet'}
+              />
+            </div>
+            <div className="col-md-3">
+              <StatsCard
+                statValue={'64'}
+                statLabel={<a>Finished feedback</a>}
+                icon={<i className="fa fa-check"></i>}
+                backColor={'blue'}
+              />
+            </div>
+            <div className="col-md-3">
+              <StatsCard
+                statValue={'6'}
+                statLabel={<a>Feedback in progress</a>}
+                icon={<i className="fa fa-spinner"></i>}
+                backColor={'green'}
+              />
+            </div>
+          </div>
+
+          <hr style={{border: "1px solid blue"}}/>
+
+          <div className="row">
+            <div className="col-lg-8">
+              <div className="input-group custom-search-form">
+                <Autosuggest
+                  suggestions={regions}
+                  onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
+                  onSuggestionsClearRequested={this.onSuggestionsClearRequested}
+                  getSuggestionValue={getSuggestionValue}
+                  renderSuggestion={renderSuggestion}
+                  inputProps={inputProps}
+                  className="form-control"
+                  theme={{input: {width: 750, height: 35}}}
+                />
+                <span className="input-group-btn">
+                  <button className="btn btn-default" type="button">
+                    <i className="fa fa-search" />
+                  </button>
+                </span>
+              </div>
+              <div style={{ paddingTop: 10}}>
+                <div className="row">
+                  {this.renderTreeButtons(0)}
+                </div>
+                {this.renderTilesHelper4(this.state.opened)}
+              </div>
+            </div>
+            <div className="col-lg-4 pull-right">
+              <Panel
+                title="Top Feedback"
+                hasTitle={true}
+              >
+                <div>
+                  <p>Feedbackcards go here
+                  </p>
+                </div>
+              </Panel>
+            </div>
+          </div>
+        </AnimatedView>
+      );
+    }
+    return (
+      <div>
+        Authentication failed! Please try again.
+        <Link to={'/Dashboard/workProgress'}>
+          <button
+            type='button'
+            className='btn btn-primary'
+            onClick={this.handleSubmit}
+          >
+          Login again!
+        </button>
+        </Link>
+      </div>
     );
+  }
+  render() {
+    return(
+      this.renderHome()
+    )
   }
 }
 
-export default Home;
+function mapStateToProps(state) {
+  const { email, emailSentSuccess, loading, authenticated } = state.auth;
+  return { email, emailSentSuccess, loading, authenticated };
+}
+
+export default connect(mapStateToProps, {})(Home);
 
         //
         // <div className="row">
