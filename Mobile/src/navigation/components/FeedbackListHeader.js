@@ -47,8 +47,10 @@ class FeedbackSubmitHeader extends Component {
             </Text>
           </View>
           <View style={iconLayout}>
-            <SendInviteTextButton navigation={this.props.navigation} />
-            {this.renderPicker()}
+            <View style = {{paddingRight: 17}}>
+              <SendInviteTextButton navigation={this.props.navigation} />
+            </View>
+              {this.renderPicker()}
             <TouchableOpacity onPress={() => this.setState({ searchPressed: true })} >
               <Icon name="search" size={30} color="white" />
             </TouchableOpacity>
