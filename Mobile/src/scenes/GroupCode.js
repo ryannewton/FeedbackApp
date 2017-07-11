@@ -92,19 +92,18 @@ class Authorize extends Component {
           </Text>
           {/* Email input */}
           <Makiko
-            label={'Enter Code from Email'}
+            label={'Your Group Code'}
             iconClass={FontAwesomeIcon}
-            iconName={'envelope-open'}
+            iconName={'user-circle'}
             iconColor={'#00A2FF'}
             inputStyle={{ color: 'black' }}
-            value={this.state.code}
-            onChangeText={text => this.setState({ code: text })}
+            value={this.state.groupCode}
+            onChangeText={text => this.setState({ groupCode: text })}
             keyboardType="phone-pad"
-            maxLength={10}
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 0, backgroundColor: 'white' }}
             maxLength={100}
           />
 
@@ -112,6 +111,8 @@ class Authorize extends Component {
           <Text style={styles.errorTextStyle}>
             {this.props.auth.error}
           </Text>
+
+          {this.renderGroup()}
 
           {/* Confirmation button, and 'go to login' button */}
           {/*<View style={{ marginLeft: 15, marginRight: 15, marginTop: 15, zIndex:5 }}>*/}
