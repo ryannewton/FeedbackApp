@@ -4,7 +4,7 @@ import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
 
 // Import Scenes, header buttons & Styles
-import FeedbackSubmitHeaderButtons from './FeedbackSubmitHeaderButtons';
+import FeedbackSubmitHeaderButtons from './components/FeedbackSubmitHeaderButtons';
 import FeedbackSubmit from '../scenes/FeedbackSubmit';
 import Settings from '../scenes/Settings';
 import Submitted from '../scenes/Submitted';
@@ -17,7 +17,7 @@ const scenes = StackNavigator(
       screen: FeedbackSubmit,
       navigationOptions: ({ navigation }) => ({
         title: 'Submit Feedback',
-        headerRight: FeedbackSubmitHeaderButtons(navigation),
+        headerRight: <FeedbackSubmitHeaderButtons navigation={navigation} />,
         headerTitleStyle: {
           color: '#fff',
           fontWeight: 'bold',

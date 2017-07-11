@@ -13,8 +13,6 @@ import registerForNotifications from '../services/push_notifications';
 // Import tracking
 import { sendGoogleAnalytics } from '../actions';
 
-import SearchBar from '../components/SearchBar'
-
 const stopwords = require('stopwords').english;
 import great from '../../images/backgrounds/great.jpg';
 

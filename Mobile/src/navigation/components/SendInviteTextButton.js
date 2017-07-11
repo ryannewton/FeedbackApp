@@ -1,29 +1,22 @@
 // Import Libraries
-import React from 'react';
-import { TouchableOpacity, View, Alert, Linking, Platform } from 'react-native';
+import React, { Component } from 'react';
+import { TouchableOpacity, Alert, Linking, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 const TEXT_INTRO = 'Join me on Suggestion Box!\n\nGROUP CODE: ';
 const APP_STORE_URL = 'https://appurl.io/j4kj90r2';
 
-function FeedbackSubmitHeaderButtons(navigation) {
-  return (
-    <View style={{ flexDirection: 'row' }}>
-      {shareAppButton(navigation)}
-      {settingsButton(navigation)}
-    </View>
-  );
-}
-
-function shareAppButton(navigation) {
-  return (
-    <TouchableOpacity
-      sytle={{ width: 50 }}
-      onPress={() => shareAppAlert(navigation)}
-    >
-      <Icon name="share" size={25} color="white" />
-    </TouchableOpacity>
-  );
+class SendInviteTextButton extends Component {
+  render() {
+    return (
+      <TouchableOpacity
+        sytle={{ width: 50 }}
+        onPress={() => shareAppAlert(this.props.navigation)}
+      >
+        <Icon name="share" size={25} color="white" />
+      </TouchableOpacity>
+    );
+  }
 }
 
 function shareAppAlert(navigation) {
@@ -62,15 +55,4 @@ function buildTextLink(groupAuthCode) {
   return textLink;
 }
 
-function settingsButton(navigation) {
-  return (
-    <TouchableOpacity
-      style={{ width: 50 }}
-      onPress={() => navigation.navigate('Settings')}
-    >
-      <Icon name="settings" size={25} color="white" />
-    </TouchableOpacity>
-  );
-}
-
-export default FeedbackSubmitHeaderButtons;
+export default SendInviteTextButton;

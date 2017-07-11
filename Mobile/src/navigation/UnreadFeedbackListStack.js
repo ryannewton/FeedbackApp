@@ -1,8 +1,8 @@
 // Import Libraries
 import React from 'react';
+import { Text } from 'react-native';
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import SearchBar from '../components/SearchBar';
 
 // Import Scenes
 import UnreadFeedbackList from '../scenes/UnreadFeedbackList';
@@ -13,7 +13,7 @@ import styles from '../styles/common/navStyles';
 const scenes = StackNavigator({
   UnreadFeedbackList: {
     screen: UnreadFeedbackList,
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       title: 'Unread Feedback',
       headerTitleStyle: {
         color: '#fff',
@@ -25,7 +25,7 @@ const scenes = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    },
+    }),
   },
   Details: {
     screen: FeedbackDetails,
