@@ -2,7 +2,7 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import SearchBar from '../components/SearchBar';
+import FeedbackListHeader from './components/FeedbackListHeader';
 
 // Import Scenes
 import FeedbackList from '../scenes/FeedbackList';
@@ -13,10 +13,10 @@ import styles from '../styles/common/navStyles';
 const scenes = StackNavigator({
   FeedbackList: {
     screen: FeedbackList,
-    navigationOptions: {
-      header: (<SearchBar />),
+    navigationOptions: ({ navigation }) => ({
+      header: <FeedbackListHeader navigation={navigation} />,
       headerTintColor: 'white',
-    },
+    }),
   },
   Details: {
     screen: FeedbackDetails,

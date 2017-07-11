@@ -2,19 +2,20 @@
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
 import { Icon } from 'react-native-elements';
-import SearchBar from '../components/SearchBar';
 
-// Import Scenes
+// Import Scenes & Components
 import UnreadFeedbackList from '../scenes/UnreadFeedbackList';
 import FeedbackDetails from '../scenes/FeedbackDetails';
+import SendInviteTextButton from './components/SendInviteTextButton';
 import styles from '../styles/common/navStyles';
 
 // Stack of scenes
 const scenes = StackNavigator({
   UnreadFeedbackList: {
     screen: UnreadFeedbackList,
-    navigationOptions: {
+    navigationOptions: ({ navigation }) => ({
       title: 'Unread Feedback',
+      headerRight: <SendInviteTextButton navigation={navigation} />,
       headerTitleStyle: {
         color: '#fff',
         fontWeight: 'bold',
@@ -25,7 +26,7 @@ const scenes = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    },
+    }),
   },
   Details: {
     screen: FeedbackDetails,

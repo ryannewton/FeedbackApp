@@ -11,7 +11,7 @@ import UnreadFeedbackListStack from './UnreadFeedbackListStack';
 const tabs = {
   UnreadFeedbackList: UnreadFeedbackListStack,
   FeedbackList: FeedbackListStack,
-  FeedbackSubmit: FeedbackSubmitStack,  
+  FeedbackSubmit: FeedbackSubmitStack,
 };
 
 // Tab options
