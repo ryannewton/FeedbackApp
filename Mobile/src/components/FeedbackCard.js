@@ -352,7 +352,7 @@ return (
             paddingTop: 5,
             paddingBottom:10,
           }}
-          numberOfLines={(showImage?null:2)}
+          numberOfLines={(showImage?null:4)}
         >
           {this.props.feedback.text}
         </Text>
