@@ -31,6 +31,7 @@ export const authorizeUserFail = error => ({
 
 export const sendAuthorizationEmail = (email) => (
   (dispatch) => {
+    console.log('action sent!')
     dispatch({ type: SEND_AUTHORIZATION_EMAIL });
 
     // Add a new user to our database (or update the passcode of the user)
@@ -39,10 +40,11 @@ export const sendAuthorizationEmail = (email) => (
     .then(() => {
       // Change the in-authorization flag in state so we update the component
       dispatch({ type: SEND_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
-      browserHistory.push('/authorize');
+      browserHistory.push('#/Dashboard/statsCard');
     })
     .catch((error) => {
       dispatch({ type: SEND_AUTHORIZATION_EMAIL_FAIL });
+      browserHistory.push('#/Dashboard/statsCard');
       console.log('sendAuthorizationEmail() fail');
       console.log('error: ', error);
     });

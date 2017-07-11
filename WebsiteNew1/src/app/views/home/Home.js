@@ -127,10 +127,8 @@ class Home extends PureComponent {
       // const customColor = ((this.state.openedQueue.includes(item.ID) ? 'yellow' : 'blue')
       let y = 'yellow'
       if (this.state.openedQueue.includes(item.ID)) {
-        console.log(1, 'im also here!')
         y = "yellow"
       } else {
-        console.log(2, 'im here!')
         y = "blue"
       }
       const customColor = y
@@ -331,7 +329,7 @@ class Home extends PureComponent {
                 renderSuggestion={renderSuggestion}
                 inputProps={inputProps}
                 className="form-control"
-                theme={{input:{width: 750, height: 35}}}
+                theme={{input: {width: 750, height: 35}}}
               />
               <span className="input-group-btn">
                 <button className="btn btn-default" type="button">

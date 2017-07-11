@@ -17,11 +17,26 @@ const AsideLeft = (props) => {
     showPicture
   } = props;
 
+  const token = localStorage.getItem('token');
+  const sideMenu = (token) ? props.sideMenu : [
+    // group menu #1
+    {
+      id: 1,
+      group: 'Dashboard  ',
+      menus: [
+        {
+          name: 'Sign In',
+          linkTo: '/Dashboard/workProgress',
+          faIconName: 'fa-check'
+        },
+      ]
+    }
+  ];
+  const currentView = (token) ? props.currentView: 'WorkProgress';
+
   const {
     isAnimated,
     isCollapsed,
-    currentView,
-    sideMenu
   } = props;
 
   return (

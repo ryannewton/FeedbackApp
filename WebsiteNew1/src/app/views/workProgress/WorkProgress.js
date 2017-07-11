@@ -13,23 +13,14 @@ import {
 }                         from '../../components';
 import shallowCompare     from 'react-addons-shallow-compare';
 import Highlight          from 'react-highlight';
+import SigninDescription from '../../components/SigninDescription';
+import LogoHeader from '../../components/LogoHeader';
+import { sendAuthorizationEmail } from '../../actions';
+import { connect } from 'react-redux';
+
 
 
 class WorkProgress extends Component {
-
-  state = {
-    headers: ['#', 'Project', 'Manager', 'Deadline', 'Status', 'Progress'],
-    content: [
-      ['1', 'Facebook', 'Mark', '10/10/2014', <span className="label label-danger">in progress</span>, <span className="badge badge-info">50%</span>],
-      ['2', 'Twitter', 'Evan', '10/8/2014', <span className="label label-success">completed</span>, <span className="badge badge-success">100%</span>],
-      ['3', 'Google', 'Larry', '10/12/2014', <span className="label label-warning">in progress</span>, <span className="badge badge-warning">75%</span>],
-      ['4', 'LinkedIn', 'Allen', '10/01/2015', <span className="label label-info">in progress</span>, <span className="badge badge-info">65%</span>],
-      ['5', 'Tumblr', 'David', '01/11/2014', <span className="label label-warning">in progress</span>, <span className="badge badge-danger">95%</span>],
-      ['6', 'Tesla', 'Musk', '01/11/2014', <span className="label label-info">in progress</span>, <span className="badge badge-success">95%</span>],
-      ['7', 'Ghost', 'XXX', '01/11/2014', <span className="label label-info">in progress</span>, <span className="badge badge-success">95%</span>]
-    ]
-  };
-
   componentWillMount() {
     const { actions: { enterWorkProgress } } = this.props;
     enterWorkProgress();
@@ -43,105 +34,55 @@ class WorkProgress extends Component {
     const { actions: { leaveWorkProgress } } = this.props;
     leaveWorkProgress();
   }
+  constructor(props) {
+    super(props);
+    this.state = { email: props.email || '' };
+  }
+
+  handleSubmit = () => {
+    this.props.sendAuthorizationEmail(this.state.email);
+  }
+
+  logoSection() {
+    return (
+      <p>Suggestion Box App</p>
+    );
+  }
 
   render() {
-    const {
-      headers,
-      content
-    } = this.state;
+    return (
+      <div>
+        <SigninDescription />
+        <LogoHeader />
 
-    const source = `
-      // import
-      import { EarningGraph } from './_SOMEWHERE_/components';
-
-      // labels and data (in state for example):
-      state = {
-        headers: ['#', 'Project', 'Manager', 'Deadline', 'Status', 'Progress'],
-        content: [
-          ['1', 'Facebook', 'Mark', '10/10/2014', <span className="label label-danger">in progress</span>, <span className="badge badge-info">50%</span>],
-          ['2', 'Twitter', 'Evan', '10/8/2014', <span className="label label-success">completed</span>, <span className="badge badge-success">100%</span>],
-          ['3', 'Google', 'Larry', '10/12/2014', <span className="label label-warning">in progress</span>, <span className="badge badge-warning">75%</span>],
-          ['4', 'LinkedIn', 'Allen', '10/01/2015', <span className="label label-info">in progress</span>, <span className="badge badge-info">65%</span>],
-          ['5', 'Tumblr', 'David', '01/11/2014', <span className="label label-warning">in progress</span>, <span className="badge badge-danger">95%</span>],
-          ['6', 'Tesla', 'Musk', '01/11/2014', <span className="label label-info">in progress</span>, <span className="badge badge-success">95%</span>],
-          ['7', 'Ghost', 'XXX', '01/11/2014', <span className="label label-info">in progress</span>, <span className="badge badge-success">95%</span>]
-        ]
-      };
-
-      // in render():
-      <div className="row">
-        <div className="col-md-8 col-md-offset-2">
-          <EarningGraphComponent
-            labels={this.state.labels}
-            datasets={this.state.datasets}
+        <div>
+          <label>Email:</label>
+          <input
+            type='text'
+            className='form-control'
+            placeholder='Your email address'
+            value={this.state.email}
+            style={{ width: 300 }}
+            onChange={event => this.setState({ email: event.target.value }) }
           />
+          <button
+            type='button'
+            className='btn btn-primary'
+            onClick={this.handleSubmit}
+          >
+            Get Code
+          </button>
         </div>
       </div>
-      `;
-
-    return(
-      <AnimatedView>
-        {/* preview: */}
-        <Panel
-          title="Work Progress"
-          hasTitle={true}
-          bodyBackGndColor={'#F4F5F6'}
-          bodyCustomClass="table-responsive">
-          <Table>
-            <TableHeader>
-              {
-                headers.map(
-                  (header, headerIdx) => {
-                    return (
-                      <TableCol key={headerIdx}>
-                        {header}
-                      </TableCol>
-                    );
-                  }
-                )
-              }
-            </TableHeader>
-            <TableBody>
-              {
-                content.map(
-                  (contentRow, contentRowIdx) => {
-                    return (
-                      <TableRow key={contentRowIdx}>
-                        {
-                          contentRow.map(
-                            (contentColumn, contentColumnIdx) => {
-                              return (
-                                <TableCol key={contentColumnIdx}>
-                                  {contentColumn}
-                                </TableCol>
-                              );
-                            }
-                          )
-                        }
-                      </TableRow>
-                    );
-                  }
-                )
-              }
-            </TableBody>
-          </Table>
-        </Panel>
-        {/* source: */}
-        <div className="row">
-          <div className="col-xs-12">
-            <Panel
-              title="Source"
-              hasTitle={true}>
-              <Highlight className="javascript">
-                {source}
-              </Highlight>
-            </Panel>
-          </div>
-        </div>
-      </AnimatedView>
     );
   }
 }
+
+function mapStateToProps(state) {
+  const { email } = state.auth;
+  return { email };
+}
+
 
 WorkProgress.propTypes= {
   actions: PropTypes.shape({
@@ -150,4 +91,4 @@ WorkProgress.propTypes= {
   })
 };
 
-export default WorkProgress;
+export default connect(mapStateToProps, { sendAuthorizationEmail })(WorkProgress);

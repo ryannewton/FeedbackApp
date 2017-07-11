@@ -14,55 +14,13 @@ import {
 import Highlight          from 'react-highlight';
 import shallowCompare     from 'react-addons-shallow-compare';
 
+import ApproveFeedbackCard from '../../components/ApproveFeedbackCard';
+import ErrorMessage from '../../components/ErrorMessage';
+import { pullFeedback } from '../../actions';
+import { connect } from 'react-redux';
+
+
 class TodoListView extends Component {
-
-  state = {
-    todos: [
-      {
-        label: 'Director is Modern Dashboard',
-        done: false,
-        statusLabel: '2 days',
-        statusLevel: 'label-success'
-      },
-      {
-        label: 'Fully Responsive & Bootstrap 3.0.2 Compatible',
-        done: false,
-        statusLabel: 'done',
-        statusLevel: 'label-danger'
-      },
-      {
-        label: 'Latest Design Concept',
-        done: false,
-        statusLabel: 'Company',
-        statusLevel: 'label-warning'
-      },
-      {
-        label: 'Director is Modern Dashboard',
-        done: false,
-        statusLabel: '2 days',
-        statusLevel: 'label-success'
-      },
-      {
-        label: 'Director is Modern Dashboard',
-        done: false,
-        statusLabel: '2 days',
-        statusLevel: 'label-success'
-      },
-      {
-        label: 'Director is Modern Dashboard',
-        done: false,
-        statusLabel: '2 days',
-        statusLevel: 'label-success'
-      },
-      {
-        label: 'Director is Modern Dashboard',
-        done: false,
-        statusLabel: '2 days',
-        statusLevel: 'label-success'
-      }
-    ]
-  };
-
   componentWillMount() {
     const { actions: { enterTodoListView } } = this.props;
     enterTodoListView();
@@ -77,142 +35,64 @@ class TodoListView extends Component {
     leaveTodoListView();
     clearTimeout(this.enterAnimationTimer);
   }
+  componentDidMount() {
+    const token = localStorage.getItem('token');
+    if(token) {
+      this.props.pullFeedback();
+    }
+  }
+
+  listFeedback = () => {
+    if (this.props.feedback.error) {
+      return <ErrorMessage />
+    }
+
+    if (this.props.feedback.loading) {
+      return this.renderLoadingScreen();
+    }
+
+    if (this.props.feedback.list.length === 0) {
+      return this.renderEmptyList();
+    }
+
+    return (
+      <div>
+        {this.props.feedback.list
+          .filter(feedback => feedback.approved)
+          .map(feedback => {
+            return (
+              <div className='col-md-10 col-md-offset-1'>
+                <ApproveFeedbackCard
+                  key={feedback.id}
+                  feedback={feedback}
+                />
+              </div>
+            )
+          })
+        }
+      </div>
+    );
+  }
+
+  renderEmptyList() {
+    return (
+      <div>Congratulations, youve hit zero inbox!</div>
+    );
+  }
+
+  renderLoadingScreen() {
+    return (
+      <div>Beep boop. Retrieving your feedback...</div>
+    );
+  }
 
   render() {
-    const { todos } = this.state;
-
-    const source = `
-      // import
-      import {
-        Panel,
-        TodoList,
-        TodoListItem,
-        TodoListCommands,
-        TodoListAddTask,
-        TodoListSeeAllTask
-      } from './_SOMEWHERE_/components';
-
-      // todos (in state for example):
-      state = {
-        todos: [
-          {
-            label: 'Director is Modern Dashboard',
-            done: false,
-            statusLabel: '2 days',
-            statusLevel: 'label-success'
-          },
-          {
-            label: 'Fully Responsive & Bootstrap 3.0.2 Compatible',
-            done: false,
-            statusLabel: 'done',
-            statusLevel: 'label-danger'
-          },
-          {
-            label: 'Latest Design Concept',
-            done: false,
-            statusLabel: 'Company',
-            statusLevel: 'label-warning'
-          },
-          {
-            label: 'Director is Modern Dashboard',
-            done: false,
-            statusLabel: '2 days',
-            statusLevel: 'label-success'
-          },
-          {
-            label: 'Director is Modern Dashboard',
-            done: false,
-            statusLabel: '2 days',
-            statusLevel: 'label-success'
-          },
-          {
-            label: 'Director is Modern Dashboard',
-            done: false,
-            statusLabel: '2 days',
-            statusLevel: 'label-success'
-          },
-          {
-            label: 'Director is Modern Dashboard',
-            done: false,
-            statusLabel: '2 days',
-            statusLevel: 'label-success'
-          }
-        ]
-      };
-
-      // in render():
-      <Panel
-        hasTitle={true}
-        title={'Todo list'}
-        sectionCustomClass="tasks-widget">
-        <TodoList>
-          {
-            todos.map(
-              ({label, done, statusLabel, statusLevel}, todoIdx) => {
-                return (
-                  <TodoListItem
-                    key={todoIdx}
-                    label={label}
-                    done={done}
-                    statusLabel={statusLabel}
-                    statusLabelStyle={statusLevel}
-                  />
-                );
-              }
-            )
-          }
-        </TodoList>
-       <TodoListCommands>
-         <TodoListAddTask />
-         <TodoListSeeAllTask />
-       </TodoListCommands>
-     </Panel>
-      `;
 
     return(
       <AnimatedView>
-        {/* preview: */}
-        <div className="row">
-          <div className="col-xs-8 col-xs-offset-2">
-            <Panel
-              hasTitle={true}
-              title={'Todo list'}
-              sectionCustomClass="tasks-widget">
-              <TodoList>
-                {
-                  todos.map(
-                    ({label, done, statusLabel, statusLevel}, todoIdx) => {
-                      return (
-                        <TodoListItem
-                          key={todoIdx}
-                          label={label}
-                          done={done}
-                          statusLabel={statusLabel}
-                          statusLabelStyle={statusLevel}
-                        />
-                      );
-                    }
-                  )
-                }
-              </TodoList>
-             <TodoListCommands>
-               <TodoListAddTask />
-               <TodoListSeeAllTask />
-             </TodoListCommands>
-           </Panel>
-          </div>
-        </div>
-        {/* source: */}
-        <div className="row">
-          <div className="col-xs-12">
-            <Panel
-              title="Source"
-              hasTitle={true}>
-              <Highlight className="javascript">
-                {source}
-              </Highlight>
-            </Panel>
-          </div>
+        <div>
+          <h5>Feedback Approval Needed: (currently shows approved feedback)</h5>
+          {this.listFeedback()}
         </div>
       </AnimatedView>
     );
@@ -226,4 +106,9 @@ TodoListView.propTypes= {
   })
 };
 
-export default TodoListView;
+function mapStateToProps(state) {
+  const { feedback } = state;
+  return { feedback };
+}
+
+export default connect(mapStateToProps, { pullFeedback })(TodoListView);
