@@ -235,7 +235,7 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
     else if (!email.includes('admin_test')) {
       // Step #4: Send an email with the code to the user (make sure it shows up in notification)
-      sendEmail([email], defaultFromEmail, 'Collaborative Feedback: Verify Your Email Address', 'Enter this passcode: ' + String(code));
+      sendEmail([email], defaultFromEmail, 'Verify Your Email Address for the Suggestion Box', 'Enter this passcode: ' + String(code));
     }
     res.status(200).json(groupSignupCode);
   });
