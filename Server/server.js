@@ -697,14 +697,27 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
         GROUP BY feedbackId
       ) b
       ON a.id = b.feedbackId
-      WHERE groupId=?`;
-      connection.query(connectionString, [groupId, groupId], (err, rows) => {
+      LEFT JOIN (
+        SELECT targetId as feedbackId, translatedText, translatedFrom
+        FROM translatedText
+        WHERE type='feedback'
+        AND language=?
+      ) c
+      ON a.id = c.feedbackId
+      LEFT JOIN (
+        SELECT targetId as feedbackId, translatedText, translatedFrom
+        FROM translatedText
+        WHERE type='feedback'
+        AND language=?
+      ) c
+      WHERE a.groupId=?`;
+      connection.query(connectionString, [decoded.language || 'english', groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
         else {
           const adjRows = rows.map((row) => {
-            if (!row.upvotes) { row.upvotes = 0 };
-            if (!row.downvotes) { row.downvotes = 0 };
-            if (!row.noOpinions) { row.noOpinions = 0 };
+            if (!row.upvotes) { row.upvotes = 0; }
+            if (!row.downvotes) { row.downvotes = 0; }
+            if (!row.noOpinions) { row.noOpinions = 0; }
             return row;
           });
           res.status(200).send(adjRows);
@@ -729,10 +742,17 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
         GROUP BY solutionId
       ) b
       ON a.id = b.solutionId
-      JOIN feedback c
-      ON a.feedbackId = c.id
+      LEFT JOIN (
+        SELECT targetId as solutionId, translatedText, translatedFrom
+        FROM translatedText
+        WHERE type='solution'
+        AND language=?
+      ) c
+      ON a.id = c.solutionId
+      JOIN feedback d
+      ON a.feedbackId = d.id
       WHERE c.groupId=?`;
-      connection.query(connectionString, [groupId, groupId], (err, rows) => {
+      connection.query(connectionString, [decoded.language || 'english', groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         else {
           const adjRows = rows.map((row) => {
