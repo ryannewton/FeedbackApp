@@ -13,7 +13,7 @@ import registerForNotifications from '../services/push_notifications';
 import { sendGoogleAnalytics } from '../actions';
 
 const stopwords = require('stopwords').english;
-import great from '../../images/backgrounds/great.jpg';
+import nothing from '../../images/backgrounds/nothing.jpg';
 
 class FeedbackList extends Component {
   constructor(props) {
@@ -169,7 +169,9 @@ class FeedbackList extends Component {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     const filteredFeedbackList = this.curateFeedbackList();
     if (!filteredFeedbackList.length) {
-      return <View style={styles.container, {zIndex: -1}} />
+      return <View style={styles.container}> 
+        <Image style={styles.background} source={nothing} resizeMode="cover" />
+      </View>
     }
     return (
       <View style={styles.container}>
