@@ -387,6 +387,12 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
   });
 });
 
+function translateText(text, from) {
+
+}
+
+function insertText()
+
 // SUBMIT
 app.post('/submitFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
@@ -415,7 +421,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               else {
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'Email: ' + userId);
+                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'UserId: ' + userId);
                 res.json({ id: result.insertId });
               }
             }
@@ -451,6 +457,21 @@ app.post('/submitSolution', upload.array(), (req, res) => {
               else res.json({ id: result.insertId });
             });
         }
+      });
+    }
+  });
+});
+
+// SUBMIT OFFICIAL REPLY
+app.post('/submitOfficialReply', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { feedback, officialReply } = req.body;
+      const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
+      connection.query(connectionString, [officialReply, feedback.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
+        else res.sendStatus(200);
       });
     }
   });
@@ -499,21 +520,6 @@ app.post('/submitSolutionVote', upload.array(), (req, res) => {
           else res.sendStatus(200);
         }
       );
-    }
-  });
-});
-
-// SUBMIT OFFICIAL REPLY
-app.post('/submitOfficialReply', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    if (err) res.status(400).send('Authorization failed');
-    else {
-      const { feedback, officialReply } = req.body;
-      const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
-      connection.query(connectionString, [officialReply, feedback.id], (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
-        else res.sendStatus(200);
-      });
     }
   });
 });
@@ -654,13 +660,13 @@ app.post('/updateSolution', upload.array(), (req, res) => {
   });
 });
 
-// DELETE
+// DELETE - Needs to also delete associated official responses and solutions
 app.post('/deleteFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      const connectionString = 'DELETE FROM feedback WHERE id = ?';
-      connection.query(connectionString, [req.body.feedback.id], (err) => {
+      const connectionString = `DELETE FROM feedback WHERE id = ?; DELETE FROM translatedText WHERE targetId=? AND (type='feedback' OR type='reply')`;
+      connection.query(connectionString, [req.body.feedback.id, req.body.feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 7926');
         else res.sendStatus(200);
       });
@@ -672,8 +678,8 @@ app.post('/deleteSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      const connectionString = 'DELETE FROM solutions WHERE id = ?';
-      connection.query(connectionString, [req.body.solution.id], (err) => {
+      const connectionString = `DELETE FROM solutions WHERE id = ?;DELETE FROM translatedText WHERE targetId=? AND type='solution';`;
+      connection.query(connectionString, [req.body.solution.id, req.body.solution.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 7930');
         else res.sendStatus(200);
       });
