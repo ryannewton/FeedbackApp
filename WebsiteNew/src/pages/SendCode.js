@@ -27,7 +27,6 @@ class SendCode extends Component {
       <div>
         <SigninDescription />
         <LogoHeader />
-
         <div>
           <label>Email:</label>
           <input

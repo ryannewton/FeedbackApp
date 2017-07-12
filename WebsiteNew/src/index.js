@@ -39,12 +39,12 @@ ReactDOM.render(
     <Router history={browserHistory}>
       <Route path='/admin.html' component={App}>
         <IndexRoute component = {Landing} />
-        <Route path='sendcode' component={SendCode} />
-        <Route path='authorize' component={AuthorizeUser} />
-        <Route path='signout' component={Signout} />
-        <Route path='approvefeedback' component={ApproveFeedback} />
-        <Route path='approvesolutions' component={ApproveSolutions} />
-        <Route path='managefeedback' component={ManageFeedback} />
+        <Route path='/sendcode' component={SendCode} />
+        <Route path='/authorize' component={AuthorizeUser} />
+        <Route path='/signout' component={Signout} />
+        <Route path='/approvefeedback' component={ApproveFeedback} />
+        <Route path='/approvesolutions' component={ApproveSolutions} />
+        <Route path='/managefeedback' component={ManageFeedback} />
       </Route>
     </Router>
   </Provider>
