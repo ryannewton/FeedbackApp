@@ -3,8 +3,9 @@ import React from 'react';
     // <div dangerouslySetInnerHTML={ {__html: htmlContent} }></div>
 
 const Landing = () => {
+  // Conditional render based of logged in status
   return (
-    <div>Replace with landing page</div>
+    <div>Please log in!</div>
   );
 }
 
