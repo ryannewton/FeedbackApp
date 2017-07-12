@@ -4,30 +4,32 @@ import { Text, View, Keyboard, TouchableWithoutFeedback, Image } from 'react-nat
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
+import { Icon } from 'react-native-elements';
 
 // Import components and action creators
-import { Button, Spinner } from '../components/common';
-import { verifyEmail, sendGoogleAnalytics } from '../actions';
+import { Card, CardSection, Input, Button, Spinner } from '../components/common';
+import { authorizeUser, sendGoogleAnalytics } from '../actions';
+import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Makiko } from 'react-native-textinput-effects';
-import fullScreen from '../../images/backgrounds/auth2.jpg';
+import fullScreen from '../../images/backgrounds/auth3.jpg';
 
 class Authorize extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      code: '',
+      groupSignupCode: '',
       cleared: false,
     };
 
     this.route = this.route.bind(this);
-    this.verifyEmail = this.verifyEmail.bind(this);
+    this.authorizeUser = this.authorizeUser.bind(this);
 
     // tracker.trackScreenView('Authorize');
-    props.sendGoogleAnalytics('Authorize');
+    props.sendGoogleAnalytics('GroupSignupCode');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,19 +50,21 @@ class Authorize extends Component {
       });
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
-    } else if (nextProps.auth.needsGroupCode === true) {
-      this.props.navigation.navigate('AuthGroupCode');
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
-  verifyEmail() {
-    this.props.verifyEmail(this.props.auth.email, this.state.code);
+  authorizeUser() {
+    this.props.authorizeUser(
+      this.props.auth.email,
+      this.props.auth.code,
+      this.state.groupSignupCode
+    );
   }
 
   renderSignupButton() {
     return (
-      <Button onPress={this.verifyEmail}>
+      <Button onPress={this.authorizeUser}>
         Verify Email
       </Button>
     );
@@ -82,24 +86,25 @@ class Authorize extends Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
-          <Text style={{padding:20, backgroundColor:'rgba(0,0,0,0)', fontSize:18, color:'white'}}>
-            Great! We sent an email with a 4-digit code to {this.props.auth.email}!
+          <Text style={{ padding: 20, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
+            {'Please enter your organization\'s unique group code.\n'}
+            {'If you received an invitation text or email, check that for your group code.\n'}
+            {'If you don\'t know what it is, ask your manager.\n'}
           </Text>
           {/* Email input */}
           <Makiko
-            label={'Enter Code from Email'}
+            label={'Your Group Code'}
             iconClass={FontAwesomeIcon}
-            iconName={'envelope-open'}
+            iconName={'user-circle'}
             iconColor={'#00A2FF'}
             inputStyle={{ color: 'black' }}
-            value={this.state.code}
-            onChangeText={text => this.setState({ code: text })}
+            value={this.state.groupSignupCode}
+            onChangeText={text => this.setState({ groupSignupCode: text })}
             keyboardType="phone-pad"
-            maxLength={10}
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
+            style={{ marginLeft: 20, marginRight: 20, marginTop: 0, backgroundColor: 'white' }}
             maxLength={100}
           />
 
@@ -135,4 +140,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { verifyEmail, sendGoogleAnalytics })(Authorize);
+export default connect(mapStateToProps, { authorizeUser, sendGoogleAnalytics })(Authorize);

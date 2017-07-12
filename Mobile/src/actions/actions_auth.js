@@ -8,16 +8,16 @@ import {
   SENT_AUTHORIZATION_EMAIL_SUCCESS,
   SENT_AUTHORIZATION_EMAIL_FAIL,
   AUTHORIZING_USER,
+  VERIFY_EMAIL,
   AUTHORIZE_USER_FAIL,
   AUTHORIZE_USER_SUCCESS,
   LOG_OUT_USER,
   SAVE_GROUP_CODE,
+  NEEDS_GROUP_CODE,
 } from './types';
 
 // Import functions
-import { pullFeedback } from './actions_feedback';
-import { pullSolutions } from './actions_solutions';
-import { pullGroupInfo } from './actions_group';
+import loadOnLaunch from '../reducers/load_on_launch';
 
 export const sendAuthorizationEmail = (email, navigateToNext) => (
   (dispatch) => {
@@ -45,19 +45,39 @@ export const authorizeUserFail = error => ({
 
 export const authorizeUserSuccess = token => (
   (dispatch) => {
-    dispatch(pullFeedback(token));
-    dispatch(pullSolutions(token));
-    dispatch(pullGroupInfo(token));
+    loadOnLaunch();
     return { type: AUTHORIZE_USER_SUCCESS, payload: token };
   }
 );
 
-export const authorizeUser = (email, code, groupAuthCode) => (
+export const verifyEmail = (email, code) => (
+  (dispatch) => {
+    dispatch({ type: VERIFY_EMAIL });
+
+    return http.post('/verifyEmail', { email, code })
+    .then((response) => {
+      if (response.data.needsGroupSignupCode) {
+        dispatch({ type: NEEDS_GROUP_CODE, payload: code });          
+      } else if (response.data.token) {
+        const token = String(response.data.token);
+        AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
+        .then(() => {
+          dispatch(authorizeUserSuccess(token));
+        });
+      } else dispatch(authorizeUserFail('Missing token, verifyEmail routine'));
+    })
+    .catch((error) => {
+      dispatch(authorizeUserFail(error.response.data));
+    });
+  }
+);
+
+export const authorizeUser = (email, code, groupSignupCode) => (
   (dispatch) => {
     dispatch({ type: AUTHORIZING_USER });
 
     // Submits the code the user entered from their email
-    return http.post('/authorizeUser/', { email, code, groupAuthCode })
+    return http.post('/authorizeUser/', { email, code, groupSignupCode })
     // If successful store the token, repull state from the database, and set state to logged-in
     .then((response) => {
       const token = String(response.data);
