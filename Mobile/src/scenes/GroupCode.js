@@ -14,7 +14,7 @@ import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Makiko } from 'react-native-textinput-effects';
-import fullScreen from '../../images/backgrounds/auth2.jpg';
+import fullScreen from '../../images/backgrounds/auth3.jpg';
 
 class Authorize extends Component {
   constructor(props) {
