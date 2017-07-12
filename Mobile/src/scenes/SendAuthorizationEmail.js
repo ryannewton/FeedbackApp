@@ -10,7 +10,7 @@ import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogl
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
-import { Makiko } from 'react-native-textinput-effects';
+import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth1.jpg';
 
 class SendAuthorizationEmail extends Component {
@@ -59,7 +59,7 @@ class SendAuthorizationEmail extends Component {
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
           {/* Email input */}
-          <Makiko
+          <Fumi
             label={'Enter Your Email Address'}
             iconClass={FontAwesomeIcon}
             iconName={'envelope'}
@@ -71,7 +71,7 @@ class SendAuthorizationEmail extends Component {
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 80, backgroundColor:'white' }}
+            style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 80, backgroundColor:'white' }}
             maxLength={100}
           />
           

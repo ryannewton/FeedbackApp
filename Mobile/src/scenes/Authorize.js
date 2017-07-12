@@ -11,7 +11,7 @@ import { verifyEmail, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
-import { Makiko } from 'react-native-textinput-effects';
+import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth2.jpg';
 
 class Authorize extends Component {
@@ -86,7 +86,7 @@ class Authorize extends Component {
             Great! We sent an email with a 4-digit code to {this.props.auth.email}!
           </Text>
           {/* Email input */}
-          <Makiko
+          <Fumi
             label={'Enter Code from Email'}
             iconClass={FontAwesomeIcon}
             iconName={'envelope-open'}
@@ -99,7 +99,7 @@ class Authorize extends Component {
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
+            style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
             maxLength={100}
           />
 

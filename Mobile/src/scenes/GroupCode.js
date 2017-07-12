@@ -13,7 +13,7 @@ import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
-import { Makiko } from 'react-native-textinput-effects';
+import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth3.jpg';
 
 class Authorize extends Component {
@@ -92,7 +92,7 @@ class Authorize extends Component {
             {'If you don\'t know what it is, ask your manager.\n'}
           </Text>
           {/* Email input */}
-          <Makiko
+          <Fumi
             label={'Your Group Code'}
             iconClass={FontAwesomeIcon}
             iconName={'user-circle'}
@@ -104,7 +104,7 @@ class Authorize extends Component {
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
-            style={{ marginLeft: 20, marginRight: 20, marginTop: 0, backgroundColor: 'white' }}
+            style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
             maxLength={100}
           />
 
