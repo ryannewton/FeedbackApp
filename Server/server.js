@@ -688,8 +688,9 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
       const { groupId } = decoded;
+      const language = decoded.language || 'english';
       const connectionString = `
-      SELECT *
+      SELECT a.id, a.groupId, a.userId, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date
       FROM feedback a
       LEFT JOIN (
         SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes, SUM(noOpinion) as noOpinions
@@ -705,13 +706,14 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       ) c
       ON a.id = c.feedbackId
       LEFT JOIN (
-        SELECT targetId as feedbackId, translatedText, translatedFrom
+        SELECT targetId as feedbackId, translatedText as translatedOfficialReply, translatedFromOfficialReply
         FROM translatedText
-        WHERE type='feedback'
+        WHERE type='reply'
         AND language=?
-      ) c
+      ) d
+      ON a.id = d.feedbackId
       WHERE a.groupId=?`;
-      connection.query(connectionString, [decoded.language || 'english', groupId], (err, rows) => {
+      connection.query(connectionString, [language, language, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
         else {
           const adjRows = rows.map((row) => {
@@ -733,8 +735,9 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
       const { groupId } = decoded;
+      const language = decoded.language || 'english';
       const connectionString = `
-      SELECT a.id, a.feedbackId, a.userId, a.text, a.approved, b.upvotes, b.downvotes, a.date
+      SELECT a.id, a.feedbackId, a.userId, b.translatedText AS text, b.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
@@ -752,7 +755,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       JOIN feedback d
       ON a.feedbackId = d.id
       WHERE c.groupId=?`;
-      connection.query(connectionString, [decoded.language || 'english', groupId], (err, rows) => {
+      connection.query(connectionString, [language, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         else {
           const adjRows = rows.map((row) => {
