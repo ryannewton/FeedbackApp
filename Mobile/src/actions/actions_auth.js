@@ -8,7 +8,7 @@ import {
   SENT_AUTHORIZATION_EMAIL_SUCCESS,
   SENT_AUTHORIZATION_EMAIL_FAIL,
   AUTHORIZING_USER,
-  VERIFY_EMAIL,
+  VERIFYING_EMAIL,
   AUTHORIZE_USER_FAIL,
   AUTHORIZE_USER_SUCCESS,
   LOG_OUT_USER,
@@ -52,7 +52,7 @@ export const authorizeUserSuccess = token => (
 
 export const verifyEmail = (email, code) => (
   (dispatch) => {
-    dispatch({ type: VERIFY_EMAIL });
+    dispatch({ type: VERIFYING_EMAIL });
 
     return http.post('/verifyEmail', { email, code })
     .then((response) => {

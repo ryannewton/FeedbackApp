@@ -55,6 +55,7 @@ class Authorize extends Component {
   }
 
   verifyEmail() {
+    Keyboard.dismiss();
     this.props.verifyEmail(this.props.auth.email, this.state.code);
   }
 
