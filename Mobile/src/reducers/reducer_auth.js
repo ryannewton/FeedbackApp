@@ -4,7 +4,7 @@ import {
   SENT_AUTHORIZATION_EMAIL_SUCCESS,
   SENT_AUTHORIZATION_EMAIL_FAIL,
   AUTHORIZING_USER,
-  VERIFY_EMAIL,
+  VERIFYING_EMAIL,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   LOG_OUT_USER,
@@ -32,7 +32,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, sentAuthorizationEmail: false, loading: false, error: action.payload };
     case AUTHORIZING_USER:
       return { ...state, loading: true };
-    case VERIFY_EMAIL:
+    case VERIFYING_EMAIL:
       return { ...state, loading: true };
     case AUTHORIZE_USER_SUCCESS:
       return { ...state, sentAuthorizationEmail: false, loading: false, loggedIn: true, token: action.payload, error: false };

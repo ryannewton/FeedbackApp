@@ -189,44 +189,6 @@ function getDomain(email) {
   return re.exec(email)[0].slice(1);
 }
 
-// Authentication Step #1
-app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  // Checks to make sure it is a valid email address
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (!re.test(req.body.email)) {
-    res.status(400).send('Sorry, this does not appear to be a valid email address :(');
-  } else {
-    // Step #1: Generate a code
-    const code = generatePassword(4);
-    const email = req.body.email;
-    console.log(code);
-
-    // Step #2: Check to see if the user is already in the database
-    let connectionString = `
-      SELECT a.groupId, b.groupSignupCode
-      FROM users a
-      JOIN groups b
-      ON a.groupId = b.id
-      WHERE a.email=?`;
-    connection.query(connectionString, [email], (err, rows) => {
-      if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
-      else if (!rows.length) {
-        // Step #2A: If the user's email is not in the user table see if it has a default groupId
-        connectionString = 'SELECT id, groupSignupCode FROM groups WHERE defaultEmailDomain=?';
-        connection.query(connectionString, [getDomain(email)], (err, rows) => {
-          if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
-          else if (!rows.length) {
-            sendAuthEmailHelper(res, 0, email, code, 0);
-          } else {
-            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode);
-          }
-        });
-      } else {
-        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode);
-      }
-    });
-  }
-});
 
 function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
   // Step #3: Add the email, groupId, code, and timestamp to the database
@@ -308,6 +270,44 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
 });
 
 // AUTH
+app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
+  // Checks to make sure it is a valid email address
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!re.test(req.body.email)) {
+    res.status(400).send('Sorry, this does not appear to be a valid email address :(');
+  } else {
+    // Step #1: Generate a code
+    const code = generatePassword(4);
+    const email = req.body.email;
+    console.log(code);
+
+    // Step #2: Check to see if the user is already in the database
+    let connectionString = `
+      SELECT a.groupId, b.groupSignupCode
+      FROM users a
+      JOIN groups b
+      ON a.groupId = b.id
+      WHERE a.email=?`;
+    connection.query(connectionString, [email], (err, rows) => {
+      if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
+      else if (!rows.length) {
+        // Step #2A: If the user's email is not in the user table see if it has a default groupId
+        connectionString = 'SELECT id, groupSignupCode FROM groups WHERE defaultEmailDomain=?';
+        connection.query(connectionString, [getDomain(email)], (err, rows) => {
+          if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
+          else if (!rows.length) {
+            sendAuthEmailHelper(res, 0, email, code, 0);
+          } else {
+            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode);
+          }
+        });
+      } else {
+        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode);
+      }
+    });
+  }
+});
+
 app.post('/verifyEmail', upload.array(), (req, res) => {
   const { email, code } = req.body;
   let connectionString = `
@@ -324,7 +324,6 @@ app.post('/verifyEmail', upload.array(), (req, res) => {
     else res.status(400).send('Sorry the server is experiencing an error - G2D7');
   });
 });
-
 
 app.post('/authorizeUser', upload.array(), (req, res) => {
   const { email, code, groupSignupCode } = req.body;
