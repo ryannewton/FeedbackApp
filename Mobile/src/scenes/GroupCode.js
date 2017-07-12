@@ -65,7 +65,7 @@ class Authorize extends Component {
   renderSignupButton() {
     return (
       <Button onPress={this.authorizeUser}>
-        Verify Email
+        Join Group
       </Button>
     );
   }
@@ -86,10 +86,8 @@ class Authorize extends Component {
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
-          <Text style={{ padding: 20, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
-            {'Please enter your organization\'s unique group code.\n'}
-            {'If you received an invitation text or email, check that for your group code.\n'}
-            {'If you don\'t know what it is, ask your manager.\n'}
+          <Text style={{ fontWeight: '500', padding: 20, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
+            {'Please enter your organization\'s unique group code to join your organization.'}
           </Text>
           {/* Email input */}
           <Fumi
@@ -114,7 +112,6 @@ class Authorize extends Component {
           </Text>
 
           {/* Confirmation button, and 'go to login' button */}
-          {/*<View style={{ marginLeft: 15, marginRight: 15, marginTop: 15, zIndex:5 }}>*/}
           <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
             {this.renderButtons()}
           </View>
