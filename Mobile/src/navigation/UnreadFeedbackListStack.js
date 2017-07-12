@@ -15,7 +15,7 @@ const scenes = StackNavigator({
   UnreadFeedbackList: {
     screen: UnreadFeedbackList,
     navigationOptions: ({ navigation }) => ({
-      title: 'Unread Feedback',
+      title: 'New Feedback',
       headerRight: <View style = {{paddingRight: 15}}><SendInviteTextButton navigation={navigation} /></View>,
       headerTitleStyle: {
         color: '#fff',
@@ -48,8 +48,8 @@ const scenes = StackNavigator({
 
 // Stack options
 const options = {
-  tabBarLabel: 'Unread Feedback',
-  tabBarIcon: ({ tintColor }) => <Icon name="email" size={22} color={tintColor} />,
+  tabBarLabel: 'New Feedback',
+  tabBarIcon: ({ tintColor }) => <Icon name="explore" size={22} color={tintColor} />,
   cardStack: { gesturesEnabled: false },
 };
 

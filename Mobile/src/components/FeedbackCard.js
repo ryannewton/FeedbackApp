@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
-import { Icon } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
 import PropTypes from 'prop-types';
@@ -14,6 +14,7 @@ import noOpinionG from '../../images/icons/meh_g1.png';
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
 import { Card, CardSection } from './common';
+import { TinyButton } from '../components/common';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -100,28 +101,25 @@ class Feedback extends Component {
     );
   }
 
+
   renderNoOpinionButton = () => {
     const { feedback, user, biggerCard } = this.props;
-    let noOpinionN = noOpinionG;
+    let iconColor = '#bdbdbd';
     // If user hasn't upvoted this feedback
     if (user.feedbackNoOpinions.includes(feedback.id)) {
-      noOpinionN = noOpinionY;
+      iconColor = '#F8C61C';
     }
     return (
       <View>
-        <Image
-          source={biggerCard?noOpinionY:noOpinionN}
-          style={{
-            paddingTop:biggerCard?32:3,
-            height: 17,
-            width: biggerCard?35:20,
-            resizeMode: 'contain',
-          }}
-        />
+        <TinyButton 
+          style={biggerCard?null:{backgroundColor: iconColor, borderColor: iconColor, shadowColor: 'white', width:30}}
+          textStyle={biggerCard?null:{fontSize: 6,}}
+          >
+          No Opinion
+        </TinyButton>
       </View>
     );
   }
-
   renderThumbUpButton = () => {
     const { feedback, user, biggerCard } = this.props;
     let iconColor = '#bdbdbd';
@@ -131,7 +129,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-up" size={biggerCard?35:20} color={biggerCard?'#48D2A0':iconColor} />
+        <Icon name="thumb-up" size={biggerCard?25:25} color={biggerCard?'#48D2A0':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
       </View>
     );
   }
@@ -144,7 +142,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-down" size={biggerCard?35:20} color={biggerCard?'#F54B5E':iconColor} />
+        <Icon name="thumb-down" size={biggerCard?25:25} color={biggerCard?'#F54B5E':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
       </View>
     );
   }
@@ -357,27 +355,20 @@ return (
           {this.props.feedback.text}
         </Text>
           {/* Vote count */}
-        <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
+
           {/* Upvote Button and Downvote */}
-          <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
-            {this.renderThumbDownButton()}
-          </TouchableOpacity>
-          <Text style={downvoteTextStyle, { paddingTop: 7, paddingBottom:20, paddingRight: 12, color:'#bdbdbd'}}>
-            {this.props.feedback.downvotes}
-          </Text>
-          <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 3 }}>
-            {this.renderNoOpinionButton()}
-          </TouchableOpacity>
-          <Text style={upvoteTextStyle, {paddingRight: 12, paddingTop: 7, color:'#bdbdbd'}}>
-            {this.props.feedback.noOpinions}
-          </Text>
-          <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 3 }}>
-            {this.renderThumbUpButton()}
-          </TouchableOpacity>
-          <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
-            {this.props.feedback.upvotes}
-          </Text>
-        </View>
+          <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center'}}>
+            <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
+              {this.renderThumbDownButton()}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 3 }}>
+              {this.renderNoOpinionButton()}
+            </TouchableOpacity>
+            <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 3 }}>
+              {this.renderThumbUpButton()}
+            </TouchableOpacity>
+          </View>
+
       </View>
     );
   }
@@ -399,26 +390,26 @@ renderVoteCount = () => {
       return null;
     } 
     return (
-      <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
+      <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center'}}>
         {/* Upvote Button and Downvote */}
-        <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
+        <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'row'}}>
           {this.renderThumbDownButton()}
-        </TouchableOpacity>
-        <Text style={downvoteTextStyle, { paddingTop: 7, paddingRight: 8, color:'#bdbdbd'}}>
+        <Text style={downvoteTextStyle, { paddingRight:8, paddingLeft:2, paddingTop:4, color:'#bdbdbd'}}>
           {this.props.feedback.downvotes}
         </Text>
-        <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 2 }}>
-          {this.renderNoOpinionButton()}
         </TouchableOpacity>
-        <Text style={upvoteTextStyle, {paddingRight: 8, paddingTop: 7, color:'#bdbdbd'}}>
+        <TouchableOpacity onPress={this.addNoOpinion} style={{ flexDirection: 'row'}}>
+          {this.renderNoOpinionButton()}
+        <Text style={upvoteTextStyle, {paddingRight: 8, paddingLeft:2, color:'#bdbdbd'}}>
           {this.props.feedback.noOpinions}
         </Text>
-        <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 2 }}>
-          {this.renderThumbUpButton()}
         </TouchableOpacity>
-        <Text style={upvoteTextStyle, { paddingTop: 7, color:'#bdbdbd'}}>
+        <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'row'}}>
+          {this.renderThumbUpButton()}
+        <Text style={upvoteTextStyle, { paddingLeft:2, paddingTop:4, color:'#bdbdbd'}}>
           {this.props.feedback.upvotes}
         </Text>
+        </TouchableOpacity>
       </View>
     );
   }
