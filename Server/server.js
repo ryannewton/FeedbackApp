@@ -10,6 +10,7 @@ const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
 const Jimp = require('jimp'); // For image processing
 const stopwords = require('stopwords').english;
+var googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
 
 aws.config.loadFromPath('config.json'); // load aws config
 const upload = multer(); // for parsing multipart/form-data
@@ -387,11 +388,31 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
   });
 });
 
-function translateText(text, from) {
-
+function translateText(text, language) {
+  return googleTranslate.translate(text, language, function(err, translation) {
+    if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2')
+    else return translation; //translatedText, detectedSourceLanguage
+  });
 }
 
-function insertText()
+function insertText(targetId, type, text) {
+  const supportedLanguages = ['en', 'es', 'vi'];
+  supportedLanguages.forEach(language => {
+    let { translatedText, detectedSourceLanguage } = translateText(text, language);
+    let connectionString = 'INSERT INTO translatedText SET ?';
+    connection.query(connectionString,
+      {
+        targetId,
+        type,
+        translatedText,
+        translatedFrom: detectedSourceLanguage,
+        language
+      }, (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - JKD1');
+      }
+    );
+  });
+}
 
 // SUBMIT
 app.post('/submitFeedback', upload.array(), (req, res) => {
@@ -404,8 +425,9 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
       connection.query(connectionString, [groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
-          // Insert the feedback into the database
           const { text, type, imageURL } = req.body.feedback;
+          
+          // Insert the feedback into the database
           const approved = !rows[0].feedbackRequiresApproval;
           connectionString = 'INSERT INTO feedback SET ?';
           connection.query(connectionString,
@@ -419,6 +441,9 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
             }, (err, result) => {
               if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
               else {
+                // Insert text
+                insertText(result.insertId, 'feedback', text);
+
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
                 sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'UserId: ' + userId);
@@ -438,7 +463,7 @@ app.post('/submitSolution', upload.array(), (req, res) => {
     else {
       // Check if the solution requires approval
       const { groupId, userId } = decoded;
-      let connectionString = `SELECT solutionsRequireApproval FROM groups WHERE id=?`;
+      let connectionString = `SELECT solutionsRequireApproval, groupName FROM groups WHERE id=?`;
       connection.query(connectionString, [groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 0942');
         else {
@@ -454,8 +479,18 @@ app.post('/submitSolution', upload.array(), (req, res) => {
               approved,
             }, (err, result) => {
               if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 2579');
-              else res.json({ id: result.insertId });
-            });
+              else {
+                // Insert text
+                insertText(result.insertId, 'solution', text);
+
+                // Send Email to Moderators
+                const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
+                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Solution: ' + text, 'UserId: ' + userId);
+
+                res.json({ id: result.insertId });
+              } 
+            }
+          );
         }
       });
     }
@@ -471,7 +506,16 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
       const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
       connection.query(connectionString, [officialReply, feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
-        else res.sendStatus(200);
+        else {
+          // Insert text
+          insertText(feedback.id, 'reply', officialReply);
+
+          // Send Email to Moderators
+          const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
+          sendEmail(toEmails, defaultFromEmail, 'Reply: ' + officialReply, 'UserId: some admin');
+
+          res.sendStatus(200);
+        }
       });
     }
   });
