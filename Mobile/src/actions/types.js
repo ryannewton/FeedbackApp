@@ -58,3 +58,4 @@ export const ADD_TO_INSTRUCTIONS_VIEWED = 'add_to_instructions_viewed';
 export const CHANGE_FILTER_METHOD = 'change_filter_method';
 export const SET_SEARCH_QUERY = 'set_search_query';
 export const SEARCH_IN_PROGRESS = 'search_in_progress';
+export const CHANGE_LANGUAGE_CHOICE= 'change_language_choice';

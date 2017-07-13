@@ -17,6 +17,7 @@
     "@expo/vector-icons": "^5.0.0",
     "axios": "^0.15.3",
     "expo": "^17.0.0",
+    "google-translate-api": "^2.3.0",
     "prop-types": "^15.5.10",
     "react": "16.0.0-alpha.6",
     "react-native": "^0.44.0",

@@ -18,22 +18,37 @@ const SLIDE_DATA = [
   { text: "Top feedback will either be addressed or receive an official response", image: pageFourImage, color: '#009688' },
 ];
 
+const SLIDE_DATA2 = [
+  { text: "Choose your language!", image: pageThreeImage, color: '#03A9F4' },
+  { text: 'Welcome to the Suggestion Box!', image: pageOneImage, color: '#03A9F4' },
+  { text: 'Anonymously submit feedback for your community...', image: pageTwoImage, color: '#009688' },
+  { text: "...and prioritize other members' feedback by voting.", image: pageThreeImage, color: '#03A9F4' },
+  { text: "Top feedback will either be addressed or receive an official response", image: pageFourImage, color: '#009688' },
+];
+
+
 class WelcomeScreen extends Component {
   onSlidesComplete = () => {
     this.props.navigation.navigate('SubmitEmail');
   }
 
+  renderCards() {
+    if (!this.props.group.includeLanguage) {
+      return <Slides data={SLIDE_DATA} onComplete={this.onSlidesComplete} />;
+    }
+    return <Slides data={SLIDE_DATA2} onComplete={this.onSlidesComplete} />;
+  }
   render() {
     return (
-      <Slides data={SLIDE_DATA} onComplete={this.onSlidesComplete} />
+      this.renderCards()
     );
   }
 }
 
 function mapStateToProps(state) {
   console.log('state: ', state);
-  const { token } = state.auth;
-  return { token };
+  const { group } = state
+  return { group };
 }
 
 export default connect(mapStateToProps)(WelcomeScreen);

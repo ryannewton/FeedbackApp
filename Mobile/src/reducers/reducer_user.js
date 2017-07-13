@@ -21,6 +21,7 @@ import {
   REMOVE_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_DOWNVOTE,
   LOG_OUT_USER,
+  CHANGE_LANGUAGE_CHOICE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -32,6 +33,7 @@ const INITIAL_STATE = {
   solutionUpvotes: [],
   solutionDownvotes: [],
   feedbackNoOpinions: [],
+  language: 'en',
 };
 
 const removeItem = (arr, item) => {
@@ -46,6 +48,8 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case PULL_GROUP_INFO:
       return { ...state, userId: action.payload.userId };
+    case CHANGE_LANGUAGE_CHOICE:
+      return { ...state, language: action.payload };
     case LOAD_DO_NOT_DISPLAY_LIST:
       return { ...state, doNotDisplayList: action.payload };
     case LOAD_INSTRUCTIONS_VIEWED:

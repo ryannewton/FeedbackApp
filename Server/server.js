@@ -10,7 +10,12 @@ const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
 const Jimp = require('jimp'); // For image processing
 const stopwords = require('stopwords').english;
+<<<<<<< HEAD
 var googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
+=======
+const translate = require('google-translate-api');
+var googleTranslate = require('google-translate')('AIzaSyBf7KdjtQuSuzg0OGliqqSW8tJiHGbNULE');
+>>>>>>> temp
 
 aws.config.loadFromPath('config.json'); // load aws config
 const upload = multer(); // for parsing multipart/form-data
@@ -829,13 +834,13 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
       const { userId, groupId } = decoded;
       const connectionString = `
         SELECT
-          '` + userId + `' as userId,
-          groupName,
-          groupSignupCode as groupAuthCode,
-          feedbackRequiresApproval,
-          solutionsRequireApproval,
-          showStatus,
-          includePositiveFeedbackBox
+          b.userId,
+          a.groupName,
+          a.groupSignupCode,
+          a.feedbackRequiresApproval,
+          a.solutionsRequireApproval,
+          a.showStatus,
+          a.includePositiveFeedbackBox
         FROM
           groups
         WHERE
@@ -849,5 +854,9 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
 });
 
 app.listen(8081, () => {
+  googleTranslate.translate('hello i am from china', 'en', function(err, translation) {
+    console.log(translation);
+    // =>  Mi nombre es Brandon
+  });
  console.log('Suggestion Box Server listening on port 8081!');
 });
