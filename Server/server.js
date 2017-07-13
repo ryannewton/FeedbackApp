@@ -195,11 +195,49 @@ function getDomain(email) {
   return re.exec(email)[0].slice(1);
 }
 
+// Authentication Step #1
+app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
+  // Checks to make sure it is a valid email address
+  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  if (!re.test(req.body.email)) {
+    res.status(400).send('Sorry, this does not appear to be a valid email address :(');
+  } else {
+    const { language, email } = req.body;
+    // Step #1: Generate a code
+    const code = generatePassword(4);
+    console.log(code);
 
-function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
+    // Step #2: Check to see if the user is already in the database
+    let connectionString = `
+      SELECT a.groupId, b.groupSignupCode
+      FROM users a
+      JOIN groups b
+      ON a.groupId = b.id
+      WHERE a.email=?`;
+    connection.query(connectionString, [email], (err, rows) => {
+      if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
+      else if (!rows.length) {
+        // Step #2A: If the user's email is not in the user table see if it has a default groupId
+        connectionString = 'SELECT id, groupSignupCode FROM groups WHERE defaultEmailDomain=?';
+        connection.query(connectionString, [getDomain(email)], (err, rows) => {
+          if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
+          else if (!rows.length) {
+            sendAuthEmailHelper(res, 0, email, code, 0, language || 'en');
+          } else {
+            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode, language || 'en');
+          }
+        });
+      } else {
+        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode, language || 'en');
+      }
+    });
+  }
+});
+
+function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode, language) {
   // Step #3: Add the email, groupId, code, and timestamp to the database
-  const connectionString = 'INSERT INTO users (groupId, email, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcodeTime=NOW()';
-  connection.query(connectionString, [groupId, email, String(code), String(code), groupId], (err) => {
+  const connectionString = 'INSERT INTO users (groupId, email, passcode, language) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcodeTime=NOW(), language=?';
+  connection.query(connectionString, [groupId, email, String(code), language, String(code), groupId, language], (err) => {
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
     else if (!email.includes('admin_test')) {
       // Step #4: Send an email with the code to the user (make sure it shows up in notification)
@@ -216,6 +254,7 @@ function generateToken(userInfo) {
       userId: userInfo.id,
       groupId: userInfo.groupId,
       groupName: userInfo.groupName,
+      language: userInfo.language,
     },
     process.env.JWT_KEY);
 }
@@ -276,48 +315,10 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
 });
 
 // AUTH
-app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  // Checks to make sure it is a valid email address
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (!re.test(req.body.email)) {
-    res.status(400).send('Sorry, this does not appear to be a valid email address :(');
-  } else {
-    // Step #1: Generate a code
-    const code = generatePassword(4);
-    const email = req.body.email;
-    console.log(code);
-
-    // Step #2: Check to see if the user is already in the database
-    let connectionString = `
-      SELECT a.groupId, b.groupSignupCode
-      FROM users a
-      JOIN groups b
-      ON a.groupId = b.id
-      WHERE a.email=?`;
-    connection.query(connectionString, [email], (err, rows) => {
-      if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
-      else if (!rows.length) {
-        // Step #2A: If the user's email is not in the user table see if it has a default groupId
-        connectionString = 'SELECT id, groupSignupCode FROM groups WHERE defaultEmailDomain=?';
-        connection.query(connectionString, [getDomain(email)], (err, rows) => {
-          if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
-          else if (!rows.length) {
-            sendAuthEmailHelper(res, 0, email, code, 0);
-          } else {
-            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode);
-          }
-        });
-      } else {
-        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode);
-      }
-    });
-  }
-});
-
 app.post('/verifyEmail', upload.array(), (req, res) => {
   const { email, code } = req.body;
   let connectionString = `
-    SELECT a.id, b.groupName, b.id as groupId
+    SELECT a.id, a.language, b.groupName, b.id as groupId
     FROM users a
     LEFT JOIN groups b
     ON a.groupId = b.id
@@ -326,10 +327,11 @@ app.post('/verifyEmail', upload.array(), (req, res) => {
     if (err) res.status(400).send('Sorry the server is experiencing an error - G2D6');
     else if (!user.length) res.status(400).send('Sorry, your email verification code is incorrect');
     else if (!user[0].groupName) res.status(200).json({ needsGroupSignupCode: true });
-    else if (user[0].id && user[0].groupName && user[0].groupId) res.status(200).json({ needsGroupSignupCode: false, token: generateToken(user[0]) });
+    else if (user[0].id && user[0].groupName && user[0].groupId && user[0].language) res.status(200).json({ needsGroupSignupCode: false, token: generateToken(user[0]) });
     else res.status(400).send('Sorry the server is experiencing an error - G2D7');
   });
 });
+
 
 app.post('/authorizeUser', upload.array(), (req, res) => {
   const { email, code, groupSignupCode } = req.body;
@@ -344,7 +346,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
     else {
       // Step #1: Query the database for the userinfo associated with the email
       connectionString = `
-        SELECT a.id, a.groupId, b.groupName
+        SELECT a.id, a.groupId, b.groupName, a.language
         FROM users a
         LEFT JOIN groups b
         ON a.groupId = b.id
@@ -356,8 +358,8 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
           connectionString = `
             UPDATE users
             SET groupId=?
-            WHERE email=?`;
-          connection.query(connectionString, [group[0].id, email], (err) => {
+            WHERE id=?`;
+          connection.query(connectionString, [group[0].id, rows[0].id], (err) => {
             if (err) res.status(400).send('Sorry, the server is experiencing an error - 41H1');
             else {
               const groupInfo = rows[0];
@@ -835,6 +837,7 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
       const connectionString = `
         SELECT
           b.userId,
+          b.language,
           a.groupName,
           a.groupSignupCode,
           a.feedbackRequiresApproval,
@@ -842,10 +845,14 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
           a.showStatus,
           a.includePositiveFeedbackBox
         FROM
-          groups
+          groups a
+        JOIN
+          users b
+        ON
+          a.id = b.groupId
         WHERE
-          id=?`;
-      connection.query(connectionString, [groupId], (err, rows) => {
+          b.userId=?`;
+      connection.query(connectionString, [userId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
         else res.status(200).send(rows[0]);
       });
