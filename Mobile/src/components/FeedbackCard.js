@@ -300,7 +300,7 @@ return (
   renderSolutionsTag = () => {
     const { solutions, feedback } = this.props;
     const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
-    if (feedbackSolutions.length) {
+    if (feedbackSolutions.length && !this.props.showImage) {
       return (
         <View style={{paddingTop:2}}>
           <Icon name="question-answer" size={20} color="#bdbdbd" />
@@ -390,7 +390,7 @@ renderVoteCount = () => {
       return null;
     } 
     return (
-      <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center'}}>
+      <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
         {/* Upvote Button and Downvote */}
         <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'row'}}>
           {this.renderThumbDownButton()}
@@ -400,7 +400,7 @@ renderVoteCount = () => {
         </TouchableOpacity>
         <TouchableOpacity onPress={this.addNoOpinion} style={{ flexDirection: 'row'}}>
           {this.renderNoOpinionButton()}
-        <Text style={upvoteTextStyle, {paddingRight: 8, paddingLeft:2, color:'#bdbdbd'}}>
+        <Text style={upvoteTextStyle, {paddingRight: 8, paddingLeft:2, paddingTop:4, color:'#bdbdbd'}}>
           {this.props.feedback.noOpinions}
         </Text>
         </TouchableOpacity>
