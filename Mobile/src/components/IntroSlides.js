@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, Image, ScrollView, Dimensions } from 'react-native';
+import { View, Text, Image, ScrollView, Dimensions, TouchableOpacity } from 'react-native';
 import { Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -19,7 +19,7 @@ class IntroSlides extends Component {
   languageButtonStyle(language) {
     if (this.state.language === language) {
       return (
-        [styles.buttonStyle, {backgroundColor: 'yellow'}]
+        [styles.buttonStyle, {backgroundColor: 'rgba(0,0,0,0)'}]
       );
     }
     return styles.buttonStyle;
@@ -45,35 +45,48 @@ class IntroSlides extends Component {
       return (
         <View>
           <Button
-            title="English"
-            raised
-            buttonStyle={this.languageButtonStyle('en')}
+            title="English                                   "
+            textStyle={{alignItems:'flex-start'}}
+            containerViewStyle={{alignItems:'flex-start'}}
+            fontSize={28}
+            buttonStyle={[this.languageButtonStyle('en'), { backgroundColor:'rgba(0,0,0,0)', width: SCREEN_WIDTH, paddingTop: SCREEN_HEIGHT * 0.1, paddingBottom: SCREEN_HEIGHT * 0.23 }]}
             onPress={() => this.languageButtonPress('en')}
-          />
+          >
+          </Button>
           <Button
-            title="Spanish"
-            raised
-            buttonStyle={this.languageButtonStyle('es')}
+            title="Spanish                                   "
+            fontSize={28}
+            buttonStyle={[this.languageButtonStyle('es'), { backgroundColor:'rgba(0,0,0,0)', paddingTop: SCREEN_HEIGHT * 0.09, paddingBottom: SCREEN_HEIGHT * 0.09 }]}
             onPress={() => this.languageButtonPress('es')}
           />
           <Button
-            title="Vietnamese"
-            raised
-            buttonStyle={this.languageButtonStyle('vi')}
+            title="Vietnamese                              "
+            textStyle={{textAlign:'left'}}
+            fontSize={28}
+            buttonStyle={[this.languageButtonStyle('vi'), { backgroundColor:'rgba(0,0,0,0)', paddingTop: SCREEN_HEIGHT * 0.09, paddingBottom: SCREEN_HEIGHT * 0.09 }]}
             onPress={() => this.languageButtonPress('vi')}
           />
         </View>
       )
+    } else {
+      return (
+        <TouchableOpacity
+          style={{width: SCREEN_WIDTH, height:SCREEN_HEIGHT}}
+          onPress={() => this.myScroll.scrollTo({x: SCREEN_WIDTH*(index+1), y: 0, animated: true})}
+        />
+      );
     }
     return null;
   }
 
   renderText(text, index) {
     if (index === 0) {
-      <View style={styles.textContainer}>
-        <View style={{ height: SCREEN_HEIGHT * 0.4 }} />
-        <Text style={styles.textStyle}>{text}</Text>
-      </View>
+      return (
+        <View style={styles.textContainer}>
+          <View style={{ height: SCREEN_HEIGHT * 0.05 }} />
+          <Text style={styles.textStyle}>{text}</Text>
+        </View>
+      );
     }
     return (
       <View style={styles.textContainer}>
@@ -86,11 +99,17 @@ class IntroSlides extends Component {
   renderSlides() {
     return this.props.data.map((slide, index) => {
       return (
-        <View key={slide.text} style={styles.slideStyle, {backgroundColor:'#00A2FF'}}>
+        <View key={slide.text} style={styles.slideStyle, {backgroundColor:'white'}}>
+        <TouchableOpacity
+          activeOpacity={1}
+          style={{zIndex:5, width: SCREEN_WIDTH, height:SCREEN_HEIGHT}}
+          onPress={(index === 0 || index === this.props.data.length - 1)?null:() => this.myScroll.scrollTo({x: SCREEN_WIDTH*(index+1), y: 0, animated: true})}
+        >
           <Image source={slide.image} style={styles.backgroundImageStyle}>
             {this.renderText(slide.text, index)}
             {this.renderLastSlide(index)}
           </Image>
+          </TouchableOpacity>
         </View>
       );
     });
