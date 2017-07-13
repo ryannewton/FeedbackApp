@@ -28,7 +28,7 @@ class SendAuthorizationEmail extends Component {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
       Keyboard.dismiss();
-      this.props.sendAuthorizationEmail(this.state.email, () => this.props.navigation.navigate('AuthCode'));
+      this.props.sendAuthorizationEmail(this.state.email, () => this.props.navigation.navigate('AuthCode'), this.props.user.language);
     } else {
       this.props.authorizeUserFail('Invalid Email Address');
     }
@@ -74,7 +74,7 @@ class SendAuthorizationEmail extends Component {
             style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 80, backgroundColor:'white' }}
             maxLength={100}
           />
-          
+
           {/* Error message (blank if no error) */}
           <Text style={styles.errorTextStyle}>
             {this.props.auth.error}
