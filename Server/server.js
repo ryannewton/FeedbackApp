@@ -805,7 +805,6 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       JOIN feedback d
       ON a.feedbackId = d.id
       WHERE d.groupId=?`;
-      console.log(connectionString);
       connection.query(connectionString, [language, groupId], (err, rows) => {
         //if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         if (err) console.log(err);
