@@ -388,29 +388,28 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
   });
 });
 
-function translateText(text, language) {
-  return googleTranslate.translate(text, language, function(err, translation) {
-    if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2')
-    else return translation; //translatedText, detectedSourceLanguage
-  });
-}
-
 function insertText(targetId, type, text) {
   const supportedLanguages = ['en', 'es', 'vi'];
   supportedLanguages.forEach(language => {
-    let { translatedText, detectedSourceLanguage } = translateText(text, language);
-    let connectionString = 'INSERT INTO translatedText SET ?';
-    connection.query(connectionString,
-      {
-        targetId,
-        type,
-        translatedText,
-        translatedFrom: detectedSourceLanguage,
-        language
-      }, (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - JKD1');
+    googleTranslate.translate(text, language, function(err, translation) {
+      if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2')
+      else {
+        console.log('translation: ', translation);
+        let { translatedText, detectedSourceLanguage } = translation;
+        let connectionString = 'INSERT INTO translatedText SET ?';
+        connection.query(connectionString,
+          {
+            targetId,
+            type,
+            translatedText,
+            translatedFrom: detectedSourceLanguage,
+            language
+          }, (err) => {
+            if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - JKD1');
+          }
+        );
       }
-    );
+    });
   });
 }
 
@@ -738,9 +737,9 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
       const { groupId } = decoded;
-      const language = decoded.language || 'english';
+      const language = decoded.language || 'en';
       const connectionString = `
-      SELECT a.id, a.groupId, a.userId, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date
+      SELECT a.id, a.groupId, a.userId, a.text as backupText, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date
       FROM feedback a
       LEFT JOIN (
         SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes, SUM(noOpinion) as noOpinions
@@ -756,7 +755,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       ) c
       ON a.id = c.feedbackId
       LEFT JOIN (
-        SELECT targetId as feedbackId, translatedText as translatedOfficialReply, translatedFromOfficialReply
+        SELECT targetId as feedbackId, translatedText as translatedOfficialReply, translatedFrom AS translatedFromOfficialReply
         FROM translatedText
         WHERE type='reply'
         AND language=?
@@ -770,6 +769,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
             if (!row.upvotes) { row.upvotes = 0; }
             if (!row.downvotes) { row.downvotes = 0; }
             if (!row.noOpinions) { row.noOpinions = 0; }
+            if (!row.text) { row.text = row.backupText || ''; }
             return row;
           });
           res.status(200).send(adjRows);
@@ -785,9 +785,9 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
       const { groupId } = decoded;
-      const language = decoded.language || 'english';
+      const language = decoded.language || 'en';
       const connectionString = `
-      SELECT a.id, a.feedbackId, a.userId, b.translatedText AS text, b.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date
+      SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
@@ -804,9 +804,11 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       ON a.id = c.solutionId
       JOIN feedback d
       ON a.feedbackId = d.id
-      WHERE c.groupId=?`;
+      WHERE d.groupId=?`;
+      console.log(connectionString);
       connection.query(connectionString, [language, groupId], (err, rows) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
+        //if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
+        if (err) console.log(err);
         else {
           const adjRows = rows.map((row) => {
             if (!row.upvotes) { row.upvotes = 0; }
