@@ -19,12 +19,12 @@ import {
 // Import functions
 import loadOnLaunch from '../reducers/load_on_launch';
 
-export const sendAuthorizationEmail = (email, navigateToNext) => (
+export const sendAuthorizationEmail = (email, navigateToNext, language = 'en') => (
   (dispatch) => {
     dispatch({ type: SENDING_AUTHORIZATION_EMAIL });
 
     // Add a new user to our database (or update the passcode of the user)
-    return http.post('/sendAuthorizationEmail/', { email })
+    return http.post('/sendAuthorizationEmail/', { email, language })
     // If successful navigate to the login in screen (for post email verification)
     .then((response) => {
       // Change the in-authorization flag in state so we update the component
@@ -57,7 +57,7 @@ export const verifyEmail = (email, code) => (
     return http.post('/verifyEmail', { email, code })
     .then((response) => {
       if (response.data.needsGroupSignupCode) {
-        dispatch({ type: NEEDS_GROUP_CODE, payload: code });          
+        dispatch({ type: NEEDS_GROUP_CODE, payload: code });
       } else if (response.data.token) {
         const token = String(response.data.token);
         AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)

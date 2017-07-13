@@ -27,7 +27,9 @@ class IntroSlides extends Component {
 
   languageButtonPress(language) {
     this.setState({ language });
-    this.props.languageChoice(language)
+    this.props.languageChoice(language);
+    console.log('here')
+    this.myScroll.scrollTo({x: SCREEN_WIDTH, y: 0, animated: true});
   }
   renderLastSlide(index) {
     if (index === this.props.data.length - 1) {
@@ -39,7 +41,7 @@ class IntroSlides extends Component {
           onPress={this.props.onComplete}
         />
       );
-    } else if (index === 0 && this.props.group.includeLanguage) {
+    } else if (index === 0) {
       return (
         <View>
           <Button
@@ -67,7 +69,7 @@ class IntroSlides extends Component {
   }
 
   renderText(text, index) {
-    if (index === 0 && this.props.group.includeLanguage) {
+    if (index === 0) {
       <View style={styles.textContainer}>
         <View style={{ height: SCREEN_HEIGHT * 0.4 }} />
         <Text style={styles.textStyle}>{text}</Text>
@@ -95,9 +97,9 @@ class IntroSlides extends Component {
   }
 
   render() {
-    console.log('reducer state', this.props.user.language)
     return (
       <ScrollView
+        ref={(ref) => this.myScroll = ref}
         horizontal
         style={{ flex: 1 }}
         pagingEnabled
