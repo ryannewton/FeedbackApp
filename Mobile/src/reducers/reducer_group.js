@@ -6,7 +6,7 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  groupAuthCode: 0,
+  groupSignupCode: 0,
   groupName: '',
   feedbackRequireApproval: true,
   solutionsRequireApproval: true,
@@ -18,16 +18,17 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case PULL_GROUP_INFO:
+      console.log('pulling group info', action, state )
       return {...state,
         groupName: action.payload.groupName,
+        groupSignupCode: action.payload.groupAuthCode,
         feedbackRequireApproval: Boolean(action.payload.feedbackRequireApproval),
         solutionsRequireApproval: Boolean(action.payload.solutionsRequireApproval),
         showStatus: Boolean(action.payload.showStatus),
         includePositiveFeedbackBox: Boolean(action.payload.includePositiveFeedbackBox),
-        groupAuthCode: action.payload.groupAuthCode,
       };
     case SAVE_GROUP_CODE:
-      return {...state, groupAuthCode: action.payload}
+      return {...state, groupSignupCode: action.payload}
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:

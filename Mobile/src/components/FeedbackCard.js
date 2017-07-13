@@ -15,6 +15,7 @@ import noOpinionG from '../../images/icons/meh_g1.png';
 import styles from '../styles/components/FeedbackCardStyles';
 import { Card, CardSection } from './common';
 import { TinyButton } from '../components/common';
+import * as Animatable from 'react-native-animatable';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -29,6 +30,12 @@ import {
 } from '../actions';
 
 class Feedback extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      toggled: false
+    }
+  }
   goToDetails = () => {
     this.props.navigate('Details', { feedback: this.props.feedback });
   }
@@ -50,12 +57,13 @@ class Feedback extends Component {
     } else {
       this.props.removeFeedbackUpvote(feedback);
     }
-    this.props.addToDoNotDisplayList(feedback.id)
+    this.props.addToDoNotDisplayList(feedback.id);
+    this.setState({toggled: true});
   }
 
   // If user hasn't downvoted this feedback, add an downvote - if they have, remove it
   downvote = () => {
-    const { feedback, user } = this.props;    
+    const { feedback, user } = this.props;
     if (!user.feedbackDownvotes.includes(feedback.id)) {
       this.props.addFeedbackDownvote(feedback);
     } else {
@@ -68,7 +76,7 @@ class Feedback extends Component {
     const { showImage, biggerCard } = this.props;
     if (biggerCard) {
       return null;
-    } 
+    }
     if (this.props.feedback === undefined) {
       return '';
     } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
@@ -111,7 +119,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <TinyButton 
+        <TinyButton
           style={biggerCard?null:{backgroundColor: iconColor, borderColor: iconColor, shadowColor: 'white', width:30}}
           textStyle={biggerCard?null:{fontSize: 6,}}
           >
@@ -336,10 +344,10 @@ return (
     } = styles;
     if (this.props.feedback === undefined) {
       return '';
-    } 
+    }
     if (!biggerCard) {
       return null;
-    } 
+    }
     return (
       <View>
         <Text
@@ -385,10 +393,10 @@ renderVoteCount = () => {
     } = styles;
     if (this.props.feedback === undefined) {
       return '';
-    } 
+    }
     if (biggerCard) {
       return null;
-    } 
+    }
     return (
       <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
         {/* Upvote Button and Downvote */}
@@ -427,7 +435,6 @@ renderVoteCount = () => {
       downvoteCountStyle,
       thumbStyle,
     } = styles;
-
     let updatedRow = row;
     if (this.props.feedback.type === 'positive feedback') {
       updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];

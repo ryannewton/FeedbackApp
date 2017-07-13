@@ -28,7 +28,7 @@ class IntroSlides extends Component {
   languageButtonPress(language) {
     this.setState({ language });
     this.props.languageChoice(language);
-    console.log('here')
+    console.log(language)
     this.myScroll.scrollTo({x: SCREEN_WIDTH, y: 0, animated: true});
   }
   renderLastSlide(index) {
