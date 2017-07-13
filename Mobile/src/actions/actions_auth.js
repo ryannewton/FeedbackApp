@@ -19,8 +19,9 @@ import {
 // Import functions
 import loadOnLaunch from '../reducers/load_on_launch';
 
-export const sendAuthorizationEmail = (email, navigateToNext, language = 'en') => (
+export const sendAuthorizationEmail = (email, navigateToNext, language) => (
   (dispatch) => {
+    console.log(language)
     dispatch({ type: SENDING_AUTHORIZATION_EMAIL });
 
     // Add a new user to our database (or update the passcode of the user)
