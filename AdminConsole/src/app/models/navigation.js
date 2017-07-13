@@ -33,7 +33,7 @@ export const navigation = {
         },
         {
           name: 'Official Reply',
-          linkTo: '/officialReply',
+          linkTo: '/manageFeedback',
           faIconName: 'fa-comment'
         },
       ]

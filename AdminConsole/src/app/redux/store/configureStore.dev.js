@@ -5,7 +5,7 @@ import {
 } from 'redux';
 import { createLogger } from 'redux-logger';
 import thunkMiddleware from 'redux-thunk';
-import reducer from '../modules/reducers';
+import reducer from '../reducers';
 import { localStorageManager } from '../middleware';
 
 const loggerMiddleware = createLogger({
@@ -31,8 +31,8 @@ const enhancer = composeEnhancers(
 export default function configureStore(initialState) {
   const store = createStore(reducer, initialState, enhancer);
   if (module.hot) {
-    module.hot.accept('../modules/reducers', () =>
-      store.replaceReducer(require('../modules/reducers').default)
+    module.hot.accept('../reducers', () =>
+      store.replaceReducer(require('../reducers').default)
     );
   }
   return store;

@@ -10,18 +10,6 @@ import {
 
 class Home extends PureComponent {
   static propTypes = {
-    earningGraphLabels: PropTypes.array,
-    earningGraphDatasets: PropTypes.array,
-    teamMatesIsFetching: PropTypes.bool,
-    teamMates: PropTypes.arrayOf(
-      PropTypes.shape({
-        picture: PropTypes.string,
-        firstname: PropTypes.string,
-        lastname: PropTypes.string,
-        profile: PropTypes.string,
-        profileColor: PropTypes.oneOf(['danger', 'warning', 'info', 'success'])
-      })
-    ),
     actions: PropTypes.shape({
       enterHome: PropTypes.func,
       leaveHome: PropTypes.func,
@@ -39,12 +27,7 @@ class Home extends PureComponent {
   }
 
   render() {
-    const {
-      teamMates,
-      teamMatesIsFetching,
-      earningGraphLabels,
-      earningGraphDatasets
-    } = this.props;
+    console.log('Home props: ', this.props);
 
     return(
       <AnimatedView>

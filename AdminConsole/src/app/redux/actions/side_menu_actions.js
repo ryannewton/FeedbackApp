@@ -1,45 +1,16 @@
 import moment from 'moment';
 
-const SIDEMU_IS_COLLAPSED_KEY = 'SIDEMENU_IS_OPENED_KEY';
-const SIDEMU_IS_COLLAPSED_VALUE = true;
-const SIDEMU_IS_NOT_COLLAPSED_VALUE = false;
-const READ_LOCALSTORAGE = false;
-const WRITE_LOCALSTORAGE = true;
+import {
+  SIDEMU_IS_COLLAPSED_KEY,
+  SIDEMU_IS_COLLAPSED_VALUE,
+  SIDEMU_IS_NOT_COLLAPSED_VALUE,
+  READ_LOCALSTORAGE,
+  WRITE_LOCALSTORAGE,
+  OPEN_SIDE_MENU,
+  CLOSE_SIDE_MENU,
+  GET_SIDE_MENU_TOGGLE_STATE_FROM_LOCALSTORAGE,
+} from './types';
 
-
-const OPEN_SIDE_MENU   = 'OPEN_SIDE_MENU';
-const CLOSE_SIDE_MENU  = 'CLOSE_SIDE_MENU';
-const GET_SIDE_MENU_TOGGLE_STATE_FROM_LOCALSTORAGE = 'GET_SIDE_MENU_TOGGLE_STATE_FROM_LOCALSTORAGE';
-
-const initialState = {
-  isCollapsed: false,
-  time: null
-};
-
-export default function sideMenu(state = initialState, action) {
-  switch (action.type) {
-
-  case GET_SIDE_MENU_TOGGLE_STATE_FROM_LOCALSTORAGE:
-    return {
-      isCollapsed:  Boolean(action.permanentStore.storeValue),
-      time:         action.time
-    };
-  case OPEN_SIDE_MENU:
-    return {
-      ...state,
-      isCollapsed:  action.isCollapsed,
-      time:         action.time
-    };
-  case CLOSE_SIDE_MENU:
-    return {
-      ...state,
-      isCollapsed:  action.isCollapsed,
-      time:         action.time
-    };
-  default:
-    return state;
-  }
-}
 
 export function getSideMenuCollpasedStateFromLocalStorage(time = moment().format()) {
   return {

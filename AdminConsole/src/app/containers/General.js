@@ -1,6 +1,7 @@
+import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import * as actions from '../redux/modules/actions';
+import * as actions from '../redux/actions';
 import { General } from '../views';
 
 const mapStateToProps = (state) => {
@@ -20,6 +21,14 @@ const mapDispatchToProps = (dispatch) => {
       dispatch)
   };
 };
+
+class test extends Component {
+  render() {
+    return (
+      <div>Testing 123. Testing 123. Testing 123. Testing 123. Testing 123. Testing 123. Testing 123. Testing 123. Testing 123. Testing 123. </div>
+    )
+  }
+}
 
 export default connect(
   mapStateToProps,

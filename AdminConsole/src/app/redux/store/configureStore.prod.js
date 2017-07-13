@@ -4,7 +4,7 @@ import {
   compose
 } from 'redux';
 import thunkMiddleware from 'redux-thunk';
-import reducer from '../modules/reducers';
+import reducer from '../reducers';
 import { localStorageManager } from '../middleware';
 
 // createStore : enhancer

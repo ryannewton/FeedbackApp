@@ -1,12 +1,9 @@
-import React, {
-  PropTypes,
-  Component
-} from 'react';
+import React, { PropTypes, Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import MainRoutes from '../routes/MainRoutes';
 import { withRouter } from 'react-router';
-import * as actions from '../redux/modules/actions';
+import MainRoutes from '../routes/MainRoutes';
+import * as actions from '../redux/actions';
 import {
   Header,
   // Footer,
@@ -98,14 +95,15 @@ class App extends Component {
 
 const mapStateToProps = (state) => {
   return {
-    currentView:         state.views.currentView,
+    currentView: state.views.currentView,
     sideMenuIsCollapsed: state.sideMenu.isCollapsed,
+    routing: state.routing,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    actions : bindActionCreators(
+    actions: bindActionCreators(
       {...actions},
       dispatch)
   };
