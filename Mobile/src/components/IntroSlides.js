@@ -95,7 +95,7 @@ class IntroSlides extends Component {
               width: SCREEN_HEIGHT * 0.45, 
               height: SCREEN_HEIGHT * 0.13, 
             }]}
-            onPress={() => this.languageButtonPress('en')}
+            onPress={() => this.languageButtonPress('es')}
           >
             <Image
               source={l2}
@@ -126,7 +126,7 @@ class IntroSlides extends Component {
               width: SCREEN_HEIGHT * 0.45, 
               height: SCREEN_HEIGHT * 0.13, 
             }]}
-            onPress={() => this.languageButtonPress('en')}
+            onPress={() => this.languageButtonPress('vi')}
           >
             <Image
               source={l3}
@@ -157,7 +157,7 @@ class IntroSlides extends Component {
               width: SCREEN_HEIGHT * 0.45, 
               height: SCREEN_HEIGHT * 0.13, 
             }]}
-            onPress={() => this.languageButtonPress('en')}
+            onPress={() => this.languageButtonPress('zh-cn')}
           >
             <Image
               source={l4}
