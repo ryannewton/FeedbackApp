@@ -179,6 +179,7 @@ class FeedbackList extends Component {
         <ListView
           style = {{zIndex: -1}}
           dataSource={ds.cloneWithRows(filteredFeedbackList)}
+          removeClippedSubviews={false}
           renderRow={rowData =>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
