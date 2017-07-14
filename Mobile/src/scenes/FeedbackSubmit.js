@@ -18,6 +18,7 @@ import {
   Dimensions,
 } from 'react-native';
 import PropTypes from 'prop-types';
+import translate from '../translation';
 
 // Import actions
 import { submitFeedbackToServer, uploadImage, sendGoogleAnalytics } from '../actions';
@@ -143,6 +144,8 @@ class FeedbackSubmit extends Component {
   }
 
   renderButtons = (type) => {
+    const { language } = this.props.user;
+
     if (this.props.feedback.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
@@ -151,7 +154,7 @@ class FeedbackSubmit extends Component {
       <View style={{ flexDirection: 'row', paddingTop:10 }}>
         <View style={{ flex: 3.5 }}>
           <Button onPress={this.submitFeedback}>
-            Submit Feedback
+            {translate(language).SUBMIT_FEEDBACK}
           </Button>
         </View>
         <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -167,8 +170,7 @@ class FeedbackSubmit extends Component {
   }
 
   render() {
-    const placeholderText = 'Enter your feedback here!';
-
+    const { language } = this.props.user;
     const singleFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
         <View style={{ flexDirection: 'row'}}>
@@ -176,7 +178,7 @@ class FeedbackSubmit extends Component {
             multiline={Boolean(true)}
             onChangeText={feedback => this.setState({ feedback })}
             style={[styles.feedbackInput, { flex: 1 }]}
-            placeholder={placeholderText}
+            placeholder={translate(language).ENTER_FEEDBACK}
             placeholderTextColor="#d0d0d0"f
             value={this.state.feedback}
             maxLength={500}
@@ -195,7 +197,7 @@ class FeedbackSubmit extends Component {
               multiline={Boolean(true)}
               onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
               style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1 }]}
-              placeholder={'Positives: What is something that positively contributed to sales and conversion?'}
+              placeholder={translate(language).POSITIVE_FILL_TEXT}
               placeholderTextColor="#d0d0d0"
               value={this.state.positiveFeedback}
               maxLength={500}
@@ -214,7 +216,7 @@ class FeedbackSubmit extends Component {
                 this.setState({ height: event.nativeEvent.contentSize.height });
               }}
               style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1 }]}
-              placeholder={'Negatives: What is something that negatively impacted sales and conversion?'}
+              placeholder={translate(language).NEGATIVE_FILL_TEXT}
               placeholderTextColor="#d0d0d0"
               value={this.state.negativeFeedback}
               maxLength={500}

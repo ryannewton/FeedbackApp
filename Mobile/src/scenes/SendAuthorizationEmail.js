@@ -12,6 +12,7 @@ import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth1.jpg';
+import translate from '../translation';
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -34,33 +35,38 @@ class SendAuthorizationEmail extends Component {
     }
   }
 
-  renderSignupButton = () => {
+  renderSignupButton = (TEXT) => {
     return (
       <Button onPress={this.sendAuthorizationEmail}>
-        Send Authorization Email
+        {TEXT}
       </Button>
     );
   }
 
-  renderButtons = () => {
+  renderButtons = (TEXT) => {
     if (this.props.auth.loading) {
       return <Spinner />;
     }
 
     return (
       <View style={{ flex: 1 }}>
-        {this.renderSignupButton()}
+        {this.renderSignupButton(TEXT)}
       </View>
     );
   }
 
   render() {
+    const { language } = this.props.user;
+    const {
+      ENTER_EMAIL,
+      SEND_EMAIL,
+    } = translate(language)
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
           {/* Email input */}
           <Fumi
-            label={'Enter Your Email Address'}
+            label={ENTER_EMAIL}
             iconClass={FontAwesomeIcon}
             iconName={'envelope'}
             iconColor={'#00A2FF'}
@@ -82,7 +88,7 @@ class SendAuthorizationEmail extends Component {
 
           {/* Confirmation button, and 'go to login' button */}
           <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
-            {this.renderButtons()}
+            {this.renderButtons(SEND_EMAIL)}
           </View>
         </Image>
       </TouchableWithoutFeedback>
