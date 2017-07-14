@@ -6,16 +6,11 @@ import store from './store';
 import * as actions from '../actions';
 import { ROOT_STORAGE } from '../constants';
 
-async function loadToken() {
+async function loadToken(token) {
   try {
-    const token = await AsyncStorage.getItem(`${ROOT_STORAGE}token`) || null;
-    if (token === null) {
-      store.dispatch(actions.authorizeUserFail());
-    } else {
-      store.dispatch(actions.pullFeedback(token));
-      store.dispatch(actions.pullSolutions(token));
-      store.dispatch(actions.pullGroupInfo(token));
-    }
+    store.dispatch(actions.pullFeedback(token));
+    store.dispatch(actions.pullSolutions(token));
+    store.dispatch(actions.pullGroupInfo(token));
   } catch (error) {
     console.log('Error running loadToken(): ', error);
   }
@@ -87,9 +82,9 @@ async function clearAsyncStorage() {
 }
 
 // Initialize saved state
-const loadOnLaunch = () => {
+const loadOnLaunch = (token) => {
   //clearAsyncStorage();
-  loadToken();
+  loadToken(token);
   loadVotes();
   loadDoNotDisplayList();
   loadInstructions();

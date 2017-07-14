@@ -102,7 +102,7 @@ class Authorize extends Component {
             inputStyle={{ color: 'black' }}
             value={this.state.groupSignupCode}
             onChangeText={text => this.setState({ groupSignupCode: text })}
-            keyboardType="phone-pad"
+
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}

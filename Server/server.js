@@ -300,7 +300,7 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode, languag
 
 app.post('/verifyEmail', upload.array(), (req, res) => {
   const { email, code } = req.body;
-  let connectionString = `
+  const connectionString = `
     SELECT a.id as userId, a.language, b.groupName, b.id as groupId
     FROM users a
     LEFT JOIN groups b

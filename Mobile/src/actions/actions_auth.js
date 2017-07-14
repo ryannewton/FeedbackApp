@@ -46,7 +46,7 @@ export const authorizeUserFail = error => ({
 
 export const authorizeUserSuccess = token => (
   (dispatch) => {
-    loadOnLaunch();
+    loadOnLaunch(token);
     return { type: AUTHORIZE_USER_SUCCESS, payload: token };
   }
 );
