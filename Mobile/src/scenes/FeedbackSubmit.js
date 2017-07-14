@@ -35,6 +35,8 @@ class FeedbackSubmit extends Component {
       feedback: '',
       positiveFeedback: '',
       negativeFeedback: '',
+      imageWidth: null,
+      imageHeight: null
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit')
@@ -97,33 +99,20 @@ class FeedbackSubmit extends Component {
 
     // If there is no image, don't render anything
     if (!imageURL) {
-      return <View />;
+      return null;
     }
 
     Image.getSize(imageURL, (iwidth, iheight) => {
-      let sizeConstraint = {};
-      if (iwidth > iheight) {
-        sizeConstraint = { width: width*0.45, height: iheight/iwidth*width*0.45 }
-      } else {
-        sizeConstraint = { height: width*0.6, width: iwidth/iheight*width*0.6 }
-      }
-      if (!type) {
-        this.setState({ sizeConstraint });
-      }
-      else if (type === 'positive') {
-        this.setState({ positiveSizeConstraint: sizeConstraint });
-      }
-      else if (type === 'negative') {
-        this.setState({ negativeSizeConstraint: sizeConstraint });
-      }
+      this.setState({imageWidth: iwidth, imageHeight: iheight})
     });
-
-    if (sizeConstraint) {
-      return (
+    return (
         <Image
           source={{ uri: imageURL }}
-          style={[
-            sizeConstraint, {
+          style={[{
+            flex: 1,
+            width: this.state.imageWidth,
+            height: this.state.imageHeight,
+            resizeMode: 'contain',
             shadowColor: 'rgba(0,0,0,1)',
             shadowOpacity: 0.5,
             shadowOffset: { width: 4, height: 4 },
@@ -131,9 +120,9 @@ class FeedbackSubmit extends Component {
             marginTop: 10,
             alignSelf: 'center'
           }]}
+          resizeMode={'contain'}
         />
-      );
-    }
+    );
   }
 
   maybeRenderUploadingOverlay = () => {
@@ -246,7 +235,7 @@ class FeedbackSubmit extends Component {
           </Text>
           {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
           {this.maybeRenderUploadingOverlay()}
-        </View>          
+        </View>
       </TouchableWithoutFeedback>
     );
   }
