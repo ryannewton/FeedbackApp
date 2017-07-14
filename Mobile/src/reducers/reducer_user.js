@@ -47,7 +47,6 @@ const removeItem = (arr, item) => {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case PULL_GROUP_INFO:
-      console.log(action.payload.language, 'pull group info language')
       return { ...state, userId: action.payload.userId, language: action.payload.language};
     case CHANGE_LANGUAGE_CHOICE:
       console.log(action.payload, 'in change_language_choice')
