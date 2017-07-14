@@ -6,6 +6,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { languageChoice } from '../actions';
 
+import l1 from '../../images/backgrounds/l1.png';
+import l2 from '../../images/backgrounds/l2.png';
+import l3 from '../../images/backgrounds/l3.png';
+import l4 from '../../images/backgrounds/l4.png';
+
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -19,7 +24,7 @@ class IntroSlides extends Component {
   languageButtonStyle(language) {
     if (this.state.language === language) {
       return (
-        [styles.buttonStyle, {backgroundColor: 'rgba(0,0,0,0)'}]
+        [styles.buttonStyle]
       );
     }
     return styles.buttonStyle;
@@ -43,29 +48,131 @@ class IntroSlides extends Component {
       );
     } else if (index === 0) {
       return (
-        <View>
-          <Button
-            title="English                                   "
-            textStyle={{alignItems:'flex-start'}}
-            containerViewStyle={{alignItems:'flex-start'}}
-            fontSize={28}
-            buttonStyle={[this.languageButtonStyle('en'), { backgroundColor:'rgba(0,0,0,0)', width: SCREEN_WIDTH, paddingTop: SCREEN_HEIGHT * 0.1, paddingBottom: SCREEN_HEIGHT * 0.23 }]}
+        <View style={{alignItems:'center', paddingTop:SCREEN_HEIGHT * 0.14 }}>
+          <TouchableOpacity
+            style={[this.languageButtonStyle('en'), {
+              flexDirection:'row',
+              alignItems:'center',
+              shadowColor: "#000000",
+              shadowOpacity: 0.7,
+              shadowRadius: 7,
+              shadowOffset: {
+                  height: 1,
+                  width: 1
+                },
+              backgroundColor: '#0081cb', 
+              width: SCREEN_HEIGHT * 0.45, 
+              height: SCREEN_HEIGHT * 0.13, 
+            }]}
             onPress={() => this.languageButtonPress('en')}
           >
-          </Button>
-          <Button
-            title="Spanish                                   "
-            fontSize={28}
-            buttonStyle={[this.languageButtonStyle('es'), { backgroundColor:'rgba(0,0,0,0)', paddingTop: SCREEN_HEIGHT * 0.09, paddingBottom: SCREEN_HEIGHT * 0.09 }]}
-            onPress={() => this.languageButtonPress('es')}
-          />
-          <Button
-            title="Vietnamese                              "
-            textStyle={{textAlign:'left'}}
-            fontSize={28}
-            buttonStyle={[this.languageButtonStyle('vi'), { backgroundColor:'rgba(0,0,0,0)', paddingTop: SCREEN_HEIGHT * 0.09, paddingBottom: SCREEN_HEIGHT * 0.09 }]}
-            onPress={() => this.languageButtonPress('vi')}
-          />
+            <Image
+              source={l1}
+              style={{
+                width: SCREEN_HEIGHT * 0.13,
+                height: SCREEN_HEIGHT * 0.13,
+                resizeMode: 'contain',
+                paddingLeft:SCREEN_HEIGHT*0.02,
+                flex:1.6
+              }}
+            />
+            <Text style={{flex:3, textAlign:'center', paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, fontSize:SCREEN_HEIGHT*0.025, fontWeight:'bold', color:'white'}}>
+              Set default language to English
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[this.languageButtonStyle('en'), {
+              flexDirection:'row',
+              alignItems:'center',
+              shadowColor: "#000000",
+              shadowOpacity: 0.7,
+              shadowRadius: 7,
+              shadowOffset: {
+                  height: 1,
+                  width: 1
+                },
+              backgroundColor: '#f8c61c', 
+              width: SCREEN_HEIGHT * 0.45, 
+              height: SCREEN_HEIGHT * 0.13, 
+            }]}
+            onPress={() => this.languageButtonPress('en')}
+          >
+            <Image
+              source={l2}
+              style={{
+                width: SCREEN_HEIGHT * 0.13,
+                height: SCREEN_HEIGHT * 0.13,
+                resizeMode: 'contain',
+                paddingLeft:SCREEN_HEIGHT*0.02,
+                flex:1.6
+              }}
+            />
+            <Text style={{flex:3, textAlign:'center', paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, fontSize:SCREEN_HEIGHT*0.022, fontWeight:'bold', color:'white'}}>
+              Utilizar el español como idioma predeterminado
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[this.languageButtonStyle('en'), {
+              flexDirection:'row',
+              alignItems:'center',
+              shadowColor: "#000000",
+              shadowOpacity: 0.7,
+              shadowRadius: 7,
+              shadowOffset: {
+                  height: 1,
+                  width: 1
+                },
+              backgroundColor: '#f56b4b', 
+              width: SCREEN_HEIGHT * 0.45, 
+              height: SCREEN_HEIGHT * 0.13, 
+            }]}
+            onPress={() => this.languageButtonPress('en')}
+          >
+            <Image
+              source={l3}
+              style={{
+                width: SCREEN_HEIGHT * 0.13,
+                height: SCREEN_HEIGHT * 0.13,
+                resizeMode: 'contain',
+                paddingLeft:SCREEN_HEIGHT*0.02,
+                flex:1.6
+              }}
+            />
+            <Text style={{flex:3, paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, textAlign:'center', fontSize:SCREEN_HEIGHT*0.022, fontWeight:'bold', color:'white'}}>
+              Sử dụng tiếng Việt làm ngôn ngữ mặc định
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[this.languageButtonStyle('en'), {
+              flexDirection:'row',
+              alignItems:'center',
+              shadowColor: "#000000",
+              shadowOpacity: 0.7,
+              shadowRadius: 7,
+              shadowOffset: {
+                  height: 1,
+                  width: 1
+                },
+              backgroundColor: '#f44242', 
+              width: SCREEN_HEIGHT * 0.45, 
+              height: SCREEN_HEIGHT * 0.13, 
+            }]}
+            onPress={() => this.languageButtonPress('en')}
+          >
+            <Image
+              source={l4}
+              style={{
+                width: SCREEN_HEIGHT * 0.13,
+                height: SCREEN_HEIGHT * 0.13,
+                resizeMode: 'contain',
+                paddingLeft:SCREEN_HEIGHT*0.02,
+                flex:1.6
+              }}
+            />
+            <Text style={{flex:3, textAlign:'center', paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, fontSize:SCREEN_HEIGHT*0.027, fontWeight:'bold', color:'white'}}>
+              将简体中文设置为默认语言
+            </Text>
+          </TouchableOpacity>
         </View>
       )
     } else {

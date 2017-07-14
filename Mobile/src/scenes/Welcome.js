@@ -5,7 +5,7 @@ import { AppLoading } from 'expo';
 import Slides from '../components/IntroSlides';
 
 // Import Images
-import pageZeroImage from '../../images/backgrounds/language.jpg';
+import pageZeroImage from '../../images/backgrounds/language3.jpg';
 import pageOneImage from '../../images/backgrounds/1_n.jpg';
 import pageTwoImage from '../../images/backgrounds/2_n.jpg';
 import pageThreeImage from '../../images/backgrounds/3_n.jpg';
