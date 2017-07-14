@@ -382,7 +382,7 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
 });
 
 function insertText(res, targetId, type, text) {
-  const supportedLanguages = ['en', 'es', 'vi'];
+  const supportedLanguages = ['en', 'es', 'vi', 'zh-cn'];
   supportedLanguages.forEach((language) => {
     googleTranslate.translate(text, language, (err, translation) => {
       if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2');
