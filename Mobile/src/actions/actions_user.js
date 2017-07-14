@@ -13,6 +13,7 @@ import {
   LOAD_SOLUTION_DOWNVOTES,
   LOAD_DO_NOT_DISPLAY_LIST,
   ADD_TO_DO_NOT_DISPLAY_LIST,
+  CHANGE_LANGUAGE_CHOICE,
 } from './types';
 
 // Import constants
@@ -82,6 +83,13 @@ export const addToDoNotDisplayList = feedbackId => (
     AsyncStorage.setItem(`${ROOT_STORAGE}doNotDisplayList`, JSON.stringify(doNotDisplayList));
   }
 );
+
+export const languageChoice = language => (
+  {
+    type: CHANGE_LANGUAGE_CHOICE,
+    payload: language,
+  }
+)
 
 
 export const sendGoogleAnalytics = (page, groupID = 0, feedbackID = 0) => (

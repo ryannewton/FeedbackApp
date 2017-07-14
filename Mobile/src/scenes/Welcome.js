@@ -10,13 +10,14 @@ import pageTwoImage from '../../images/backgrounds/2_n.jpg';
 import pageThreeImage from '../../images/backgrounds/3_n.jpg';
 import pageFourImage from '../../images/backgrounds/4_n.jpg';
 
-
 const SLIDE_DATA = [
+  { text: "Choose your language!", image: pageThreeImage, color: '#03A9F4' },
   { text: 'Welcome to the Suggestion Box!', image: pageOneImage, color: '#03A9F4' },
   { text: 'Anonymously submit feedback for your community...', image: pageTwoImage, color: '#009688' },
   { text: "...and prioritize other members' feedback by voting.", image: pageThreeImage, color: '#03A9F4' },
   { text: "Top feedback will either be addressed or receive an official response", image: pageFourImage, color: '#009688' },
 ];
+
 
 class WelcomeScreen extends Component {
   onSlidesComplete = () => {
@@ -32,8 +33,8 @@ class WelcomeScreen extends Component {
 
 function mapStateToProps(state) {
   console.log('state: ', state);
-  const { token } = state.auth;
-  return { token };
+  const { group } = state
+  return { group };
 }
 
 export default connect(mapStateToProps)(WelcomeScreen);
