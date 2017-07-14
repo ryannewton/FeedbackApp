@@ -190,31 +190,6 @@ function getDomain(email) {
   return re.exec(email)[0].slice(1);
 }
 
-
-function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode) {
-  // Step #3: Add the email, groupId, code, and timestamp to the database
-  const connectionString = 'INSERT INTO users (groupId, email, passcode) VALUES (?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcodeTime=NOW()';
-  connection.query(connectionString, [groupId, email, String(code), String(code), groupId], (err) => {
-    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
-    else if (!email.includes('admin_test')) {
-      // Step #4: Send an email with the code to the user (make sure it shows up in notification)
-      sendEmail([email], defaultFromEmail, 'Verify Your Email Address for the Suggestion Box', 'Enter this passcode: ' + String(code));
-      res.status(200).json(groupSignupCode);
-    }
-    else res.status(200).json(groupSignupCode);
-  });
-}
-
-function generateToken(userInfo) {
-  return jwt.sign(
-    {
-      userId: userInfo.id,
-      groupId: userInfo.groupId,
-      groupName: userInfo.groupName,
-    },
-    process.env.JWT_KEY);
-}
-
 // SAVE PUSH NOTIFICATION TOKEN
 app.post('/savePushToken', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
@@ -272,14 +247,15 @@ app.post('/sendPushNotification', upload.array(), (req, res) => {
 
 // AUTH
 app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
+  const { email, language } = req.body;
+
   // Checks to make sure it is a valid email address
   const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (!re.test(req.body.email)) {
+  if (!re.test(email)) {
     res.status(400).send('Sorry, this does not appear to be a valid email address :(');
   } else {
     // Step #1: Generate a code
     const code = generatePassword(4);
-    const email = req.body.email;
     console.log(code);
 
     // Step #2: Check to see if the user is already in the database
@@ -297,22 +273,35 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
         connection.query(connectionString, [getDomain(email)], (err, rows) => {
           if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
           else if (!rows.length) {
-            sendAuthEmailHelper(res, 0, email, code, 0);
+            sendAuthEmailHelper(res, 0, email, code, 0, language);
           } else {
-            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode);
+            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode, language);
           }
         });
       } else {
-        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode);
+        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode, language);
       }
     });
   }
 });
 
+function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode, language) {
+  // Step #3: Add the email, groupId, code, and timestamp to the database
+  const connectionString = 'INSERT INTO users (groupId, email, passcode, language) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcodeTime=NOW(), language=?';
+  connection.query(connectionString, [groupId, email, String(code), language, String(code), groupId, language], (err) => {
+    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
+    else if (!email.includes('admin_test')) {
+      // Step #4: Send an email with the code to the user (make sure it shows up in notification)
+      sendEmail([email], defaultFromEmail, 'Suggestion Box: Verify Your Email Address', 'Enter this passcode: ' + String(code));
+      res.status(200).json(groupSignupCode);
+    } else res.status(200).json(groupSignupCode);
+  });
+}
+
 app.post('/verifyEmail', upload.array(), (req, res) => {
   const { email, code } = req.body;
   let connectionString = `
-    SELECT a.id, b.groupName, b.id as groupId
+    SELECT a.id as userId, a.language, b.groupName, b.id as groupId
     FROM users a
     LEFT JOIN groups b
     ON a.groupId = b.id
@@ -321,10 +310,14 @@ app.post('/verifyEmail', upload.array(), (req, res) => {
     if (err) res.status(400).send('Sorry the server is experiencing an error - G2D6');
     else if (!user.length) res.status(400).send('Sorry, your email verification code is incorrect');
     else if (!user[0].groupName) res.status(200).json({ needsGroupSignupCode: true });
-    else if (user[0].id && user[0].groupName && user[0].groupId) res.status(200).json({ needsGroupSignupCode: false, token: generateToken(user[0]) });
+    else if (user[0].userId && user[0].groupName && user[0].groupId && user[0].language) res.status(200).json({ needsGroupSignupCode: false, token: generateToken(user[0]) });
     else res.status(400).send('Sorry the server is experiencing an error - G2D7');
   });
 });
+
+function generateToken(userInfo) {
+  return jwt.sign(userInfo, process.env.JWT_KEY);
+}
 
 app.post('/authorizeUser', upload.array(), (req, res) => {
   const { email, code, groupSignupCode } = req.body;
@@ -339,7 +332,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
     else {
       // Step #1: Query the database for the userinfo associated with the email
       connectionString = `
-        SELECT a.id, a.groupId, b.groupName
+        SELECT a.id AS userId, a.language, a.groupId, b.groupName
         FROM users a
         LEFT JOIN groups b
         ON a.groupId = b.id
@@ -372,7 +365,7 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
   // Step #1: Query the database for the groupId associated with the email address, passcode, and admin passcode in req.body
   const { email, groupAdminCode, code } = req.body;
   const connectionString = `
-    SELECT a.id, a.groupId, b.groupName
+    SELECT a.id AS userId, a.language, a.groupId, b.groupName
     FROM users a
     JOIN groups b
     ON a.groupId = b.id
@@ -388,22 +381,21 @@ app.post('/authorizeAdminUser', upload.array(), (req, res) => {
   });
 });
 
-function insertText(targetId, type, text) {
+function insertText(res, targetId, type, text) {
   const supportedLanguages = ['en', 'es', 'vi'];
-  supportedLanguages.forEach(language => {
-    googleTranslate.translate(text, language, function(err, translation) {
-      if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2')
+  supportedLanguages.forEach((language) => {
+    googleTranslate.translate(text, language, (err, translation) => {
+      if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2');
       else {
-        console.log('translation: ', translation);
-        let { translatedText, detectedSourceLanguage } = translation;
-        let connectionString = 'INSERT INTO translatedText SET ?';
+        const { translatedText, detectedSourceLanguage } = translation;
+        const connectionString = 'INSERT INTO translatedText SET ?';
         connection.query(connectionString,
           {
             targetId,
             type,
             translatedText,
             translatedFrom: detectedSourceLanguage,
-            language
+            language,
           }, (err) => {
             if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - JKD1');
           }
@@ -441,7 +433,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
               else {
                 // Insert text
-                insertText(result.insertId, 'feedback', text);
+                insertText(res, result.insertId, 'feedback', text);
 
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
@@ -480,7 +472,7 @@ app.post('/submitSolution', upload.array(), (req, res) => {
               if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 2579');
               else {
                 // Insert text
-                insertText(result.insertId, 'solution', text);
+                insertText(res, result.insertId, 'solution', text);
 
                 // Send Email to Moderators
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
@@ -507,7 +499,7 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
         else {
           // Insert text
-          insertText(feedback.id, 'reply', officialReply);
+          insertText(res, feedback.id, 'reply', officialReply);
 
           // Send Email to Moderators
           const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
@@ -806,8 +798,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       ON a.feedbackId = d.id
       WHERE d.groupId=?`;
       connection.query(connectionString, [language, groupId], (err, rows) => {
-        //if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
-        if (err) console.log(err);
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         else {
           const adjRows = rows.map((row) => {
             if (!row.upvotes) { row.upvotes = 0; }
