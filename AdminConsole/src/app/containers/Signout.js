@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { signoutUser } from '../redux/actions';
 
 class Signout extends Component {
@@ -12,4 +13,4 @@ class Signout extends Component {
   }
 }
 
-export default connect(null, { signoutUser })(Signout);
+export default withRouter(connect(null, { signoutUser })(Signout));

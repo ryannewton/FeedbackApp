@@ -29,9 +29,10 @@ export const MainRoutes = () => {
 
       <Route path="/approveFeedback" component={ApproveFeedback} />
       <Route path="/approveSolutions" component={ApproveSolutions} />
-      <Route path="/authorizeUser" component={AuthorizeUser} />
       <Route path="/manageFeedback" component={ManageFeedback} />
+
       <Route path="/sendCode" component={SendCode} />
+      <Route path="/authorize" component={AuthorizeUser} />
       <Route path="/signout" component={Signout} />
 
       <Route path="*" component={PageNotFound} />

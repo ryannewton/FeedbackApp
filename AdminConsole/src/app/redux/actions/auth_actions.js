@@ -16,7 +16,6 @@ import { http } from '../../constants';
 export const authorizeUserSuccess = token => (
   (dispatch) => {
     localStorage.setItem('token', token);
-    browserHistory.push('/approvefeedback');
     return {
       type: AUTHORIZE_USER_SUCCESS,
       payload: token,
@@ -29,7 +28,7 @@ export const authorizeUserFail = error => ({
   payload: error,
 });
 
-export const sendAuthorizationEmail = (email) => (
+export const sendAuthorizationEmail = ({ email, history }) => (
   (dispatch) => {
     dispatch({ type: SEND_AUTHORIZATION_EMAIL });
 
@@ -39,7 +38,7 @@ export const sendAuthorizationEmail = (email) => (
     .then(() => {
       // Change the in-authorization flag in state so we update the component
       dispatch({ type: SEND_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
-      browserHistory.push('/authorize');
+      history.push('/authorize');
     })
     .catch((error) => {
       dispatch({ type: SEND_AUTHORIZATION_EMAIL_FAIL });
@@ -49,7 +48,7 @@ export const sendAuthorizationEmail = (email) => (
   }
 );
 
-export const authorizeUser = (email, authCode, adminCode) => (
+export const authorizeUser = ({ email, authCode, adminCode, history }) => (
   (dispatch) => {
     dispatch({ type: AUTHORIZE_USER });
 
@@ -59,6 +58,7 @@ export const authorizeUser = (email, authCode, adminCode) => (
     .then((response) => {
       const token = String(response.data);
       dispatch(authorizeUserSuccess(token));
+      history.push('/approveFeedback');
     })
     // If not, show an error message
     .catch((error) => {

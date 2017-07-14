@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { authorizeUser } from '../redux/actions';
 
 // Import components
@@ -13,9 +14,9 @@ class AuthorizeUser extends Component {
   }
 
   handleSubmit = () => {
-    const { email } = this.props;
+    const { email, history } = this.props;
     const { authCode, adminCode } = this.state;
-    this.props.authorizeUser(email, authCode, adminCode);
+    this.props.authorizeUser({ email, authCode, adminCode, history });
   }
 
   render() {
@@ -76,4 +77,4 @@ function mapStateToProps(state) {
   return { email };
 }
 
-export default connect(mapStateToProps, { authorizeUser })(AuthorizeUser);
+export default withRouter(connect(mapStateToProps, { authorizeUser })(AuthorizeUser));

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { sendAuthorizationEmail } from '../redux/actions';
 
 // Import components
@@ -13,7 +14,9 @@ class SendCode extends Component {
   }
 
   handleSubmit = () => {
-    this.props.sendAuthorizationEmail(this.state.email);
+    const { history } = this.props;
+    const { email } = this.state;
+    this.props.sendAuthorizationEmail({ email, history });
   }
 
   logoSection() {
@@ -55,4 +58,4 @@ function mapStateToProps(state) {
   return { email };
 }
 
-export default connect(mapStateToProps, { sendAuthorizationEmail })(SendCode);
+export default withRouter(connect(mapStateToProps, { sendAuthorizationEmail })(SendCode));

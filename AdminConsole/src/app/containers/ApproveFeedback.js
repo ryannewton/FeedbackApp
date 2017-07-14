@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router';
 import { pullFeedback } from '../redux/actions';
 import RequireAuth from '../components/RequireAuth';
 
@@ -74,4 +75,4 @@ function mapStateToProps(state) {
   return { feedback };
 }
 
-export default connect(mapStateToProps, { pullFeedback })(ApproveFeedback);
+export default withRouter(connect(mapStateToProps, { pullFeedback })(ApproveFeedback));
