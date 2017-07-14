@@ -4,6 +4,7 @@ import { Text, View, TouchableOpacity, LayoutAnimation, Platform } from 'react-n
 import Menu, { MenuOptions, MenuOption, MenuTrigger, MenuContext } from 'react-native-menu';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
+import translate from '../../translation'
 
 // Import components, styles, and actions
 import { changeFilterMethod, setSearchQuery, searchInProgress } from '../../actions';
@@ -121,7 +122,12 @@ class FeedbackSubmitHeader extends Component {
 
     const renderTouchable = () => <TouchableOpacity />;
     const { menuOptions, divider, pickerStyle } = styles;
-
+    const { language } = this.props
+    const { MOST_POPULAR,
+            THIS_WEEK,
+            TODAY,
+            MY_FEEDBACK,
+    } = translate(language);
     return (
       <View style={pickerStyle}>
         <MenuContext>
@@ -140,7 +146,7 @@ class FeedbackSubmitHeader extends Component {
                 renderTouchable={renderTouchable}
                 style={this.hasDisabledStyle('all')}
               >
-                <Text>All</Text>
+                <Text>{MOST_POPULAR}</Text>
               </MenuOption>
               <View style={divider} />
               <MenuOption
@@ -148,21 +154,21 @@ class FeedbackSubmitHeader extends Component {
                 renderTouchable={renderTouchable}
                 style={this.hasDisabledStyle('this_week')}
               >
-                <Text>This week</Text>
+                <Text>{THIS_WEEK}</Text>
               </MenuOption>
               <MenuOption
                 value="today"
                 renderTouchable={renderTouchable}
                 style={this.hasDisabledStyle('today')}
               >
-                <Text>Today</Text>
+                <Text>{TODAY}</Text>
               </MenuOption>
               <MenuOption
                 value="my_feedback"
                 renderTouchable={renderTouchable}
                 style={this.hasDisabledStyle('my_feedback')}
               >
-                <Text>My Feedback</Text>
+                <Text>{MY_FEEDBACK}</Text>
               </MenuOption>
             </MenuOptions>
           </Menu>
@@ -183,7 +189,8 @@ class FeedbackSubmitHeader extends Component {
 
 const mapStateToProps = (state) => {
   const { feedback } = state;
-  return { feedback };
+  const { language } = state.user
+  return { feedback, language };
 };
 
 export default connect(mapStateToProps, { changeFilterMethod, setSearchQuery, searchInProgress })(FeedbackSubmitHeader);

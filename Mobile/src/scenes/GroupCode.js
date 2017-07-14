@@ -15,6 +15,7 @@ import styles from '../styles/scenes/AuthorizeStyles';
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth3.jpg';
+import translate from '../translation'
 
 class Authorize extends Component {
   constructor(props) {
@@ -64,9 +65,10 @@ class Authorize extends Component {
   }
 
   renderSignupButton() {
+    const { language } = this.props.user
     return (
       <Button onPress={this.authorizeUser}>
-        Join Group
+        {translate(language).JOIN_GROUP}
       </Button>
     );
   }
@@ -84,15 +86,16 @@ class Authorize extends Component {
   }
 
   render() {
+    const { language } = this.props.user
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
           <Text style={{ fontWeight: '500', padding: 20, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
-            {'Please enter your organization\'s unique group code to join your organization.'}
+            {translate(language).GROUP_DESCRIPTION}
           </Text>
           {/* Email input */}
           <Fumi
-            label={'Your Group Code'}
+            label={translate(language).GROUP_CODE}
             iconClass={FontAwesomeIcon}
             iconName={'user-circle'}
             iconColor={'#00A2FF'}
@@ -133,8 +136,8 @@ Authorize.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { auth, feedback, group } = state;
-  return { auth, feedback, group };
+  const { auth, feedback, group, user } = state;
+  return { auth, feedback, group, user };
 }
 
 

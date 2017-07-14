@@ -49,7 +49,6 @@ export default (state = INITIAL_STATE, action) => {
     case PULL_GROUP_INFO:
       return { ...state, userId: action.payload.userId, language: action.payload.language};
     case CHANGE_LANGUAGE_CHOICE:
-      console.log(action.payload, 'in change_language_choice')
       return { ...state, language: action.payload };
     case LOAD_DO_NOT_DISPLAY_LIST:
       return { ...state, doNotDisplayList: action.payload };

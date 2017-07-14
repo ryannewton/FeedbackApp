@@ -3,22 +3,32 @@ import React, { Component } from 'react';
 import { TouchableOpacity, Alert, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
+import translate from '../../translation'
 
-const TEXT_INTRO = 'Join me on Suggestion Box!\n\nGROUP CODE: ';
+
 const APP_STORE_URL = 'https://appurl.io/j4kj90r2';
 
 class SendInviteTextButton extends Component {
+  textIntro() {
+    return translate(this.props.language).TEXT_INTRO;
+  }
   shareAppAlert = () => {
     const textLink = this.buildTextLink(this.props.groupAuthCode);
+    const { language } = this.props;
+    const { INVITE_OTHERS,
+            INVITE_OTHERS_BODY,
+            DISMISS,
+            SHARE,
+          } = translate(language);
 
     return (
       Alert.alert(
-        'Invite others',
-        'Help others in your community voice their feedback through Suggestion Box.',
+        INVITE_OTHERS,
+        INVITE_OTHERS_BODY,
         [
-          { text: 'Dismiss' },
+          { text: DISMISS },
           {
-            text: 'Share',
+            text: SHARE,
             onPress: () => {
               Linking.openURL(textLink)
               .catch(error => console.log('Error running shareAppAlert(): ', error));
@@ -32,7 +42,7 @@ class SendInviteTextButton extends Component {
 
   buildTextLink = () => {
     let textLink = '';
-    const message = `${TEXT_INTRO}${this.props.groupAuthCode}\n\n `;
+    const message = `${this.textIntro()}${this.props.groupAuthCode}\n\n `;
 
     // Use percent-encoding for Android
     if (Platform.OS === 'android') {
@@ -58,7 +68,8 @@ class SendInviteTextButton extends Component {
 
 function mapStateToProps(state) {
   const { groupAuthCode } = state.group;
-  return { groupAuthCode };
+  const { language } = state.user;
+  return { groupAuthCode, language };
 }
 
 export default connect(mapStateToProps)(SendInviteTextButton);
