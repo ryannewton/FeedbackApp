@@ -31,7 +31,6 @@ const translate = language => {
         TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
         ENTER_FEEDBACK: 'Enter your feedback here!',
         SIGN_OUT: 'Sign Out'
-
       }
     case 'es':
       return {
@@ -66,9 +65,69 @@ const translate = language => {
         SIGN_OUT: 'Sign Out'
       }
     case 'vi':
-      return null;
-    case 'cn-zh':
-      return null;
+      return {
+        INTRO_SLIDE_1: 'Welcome to the Suggestion Box!',
+        INTRO_SLIDE_2: 'Anonymously submit feedback for your community...',
+        INTRO_SLIDE_3: "...and prioritize other members' feedback by voting.",
+        INTRO_SLIDE_4: 'Top feedback will either be addressed or receive an official response',
+        SUBMIT_FEEDBACK: 'Submit Feedback',
+        POSITIVE_FILL_TEXT: 'Positives: What is something that positively contributed to sales and conversation?',
+        NEGATIVE_FILL_TEXT: 'Negatives: What is something that negatively impacted sales and conversation?',
+        ALL_FEEDBACK: 'All Feedback',
+        INVITE_OTHERS: 'Invite others',
+        INVITE_OTHERS_BODY: 'Help others in your community voice their feedback through Suggestion Box.',
+        SHARE: 'Share',
+        DISMISS: 'Dismiss',
+        PROPOSED_SOLUTIONS: 'Proposed Solutions',
+        NEW_FEEDBACK: 'New Feedback',
+        MOST_POPULAR: 'Most popular',
+        THIS_WEEK: 'This week',
+        TODAY: 'Today',
+        MY_FEEDBACK: 'My Feedback',
+        ENTER_EMAIL: 'Enter Your Email Address',
+        SEND_EMAIL: 'Send Authorization Email',
+        EMAIL_BLURB_FOR_CODE: 'Great! We sent an email with a 4-digit code to',
+        ENTER_CODE: 'Enter Code from Email',
+        VERIFY_EMAIL: 'Verify Email',
+        GROUP_DESCRIPTION: "Please enter your organization's unique group code to join your organization.",
+        GROUP_CODE: 'Your Group Code',
+        JOIN_GROUP: 'Join Group',
+        TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
+        ENTER_FEEDBACK: 'Enter your feedback here!',
+        SIGN_OUT: 'Sign Out'
+      }
+    case 'zh-cn':
+      return {
+        INTRO_SLIDE_1: '欢迎使用 Suggestion Box， 一个多平台的电子意见箱',
+        INTRO_SLIDE_2: '匿名地向你所在的组织提交反馈与建议',
+        INTRO_SLIDE_3: "为你所赞成的反馈投票",
+        INTRO_SLIDE_4: '关注度最高的反馈会被管理层采纳或受到官方的回复',
+        SUBMIT_FEEDBACK: '提交反馈',
+        POSITIVE_FILL_TEXT: '积极反馈: 有什么可以帮助我们的销售和团队工作？',
+        NEGATIVE_FILL_TEXT: '负面反馈：有什么正在影响我们的销售和团队工作？',
+        ALL_FEEDBACK: '所有反馈',
+        INVITE_OTHERS: '邀请朋友',
+        INVITE_OTHERS_BODY: '帮助你所在组织中的其他人用Suggestion Box表达他们的意见和想法',
+        SHARE: '分享',
+        DISMISS: '取消',
+        PROPOSED_SOLUTIONS: '用户提议的解决方案',
+        NEW_FEEDBACK: '新反馈',
+        MOST_POPULAR: '最多人赞成',
+        THIS_WEEK: '本周',
+        TODAY: '今天',
+        MY_FEEDBACK: '我提交的反馈',
+        ENTER_EMAIL: '输入你的电子邮箱地址',
+        SEND_EMAIL: '发送邮箱验证码',
+        EMAIL_BLURB_FOR_CODE: '一个四位数邮箱验证码已发送至',
+        ENTER_CODE: '请输入验证码',
+        VERIFY_EMAIL: '验证邮箱',
+        GROUP_DESCRIPTION: '请输入你的组织独有的Suggestion Box识别码',
+        GROUP_CODE: '你组织的识别码',
+        JOIN_GROUP: '加入你的组织',
+        ENTER_FEEDBACK: 'Enter your feedback here!',
+        TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
+        SIGN_OUT: 'Sign Out'
+      }
     }
 }
 
