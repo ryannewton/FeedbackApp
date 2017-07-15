@@ -4,6 +4,11 @@ node_modules/
 *.log
 npm-debug.log.*
 
-build/
-dist/
-public/assets/
+docs/public/assets/app.bundle.js
+docs/public/assets/app.styles.css
+docs/public/assets/fontawesome-webfont.svg
+docs/public/assets/glyphicons-halflings-regular.svg
+docs/public/assets/ionicons.svg
+docs/public/assets/app.bundle.js.map
+docs/public/assets/app.vendor.bundle.js
+docs/public/assets/app.vendor.bundle.js.map
