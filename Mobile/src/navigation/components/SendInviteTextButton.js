@@ -54,6 +54,9 @@ class SendInviteTextButton extends Component {
   }
 
   render() {
+    if (this.props.groupName === 'Gymboree') {
+      return null;
+    }
     return (
       <TouchableOpacity
         sytle={{ width: 50}}
@@ -67,9 +70,9 @@ class SendInviteTextButton extends Component {
 
 
 function mapStateToProps(state) {
-  const { groupAuthCode } = state.group;
+  const { groupAuthCode, groupName } = state.group;
   const { language } = state.user;
-  return { groupAuthCode, language };
+  return { groupAuthCode, language, groupName };
 }
 
 export default connect(mapStateToProps)(SendInviteTextButton);

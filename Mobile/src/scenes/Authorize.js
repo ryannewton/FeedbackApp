@@ -13,7 +13,8 @@ import styles from '../styles/scenes/AuthorizeStyles';
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth2.jpg';
-import translate from '../translation';
+import translate from '../translation'
+
 
 class Authorize extends Component {
   constructor(props) {
