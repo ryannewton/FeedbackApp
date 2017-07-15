@@ -10,6 +10,8 @@ const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
 const Jimp = require('jimp'); // For image processing
 const stopwords = require('stopwords').english;
+const path = require('path');
+
 var googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
 
 aws.config.loadFromPath('config.json'); // load aws config
@@ -20,6 +22,7 @@ const app = express();
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 app.use(express.static('public'));
+app.use(express.static('public/assets/'));
 
 if (!process.env.db) {
   const cors = require('cors'); // Uncomment for development server
@@ -37,6 +40,10 @@ const connection = mysql.createConnection({
 const defaultFromEmail = 'SuggestionBox@suggestionboxapp.com';
 
 connection.connect();
+
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/admin.html'));
+});
 
 // Text matching algorithm
 function textMatch(newQuestion) {
