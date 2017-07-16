@@ -19,55 +19,28 @@ export const navigation = {
     // Manage Menu
     {
       id: 1,
-      group: 'Manage',
+      group: 'Admin Console',
       menus: [
         {
-          name: 'Approve Feedback',
-          linkTo: '/admin/approveFeedback',
+          name: 'Approve',
+          linkTo: '/admin/approve',
           faIconName: 'fa-check-square-o'
         },
         {
-          name: 'Approve Solutions',
-          linkTo: '/admin/approveSolutions',
-          faIconName: 'fa-check-square'
-        },
-        {
-          name: 'Edit & Delete',
+          name: 'Edit',
           linkTo: '/admin/edit',
-          faIconName: 'fa-comment'
-        },
-      ]
-    },
-    // Insights Menu
-    {
-      id: 2,
-      group: 'Insights & Actions',
-      menus: [
-        {
-          name: 'Key Stats',
-          linkTo: '/admin/keystats',
-          faIconName: 'fa-bar-chart'
+          faIconName: 'fa-check-square'
         },
         {
           name: 'Dashboard',
           linkTo: '/admin/dashboard',
-          faIconName: 'fa-bar-chart'
-        },
-        {
-          name: 'Respond',
-          linkTo: '/admin/respond',
-          faIconName: 'fa-comment'
-        },
-        {
-          name: 'Form a Focus Group',
-          linkTo: '/admin/focusgroup',
           faIconName: 'fa-comment'
         },
       ]
-    },
+    },    
     // Profile Menu
     {
-      id: 3,
+      id: 2,
       group: 'Profile',
       menus: [
         {

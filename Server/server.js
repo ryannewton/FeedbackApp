@@ -45,6 +45,10 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, './public/admin.html'));
 });
 
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 // Text matching algorithm
 function textMatch(newQuestion) {
   // Step #1 - Pull the previous questions

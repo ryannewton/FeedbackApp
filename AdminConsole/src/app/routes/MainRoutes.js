@@ -27,17 +27,10 @@ export const MainRoutes = () => {
       <Route path="/admin/authorize" component={AuthorizeUser} />
       <Route path="/admin/signout" component={Signout} />
 
-      {/*Manage*/}
-      <Route path="/admin/approveFeedback" component={ApproveFeedback} />
-      <Route path="/admin/approveSolutions" component={ApproveSolutions} />
+      {/*Main*/}
+      <Route path="/admin/approve" component={ApproveFeedback} />
       <Route path="/admin/edit" component={ApproveSolutions} />
-      
-
-      {/*Insights*/}
-      <Route path="/admin/keystats" component={ManageFeedback} />
       <Route path="/admin/dashboard" component={Dashboard} />
-      <Route path="/admin/respond" component={ManageFeedback} />
-      <Route path="/admin/focusgroup" component={ManageFeedback} />
 
       {/*All other*/}
       <Route path="*" component={PageNotFound} />
