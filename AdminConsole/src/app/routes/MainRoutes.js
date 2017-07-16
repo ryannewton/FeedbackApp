@@ -23,18 +23,27 @@ import {
 export const MainRoutes = () => {
   return (
     <Switch>
-      <Route exact path="/" component={Home} />
-      <Route path="/general" component={General} />
-      <Route path="/general/tabPanels" component={TabPanel} />
+      {/*Home*/}
+      <Route exact path="/admin/" component={Home} />
 
-      <Route path="/approveFeedback" component={ApproveFeedback} />
-      <Route path="/approveSolutions" component={ApproveSolutions} />
-      <Route path="/manageFeedback" component={ManageFeedback} />
+      {/*Auth*/}
+      <Route path="/admin/sendCode" component={SendCode} />
+      <Route path="/admin/authorize" component={AuthorizeUser} />
+      <Route path="/admin/signout" component={Signout} />
 
-      <Route path="/sendCode" component={SendCode} />
-      <Route path="/authorize" component={AuthorizeUser} />
-      <Route path="/signout" component={Signout} />
+      {/*Manage*/}
+      <Route path="/admin/approveFeedback" component={ApproveFeedback} />
+      <Route path="/admin/approveSolutions" component={ApproveSolutions} />
+      <Route path="/admin/edit" component={ApproveSolutions} />
+      
 
+      {/*Insights*/}
+      <Route path="/admin/keystats" component={ManageFeedback} />
+      <Route path="/admin/dashboard" component={ManageFeedback} />
+      <Route path="/admin/respond" component={ManageFeedback} />
+      <Route path="/admin/focusgroup" component={ManageFeedback} />
+
+      {/*All other*/}
       <Route path="*" component={PageNotFound} />
     </Switch>
   );

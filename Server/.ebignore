@@ -2,6 +2,5 @@
 .babelrc
 .eslintrc
 .gitignore
-server.js
 package-lock.json
 yarn.lock

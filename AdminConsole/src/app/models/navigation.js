@@ -4,49 +4,81 @@ export const navigation = {
   rightLinks: [
     {
       label:      'Home',
-      link:       '/',
+      link:       '/admin/',
       view:       'home',
       isRouteBtn: true
     },
     {
       label:      'About',
-      link:       '/about',
+      link:       '/admin/about',
       view:       'about',
       isRouteBtn: true
     }
   ],
   sideMenu: [
-    // group menu #1
+    // Manage Menu
     {
       id: 1,
       group: 'Manage',
       menus: [
         {
           name: 'Approve Feedback',
-          linkTo: '/approveFeedback',
+          linkTo: '/admin/approveFeedback',
           faIconName: 'fa-check-square-o'
         },
         {
           name: 'Approve Solutions',
-          linkTo: '/approveSolutions',
+          linkTo: '/admin/approveSolutions',
           faIconName: 'fa-check-square'
         },
         {
-          name: 'Official Reply',
-          linkTo: '/manageFeedback',
+          name: 'Edit & Delete',
+          linkTo: '/admin/edit',
           faIconName: 'fa-comment'
         },
       ]
     },
-    // group menu #2
+    // Insights Menu
     {
       id: 2,
-      group: 'Dashboard',
+      group: 'Insights & Actions',
       menus: [
         {
-          name: 'Dashboard',
-          linkTo: '/dashboard',
+          name: 'Key Stats',
+          linkTo: '/admin/keystats',
           faIconName: 'fa-bar-chart'
+        },
+        {
+          name: 'Dashboard',
+          linkTo: '/admin/dashboard',
+          faIconName: 'fa-bar-chart'
+        },
+        {
+          name: 'Respond',
+          linkTo: '/admin/respond',
+          faIconName: 'fa-comment'
+        },
+        {
+          name: 'Form a Focus Group',
+          linkTo: '/admin/focusgroup',
+          faIconName: 'fa-comment'
+        },
+      ]
+    },
+    // Profile Menu
+    {
+      id: 3,
+      group: 'Profile',
+      menus: [
+        {
+          name: 'Log in',
+          linkTo: '/admin/sendCode',
+          faIconName: 'fa-check-square-o'
+        },
+        {
+          name: 'Log out',
+          linkTo: '/admin/signout',
+          faIconName: 'fa-check-square'
         },
       ]
     },
