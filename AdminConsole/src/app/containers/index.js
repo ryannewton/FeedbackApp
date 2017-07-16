@@ -9,6 +9,7 @@ import TabPanel from './TabPanel';
 import ApproveFeedback from './ApproveFeedback';
 import ApproveSolutions from './ApproveSolutions';
 import AuthorizeUser from './AuthorizeUser';
+import Dashboard from './Dashboard';
 import ManageFeedback from './ManageFeedback';
 import SendCode from './SendCode';
 import Signout from './Signout';
@@ -20,10 +21,14 @@ export {
   PageNotFound,
   TabPanel,
 
+  SendCode,
+  AuthorizeUser,
+  Signout,
+
   ApproveFeedback,
   ApproveSolutions,
-  AuthorizeUser,
   ManageFeedback,
-  SendCode,
-  Signout,
+
+  Dashboard,
+  
 };

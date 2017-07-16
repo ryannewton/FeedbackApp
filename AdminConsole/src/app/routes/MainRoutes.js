@@ -3,21 +3,17 @@ import React from 'react';
 import {
  Route,
  Switch,
- // Router,
 } from 'react-router';
 import {
-  App,
-  General,
   Home,
-  PageNotFound,
-  TabPanel,
-
+  SendCode,
+  AuthorizeUser,
+  Signout,
   ApproveFeedback,
   ApproveSolutions,
-  AuthorizeUser,
   ManageFeedback,
-  SendCode,
-  Signout,
+  Dashboard,
+  PageNotFound,
 } from '../containers';
 
 export const MainRoutes = () => {
@@ -39,7 +35,7 @@ export const MainRoutes = () => {
 
       {/*Insights*/}
       <Route path="/admin/keystats" component={ManageFeedback} />
-      <Route path="/admin/dashboard" component={ManageFeedback} />
+      <Route path="/admin/dashboard" component={Dashboard} />
       <Route path="/admin/respond" component={ManageFeedback} />
       <Route path="/admin/focusgroup" component={ManageFeedback} />
 

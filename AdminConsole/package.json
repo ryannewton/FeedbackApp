@@ -92,6 +92,7 @@
     "prop-types": "^15.5.10",
     "react": "^15.6.1",
     "react-addons-test-utils": "^15.6.0",
+    "react-autosuggest": "^9.3.1",
     "react-bootstrap": "^0.31.0",
     "react-collapse": "^4.0.2",
     "react-dom": "^15.6.1",
