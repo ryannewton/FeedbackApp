@@ -6,39 +6,15 @@ import MainRoutes from '../routes/MainRoutes';
 import * as actions from '../redux/actions';
 import {
   Header,
-  // Footer,
   AsideLeft,
   AsideRight
 } from '../components';
-import { Modals } from '../views';
-import { appConfig } from '../config';
 import { navigation } from '../models';
 
 class App extends Component {
 
-  static propTypes = {
-    // react-router 4:
-    match:    PropTypes.object.isRequired,
-    location: PropTypes.object.isRequired,
-    history:  PropTypes.object.isRequired,
-
-    sideMenuIsCollapsed: PropTypes.bool,
-    userIsConnected: PropTypes.bool,
-    currentView:     PropTypes.string,
-
-    actions: PropTypes.shape({
-      enterHome: PropTypes.func,
-      leaveHome: PropTypes.func,
-      openSideMenu:   PropTypes.func,
-      closeSideMenu:  PropTypes.func,
-      toggleSideMenu: PropTypes.func
-    })
-  };
-
   state = {
-    appName:          appConfig.APP_NAME,
-    connectionStatus: appConfig.CONNECTION_STATUS,
-    helloWord:        appConfig.HELLO_WORD
+    appName: 'Suggestion Box',
   };
 
   componentDidMount() {
@@ -52,7 +28,7 @@ class App extends Component {
   }
 
   render() {
-    const { appName, connectionStatus, helloWord } = this.state;
+    const { appName, connectionStatus } = this.state;
     const { userIsConnected } = this.props;
     const { sideMenuIsCollapsed, currentView } = this.props;
 
@@ -69,7 +45,6 @@ class App extends Component {
             sideMenu={navigation.sideMenu}
             currentView={currentView}
             isCollapsed={sideMenuIsCollapsed}
-            helloWord={helloWord}
             connectionStatus={connectionStatus}
             userIsConnected={userIsConnected}
           />
@@ -79,9 +54,6 @@ class App extends Component {
             <MainRoutes />
           </AsideRight>
         </div>
-        {/* <Footer /> */}
-        {/* modals cannot be placed anywhere (avoid backdrop or modal placement issues) so all grouped in same component and outside .wrapper*/}
-        <Modals />
       </div>
     );
   }
