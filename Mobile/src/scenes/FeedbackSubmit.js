@@ -16,6 +16,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import translate from '../translation';
@@ -72,13 +73,26 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  addImage = async (type) => {
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
-
+  addImageHelper = async (type, pickerChoice) => {
+    const pickerResult = (pickerChoice == 'takePhoto') ? await ImagePicker.launchCameraAsync() :
+      await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
     // If user selects an image
     if (!pickerResult.cancelled) {
       this.props.uploadImage(pickerResult.uri, type);
     }
+  }
+
+  addImage = async (type) => {
+    Alert.alert(
+      'Upload photo.',
+      '',
+      [
+        {text: 'Take photo...', onPress: () => this.addImageHelper(type, 'takePhoto')},
+        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+        {text: 'Choose from library...', onPress: () => this.addImageHelper(type, 'choosePhoto')},
+      ],
+      { cancelable: false }
+    )
   }
 
   maybeRenderImage = (type) => {
