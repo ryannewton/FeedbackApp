@@ -8,12 +8,34 @@ import { Card } from './common';
 import { approveFeedback, clarifyFeedback, rejectFeedback } from '../redux/actions';
 
 class ApproveFeedbackCard extends Component {
-  renderFeedbackText() {
+
+  //Text, Image, Status, Votes, Solutions, Response, Category, Group, Approved, Date, Translated From
+  render() {
+    return (
+      <div className='clearfix'>
+        <Card>
+          {this.renderFeedbackText()}
+        </Card>
+        <div className='pull-right'>
+          {this.renderActionButtons()}
+        </div>
+      </div>
+    );
+  }
+
+  renderFeedbackText = () => {
+    console.log(this.props.feedback);
     const timestamp = new Date(this.props.feedback.date);
     return (
       <div style={{ marginTop: 10, marginBottom: 20 }}>
         <div style={{ fontWeight: 'bold', fontSize: 14 }}>
           {this.props.feedback.text}
+        </div>
+        <div style={{ fontSize: 8 }}>
+          {this.props.feedback.approved}
+          {this.props.feedback.category}
+          {this.props.feedback.status}
+          {this.props.feedback.approved}
         </div>
         <div style={{ fontSize: 10, float: 'right' }}>
           Submitted <TimeAgo date={timestamp} />
@@ -22,41 +44,13 @@ class ApproveFeedbackCard extends Component {
     );
   }
 
-  renderButtons() {
-    const { feedback, approveFeedback, clarifyFeedback, rejectFeedback } = this.props;
+  renderActionButtons = () => {
     return (
-      <div style={{ marginTop: 20, marginBottom: 5 }}>
-        <button
-          type='button'
-          onClick={() => approveFeedback(feedback)}
-          style={{ ...buttonStyles, backgroundColor: '#6ECFA2' }}
-        >
-          APPROVE
-        </button>
-        <button
-          type='button'
-          onClick={() => clarifyFeedback(feedback)}
-          style={{ ...buttonStyles, backgroundColor: '#F2C63B' }}
-        >
-          CLARIFY
-        </button>
-        <button
-          type='button'
-          onClick={() => rejectFeedback(feedback)}
-          style={{ ...buttonStyles, backgroundColor: '#E5575F' }}
-        >
-          REJECT
-        </button>
+      <div>
+        <button>Reply</button>
+        <button>View Solutions</button>
+        <button>Update</button>
       </div>
-    );
-  }
-
-  render() {
-    return (
-      <Card>
-        {this.renderFeedbackText()}
-        {this.renderButtons()}
-      </Card>
     );
   }
 }

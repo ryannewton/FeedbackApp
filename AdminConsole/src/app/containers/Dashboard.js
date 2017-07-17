@@ -189,14 +189,22 @@ class Dashboard extends Component {
   }
 
   renderKeyStats = () => {
-    //const filteredFeedback = ['a', 'b'];
-    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
-    const filteredSolutions = this.props.solutions.list.filter(this.filterSolutions);
+    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback).sort(this.sortFeedback);
+    const filteredSolutions =
+      this.props.solutions.list
+      .filter((solution) => filteredFeedback.some((feedback) => feedback.id === solution.feedbackId))
+      .filter(this.filterSolutions);
+    const percentOfTopFive = [0,0,0,0,0].reduce((count, item, index) => {
+      if (filteredFeedback.length <= index) return count;
+      else if(filteredFeedback[index].officialReply) return (count + 1);
+      else return count;
+    },0)/5*100;
+
     return (
       <div
         className="row"
         style={{marginBottom: '5px'}}>
-        <div className="col-md-3">
+        <div className="col-md-4">
           <StatsCard
             statValue={filteredFeedback.length || 0}
             statLabel={'New Feedback!'}
@@ -204,7 +212,7 @@ class Dashboard extends Component {
             backColor={'red'}
           />
         </div>
-        <div className="col-md-3">
+        <div className="col-md-4">
           <StatsCard
             statValue={filteredSolutions.length}
             statLabel={'New solutions!'}
@@ -212,20 +220,12 @@ class Dashboard extends Component {
             backColor={'violet'}
           />
         </div>
-        <div className="col-md-3">
+        <div className="col-md-4">
           <StatsCard
-            statValue={'64'}
-            statLabel={'Finished feedback'}
+            statValue={percentOfTopFive}
+            statLabel={'% of Top 5 With Responses'}
             icon={<i className="fa fa-check"></i>}
             backColor={'blue'}
-          />
-        </div>
-        <div className="col-md-3">
-          <StatsCard
-            statValue={'6'}
-            statLabel={'Feedback in progress'}
-            icon={<i className="fa fa-spinner"></i>}
-            backColor={'green'}
           />
         </div>
       </div>
