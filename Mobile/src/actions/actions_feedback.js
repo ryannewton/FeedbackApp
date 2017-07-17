@@ -23,6 +23,7 @@ import {
   CHANGE_FILTER_METHOD,
   SET_SEARCH_QUERY,
   SEARCH_IN_PROGRESS,
+  REMOVE_IMAGE,
 } from './types';
 
 // Import constants
@@ -218,3 +219,9 @@ export const uploadImage = (uri, type) => (
     });
   }
 );
+
+export const removeImage = () => (
+  {
+    type: REMOVE_IMAGE
+  }
+)
