@@ -742,7 +742,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       const { groupId } = decoded;
       const language = decoded.language || 'en';
       const connectionString = `
-      SELECT a.id, a.groupId, a.userId, a.text as backupText, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date
+      SELECT a.id, a.groupId, a.userId, a.text as backupText, a.category, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date
       FROM feedback a
       LEFT JOIN (
         SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes, SUM(noOpinion) as noOpinions
