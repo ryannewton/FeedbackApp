@@ -1,22 +1,22 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
-import { pullFeedback } from '../redux/actions';
 import RequireAuth from '../components/RequireAuth';
 
 // Import Components
 import ApproveFeedbackCard from '../components/ApproveFeedbackCard';
+import ApproveSolutionsCard from '../components/ApproveSolutionsCard';
 import ErrorMessage from '../components/ErrorMessage';
 
 class ApproveFeedback extends Component {
+  constructor(props) {
+    super(props);
+    console.log('Approve', props);
+  }
 
   listFeedback = () => {
     if (this.props.feedback.error) {
       return <ErrorMessage />
-    }
-
-    if (this.props.feedback.loading) {
-      return this.renderLoadingScreen();
     }
 
     if (this.props.feedback.list.length === 0) {
@@ -26,12 +26,39 @@ class ApproveFeedback extends Component {
     return (
       <div>
         {this.props.feedback.list
-          .filter(feedback => feedback.approved)
+          .filter(feedback => !feedback.approved)
           .map(feedback => {
             return (
-              <div className='col-md-10 col-md-offset-1'>
+              <div key={feedback.id}>
                 <ApproveFeedbackCard
-                  key={feedback.id}
+                  feedback={feedback}
+                />
+              </div>
+            )
+          })
+        }
+      </div>
+    );
+  }
+
+  listSolutions = () => {
+    if (this.props.solutions.list.length === 0) {
+      return this.renderEmptyList();
+    }
+
+    return (
+      <div>
+        {this.props.solutions.list
+          .filter(solution => !solution.approved)
+          .map(solution => {
+            let feedback = this.props.feedback.list.find(feedback => {
+              return feedback.id === solution.feedbackId;
+            });
+            return (
+              <div key={solution.id}>
+                <ApproveSolutionsCard
+                  key={solution.id}
+                  solution={solution}
                   feedback={feedback}
                 />
               </div>
@@ -48,25 +75,25 @@ class ApproveFeedback extends Component {
     );
   }
 
-  renderLoadingScreen() {
-    return (
-      <div>Beep boop. Retrieving your feedback...</div>
-    );
-  }
-
-   render() {
-    return (
+ render() {
+  return (
+    <div>
       <div>
         <h5>Feedback Approval Needed: (currently shows approved feedback)</h5>
         {this.listFeedback()}
       </div>
-    );
+      <div>
+        <h5>Solution Approval Needed: (currently shows approved solutions)</h5>
+        {this.listSolutions()}
+      </div>
+    </div>
+  );
   }
 }
 
 function mapStateToProps(state) {
-  const { feedback } = state;
-  return { feedback };
+  const { feedback, solutions } = state;
+  return { feedback, solutions };
 }
 
-export default withRouter(connect(mapStateToProps, { pullFeedback })(RequireAuth(ApproveFeedback)));
+export default withRouter(connect(mapStateToProps)(RequireAuth(ApproveFeedback)));

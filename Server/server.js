@@ -21,8 +21,8 @@ const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 const app = express();
 app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
+
 app.use(express.static('public'));
-app.use(express.static('public/assets/'));
 
 if (!process.env.db) {
   const cors = require('cors'); // Uncomment for development server
@@ -45,9 +45,9 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, './public/admin.html'));
 });
 
-app.get('/admin/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
-});
+// app.get('/admin/*', (req, res) => {
+//   res.sendFile(path.join(__dirname, './public/admin.html'));
+// });
 
 // Text matching algorithm
 function textMatch(newQuestion) {

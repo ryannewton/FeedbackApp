@@ -9,5 +9,5 @@ export {
   Header,
   AsideLeft,
   AsideRight,
-  StatsCard
+  StatsCard,
 };

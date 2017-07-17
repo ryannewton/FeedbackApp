@@ -6,11 +6,6 @@ import Loading from '../containers/Loading';
 
 export default function(ComposedComponent) {
   class RequireAuth extends Component {
-
-    componentWillReceiveProps(nextProps) {
-      console.log('require auth', nextProps);
-    }
-
     render() {
       // First check to see if authenticated failed (it starts off as null)
       if (this.props.authenticated === false) return <Login />;
