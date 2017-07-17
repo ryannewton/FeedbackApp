@@ -75,4 +75,4 @@ function mapStateToProps(state) {
   return { feedback };
 }
 
-export default withRouter(connect(mapStateToProps, { pullFeedback })(ApproveFeedback));
+export default withRouter(connect(mapStateToProps, { pullFeedback })(RequireAuth(ApproveFeedback)));

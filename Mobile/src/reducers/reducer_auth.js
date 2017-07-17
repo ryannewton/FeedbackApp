@@ -27,19 +27,19 @@ export default (state = INITIAL_STATE, action) => {
     case SENDING_AUTHORIZATION_EMAIL:
       return { ...state, loading: true };
     case SENT_AUTHORIZATION_EMAIL_SUCCESS:
-      return { ...state, sentAuthorizationEmail: true, loading: false, error: false, email: action.payload };
+      return { ...state, loading: false, sentAuthorizationEmail: true, error: false, email: action.payload };
     case SENT_AUTHORIZATION_EMAIL_FAIL:
-      return { ...state, sentAuthorizationEmail: false, loading: false, error: action.payload };
+      return { ...state, loading: false, sentAuthorizationEmail: false, error: action.payload };
     case AUTHORIZING_USER:
       return { ...state, loading: true };
     case VERIFYING_EMAIL:
       return { ...state, loading: true };
     case AUTHORIZE_USER_SUCCESS:
-      return { ...state, sentAuthorizationEmail: false, loading: false, loggedIn: true, token: action.payload, error: false };
+      return { ...state, loading: false, sentAuthorizationEmail: false, loggedIn: true, token: action.payload, error: false };
     case AUTHORIZE_USER_FAIL:
       return { ...state, loading: false, loggedIn: false, error: action.payload };
     case NEEDS_GROUP_CODE:
-      return { ...state, needsGroupCode: true, loading: false, code: action.payload };
+      return { ...state, loading: false, needsGroupCode: true,  code: action.payload };
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:

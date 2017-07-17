@@ -6,13 +6,13 @@ export const navigation = {
       label:      'Home',
       link:       '/admin/',
       view:       'home',
-      isRouteBtn: true
+      isRouteBtn: true,
     },
     {
       label:      'About',
       link:       '/admin/about',
       view:       'about',
-      isRouteBtn: true
+      isRouteBtn: true,
     }
   ],
   sideMenu: [
@@ -22,22 +22,22 @@ export const navigation = {
       group: 'Admin Console',
       menus: [
         {
+          name: 'Dashboard',
+          linkTo: '/admin/dashboard',
+          faIconName: 'fa-comment',
+        },
+        {
           name: 'Approve',
           linkTo: '/admin/approve',
-          faIconName: 'fa-check-square-o'
+          faIconName: 'fa-check-square-o',
         },
         {
           name: 'Edit',
           linkTo: '/admin/edit',
-          faIconName: 'fa-check-square'
+          faIconName: 'fa-check-square',
         },
-        {
-          name: 'Dashboard',
-          linkTo: '/admin/dashboard',
-          faIconName: 'fa-comment'
-        },
-      ]
-    },    
+      ],
+    },
     // Profile Menu
     {
       id: 2,
@@ -46,14 +46,14 @@ export const navigation = {
         {
           name: 'Log in',
           linkTo: '/admin/sendCode',
-          faIconName: 'fa-check-square-o'
+          faIconName: 'fa-check-square-o',
         },
         {
           name: 'Log out',
           linkTo: '/admin/signout',
-          faIconName: 'fa-check-square'
+          faIconName: 'fa-check-square',
         },
-      ]
+      ],
     },
-  ]
+  ],
 };
