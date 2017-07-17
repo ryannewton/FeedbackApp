@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StatsCard } from '../components';
+import { Panel } from '../components/common';
 import {
   MenuItem,
   DropdownButton,
@@ -7,7 +8,6 @@ import {
   Button,
   Well,
   Collapse,
-  Panel,
 } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest';
 import { connect } from 'react-redux';
@@ -203,11 +203,11 @@ class Dashboard extends Component {
     return (
       <div
         className="row"
-        style={{marginBottom: '5px'}}>
+        style={{marginBottom: '5px', paddingLeft:15}}>
         <div className="col-md-4">
           <StatsCard
             statValue={filteredFeedback.length || 0}
-            statLabel={'New Feedback!'}
+            statLabel={'New Feedback Submitted!'}
             icon={<i className="fa fa-comments-o"></i>}
             backColor={'red'}
           />
@@ -215,7 +215,7 @@ class Dashboard extends Component {
         <div className="col-md-4">
           <StatsCard
             statValue={filteredSolutions.length}
-            statLabel={'New solutions!'}
+            statLabel={'New solutions Proposed!'}
             icon={<i className="fa fa-tasks"></i>}
             backColor={'violet'}
           />
@@ -279,8 +279,8 @@ class Dashboard extends Component {
 
   renderFeedbackList = () => {
     return (
-      <div className='row'>
-        <Panel>
+      <div className='row' style={{paddingLeft:15}}>
+        <Panel title="Feedback List">
           {console.log(this.props.feedback.list[0])}
           {this.props.feedback.list
           .filter(this.filterFeedback)
@@ -297,21 +297,21 @@ class Dashboard extends Component {
 
   renderTimeControls = () => {
     return (
-      <Panel className='row' header='Filter by Time'>
-        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'all'})}>All</button></div>
-        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button></div>
-        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button></div>
+      <Panel title="Filter by Time">
+        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'all'})}>All</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button>
       </Panel>
     );
   }
 
   renderCategoryControls = () => {
     return (
-      <Panel className='row' header='Filter by Feedback Category'>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'all'})}>All</button></div>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button></div>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button></div>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'other'})}>Other</button></div>
+      <Panel title="Filter by Feedback Category">
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'all'})}>All</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'other'})}>Other</button>
       </Panel>
     );
   }
@@ -325,7 +325,7 @@ class Dashboard extends Component {
     };
 
     return (
-      <Panel className="row">
+      <Panel hasTitle={false}>
         <div className="col-lg-8">
           <div className="input-group custom-search-form">
             <Autosuggest
@@ -363,17 +363,17 @@ class Dashboard extends Component {
 
   renderSearch = () => {
     return (
-      <Panel className='row' header='Search to Filter'>
-        <input value={this.state.searchTerm} onChange={(event) => this.setState({searchTerm: event.target.value})} />
+      <Panel title='Search to Filter'>
+        <input className="form-control" value={this.state.searchTerm} onChange={(event) => this.setState({searchTerm: event.target.value})} />
       </Panel>
     );
   }
 
   renderSort = () => {
     return (
-      <Panel className='row' header='Sort by...'>
-        <div className='col-md-6'><button onClick={() => this.setState({sortBy: 'MostVotes'})}>Most Votes</button></div>
-        <div className='col-md-6'><button onClick={() => this.setState({sortBy: 'MostRecent'})}>Most Recent</button></div>
+      <Panel title='Sort by...'>
+        <button className="btn btn-default" onClick={() => this.setState({sortBy: 'MostVotes'})}>Most Votes</button>
+        <button className="btn btn-default" onClick={() => this.setState({sortBy: 'MostRecent'})}>Most Recent</button>
       </Panel>
     );
   }
