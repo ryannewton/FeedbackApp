@@ -16,7 +16,7 @@ const Header = (props) => {
         className="navbar navbar-static-top"
         role="navigation"
       >
-        [Put the name of the current page here]
+        Administrator Console
         <button onClick={props.signoutUser}>Logout</button>
       </nav>
     </header>
