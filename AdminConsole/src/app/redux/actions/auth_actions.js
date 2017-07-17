@@ -5,7 +5,8 @@ import {
   SIGNOUT_USER,
 } from './types';
 
-import http from '../../constants';
+import http, { ROOT_STORAGE } from '../../constants';
+
 
 export const authorizeUser = ({ email, code }) => (
   (dispatch) => {
@@ -26,7 +27,7 @@ export const authorizeUser = ({ email, code }) => (
 export const authorizeUserSuccess = token => (
   (dispatch) => {
     dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
-    localStorage.setItem('token', token);
+    localStorage.setItem(`${ROOT_STORAGE}token`, token);
   }
 );
 
@@ -38,6 +39,6 @@ export const authorizeUserFail = error => ({
 export const signoutUser = () => (
   (dispatch) => {
     dispatch({ type: SIGNOUT_USER });
-    localStorage.removeItem('token');
+    localStorage.removeItem(`${ROOT_STORAGE}token`);
   }
 );

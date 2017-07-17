@@ -19,11 +19,11 @@ import {
 } from './types';
 
 // Import constants
-import { http } from '../../constants';
+import http, { ROOT_STORAGE } from '../../constants';
 
-export const pullFeedback = () => (
+export const pullFeedback = (token) => (
   (dispatch) => {
-    const token = localStorage.getItem('token');
+    console.log('pull Feedback', token);
     dispatch({ type: REQUEST_FEEDBACK });
 
     http.post('/pullFeedback', { authorization: token })
@@ -43,7 +43,7 @@ export const approveFeedback = (feedback) => (
   (dispatch) => {
     dispatch({ type: APPROVE_FEEDBACK });
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(`${ROOT_STORAGE}token`);
     http.post('/approveFeedback', { authorization: token, feedback })
     .then((response) => {
       dispatch({ type: APPROVE_FEEDBACK_SUCCESS, payload: feedback });
@@ -62,7 +62,7 @@ export const clarifyFeedback = (feedback) => (
     console.log('clarifyFeedback() not functional');
     dispatch({ type: CLARIFY_FEEDBACK });
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(`${ROOT_STORAGE}token`);
     // http.post('/updateFeedback', { authorization: token, feedback })
     // .then((response) => {
     //   console.log('clarifyFeedback() Success');
@@ -82,7 +82,7 @@ export const rejectFeedback = (feedback) => (
     console.log('rejectFeedback() not functional');
     dispatch({ type: REJECT_FEEDBACK });
 
-    // const token = localStorage.getItem('token');
+    // const token = localStorage.getItem(`${ROOT_STORAGE}token`);
     // http.post('/deleteFeedback', { authorization: token, feedback })
     // .then((response) => {
     //   console.log('rejectFeedback() Success');
@@ -100,7 +100,7 @@ export const submitOfficialReply = ({ feedback, officialReply }) => (
   (dispatch) => {
     dispatch({ type: SUBMIT_OFFICIAL_REPLY });
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(`${ROOT_STORAGE}token`);
     http.post('/submitOfficialReply', { authorization: token, feedback, officialReply })
     .then((response) => {
       dispatch({ type: SUBMIT_OFFICIAL_REPLY_SUCCESS, payload: { feedback, officialReply } });

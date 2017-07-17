@@ -1,25 +1,21 @@
-// Generic Containers
-import PageNotFound from './PageNotFound';
-import TabPanel from './TabPanel';
-
-// Specific Containers
-import ApproveFeedback from './ApproveFeedback';
-import ApproveSolutions from './ApproveSolutions';
-import Dashboard from './Dashboard';
-import ManageFeedback from './ManageFeedback';
+import Loading from './Loading';
 import Login from './Login';
 import Logout from './Logout';
 
-export {
-  PageNotFound,
-  TabPanel,
+import Dashboard from './Dashboard';
+import Approve from './Approve';
+import Edit from './Edit';
 
+import PageNotFound from './PageNotFound';
+
+export {
+  Loading,
   Login,
   Logout,
 
-  ApproveFeedback,
-  ApproveSolutions,
-  ManageFeedback,
-
   Dashboard,
+  Approve,
+  Edit,
+
+  PageNotFound,
 };
