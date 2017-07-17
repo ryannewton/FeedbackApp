@@ -16,12 +16,18 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
+  Alert,
 } from 'react-native';
 import PropTypes from 'prop-types';
 import translate from '../translation';
 
 // Import actions
-import { submitFeedbackToServer, uploadImage, sendGoogleAnalytics } from '../actions';
+import {
+  submitFeedbackToServer,
+  uploadImage,
+  sendGoogleAnalytics,
+  removeImage
+} from '../actions';
 
 // Import components, functions, and styles
 import { Button, Spinner } from '../components/common';
@@ -72,13 +78,28 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  addImage = async (type) => {
-    const pickerResult = await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
+
+  addImageHelper = async (type, pickerChoice) => {
+    const pickerResult = (pickerChoice == 'takePhoto') ? await ImagePicker.launchCameraAsync() :
+      await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
 
     // If user selects an image
     if (!pickerResult.cancelled) {
       this.props.uploadImage(pickerResult.uri, type);
     }
+  }
+
+  addImage = async (type) => {
+    Alert.alert(
+      'Upload photo.',
+      '',
+      [
+        {text: 'Take photo...', onPress: () => this.addImageHelper(type, 'takePhoto')},
+        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
+        {text: 'Choose from library...', onPress: () => this.addImageHelper(type, 'choosePhoto')},
+      ],
+      { cancelable: false }
+    )
   }
 
   maybeRenderImage = (type) => {
@@ -169,6 +190,19 @@ class FeedbackSubmit extends Component {
     );
   }
 
+  maybeRenderDeleteButton() {
+    if (!this.props.feedback.imageURL) {
+      return null;
+    }
+    return (
+      <View>
+        <TouchableOpacity onPress={ () => this.props.removeImage() }>
+          <Icon name="remove-circle" size={40} color={'red'}/>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render() {
     const { language } = this.props.user;
     const singleFeedbackBox = (
@@ -186,6 +220,7 @@ class FeedbackSubmit extends Component {
         </View>
         {this.renderButtons()}
         {this.maybeRenderImage()}
+        {this.maybeRenderDeleteButton()}
       </View>
     );
 
@@ -259,5 +294,6 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
   uploadImage,
-  sendGoogleAnalytics
+  sendGoogleAnalytics,
+  removeImage,
 })(FeedbackSubmit);

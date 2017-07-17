@@ -20,6 +20,7 @@ import {
   CHANGE_FILTER_METHOD,
   SET_SEARCH_QUERY,
   SEARCH_IN_PROGRESS,
+  REMOVE_IMAGE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -64,6 +65,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case SUBMITTING_IMAGE:
       return { ...state, loadingImage: true };
+
+    case REMOVE_IMAGE:
+      return { ...state, imageURL: ''};
 
     case SUBMIT_IMAGE_SUCCESS: {
       if (!action.payload.type)

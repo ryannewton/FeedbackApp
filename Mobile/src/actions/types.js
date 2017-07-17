@@ -43,6 +43,7 @@ export const REMOVE_FEEDBACK_DOWNVOTE = 'remove_feedback_downvote';
 export const ADD_FEEDBACK_TO_STATE = 'add_feedback_to_state';
 export const ADD_FEEDBACK_NO_OPINION = 'add_feedback_no_opinion';
 export const REMOVE_FEEDBACK_NO_OPINION = 'remove_feedback_no_opinion';
+export const REMOVE_IMAGE = 'remove_image';
 
 
 // User
