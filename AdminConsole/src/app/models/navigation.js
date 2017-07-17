@@ -45,12 +45,12 @@ export const navigation = {
       menus: [
         {
           name: 'Log in',
-          linkTo: '/admin/sendCode',
+          linkTo: '/admin/login',
           faIconName: 'fa-check-square-o',
         },
         {
           name: 'Log out',
-          linkTo: '/admin/signout',
+          linkTo: '/admin/logout',
           faIconName: 'fa-check-square',
         },
       ],

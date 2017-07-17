@@ -5,12 +5,11 @@ import {
  Switch,
 } from 'react-router';
 import {
-  Login,
   Logout,
 
-  ApproveFeedback,
-  ManageFeedback,
   Dashboard,
+  Approve,
+  Edit,
 
   PageNotFound,
 } from '../containers';
@@ -26,9 +25,9 @@ export const MainRoutes = () =>
       <Route path="/admin/logout" component={Logout} />
 
       {/* Main */}
-      <Route path="/admin/approve" component={ApproveFeedback} />
-      <Route path="/admin/edit" component={ManageFeedback} />
       <Route path="/admin/dashboard" component={Dashboard} />
+      <Route path="/admin/approve" component={Approve} />
+      <Route path="/admin/edit" component={Edit} />
 
       {/* All other */}
       <Route path="*" component={PageNotFound} />

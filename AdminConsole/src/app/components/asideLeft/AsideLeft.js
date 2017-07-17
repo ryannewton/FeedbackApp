@@ -1,7 +1,6 @@
 /* eslint no-console: 0 */
 import React, { PropTypes } from 'react';
 import cx from 'classnames';
-import SearchForm from './searchForm/SearchForm';
 import Menu from './menu/Menu';
 
 

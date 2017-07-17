@@ -28,8 +28,7 @@ class App extends Component {
   }
 
   render() {
-    const { appName, connectionStatus } = this.state;
-    const { userIsConnected } = this.props;
+    const { appName } = this.state;
     const { sideMenuIsCollapsed, currentView } = this.props;
 
     return (
@@ -45,8 +44,6 @@ class App extends Component {
             sideMenu={navigation.sideMenu}
             currentView={currentView}
             isCollapsed={sideMenuIsCollapsed}
-            connectionStatus={connectionStatus}
-            userIsConnected={userIsConnected}
           />
           <AsideRight
             isAnimated={true}

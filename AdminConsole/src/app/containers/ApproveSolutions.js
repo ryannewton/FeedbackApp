@@ -8,13 +8,6 @@ import RequireAuth from '../components/RequireAuth';
 import ApproveSolutionsCard from '../components/ApproveSolutionsCard';
 
 class ApproveSolutions extends Component {
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    if(token) {
-      this.props.pullFeedback();
-      this.props.pullSolutions();
-    }
-  }
 
   listSolutions = () => {
     if (this.props.solutions.loading || this.props.feedback.loading) {

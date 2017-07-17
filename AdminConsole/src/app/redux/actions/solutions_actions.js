@@ -14,11 +14,10 @@ import {
 } from './types';
 
 // Import constants
-import { http } from '../../constants';
+import http, { ROOT_STORAGE } from '../../constants';
 
-export const pullSolutions = () => (
+export const pullSolutions = (token) => (
   (dispatch) => {
-    const token = localStorage.getItem('token');
     dispatch({ type: REQUEST_SOLUTIONS });
 
     http.post('/pullSolutions', { authorization: token })
@@ -37,7 +36,7 @@ export const approveSolution = (solution) => (
   (dispatch) => {
     dispatch({ type: APPROVE_SOLUTION, payload: solution });
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem(`${ROOT_STORAGE}token`);
     http.post('/approveSolution', { authorization: token, solution })
     .then((response) => {
       dispatch({ type: APPROVE_SOLUTION_SUCCESS, payload: solution });
@@ -55,7 +54,7 @@ export const clarifySolution = (solution) => (
     console.log('clarifySolution() not functional');
     dispatch({ type: CLARIFY_SOLUTION, payload: solution });
 
-    // const token = localStorage.getItem('token');
+    // const token = localStorage.getItem(`${ROOT_STORAGE}token`);
     // http.post('', { authorization: token, solution })
     // .then((response) => {
     //   console.log('clarifySolution() success');
@@ -74,7 +73,7 @@ export const rejectSolution = (solution) => (
     console.log('rejectSolution() not functional');
     dispatch({ type: REJECT_SOLUTION, payload: solution });
 
-    // const token = localStorage.getItem('token');
+    // const token = localStorage.getItem(`${ROOT_STORAGE}token`);
     // http.post('/deleteSolution', { authorization: token, solution })
     // .then((response) => {
     //   console.log('rejectSolution() success');

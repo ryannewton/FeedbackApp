@@ -9,12 +9,6 @@ import ApproveFeedbackCard from '../components/ApproveFeedbackCard';
 import ErrorMessage from '../components/ErrorMessage';
 
 class ApproveFeedback extends Component {
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    if(token) {
-      this.props.pullFeedback();
-    }
-  }
 
   listFeedback = () => {
     if (this.props.feedback.error) {

@@ -12,6 +12,7 @@ import Autosuggest from 'react-autosuggest';
 import { connect } from 'react-redux';
 import { Link } from 'react-router'
 import { browserHistory } from 'react-router';
+import RequireAuth from '../components/RequireAuth';
 
 const dataHelper = [
   {ID: 1, NAME: 'North', PARENT: 0},
@@ -348,7 +349,7 @@ function mapStateToProps(state) {
   return { email, emailSentSuccess, loading, authenticated };
 }
 
-export default connect(mapStateToProps, {})(Dashboard);
+export default connect(mapStateToProps, {})(RequireAuth(Dashboard));
 
         //
         // <div className="row">

@@ -8,12 +8,6 @@ import RequireAuth from '../components/RequireAuth';
 import ManageFeedbackCard from '../components/ManageFeedbackCard';
 
 class ManageFeedback extends Component {
-  componentDidMount() {
-    const token = localStorage.getItem('token');
-    if(token) {
-      this.props.pullFeedback();
-    }
-  }
 
   listFeedback = () => {
     if (this.props.feedback.loading) {
