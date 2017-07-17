@@ -73,7 +73,7 @@ Menu.propTypes = {
 };
 
 Menu.defaultProps = {
-  headerBackColor: '#283744'
+  headerBackColor: '#00A2FF'
 };
 
 export default Menu;

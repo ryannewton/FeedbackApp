@@ -8,17 +8,12 @@ const Header = (props) => {
   } = props;
 
   return (
-    <header className="header fixed--header">
-      <a href="/admin" className="logo">
-        { appName }
-      </a>
-      <nav
-        className="navbar navbar-static-top"
-        role="navigation"
-      >
-        Administrator Console
-        <button onClick={props.signoutUser}>Logout</button>
-      </nav>
+    <header className="header fixed--header" style={{backgroundColor:'#00A2FF', height:50}}>
+      <div style={{paddingTop:5}}>
+        <img href="/admin" src={require('../../vendors/img/logo.png')} className="col-xs-2"/>
+        <h4 className="col-xs-9" style={{color:'white'}}>Administrator Console</h4>
+        <button className="btn btn-default" onClick={props.signoutUser}>Logout</button>
+      </div>
     </header>
   );
 };
