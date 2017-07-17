@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { signoutUser } from '../redux/actions';
 
-class Signout extends Component {
+class Logout extends Component {
   componentWillMount() {
     this.props.signoutUser();
   }
@@ -13,4 +13,4 @@ class Signout extends Component {
   }
 }
 
-export default withRouter(connect(null, { signoutUser })(Signout));
+export default withRouter(connect(null, { signoutUser })(Logout));

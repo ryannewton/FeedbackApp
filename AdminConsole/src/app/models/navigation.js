@@ -6,81 +6,54 @@ export const navigation = {
       label:      'Home',
       link:       '/admin/',
       view:       'home',
-      isRouteBtn: true
+      isRouteBtn: true,
     },
     {
       label:      'About',
       link:       '/admin/about',
       view:       'about',
-      isRouteBtn: true
+      isRouteBtn: true,
     }
   ],
   sideMenu: [
     // Manage Menu
     {
       id: 1,
-      group: 'Manage',
+      group: 'Admin Console',
       menus: [
-        {
-          name: 'Approve Feedback',
-          linkTo: '/admin/approveFeedback',
-          faIconName: 'fa-check-square-o'
-        },
-        {
-          name: 'Approve Solutions',
-          linkTo: '/admin/approveSolutions',
-          faIconName: 'fa-check-square'
-        },
-        {
-          name: 'Edit & Delete',
-          linkTo: '/admin/edit',
-          faIconName: 'fa-comment'
-        },
-      ]
-    },
-    // Insights Menu
-    {
-      id: 2,
-      group: 'Insights & Actions',
-      menus: [
-        {
-          name: 'Key Stats',
-          linkTo: '/admin/keystats',
-          faIconName: 'fa-bar-chart'
-        },
         {
           name: 'Dashboard',
           linkTo: '/admin/dashboard',
-          faIconName: 'fa-bar-chart'
+          faIconName: 'fa-comment',
         },
         {
-          name: 'Respond',
-          linkTo: '/admin/respond',
-          faIconName: 'fa-comment'
+          name: 'Approve',
+          linkTo: '/admin/approve',
+          faIconName: 'fa-check-square-o',
         },
         {
-          name: 'Form a Focus Group',
-          linkTo: '/admin/focusgroup',
-          faIconName: 'fa-comment'
+          name: 'Edit',
+          linkTo: '/admin/edit',
+          faIconName: 'fa-check-square',
         },
-      ]
+      ],
     },
     // Profile Menu
     {
-      id: 3,
+      id: 2,
       group: 'Profile',
       menus: [
         {
           name: 'Log in',
           linkTo: '/admin/sendCode',
-          faIconName: 'fa-check-square-o'
+          faIconName: 'fa-check-square-o',
         },
         {
           name: 'Log out',
           linkTo: '/admin/signout',
-          faIconName: 'fa-check-square'
+          faIconName: 'fa-check-square',
         },
-      ]
+      ],
     },
-  ]
+  ],
 };

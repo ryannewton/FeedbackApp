@@ -3,13 +3,10 @@ import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import { sendAuthorizationEmail } from '../redux/actions';
 
-// Import components
-import SigninDescription from '../components/SigninDescription';
-import LogoHeader from '../components/LogoHeader';
-
 class SendCode extends Component {
   constructor(props) {
     super(props);
+    console.log('props', props);
     this.state = { email: props.email || '' };
   }
 
@@ -28,8 +25,13 @@ class SendCode extends Component {
   render() {
     return (
       <div>
-        <SigninDescription />
-        <LogoHeader />
+        <div>
+          <p>Signing in is easier than ever. No need to remember another password.</p>
+          <p>1) Enter your email address</p>
+          <p>2) Submit the code from your email</p>
+          <p>3) We'll remember you in the future</p>
+        </div>
+        <p>Suggestion Box App</p>
         <div>
           <label>Email:</label>
           <input

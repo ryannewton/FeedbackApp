@@ -1,10 +1,7 @@
 // Auth Actions
-export const AUTHORIZE_USER = "authorize_user";
+export const AUTHORIZING_USER = "authorize_user";
 export const AUTHORIZE_USER_SUCCESS = "authorize_user_success";
 export const AUTHORIZE_USER_FAIL = "authorize_user_fail";
-export const SEND_AUTHORIZATION_EMAIL = "send_authorization_email";
-export const SEND_AUTHORIZATION_EMAIL_SUCCESS = "send_authorization_email_success";
-export const SEND_AUTHORIZATION_EMAIL_FAIL = "send_authorization_email_fail";
 export const SIGNOUT_USER = "signout_user";
 
 // Feedback Actions

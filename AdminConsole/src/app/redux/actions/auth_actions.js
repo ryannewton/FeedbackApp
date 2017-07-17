@@ -1,25 +1,32 @@
-import axios from 'axios';
-import { browserHistory } from 'react-router';
 import {
-  AUTHORIZE_USER,
+  AUTHORIZING_USER,
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
-  SEND_AUTHORIZATION_EMAIL,
-  SEND_AUTHORIZATION_EMAIL_SUCCESS,
-  SEND_AUTHORIZATION_EMAIL_FAIL,
   SIGNOUT_USER,
 } from './types';
 
-import { http } from '../../constants';
-// const ROOT_URL = 'http://localhost:3090';
+import http from '../../constants';
+
+export const authorizeUser = ({ email, code }) => (
+  (dispatch) => {
+    dispatch({ type: AUTHORIZING_USER });
+
+    http.post('/authorizeAdministrator/', { email, code })
+    .then((response) => {
+      const token = String(response.data);
+      dispatch(authorizeUserSuccess(token));
+    })
+    .catch((error) => {
+      console.log('error in authorizeUser: ', error);
+      dispatch(authorizeUserFail(error.response.data || 'Error Authenticating'));
+    });
+  }
+);
 
 export const authorizeUserSuccess = token => (
   (dispatch) => {
+    dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
     localStorage.setItem('token', token);
-    return {
-      type: AUTHORIZE_USER_SUCCESS,
-      payload: token,
-    }
   }
 );
 
@@ -28,50 +35,9 @@ export const authorizeUserFail = error => ({
   payload: error,
 });
 
-export const sendAuthorizationEmail = ({ email, history }) => (
-  (dispatch) => {
-    dispatch({ type: SEND_AUTHORIZATION_EMAIL });
-
-    // Add a new user to our database (or update the passcode of the user)
-    return http.post('/sendAuthorizationEmail/', { email })
-    // If successful navigate to the login in screen (for post email verification)
-    .then(() => {
-      // Change the in-authorization flag in state so we update the component
-      dispatch({ type: SEND_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
-      history.push('/authorize');
-    })
-    .catch((error) => {
-      dispatch({ type: SEND_AUTHORIZATION_EMAIL_FAIL });
-      console.log('sendAuthorizationEmail() fail');
-      console.log('error: ', error);
-    });
-  }
-);
-
-export const authorizeUser = ({ email, authCode, adminCode, history }) => (
-  (dispatch) => {
-    dispatch({ type: AUTHORIZE_USER });
-
-    // Submits the code the user entered from their email
-    return http.post('/authorizeAdminUser/', { email, code: authCode, groupAdminCode: adminCode })
-    // If successful store the token, repull state from the database, and set state to logged-in
-    .then((response) => {
-      const token = String(response.data);
-      dispatch(authorizeUserSuccess(token));
-      history.push('/approveFeedback');
-    })
-    // If not, show an error message
-    .catch((error) => {
-      console.log('Bag Login Info');
-      console.log('error: ', error.response.data);
-      dispatch(authorizeUserFail(error.response.data));
-    });
-  }
-);
-
 export const signoutUser = () => (
   (dispatch) => {
-    localStorage.removeItem('token');
     dispatch({ type: SIGNOUT_USER });
+    localStorage.removeItem('token');
   }
 );

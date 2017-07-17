@@ -23,6 +23,10 @@ app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, 'admin.html'));
 });
 
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
 app.listen(3000, (err) => {
   if (err) {
     return console.error(err);
