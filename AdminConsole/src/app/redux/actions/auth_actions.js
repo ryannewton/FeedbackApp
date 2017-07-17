@@ -6,6 +6,7 @@ import {
 } from './types';
 
 import http, { ROOT_STORAGE } from '../../constants';
+import { pullFeedback, pullSolutions } from '../actions';
 
 
 export const authorizeUser = ({ email, code }) => (
@@ -16,6 +17,8 @@ export const authorizeUser = ({ email, code }) => (
     .then((response) => {
       const token = String(response.data);
       dispatch(authorizeUserSuccess(token));
+      dispatch(pullFeedback(token));
+      dispatch(pullSolutions(token));
     })
     .catch((error) => {
       console.log('error in authorizeUser: ', error);

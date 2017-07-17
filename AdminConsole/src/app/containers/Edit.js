@@ -5,9 +5,9 @@ import { pullFeedback } from '../redux/actions';
 import RequireAuth from '../components/RequireAuth';
 
 // Import Components
-import ManageFeedbackCard from '../components/ManageFeedbackCard';
+import EditCard from '../components/EditCard';
 
-class ManageFeedback extends Component {
+class Edit extends Component {
 
   listFeedback = () => {
     if (this.props.feedback.loading) {
@@ -25,7 +25,7 @@ class ManageFeedback extends Component {
           .map(feedback => {
             return (
               <div className='col-md-10 col-md-offset-1'>
-                <ManageFeedbackCard
+                <EditCard
                   key={feedback.id}
                   feedback={feedback}
                 />
@@ -64,4 +64,4 @@ function mapStateToProps(state) {
   return { feedback };
 }
 
-export default withRouter(connect(mapStateToProps, { pullFeedback })(ManageFeedback));
+export default withRouter(connect(mapStateToProps, { pullFeedback })(RequireAuth(Edit)));

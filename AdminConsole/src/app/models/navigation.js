@@ -38,22 +38,5 @@ export const navigation = {
         },
       ],
     },
-    // Profile Menu
-    {
-      id: 2,
-      group: 'Profile',
-      menus: [
-        {
-          name: 'Log in',
-          linkTo: '/admin/login',
-          faIconName: 'fa-check-square-o',
-        },
-        {
-          name: 'Log out',
-          linkTo: '/admin/logout',
-          faIconName: 'fa-check-square',
-        },
-      ],
-    },
   ],
 };

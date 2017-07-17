@@ -13,3 +13,12 @@ production.js
 
 package-lock.json
 yarn.lock
+
+public/assets/app.bundle.js
+public/assets/app.bundle.js.map
+public/assets/app.styles.css
+public/assets/app.vendor.bundle.js
+public/assets/app.vendor.bundle.js.map
+public/assets/fontawesome-webfont.svg
+public/assets/glyphicons-halflings-regular.svg
+public/assets/ionicons.svg

@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { signoutUser } from '../../redux/actions';
 
 const Header = (props) => {
   const {
@@ -15,9 +17,14 @@ const Header = (props) => {
         role="navigation"
       >
         [Put the name of the current page here]
+        <button onClick={props.signoutUser}>Logout</button>
       </nav>
     </header>
   );
 };
 
-export default Header;
+function mapStateToProps() {
+  return {};
+}
+
+export default connect(mapStateToProps, { signoutUser })(Header);
