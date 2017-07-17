@@ -31,11 +31,6 @@ export const navigation = {
           linkTo: '/admin/approve',
           faIconName: 'fa-check-square-o',
         },
-        {
-          name: 'Edit',
-          linkTo: '/admin/edit',
-          faIconName: 'fa-check-square',
-        },
       ],
     },
   ],
