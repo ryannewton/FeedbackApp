@@ -2,3 +2,4 @@
 .expo/
 .idea/
 gen
+/node_modules
