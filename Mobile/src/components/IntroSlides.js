@@ -244,7 +244,7 @@ const styles = {
     width: SCREEN_WIDTH,
   },
   textStyle: {
-    fontSize: 30,
+    fontSize: 25,
     color: 'white',
     backgroundColor: 'transparent',
     textAlign: 'center',
