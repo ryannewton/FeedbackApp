@@ -711,6 +711,100 @@ app.post('/updateSolution', upload.array(), (req, res) => {
   });
 });
 
+// REJECT FEEDBACK
+// 1. Email rejection message to user
+// 2. Mark feedback status as 'rejected'
+// req.body = { authorization, message, feedback }
+app.post('/rejectFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    const { feedback, message } = req.body;
+    if (err) {
+      res.status(400).send('Autorization failed');
+    } else if (!message) {
+      res.status(400).send('Message required');
+    } else if (!feedback || !feedback.id) {
+      res.status(400).send('Unrecognized feedback object');
+    } else {
+      let connectionString = 'SELECT email FROM feedback JOIN users ON feedback.userId = users.id WHERE feedback.id = ?';
+      connection.query(connectionString, [feedback.id], (err1, rows) => {
+        if (err1) {
+          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0001');
+        } else {
+          const toEmail = [rows[0].email];
+          const fromEmail = defaultFromEmail;
+          const subjectLine = 'Suggestion Box: Feedback rejected';
+          const bodyText =
+            `In response to your feedback:\n
+            ${feedback.text}\n
+            \n
+            Your feedback was rejected because:\n
+            ${message}\n
+            \n
+            Note: Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback.`;
+
+          connectionString = "UPDATE feedback SET status='rejected' WHERE id=?";
+          connection.query(connectionString, [feedback.id], (err2) => {
+            if (err2) {
+              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
+            } else {
+              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+              res.status(200);
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+// CLARIFY FEEDBACK
+// 1. Email clarification message to user
+// 2. Flag feedback as status as 'clarify'
+// req.body = { authorization, message, feedback }
+app.post('/clarifyFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    const { feedback, message } = req.body;
+    if (err) {
+      res.status(400).send('Autorization failed');
+    } else if (!message) {
+      res.status(400).send('Message required');
+    } else if (!feedback || !feedback.id) {
+      res.status(400).send('Unrecognized feedback object');
+    } else {
+      let connectionString = 'SELECT email FROM feedback JOIN users ON feedback.userId = users.id WHERE feedback.id = ?';
+      connection.query(connectionString, [feedback.id], (err1, rows) => {
+        if (err1) {
+          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0003');
+        } else {
+          const toEmail = [rows[0].email];
+          const fromEmail = defaultFromEmail;
+          const subjectLine = 'Suggestion Box: Clarification needed';
+          const bodyText =
+            `In response to your feedback:\n
+            ${feedback.text}\n
+            \n
+            Some clarification is needed:\n
+            ${message}\n
+            \n
+            You can reply to this email and your message will be passed along.\n
+            \n
+            Note: Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback.`;
+
+          connectionString = "UPDATE feedback SET status='clarify' WHERE id=?";
+          connection.query(connectionString, [feedback.id], (err2) => {
+            if (err2) {
+              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0004');
+            } else {
+              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+              res.status(200);
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
 // DELETE - Needs to also delete associated official responses and solutions
 app.post('/deleteFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {

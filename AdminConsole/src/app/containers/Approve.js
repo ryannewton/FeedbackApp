@@ -9,11 +9,6 @@ import ApproveSolutionsCard from '../components/ApproveSolutionsCard';
 import ErrorMessage from '../components/ErrorMessage';
 
 class ApproveFeedback extends Component {
-  constructor(props) {
-    super(props);
-    console.log('Approve', props);
-  }
-
   listFeedback = () => {
     if (this.props.feedback.error) {
       return <ErrorMessage />
