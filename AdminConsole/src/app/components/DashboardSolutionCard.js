@@ -45,7 +45,9 @@ class DashboardSolutionsCard extends Component {
   renderActionButtons = () => {
     return (
       <div style={{paddingTop:20, paddingBottom:20}}>
-        <button onClick={() => this.handleUpdate()} className="btn btn-primary">Update</button>
+        <button onClick={() => this.handleUpdate()} className="btn btn-primary">
+          Update
+        </button>
       </div>
     );
   }
@@ -59,7 +61,11 @@ class DashboardSolutionsCard extends Component {
       return (
         <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
           <div className="col-xs-3">
-            <select className="form-control" value={this.state.approved} onChange={this.handleApprovedStatusChange}>
+            <select
+              className="form-control"
+              value={this.state.approved}
+              onChange={this.handleApprovedStatusChange}
+            >
               <option value={1} >Approved</option>
               <option value={0} >Not Approved</option>
             </select>

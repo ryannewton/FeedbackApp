@@ -14,12 +14,11 @@ class ApproveFeedbackCard extends Component {
     this.state = {
       status: this.props.feedback.status,
       approved: this.props.feedback.approved,
-      replyEnabled: false,
       officialReply: this.props.feedback.officialReply,
+      category: null,
+      replyEnabled: false,
       editing: false,
       viewSolutions: false,
-      anySolutions: null,
-      category: null,
     };
      this.handleUpdate = this.handleUpdate.bind(this);
      this.handleStatusChange = this.handleStatusChange.bind(this);
@@ -28,29 +27,8 @@ class ApproveFeedbackCard extends Component {
      this.renderSolutionsButton = this.renderSolutionsButton.bind(this)
   }
 
-  //Text, Image, Status, Votes, Solutions, Response, Category, Group, Approved, Date, Translated From
-  render() {
-    return (
-      <div className='clearfix'>
-        <Panel hasTitle={false}>
-          {this.renderFeedbackText()}
-          {this.renderSelections()}
-          {this.renderReply()}
-          <div className='pull-right'>
-            {this.renderActionButtons()}
-          </div>
-          <div className='pull-left'>
-           {this.renderSolutionsButton()}
-          </div>
-        </Panel>
-        {this.maybeRenderSolutions()}
-      </div>
-    );
-  }
-
-
   renderSolutionsButton() {
-    const { viewSolutions, anySolutions } = this.state
+    const { viewSolutions } = this.state
     return (
       <div style={{paddingTop:20, paddingBottom:20}}>
         <button className="btn btn-default" onClick={() => this.setState({ viewSolutions: !viewSolutions})}>View Solutions</button>
@@ -207,6 +185,24 @@ class ApproveFeedbackCard extends Component {
     return (
       <div>
         {solutions}
+      </div>
+    );
+  }
+  render() {
+    return (
+      <div className='clearfix'>
+        <Panel hasTitle={false}>
+          {this.renderFeedbackText()}
+          {this.renderSelections()}
+          {this.renderReply()}
+          <div className='pull-right'>
+            {this.renderActionButtons()}
+          </div>
+          <div className='pull-left'>
+           {this.renderSolutionsButton()}
+          </div>
+        </Panel>
+        {this.maybeRenderSolutions()}
       </div>
     );
   }
