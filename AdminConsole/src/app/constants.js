@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-export const ROOT_STORAGE = '@FeedbackApp:';
 // const ROOT_URL = 'https://feedbackappdev.com';
 // const ROOT_URL = 'https://collaborativefeedback.com';
 // const ROOT_URL = 'http://10.0.2.2:3000';

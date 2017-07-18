@@ -38,60 +38,58 @@ export const pullFeedback = token => (
   }
 );
 
-export const approveFeedback = (feedback) => (
+export const approveFeedback = feedback => (
   (dispatch) => {
     dispatch({ type: APPROVE_FEEDBACK });
 
-    const token = localStorage.getItem(`${ROOT_STORAGE}token`);
+    const token = localStorage.getItem('token');
     http.post('/approveFeedback', { authorization: token, feedback })
-    .then((response) => {
+    .then(() => {
       dispatch({ type: APPROVE_FEEDBACK_SUCCESS, payload: feedback });
     })
     .catch((error) => {
       console.log('approveFeedback() Fail');
       console.log('Error: ', error);
       dispatch({ type: APPROVE_FEEDBACK_FAIL, payload: feedback });
-    })
+    });
   }
 );
 
 // To be build. Requires new server endpoint
-export const clarifyFeedback = (feedback) => (
+export const clarifyFeedback = ({ feedback, message }) => (
   (dispatch) => {
-    console.log('clarifyFeedback() not functional');
     dispatch({ type: CLARIFY_FEEDBACK });
 
-    const token = localStorage.getItem(`${ROOT_STORAGE}token`);
-    // http.post('/updateFeedback', { authorization: token, feedback })
-    // .then((response) => {
-    //   console.log('clarifyFeedback() Success');
-    //   dispatch({ type: CLARIFY_FEEDBACK_SUCCESS, payload: feedback });
-    // })
-    // .catch((error) => {
-    //   console.log('clarifyFeedback() Fail');
-    //   console.log('Error: ', error);
-    //   dispatch({ type: CLARIFY_FEEDBACK_FAIL, payload: feedback });
-    // })
+    const token = localStorage.getItem('token');
+    http.post('/clarifyFeedback', { authorization: token, feedback, message })
+    .then(() => {
+      console.log('clarifyFeedback() Success');
+      dispatch({ type: CLARIFY_FEEDBACK_SUCCESS, payload: feedback });
+    })
+    .catch((error) => {
+      console.log('clarifyFeedback() Fail');
+      console.log('Error: ', error);
+      dispatch({ type: CLARIFY_FEEDBACK_FAIL, payload: feedback });
+    });
   }
 );
 
 // To be build. Requires new server endpoint
-export const rejectFeedback = (feedback) => (
+export const rejectFeedback = ({ feedback, message }) => (
   (dispatch) => {
-    console.log('rejectFeedback() not functional');
     dispatch({ type: REJECT_FEEDBACK });
 
-    // const token = localStorage.getItem(`${ROOT_STORAGE}token`);
-    // http.post('/deleteFeedback', { authorization: token, feedback })
-    // .then((response) => {
-    //   console.log('rejectFeedback() Success');
-    //   dispatch({ type: REJECT_FEEDBACK_SUCCESS, payload: feedback });
-    // })
-    // .catch((error) => {
-    //   console.log('rejectFeedback() Fail');
-    //   console.log('Error: ', error);
-    //   dispatch({ type: REJECT_FEEDBACK_FAIL, payload: feedback });
-    // })
+    const token = localStorage.getItem('token');
+    http.post('/rejectFeedback', { authorization: token, feedback, message })
+    .then(() => {
+      console.log('rejectFeedback() Success');
+      dispatch({ type: REJECT_FEEDBACK_SUCCESS, payload: feedback });
+    })
+    .catch((error) => {
+      console.log('rejectFeedback() Fail');
+      console.log('Error: ', error);
+      dispatch({ type: REJECT_FEEDBACK_FAIL, payload: feedback });
+    });
   }
 );
 
