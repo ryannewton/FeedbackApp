@@ -31,7 +31,7 @@ class Submitted extends Component {
     const navToFeedbackList = NavigationActions.reset({
       index: 0,
       key: null,
-      actions: [NavigationActions.navigate({ routeName: 'Tabs' })],
+      actions: [NavigationActions.navigate({ routeName: 'Main' })],
     });
     return (
       <View style={styles.container, { flex:1, flexDirection:'column', backgroundColor:'white'}}>
@@ -42,7 +42,7 @@ class Submitted extends Component {
             {/* To do: To do: Update navigation to use react-navigation */}
           <Text style={{ fontSize: 18 }}> Thanks for submitting feedback! </Text>
           <View style={{ width: SCREEN_WIDTH/2 }}>
-            <Button onPress={() => this.props.navigation.dispatch(navToFeedbackList)}>
+            <Button onPress={() => this.props.navigation.navigate('Main')}>
               Back to Board
             </Button>
           </View>
