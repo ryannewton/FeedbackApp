@@ -47,7 +47,7 @@ class Authorize extends Component {
       const navToFeedbackList = NavigationActions.reset({
         index: 0,
         key: null,
-        actions: [NavigationActions.navigate({ routeName: 'Tabs' })],
+        actions: [NavigationActions.navigate({ routeName: 'Main' })],
       });
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });

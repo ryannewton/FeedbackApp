@@ -8,6 +8,8 @@ import PropTypes from 'prop-types';
 import FeedbackCard from '../components/FeedbackCard';
 import styles from '../styles/scenes/FeedbackListStyles';
 import registerForNotifications from '../services/push_notifications';
+import { Icon } from 'react-native-elements';
+
 
 // Import tracking
 import { sendGoogleAnalytics } from '../actions';
@@ -31,7 +33,6 @@ class FeedbackList extends Component {
   }
 
   componentDidMount() {
-    console.log(this.props.user.language)
     registerForNotifications(this.props.token);
   }
 
@@ -166,6 +167,16 @@ class FeedbackList extends Component {
     return filteredFeedbackList;
   }
 
+  renderFeedbackSubmitButton = () => {
+    return (
+      <View style={{position: 'absolute', right: 5, bottom: 5}}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit')}>
+          <Icon name="add" size={35} color={'#db3236'} backgroundColor={'red'} raised reverse />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     const filteredFeedbackList = this.curateFeedbackList();
@@ -176,6 +187,7 @@ class FeedbackList extends Component {
     }
     return (
       <View style={styles.container}>
+
         <ListView
           style = {{zIndex: -1}}
           dataSource={ds.cloneWithRows(filteredFeedbackList)}
@@ -193,6 +205,7 @@ class FeedbackList extends Component {
             </TouchableOpacity>
           }
         />
+        {this.renderFeedbackSubmitButton()}
       </View>
     );
   }

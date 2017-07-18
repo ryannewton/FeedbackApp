@@ -445,7 +445,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               else {
                 // Insert text
                 insertText(res, result.insertId, 'feedback', text);
-
+                submitFeedbackVoteHelper(result.insertId, 1, 0, 0, userId, res)
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
                 sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'UserId: ' + userId);
@@ -523,6 +523,21 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
   });
 });
 
+function submitFeedbackVoteHelper(feedbackId, upvote, downvote, noOpinion, userId, res) {
+  const connectionString = 'INSERT INTO feedbackVotes SET ?';
+  connection.query(connectionString,
+    {
+      feedbackId,
+      userId,
+      upvote,
+      downvote,
+      noOpinion,
+    }, (err) => {
+      if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
+    });
+}
+
+
 // SUBMIT VOTE
 app.post('/submitFeedbackVote', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
@@ -531,18 +546,8 @@ app.post('/submitFeedbackVote', upload.array(), (req, res) => {
       const feedbackId = req.body.feedback.id;
       const { upvote, downvote, noOpinion } = req.body;
       const userId = decoded.userId;
-      const connectionString = 'INSERT INTO feedbackVotes SET ?';
-      connection.query(connectionString,
-        {
-          feedbackId,
-          userId,
-          upvote,
-          downvote,
-          noOpinion,
-        }, (err) => {
-          if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 3683');
-          else res.sendStatus(200);
-        });
+      submitFeedbackVoteHelper(feedbackId, upvote, downvote, noOpinion, userId, res)
+      res.sendStatus(200);
     }
   });
 });

@@ -3,7 +3,7 @@ import React from 'react';
 import { StackNavigator } from 'react-navigation';
 
 // Import Tabs, Stacks, and Scenes
-import NavTabs from './NavTabs';
+import MainStack from './MainStack';
 import AuthStack from './AuthStack';
 import SplashScreenStack from './SplashScreenStack';
 import WelcomeScreen from '../scenes/Welcome';
@@ -12,7 +12,7 @@ const stack = {
   SplashScreen: { screen: SplashScreenStack },
   Welcome: { screen: WelcomeScreen },
   Auth: { screen: AuthStack },
-  Tabs: { screen: NavTabs },
+  Main: { screen: MainStack },
 };
 
 const options = {
