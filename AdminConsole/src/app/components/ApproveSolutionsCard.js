@@ -5,11 +5,24 @@ import TimeAgo from 'react-timeago';
 import { MdArrowUpward, MdArrowDownward } from 'react-icons/lib/md/';
 import { Panel } from './common';
 import { Button } from 'react-bootstrap';
+import TextInputForm from './TextInputForm';
 
 // Import Actions
-import { approveSolution, clarifySolution, rejectSolution } from '../redux/actions';
+import {
+  approveSolution,
+  clarifySolution,
+  rejectSolution,
+  updateSolutionStatus
+} from '../redux/actions';
 
 class ApproveSolutionsCard extends Component {
+  state = {
+    showRejectInput: false,
+    rejectMessage: '',
+    showClarifyInput: false,
+    clarifyMessage: '',
+  };
+
   renderSolutionText = () => {
     const { solution } = this.props;
     const timestamp = new Date(solution.date);
@@ -47,6 +60,9 @@ class ApproveSolutionsCard extends Component {
   }
 
   renderButtons() {
+    if (this.state.showRejectInput || this.state.showClarifyInput) {
+      return null;
+    }
     const { solution, approveSolution, clarifySolution, rejectSolution } = this.props;
     return (
       <div style={{ marginTop: 20, marginBottom: 5 }}>
@@ -59,14 +75,14 @@ class ApproveSolutionsCard extends Component {
         </button>
         <button
           type='button'
-          onClick={() => clarifySolution(solution)}
+          onClick={() => this.setState({ showClarifyInput: true })}
           style={{ ...buttonStyles, backgroundColor: '#F2C63B' }}
         >
           CLARIFY
         </button>
         <button
           type='button'
-          onClick={() => rejectSolution(solution)}
+          onClick={() => this.setState({ showRejectInput: true })}
           style={{ ...buttonStyles, backgroundColor: '#E5575F' }}
         >
           REJECT
@@ -75,12 +91,56 @@ class ApproveSolutionsCard extends Component {
     );
   }
 
+  maybeRenderRejectInput() {
+    if (!this.state.showRejectInput) {
+      return null;
+    }
+
+    return (
+      <TextInputForm
+        buttonColor="#E5575F"
+        buttonText="Submit Rejection"
+                submitFunction={ ({ feedback, message }) => {
+            this.props.rejectSolution({ solution: feedback, message });
+            // this.props.updateSolutionStatus({ feedback, newStatus: 'rejected' });
+          }}
+        onClose={() => this.setState({ showRejectInput: false })}
+        instructionText="Please provide a reason for rejecting this solution."
+        placeholderText="Enter your reason here. Note that this will be sent to the member who submitted this solution."
+        feedback={this.props.solution}
+      />
+    );
+  }
+
+  maybeRenderClarifyInput() {
+    if (!this.state.showClarifyInput) {
+      return null;
+    }
+
+    return (
+      <TextInputForm
+        buttonColor="#F2C63B"
+        buttonText="Request Clarification"
+        submitFunction={ ({ feedback, message }) => {
+          this.props.clarifySolution({ solution: feedback, message });
+          // this.props.updateSolutionStatus({ feedback, newStatus: 'clarify' });
+        }}
+        onClose={() => this.setState({ showClarifyInput: false })}
+        instructionText="Please describe what is unclear."
+        placeholderText="Enter your description here. Note that this will be sent to the member who submitted this solution."
+        feedback={this.props.solution}
+      />
+    );
+  }
+
   render() {
     return (
       <Panel hasTitle={false}>
+        {this.renderFeedbackText()}
         {this.renderSolutionText()}
         {this.renderButtons()}
-        {this.renderFeedbackText()}
+        {this.maybeRenderRejectInput()}
+        {this.maybeRenderClarifyInput()}
       </Panel>
     );
   }
@@ -101,4 +161,5 @@ export default connect(null, {
   approveSolution,
   clarifySolution,
   rejectSolution,
+  updateSolutionStatus
 })(ApproveSolutionsCard);

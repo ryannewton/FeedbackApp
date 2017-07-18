@@ -20,7 +20,6 @@ class ApproveFeedbackCard extends Component {
   };
 
   renderFeedbackText = () => {
-    console.log(this.props.feedback);
     const timestamp = new Date(this.props.feedback.date);
     return (
       <div style={{ marginTop: 10, marginBottom: 20 }}>

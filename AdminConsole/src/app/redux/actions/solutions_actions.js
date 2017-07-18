@@ -49,10 +49,10 @@ export const approveSolution = (solution) => (
   }
 );
 
-export const clarifySolution = (solution) => (
+export const updateSolutionStatus = (solution) => (
   (dispatch) => {
-    console.log('clarifySolution() not functional');
-    dispatch({ type: CLARIFY_SOLUTION, payload: solution });
+    console.log('updateSolutionStatus() not functional');
+    dispatch({ type: UPDATE_SOLUTION_STATUS, payload: solution });
 
     // const token = localStorage.getItem('token');
     // http.post('', { authorization: token, solution })
@@ -67,23 +67,39 @@ export const clarifySolution = (solution) => (
     // })
   }
 );
-
-export const rejectSolution = (solution) => (
+export const clarifySolution = ({ solution, message }) => (
   (dispatch) => {
-    console.log('rejectSolution() not functional');
-    dispatch({ type: REJECT_SOLUTION, payload: solution });
+    dispatch({ type: CLARIFY_SOLUTION });
 
-    // const token = localStorage.getItem('token');
-    // http.post('/deleteSolution', { authorization: token, solution })
-    // .then((response) => {
-    //   console.log('rejectSolution() success');
-    //   dispatch({ type: REJECT_SOLUTION_SUCCESS, payload: solution });
-    // })
-    // .catch((error) => {
-    //   console.log('rejectSolution() Fail');
-    //   console.log('Error: ', error);
-    //   dispatch({ type: REJECT_SOLUTION_FAIL, payload: solution });
-    // })
+    const token = localStorage.getItem('token');
+    console.log(solution, message, "aodisnfadsoifn!")
+    http.post('/clarifySolution', { authorization: token, solution, message })
+    .then(() => {
+      console.log('clarifySolution() Success');
+      dispatch({ type: CLARIFY_SOLUTION_SUCCESS, payload: solution });
+    })
+    .catch((error) => {
+      console.log('clarifySolution() Fail');
+      console.log(error);
+      dispatch({ type: CLARIFY_SOLUTION_FAIL, payload: solution });
+    });
   }
 );
 
+export const rejectSolution = ({solution, message}) => (
+  (dispatch) => {
+    dispatch({ type: REJECT_SOLUTION });
+
+    const token = localStorage.getItem('token');
+    http.post('/rejectSolution', { authorization: token, solution, message })
+    .then(() => {
+      console.log('clarifySolution() Success');
+      dispatch({ type: REJECT_SOLUTION_SUCCESS, payload: solution });
+    })
+    .catch((error) => {
+      console.log('clarifySolution() Fail');
+      console.log('Error: ', error);
+      dispatch({ type: REJECT_SOLUTION_FAIL, payload: solution });
+    });
+  }
+);
