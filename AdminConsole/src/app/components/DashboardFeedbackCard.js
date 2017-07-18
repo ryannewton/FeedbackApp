@@ -3,6 +3,7 @@ import React, { Component, select } from 'react';
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Card, Panel } from './common';
+import DashboardSolutionsCard from './DashboardSolutionCard';
 
 // Import Actions
 import { approveFeedback, clarifyFeedback, rejectFeedback, updateFeedback } from '../redux/actions';
@@ -14,12 +15,17 @@ class ApproveFeedbackCard extends Component {
       status: this.props.feedback.status,
       approved: this.props.feedback.approved,
       replyEnabled: false,
-      officialReply: this.props.feedback.officialReply
+      officialReply: this.props.feedback.officialReply,
+      editing: false,
+      viewSolutions: false,
+      anySolutions: null,
+      category: null,
     };
      this.handleUpdate = this.handleUpdate.bind(this);
      this.handleStatusChange = this.handleStatusChange.bind(this);
      this.handleApprovedStatusChange = this.handleApprovedStatusChange.bind(this);
      this.inputText = this.inputText.bind(this);
+     this.renderSolutionsButton = this.renderSolutionsButton.bind(this)
   }
 
   //Text, Image, Status, Votes, Solutions, Response, Category, Group, Approved, Date, Translated From
@@ -33,12 +39,24 @@ class ApproveFeedbackCard extends Component {
           <div className='pull-right'>
             {this.renderActionButtons()}
           </div>
+          <div className='pull-left'>
+           {this.renderSolutionsButton()}
+          </div>
         </Panel>
+        {this.maybeRenderSolutions()}
       </div>
     );
   }
 
 
+  renderSolutionsButton() {
+    const { viewSolutions, anySolutions } = this.state
+    return (
+      <div style={{paddingTop:20, paddingBottom:20}}>
+        <button className="btn btn-default" onClick={() => this.setState({ viewSolutions: !viewSolutions})}>View Solutions</button>
+      </div>
+    )
+  }
 
   renderFeedbackText = () => {
     const timestamp = new Date(this.props.feedback.date);
@@ -57,17 +75,28 @@ class ApproveFeedbackCard extends Component {
     );
   }
 
-
-
   renderReply = () => {
     const exists = this.props.feedback.officialReply && this.props.feedback.officialReply.text !== '';
-    if (!exists && !this.state.replyEnabled) {
-      return null;
+    if (!this.state.editing) {
+      if (!exists) {
+        return (
+          <div className="col-xs-12">
+            <b>No Official Reply yet.</b>
+          </div>
+        );
+      }
+      return (
+        <div className="col-xs-12">
+          <b>Official Reply:</b>
+          <br />
+          {this.props.feedback.officialReply}
+        </div>
+      );
     }
     return (
       <div className="col-xs-12">
         <b>Official Reply: </b>
-        <input className="form-control" type="text" placeholder={this.props.feedback.officialReply} disabled={this.state.replyEnabled?false:true} onChange={this.inputText}/>
+        <input className="form-control" type="text" placeholder={this.props.feedback.officialReply} value={this.state.officialReply} onChange={this.inputText}/>
       </div>
     );
   }
@@ -77,17 +106,23 @@ class ApproveFeedbackCard extends Component {
   }
 
   handleUpdate() {
-    const { officialReply, approved, status } = this.state;
-    const updatedFeedback = { ...this.props.feedback, approved, status, officialReply };
+    const { officialReply, approved, status, category } = this.state;
+    const updatedFeedback = { ...this.props.feedback, approved, status, officialReply, category };
     this.props.updateFeedback({ feedback: updatedFeedback })
 
   }
 
   renderActionButtons = () => {
+    if (!this.state.editing) {
+      return (
+        <div style={{paddingTop:20, paddingBottom:20}}>
+          <button className="btn btn-default" onClick={() => this.setState({ editing: true})}>Edit</button>
+        </div>
+      );
+    }
     return (
       <div style={{paddingTop:20, paddingBottom:20}}>
-        <button onClick={() => this.setState({ replyEnabled: !this.state.replyEnabled})} className="btn btn-default">{this.state.replyEnabled?'Dismiss':'Reply'}</button>
-        <button className="btn btn-default">View Solutions</button>
+        <button className="btn btn-default" onClick={() => this.setState({ editing: false})}>Cancel</button>
         <button onClick={() => this.handleUpdate()} className="btn btn-primary">Update</button>
       </div>
     );
@@ -101,34 +136,77 @@ class ApproveFeedbackCard extends Component {
     this.setState({ approved: event.target.value })
   }
 
+  handleCategoryChange(event) {
+    this.setState({ category: event.target.value })
+  }
+
   renderSelections = () => {
+    if (this.state.editing) {
+      return (
+        <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
+          <div className="col-xs-4">
+            <select className="form-control" value={this.state.status} onChange={this.handleStatusChange}>
+              <option value='new'>★ New Feedback</option>
+              <option value='inprocess'>⟳ Project in process</option>
+              <option value='complete'>✔ Project Finished</option>
+              <option value='closed'>✘ Project Closed</option>
+              <option value='compliment'>❤︎ Compliment</option>
+              <option value='poll'>ℙ Poll</option>
+              <option value="rejected" >Rejected</option>
+            </select>
+          </div>
+          <div className="col-xs-3">
+            <select className="form-control" value={this.state.category} onChange={this.handleApprovedStatusChange}>
+              <option value='category_a'>Catagory A</option>
+              <option value='category_b'>Catagory B</option>
+              <option value='category_c'>Catagory C</option>
+              <option value='category_d'>Catagory D</option>
+            </select>
+          </div>
+          <div className="col-xs-3">
+            <select className="form-control" value={this.state.approved} onChange={this.handleApprovedStatusChange}>
+              <option value={1} >Approved</option>
+              <option value={0} >Not Approved</option>
+            </select>
+          </div>
+        </div>
+      );
+    }
+    const { status, category, approved } = this.props.feedback;
     return (
       <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
         <div className="col-xs-4">
-          <select className="form-control" value={this.state.status} onChange={this.handleStatusChange}>
-            <option value='new'>★ New Feedback</option>
-            <option value='inprocess'>⟳ Project in process</option>
-            <option value='complete'>✔ Project Finished</option>
-            <option value='closed'>✘ Project Closed</option>
-            <option value='compliment'>❤︎ Compliment</option>
-            <option value='poll'>ℙ Poll</option>
-            <option value="rejected" >Rejected</option>
-          </select>
+          {status}
         </div>
         <div className="col-xs-3">
-          <select className="form-control">
-            <option>Catagory A</option>
-            <option>Catagory B</option>
-            <option>Catagory C</option>
-            <option>Catagory D</option>
-          </select>
+          {category ? category: 'No category assigned'}
         </div>
         <div className="col-xs-3">
-          <select className="form-control" value={this.state.approved} onChange={this.handleApprovedStatusChange}>
-            <option value={1} >Approved</option>
-            <option value={0} >Not Approved</option>
-          </select>
+          {approved ? 'Approved': 'Not Approved'}
         </div>
+      </div>
+    )
+  }
+  maybeRenderSolutions() {
+    if (!this.state.viewSolutions) {
+      return null;
+    }
+    const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId == this.props.feedback.id)
+    if (!feedbackSolutions.length) {
+      return (
+        <div>
+          No solutions yet!
+        </div>
+      );
+    }
+    const solutions = feedbackSolutions.map((item) => {
+      return (
+        <DashboardSolutionsCard solution={item} editing={this.state.editing} />
+      )
+    })
+    return (
+      <div>
+        {solutions}
       </div>
     );
   }
@@ -145,7 +223,11 @@ const buttonStyles = {
   fontSize: 10,
 }
 
-export default connect(null, {
+function mapStateToProps(state) {
+  const { solutions } = state;
+  return { solutions };
+}
+export default connect(mapStateToProps, {
   approveFeedback,
   clarifyFeedback,
   rejectFeedback,
