@@ -140,7 +140,7 @@ class FeedbackSubmit extends Component {
             shadowOffset: { width: 4, height: 4 },
             shadowRadius: 5,
             marginTop: 10,
-            alignSelf: 'center'
+            alignSelf: 'center',
           }]}
           resizeMode={'contain'}
         />

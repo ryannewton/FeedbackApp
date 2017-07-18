@@ -40,7 +40,8 @@ function filterAndOrder(list) {
   const result = list
     .filter(item => item.stage !== 'tabled')
     .sort((a, b) => b.id - a.id)
-    .sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
+    // .sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
+    .sort((a, b) => (b.trendingScore) - (a.trendingScore));
   return result;
 }
 
