@@ -87,7 +87,7 @@ class ApproveFeedbackCard extends Component {
     const { officialReply, approved, status, category } = this.state;
     const updatedFeedback = { ...this.props.feedback, approved, status, officialReply, category };
     this.props.updateFeedback({ feedback: updatedFeedback })
-
+    this.setState({ editing: false})
   }
 
   renderActionButtons = () => {

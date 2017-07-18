@@ -69,7 +69,7 @@ class ApproveFeedback extends Component {
 
   renderEmptyList() {
     return (
-      <div>Congratulations, you've hit zero inbox!</div>
+      <div>Congratulations, youve hit zero inbox!</div>
     );
   }
 

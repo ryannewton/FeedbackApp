@@ -10,6 +10,13 @@ import { Button } from 'react-bootstrap';
 import { approveSolution, clarifySolution, rejectSolution } from '../redux/actions';
 
 class ApproveSolutionsCard extends Component {
+  state = {
+    showRejectInput: false,
+    rejectMessage: '',
+    showClarifyInput: false,
+    clarifyMessage: '',
+  };
+
   renderSolutionText = () => {
     const { solution } = this.props;
     const timestamp = new Date(solution.date);
@@ -81,6 +88,8 @@ class ApproveSolutionsCard extends Component {
         {this.renderSolutionText()}
         {this.renderButtons()}
         {this.renderFeedbackText()}
+        {this.maybeRenderRejectInput()}
+        {this.maybeRenderClarifyInput()}
       </Panel>
     );
   }
