@@ -34,24 +34,24 @@ const translate = language => {
       }
     case 'es':
       return {
-        INTRO_SLIDE_1: 'Bienvenido a The Suggestion Box \n (Caja de sugerencias)',
-        INTRO_SLIDE_2: 'Envia Sugerencias para tu comunidad anónimamente ...',
+        INTRO_SLIDE_1: 'Bienvenido a \n The Suggestion Box \n (Caja de sugerencias)',
+        INTRO_SLIDE_2: 'Envia sugerencias para tu comunidad anónimamente ...',
         INTRO_SLIDE_3: "...y prioriza otras sugerencias votando.",
-        INTRO_SLIDE_4: 'Las Sugerencias mas priorizadas, las solucionaremos y recibiran una respuesta oficial',
-        SUBMIT_FEEDBACK: 'Da Sugerencias ',
+        INTRO_SLIDE_4: 'Las sugerencias mas priorizadas, las solucionaremos y recibiran una respuesta oficial',
+        SUBMIT_FEEDBACK: 'Da sugerencias ',
         POSITIVE_FILL_TEXT: 'Positivo: Que es algo que contribuyo, en forma positiva, a ventas y conversacion?',
         NEGATIVE_FILL_TEXT: 'Negatvio: Que es algo que contribuyo, en forma positiva, a ventas y conversacion?',
-        ALL_FEEDBACK: 'Todas las Sugerencias',
+        ALL_FEEDBACK: 'Todas las sugerencias',
         INVITE_OTHERS: 'Invita a otros',
-        INVITE_OTHERS_BODY: 'Ayuda a otros en tu comunidad a dar Sugerencias en The Suggestion Box.',
+        INVITE_OTHERS_BODY: 'Ayuda a otros en tu comunidad a dar sugerencias en The Suggestion Box.',
         SHARE: 'Comparte',
         DISMISS: 'Ignorar',
         PROPOSED_SOLUTIONS: 'Soluciones propuestas',
-        NEW_FEEDBACK: 'Nuevas Sugerencias',
+        NEW_FEEDBACK: 'Nuevas sugerencias',
         MOST_POPULAR: 'Mas popular',
         THIS_WEEK: 'Esta semana',
         TODAY: 'Hoy',
-        MY_FEEDBACK: 'Mis Sugerencias',
+        MY_FEEDBACK: 'Mis sugerencias',
         ENTER_EMAIL: 'Escribe su correo electrónico',
         SEND_EMAIL: 'Manda correo de autorización',
         EMAIL_BLURB_FOR_CODE: 'Listo! Le mandamos un correo con una contraseña de 4 números a',
@@ -124,9 +124,9 @@ const translate = language => {
         GROUP_DESCRIPTION: '请输入你的组织独有的Suggestion Box识别码',
         GROUP_CODE: '你组织的识别码',
         JOIN_GROUP: '加入你的组织',
-        ENTER_FEEDBACK: 'Enter your feedback here!',
-        TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
-        SIGN_OUT: 'Sign Out'
+        ENTER_FEEDBACK: '在这里输入你的反馈!',
+        TEXT_INTRO: '和我一起使用 Suggestion Box!\n\n我们组织的识别码: ',
+        SIGN_OUT: '退出'
       }
     }
 }
