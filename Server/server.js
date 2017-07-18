@@ -892,7 +892,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       const { groupId } = decoded;
       const language = decoded.language || 'en';
       const connectionString = `
-      SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date
+      SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date, a.text AS backupText
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
@@ -916,6 +916,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
           const adjRows = rows.map((row) => {
             if (!row.upvotes) { row.upvotes = 0; }
             if (!row.downvotes) { row.downvotes = 0; }
+            if (!row.text) { row.text = row.backupText || ''; }
             return row;
           });
           res.status(200).send(adjRows);
