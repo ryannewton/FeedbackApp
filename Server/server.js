@@ -303,7 +303,7 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode, languag
     if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
     else if (!email.includes('admin_test')) {
       // Step #4: Send an email with the code to the user (make sure it shows up in notification)
-      sendEmail([email], defaultFromEmail, 'Suggestion Box: Verify Your Email Address', 'Enter this passcode: ' + String(code));
+      sendEmail([email], defaultFromEmail, `Suggestion Box Code: ${code}`, `To complete the signin process, use code: ${code}`);
       res.status(200).json(groupSignupCode);
     } else res.status(200).json(groupSignupCode);
   });
