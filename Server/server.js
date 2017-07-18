@@ -863,7 +863,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
         AND language=?
       ) d
       ON a.id = d.feedbackId
-      WHERE a.groupId=?`;
+      WHERE a.groupId=? AND a.approved=1`;
       connection.query(connectionString, [language, language, groupId], (err, rows) => {
         // if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
         if (err) console.log(err)
@@ -909,7 +909,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       ON a.id = c.solutionId
       JOIN feedback d
       ON a.feedbackId = d.id
-      WHERE d.groupId=?`;
+      WHERE d.groupId=? AND a.approved=1`;
       connection.query(connectionString, [language, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         else {
