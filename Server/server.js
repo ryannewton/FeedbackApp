@@ -730,7 +730,12 @@ app.post('/rejectFeedback', upload.array(), (req, res) => {
         if (err1) {
           res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0001');
         } else {
-          const toEmail = [rows[0].email];
+          let toEmail;
+          if (rows.length === 0) {
+            toEmail = ['newton1988@gmail.com', 'tyler.hannasch@gmail.com'];
+          } else {
+            toEmail = [rows[0].email];
+          }
           const fromEmail = defaultFromEmail;
           const subjectLine = 'Suggestion Box: Feedback rejected';
           const bodyText =
@@ -775,6 +780,8 @@ app.post('/clarifyFeedback', upload.array(), (req, res) => {
       connection.query(connectionString, [feedback.id], (err1, rows) => {
         if (err1) {
           res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0003');
+        } else if (rows.length === 0) {
+          res.status(400).send('Sorry, this feedback\'s submitter was not saved. Cannot clarify');
         } else {
           const toEmail = [rows[0].email];
           const fromEmail = defaultFromEmail;
