@@ -2,28 +2,85 @@
 import React, { Component, select } from 'react';
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
-import { Card } from './common';
+import { Card, Panel } from './common';
 
 // Import Actions
 import { approveFeedback, clarifyFeedback, rejectFeedback } from '../redux/actions';
 
 class ApproveFeedbackCard extends Component {
-
+  state = {
+    replyEnabled:false,
+  }
   //Text, Image, Status, Votes, Solutions, Response, Category, Group, Approved, Date, Translated From
   render() {
     return (
       <div className='clearfix'>
-        <Card>
+        <Panel hasTitle={false}>
           {this.renderFeedbackText()}
-        </Card>
-        <div className="col-xs-3">
+          {this.renderSelections()}
+          {this.renderReply()}
+          <div className='pull-right'>
+            {this.renderActionButtons()}
+          </div>
+        </Panel>
+      </div>
+    );
+  }
+
+  renderFeedbackText = () => {
+    console.log(this.props.feedback);
+    const timestamp = new Date(this.props.feedback.date);
+    return (
+      <div style={{ marginTop: 10, marginBottom: 20 }}>
+        <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
+          <p style={{color:'#48D2A0'}}>▲ {this.props.feedback.upvotes}</p><p style={{color:'#F54B5E'}}>▼ {this.props.feedback.downvotes}</p>
+        </div>
+        <div className="col-xs-offset-1" style={{ fontWeight: 'bold', fontSize: 14 }}>
+          {this.props.feedback.text}
+        </div>
+        <div className="pull-right" style={{ fontSize: 10}}>
+          Submitted <TimeAgo date={timestamp} />
+        </div>
+      </div>
+    );
+  }
+
+  renderReply = () => {
+    console.log(this.props.feedback);
+    const exists = this.props.feedback.officialReply && this.props.feedback.officialReply.text !== '';
+    if (!exists && !this.state.replyEnabled) {
+      return null;
+    }
+    return (
+      <div className="col-xs-12">
+        <b>Official Reply: </b>
+        <input className="form-control" type="text" placeholder={this.props.feedback.officialReply} disabled={this.state.replyEnabled?false:true}/>
+      </div>
+    );
+  }
+
+  renderActionButtons = () => {
+    console.log(this.props.feedback);
+    return (
+      <div style={{paddingTop:20, paddingBottom:20}}>
+        <button onClick={() => this.setState({ replyEnabled: !this.state.replyEnabled})} className="btn btn-default">{this.state.replyEnabled?'Dismiss':'Reply'}</button>
+        <button className="btn btn-default">View Solutions</button>
+        <button className="btn btn-primary">Update</button>
+      </div>
+    );
+  }
+
+  renderSelections = () => {
+    return (
+      <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
+        <div className="col-xs-4">
           <select className="form-control">
-            <option>New Feedback</option>
-            <option>Project in process</option>
-            <option><t>Project Finished</t></option>
-            <option>Project Closed</option>
-            <option>Compliment</option>
-            <option>Poll</option>
+            <option>★ New Feedback</option>
+            <option>⟳ Project in process</option>
+            <option>✔ Project Finished</option>
+            <option>✘ Project Closed</option>
+            <option>❤︎ Compliment</option>
+            <option>ℙ Poll</option>
           </select>
         </div>
         <div className="col-xs-3">
@@ -41,40 +98,6 @@ class ApproveFeedbackCard extends Component {
             <option>Rejected</option>
           </select>
         </div>
-        <div className='pull-right'>
-          {this.renderActionButtons()}
-        </div>
-      </div>
-    );
-  }
-
-  renderFeedbackText = () => {
-    console.log(this.props.feedback);
-    const timestamp = new Date(this.props.feedback.date);
-    return (
-      <div style={{ marginTop: 10, marginBottom: 20 }}>
-        <div style={{ fontWeight: 'bold', fontSize: 14 }}>
-          {this.props.feedback.text}
-        </div>
-        <div style={{ fontSize: 8 }}>
-          {this.props.feedback.approved}
-          {this.props.feedback.category}
-          {this.props.feedback.status}
-          {this.props.feedback.approved}
-        </div>
-        <div style={{ fontSize: 10, float: 'right' }}>
-          Submitted <TimeAgo date={timestamp} />
-        </div>
-      </div>
-    );
-  }
-
-  renderActionButtons = () => {
-    return (
-      <div>
-        <button>Reply</button>
-        <button>View Solutions</button>
-        <button>Update</button>
       </div>
     );
   }
