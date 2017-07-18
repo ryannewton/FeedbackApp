@@ -7,12 +7,14 @@ import {
   Button,
   Well,
   Collapse,
+  Panel,
 } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest';
 import { connect } from 'react-redux';
 import { Link } from 'react-router'
 import { browserHistory } from 'react-router';
 import RequireAuth from '../components/RequireAuth';
+import DashboardFeedbackCard from '../components/DashboardFeedbackCard';
 
 const dataHelper = [
   {ID: 1, NAME: 'North', PARENT: 0},
@@ -54,10 +56,20 @@ const renderSuggestion = region => (
 );
 
 class Dashboard extends Component {
-  constructor(...args) {
-    super(...args);
+  constructor(props) {
+    super(props);
 
     this.state = {
+      //Filtering
+      selectedGroup: 'all',
+      selectedCategory: 'all',
+      selectedTime: 'all',
+      searchTerm: '',
+
+      //Sorting
+      sortBy: 'votes',
+
+      //For Groups Component
       open: false,
       open1: false,
       open2: false,
@@ -177,61 +189,130 @@ class Dashboard extends Component {
   }
 
   renderKeyStats = () => {
-    return (<div
-      className="row"
-      style={{marginBottom: '5px'}}>
-      <div className="col-md-3">
-        <StatsCard
-          statValue={'12'}
-          statLabel={'New Feedback!'}
-          icon={<i className="fa fa-comments-o"></i>}
-          backColor={'red'}
-        />
+    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback).sort(this.sortFeedback);
+    const filteredSolutions =
+      this.props.solutions.list
+      .filter((solution) => filteredFeedback.some((feedback) => feedback.id === solution.feedbackId))
+      .filter(this.filterSolutions);
+    const percentOfTopFive = [0,0,0,0,0].reduce((count, item, index) => {
+      if (filteredFeedback.length <= index) return count;
+      else if(filteredFeedback[index].officialReply) return (count + 1);
+      else return count;
+    },0)/5*100;
+
+    return (
+      <div
+        className="row"
+        style={{marginBottom: '5px'}}>
+        <div className="col-md-4">
+          <StatsCard
+            statValue={filteredFeedback.length || 0}
+            statLabel={'New Feedback!'}
+            icon={<i className="fa fa-comments-o"></i>}
+            backColor={'red'}
+          />
+        </div>
+        <div className="col-md-4">
+          <StatsCard
+            statValue={filteredSolutions.length}
+            statLabel={'New solutions!'}
+            icon={<i className="fa fa-tasks"></i>}
+            backColor={'violet'}
+          />
+        </div>
+        <div className="col-md-4">
+          <StatsCard
+            statValue={percentOfTopFive}
+            statLabel={'% of Top 5 With Responses'}
+            icon={<i className="fa fa-check"></i>}
+            backColor={'blue'}
+          />
+        </div>
       </div>
-      <div className="col-md-3">
-        <StatsCard
-          statValue={'20'}
-          statLabel={'New solutions!'}
-          icon={<i className="fa fa-tasks"></i>}
-          backColor={'violet'}
-        />
-      </div>
-      <div className="col-md-3">
-        <StatsCard
-          statValue={'64'}
-          statLabel={'Finished feedback'}
-          icon={<i className="fa fa-check"></i>}
-          backColor={'blue'}
-        />
-      </div>
-      <div className="col-md-3">
-        <StatsCard
-          statValue={'6'}
-          statLabel={'Feedback in progress'}
-          icon={<i className="fa fa-spinner"></i>}
-          backColor={'green'}
-        />
-      </div>
-    </div>);
+    );
+  }
+
+  filterSolutions = (solution) => {
+    if (this.state.selectedTime !== 'all') {
+      const solutionDate = new Date(solution.date);
+      const daysAgo = (Date.now() - solutionDate.getTime())/1000/60/60/24;
+      if (this.state.selectedTime === 'lastWeek' && daysAgo > 7)
+        return false;
+      if (this.state.selectedTime === 'lastMonth' && daysAgo > 30)
+        return false;
+    }
+    return true;
+  }
+
+  filterFeedback = (feedback) => {
+    //First Filter by Date
+    if (this.state.selectedTime !== 'all') {
+      const feedbackDate = new Date(feedback.date);
+      const daysAgo = (Date.now() - feedbackDate.getTime())/1000/60/60/24;
+      if (this.state.selectedTime === 'lastWeek' && daysAgo > 7)
+        return false;
+      if (this.state.selectedTime === 'lastMonth' && daysAgo > 30)
+        return false;
+    }
+    //Then Filter by Category (all, facilities, hr, other)
+    if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {
+      return false; 
+    }
+    //Then Filter by Group
+    if (this.state.selectedGroup !== 'all' && this.state.selectedGroup !== feedback.group) {
+      return false; 
+    }
+    //Then Filter by Search
+    if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
+      return false; 
+    }
+    return true;
+  }
+
+  sortFeedback = (a, b) => {
+    if (this.state.sortBy === "MostVotes")
+      return b.upvotes - a.upvotes;
+    else {
+      return new Date(b.date) - new Date(a.date);
+    }
   }
 
   renderFeedbackList = () => {
     return (
-      <div>
-        <p>Feedbackcards go here</p>
+      <div className='row'>
+        <Panel>
+          {console.log(this.props.feedback.list[0])}
+          {this.props.feedback.list
+          .filter(this.filterFeedback)
+          .sort(this.sortFeedback)
+          .map(feedback =>
+            <div key={feedback.id}>
+              <DashboardFeedbackCard feedback={feedback} />
+            </div>
+          )}
+        </Panel>
       </div>
     );
   }
 
   renderTimeControls = () => {
     return (
-      <div>Time Controls</div>
+      <Panel className='row' header='Filter by Time'>
+        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'all'})}>All</button></div>
+        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button></div>
+        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button></div>
+      </Panel>
     );
   }
 
-  renderTypeControls = () => {
+  renderCategoryControls = () => {
     return (
-      <div>Type Controls</div>
+      <Panel className='row' header='Filter by Feedback Category'>
+        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'all'})}>All</button></div>
+        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button></div>
+        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button></div>
+        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'other'})}>Other</button></div>
+      </Panel>
     );
   }
 
@@ -244,7 +325,7 @@ class Dashboard extends Component {
     };
 
     return (
-      <div className="row">
+      <Panel className="row">
         <div className="col-lg-8">
           <div className="input-group custom-search-form">
             <Autosuggest
@@ -276,29 +357,53 @@ class Dashboard extends Component {
           >            
           </div>
         </div>
-      </div>
+      </Panel>
+    );
+  }
+
+  renderSearch = () => {
+    return (
+      <Panel className='row' header='Search to Filter'>
+        <input value={this.state.searchTerm} onChange={(event) => this.setState({searchTerm: event.target.value})} />
+      </Panel>
+    );
+  }
+
+  renderSort = () => {
+    return (
+      <Panel className='row' header='Sort by...'>
+        <div className='col-md-6'><button onClick={() => this.setState({sortBy: 'MostVotes'})}>Most Votes</button></div>
+        <div className='col-md-6'><button onClick={() => this.setState({sortBy: 'MostRecent'})}>Most Recent</button></div>
+      </Panel>
     );
   }
 
   render() {
     return(
-      <div>
-        {/* Left Side - Data: Key Stats and Feedback Cards */}
-        {this.renderKeyStats()}
-        <hr style={{border: "1px solid blue"}}/>
-        {this.renderFeedbackList()}
-
-        {/* Right Side - Controls: Time, Type, Group */}
-        {this.renderTimeControls()}
-        {this.renderTypeControls()}
-        {this.renderGroupControls()}        
+      <div className='container-fluid'>
+        <div className='row'>
+          <div className='col-md-8'>
+            {/* Left Side - Data: Key Stats and Feedback Cards */}
+            {this.renderKeyStats()}
+            {this.renderFeedbackList()}
+          </div>
+          <div className='col-md-4'>
+            {/* Right Side - Controls: Time, Category, Group */}
+            {this.renderSearch()}
+            {this.renderSort()}
+            {this.renderTimeControls()}
+            {this.renderCategoryControls()}
+            {this.renderGroupControls()}
+          </div>
+        </div>     
       </div>
     );
   }  
 }
 
 function mapStateToProps(state) {
-  return {};
+  const { feedback, solutions } = state;
+  return { feedback, solutions };
 }
 
 export default connect(mapStateToProps, {})(RequireAuth(Dashboard));

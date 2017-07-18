@@ -742,7 +742,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       const { groupId } = decoded;
       const language = decoded.language || 'en';
       const connectionString = `
-      SELECT a.id, a.groupId, a.userId, a.text as backupText, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date, b.trendingScore
+      SELECT a.id, a.groupId, a.userId, a.text as backupText, a.category, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date, a.officialReply AS backupOfficialReply, b.trendingScore
       FROM feedback a
       LEFT JOIN (
         SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes, SUM(noOpinion) as noOpinions, (SUM(upvote * ((1000*60 * 60 * 24)/((1000*60 * 60 * 24)+((NOW() - date))))) - (SUM(downvote * (1/(1+((NOW()/(1000*60 * 60 * 24)) - (date/(1000 * 60 * 60 * 24)))))))) as trendingScore
@@ -775,6 +775,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
             if (!row.noOpinions) { row.noOpinions = 0; }
             if (!row.trendingScore) { row.trendingScore = 0; }
             if (!row.text) { row.text = row.backupText || ''; }
+            if (!row.officialReply) { row.officialReply = row.backupOfficialReply || ''; }
             return row;
           });
           res.status(200).send(adjRows);
