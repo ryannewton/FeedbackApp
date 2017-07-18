@@ -19,9 +19,9 @@ import {
 } from './types';
 
 // Import constants
-import http, { ROOT_STORAGE } from '../../constants';
+import http from '../../constants';
 
-export const pullFeedback = (token) => (
+export const pullFeedback = token => (
   (dispatch) => {
     dispatch({ type: REQUEST_FEEDBACK });
 
@@ -99,13 +99,14 @@ export const submitOfficialReply = ({ feedback, officialReply }) => (
   (dispatch) => {
     dispatch({ type: SUBMIT_OFFICIAL_REPLY });
 
-    const token = localStorage.getItem(`${ROOT_STORAGE}token`);
+    const token = localStorage.getItem('token');
     http.post('/submitOfficialReply', { authorization: token, feedback, officialReply })
-    .then((response) => {
+    .then(() => {
       dispatch({ type: SUBMIT_OFFICIAL_REPLY_SUCCESS, payload: { feedback, officialReply } });
     })
     .catch((error) => {
-      console.log('submitOfficialReply() FAIL');
+      console.log('submitOfficialReply() FAIL.');
+      console.log('ERROR: ', error);
       dispatch({ type: SUBMIT_OFFICIAL_REPLY_FAIL });
     });
   }
