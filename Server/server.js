@@ -921,7 +921,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       ON a.id = c.solutionId
       JOIN feedback d
       ON a.feedbackId = d.id
-      WHERE a.groupId=?` + (admin ? '' : ' AND a.approved=1');
+      WHERE d.groupId=?` + (admin ? '' : ' AND a.approved=1');
       connection.query(connectionString, [language, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         else {
