@@ -30,7 +30,7 @@ export const authorizeUser = ({ email, code }) => (
 export const authorizeUserSuccess = token => (
   (dispatch) => {
     dispatch({ type: AUTHORIZE_USER_SUCCESS, payload: token });
-    localStorage.setItem(token);
+    localStorage.setItem('token', token);
   }
 );
 
