@@ -671,9 +671,10 @@ app.post('/removeSolutionVote', upload.array(), (req, res) => {
 // UPDATE
 app.post('/updateFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    console.log(req.body)
     if (err) res.status(400).send('Authorization failed');
     else {
-      const { text, status, imageURL, approved, id } = req.body.feedback;
+      const { text, status, imageURL, approved, id, category, officialReply } = req.body.feedback;
       const connectionString = 'UPDATE feedback SET ? WHERE ?';
       connection.query(connectionString,
         [{
@@ -681,6 +682,8 @@ app.post('/updateFeedback', upload.array(), (req, res) => {
           status,
           imageURL,
           approved,
+          category,
+          officialReply
         },
         { id }], (err) => {
           if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4928');

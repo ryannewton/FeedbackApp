@@ -7,7 +7,6 @@ export const SIGNOUT_USER = 'signout_user';
 // Feedback Actions
 export const REQUEST_FEEDBACK = 'requested_feedback';
 export const REQUEST_FEEDBACK_SUCCESS = 'request_feedback_success';
-
 export const APPROVE_FEEDBACK = 'approve_feedback';
 export const APPROVE_FEEDBACK_SUCCESS = 'approve_feedback_success';
 export const APPROVE_FEEDBACK_FAIL = 'approve_feedback_fail';
@@ -21,6 +20,7 @@ export const SUBMIT_OFFICIAL_REPLY = 'submit_official_reply';
 export const SUBMIT_OFFICIAL_REPLY_SUCCESS = 'submit_official_reply_success';
 export const SUBMIT_OFFICIAL_REPLY_FAIL = 'submit_official_reply_fail';
 export const UPDATE_FEEDBACK_STATUS = 'update_feedback_status';
+export const UPDATE_FEEDBACK = 'update_feedback';
 
 // Solutions Actions
 export const REQUEST_SOLUTIONS = 'request_solutions';

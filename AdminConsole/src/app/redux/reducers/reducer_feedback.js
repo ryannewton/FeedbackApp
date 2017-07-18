@@ -7,6 +7,7 @@ import {
   SUBMIT_OFFICIAL_REPLY_SUCCESS,
   SIGNOUT_USER,
   UPDATE_FEEDBACK_STATUS,
+  UPDATE_FEEDBACK
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -34,6 +35,14 @@ export default (state = INITIAL_STATE, action) => {
     case REQUEST_FEEDBACK_SUCCESS: {
       const list = filterAndOrder(action.payload.list);
       return { ...state, list, lastPulled: action.payload.lastPulled, loading: false, error: false };
+    }
+
+    case UPDATE_FEEDBACK: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      const newList = state.list.slice(0);
+      newList[index] = action.payload;
+      return { ...state, list: newList, loading: false };
+
     }
 
     case REQUEST_FEEDBACK_FAIL:
