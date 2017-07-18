@@ -190,7 +190,7 @@ class Dashboard extends Component {
         {
           row.map(group =>
             <div className="col-md-3">
-              <button onClick={() => this.setState({ selectedGroup: group })}>
+              <button className="btn btn-default" onClick={() => this.setState({ selectedGroup: group })}>
                 {group.name}
               </button>
             </div>
