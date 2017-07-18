@@ -19,12 +19,12 @@ export const navigation = {
     // Manage Menu
     {
       id: 1,
-      group: 'Admin Console',
+      group: 'Pages',
       menus: [
         {
           name: 'Dashboard',
           linkTo: '/admin/dashboard',
-          faIconName: 'fa-comment',
+          faIconName: 'fa-dashboard',
         },
         {
           name: 'Approve',

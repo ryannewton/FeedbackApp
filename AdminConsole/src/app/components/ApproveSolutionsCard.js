@@ -3,49 +3,44 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { MdArrowUpward, MdArrowDownward } from 'react-icons/lib/md/';
-import { Card } from './common';
+import { Panel } from './common';
+import { Button } from 'react-bootstrap';
 
 // Import Actions
 import { approveSolution, clarifySolution, rejectSolution } from '../redux/actions';
 
 class ApproveSolutionsCard extends Component {
-  renderSolutionText() {
-    const timestamp = new Date(this.props.solution.date);
+  renderSolutionText = () => {
+    const { solution } = this.props;
+    const timestamp = new Date(solution.date);
     return (
       <div style={{ marginTop: 10, marginBottom: 20 }}>
-        <div style={{ fontWeight: 'bold', fontSize: 14 }}>
+        <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
+          <t style={{color:'#48D2A0'}}>▲ {this.props.solution.upvotes} </t><t style={{color:'#F54B5E'}}> ▼ {this.props.solution.downvotes}</t>
+        </div>
+        <div className="col-xs-offset-1" style={{ fontWeight: 'bold', fontSize: 14, marginLeft:80 }}>
           {this.props.solution.text}
         </div>
-        <div style={{ fontSize: 10, float: 'right' }}>
+        <div className="pull-right" style={{ fontSize: 10}}>
           Submitted <TimeAgo date={timestamp} />
         </div>
       </div>
     );
   }
 
-  renderFeedbackText() {
+  renderFeedbackText = () => {
     const { feedback } = this.props;
     const timestamp = new Date(feedback.date);
     return (
-      <div style={{ marginTop: 10, marginBottom: 20, fontSize: 14 }}>
-        In Response To:
-        <div>
-          <div className="col-md-1" style={{ margin: 0, padding: 0, textAlign: 'center' }}>
-            <div style={{ color: 'green', margin: 0, padding: 0 }}>
-              <MdArrowUpward />
-              {feedback.upvotes}
-            </div>
-            <div style={{ color: 'red', margin: 0, padding: 0 }}>
-              <MdArrowDownward />
-              {feedback.downvotes}
-            </div>
-          </div>
-          <div>
-            {feedback.text}
-          </div>
-          <div style={{ fontSize: 10, float: 'right' }}>
-            Submitted <TimeAgo date={timestamp} />
-          </div>
+      <div style={{ marginTop: 10, marginBottom: 20 }}>
+        <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
+          <t style={{color:'#48D2A0'}}>▲ {this.props.feedback.upvotes} </t><t style={{color:'#F54B5E'}}> ▼ {this.props.feedback.downvotes}</t>
+        </div>
+        <div className="col-xs-offset-1" style={{ fontWeight: 'bold', fontSize: 14, marginLeft:80 }}>
+          {this.props.feedback.text}
+        </div>
+        <div className="pull-right" style={{ fontSize: 10}}>
+          Submitted <TimeAgo date={timestamp} />
         </div>
       </div>
     );
@@ -82,11 +77,11 @@ class ApproveSolutionsCard extends Component {
 
   render() {
     return (
-      <Card>
+      <Panel hasTitle={false}>
         {this.renderSolutionText()}
         {this.renderButtons()}
         {this.renderFeedbackText()}
-      </Card>
+      </Panel>
     );
   }
 }
