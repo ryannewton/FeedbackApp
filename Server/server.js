@@ -873,7 +873,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
         AND language=?
       ) d
       ON a.id = d.feedbackId
-      WHERE a.groupId=?`;
+      WHERE a.groupId=? AND a.approved=1`;
       connection.query(connectionString, [language, language, groupId], (err, rows) => {
         // if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
         if (err) console.log(err)
@@ -902,7 +902,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       const { groupId } = decoded;
       const language = decoded.language || 'en';
       const connectionString = `
-      SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date
+      SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date, a.text AS backupText
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes
@@ -919,13 +919,14 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       ON a.id = c.solutionId
       JOIN feedback d
       ON a.feedbackId = d.id
-      WHERE d.groupId=?`;
+      WHERE d.groupId=? AND a.approved=1`;
       connection.query(connectionString, [language, groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4685');
         else {
           const adjRows = rows.map((row) => {
             if (!row.upvotes) { row.upvotes = 0; }
             if (!row.downvotes) { row.downvotes = 0; }
+            if (!row.text) { row.text = row.backupText || ''; }
             return row;
           });
           res.status(200).send(adjRows);
