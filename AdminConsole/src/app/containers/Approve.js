@@ -22,6 +22,7 @@ class ApproveFeedback extends Component {
       <div>
         {this.props.feedback.list
           .filter(feedback => !feedback.approved)
+          .filter(feedback => feedback.status !== 'clarify' && feedback.status !== 'rejected')
           .map(feedback => {
             return (
               <div key={feedback.id}>
@@ -45,6 +46,7 @@ class ApproveFeedback extends Component {
       <div>
         {this.props.solutions.list
           .filter(solution => !solution.approved)
+          .filter(solution => solution.status !== 'clarify' && solution.status !== 'rejected')
           .map(solution => {
             let feedback = this.props.feedback.list.find(feedback => {
               return feedback.id === solution.feedbackId;
@@ -74,11 +76,11 @@ class ApproveFeedback extends Component {
   return (
     <div>
       <div>
-        <h5>Feedback Approval Needed: (currently shows approved feedback)</h5>
+        <h5>Feedback Approval Needed:</h5>
         {this.listFeedback()}
       </div>
       <div>
-        <h5>Solution Approval Needed: (currently shows approved solutions)</h5>
+        <h5>Solution Approval Needed:</h5>
         {this.listSolutions()}
       </div>
     </div>

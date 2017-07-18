@@ -8,7 +8,7 @@ import TextInputForm from './TextInputForm';
 import { Card } from './common';
 
 // Import Actions
-import { approveFeedback, clarifyFeedback, rejectFeedback } from '../redux/actions';
+import { approveFeedback, clarifyFeedback, rejectFeedback, updateFeedbackStatus } from '../redux/actions';
 
 class ApproveFeedbackCard extends Component {
   state = {
@@ -74,7 +74,10 @@ class ApproveFeedbackCard extends Component {
       <TextInputForm
         buttonColor="#E5575F"
         buttonText="SUBMIT REJECTION"
-        submitFunction={this.props.rejectFeedback}
+        submitFunction={ ({ feedback, message }) => {
+            this.props.rejectFeedback({ feedback, message });
+            this.props.updateFeedbackStatus({ feedback, newStatus: 'rejected' });
+          }}
         onClose={() => this.setState({ showRejectInput: false })}
         instructionText="Please provide a reason for rejecting this feedback."
         placeholderText="Enter your reason here. Note that this will be sent to the member who submitted this feedback."
@@ -92,7 +95,10 @@ class ApproveFeedbackCard extends Component {
       <TextInputForm
         buttonColor="#F2C63B"
         buttonText="REQUEST CLARIFICATION"
-        submitFunction={this.props.clarifyFeedback}
+        submitFunction={ ({ feedback, message }) => {
+          this.props.clarifyFeedback({ feedback, message });
+          this.props.updateFeedbackStatus({ feedback, newStatus: 'clarify' });
+        }}
         onClose={() => this.setState({ showClarifyInput: false })}
         instructionText="Please describe what is unclear."
         placeholderText="Enter your description here. Note that this will be sent to the member who submitted this feedback."
@@ -129,10 +135,12 @@ ApproveFeedbackCard.propTypes = {
   approveFeedback: PropTypes.func,
   clarifyFeedback: PropTypes.func,
   rejectFeedback: PropTypes.func,
+  updateFeedbackStatus: PropTypes.func,
 };
 
 export default connect(null, {
   approveFeedback,
   clarifyFeedback,
   rejectFeedback,
+  updateFeedbackStatus,
 })(ApproveFeedbackCard);

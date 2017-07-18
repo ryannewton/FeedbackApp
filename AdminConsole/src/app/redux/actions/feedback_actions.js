@@ -16,6 +16,7 @@ import {
   SUBMIT_OFFICIAL_REPLY,
   SUBMIT_OFFICIAL_REPLY_SUCCESS,
   SUBMIT_OFFICIAL_REPLY_FAIL,
+  UPDATE_FEEDBACK_STATUS,
   UPDATE_FEEDBACK,
 } from './types';
 
@@ -122,6 +123,15 @@ export const submitOfficialReply = ({ feedback, officialReply }) => (
       console.log('submitOfficialReply() FAIL.');
       console.log('ERROR: ', error);
       dispatch({ type: SUBMIT_OFFICIAL_REPLY_FAIL });
+    });
+  }
+);
+
+export const updateFeedbackStatus = ({ feedback, newStatus }) => (
+  (dispatch) => {
+    dispatch({
+      type: UPDATE_FEEDBACK_STATUS,
+      payload: { feedback, status: newStatus },
     });
   }
 );
