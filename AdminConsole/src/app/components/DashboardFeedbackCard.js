@@ -1,5 +1,5 @@
 // Import Libraries
-import React, { Component } from 'react';
+import React, { Component, select } from 'react';
 import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { Card } from './common';
@@ -16,6 +16,31 @@ class ApproveFeedbackCard extends Component {
         <Card>
           {this.renderFeedbackText()}
         </Card>
+        <div className="col-xs-3">
+          <select className="form-control">
+            <option>New Feedback</option>
+            <option>Project in process</option>
+            <option><t>Project Finished</t></option>
+            <option>Project Closed</option>
+            <option>Compliment</option>
+            <option>Poll</option>
+          </select>
+        </div>
+        <div className="col-xs-3">
+          <select className="form-control">
+            <option>Catagory A</option>
+            <option>Catagory B</option>
+            <option>Catagory C</option>
+            <option>Catagory D</option>
+          </select>
+        </div>
+        <div className="col-xs-3">
+          <select className="form-control">
+            <option>Approved</option>
+            <option>Not Approved</option>
+            <option>Rejected</option>
+          </select>
+        </div>
         <div className='pull-right'>
           {this.renderActionButtons()}
         </div>

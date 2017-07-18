@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { StatsCard } from '../components';
+import { Panel } from '../components/common';
 import {
   MenuItem,
   DropdownButton,
@@ -7,7 +8,6 @@ import {
   Button,
   Well,
   Collapse,
-  Panel,
 } from 'react-bootstrap';
 import Autosuggest from 'react-autosuggest';
 import { connect } from 'react-redux';
@@ -16,176 +16,20 @@ import { browserHistory } from 'react-router';
 import RequireAuth from '../components/RequireAuth';
 import DashboardFeedbackCard from '../components/DashboardFeedbackCard';
 
-const dataHelper = [
-  {ID: 1, NAME: 'North', PARENT: 0},
-  {ID: 2, NAME: 'South', PARENT: 0},
-  {ID: 3, NAME: 'East', PARENT: 0},
-  {ID: 4, NAME: 'West', PARENT: 0},
-  {ID: 5, NAME: 'NorthWest', PARENT: 1},
-  {ID: 6, NAME: 'NorthEast', PARENT: 1},
-  {ID: 7, NAME: 'Test1', PARENT: 1},
-  {ID: 8, NAME: 'Test2', PARENT: 1},
-  {ID: 9, NAME: 'Westchester', PARENT: 5},
-  {ID: 10, NAME: 'Manhatten', PARENT: 5},
-  {ID: 11, NAME: 'Brooklyn', PARENT: 5},
-  {ID: 12, NAME: 'Queens', PARENT: 5},
-]
-
-// Teach search bar how to calculate suggestions for any given input value.
-const getRegions = value => {
-  const inputValue = value.trim().toLowerCase();
-  const inputLength = inputValue.length;
-
-  return inputLength === 0 ? [] : dataHelper.filter(lang =>
-    lang.NAME.toLowerCase().slice(0, inputLength) === inputValue
-  );
-};
-
-// When suggestion is clicked, Autosuggest needs to populate the input
-// based on the clicked suggestion. Teach Autosuggest how to calculate the
-// input value for every given suggestion.
-const getSuggestionValue = region => region.NAME;
-
-// Use your imagination to render suggestions.
-const renderSuggestion = region => (
-  <div>
-    <a>
-      {region.NAME}
-    </a>
-  </div>
-);
-
 class Dashboard extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       //Filtering
-      selectedGroup: 'all',
+      selectedGroup: { id: 0, name: 'all', parent: -1 },
       selectedCategory: 'all',
       selectedTime: 'all',
       searchTerm: '',
 
       //Sorting
       sortBy: 'votes',
-
-      //For Groups Component
-      open: false,
-      open1: false,
-      open2: false,
-      open3: false,
-      open_third_level: false,
-      open_third_level1: false,
-      open_third_level2: false,
-      open_third_level3: false,
-      opened: 0,
-      openedQueue: [],
-      value: '',
-      regions: [],
     };
-  }
-
-  onChange = (event, { newValue }) => {
-    this.setState({
-      value: newValue
-    });
-  }
-
-  // Autosuggest will call this function every time you need to update suggestions.
-  // You already implemented this logic above, so just use it.
-  onSuggestionsFetchRequested = ({ value }) => {
-    this.setState({
-      regions: getRegions(value)
-    });
-  }
-
-  // Autosuggest will call this function every time you need to clear suggestions.
-  onSuggestionsClearRequested = () => {
-    this.setState({
-      regions: []
-    });
-  }
-
-  renderTreeButtons = (ID) => {
-    const filteredData = dataHelper.filter((item) => item.PARENT == ID)
-    const renderedButtons = filteredData.map((item) => {
-      // const customColor = ((this.state.openedQueue.includes(item.ID) ? 'yellow' : 'blue')
-      let y = 'yellow'
-      if (this.state.openedQueue.includes(item.ID)) {
-        y = "yellow"
-      } else {
-        y = "blue"
-      }
-      const customColor = y
-      return (
-        <div className="col-lg-3" key={item.ID}>
-          <Button bsSize="large" block style={{backgroundColor: customColor}} onClick={ () => {
-            this.setState({ opened: item.ID});
-            if (this.state.openedQueue === [] || item.PARENT == 0) {
-              this.setState({ openedQueue: [item.ID]})
-            } else if (this.state.openedQueue.length == 1) {
-              this.setState({ openedQueue: [...this.state.openedQueue, item.ID]})
-            } else if (this.state.openedQueue.length == 2) {
-              if (item.PARENT == this.state.openedQueue[0]) {
-                this.setState({ openedQueue: [item.PARENT, item.ID]})
-              } else {
-                this.setState({ openedQueue: [...this.state.openedQueue, item.ID]})
-              }
-            } else if (this.state.openedQueue.length == 3) {
-              if (item.PARENT == this.state.openedQueue[0]) {
-                this.setState({ openedQueue: [item.PARENT, item.ID]})
-              } else if (item.PARENT == this.state.openedQueue[1]) {
-                this.setState({ openedQueue: [this.state.openedQueue[0], item.PARENT, item.ID]})
-              }
-            }
-          }}>
-            {item.NAME}
-          </Button>
-        </div>
-      );
-    });
-    return renderedButtons;
-  }
-
-  renderTilesHelper4 = () => {
-    if (this.state.opened == 0) {
-      return null;
-    }
-    const selectedFeedback = dataHelper.filter((item) => item.ID == this.state.opened)
-    if (selectedFeedback[0].PARENT == 0) {
-      return (
-        <div className="row" style={{paddingTop: 10}}>
-          {this.renderTreeButtons(selectedFeedback[0].ID)}
-        </div>
-      );
-    }
-    const selectedFeedbackParent = dataHelper.filter((item) => item.ID == selectedFeedback[0].PARENT)
-    if (selectedFeedbackParent[0].PARENT == 0) {
-      return (
-        <div>
-          <div className="row" style={{paddingTop: 10}}>
-            {this.renderTreeButtons(selectedFeedbackParent[0].ID)}
-          </div>
-          <div className="row" style={{paddingTop: 10}}>
-            {this.renderTreeButtons(selectedFeedback[0].ID)}
-          </div>
-        </div>
-      );
-    }
-    const selectedFeedbackParentParent = dataHelper.filter((item) => item.ID == selectedFeedbackParent[0].PARENT)
-    return (
-      <div>
-        <div className="row" style={{paddingTop: 10}}>
-          {this.renderTreeButtons(selectedFeedbackParentParent[0].ID)}
-        </div>
-        <div className="row" style={{paddingTop: 10}}>
-          {this.renderTreeButtons(selectedFeedbackParent[0].ID)}
-        </div>
-        <div className="row" style={{paddingTop: 10}}>
-          {this.renderTreeButtons(selectedFeedback[0].ID)}
-        </div>
-      </div>
-    );
   }
 
   renderKeyStats = () => {
@@ -203,11 +47,11 @@ class Dashboard extends Component {
     return (
       <div
         className="row"
-        style={{marginBottom: '5px'}}>
+        style={{marginBottom: '5px', paddingLeft:15}}>
         <div className="col-md-4">
           <StatsCard
             statValue={filteredFeedback.length || 0}
-            statLabel={'New Feedback!'}
+            statLabel={'New Feedback Submitted!'}
             icon={<i className="fa fa-comments-o"></i>}
             backColor={'red'}
           />
@@ -215,7 +59,7 @@ class Dashboard extends Component {
         <div className="col-md-4">
           <StatsCard
             statValue={filteredSolutions.length}
-            statLabel={'New solutions!'}
+            statLabel={'New solutions Proposed!'}
             icon={<i className="fa fa-tasks"></i>}
             backColor={'violet'}
           />
@@ -259,7 +103,7 @@ class Dashboard extends Component {
       return false; 
     }
     //Then Filter by Group
-    if (this.state.selectedGroup !== 'all' && this.state.selectedGroup !== feedback.group) {
+    if (this.state.selectedGroup.name !== 'all' && this.state.selectedGroup.name !== feedback.group) {
       return false; 
     }
     //Then Filter by Search
@@ -279,8 +123,8 @@ class Dashboard extends Component {
 
   renderFeedbackList = () => {
     return (
-      <div className='row'>
-        <Panel>
+      <div className='row' style={{paddingLeft:15}}>
+        <Panel title="Feedback List">
           {console.log(this.props.feedback.list[0])}
           {this.props.feedback.list
           .filter(this.filterFeedback)
@@ -297,83 +141,85 @@ class Dashboard extends Component {
 
   renderTimeControls = () => {
     return (
-      <Panel className='row' header='Filter by Time'>
-        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'all'})}>All</button></div>
-        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button></div>
-        <div className='col-md-4'><button onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button></div>
+      <Panel title="Filter by Time">
+        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'all'})}>All</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button>
       </Panel>
     );
   }
 
   renderCategoryControls = () => {
     return (
-      <Panel className='row' header='Filter by Feedback Category'>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'all'})}>All</button></div>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button></div>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button></div>
-        <div className='col-md-3'><button onClick={() => this.setState({selectedCategory: 'other'})}>Other</button></div>
+      <Panel title="Filter by Feedback Category">
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'all'})}>All</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button>
+        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'other'})}>Other</button>
       </Panel>
     );
   }
 
-  renderGroupControls = () => {
-    const { value, regions } = this.state;
-    const inputProps = {
-      placeholder: 'Type a region',
-      value,
-      onChange: this.onChange,
-    };
+  createStylingArray = (currentGroups, lastGroup) => {
+    const newGroup = this.props.groupStructure.filter(group => group.id === lastGroup.parent);
+    if (newGroup.length) {
+      return this.createStylingArray([...currentGroups, ...newGroup], newGroup[0]);
+    } else
+      return currentGroups;
+  }
 
-    return (
-      <Panel className="row">
-        <div className="col-lg-8">
-          <div className="input-group custom-search-form">
-            <Autosuggest
-              suggestions={regions}
-              onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
-              onSuggestionsClearRequested={this.onSuggestionsClearRequested}
-              getSuggestionValue={getSuggestionValue}
-              renderSuggestion={renderSuggestion}
-              inputProps={inputProps}
-              className="form-control"
-              theme={{input: {width: 750, height: 35}}}
-            />
-            <span className="input-group-btn">
-              <button className="btn btn-default" type="button">
-                <i className="fa fa-search" />
+  renderGroupControls = () => {
+    // Step #1 - Create the one dimensional styling array
+    const stylingArray = this.createStylingArray([this.state.selectedGroup], this.state.selectedGroup);
+    console.log('STYLING ARRAY: ', stylingArray);
+    
+    // Step #2 - Create the two dimensional output array
+    let outputArray = []; 
+    stylingArray.forEach((selectedNode, index) => {
+      outputArray.push(this.props.groupStructure.filter(group => group.parent === selectedNode.parent));
+    });
+    console.log('OUTPUT ARRAY: ', outputArray);
+
+    outputArray = outputArray.reverse();
+
+    const bottomRow = this.props.groupStructure.filter(group => group.parent === this.state.selectedGroup.id);
+    if (bottomRow.length) outputArray.push(bottomRow);
+
+    const groupsToRender = outputArray.map(row =>
+      <div className="row">
+        {
+          row.map(group =>
+            <div className="col-md-3">
+              <button onClick={() => this.setState({ selectedGroup: group })}>
+                {group.name}
               </button>
-            </span>
-          </div>
-          <div style={{ paddingTop: 10}}>
-            <div className="row">
-              {this.renderTreeButtons(0)}
             </div>
-            {this.renderTilesHelper4(this.state.opened)}
-          </div>
-        </div>
-        <div className="col-lg-4 pull-right">
-          <div
-            title="Top Feedback"
-          >            
-          </div>
-        </div>
+          )
+        }
+      </div>
+    );
+
+    // Step #3 - Render the output array
+    return (
+      <Panel title="Filter by Group" className='container-fluid'>
+        {groupsToRender}
       </Panel>
     );
   }
 
   renderSearch = () => {
     return (
-      <Panel className='row' header='Search to Filter'>
-        <input value={this.state.searchTerm} onChange={(event) => this.setState({searchTerm: event.target.value})} />
+      <Panel title='Search to Filter'>
+        <input className="form-control" value={this.state.searchTerm} onChange={(event) => this.setState({searchTerm: event.target.value})} />
       </Panel>
     );
   }
 
   renderSort = () => {
     return (
-      <Panel className='row' header='Sort by...'>
-        <div className='col-md-6'><button onClick={() => this.setState({sortBy: 'MostVotes'})}>Most Votes</button></div>
-        <div className='col-md-6'><button onClick={() => this.setState({sortBy: 'MostRecent'})}>Most Recent</button></div>
+      <Panel title='Sort by...'>
+        <button className="btn btn-default" onClick={() => this.setState({sortBy: 'MostVotes'})}>Most Votes</button>
+        <button className="btn btn-default" onClick={() => this.setState({sortBy: 'MostRecent'})}>Most Recent</button>
       </Panel>
     );
   }
@@ -403,7 +249,21 @@ class Dashboard extends Component {
 
 function mapStateToProps(state) {
   const { feedback, solutions } = state;
-  return { feedback, solutions };
+  const groupStructure = [
+    {id: 1, name: '1', parent: 0},
+    {id: 2, name: '2', parent: 0},
+    {id: 3, name: '3', parent: 0},
+    {id: 4, name: '4', parent: 0},
+    {id: 5, name: '11', parent: 1},
+    {id: 6, name: '12', parent: 1},
+    {id: 7, name: '13', parent: 1},
+    {id: 8, name: '14', parent: 1},
+    {id: 9, name: '111', parent: 5},
+    {id: 10, name: '112', parent: 5},
+    {id: 11, name: '113', parent: 5},
+    {id: 12, name: '114', parent: 5},
+  ];
+  return { feedback, solutions, groupStructure };
 }
 
 export default connect(mapStateToProps, {})(RequireAuth(Dashboard));

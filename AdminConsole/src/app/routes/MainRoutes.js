@@ -27,7 +27,6 @@ export const MainRoutes = () =>
       {/* Main */}
       <Route path="/admin/dashboard" component={Dashboard} />
       <Route path="/admin/approve" component={Approve} />
-      <Route path="/admin/edit" component={Edit} />
 
       {/* All other */}
       <Route path="*" component={PageNotFound} />
