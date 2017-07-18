@@ -128,6 +128,38 @@ const translate = language => {
         TEXT_INTRO: '和我一起使用 Suggestion Box!\n\n我们组织的识别码: ',
         SIGN_OUT: '退出'
       }
+    default:
+      return {
+        INTRO_SLIDE_1: 'Welcome to the Suggestion Box!',
+        INTRO_SLIDE_2: 'Anonymously submit feedback for your community...',
+        INTRO_SLIDE_3: "...and prioritize other members' feedback by voting.",
+        INTRO_SLIDE_4: 'Top feedback will either be addressed or receive an official response',
+        SUBMIT_FEEDBACK: 'Submit Feedback',
+        POSITIVE_FILL_TEXT: 'Positives: What is something that positively contributed to sales and conversation?',
+        NEGATIVE_FILL_TEXT: 'Negatives: What is something that negatively impacted sales and conversation?',
+        ALL_FEEDBACK: 'All Feedback',
+        INVITE_OTHERS: 'Invite others',
+        INVITE_OTHERS_BODY: 'Help others in your community voice their feedback through Suggestion Box.',
+        SHARE: 'Share',
+        DISMISS: 'Dismiss',
+        PROPOSED_SOLUTIONS: 'Proposed Solutions',
+        NEW_FEEDBACK: 'New Feedback',
+        MOST_POPULAR: 'Most popular',
+        THIS_WEEK: 'This week',
+        TODAY: 'Today',
+        MY_FEEDBACK: 'My Feedback',
+        ENTER_EMAIL: 'Enter Your Email Address',
+        SEND_EMAIL: 'Send Authorization Email',
+        EMAIL_BLURB_FOR_CODE: 'Great! We sent an email with a 4-digit code to',
+        ENTER_CODE: 'Enter Code from Email',
+        VERIFY_EMAIL: 'Verify Email',
+        GROUP_DESCRIPTION: "Please enter your organization's unique group code to join your organization.",
+        GROUP_CODE: 'Your Group Code',
+        JOIN_GROUP: 'Join Group',
+        TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
+        ENTER_FEEDBACK: 'Enter your feedback here!',
+        SIGN_OUT: 'Sign Out'
+      }
     }
 }
 
