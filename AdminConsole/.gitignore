@@ -4,6 +4,8 @@ node_modules/
 *.log
 npm-debug.log.*
 
+src/app/constants.js
+
 docs/public/assets/app.bundle.js
 docs/public/assets/app.styles.css
 docs/public/assets/fontawesome-webfont.svg
