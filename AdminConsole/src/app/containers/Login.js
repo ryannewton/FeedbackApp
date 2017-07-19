@@ -10,11 +10,19 @@ class Login extends Component {
       email: '',
       code: '',
     };
+    this._handleKeyPress = this._handleKeyPress.bind(this)
   }
 
   handleSubmit = () => {
     const { email, code } = this.state;
     this.props.authorizeUser({ email, code });
+  }
+
+  _handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      const { email, code } = this.state;
+      this.props.authorizeUser({ email, code });
+    }
   }
 
   render() {
@@ -44,12 +52,13 @@ class Login extends Component {
               <div style={{paddingTop:20}} />
               <label>Administrator Password:</label>
               <input
-                type='text'
+                type='password'
                 className='form-control'
                 placeholder='Your email address'
                 value={this.state.code}
                 style={{ width: 300 }}
                 onChange={event => this.setState({ code: event.target.value }) }
+                onKeyPress={this._handleKeyPress}
               />
               <div style={{paddingLeft:240, paddingTop:20}}>
               <button
