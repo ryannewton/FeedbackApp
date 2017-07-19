@@ -30,8 +30,8 @@ class ApproveFeedbackCard extends Component {
   renderSolutionsButton() {
     const { viewSolutions } = this.state
     return (
-      <div style={{paddingTop:20, paddingBottom:20}}>
-        <button className="btn btn-default" onClick={() => this.setState({ viewSolutions: !viewSolutions})}>View Solutions</button>
+      <div style={{paddingTop:10, paddingBottom:10}}>
+        <button className="btn btn-default" onClick={() => this.setState({ viewSolutions: !viewSolutions})}>{viewSolutions?'Hide Solutions':'View Solutions'}</button>
       </div>
     )
   }
@@ -39,7 +39,7 @@ class ApproveFeedbackCard extends Component {
   renderFeedbackText = () => {
     const timestamp = new Date(this.props.feedback.date);
     return (
-      <div style={{ marginTop: 10, marginBottom: 20 }}>
+      <div style={{ marginTop: 5, marginBottom: 10 }}>
         <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
           <p style={{color:'#48D2A0'}}>▲ {this.props.feedback.upvotes}</p><p style={{color:'#F54B5E'}}>▼ {this.props.feedback.downvotes}</p>
         </div>
@@ -93,13 +93,13 @@ class ApproveFeedbackCard extends Component {
   renderActionButtons = () => {
     if (!this.state.editing) {
       return (
-        <div style={{paddingTop:20, paddingBottom:20}}>
+        <div style={{paddingTop:10, paddingBottom:10}}>
           <button className="btn btn-default" onClick={() => this.setState({ editing: true})}>Edit</button>
         </div>
       );
     }
     return (
-      <div style={{paddingTop:20, paddingBottom:20}}>
+      <div style={{paddingTop:10, paddingBottom:10}}>
         <button className="btn btn-default" onClick={() => this.setState({ editing: false})}>Cancel</button>
         <button onClick={() => this.handleUpdate()} className="btn btn-primary">Update</button>
       </div>
@@ -174,11 +174,15 @@ class ApproveFeedbackCard extends Component {
     const { status, category, approved } = this.props.feedback;
     return (
       <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
+
+        <div className="col-xs-3">
+          Status: {status}
+        </div>
         <div className="col-xs-4">
-          {this.renderStatus(status)}
+          {category ? category: <i>No category assigned</i>}
         </div>
         <div className="col-xs-3">
-          {category ? category: 'Uncategorized'}
+          {approved ? 'Approved': 'Not Approved'}
         </div>
           {this.maybeRenderApproved()}
       </div>
@@ -191,8 +195,10 @@ class ApproveFeedbackCard extends Component {
     const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId == this.props.feedback.id)
     if (!feedbackSolutions.length) {
       return (
-        <div>
+        <div className='col-xs-10 col-xs-offset-1 clearfix'>
+        <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
           No solutions yet!
+          </Panel>
         </div>
       );
     }
