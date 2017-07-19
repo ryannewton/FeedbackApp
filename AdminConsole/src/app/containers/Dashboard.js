@@ -23,6 +23,7 @@ class Dashboard extends Component {
     this.state = {
       //Filtering
       selectedGroup: { id: 0, name: 'all', parent: -1 },
+      selectedStatus: 'all',
       selectedCategory: 'all',
       selectedTime: 'all',
       searchTerm: '',
@@ -30,6 +31,7 @@ class Dashboard extends Component {
       //Sorting
       sortBy: 'votes',
     };
+    this.handleStatusChange = this.handleStatusChange.bind(this);
   }
 
   renderKeyStats = () => {
@@ -88,6 +90,18 @@ class Dashboard extends Component {
     return true;
   }
 
+  createAllowedGroups = (currentGroupNames, currentGroups) => {
+    let childrenOfCurrentGroups = [];
+    currentGroups.forEach(parent => {
+      childrenOfCurrentGroups = [...childrenOfCurrentGroups, ...this.props.groupStructure.filter(group => group.parent === parent.id)];
+    });
+
+    if (childrenOfCurrentGroups.length) {
+      return this.createAllowedGroups([...currentGroupNames, ...childrenOfCurrentGroups.map((group) => group.name)], childrenOfCurrentGroups);
+    } else
+      return currentGroupNames;
+  }
+
   filterFeedback = (feedback) => {
     //First Filter by Date
     if (this.state.selectedTime !== 'all') {
@@ -99,12 +113,17 @@ class Dashboard extends Component {
         return false;
     }
     //Then Filter by Category (all, facilities, hr, other)
-    if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {
-      return false;
+    if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {     
+      return false; 
+    }
+    //Then Filter by Status (all, new, inprocess, complete, closed)
+    if (this.state.selectedStatus !== 'all' && this.state.selectedStatus !== feedback.status) {
+      return false; 
     }
     //Then Filter by Group
     if (this.state.selectedGroup.name !== 'all' && this.state.selectedGroup.name !== feedback.group) {
-      return false;
+      const listOfAllowedGroupNames = createAllowedGroups([this.state.selectedGroup.name], [this.state.selectedGroup]);
+      if (!listOfAllowedGroupNames.includes(this.state.selectedGroup.name)) return false; 
     }
     //Then Filter by Search
     if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
@@ -116,7 +135,9 @@ class Dashboard extends Component {
   sortFeedback = (a, b) => {
     if (this.state.sortBy === "MostVotes")
       return b.upvotes - a.upvotes;
-    else {
+    else if (this.state.sortBy === "Oldest") {
+      return new Date(a.date) - new Date(b.date);
+    } else {
       return new Date(b.date) - new Date(a.date);
     }
   }
@@ -140,22 +161,43 @@ class Dashboard extends Component {
 
   renderTimeControls = () => {
     return (
-      <Panel title="Filter by Time">
-        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'all'})}>All</button>
-        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button>
-        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button>
-      </Panel>
+      <div style={{marginBottom:20}}>
+      <p>Time: </p>
+        <button className={this.state.selectedTime === "all"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedTime: 'all'})}>All</button>
+        <button className={this.state.selectedTime === "lastWeek"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button>
+        <button className={this.state.selectedTime === "lastMonth"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button>
+      </div>
     );
   }
 
   renderCategoryControls = () => {
     return (
-      <Panel title="Filter by Feedback Category">
-        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'all'})}>All</button>
-        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button>
-        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button>
-        <button className="btn btn-default" onClick={() => this.setState({selectedCategory: 'other'})}>Other</button>
-      </Panel>
+      <div style={{marginBottom:20}}>
+      <p>Catagory: </p>
+        <button className={this.state.selectedCategory === "all"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'all'})}>All</button>
+        <button className={this.state.selectedCategory === "facilities"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button>
+        <button className={this.state.selectedCategory === "hr"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button>
+        <button className={this.state.selectedCategory === "other"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'other'})}>Other</button>
+      </div>
+    );
+  }
+
+  handleStatusChange(event) {
+    this.setState({ selectedStatus: event.target.value })
+  }
+
+  renderStatusControls = () => {
+    return (
+      <div style={{marginBottom:20}}>
+        <p>Status: </p>
+        <select className="form-control" value={this.state.selectedStatus} onChange={this.handleStatusChange}>
+          <option value='all'>All Feedback</option>
+          <option value='new'>★ New Feedback</option>
+          <option value='inprocess'>⟳ Project in process</option>
+          <option value='complete'>✔ Project Finished</option>
+          <option value='closed'>✘ Project Closed</option>
+        </select>
+      </div>
     );
   }
 
@@ -186,7 +228,15 @@ class Dashboard extends Component {
         {
           row.map(group =>
             <div className="col-md-3">
-              <button className="btn btn-default" onClick={() => this.setState({ selectedGroup: group })}>
+              <button
+                className={this.state.selectedGroup === group?"btn btn-primary":"btn btn-default"}
+                onClick={() => {
+                  if (this.state.selectedGroup.id === group.id)
+                    this.setState({ selectedGroup: { id: 0, name: 'all', parent: -1 } });
+                  else
+                    this.setState({ selectedGroup: group });
+                }}
+              >
                 {group.name}
               </button>
             </div>
@@ -197,9 +247,10 @@ class Dashboard extends Component {
 
     // Step #3 - Render the output array
     return (
-      <Panel title="Filter by Group" className='container-fluid'>
+      <div>
+      <p>Group: </p>
         {groupsToRender}
-      </Panel>
+      </div>
     );
   }
 
@@ -214,8 +265,9 @@ class Dashboard extends Component {
   renderSort = () => {
     return (
       <Panel title='Sort by...'>
-        <button className="btn btn-default" onClick={() => this.setState({sortBy: 'MostVotes'})}>Most Votes</button>
-        <button className="btn btn-default" onClick={() => this.setState({sortBy: 'MostRecent'})}>Most Recent</button>
+        <button className={this.state.sortBy === "MostVotes"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({sortBy: 'MostVotes'})}>Most Votes</button>
+        <button className={(this.state.sortBy === "MostVotes"||this.state.sortBy === "Oldest")?"btn btn-default":"btn btn-primary"}  onClick={() => this.setState({sortBy: 'MostRecent'})}>Most Recent</button>
+        <button className={this.state.sortBy === "Oldest"?"btn btn-primary":"btn btn-default"}  onClick={() => this.setState({sortBy: 'Oldest'})}>Oldest</button>
       </Panel>
     );
   }
@@ -233,9 +285,12 @@ class Dashboard extends Component {
             {/* Right Side - Controls: Time, Category, Group */}
             {this.renderSearch()}
             {this.renderSort()}
-            {this.renderTimeControls()}
-            {this.renderCategoryControls()}
-            {this.renderGroupControls()}
+            <Panel title='Filter by...'>
+              {this.renderStatusControls()}
+              {this.renderTimeControls()}
+              {this.renderCategoryControls()}
+              {this.renderGroupControls()}
+            </Panel>
           </div>
         </div>
       </div>

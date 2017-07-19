@@ -27,7 +27,8 @@ class ApproveSolutionsCard extends Component {
     const { solution } = this.props;
     const timestamp = new Date(solution.date);
     return (
-      <div style={{ marginTop: 10, marginBottom: 20 }}>
+      <div className='col-xs-10 col-xs-offset-1 clearfix'>
+      <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
         <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
           <t style={{color:'#48D2A0'}}>▲ {this.props.solution.upvotes} </t><t style={{color:'#F54B5E'}}> ▼ {this.props.solution.downvotes}</t>
         </div>
@@ -37,6 +38,7 @@ class ApproveSolutionsCard extends Component {
         <div className="pull-right" style={{ fontSize: 10}}>
           Submitted <TimeAgo date={timestamp} />
         </div>
+      </Panel>
       </div>
     );
   }
@@ -45,7 +47,8 @@ class ApproveSolutionsCard extends Component {
     const { feedback } = this.props;
     const timestamp = new Date(feedback.date);
     return (
-      <div style={{ marginTop: 10, marginBottom: 20 }}>
+      <div className="col-xs-12" style={{ marginTop: 10, marginBottom: 20 }}>
+        <p>In Response to: </p>
         <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
           <t style={{color:'#48D2A0'}}>▲ {this.props.feedback.upvotes} </t><t style={{color:'#F54B5E'}}> ▼ {this.props.feedback.downvotes}</t>
         </div>
@@ -65,27 +68,30 @@ class ApproveSolutionsCard extends Component {
     }
     const { solution, approveSolution, clarifySolution, rejectSolution } = this.props;
     return (
-      <div style={{ marginTop: 20, marginBottom: 5 }}>
+      <div className="col-xs-offset-1" style={{ marginTop: 20, marginBottom: 5 }}>
         <button
-          type='button'
+          type="button"
+          className="btn btn-success"
+          style={{ ...buttonStyles, backgroundColor:'#6ECFA2' }}
           onClick={() => approveSolution(solution)}
-          style={{ ...buttonStyles, backgroundColor: '#6ECFA2' }}
         >
-          APPROVE
+          Approve
         </button>
         <button
-          type='button'
+          type="button"
+          className="btn btn-warning"
           onClick={() => this.setState({ showClarifyInput: true })}
           style={{ ...buttonStyles, backgroundColor: '#F2C63B' }}
         >
-          CLARIFY
+          Clarify
         </button>
         <button
-          type='button'
+          type="button"
+          className="btn btn-danger"
           onClick={() => this.setState({ showRejectInput: true })}
           style={{ ...buttonStyles, backgroundColor: '#E5575F' }}
         >
-          REJECT
+          Reject
         </button>
       </div>
     );
@@ -136,11 +142,13 @@ class ApproveSolutionsCard extends Component {
   render() {
     return (
       <Panel hasTitle={false}>
-        {this.renderFeedbackText()}
         {this.renderSolutionText()}
         {this.renderButtons()}
+        <div className="col-sm-offset-1">
         {this.maybeRenderRejectInput()}
         {this.maybeRenderClarifyInput()}
+        </div>
+        {this.renderFeedbackText()}
       </Panel>
     );
   }
@@ -150,11 +158,6 @@ const buttonStyles = {
   marginLeft: 20,
   marginRight: 20,
   width: 100,
-  height: 30,
-  color: 'white',
-  border: 'none',
-  borderRadius: 2,
-  fontSize: 10,
 }
 
 export default connect(null, {
