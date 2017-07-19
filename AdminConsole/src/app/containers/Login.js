@@ -52,7 +52,7 @@ class Login extends Component {
               <div style={{paddingTop:20}} />
               <label>Administrator Password:</label>
               <input
-                type='text'
+                type='password'
                 className='form-control'
                 placeholder='Your email address'
                 value={this.state.code}
