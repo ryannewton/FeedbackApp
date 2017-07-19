@@ -18,6 +18,7 @@ import {
   SUBMIT_OFFICIAL_REPLY_FAIL,
   UPDATE_FEEDBACK_STATUS,
   UPDATE_FEEDBACK,
+  PULL_GROUP_INFO
 } from './types';
 
 // Import constants
@@ -134,4 +135,15 @@ export const updateFeedbackStatus = ({ feedback, newStatus }) => (
       payload: { feedback, status: newStatus },
     });
   }
+);
+
+export const pullGroupInfo = token => (
+  dispatch =>
+    http.post('/pullGroupInfo', { authorization: token })
+    .then((response) => {
+      dispatch({ type: PULL_GROUP_INFO, payload: response.data });
+    })
+    .catch((error) => {
+      console.log('Error in pullGroupInfo, Error: ', error.response.data);
+    })
 );

@@ -11,7 +11,7 @@ import { createBrowserHistory } from 'history';
 import configureStore from './redux/store/configureStore';
 import App from './containers/App';
 
-import { authorizeUserFail, pullFeedback, pullSolutions, pullGroupTreeInfo } from './redux/actions';
+import { authorizeUserFail, pullFeedback, pullSolutions, pullGroupTreeInfo, pullGroupInfo } from './redux/actions';
 
 const store = configureStore({});
 const history = createBrowserHistory();
@@ -24,6 +24,7 @@ class Root extends Component {
       store.dispatch(pullFeedback(token));
       store.dispatch(pullSolutions(token));
       store.dispatch(pullGroupTreeInfo(token));
+      store.dispatch(pullGroupInfo(token));
     }
     else store.dispatch(authorizeUserFail(''));
   }
