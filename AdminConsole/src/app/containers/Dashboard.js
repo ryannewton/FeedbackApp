@@ -35,41 +35,34 @@ class Dashboard extends Component {
   }
 
   renderKeyStats = () => {
-    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback).sort(this.sortFeedback);
-    const filteredSolutions =
-      this.props.solutions.list
-      .filter((solution) => filteredFeedback.some((feedback) => feedback.id === solution.feedbackId))
-      .filter(this.filterSolutions);
-    const percentOfTopFive = [0,0,0,0,0].reduce((count, item, index) => {
-      if (filteredFeedback.length <= index) return count;
-      else if(filteredFeedback[index].officialReply) return (count + 1);
-      else return count;
-    },0)/5*100;
-
+    const { list } = this.props.feedback
+    const newFeedback = list.filter((item) => item.status == 'new');
+    const inProccessFeedback = list.filter((item) => item.status == 'inprocess');
+    const completeFeedback = list.filter((item) => item.status == 'complete');
     return (
       <div
         className="row"
         style={{marginBottom: '5px', paddingLeft:15}}>
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={() => this.setState({ selectedStatus: 'new', sortBy: 'Oldest' })}>
           <StatsCard
-            statValue={filteredFeedback.length || 0}
-            statLabel={'New Feedback Submitted!'}
+            statValue={newFeedback.length}
+            statLabel={'Open Feedback'}
             icon={<i className="fa fa-comments-o"></i>}
             backColor={'red'}
           />
         </div>
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={() => this.setState({ selectedStatus: 'inprocess', sortBy: 'MostVotes' })}>
           <StatsCard
-            statValue={filteredSolutions.length}
-            statLabel={'New comments Proposed!'}
-            icon={<i className="fa fa-tasks"></i>}
+            statValue={inProccessFeedback.length}
+            statLabel={'Feedback in progress'}
+            icon={<i className="fa fa-spinner"></i>}
             backColor={'violet'}
           />
         </div>
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={() => this.setState({ selectedStatus: 'complete', sortBy: 'MostVotes' })}>
           <StatsCard
-            statValue={percentOfTopFive}
-            statLabel={'% of Top 5 With Responses'}
+            statValue={completeFeedback.length}
+            statLabel={'Completed Feedback'}
             icon={<i className="fa fa-check"></i>}
             backColor={'blue'}
           />
@@ -186,7 +179,7 @@ class Dashboard extends Component {
   renderCategoryControls = () => {
     return (
       <div style={{marginBottom:20}}>
-      <p>Catagory: </p>
+      <p>Category: </p>
         <button className={this.state.selectedCategory === "all"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'all'})}>All</button>
         <button className={this.state.selectedCategory === "facilities"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button>
         <button className={this.state.selectedCategory === "hr"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button>
