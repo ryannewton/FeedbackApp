@@ -113,17 +113,17 @@ class Dashboard extends Component {
         return false;
     }
     //Then Filter by Category (all, facilities, hr, other)
-    if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {     
-      return false; 
+    if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {
+      return false;
     }
     //Then Filter by Status (all, new, inprocess, complete, closed)
     if (this.state.selectedStatus !== 'all' && this.state.selectedStatus !== feedback.status) {
-      return false; 
+      return false;
     }
     //Then Filter by Group
     if (this.state.selectedGroup.name !== 'all' && this.state.selectedGroup.name !== feedback.group) {
       const listOfAllowedGroupNames = createAllowedGroups([this.state.selectedGroup.name], [this.state.selectedGroup]);
-      if (!listOfAllowedGroupNames.includes(this.state.selectedGroup.name)) return false; 
+      if (!listOfAllowedGroupNames.includes(this.state.selectedGroup.name)) return false;
     }
     //Then Filter by Search
     if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
@@ -159,14 +159,19 @@ class Dashboard extends Component {
     );
   }
 
+  handleTimeFilter(event) {
+    this.setState({ selectedTime: event.target.value })
+  }
+
   renderTimeControls = () => {
     return (
-      <div style={{marginBottom:20}}>
-      <p>Time: </p>
-        <button className={this.state.selectedTime === "all"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedTime: 'all'})}>All</button>
-        <button className={this.state.selectedTime === "lastWeek"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button>
-        <button className={this.state.selectedTime === "lastMonth"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button>
-      </div>
+      <Panel title="Filter by Time">
+        <select className="form-control" value={this.state.selectedTime} onChange={this.handleTimeFilter}>
+          <option value='all'>All</option>
+          <option value='lastWeek'>Last Week</option>
+          <option value='lastMonth'>Last month</option>
+        </select>
+      </Panel>
     );
   }
 
