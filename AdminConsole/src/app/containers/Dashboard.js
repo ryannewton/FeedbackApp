@@ -262,7 +262,20 @@ class Dashboard extends Component {
   renderSearch = () => {
     return (
       <Panel title='Search to Filter'>
-        <input className="form-control" value={this.state.searchTerm} onChange={(event) => this.setState({searchTerm: event.target.value})} />
+        <input
+          className="form-control"
+          value={this.state.searchTerm}
+          onChange={(event) =>
+            this.setState(
+              {
+                searchTerm: event.target.value,
+                selectedStatus: 'all',
+                selectedCategory: 'all',
+                selectedTime: 'all',
+                sortBy: 'votes',
+              }
+          )}
+        />
       </Panel>
     );
   }
@@ -288,7 +301,6 @@ class Dashboard extends Component {
           </div>
           <div className='col-md-4'>
             {/* Right Side - Controls: Time, Category, Group */}
-            {this.renderSearch()}
             {this.renderSort()}
             <Panel title='Filter by...'>
               {this.renderStatusControls()}
@@ -296,6 +308,7 @@ class Dashboard extends Component {
               {this.renderCategoryControls()}
               {this.renderGroupControls()}
             </Panel>
+            {this.renderSearch()}
           </div>
         </div>
       </div>
