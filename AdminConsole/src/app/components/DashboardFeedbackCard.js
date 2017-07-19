@@ -178,7 +178,7 @@ class ApproveFeedbackCard extends Component {
           {this.renderStatus(status)}
         </div>
         <div className="col-xs-3">
-          {category ? category: 'No category assigned'}
+          {category ? category: 'Uncategorized'}
         </div>
           {this.maybeRenderApproved()}
       </div>
