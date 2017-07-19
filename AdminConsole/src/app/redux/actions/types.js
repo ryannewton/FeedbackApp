@@ -37,6 +37,7 @@ export const REJECT_SOLUTION_FAIL = 'reject_solution_fail';
 
 // Group Actions
 export const GROUP_TREE_INFO = 'get_group_tree_info';
+export const PULL_GROUP_INFO = 'pull_group_info';
 
 // Side Menu Actions
 export const SIDEMU_IS_COLLAPSED_KEY = 'SIDEMENU_IS_OPENED_KEY';

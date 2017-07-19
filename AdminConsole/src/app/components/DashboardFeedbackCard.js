@@ -117,7 +117,26 @@ class ApproveFeedbackCard extends Component {
   handleCategoryChange(event) {
     this.setState({ category: event.target.value })
   }
-
+  maybeRenderApproved() {
+    if (this.props.group.feedbackRequiresApproval) {
+      if (this.state.editing) {
+        return (
+          <div className="col-xs-3">
+            <select className="form-control" value={this.state.approved} onChange={this.handleApprovedStatusChange}>
+              <option value={1} >Approved</option>
+              <option value={0} >Not Approved</option>
+            </select>
+          </div>
+        )
+      }
+      return (
+        <div className="col-xs-3">
+          {approved ? 'Approved': 'Not Approved'}
+        </div>
+      )
+    }
+    return null;
+  }
   renderSelections = () => {
     if (this.state.editing) {
       return (
@@ -141,12 +160,7 @@ class ApproveFeedbackCard extends Component {
               <option value='category_d'>Category D</option>
             </select>
           </div>
-          <div className="col-xs-3">
-            <select className="form-control" value={this.state.approved} onChange={this.handleApprovedStatusChange}>
-              <option value={1} >Approved</option>
-              <option value={0} >Not Approved</option>
-            </select>
-          </div>
+          {this.maybeRenderApproved()}
         </div>
       );
     }
@@ -159,9 +173,7 @@ class ApproveFeedbackCard extends Component {
         <div className="col-xs-3">
           {category ? category: 'No category assigned'}
         </div>
-        <div className="col-xs-3">
-          {approved ? 'Approved': 'Not Approved'}
-        </div>
+          {this.maybeRenderApproved()}
       </div>
     )
   }
@@ -220,8 +232,8 @@ const buttonStyles = {
 }
 
 function mapStateToProps(state) {
-  const { solutions } = state;
-  return { solutions };
+  const { solutions, group } = state;
+  return { solutions, group };
 }
 export default connect(mapStateToProps, {
   approveFeedback,
