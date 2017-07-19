@@ -138,12 +138,18 @@ class Dashboard extends Component {
     );
   }
 
+  handleTimeFilter(event) {
+    this.setState({ selectedTime: event.target.value })
+  }
+
   renderTimeControls = () => {
     return (
       <Panel title="Filter by Time">
-        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'all'})}>All</button>
-        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastWeek'})}>Last Week</button>
-        <button className="btn btn-default" onClick={() => this.setState({selectedTime: 'lastMonth'})}>Last Month</button>
+        <select className="form-control" value={this.state.selectedTime} onChange={this.handleTimeFilter}>
+          <option value='all'>All</option>
+          <option value='lastWeek'>Last Week</option>
+          <option value='lastMonth'>Last month</option>
+        </select>
       </Panel>
     );
   }
