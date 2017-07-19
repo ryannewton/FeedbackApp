@@ -61,7 +61,7 @@ class Dashboard extends Component {
         <div className="col-md-4">
           <StatsCard
             statValue={filteredSolutions.length}
-            statLabel={'New solutions Proposed!'}
+            statLabel={'New comments Proposed!'}
             icon={<i className="fa fa-tasks"></i>}
             backColor={'violet'}
           />
@@ -112,6 +112,10 @@ class Dashboard extends Component {
       if (this.state.selectedTime === 'lastMonth' && daysAgo > 30)
         return false;
     }
+
+    if (this.state.selectedCategory == 'rejected' && !feedback.approved) {
+      return true;
+    }
     //Then Filter by Category (all, facilities, hr, other)
     if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {
       return false;
@@ -127,6 +131,10 @@ class Dashboard extends Component {
     }
     //Then Filter by Search
     if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
+      return false;
+    }
+    // Filter by Rejected
+    if (!feedback.approved) {
       return false;
     }
     return true;
@@ -197,10 +205,11 @@ class Dashboard extends Component {
         <p>Status: </p>
         <select className="form-control" value={this.state.selectedStatus} onChange={this.handleStatusChange}>
           <option value='all'>All Feedback</option>
-          <option value='new'>★ New Feedback</option>
+          <option value='new'>★ Open Feedback</option>
           <option value='inprocess'>⟳ Project in process</option>
           <option value='complete'>✔ Project Finished</option>
           <option value='closed'>✘ Project Closed</option>
+          <option value='rejected'>Rejected Feedback</option>
         </select>
       </div>
     );

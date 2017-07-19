@@ -31,7 +31,7 @@ class ApproveFeedbackCard extends Component {
     const { viewSolutions } = this.state
     return (
       <div style={{paddingTop:10, paddingBottom:10}}>
-        <button className="btn btn-default" onClick={() => this.setState({ viewSolutions: !viewSolutions})}>{viewSolutions?'Hide Solutions':'View Solutions'}</button>
+        <button className="btn btn-default" onClick={() => this.setState({ viewSolutions: !viewSolutions})}>{viewSolutions?'Hide Comments':'View Comments'}</button>
       </div>
     )
   }
@@ -188,7 +188,7 @@ class ApproveFeedbackCard extends Component {
       return (
         <div className='col-xs-10 col-xs-offset-1 clearfix'>
         <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
-          No solutions yet!
+          No comments yet!
           </Panel>
         </div>
       );
