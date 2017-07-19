@@ -175,12 +175,6 @@ class ApproveFeedbackCard extends Component {
         <div className="col-xs-4">
           {category ? category: <i>No category assigned</i>}
         </div>
-<<<<<<< HEAD
-=======
-        <div className="col-xs-3">
-          {approved ? 'Approved': 'Not Approved'}
-        </div>
->>>>>>> 7356f6b2605b22ce9d4cbc470da9807fecd56ebd
           {this.maybeRenderApproved()}
       </div>
     )
