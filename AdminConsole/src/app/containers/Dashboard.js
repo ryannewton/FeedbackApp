@@ -35,41 +35,34 @@ class Dashboard extends Component {
   }
 
   renderKeyStats = () => {
-    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback).sort(this.sortFeedback);
-    const filteredSolutions =
-      this.props.solutions.list
-      .filter((solution) => filteredFeedback.some((feedback) => feedback.id === solution.feedbackId))
-      .filter(this.filterSolutions);
-    const percentOfTopFive = [0,0,0,0,0].reduce((count, item, index) => {
-      if (filteredFeedback.length <= index) return count;
-      else if(filteredFeedback[index].officialReply) return (count + 1);
-      else return count;
-    },0)/5*100;
-
+    const { list } = this.props.feedback
+    const newFeedback = list.filter((item) => item.status == 'new');
+    const inProccessFeedback = list.filter((item) => item.status == 'inprocess');
+    const completeFeedback = list.filter((item) => item.status == 'complete');
     return (
       <div
         className="row"
         style={{marginBottom: '5px', paddingLeft:15}}>
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={() => this.setState({ selectedStatus: 'new', sortBy: 'Oldest' })}>
           <StatsCard
-            statValue={filteredFeedback.length || 0}
-            statLabel={'New Feedback Submitted!'}
+            statValue={newFeedback.length}
+            statLabel={'Open Feedback'}
             icon={<i className="fa fa-comments-o"></i>}
             backColor={'red'}
           />
         </div>
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={() => this.setState({ selectedStatus: 'inprocess', sortBy: 'MostVotes' })}>
           <StatsCard
-            statValue={filteredSolutions.length}
-            statLabel={'New solutions Proposed!'}
-            icon={<i className="fa fa-tasks"></i>}
+            statValue={inProccessFeedback.length}
+            statLabel={'Feedback in progress'}
+            icon={<i className="fa fa-spinner"></i>}
             backColor={'violet'}
           />
         </div>
-        <div className="col-md-4">
+        <div className="col-md-4" onClick={() => this.setState({ selectedStatus: 'complete', sortBy: 'MostVotes' })}>
           <StatsCard
-            statValue={percentOfTopFive}
-            statLabel={'% of Top 5 With Responses'}
+            statValue={completeFeedback.length}
+            statLabel={'Completed Feedback'}
             icon={<i className="fa fa-check"></i>}
             backColor={'blue'}
           />
@@ -112,6 +105,10 @@ class Dashboard extends Component {
       if (this.state.selectedTime === 'lastMonth' && daysAgo > 30)
         return false;
     }
+
+    if (this.state.selectedCategory == 'rejected' && !feedback.approved) {
+      return true;
+    }
     //Then Filter by Category (all, facilities, hr, other)
     if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {
       return false;
@@ -127,6 +124,10 @@ class Dashboard extends Component {
     }
     //Then Filter by Search
     if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
+      return false;
+    }
+    // Filter by Rejected
+    if (!feedback.approved) {
       return false;
     }
     return true;
@@ -178,7 +179,7 @@ class Dashboard extends Component {
   renderCategoryControls = () => {
     return (
       <div style={{marginBottom:20}}>
-      <p>Catagory: </p>
+      <p>Category: </p>
         <button className={this.state.selectedCategory === "all"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'all'})}>All</button>
         <button className={this.state.selectedCategory === "facilities"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'facilities'})}>Facilities</button>
         <button className={this.state.selectedCategory === "hr"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedCategory: 'hr'})}>HR</button>
@@ -197,10 +198,11 @@ class Dashboard extends Component {
         <p>Status: </p>
         <select className="form-control" value={this.state.selectedStatus} onChange={this.handleStatusChange}>
           <option value='all'>All Feedback</option>
-          <option value='new'>★ New Feedback</option>
+          <option value='new'>★ Open Feedback</option>
           <option value='inprocess'>⟳ Project in process</option>
           <option value='complete'>✔ Project Finished</option>
           <option value='closed'>✘ Project Closed</option>
+          <option value='rejected'>Rejected Feedback</option>
         </select>
       </div>
     );
