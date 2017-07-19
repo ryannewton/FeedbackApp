@@ -218,6 +218,23 @@ app.post('/savePushToken', upload.array(), (req, res) => {
   });
 });
 
+app.post('/getGroupTreeData', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    // console.log(req.body, 'here!!!')
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { groupId } = decoded;
+      const connectionString =
+      `SELECT id, name, parent
+       FROM tree_test
+       WHERE groupId=?`;
+      connection.query(connectionString, [groupId], (err, rows) => {
+        if (err) console.log(err, 'here@!@#@');
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
 // SEND PUSH NOTIFICATION
 app.post('/sendPushNotification', upload.array(), (req, res) => {
   if (req.body.authorization !== 'secretPushNotificationPassword9911') {
@@ -949,7 +966,7 @@ app.post('/deleteSolution', upload.array(), (req, res) => {
   });
 });
 
-// PULL
+//
 app.post('/pullFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');

@@ -5,6 +5,7 @@ import feedback from './reducer_feedback';
 import solutions from './reducer_solutions';
 import sideMenu from './sideMenu';
 import views from './views';
+import group from './reducer_group';
 
 const reducers = {
   auth,
@@ -12,6 +13,7 @@ const reducers = {
   solutions,
   sideMenu,
   views,
+  group,
 };
 
 export default combineReducers({
