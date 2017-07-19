@@ -765,6 +765,62 @@ app.post('/rejectFeedback', upload.array(), (req, res) => {
   });
 });
 
+app.post('/rejectSolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    console.log(req.body)
+    const { solution, message } = req.body;
+    if (err) {
+      res.status(400).send('Autorization failed');
+    } else if (!message) {
+      res.status(400).send('Message required');
+    } else if (!solution || !solution.id) {
+      res.status(400).send('Unrecognized feedback object');
+    } else {
+      let connectionString =
+      `SELECT email
+       FROM solutions a
+       JOIN users b
+       ON a.userId = b.id
+       WHERE a.id = ?`;
+      connection.query(connectionString, [solution.id], (err1, rows) => {
+        if (err1) {
+          console.log(err1)
+          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0001');
+        } else {
+          let toEmail;
+          if (rows.length === 0) {
+            console.log(1)
+            toEmail = ['newton1988@gmail.com', 'tyler.hannasch@gmail.com'];
+          } else {
+            toEmail = [rows[0].email];
+          }
+          const fromEmail = defaultFromEmail;
+          const subjectLine = 'Suggestion Box: Solution rejected';
+          const bodyText =
+            `In response to your Solution:\n
+            ${solution.text}\n
+            \n
+            Your solution was rejected because:\n
+            ${message}\n
+            \n
+            Note: Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback.`;
+
+          connectionString = "UPDATE solutions SET status='rejected' WHERE id=?";
+          connection.query(connectionString, [solution.id], (err2) => {
+            if (err2) {
+              console.log(3)
+              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
+            } else {
+              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+              res.status(200);
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
 // CLARIFY FEEDBACK
 // 1. Email clarification message to user
 // 2. Flag feedback as status as 'clarify'
@@ -804,6 +860,57 @@ app.post('/clarifyFeedback', upload.array(), (req, res) => {
           connection.query(connectionString, [feedback.id], (err2) => {
             if (err2) {
               res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0004');
+            } else {
+              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+              res.status(200);
+            }
+          });
+        }
+      });
+    }
+  });
+});
+
+app.post('/clarifySolution', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    const { solution, message } = req.body;
+    if (err) {
+      res.status(400).send('Autorization failed');
+    } else if (!message) {
+      res.status(400).send('Message required');
+    } else if (!solution || !solution.id) {
+      res.status(400).send('Unrecognized solution object');
+    } else {
+      let connectionString =
+      `SELECT email
+      FROM solutions a
+      JOIN users b
+      ON a.userId = b.id
+      WHERE a.id = ?`;
+      connection.query(connectionString, [solution.id], (err1, rows) => {
+        if (err1) {
+          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0023');
+        } else if (rows.length === 0) {
+          res.status(400).send('Sorry, this solution\'s submitter was not saved. Cannot clarify');
+        } else {
+          const toEmail = [rows[0].email];
+          const fromEmail = defaultFromEmail;
+          const subjectLine = 'Suggestion Box: Clarification needed';
+          const bodyText =
+            `In response to your solution:\n
+            ${solution.text}\n
+            \n
+            Some clarification is needed:\n
+            ${message}\n
+            \n
+            You can reply to this email and your message will be passed along.\n
+            \n
+            Note: Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback.`;
+
+          connectionString = "UPDATE solutions SET status='clarify' WHERE id=?";
+          connection.query(connectionString, [solution.id], (err2) => {
+            if (err2) {
+              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - AF04');
             } else {
               sendEmail(toEmail, fromEmail, subjectLine, bodyText);
               res.status(200);

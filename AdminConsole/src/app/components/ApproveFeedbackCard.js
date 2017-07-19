@@ -5,7 +5,8 @@ import { connect } from 'react-redux';
 import TimeAgo from 'react-timeago';
 import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 import TextInputForm from './TextInputForm';
-import { Card } from './common';
+import { Panel } from './common';
+import { Button } from 'react-bootstrap';
 
 // Import Actions
 import { approveFeedback, clarifyFeedback, rejectFeedback, updateFeedbackStatus } from '../redux/actions';
@@ -18,14 +19,17 @@ class ApproveFeedbackCard extends Component {
     clarifyMessage: '',
   };
 
-  renderFeedbackText() {
+  renderFeedbackText = () => {
     const timestamp = new Date(this.props.feedback.date);
     return (
       <div style={{ marginTop: 10, marginBottom: 20 }}>
-        <div style={{ fontWeight: 'bold', fontSize: 14 }}>
+        <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
+          <p style={{color:'#48D2A0'}}>▲ {this.props.feedback.upvotes}</p><p style={{color:'#F54B5E'}}>▼ {this.props.feedback.downvotes}</p>
+        </div>
+        <div className="col-xs-offset-1" style={{ fontWeight: 'bold', fontSize: 14 }}>
           {this.props.feedback.text}
         </div>
-        <div style={{ fontSize: 10, float: 'right' }}>
+        <div className="pull-right" style={{ fontSize: 10}}>
           Submitted <TimeAgo date={timestamp} />
         </div>
       </div>
@@ -39,27 +43,30 @@ class ApproveFeedbackCard extends Component {
     }
 
     return (
-      <div style={{ marginTop: 20, marginBottom: 5 }}>
+      <div className="col-xs-offset-1" style={{ marginTop: 20, marginBottom: 5 }}>
         <button
           type="button"
+          className="btn btn-success"
+          style={{ ...buttonStyles, backgroundColor:'#6ECFA2' }}
           onClick={() => approveFeedback(feedback)}
-          style={{ ...buttonStyles, backgroundColor: '#6ECFA2' }}
         >
-          APPROVE
+          Approve
         </button>
         <button
           type="button"
+          className="btn btn-warning"
           onClick={() => this.setState({ showClarifyInput: true })}
           style={{ ...buttonStyles, backgroundColor: '#F2C63B' }}
         >
-          CLARIFY
+          Clarify
         </button>
         <button
           type="button"
+          className="btn btn-danger"
           onClick={() => this.setState({ showRejectInput: true })}
           style={{ ...buttonStyles, backgroundColor: '#E5575F' }}
         >
-          REJECT
+          Reject
         </button>
       </div>
     );
@@ -73,8 +80,8 @@ class ApproveFeedbackCard extends Component {
     return (
       <TextInputForm
         buttonColor="#E5575F"
-        buttonText="SUBMIT REJECTION"
-        submitFunction={ ({ feedback, message }) => {
+        buttonText="Submit Rejection"
+                submitFunction={ ({ feedback, message }) => {
             this.props.rejectFeedback({ feedback, message });
             this.props.updateFeedbackStatus({ feedback, newStatus: 'rejected' });
           }}
@@ -94,7 +101,7 @@ class ApproveFeedbackCard extends Component {
     return (
       <TextInputForm
         buttonColor="#F2C63B"
-        buttonText="REQUEST CLARIFICATION"
+        buttonText="Request Clarification"
         submitFunction={ ({ feedback, message }) => {
           this.props.clarifyFeedback({ feedback, message });
           this.props.updateFeedbackStatus({ feedback, newStatus: 'clarify' });
@@ -109,12 +116,12 @@ class ApproveFeedbackCard extends Component {
 
   render() {
     return (
-      <Card>
+      <Panel hasTitle={false}>
         {this.renderFeedbackText()}
         {this.maybeRenderButtons()}
         {this.maybeRenderRejectInput()}
         {this.maybeRenderClarifyInput()}
-      </Card>
+      </Panel>
     );
   }
 }
@@ -123,11 +130,6 @@ const buttonStyles = {
   marginLeft: 20,
   marginRight: 20,
   width: 100,
-  height: 30,
-  color: 'white',
-  border: 'none',
-  borderRadius: 2,
-  fontSize: 10,
 };
 
 ApproveFeedbackCard.propTypes = {

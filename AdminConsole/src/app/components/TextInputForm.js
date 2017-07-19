@@ -19,8 +19,8 @@ class TextInputForm extends Component {
     } = this.props;
 
     return (
-      <div style={{ flexDirection: 'row' }}>
-        <div className="col-md-10" style={{ marginTop: 10 }} >
+      <div style={{ flexDirection: 'row', marginTop: 50  }}>
+        <div className="col-md-9" style={{ marginTop: 10 }} >
           <FormGroup controlId="formControlsTextarea">
             <ControlLabel>{instructionText}</ControlLabel>
             <FormControl
@@ -30,25 +30,25 @@ class TextInputForm extends Component {
             />
           </FormGroup>
         </div>
-        <div>
+        <div className="col-md-2" style={{ marginTop: 30 }} > 
           <button
             type="button"
+            className="btn btn-primary btn-sm"
             onClick={() => {
               submitFunction({ feedback, message: this.state.text });
               onClose();
             }}
-            style={{ ...buttonStyles, backgroundColor: buttonColor, marginTop: 35 }}
+            style={{ backgroundColor: buttonColor }}
           >
             {buttonText}
           </button>
-        </div>
-        <div>
           <button
             type="button"
+            className="btn btn-primary btn-sm"
             onClick={onClose}
-            style={{ ...buttonStyles, backgroundColor: '#00A2FF' }}
+            style={{ backgroundColor: '#00A2FF', marginTop: 7 }}
           >
-            DISMISS
+            Dismiss
           </button>
         </div>
       </div>

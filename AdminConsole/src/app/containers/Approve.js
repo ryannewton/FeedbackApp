@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router';
 import RequireAuth from '../components/RequireAuth';
+import { Panel } from '../components/common';
 
 // Import Components
 import ApproveFeedbackCard from '../components/ApproveFeedbackCard';
@@ -68,20 +69,22 @@ class ApproveFeedback extends Component {
 
   renderEmptyList() {
     return (
-      <div>Congratulations, you've hit zero inbox!</div>
+      <div>Congratulations, youve hit zero inbox!</div>
     );
   }
 
  render() {
   return (
     <div>
-      <div>
-        <h5>Feedback Approval Needed:</h5>
+      <div style={{paddingRight:20, paddingLeft:20}}>
+        <Panel title="Feedback Approval Needed:">
         {this.listFeedback()}
+        </Panel>
       </div>
-      <div>
-        <h5>Solution Approval Needed:</h5>
+      <div style={{paddingRight:20, paddingLeft:20}}>
+        <Panel title="Solution Approval Needed:">
         {this.listSolutions()}
+        </Panel>
       </div>
     </div>
   );

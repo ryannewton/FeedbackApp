@@ -865,7 +865,7 @@ content: '';
   padding: 0;
 }
 .sidebar .sidebar-menu > li > a {
-  padding: 12px 5px 12px 15px;
+  padding: 20px 5px 12px 15px;
   display: block;
 }
 .sidebar .sidebar-menu > li > a > .fa,
@@ -2968,13 +2968,13 @@ vertical-align: top;
   background: #35404d;
 }
 .skin-black .left-side {
-  background: #39435C;
+  background: #13354E;
 }
 .skin-black .sidebar a {
   color: #eee;
 }
 .skin-black .sidebar a:hover {
-  text-decoration: none;
+  color: #F8C61C;
 }
 .skin-black .treeview-menu > li > a {
   color: #ccc;

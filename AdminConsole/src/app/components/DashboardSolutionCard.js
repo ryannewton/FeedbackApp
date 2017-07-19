@@ -21,7 +21,7 @@ class DashboardSolutionsCard extends Component {
   renderFeedbackText = () => {
     const timestamp = new Date(this.props.solution.date);
     return (
-      <div style={{ marginTop: 10, marginBottom: 20 }}>
+      <div style={{ marginTop: 5, marginBottom: 10 }}>
         <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 14 }}>
           <p style={{color:'#48D2A0'}}>▲ {this.props.solution.upvotes}</p><p style={{color:'#F54B5E'}}>▼ {this.props.solution.downvotes}</p>
         </div>
@@ -44,7 +44,7 @@ class DashboardSolutionsCard extends Component {
 
   renderActionButtons = () => {
     return (
-      <div style={{paddingTop:20, paddingBottom:20}}>
+      <div style={{paddingTop:10, paddingBottom:10}}>
         <button onClick={() => this.handleUpdate()} className="btn btn-primary">Update</button>
       </div>
     );
@@ -59,7 +59,11 @@ class DashboardSolutionsCard extends Component {
       return (
         <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
           <div className="col-xs-3">
-            <select className="form-control" value={this.state.approved} onChange={this.handleApprovedStatusChange}>
+            <select
+              className="form-control"
+              value={this.state.approved}
+              onChange={this.handleApprovedStatusChange}
+            >
               <option value={1} >Approved</option>
               <option value={0} >Not Approved</option>
             </select>
@@ -78,8 +82,8 @@ class DashboardSolutionsCard extends Component {
   }
   render() {
     return (
-      <div className='clearfix'>
-        <Panel hasTitle={false}>
+      <div className='col-xs-10 col-xs-offset-1 clearfix'>
+        <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
           {this.renderFeedbackText()}
           {this.renderSelections()}
         </Panel>

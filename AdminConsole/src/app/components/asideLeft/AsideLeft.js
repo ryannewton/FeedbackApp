@@ -50,7 +50,7 @@ const AsideLeft = (props) => {
                     key={menuIdx}
                     initialCollapseState={menuIdx === 0 ? false : null}
                     headerTitle={group}
-                    headerBackColor="#283744"
+                    headerBackColor="#1F577F"
                     activeView={currentView}
                     views={menus}
                   />
