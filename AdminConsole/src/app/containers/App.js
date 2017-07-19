@@ -12,6 +12,10 @@ import {
 import { navigation } from '../models';
 
 class App extends Component {
+  constructor(props) {
+    super(props)
+    this.sideMenu = this.sideMenu.bind(this)
+  }
 
   state = {
     appName: 'Suggestion Box',
@@ -25,6 +29,25 @@ class App extends Component {
     } = this.props;
 
     getSideMenuCollpasedStateFromLocalStorage();
+  }
+
+  sideMenu() {
+    if (this.props.group.feedbackRequiresApproval) {
+      return navigation.sideMenu;
+    }
+    return [
+        {
+          id: 1,
+          group: 'Pages',
+          menus: [
+            {
+              name: 'Dashboard',
+              linkTo: '/admin/dashboard',
+              faIconName: 'fa-dashboard',
+            },
+          ],
+        },
+      ]
   }
 
   render() {
@@ -41,7 +64,7 @@ class App extends Component {
         <div className="wrapper row-offcanvas row-offcanvas-left">
           <AsideLeft
             isAnimated={true}
-            sideMenu={navigation.sideMenu}
+            sideMenu={this.sideMenu()}
             currentView={currentView}
             isCollapsed={sideMenuIsCollapsed}
           />
@@ -67,6 +90,7 @@ const mapStateToProps = (state) => {
     currentView: state.views.currentView,
     sideMenuIsCollapsed: state.sideMenu.isCollapsed,
     routing: state.routing,
+    group: state.group
   };
 };
 
