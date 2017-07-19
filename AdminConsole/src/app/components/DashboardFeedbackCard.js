@@ -137,13 +137,20 @@ class ApproveFeedbackCard extends Component {
     }
     return null;
   }
+
+  renderStatus(status) {
+    if (status == 'new') {
+      return 'Open';
+    }
+    return status;
+  }
   renderSelections = () => {
     if (this.state.editing) {
       return (
         <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
           <div className="col-xs-4">
             <select className="form-control" value={this.state.status} onChange={this.handleStatusChange}>
-              <option value='new'>★ New Feedback</option>
+              <option value='new'>★ Open</option>
               <option value='inprocess'>⟳ Project in process</option>
               <option value='complete'>✔ Project Finished</option>
               <option value='closed'>✘ Project Closed</option>
@@ -168,7 +175,7 @@ class ApproveFeedbackCard extends Component {
     return (
       <div className="col-xs-12" style={{padding:20, paddingTop:0}}>
         <div className="col-xs-4">
-          {status}
+          {this.renderStatus(status)}
         </div>
         <div className="col-xs-3">
           {category ? category: 'No category assigned'}
