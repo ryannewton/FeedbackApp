@@ -135,10 +135,10 @@ class ApproveFeedbackCard extends Component {
           </div>
           <div className="col-xs-3">
             <select className="form-control" value={this.state.category} onChange={this.handleApprovedStatusChange}>
-              <option value='category_a'>Catagory A</option>
-              <option value='category_b'>Catagory B</option>
-              <option value='category_c'>Catagory C</option>
-              <option value='category_d'>Catagory D</option>
+              <option value='category_a'>Category A</option>
+              <option value='category_b'>Category B</option>
+              <option value='category_c'>Category C</option>
+              <option value='category_d'>Category D</option>
             </select>
           </div>
           <div className="col-xs-3">
