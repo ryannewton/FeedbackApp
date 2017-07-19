@@ -88,6 +88,18 @@ class Dashboard extends Component {
     return true;
   }
 
+  createAllowedGroups = (currentGroupNames, currentGroups) => {
+    let childrenOfCurrentGroups = [];
+    currentGroups.forEach(parent => {
+      childrenOfCurrentGroups = [...childrenOfCurrentGroups, ...this.props.groupStructure.filter(group => group.parent === parent.id)];
+    });
+
+    if (childrenOfCurrentGroups.length) {
+      return this.createAllowedGroups([...currentGroupNames, ...childrenOfCurrentGroups.map((group) => group.name)], childrenOfCurrentGroups);
+    } else
+      return currentGroupNames;
+  }
+
   filterFeedback = (feedback) => {
     //First Filter by Date
     if (this.state.selectedTime !== 'all') {
@@ -99,12 +111,13 @@ class Dashboard extends Component {
         return false;
     }
     //Then Filter by Category (all, facilities, hr, other)
-    if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {
+    if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {     
       return false; 
     }
     //Then Filter by Group
     if (this.state.selectedGroup.name !== 'all' && this.state.selectedGroup.name !== feedback.group) {
-      return false; 
+      const listOfAllowedGroupNames = createAllowedGroups([this.state.selectedGroup.name], [this.state.selectedGroup]);
+      if (!listOfAllowedGroupNames.includes(this.state.selectedGroup.name)) return false; 
     }
     //Then Filter by Search
     if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
@@ -190,7 +203,15 @@ class Dashboard extends Component {
         {
           row.map(group =>
             <div className="col-md-3">
-              <button className="btn btn-default" onClick={() => this.setState({ selectedGroup: group })}>
+              <button
+                className="btn btn-default"
+                onClick={() => {
+                  if (this.state.selectedGroup.id === group.id)
+                    this.setState({ selectedGroup: { id: 0, name: 'all', parent: -1 } });
+                  else
+                    this.setState({ selectedGroup: group });
+                }}
+              >
                 {group.name}
               </button>
             </div>
