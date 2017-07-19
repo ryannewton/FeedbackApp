@@ -100,15 +100,15 @@ class Dashboard extends Component {
     }
     //Then Filter by Category (all, facilities, hr, other)
     if (this.state.selectedCategory !== 'all' && this.state.selectedCategory !== feedback.category) {
-      return false; 
+      return false;
     }
     //Then Filter by Group
     if (this.state.selectedGroup.name !== 'all' && this.state.selectedGroup.name !== feedback.group) {
-      return false; 
+      return false;
     }
     //Then Filter by Search
     if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
-      return false; 
+      return false;
     }
     return true;
   }
@@ -125,7 +125,6 @@ class Dashboard extends Component {
     return (
       <div className='row' style={{paddingLeft:15}}>
         <Panel title="Feedback List">
-          {console.log(this.props.feedback.list[0])}
           {this.props.feedback.list
           .filter(this.filterFeedback)
           .sort(this.sortFeedback)
@@ -161,7 +160,7 @@ class Dashboard extends Component {
   }
 
   createStylingArray = (currentGroups, lastGroup) => {
-    const newGroup = this.props.groupStructure.filter(group => group.id === lastGroup.parent);
+    const newGroup = this.props.group.groupTree.filter(group => group.id === lastGroup.parent);
     if (newGroup.length) {
       return this.createStylingArray([...currentGroups, ...newGroup], newGroup[0]);
     } else
@@ -171,18 +170,15 @@ class Dashboard extends Component {
   renderGroupControls = () => {
     // Step #1 - Create the one dimensional styling array
     const stylingArray = this.createStylingArray([this.state.selectedGroup], this.state.selectedGroup);
-    console.log('STYLING ARRAY: ', stylingArray);
-    
-    // Step #2 - Create the two dimensional output array
-    let outputArray = []; 
-    stylingArray.forEach((selectedNode, index) => {
-      outputArray.push(this.props.groupStructure.filter(group => group.parent === selectedNode.parent));
-    });
-    console.log('OUTPUT ARRAY: ', outputArray);
 
+    // Step #2 - Create the two dimensional output array
+    let outputArray = [];
+    stylingArray.forEach((selectedNode, index) => {
+      outputArray.push(this.props.group.groupTree.filter(group => group.parent === selectedNode.parent));
+    });
     outputArray = outputArray.reverse();
 
-    const bottomRow = this.props.groupStructure.filter(group => group.parent === this.state.selectedGroup.id);
+    const bottomRow = this.props.group.groupTree.filter(group => group.parent === this.state.selectedGroup.id);
     if (bottomRow.length) outputArray.push(bottomRow);
 
     const groupsToRender = outputArray.map(row =>
@@ -241,29 +237,15 @@ class Dashboard extends Component {
             {this.renderCategoryControls()}
             {this.renderGroupControls()}
           </div>
-        </div>     
+        </div>
       </div>
     );
-  }  
+  }
 }
 
 function mapStateToProps(state) {
-  const { feedback, solutions } = state;
-  const groupStructure = [
-    {id: 1, name: '1', parent: 0},
-    {id: 2, name: '2', parent: 0},
-    {id: 3, name: '3', parent: 0},
-    {id: 4, name: '4', parent: 0},
-    {id: 5, name: '11', parent: 1},
-    {id: 6, name: '12', parent: 1},
-    {id: 7, name: '13', parent: 1},
-    {id: 8, name: '14', parent: 1},
-    {id: 9, name: '111', parent: 5},
-    {id: 10, name: '112', parent: 5},
-    {id: 11, name: '113', parent: 5},
-    {id: 12, name: '114', parent: 5},
-  ];
-  return { feedback, solutions, groupStructure };
+  const { feedback, solutions, group } = state;
+  return { feedback, solutions, group };
 }
 
 export default connect(mapStateToProps, {})(RequireAuth(Dashboard));

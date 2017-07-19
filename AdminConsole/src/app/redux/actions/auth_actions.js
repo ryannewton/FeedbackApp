@@ -3,6 +3,7 @@ import {
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   SIGNOUT_USER,
+  GROUP_TREE_INFO
 } from './types';
 
 import http from '../../constants';
@@ -33,6 +34,18 @@ export const authorizeUserSuccess = token => (
     localStorage.setItem('token', token);
   }
 );
+
+export const pullGroupTreeInfo = token => (
+  (dispatch) => {
+    http.post('/getGroupTreeData', { authorization: token})
+    .then((response) => {
+      dispatch({ type: GROUP_TREE_INFO, payload: response.data });
+    })
+    .catch((error) => {
+      console.log(error)
+    });
+  }
+)
 
 export const authorizeUserFail = error => ({
   type: AUTHORIZE_USER_FAIL,
