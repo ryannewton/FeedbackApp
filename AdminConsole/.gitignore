@@ -12,3 +12,5 @@ docs/public/assets/ionicons.svg
 docs/public/assets/app.bundle.js.map
 docs/public/assets/app.vendor.bundle.js
 docs/public/assets/app.vendor.bundle.js.map
+
+src/app/constants.js
