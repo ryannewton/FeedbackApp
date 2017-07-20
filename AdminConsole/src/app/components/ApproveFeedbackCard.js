@@ -16,7 +16,8 @@ class ApproveFeedbackCard extends Component {
     showRejectInput: false,
     rejectMessage: '',
     showClarifyInput: false,
-    clarifyMessage: '',
+    clarifyNothingSubmitted: false,
+    rejectNothingSubmitted: false,
   };
 
   renderFeedbackText = () => {
@@ -81,11 +82,16 @@ class ApproveFeedbackCard extends Component {
       <TextInputForm
         buttonColor="#E5575F"
         buttonText="Submit Rejection"
-                submitFunction={ ({ feedback, message }) => {
-            this.props.rejectFeedback({ feedback, message });
-            this.props.updateFeedbackStatus({ feedback, newStatus: 'rejected' });
+          submitFunction={ ({ feedback, message }) => {
+            if (message == '') {
+              this.setState({ rejectNothingSubmitted: true})
+            } else {
+              this.setState({ rejectNothingSubmitted: false})
+              this.props.rejectFeedback({ feedback, message });
+              this.props.updateFeedbackStatus({ feedback, newStatus: 'rejected' });
+            }
           }}
-        onClose={() => this.setState({ showRejectInput: false })}
+        onClose={() => this.setState({ showRejectInput: false, rejectNothingSubmitted: false })}
         instructionText="Please provide a reason for rejecting this feedback."
         placeholderText="Enter your reason here. Note that this will be sent to the member who submitted this feedback."
         feedback={this.props.feedback}
@@ -103,10 +109,15 @@ class ApproveFeedbackCard extends Component {
         buttonColor="#F2C63B"
         buttonText="Request Clarification"
         submitFunction={ ({ feedback, message }) => {
-          this.props.clarifyFeedback({ feedback, message });
-          this.props.updateFeedbackStatus({ feedback, newStatus: 'clarify' });
+          if (message == '') {
+            this.setState({ clarifyNothingSubmitted: true})
+          } else {
+            this.setState({ clarifyNothingSubmitted: false})
+            this.props.clarifyFeedback({ feedback, message });
+            this.props.updateFeedbackStatus({ feedback, newStatus: 'clarify' });
+          }
         }}
-        onClose={() => this.setState({ showClarifyInput: false })}
+        onClose={() => this.setState({ showClarifyInput: false, clarifyNothingSubmitted: false })}
         instructionText="Please describe what is unclear."
         placeholderText="Enter your description here. Note that this will be sent to the member who submitted this feedback."
         feedback={this.props.feedback}
@@ -114,14 +125,38 @@ class ApproveFeedbackCard extends Component {
     );
   }
 
+  maybeRenderErrorMessage() {
+    if (this.state.clarifyNothingSubmitted) {
+      return (
+        <center>
+          <div style={{color: 'red'}}>
+            Please add a message to help the user understand what to clarify.
+          </div>
+        </center>
+      )
+    } else if (this.state.rejectNothingSubmitted) {
+      return (
+        <center>
+          <div style={{color: 'red'}}>
+            Please add a message to help the user understand why this feedback is being rejected.
+          </div>
+        </center>
+      )
+    }
+    return null;
+  }
+
   render() {
     return (
-      <Panel hasTitle={false}>
-        {this.renderFeedbackText()}
-        {this.maybeRenderButtons()}
-        {this.maybeRenderRejectInput()}
-        {this.maybeRenderClarifyInput()}
-      </Panel>
+      <div>
+        <Panel hasTitle={false}>
+          {this.renderFeedbackText()}
+          {this.maybeRenderButtons()}
+          {this.maybeRenderRejectInput()}
+          {this.maybeRenderClarifyInput()}
+        </Panel>
+        {this.maybeRenderErrorMessage()}
+      </div>
     );
   }
 }

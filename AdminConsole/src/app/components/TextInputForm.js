@@ -1,11 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
 class TextInputForm extends Component {
   state = {
     text: '',
+    nothingSubmitted: false
   };
+
+  handleClick(feedback, message, submitFunction, onClose) {
+    submitFunction({ feedback, message });
+    if (!message == '' && !this.props.clarifyError) {
+      onClose();
+    }
+  }
+
   render() {
 
     const {
@@ -19,39 +29,40 @@ class TextInputForm extends Component {
     } = this.props;
 
     return (
-      <div style={{ flexDirection: 'row', marginTop: 50  }}>
-        <div className="col-md-9" style={{ marginTop: 10 }} >
-          <FormGroup controlId="formControlsTextarea">
-            <ControlLabel>{instructionText}</ControlLabel>
-            <FormControl
-              componentClass="textarea"
-              placeholder={placeholderText}
-              onChange={event => this.setState({ text: event.target.value })}
-            />
-          </FormGroup>
+        <div style={{ flexDirection: 'row', marginTop: 50  }}>
+          <div className="col-md-9" style={{ marginTop: 10 }} >
+            <FormGroup controlId="formControlsTextarea">
+              <ControlLabel>{instructionText}</ControlLabel>
+              <FormControl
+                componentClass="textarea"
+                placeholder={placeholderText}
+                onChange={event => this.setState({ text: event.target.value })}
+              />
+            </FormGroup>
+          </div>
+          <div className="col-md-2" style={{ marginTop: 30 }} >
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={() => {
+                this.handleClick(feedback, this.state.text, submitFunction, onClose)
+              }}
+              style={{ backgroundColor: buttonColor }}
+            >
+              {buttonText}
+            </button>
+            <button
+              type="button"
+              className="btn btn-primary btn-sm"
+              onClick={onClose}
+              style={{ backgroundColor: '#00A2FF', marginTop: 7 }}
+            >
+              Dismiss
+            </button>
+          </div>
         </div>
-        <div className="col-md-2" style={{ marginTop: 30 }} > 
-          <button
-            type="button"
-            className="btn btn-primary btn-sm"
-            onClick={() => {
-              submitFunction({ feedback, message: this.state.text });
-              onClose();
-            }}
-            style={{ backgroundColor: buttonColor }}
-          >
-            {buttonText}
-          </button>
-          <button
-            type="button"
-            className="btn btn-primary btn-sm"
-            onClick={onClose}
-            style={{ backgroundColor: '#00A2FF', marginTop: 7 }}
-          >
-            Dismiss
-          </button>
-        </div>
-      </div>
+
+
     );
   }
 }
@@ -78,4 +89,9 @@ TextInputForm.propTypes = {
   closeFunction: PropTypes.func,
 };
 
-export default TextInputForm;
+function mapStateToProps(state) {
+  const { clarifyError } = state.feedback;
+  return { clarifyError };
+}
+
+export default connect(mapStateToProps, {})(TextInputForm);

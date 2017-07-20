@@ -72,7 +72,7 @@ export const clarifyFeedback = ({ feedback, message }) => (
     .catch((error) => {
       console.log('clarifyFeedback() Fail');
       console.log('Error: ', error);
-      dispatch({ type: CLARIFY_FEEDBACK_FAIL, payload: feedback });
+      dispatch({ type: CLARIFY_FEEDBACK_FAIL, payload: error });
     });
   }
 );
