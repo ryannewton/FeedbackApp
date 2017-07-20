@@ -9,13 +9,20 @@ class Login extends Component {
     this.state = {
       email: '',
       code: '',
+      error: ''
     };
     this._handleKeyPress = this._handleKeyPress.bind(this)
   }
 
   handleSubmit = () => {
     const { email, code } = this.state;
-    this.props.authorizeUser({ email, code });
+    if (email == '' || code == '') {
+      this.setState({ error: 'Please enter a username/password!'});
+    } else {
+      this.setState({ error: ''})
+      this.props.authorizeUser({ email, code });
+    }
+
   }
 
   _handleKeyPress(e) {
@@ -23,6 +30,23 @@ class Login extends Component {
       const { email, code } = this.state;
       this.props.authorizeUser({ email, code });
     }
+  }
+
+  maybeRenderErrorMessage = () => {
+    if (this.state.error !== '') {
+      return (
+        <div style={{ color: 'red' }}>
+          {this.state.error}
+        </div>
+      );
+    } else if (this.props.auth.error) {
+      return (
+        <div style={{ color: 'red' }}>
+          The entered username and password combination was not recognized in our server.
+        </div>
+      )
+    }
+    return null;
   }
 
   render() {
@@ -69,6 +93,7 @@ class Login extends Component {
                   Login
                 </button>
               </div>
+              {this.maybeRenderErrorMessage()}
             </div>
           </Panel>
         </div>
@@ -78,7 +103,8 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  return {};
+  const { auth } = state
+  return { auth };
 }
 
 export default connect(mapStateToProps, { authorizeUser })(Login);

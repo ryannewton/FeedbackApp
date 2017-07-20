@@ -7,7 +7,8 @@ import {
   SUBMIT_OFFICIAL_REPLY_SUCCESS,
   SIGNOUT_USER,
   UPDATE_FEEDBACK_STATUS,
-  UPDATE_FEEDBACK
+  UPDATE_FEEDBACK,
+  CLARIFY_FEEDBACK_FAIL
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -15,6 +16,7 @@ const INITIAL_STATE = {
   list: [],
   lastPulled: new Date(0),
   error: false,
+  clarifyError: false,
 };
 
 function filterAndOrder(list) {
@@ -35,6 +37,10 @@ export default (state = INITIAL_STATE, action) => {
     case REQUEST_FEEDBACK_SUCCESS: {
       const list = filterAndOrder(action.payload.list);
       return { ...state, list, lastPulled: action.payload.lastPulled, loading: false, error: false };
+    }
+
+    case CLARIFY_FEEDBACK_FAIL: {
+      return { ...state, clarifyError: true}
     }
 
     case UPDATE_FEEDBACK: {
