@@ -6,7 +6,7 @@ import { Card, Panel } from './common';
 import DashboardSolutionsCard from './DashboardSolutionCard';
 
 // Import Actions
-import { approveFeedback, clarifyFeedback, rejectFeedback, updateFeedback } from '../redux/actions';
+import { approveFeedback, clarifyFeedback, rejectFeedback, updateFeedback, submitOfficialReply } from '../redux/actions';
 
 class ApproveFeedbackCard extends Component {
   constructor(props) {
@@ -87,6 +87,7 @@ class ApproveFeedbackCard extends Component {
     const { officialReply, approved, status, category } = this.state;
     const updatedFeedback = { ...this.props.feedback, approved, status, officialReply, category };
     this.props.updateFeedback({ feedback: updatedFeedback })
+    this.props.submitOfficialReply({ feedback: updatedFeedback, officialReply });
     this.setState({ editing: false})
   }
 
@@ -243,5 +244,6 @@ export default connect(mapStateToProps, {
   approveFeedback,
   clarifyFeedback,
   rejectFeedback,
-  updateFeedback
+  updateFeedback,
+  submitOfficialReply
 })(ApproveFeedbackCard);

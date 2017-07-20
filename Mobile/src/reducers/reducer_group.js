@@ -18,10 +18,9 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case PULL_GROUP_INFO:
-      console.log('pulling group info', action, state )
       return {...state,
         groupName: action.payload.groupName,
-        groupSignupCode: action.payload.groupAuthCode,
+        groupSignupCode: action.payload.groupSignupCode,
         feedbackRequireApproval: Boolean(action.payload.feedbackRequireApproval),
         solutionsRequireApproval: Boolean(action.payload.solutionsRequireApproval),
         showStatus: Boolean(action.payload.showStatus),

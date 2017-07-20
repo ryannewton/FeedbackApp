@@ -13,7 +13,7 @@ class SendInviteTextButton extends Component {
     return translate(this.props.language).TEXT_INTRO;
   }
   shareAppAlert = () => {
-    const textLink = this.buildTextLink(this.props.groupAuthCode);
+    const textLink = this.buildTextLink(this.props.group.groupSignupCode);
     const { language } = this.props;
     const { INVITE_OTHERS,
             INVITE_OTHERS_BODY,
@@ -41,8 +41,9 @@ class SendInviteTextButton extends Component {
   }
 
   buildTextLink = () => {
+    console.log(this.props.group.groupSignupCode, 'ELLO MATE')
     let textLink = '';
-    const message = `${this.textIntro()}${this.props.groupAuthCode}\n\n `;
+    const message = `${this.textIntro()}${this.props.group.groupSignupCode}\n\n `;
 
     // Use percent-encoding for Android
     if (Platform.OS === 'android') {
@@ -70,9 +71,10 @@ class SendInviteTextButton extends Component {
 
 
 function mapStateToProps(state) {
-  const { groupAuthCode, groupName } = state.group;
+  const { groupName } = state.group;
   const { language } = state.user;
-  return { groupAuthCode, language, groupName };
+  const { group } = state;
+  return { groupSignupCode, language, groupName, group };
 }
 
 export default connect(mapStateToProps)(SendInviteTextButton);

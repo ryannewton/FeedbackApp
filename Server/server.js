@@ -220,7 +220,6 @@ app.post('/savePushToken', upload.array(), (req, res) => {
 
 app.post('/getGroupTreeData', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    // console.log(req.body, 'here!!!')
     if (err) res.status(400).send('Authorization failed');
     else {
       const { groupId } = decoded;
@@ -409,22 +408,23 @@ app.post('/authorizeAdministrator', upload.array(), (req, res) => {
   });
 });
 
-function insertText(res, targetId, type, text) {
+function insertText(res, targetId, type, text, userId) {
   const supportedLanguages = ['en', 'es', 'vi', 'zh-cn'];
   supportedLanguages.forEach((language) => {
     googleTranslate.translate(text, language, (err, translation) => {
       if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2');
       else {
         const { translatedText, detectedSourceLanguage } = translation;
-        const connectionString = 'INSERT INTO translatedText SET ?';
+        const connectionString = 'INSERT INTO translatedText SET ? ON DUPLICATE KEY UPDATE ?';
         connection.query(connectionString,
-          {
+          [{
             targetId,
             type,
             translatedText,
             translatedFrom: detectedSourceLanguage,
             language,
-          }, (err) => {
+            userId,
+          }, { translatedText, userId }], (err) => {
             if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - JKD1');
           }
         );
@@ -461,7 +461,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
               else {
                 // Insert text
-                insertText(res, result.insertId, 'feedback', text);
+                insertText(res, result.insertId, 'feedback', text, userId);
                 submitFeedbackVoteHelper(result.insertId, 1, 0, 0, userId, res)
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
@@ -500,7 +500,7 @@ app.post('/submitSolution', upload.array(), (req, res) => {
               if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 2579');
               else {
                 // Insert text
-                insertText(res, result.insertId, 'solution', text);
+                insertText(res, result.insertId, 'solution', text, userId);
 
                 // Send Email to Moderators
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
@@ -518,16 +518,17 @@ app.post('/submitSolution', upload.array(), (req, res) => {
 
 // SUBMIT OFFICIAL REPLY
 app.post('/submitOfficialReply', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
+      const { userId } = decoded;
       const { feedback, officialReply } = req.body;
       const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
       connection.query(connectionString, [officialReply, feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
         else {
           // Insert text
-          insertText(res, feedback.id, 'reply', officialReply);
+          insertText(res, feedback.id, 'reply', officialReply, userId);
 
           // Send Email to Moderators
           const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
