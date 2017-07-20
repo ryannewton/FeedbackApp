@@ -74,7 +74,7 @@ function mapStateToProps(state) {
   const { groupName } = state.group;
   const { language } = state.user;
   const { group } = state;
-  return { groupSignupCode, language, groupName, group };
+  return { language, groupName, group };
 }
 
 export default connect(mapStateToProps)(SendInviteTextButton);
