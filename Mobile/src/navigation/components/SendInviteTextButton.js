@@ -41,7 +41,6 @@ class SendInviteTextButton extends Component {
   }
 
   buildTextLink = () => {
-    console.log(this.props.group.groupSignupCode, 'ELLO MATE')
     let textLink = '';
     const message = `${this.textIntro()}${this.props.group.groupSignupCode}\n\n `;
 
