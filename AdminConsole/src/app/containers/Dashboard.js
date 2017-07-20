@@ -22,7 +22,8 @@ class Dashboard extends Component {
 
     this.state = {
       //Filtering
-      selectedGroup: { id: 0, name: 'all', parent: -1 },
+      //selectedGroup: { id: 0, name: 'all', parent: -1 },
+      selectedGroup: 'all',
       selectedStatus: 'all',
       selectedCategory: 'all',
       selectedTime: 'all',
@@ -118,10 +119,10 @@ class Dashboard extends Component {
       return false;
     }
     //Then Filter by Group
-    if (this.state.selectedGroup.name !== 'all' && this.state.selectedGroup.name !== feedback.group) {
-      const listOfAllowedGroupNames = createAllowedGroups([this.state.selectedGroup.name], [this.state.selectedGroup]);
-      if (!listOfAllowedGroupNames.includes(this.state.selectedGroup.name)) return false;
-    }
+    // if (this.state.selectedGroup.name !== 'all' && this.state.selectedGroup.name !== feedback.group) {
+    //   const listOfAllowedGroupNames = createAllowedGroups([this.state.selectedGroup.name], [this.state.selectedGroup]);
+    //   if (!listOfAllowedGroupNames.includes(this.state.selectedGroup.name)) return false;
+    // }
     //Then Filter by Search
     if (this.state.searchTerm !== '' && !feedback.text.includes(this.state.searchTerm)) {
       return false;
@@ -166,13 +167,14 @@ class Dashboard extends Component {
 
   renderTimeControls = () => {
     return (
-      <Panel title="Filter by Time">
+      <div style={{marginBottom:20}}>
+        <p>Time: </p>
         <select className="form-control" value={this.state.selectedTime} onChange={this.handleTimeFilter}>
           <option value='all'>All</option>
           <option value='lastWeek'>Last Week</option>
           <option value='lastMonth'>Last month</option>
         </select>
-      </Panel>
+      </div>
     );
   }
 
@@ -217,6 +219,18 @@ class Dashboard extends Component {
   }
 
   renderGroupControls = () => {
+    return (
+      <div style={{marginBottom:20}}>
+      <p>Department: </p>
+        <button className={this.state.selectedGroup === "all"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedGroup: 'all'})}>All</button>
+        <button className={this.state.selectedGroup === "Marketing"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedGroup: 'Marketing'})}>Marketing</button>
+        <button className={this.state.selectedGroup === "Team Analytics"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedGroup: 'Team Analytics'})}>Team Analtyics</button>
+        <button className={this.state.selectedGroup === "Other"?"btn btn-primary":"btn btn-default"} onClick={() => this.setState({selectedGroup: 'Other'})}>Other</button>
+      </div>
+    );
+  }
+
+  renderGroupControls2 = () => {
     // Step #1 - Create the one dimensional styling array
     const stylingArray = this.createStylingArray([this.state.selectedGroup], this.state.selectedGroup);
 
