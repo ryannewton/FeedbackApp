@@ -24,7 +24,7 @@ class SolutionsCard extends Component {
     if (!feedbackSolutions.length) {
       return (
         <CardSection>
-          <Text style={noSolutionsMessage}>{((status && status === 'compliment')?'No comments (yet)\nBe the first!':'No solutions (yet)\nBe the first!')}</Text>
+          <Text style={noSolutionsMessage}>{((status && status === 'compliment')?'No comments (yet)\nBe the first!':'No comments (yet)\nBe the first!')}</Text>
         </CardSection>
       );
     }
@@ -39,7 +39,7 @@ class SolutionsCard extends Component {
     return (
       <View>
         <CardSection>
-          <Text style={subheaderText}>Proposed solutions</Text>
+          <Text style={subheaderText}>Comments</Text>
             <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
               <Icon name="question-answer" color="#bdbdbd" />
             </View>

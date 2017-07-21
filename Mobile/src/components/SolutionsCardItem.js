@@ -41,7 +41,7 @@ class SolutionsCardItem extends Component {
     return (
       <TouchableOpacity onPress={() => this.upvoteSolution(solution)}>
         <View>
-          <Icon name="thumb-up" size={30} color={iconColor} />
+          <Icon name="arrow-drop-up" size={30} color={iconColor} />
         </View>
       </TouchableOpacity>
     );
@@ -57,7 +57,7 @@ class SolutionsCardItem extends Component {
     return (
       <TouchableOpacity onPress={() => this.downvoteSolution(solution)}>
         <View>
-          <Icon name="thumb-down" size={30} color={iconColor} />
+          <Icon name="arrow-drop-down" size={30} color={iconColor} />
         </View>
       </TouchableOpacity>
     );
@@ -69,27 +69,20 @@ class SolutionsCardItem extends Component {
 
     return (
       <CardSection>
-        <View style={{ justifyContent: 'flex-start', flex: 1 }}>
-          {/* Solution description */}
-          <Text style={solutionText}>{solution.text}</Text>
+        <View style={{ flexDirection:'row', flex: 1, alignItems:'center' }}>
 
           {/* Upvote count and button */}
-          <View style={{ flexDirection: 'row', alignItems: 'center', paddingTop: 5, justifyContent: 'space-between' }}>
-            <View style={{ flexDirection: 'column', justifyContent: 'flex-start' }}>
-              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                <Text style={{ fontSize: 18, color: '#48D2A0' }}>{solution.upvotes}</Text>
-                <Icon size={18} name='arrow-upward' color= '#48D2A0' />
-              </View>
-              <View style={{flexDirection: 'row', justifyContent: 'flex-end'}}>
-                <Text style={{ fontSize: 18, color: '#F54B5E' }}> { solution.downvotes }</Text>
-                <Icon size={18} name='arrow-downward' color='#F54B5E' />
-              </View>
-            </View>
-            <View style={{ alignItems: 'flex-end', flexDirection: 'row' }}>
-              {this.renderSolutionDownvoteButton(solution)}
-              {this.renderSolutionUpvoteButton(solution)}
-            </View>
+          <View style={{ flex: 1, flexDirection:'column', alignItems:'center'}}>
+            {this.renderSolutionUpvoteButton(solution)}
+            <Text style={{ fontSize: 18, color: '#bdbdbd' }}>{ solution.upvotes - solution.downvotes }</Text>
+            {this.renderSolutionDownvoteButton(solution)}
           </View>
+
+          {/* Solution description */}
+          <View style={{flex: 8, paddingRight:5}}>
+            <Text style={solutionText}>{solution.text}</Text>
+          </View>
+
         </View>
       </CardSection>
     );

@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Dimensions } from 'react-native';
+import { View, Text, TouchableOpacity, Dimensions, Image as Image2 } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon, Button } from 'react-native-elements';
 import Image from 'react-native-image-progress';
@@ -33,7 +33,9 @@ class Feedback extends Component {
   constructor(props){
     super(props)
     this.state = {
-      toggled: false
+      toggled: false,
+      imageWidth: null,
+      imageHeight: null,
     }
   }
   goToDetails = () => {
@@ -85,7 +87,7 @@ class Feedback extends Component {
       return (
         <Text
           style={{
-            fontSize: 15,
+            fontSize: 16,
             color: 'black',
             fontWeight: '400',
           }}
@@ -98,7 +100,7 @@ class Feedback extends Component {
     return (
       <Text
         style={{
-          fontSize: 15,
+          fontSize: 16,
           color: 'black',
           fontWeight: 'bold',
         }}
@@ -137,7 +139,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-up" size={biggerCard?25:25} color={biggerCard?'#48D2A0':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
+        <Icon name="arrow-drop-up" size={50} color={biggerCard?'#48D2A0':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
       </View>
     );
   }
@@ -150,7 +152,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="thumb-down" size={biggerCard?25:25} color={biggerCard?'#F54B5E':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
+        <Icon name="arrow-drop-down" size={50} color={biggerCard?'#F54B5E':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
       </View>
     );
   }
@@ -192,11 +194,15 @@ class Feedback extends Component {
     // Has the server been updated to include a response object?
     const exists = feedback.officialReply && feedback.officialReply.text !== '';
     if (!exists) {
-      return null;
+      return (
+        <View style={{ paddingRight: 10, paddingTop: 2 }}>
+          <Icon name="verified-user" size={20} color="#bdbdbd" />
+        </View>
+      );
     }
     return (
       <View style={{ paddingRight: 10, paddingTop: 2 }}>
-        <Icon name="verified-user" size={20} color="blue" />
+        <Icon name="verified-user" size={20} color="#00A2FF" />
       </View>
     );
   }
@@ -205,6 +211,9 @@ class Feedback extends Component {
     const { imageURL } = this.props.feedback;
     const { showImage } = this.props;
     const { imageStyle, imageViewStyle } = styles;
+    Image2.getSize(imageURL, (iwidth, iheight) => {
+      this.setState({imageWidth: iwidth, imageHeight: iheight})
+    });
     if (!showImage) {
       return null;
     }
@@ -225,9 +234,10 @@ class Feedback extends Component {
             unfilledColor: 'rgba(200, 200, 200, 0.2)',
           }}
           style={{
-            width: 250,
-            height: 250,
-            resizeMode: 'contain',
+            width: SCREEN_WIDTH*0.4/this.state.imageHeight*this.state.imageWidth,
+            height: SCREEN_WIDTH*0.4,
+            marginBottom:10,
+            resizeMode: 'cover',
           }}
         />
       </View>
@@ -259,8 +269,8 @@ class Feedback extends Component {
             unfilledColor: 'rgba(200, 200, 200, 0.2)',
           }}
           style={{
-            width: 60,
-            height: 60,
+            width: 70,
+            height: 70,
             resizeMode: 'cover',
             paddingBottom: 5,
             borderRadius: 4,
@@ -306,16 +316,23 @@ return (
   }
 
   renderSolutionsTag = () => {
-    const { solutions, feedback } = this.props;
+    const { solutions, feedback, showResponseTag } = this.props;
     const feedbackSolutions = solutions.list.filter(solution => solution.feedbackId === feedback.id);
+    if (!showResponseTag) {
+      return null;
+    }
     if (feedbackSolutions.length && !this.props.showImage) {
       return (
         <View style={{paddingTop:2}}>
-          <Icon name="question-answer" size={20} color="#bdbdbd" />
+          <Icon name="question-answer" size={20} color="#F8C61C" />
         </View>
       );
     }
-    return null;
+    return (
+      <View style={{paddingTop:2}}>
+        <Icon name="question-answer" size={20} color="#bdbdbd" />
+      </View>
+    );
   }
 
   renderImageIcon = () => {
@@ -369,9 +386,6 @@ return (
             <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
               {this.renderThumbDownButton()}
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.addNoOpinion} style={{ paddingRight: 3 }}>
-              {this.renderNoOpinionButton()}
-            </TouchableOpacity>
             <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 3 }}>
               {this.renderThumbUpButton()}
             </TouchableOpacity>
@@ -394,29 +408,20 @@ renderVoteCount = () => {
     if (this.props.feedback === undefined) {
       return '';
     }
-    if (biggerCard) {
+    if (biggerCard||showImage) {
       return null;
     }
     return (
-      <View style={{ flexDirection: 'row', alignSelf: 'flex-end'}}>
+      <View style={{ justifyContent:'flex-start',alignItems: 'center'}}>
         {/* Upvote Button and Downvote */}
-        <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'row'}}>
-          {this.renderThumbDownButton()}
-        <Text style={downvoteTextStyle, { paddingRight:8, paddingLeft:2, paddingTop:4, color:'#bdbdbd'}}>
-          {this.props.feedback.downvotes}
-        </Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={this.addNoOpinion} style={{ flexDirection: 'row'}}>
-          {this.renderNoOpinionButton()}
-        <Text style={upvoteTextStyle, {paddingRight: 8, paddingLeft:2, paddingTop:4, color:'#bdbdbd'}}>
-          {this.props.feedback.noOpinions}
-        </Text>
-        </TouchableOpacity>
         <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'row'}}>
           {this.renderThumbUpButton()}
+        </TouchableOpacity>
         <Text style={upvoteTextStyle, { paddingLeft:2, paddingTop:4, color:'#bdbdbd'}}>
-          {this.props.feedback.upvotes}
+          {this.props.feedback.upvotes - this.props.feedback.downvotes}
         </Text>
+        <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'row'}}>
+          {this.renderThumbDownButton()}
         </TouchableOpacity>
       </View>
     );
@@ -448,33 +453,25 @@ renderVoteCount = () => {
 
     return (
       <View style={updatedRow}>
-        <View style={{ flexDirection: 'column', padding:5, height:((showImage||biggerCard)?null:100)}}>
-          <View style={{ flexDirection: 'row'}}>
-            <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
-              {this.renderTitleImage()}
-              {/* First row */}{/* Project title */}
-              <View style={{  paddingTop: 5 }}>
-                {this.renderTitle()}
-              </View>
-              {/* Render image*/}
-              {this.renderImage()}
-            </View>
-            <View style={{ alignSelf: 'center' }}>
-              {/* Render image*/}
-              {this.renderSmallImage()}
-            </View>
-          </View>
-          <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between', alignItems:'flex-end'}}>
-            <View style={{ flexDirection: 'row', justifyContent: 'space-between'}}>
-              {this.renderStatusBox()}
-              {this.renderOfficialResponseTag()}
-              {this.renderSolutionsTag()}
-            </View>
-            {/* Vote count */}
+        <View style={{ flexDirection: 'row', padding:5, paddingLeft:0, height:((showImage||biggerCard)?null:130)}}>
+          <View>
             {this.renderVoteCount()}
           </View>
-          <View>
-            {this.renderUnreadTitle()}
+          <View style={{ flex: 6, paddingTop: 13, flexDirection: 'column'}}>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
+              <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+                {this.renderImage()}
+                {this.renderTitle()}
+              </View>
+              <View>
+                {this.renderSmallImage()}
+              </View>
+            </View>
+                            <View style={{ paddingBottom:13, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                  {this.renderStatusBox()}
+                  {this.renderOfficialResponseTag()}
+                  {this.renderSolutionsTag()}
+                </View>
           </View>
         </View>
       </View>
