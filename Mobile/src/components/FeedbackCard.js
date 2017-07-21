@@ -440,12 +440,10 @@ renderVoteCount = () => {
       downvoteCountStyle,
       thumbStyle,
     } = styles;
-    let updatedRow = row;
-    if (this.props.feedback.type === 'positive feedback') {
-      updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
-    } else if (this.props.feedback.type === 'negative feedback') {
-      updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
-    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
+    
+    let updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
+    
+    if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
       this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
       this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
       updatedRow = [row, { backgroundColor: 'rgba(248, 248, 248, 248)', borderWidth: 2, borderColor: '#fff' }];
