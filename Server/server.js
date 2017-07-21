@@ -974,7 +974,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
     else {
       const { groupId } = decoded;
       const language = decoded.language || 'en';
-      const admin = String(decoded.admin) || '0';
+      const admin = decoded.admin ? true : false;
       const connectionString = `
       SELECT a.id, a.groupId, a.userId, a.text as backupText, a.category, c.translatedText AS text, c.translatedFrom, a.status, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date, a.officialReply AS backupOfficialReply, b.trendingScore
       FROM feedback a
@@ -998,7 +998,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
         AND language=?
       ) d
       ON a.id = d.feedbackId
-      WHERE a.groupId=? AND a.status<>'tabled' ` + (admin ? '' : ' AND a.approved=1');
+      WHERE a.groupId=? ` + (admin ? '' : `AND a.approved=1 AND a.status<>'tabled'`);
       connection.query(connectionString, [language, language, groupId], (err, rows) => {
         // if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
         if (err) console.log(err);
@@ -1026,7 +1026,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
     else {
       const { groupId } = decoded;
       const language = decoded.language || 'en';
-      const admin = String(decoded.admin) || '0';
+      const admin = decoded.admin ? true : false;
       const connectionString = `
       SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date, a.text AS backupText
       FROM solutions a
