@@ -140,7 +140,7 @@ export default (state = INITIAL_STATE, action) => {
     }
 
     case ADD_FEEDBACK_TO_STATE: {
-      return { ...state, list: [...state.list, action.payload] };
+      return { ...state, list: filterAndOrder([...state.list, action.payload]) };
     }
 
     case LOG_OUT_USER:
