@@ -211,17 +211,15 @@ class Feedback extends Component {
     const { imageURL } = this.props.feedback;
     const { showImage } = this.props;
     const { imageStyle, imageViewStyle } = styles;
-    Image2.getSize(imageURL, (iwidth, iheight) => {
-      this.setState({imageWidth: iwidth, imageHeight: iheight})
-    });
-    if (!showImage) {
+
+    if (!showImage || !imageURL) {
       return null;
     }
 
-    // If feedback doesn't have a photo
-    if (!imageURL) {
-      return null;
-    }
+    Image2.getSize(imageURL, (iwidth, iheight) => {
+      this.setState({imageWidth: iwidth, imageHeight: iheight})
+    });
+
     return (
       <View style={imageViewStyle}>
         <Image
