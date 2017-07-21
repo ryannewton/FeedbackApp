@@ -41,6 +41,7 @@ class Authorize extends Component {
   route(nextProps) {
     if (
       nextProps.auth.loggedIn === true &&
+      nextProps.group.groupName !== '' &&
       nextProps.feedback.lastPulled.getTime() !== 0
     ) {
       const navToFeedbackList = NavigationActions.reset({

@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { View, Text } from 'react-native';
 import { AppLoading } from 'expo';
+
+// Import tracking
+import { sendGoogleAnalytics } from '../actions';
+
 import Slides from '../components/IntroSlides';
 import translate from '../translation'
 // Import Images
@@ -53,4 +57,4 @@ function mapStateToProps(state) {
   return { group, user };
 }
 
-export default connect(mapStateToProps)(WelcomeScreen);
+export default connect(mapStateToProps, { sendGoogleAnalytics })(WelcomeScreen);
