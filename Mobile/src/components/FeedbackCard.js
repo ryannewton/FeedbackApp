@@ -234,8 +234,8 @@ class Feedback extends Component {
             unfilledColor: 'rgba(200, 200, 200, 0.2)',
           }}
           style={{
-            width: SCREEN_WIDTH*0.9,
-            height: SCREEN_WIDTH*0.9*this.state.imageHeight/this.state.imageWidth,
+            width: SCREEN_WIDTH*0.4/this.state.imageHeight*this.state.imageWidth,
+            height: SCREEN_WIDTH*0.4,
             marginBottom:10,
             resizeMode: 'cover',
           }}
@@ -263,14 +263,14 @@ class Feedback extends Component {
           source={{ uri: imageURL }}
           indicator={ProgressBar}
           indicatorProps={{
-            size: 80,
+            size: 60,
             borderWidth: 0,
             color: 'rgba(150, 150, 150, 1)',
             unfilledColor: 'rgba(200, 200, 200, 0.2)',
           }}
           style={{
-            width: 90,
-            height: 90,
+            width: 70,
+            height: 70,
             resizeMode: 'cover',
             paddingBottom: 5,
             borderRadius: 4,
@@ -462,16 +462,16 @@ renderVoteCount = () => {
               <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
                 {this.renderImage()}
                 {this.renderTitle()}
-                <View style={{ paddingBottom:13, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                  {this.renderStatusBox()}
-                  {this.renderOfficialResponseTag()}
-                  {this.renderSolutionsTag()}
-                </View>
               </View>
               <View>
                 {this.renderSmallImage()}
               </View>
             </View>
+                            <View style={{ paddingBottom:13, flexDirection: 'row', justifyContent: 'flex-end'}}>
+                  {this.renderStatusBox()}
+                  {this.renderOfficialResponseTag()}
+                  {this.renderSolutionsTag()}
+                </View>
           </View>
         </View>
       </View>
