@@ -40,8 +40,7 @@ class FeedbackSubmitHeader extends Component {
     return (
       <View>
         <View style={spacingStyle} />
-        <View style={layoutStyle}>
-          <View style={{ flex: 1 }} />
+        <View style={[layoutStyle, {justifyContent:'space-between'}]}>
           <View style={titleViewStyle}>
             <Text style={titleStyle}>
               {this.renderTitleHelper()}

@@ -27,6 +27,7 @@ class FeedbackList extends Component {
     const { cleanQues, wordspace } = this.wordspace();
     const occuranceTable = this.wordspaceOccuranceTable(cleanQues, wordspace);
     this.state = {
+      filterCategory:'new',
       wordspace,
       occuranceTable,
     };
@@ -167,6 +168,33 @@ class FeedbackList extends Component {
     return filteredFeedbackList;
   }
 
+  categorizedList = () => {
+    const categorizedFeedbackList = this.curateFeedbackList().filter((item) => {
+      if (this.state.filterCategory == 'complete') {
+        return (this.state.filterCategory == item.status)||(item.status == 'closed');
+      }
+      return this.state.filterCategory == item.status;
+    });
+
+    return categorizedFeedbackList;
+  }
+
+  renderShowCategory = () => {
+    return (
+      <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingBottom:0}}>
+          <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
+          <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>Open</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'inprocess')?'white':null)}} onPress={() => {this.setState({ filterCategory:'inprocess' });}}>
+          <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'inprocess')?'800':'400'), color:((this.state.filterCategory == 'inprocess')?'#00A2FF':'white')}]}>In Process</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'complete')?'white':null)}} onPress={() => {this.setState({ filterCategory:'complete' });}}>
+          <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>Complete</Text>
+          </TouchableOpacity>
+        </View>
+    )
+  }
+
   renderFeedbackSubmitButton = () => {
     return (
       <View style={{position: 'absolute', right: 10, bottom: 10}}>
@@ -179,25 +207,16 @@ class FeedbackList extends Component {
 
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    const filteredFeedbackList = this.curateFeedbackList();
+    const filteredFeedbackList = this.categorizedList();
     if (!filteredFeedbackList.length) {
       return <View style={styles.container}>
+      {this.renderShowCategory()}
         <Image style={styles.background} source={nothing} resizeMode="cover" />
       </View>
     }
     return (
       <View style={styles.container}>
-        <View style={{ flexDirection:'row', backgroundColor:'#00A2FF'}}>
-          <TouchableOpacity style={{flex:1}}>
-          <Text style={styles.categoryText}>Open</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{flex:1}}>
-          <Text style={styles.categoryText}>In Process</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{flex:1}}>
-          <Text style={styles.categoryText}>Complete</Text>
-          </TouchableOpacity>
-        </View>
+        {this.renderShowCategory()}
         <ListView
           style = {{zIndex: -1}}
           dataSource={ds.cloneWithRows(filteredFeedbackList)}

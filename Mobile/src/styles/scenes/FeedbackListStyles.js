@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   	categoryText:{
     textAlign:'center',
     color:'white',
-    fontWeight:'600',
+    fontSize:16,
     margin:5,
   },
 });

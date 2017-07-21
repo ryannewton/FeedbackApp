@@ -9,10 +9,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   titleViewStyle: {
-    alignItems: 'center',
+    alignItems: 'flex-start',
     justifyContent: 'flex-start',
     flex: 4,
-    marginTop: 0,
+    marginLeft: 10,
     top: 0,
     bottom: 30,
   },
