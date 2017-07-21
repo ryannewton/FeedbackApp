@@ -444,7 +444,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
       connection.query(connectionString, [groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
-          const { text, type, imageURL } = req.body.feedback;
+          const { text, imageURL } = req.body.feedback;
 
           // Insert the feedback into the database
           const approved = !rows[0].feedbackRequiresApproval;
@@ -454,7 +454,6 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               groupId,
               userId,
               text,
-              type,
               imageURL,
               approved,
             }, (err, result) => {
@@ -977,7 +976,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       const language = decoded.language || 'en';
       const admin = String(decoded.admin) || '0';
       const connectionString = `
-      SELECT a.id, a.groupId, a.userId, a.text as backupText, a.category, c.translatedText AS text, c.translatedFrom, a.status, a.type, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date, a.officialReply AS backupOfficialReply, b.trendingScore
+      SELECT a.id, a.groupId, a.userId, a.text as backupText, a.category, c.translatedText AS text, c.translatedFrom, a.status, a.imageURL, a.approved, b.upvotes, b.downvotes, b.noOpinions, d.translatedOfficialReply AS officialReply, d.translatedFromOfficialReply, a.date, a.officialReply AS backupOfficialReply, b.trendingScore
       FROM feedback a
       LEFT JOIN (
         SELECT feedbackId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes, SUM(noOpinion) as noOpinions, (SUM(upvote * ((1000*60 * 60 * 24)/((1000*60 * 60 * 24)+((NOW() - date))))) - (SUM(downvote * (1/(1+((NOW()/(1000*60 * 60 * 24)) - (date/(1000 * 60 * 60 * 24)))))))) as trendingScore
@@ -1002,7 +1001,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
       WHERE a.groupId=?` + (admin ? '' : ' AND a.approved=1');
       connection.query(connectionString, [language, language, groupId], (err, rows) => {
         // if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
-        if (err) console.log(err)
+        if (err) console.log(err);
         else {
           const adjRows = rows.map((row) => {
             if (!row.upvotes) { row.upvotes = 0; }
