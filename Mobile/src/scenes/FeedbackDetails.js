@@ -27,10 +27,8 @@ import {
 class FeedbackDetails extends Component {
   constructor(props) {
     super(props);
-
     this.state = { errorMessage: '' };
-    this.submitSolution = this.submitSolution.bind(this);
-    props.sendGoogleAnalytics('FeedbackDetails', this.props.group.groupName, this.props.navigation.state.params.feedback.feedbackId);
+    props.sendGoogleAnalytics('FeedbackDetails', props.group.groupName, props.navigation.state.params.feedback.feedbackId);
   }
 
   submitSolution = () => {

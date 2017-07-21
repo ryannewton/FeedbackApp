@@ -15,7 +15,7 @@ import styles from '../styles/scenes/SettingsStyles';
 class Settings extends Component {
   constructor(props) {
     super(props);
-    props.sendGoogleAnalytics('Settings');
+    props.sendGoogleAnalytics('Settings', props.group.groupName);
   }
 
   render() {

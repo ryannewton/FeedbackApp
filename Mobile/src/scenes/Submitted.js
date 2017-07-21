@@ -20,7 +20,7 @@ const SCREEN_HEIGHT = Dimensions.get('window').height;
 class Submitted extends Component {
   constructor(props) {
     super(props);
-    props.sendGoogleAnalytics('Submitted');
+    props.sendGoogleAnalytics('Submitted', props.group.groupName);
   }
 
   componentWillMount() {

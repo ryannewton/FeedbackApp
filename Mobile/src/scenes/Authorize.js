@@ -25,11 +25,7 @@ class Authorize extends Component {
       cleared: false,
     };
 
-    this.route = this.route.bind(this);
-    this.verifyEmail = this.verifyEmail.bind(this);
-
-    // tracker.trackScreenView('Authorize');
-    props.sendGoogleAnalytics('Authorize');
+    props.sendGoogleAnalytics('Authorize', 'Not Logged In');
   }
 
   componentWillReceiveProps(nextProps) {
@@ -38,7 +34,7 @@ class Authorize extends Component {
     }
   }
 
-  route(nextProps) {
+  route = (nextProps) => {
     if (
       nextProps.auth.loggedIn === true &&
       nextProps.feedback.lastPulled.getTime() !== 0
@@ -56,7 +52,7 @@ class Authorize extends Component {
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
-  verifyEmail() {
+  verifyEmail = () => {
     Keyboard.dismiss();
     this.props.verifyEmail(this.props.auth.email, this.state.code);
   }

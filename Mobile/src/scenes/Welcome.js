@@ -13,6 +13,11 @@ import pageFourImage from '../../images/backgrounds/4_n.jpg';
 
 
 class WelcomeScreen extends Component {
+  constructor(props) {
+    super(props);
+    props.sendGoogleAnalytics('Welcome Screen', 'Not Logged In');
+  }
+
   slideData() {
     const { language } = this.props.user
     const { INTRO_SLIDE_1,
