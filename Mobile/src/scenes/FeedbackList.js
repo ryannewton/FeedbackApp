@@ -183,6 +183,7 @@ class FeedbackList extends Component {
     if (!filteredFeedbackList.length) {
       return <View style={styles.container}>
         <Image style={styles.background} source={nothing} resizeMode="cover" />
+        {this.renderFeedbackSubmitButton()}
       </View>
     }
     return (
