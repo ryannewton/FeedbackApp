@@ -187,7 +187,17 @@ class FeedbackList extends Component {
     }
     return (
       <View style={styles.container}>
-
+        <View style={{ flexDirection:'row', backgroundColor:'#00A2FF'}}>
+          <TouchableOpacity style={{flex:1}}>
+          <Text style={styles.categoryText}>Open</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{flex:1}}>
+          <Text style={styles.categoryText}>In Process</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={{flex:1}}>
+          <Text style={styles.categoryText}>Complete</Text>
+          </TouchableOpacity>
+        </View>
         <ListView
           style = {{zIndex: -1}}
           dataSource={ds.cloneWithRows(filteredFeedbackList)}
