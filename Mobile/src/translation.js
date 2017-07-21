@@ -36,7 +36,10 @@ const translate = language => {
         COMPLETE: 'Completed',
         SEARCH:'Search',
         CANCEL:'Cancel',
-        GET_STARTED:'Get Started'
+        GET_STARTED:'Get Started',
+        VERIFY_ORGANIZATION:'Verify Your Organization',
+        ENTER_EMAIL_CODE:'Enter Code From Email',
+        ENTER_GROUP_CODE:'Enter Group Code'
       }
     case 'es':
       return {
@@ -66,15 +69,19 @@ const translate = language => {
         GROUP_DESCRIPTION: 'Escriba la contraseña de su empresa para collaborar con las sugerencias de su organización',
         GROUP_CODE: 'Contraseña de su empresa',
         JOIN_GROUP: 'Unirse al grupo',
-        ENTER_FEEDBACK: 'Enter your feedback here!',
-        TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
-        SIGN_OUT: 'Sign Out',
-        OPEN: 'Open',
-        INPROCESS: 'In Process',
-        COMPLETE: 'Completed',
-        SEARCH:'Search',
-        CANCEL:'Cancel',
-        GET_STARTED:'Get Started'
+        //TODO: human translation needed below this point
+        ENTER_FEEDBACK: '¡Escriba sus comentarios aquí!',
+        TEXT_INTRO: 'Únete a mí en la caja de sugerencias!\n\nEL CODIGO DEL GRUPO: ',
+        SIGN_OUT: 'Desconectar',
+        OPEN: 'nuevo',
+        INPROCESS: 'En proceso',
+        COMPLETE: 'Terminado',
+        SEARCH:'Buscar',
+        CANCEL:'Cancelar',
+        GET_STARTED:'Empezar',
+        VERIFY_ORGANIZATION:'Verificar su organización',
+        ENTER_EMAIL_CODE:'Introduzca el código de correo electrónico',
+        ENTER_GROUP_CODE:'Introducir código de grupo'
       }
     case 'vi':
       return {
@@ -112,7 +119,10 @@ const translate = language => {
         COMPLETE: 'Completed',
         SEARCH:'Search',
         CANCEL:'Cancel',
-        GET_STARTED:'Get Started'
+        GET_STARTED:'Get Started',
+        VERIFY_ORGANIZATION:'Verify Your Organization',
+        ENTER_EMAIL_CODE:'Enter Code From Email',
+        ENTER_GROUP_CODE:'Enter Group Code'
       }
     case 'zh-cn':
       return {
@@ -150,7 +160,10 @@ const translate = language => {
         COMPLETE: '已完成',
         SEARCH:'搜索',
         CANCEL:'取消',
-        GET_STARTED:'开始'
+        GET_STARTED:'开始',
+        VERIFY_ORGANIZATION:'验证你所在的组织',
+        ENTER_EMAIL_CODE:'验证你的邮箱',
+        ENTER_GROUP_CODE:'加入你的组织'
       }
     default:
       return {
@@ -188,7 +201,10 @@ const translate = language => {
         COMPLETE: 'Completed',
         SEARCH:'Search',
         CANCEL:'Cancel',
-        GET_STARTED:'Get Started'
+        GET_STARTED:'Get Started',
+        VERIFY_ORGANIZATION:'Verify Your Organization',
+        ENTER_EMAIL_CODE:'Enter Code From Email',
+        ENTER_GROUP_CODE:'Enter Group Code'
       }
     }
 }
