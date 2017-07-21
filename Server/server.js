@@ -461,7 +461,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               else {
                 // Insert text
                 insertText(res, result.insertId, 'feedback', text, userId);
-                submitFeedbackVoteHelper(result.insertId, 1, 0, 0, userId, res)
+                submitFeedbackVoteHelper(result.insertId, 1, 0, 0, userId, res);
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
                 sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'UserId: ' + userId);
@@ -998,7 +998,7 @@ app.post('/pullFeedback', upload.array(), (req, res) => {
         AND language=?
       ) d
       ON a.id = d.feedbackId
-      WHERE a.groupId=?` + (admin ? '' : ' AND a.approved=1');
+      WHERE a.groupId=? AND a.status<>'tabled' ` + (admin ? '' : ' AND a.approved=1');
       connection.query(connectionString, [language, language, groupId], (err, rows) => {
         // if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1472');
         if (err) console.log(err);
