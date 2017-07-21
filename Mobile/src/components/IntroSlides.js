@@ -5,6 +5,7 @@ import { Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { languageChoice } from '../actions';
+import translate from '../translation';
 
 import l1 from '../../images/backgrounds/l1.png';
 import l2 from '../../images/backgrounds/l2.png';
@@ -37,10 +38,14 @@ class IntroSlides extends Component {
     this.myScroll.scrollTo({x: SCREEN_WIDTH, y: 0, animated: true});
   }
   renderLastSlide(index) {
+    const { language } = this.props.user;
+    const {
+      GET_STARTED,
+    } = translate(language)
     if (index === this.props.data.length - 1) {
       return (
         <Button
-          title="Get started"
+          title={GET_STARTED}
           raised
           buttonStyle={styles.buttonStyle}
           onPress={this.props.onComplete}

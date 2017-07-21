@@ -9,6 +9,7 @@ import FeedbackCard from '../components/FeedbackCard';
 import styles from '../styles/scenes/FeedbackListStyles';
 import registerForNotifications from '../services/push_notifications';
 import { Icon } from 'react-native-elements';
+import translate from '../translation';
 
 
 // Import tracking
@@ -180,6 +181,13 @@ class FeedbackList extends Component {
   }
 
   renderShowCategory = () => {
+    const { language } = this.props.user;
+    const {
+      OPEN,
+      INPROCESS,
+      COMPLETE,
+    } = translate(language)
+
     if (this.props.group.includePositiveFeedbackBox)
       return (
         <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingBottom:0}}>
@@ -191,6 +199,7 @@ class FeedbackList extends Component {
           </TouchableOpacity>
         </View>
       );
+
     return (
       <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingBottom:0}}>
         <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>

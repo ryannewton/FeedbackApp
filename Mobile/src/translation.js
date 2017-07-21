@@ -30,7 +30,13 @@ const translate = language => {
         JOIN_GROUP: 'Join Group',
         TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
         ENTER_FEEDBACK: 'Enter your feedback here!',
-        SIGN_OUT: 'Sign Out'
+        SIGN_OUT: 'Sign Out',
+        OPEN: 'Open',
+        INPROCESS: 'In Process',
+        COMPLETE: 'Completed',
+        SEARCH:'Search',
+        CANCEL:'Cancel',
+        GET_STARTED:'Get Started'
       }
     case 'es':
       return {
@@ -62,7 +68,13 @@ const translate = language => {
         JOIN_GROUP: 'Unirse al grupo',
         ENTER_FEEDBACK: 'Enter your feedback here!',
         TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
-        SIGN_OUT: 'Sign Out'
+        SIGN_OUT: 'Sign Out',
+        OPEN: 'Open',
+        INPROCESS: 'In Process',
+        COMPLETE: 'Completed',
+        SEARCH:'Search',
+        CANCEL:'Cancel',
+        GET_STARTED:'Get Started'
       }
     case 'vi':
       return {
@@ -94,7 +106,13 @@ const translate = language => {
         JOIN_GROUP: 'Join Group',
         TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
         ENTER_FEEDBACK: 'Enter your feedback here!',
-        SIGN_OUT: 'Sign Out'
+        SIGN_OUT: 'Sign Out',
+        OPEN: 'Open',
+        INPROCESS: 'In Process',
+        COMPLETE: 'Completed',
+        SEARCH:'Search',
+        CANCEL:'Cancel',
+        GET_STARTED:'Get Started'
       }
     case 'zh-cn':
       return {
@@ -126,7 +144,13 @@ const translate = language => {
         JOIN_GROUP: '加入你的组织',
         ENTER_FEEDBACK: '在这里输入你的反馈!',
         TEXT_INTRO: '和我一起使用 Suggestion Box!\n\n我们组织的识别码: ',
-        SIGN_OUT: '退出'
+        SIGN_OUT: '退出',
+        OPEN: '待解决',
+        INPROCESS: '进行中',
+        COMPLETE: '已完成',
+        SEARCH:'搜索',
+        CANCEL:'取消',
+        GET_STARTED:'开始'
       }
     default:
       return {
@@ -158,7 +182,13 @@ const translate = language => {
         JOIN_GROUP: 'Join Group',
         TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
         ENTER_FEEDBACK: 'Enter your feedback here!',
-        SIGN_OUT: 'Sign Out'
+        SIGN_OUT: 'Sign Out',
+        OPEN: 'Open',
+        INPROCESS: 'In Process',
+        COMPLETE: 'Completed',
+        SEARCH:'Search',
+        CANCEL:'Cancel',
+        GET_STARTED:'Get Started'
       }
     }
 }
