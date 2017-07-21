@@ -92,7 +92,7 @@ export const languageChoice = language => (
 )
 
 
-export const sendGoogleAnalytics = (page, groupID = 0, feedbackID = 0) => (
+export const sendGoogleAnalytics = (page, groupName = 'default', feedbackId = 'default') => (
   (dispatch) => {
     const options = {
       method: 'POST',
@@ -101,7 +101,8 @@ export const sendGoogleAnalytics = (page, groupID = 0, feedbackID = 0) => (
       },
     };
 
-    const googleURL = 'https://www.google-analytics.com/collect?v=1&t=screenview&tid=UA-99660629-1&cid=' + String(Expo.Constants.deviceId) + '&cd=' + String(page) + '&cd1=' + String(groupID) + '&cd2=' + String(feedbackID) + '&an=Suggestion%20Box'
+    const googleURL = 'https://www.google-analytics.com/collect?v=1&t=screenview&tid=UA-99660629-1&cid=' + String(Expo.Constants.deviceId) + '&cd=' + String(page) + '&cd1=' + String(groupName) + '&cd2=' + String(feedbackId) + '&an=Suggestion%20Box'
+    console.log(googleURL);
     fetch(googleURL, options)
       .catch(error => console.log('Error caught in sendGoogleAnalytics', error ))
   }

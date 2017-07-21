@@ -29,8 +29,7 @@ class Authorize extends Component {
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
 
-    // tracker.trackScreenView('Authorize');
-    props.sendGoogleAnalytics('GroupSignupCode');
+    props.sendGoogleAnalytics('Group Code', 'Not Logged In');
   }
 
   componentWillReceiveProps(nextProps) {

@@ -21,8 +21,6 @@ class FeedbackList extends Component {
   constructor(props) {
     super(props);
 
-    props.sendGoogleAnalytics('FeedbackList', props.group.groupName);
-
     // Create the initial wordspace and occurance table once for future search queries
     const { cleanQues, wordspace } = this.wordspace();
     const occuranceTable = this.wordspaceOccuranceTable(cleanQues, wordspace);
@@ -30,6 +28,8 @@ class FeedbackList extends Component {
       wordspace,
       occuranceTable,
     };
+
+    props.sendGoogleAnalytics('FeedbackList', props.group.groupName);
   }
 
   componentDidMount() {
