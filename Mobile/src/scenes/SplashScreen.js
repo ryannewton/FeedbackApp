@@ -89,6 +89,7 @@ class SplashScreen extends Component {
     // 2) loggedIn is true (we logged in) and we have stored all the data we need in state
     } else if (
         this.props.auth.loggedIn === true &&
+        this.props.group.groupName !== '' &&
         this.props.feedback.lastPulled.getTime() !== 0
       ) {
       const navToFeedbackList = NavigationActions.reset({
