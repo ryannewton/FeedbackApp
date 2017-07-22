@@ -10,6 +10,8 @@ import {
   View
 } from 'react-native';
 import { Icon } from 'react-native-elements';
+import translate from '../../translation';
+import { connect } from 'react-redux';
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
 const containerHeight = 40;
@@ -52,8 +54,13 @@ class Search extends Component {
     /**
      * local variables
      */
-    this.placeholder = this.props.placeholder || 'Search';
-    this.cancelTitle = this.props.cancelTitle || 'Cancel';
+    const { language } = this.props.user;
+    const {
+      SEARCH,
+      CANCEL,
+    } = translate(language)
+    this.placeholder = this.props.placeholder || SEARCH;
+    this.cancelTitle = this.props.cancelTitle || CANCEL;
 
     /**
      * Shadow
@@ -559,4 +566,9 @@ Search.defaultProps = {
   shadowVisible: false,
 };
 
-export default Search;
+const mapStateToProps = (state) => {
+  const { user } = state;
+  return { user };
+};
+
+export default connect(mapStateToProps)(Search);

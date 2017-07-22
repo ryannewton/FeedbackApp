@@ -83,24 +83,35 @@ class FeedbackSubmitHeader extends Component {
   }
 
   renderFilterMethodTitle = (method) => {
+    const { language } = this.props
+    const { THIS_WEEK,
+            TODAY,
+            MY_FEEDBACK,
+            ALL_FEEDBACK
+    } = translate(language);
+
     switch (method) {
       case 'this_week':
-        return "This Week's Feedback";
+        return THIS_WEEK;
       case 'my_feedback':
-        return 'My Feedback';
+        return MY_FEEDBACK;
       case 'today':
-        return "Today's Feedback";
+        return TODAY;
       case 'all':
-        return 'All Feedback';
+        return ALL_FEEDBACK;
       default:
         return method;
     }
   }
 
   renderTitleHelper = () => {
+    const { language } = this.props
+    const { ALL_FEEDBACK,
+    } = translate(language);
+
     // Temporary fix to weird bug with reducer
     if (!this.props.feedback.filterMethod) {
-      return 'All Feedback';
+      return ALL_FEEDBACK;
     }
     return this.renderFilterMethodTitle(this.props.feedback.filterMethod);
   }
