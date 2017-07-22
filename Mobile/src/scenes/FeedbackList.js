@@ -74,10 +74,10 @@ class FeedbackList extends Component {
   // Helper function that cleans a single string and returns an array
   cleanQuestion = (question) => {
     return question
-            .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
-            .replace(/[\s]{2,}/g, ' ')
-            .toLowerCase()
-            .split(' ');
+      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
+      .replace(/[\s]{2,}/g, ' ')
+      .toLowerCase()
+      .split(' ');
   }
 
   // Remove duplicates
