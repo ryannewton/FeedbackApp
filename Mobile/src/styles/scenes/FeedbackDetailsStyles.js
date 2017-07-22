@@ -9,7 +9,7 @@ import { inputText } from '../common/input_styles';
 const styles = StyleSheet.create({
   inputText: {
     ...inputText,
-    height: 60,
+    height: 50,
     marginTop: 5,
     marginBottom: 5,
   },

@@ -38,13 +38,12 @@ class FeedbackDetails extends Component {
 
     if (bannedWords.test(solution.toLowerCase())) {
       // If restricted words then we show an error to the user
-      this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+      this.setState({ errorMessage: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.' });
     } else if (solution === '') {
-      this.setState({ errorMessage: 'Sorry, solutions and comments cannot be blank.' });
+      this.setState({ errorMessage: 'Sorry, comments cannot be blank.' });
     } else {
       this.setState({ errorMessage: '' });
       this.props.submitSolutionToServer(solution, feedback.id, solutionsRequireApproval);
-      // tracker.trackEvent('Submit', 'Submit Solution', { label: groupName, value: feedback.id });
       Keyboard.dismiss();
     }
   }
@@ -68,9 +67,7 @@ class FeedbackDetails extends Component {
       <Spinner size="large" style={{ marginTop: 20 }} />
     );
     const showSubmitButton = (
-      <Button onPress={this.submitSolution}>
-       {(status && status === 'compliment')?'Submit Comment':'Submit Solution'}
-      </Button>
+      <Button onPress={this.submitSolution}>Submit Comment</Button>
     );
 
     return (
@@ -99,10 +96,10 @@ class FeedbackDetails extends Component {
         {this.renderErrorMessage()}
 
         {/* Input to submit a new solution */}
-        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-64}>
+        <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-70}>
           <TextInput
             style={inputText}
-            placeholder={((status && status === 'compliment')?"Enter your comment here...":"Enter your solution here...")}
+            placeholder={'Enter your comment here...'}
             onChangeText={solution => this.props.solutionChanged(solution)}
             value={this.props.solutions.solution}
             returnKeyType={'done'}
