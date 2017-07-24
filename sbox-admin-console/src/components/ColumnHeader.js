@@ -1,7 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Overlay, Popover } from 'react-bootstrap';
+import { Glyphicon, Overlay, Popover, MenuItem } from 'react-bootstrap';
 
 class ColumnHeader extends Component {
   state = {
@@ -25,16 +25,16 @@ class ColumnHeader extends Component {
           borderRadius: 3,
           marginLeft: 30,
           marginTop: 10,
-          padding: 10,
+          padding: 0,
           width: 150,
           textAlign: 'left',
           fontSize: 12,
         }}
       >
-        <div style={{ color: 'black' }}>Sort By:</div>
-        <div style={{ color: 'black' }} onClick={() => this.sortClicked('most votes')}>Most Votes</div>
-        <div style={{ color: 'black' }} onClick={() => this.sortClicked('most recent')}>Most Recent</div>
-        <div style={{ color: 'black' }} onClick={() => this.sortClicked('oldest')}>Oldest</div>
+        <MenuItem header style={{ padding: 0 }}>Sort By...</MenuItem>
+        <MenuItem onClick={() => this.sortClicked('most votes')}>Most Votes</MenuItem>
+        <MenuItem onClick={() => this.sortClicked('most recent')}>Most Recent</MenuItem>
+        <MenuItem onClick={() => this.sortClicked('oldest')}>Oldest</MenuItem>
       </Popover>
     );
 
