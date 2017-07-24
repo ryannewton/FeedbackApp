@@ -23,8 +23,8 @@ class ColumnHeader extends Component {
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
-          marginLeft: 30,
-          marginTop: 10,
+          marginLeft: 10,
+          marginTop: 28,
           padding: 0,
           width: 150,
           textAlign: 'left',
@@ -46,7 +46,7 @@ class ColumnHeader extends Component {
           rootClose
           show={this.state.show}
           onHide={() => this.setState({ show: false })}
-          placement="right"
+          placement="bottom"
           arrowOffsetLeft="5"
           arrowOffsetTop="5"
           container={this}
