@@ -83,17 +83,15 @@ class ApproveFeedbackCard extends Component {
         <div className="pull-left" style={{ fontWeight: 'bold', fontSize: 30 }}>
           <Button
             onClick={() => this.handleUpvote()}
-            bsStyle={(this.props.user.feedbackUpvotes.includes(this.props.feedback.id)) ? 'warning': 'info'}
           >
-            <p style={{color:'#48D2A0'}}>
+            <p style={{ color:((this.props.user.feedbackUpvotes.includes(this.props.feedback.id)) ? '#48D2A0': 'grey')}}>
               ▲ {this.locallyCountUpvote()}
             </p>
           </Button>
           <Button
             onClick={() => this.handleDownvote()}
-            bsStyle={(this.props.user.feedbackDownvotes.includes(this.props.feedback.id)) ? 'warning': 'info'}
           >
-            <p style={{color:'#F54B5E'}}>
+            <p style={{color:((this.props.user.feedbackDownvotes.includes(this.props.feedback.id)) ? '#F54B5E': 'grey')}}>
               ▼ {this.locallyCountDownvote()}
             </p>
           </Button>
@@ -111,14 +109,16 @@ class ApproveFeedbackCard extends Component {
   commentOnFeedback() {
     if (this.state.commenting) {
       return (
-        <div className="col-md-8">
-          <textarea
-            class="form-control"
-            id="exampleTextarea"
-            rows="4"
-            onChange={(event) => this.setState({ commentText: event.target.value })}
-            value={this.state.commentText}
-          />
+        <div className="col-md-12">
+          <div className="col-md-9">
+            <textarea
+              className="form-control"
+              id="exampleTextarea"
+              rows="4"
+              onChange={(event) => this.setState({ commentText: event.target.value })}
+              value={this.state.commentText}
+            />
+          </div>
           <Button
             className="btn btn-primary"
             onClick={() => {
@@ -126,7 +126,8 @@ class ApproveFeedbackCard extends Component {
               this.setState({ commentText: '', commenting: false});
             }}
             bsStyle="primary"
-          />
+          >Submit Comment
+          </Button>
         </div>
       )
     }
