@@ -2,8 +2,10 @@
 import React, { Component } from 'react';
 import { Panel, Glyphicon, Image, Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
+import { connect } from 'react-redux';
 
 // Import components
+import SolutionCard from './SolutionCard';
 import AssignButton from './AssignButton';
 import ReplyButton from './ReplyButton';
 import ChangeStatusButton from './ChangeStatusButton';
@@ -15,6 +17,7 @@ class FeedbackCard extends Component {
   state = {
     mouseOver: false,
     buttonActive: false,
+    viewSolutions: false,
   }
 
   render = () => {
@@ -28,6 +31,7 @@ class FeedbackCard extends Component {
           {this.renderVotesAndTime()}
           {this.renderText()}
           {this.renderCategoryAndSolutionsButton()}
+          {this.maybeRenderSolutionCards()}
         </Panel>
       </div>
     );
@@ -46,12 +50,12 @@ class FeedbackCard extends Component {
     if (this.state.mouseOver || this.state.buttonActive) {
       if (this.props.feedback.approved)
         editButtons = (
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>          
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
             <div>
-              <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />          
+              <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
               <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
             </div>
-            <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /> 
+            <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
           </div>
         );
       else
@@ -93,12 +97,38 @@ class FeedbackCard extends Component {
     );
   }
 
+  maybeRenderSolutionCards(){
+    if (!this.state.viewSolutions) {
+      return null;
+    }
+    const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId == this.props.feedback.id)
+    if (!feedbackSolutions.length) {
+      return (
+        <div className='col-xs-10 col-xs-offset-1 clearfix'>
+        <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
+          No comments yet!
+          </Panel>
+        </div>
+      );
+    }
+    const solutions = feedbackSolutions.map((item) => {
+      return (
+        <SolutionCard solution={item} />
+      )
+    })
+    return (
+      <div>
+        Solutions:
+        {solutions}
+      </div>
+    );
+  }
   renderCategoryAndSolutionsButton = () => {
     if (this.state.mouseOver || this.state.buttonActive) {
       return (
         <div className="row">
           <div className="pull-left"><Button>Change Category</Button></div>
-          <div className="pull-right"><Button>...</Button></div>
+          <div className="pull-right"><Button onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}>...</Button></div>
         </div>
       );
     }
@@ -113,4 +143,9 @@ class FeedbackCard extends Component {
   }
 }
 
-export default FeedbackCard;
+function mapStateToProps(state) {
+  const { solutions } = state;
+  return { solutions }
+}
+
+export default connect(mapStateToProps, {})(FeedbackCard);
