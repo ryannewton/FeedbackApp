@@ -28,10 +28,12 @@ class FeedbackCard extends Component {
       <div onMouseEnter={() => this.setState({ mouseOver: true })} onMouseLeave={() => this.setState({ mouseOver: false})}>
         <Panel style={background}>
           {this.renderImage()}
-          {this.renderVotesAndTime()}
-          {this.renderText()}
-          {this.renderCategoryAndSolutionsButton()}
-          {this.maybeRenderSolutionCards()}
+          <div style={{marginLeft:20, marginRight:20}}>
+            {this.renderVotesAndTime()}
+            {this.renderText()}
+            {this.renderCategoryAndSolutionsButton()}
+            {this.maybeRenderSolutionCards()}
+          </div>
         </Panel>
       </div>
     );
@@ -50,7 +52,7 @@ class FeedbackCard extends Component {
     if (this.state.mouseOver || this.state.buttonActive) {
       if (this.props.feedback.approved)
         editButtons = (
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+          <div style={{ zIndex:10 }}>          
             <div>
               <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
               <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
@@ -60,15 +62,15 @@ class FeedbackCard extends Component {
         );
       else
         editButtons = (
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Button>Approve</Button>
+          <div>
+            <Button className="btn btn-success" style={{ position: 'absolute'}} >Approve</Button>
             <ClarifyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
             <RejectButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
           </div>
         );
     }
 
-    const image = imageURL ? <Image src={imageURL} height={100} rounded /> : null;
+    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive rounded /> : null;
     
     return (
       <div>
@@ -82,7 +84,7 @@ class FeedbackCard extends Component {
     return (
       <div className="row">
         <div className="pull-left">
-          <Glyphicon glyph='triangle-top' /><span>{this.props.feedback.upvotes}</span><Glyphicon glyph='triangle-bottom' /><span>{this.props.feedback.downvotes}</span>
+          <Glyphicon glyph='triangle-top' /><span style={{margin:5}}>{this.props.feedback.upvotes}</span><Glyphicon glyph='triangle-bottom' /><span style={{margin:5}}>{this.props.feedback.downvotes}</span>
         </div>
         <div className="pull-right">
           <TimeAgo date={this.props.feedback.date} />
@@ -126,8 +128,8 @@ class FeedbackCard extends Component {
   renderCategoryAndSolutionsButton = () => {
     if (this.state.mouseOver || this.state.buttonActive) {
       return (
-        <div className="row">
-          <div className="pull-left"><Button>Change Category</Button></div>
+        <div className="row" style={{height:35}}>
+          <div className="pull-left"><Button className="btn btn-info" >Change Category</Button></div>
           <div className="pull-right"><Button onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}>...</Button></div>
         </div>
       );
@@ -135,7 +137,7 @@ class FeedbackCard extends Component {
 
     const categoryText = this.props.feedback.category ? '#' + this.props.feedback.category : '';
     return (
-      <div className="row">
+      <div className="row" style={{height:35}}>
         <div className="pull-left">{categoryText}</div>
         <div className="pull-right"><Glyphicon glyph='option-horizontal' /></div>
       </div>
