@@ -27,7 +27,7 @@ class ChangeStatusButton extends Component {
 
   render = () => {
     const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
-    const marginLeft = (this.props.feedback.status === 'complete') ? 130 : 120;
+    const marginLeft = (this.props.feedback.status === 'complete') ? 0 : 0;
     
     const sortPopover = (
       <Popover
@@ -53,8 +53,8 @@ class ChangeStatusButton extends Component {
     );
 
     return (
-      <span style={{ position: 'relative'}}>
-        <Button className="btn btn-primary" ref="target" style={{ position: 'absolute', marginLeft:140}} onClick={this.buttonClicked}>Change Status</Button>
+      <div style={{ position: 'relative'}}>
+        <Button className="btn btn-primary" ref="target" style={{ position: 'absolute', right:0}} onClick={this.buttonClicked}>Change Status</Button>
         <Overlay
           rootClose
           show={this.state.show}
@@ -68,7 +68,7 @@ class ChangeStatusButton extends Component {
         >
           {sortPopover}
         </Overlay>
-      </span>
+      </div>
     );
   }
 }

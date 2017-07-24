@@ -45,7 +45,7 @@ class AssignButton extends Component {
 
     return (
       <div style={{ position: 'relative'}}>
-        <Button className="btn btn-danger" ref="target" style={{ position: 'absolute', marginLeft:190}} onClick={this.buttonClicked}>Reject</Button>
+        <Button className="btn btn-danger" ref="target" style={{ position: 'absolute', right:0}} onClick={this.buttonClicked}>Reject</Button>
         <Overlay
           rootClose
           show={this.state.show}

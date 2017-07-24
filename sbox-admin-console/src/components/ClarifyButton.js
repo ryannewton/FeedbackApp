@@ -19,7 +19,6 @@ class AssignButton extends Component {
   }
 
   render = () => {
-    const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
     const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
     
     const sortPopover = (
@@ -45,7 +44,7 @@ class AssignButton extends Component {
 
     return (
       <div style={{ position: 'relative'}}>
-        <Button className="btn btn-warning" style={{ position: 'absolute', marginLeft:103}} ref="target" onClick={this.buttonClicked}>Clarify</Button>
+        <Button className="btn btn-warning" style={{ position: 'absolute', right:66}} ref="target" onClick={this.buttonClicked}>Clarify</Button>
         <Overlay
           rootClose
           show={this.state.show}
@@ -53,7 +52,7 @@ class AssignButton extends Component {
             this.props.updateButtonActive(false);
             this.setState({ show: false });
           }}
-          placement={placement}
+          placement="bottom"
           container={this}
           target={() => ReactDOM.findDOMNode(this.refs.target)}
         >

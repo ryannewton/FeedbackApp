@@ -7,9 +7,9 @@ class SolutionCard extends Component {
 
   renderVotesAndTime = () => {
     return (
-      <div className="row">
+      <div className="row" style={{marginLeft:6, marginRight:6}}>
         <div className="pull-left">
-          <Glyphicon glyph='triangle-top' /><span>{this.props.solution.upvotes}</span><Glyphicon glyph='triangle-bottom' /><span>{this.props.solution.downvotes}</span>
+          <Glyphicon glyph='triangle-top' /><span style={{margin:5}}>{this.props.solution.upvotes}</span><Glyphicon glyph='triangle-bottom' /><span style={{margin:5}}>{this.props.solution.downvotes}</span>
         </div>
         <div className="pull-right">
           <TimeAgo date={this.props.solution.date} />
@@ -20,7 +20,7 @@ class SolutionCard extends Component {
 
   renderText = () => {
     return (
-      <div className="row">{this.props.solution.text}</div>
+      <div className="row" style={{marginLeft:6, marginRight:6}}>{this.props.solution.text}</div>
     );
   }
 
