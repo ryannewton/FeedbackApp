@@ -45,7 +45,7 @@ class AssignButton extends Component {
     );
 
     return (
-      <div style={{ position: 'relative'}}>
+      <span style={{ position: 'relative'}}>
         <Button ref="target" onClick={this.buttonClicked}><Glyphicon glyph='share' /></Button>
         <Overlay
           rootClose
@@ -60,7 +60,7 @@ class AssignButton extends Component {
         >
           {sortPopover}
         </Overlay>
-      </div>
+      </span>
     );
   }
 }
