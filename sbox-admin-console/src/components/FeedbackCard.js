@@ -68,7 +68,7 @@ class FeedbackCard extends Component {
           <div>
             <Button
               className="btn btn-success"
-              style=style={{ zIndex:100, position: 'absolute'}}
+              style={{ zIndex:100, position: 'absolute'}}
               onClick={() => this.props.approveFeedback(this.props.feedback)}
             >
               Approve
