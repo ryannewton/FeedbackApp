@@ -46,7 +46,7 @@ class AssignButton extends Component {
 
     return (
       <span style={{ position: 'relative'}}>
-        <Button ref="target" onClick={this.buttonClicked}><Glyphicon glyph='share' /></Button>
+        <Button style={{ zIndex:100, position: 'absolute'}} ref="target" onClick={this.buttonClicked}><Glyphicon glyph='send' /></Button>
         <Overlay
           rootClose
           show={this.state.show}
