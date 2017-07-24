@@ -967,7 +967,41 @@ app.post('/deleteSolution', upload.array(), (req, res) => {
   });
 });
 
-//
+// PULL
+app.post('/pullFeedbackVotes', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    if (err) res.status(400).send('Authorization failed')
+    else {
+      const { userId } = decoded;
+      const connectionString = `
+      SELECT upvote, downvote, feedbackId
+      FROM feedbackVotes
+      WHERE userId=?`;
+      connection.query(connectionString, [userId], (err, rows) => {
+        if (err) console.log(err);
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
+
+app.post('/pullSolutionVotes', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    if (err) res.status(400).send('Authorization failed')
+    else {
+      const { userId } = decoded;
+      const connectionString = `
+      SELECT upvote, downvote, solutionId
+      FROM solutionVotes
+      WHERE userId=?`;
+      connection.query(connectionString, [userId], (err, rows) => {
+        if (err) console.log(err);
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
+
 app.post('/pullFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
