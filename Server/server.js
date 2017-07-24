@@ -23,6 +23,7 @@ app.use(bodyParser.json()); // for parsing application/json
 app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
 
 app.use(express.static('public'));
+app.use(express.static('build'));
 
 if (!process.env.db) {
   const cors = require('cors'); // Uncomment for development server
@@ -225,7 +226,7 @@ app.post('/getGroupTreeData', upload.array(), (req, res) => {
       const { groupId } = decoded;
       const connectionString =
       `SELECT id, name, parent
-       FROM tree_test
+       FROM locationStructure
        WHERE groupId=?`;
       connection.query(connectionString, [groupId], (err, rows) => {
         if (err) console.log(err, 'here@!@#@');

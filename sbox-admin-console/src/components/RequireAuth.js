@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
-import Login from '../containers/Login';
-import Loading from '../containers/Loading';
+import Login from './Login';
+import Loading from './Loading';
 
 export default function(ComposedComponent) {
   class RequireAuth extends Component {
