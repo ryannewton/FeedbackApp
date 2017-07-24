@@ -160,6 +160,7 @@ class Feedback extends Component {
   renderStatus = () => {
     const { status } = this.props.feedback;
     const { showImage } = this.props;
+    if (!showImage) return null;
     if (status && status === 'compliment') {
       return <View style = {{flexDirection:'row'}}><Icon name="heart" type='font-awesome' size={20} color={'#F54B5E'} /><Text style={{color:'#F54B5E'}}>{showImage?'  Compliment':null}</Text></View>;
     }

@@ -67,7 +67,7 @@ class FeedbackDetails extends Component {
       <Spinner size="large" style={{ marginTop: 20 }} />
     );
     const showSubmitButton = (
-      <Button onPress={this.submitSolution}>Submit Comment</Button>
+      <Button style={{marginBottom:5}} onPress={this.submitSolution}>Submit Comment</Button>
     );
 
     return (
