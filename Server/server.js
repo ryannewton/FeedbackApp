@@ -164,10 +164,11 @@ function convertImgs(file, quality) {
 }
 
 // Sends Email from AWS SES
-function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
+function sendEmail(toEmails, fromEmail, subjectLine, bodyText) {
+  const toEmailsFiltered = toEmails.filter(email => email.toLowerCase().slice(0, 11) !== 'admin_test@');
   ses.sendEmail({
     Source: fromEmail,
-    Destination: { ToAddresses: toEmail },
+    Destination: { ToAddresses: toEmailsFiltered },
     Message: {
       Subject: {
         Data: subjectLine,

@@ -1,8 +1,8 @@
 // Import Libraries
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { Panel, Glyphicon, Image, Button, OverlayTrigger, Popover } from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
-import { connect } from 'react-redux';
 
 // Import components
 import SolutionCard from './SolutionCard';
@@ -11,6 +11,9 @@ import ReplyButton from './ReplyButton';
 import ChangeStatusButton from './ChangeStatusButton';
 import ClarifyButton from './ClarifyButton';
 import RejectButton from './RejectButton';
+
+// Import actions
+import { approveFeedback } from '../actions';
 
 class FeedbackCard extends Component {
 
@@ -50,7 +53,7 @@ class FeedbackCard extends Component {
 
     let editButtons;
     if (this.state.mouseOver || this.state.buttonActive) {
-      if (this.props.feedback.approved)
+      if (this.props.feedback.approved) {
         editButtons = (
           <div>          
             <div>
@@ -60,14 +63,21 @@ class FeedbackCard extends Component {
             <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
           </div>
         );
-      else
+      } else {
         editButtons = (
           <div>
-            <Button className="btn btn-success" style={{ zIndex:100, position: 'absolute'}} >Approve</Button>
+            <Button
+              className="btn btn-success"
+              style=style={{ zIndex:100, position: 'absolute'}}
+              onClick={() => this.props.approveFeedback(this.props.feedback)}
+            >
+              Approve
+            </Button>
             <ClarifyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
             <RejectButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
           </div>
         );
+      }
     }
 
     const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive rounded /> : null;
@@ -151,4 +161,4 @@ function mapStateToProps(state) {
   return { solutions }
 }
 
-export default connect(mapStateToProps, {})(FeedbackCard);
+export default connect(mapStateToProps, { approveFeedback })(FeedbackCard);

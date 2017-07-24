@@ -18,7 +18,7 @@ import {
   SUBMIT_OFFICIAL_REPLY_FAIL,
   UPDATE_FEEDBACK_STATUS,
   UPDATE_FEEDBACK,
-  PULL_GROUP_INFO
+  PULL_GROUP_INFO,
 } from './types';
 
 // Import constants
@@ -80,17 +80,17 @@ export const clarifyFeedback = ({ feedback, message }) => (
 export const updateFeedback = (feedback) => (
   (dispatch) => {
     const token = localStorage.getItem('token');
-    http.post('/updateFeedback', { authorization: token, feedback})
+    http.post('/updateFeedback', { authorization: token, feedback })
     .then(() => {
-      console.log('updateFeedback() Success')
-      dispatch({ type: UPDATE_FEEDBACK, payload: feedback})
+      dispatch({ type: UPDATE_FEEDBACK, payload: feedback });
     })
     .catch((error) => {
-      console.log('updateFeedback() Fail')
-      console.log('Error', error)
-    })
+      console.log('updateFeedback() Fail');
+      console.log('Error: ', error);
+    });
   }
-)
+);
+
 // To be build. Requires new server endpoint
 export const rejectFeedback = ({ feedback, message }) => (
   (dispatch) => {
