@@ -71,7 +71,7 @@ class FeedbackSubmit extends Component {
         }
 
         this.setState({ errorMessage: '' });
-        this.props.navigation.navigate('Submitted');
+        this.props.navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
       }
     } else {
       this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });

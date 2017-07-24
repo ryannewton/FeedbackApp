@@ -14,6 +14,7 @@ import pageOneImage from '../../images/backgrounds/1_n.jpg';
 import pageTwoImage from '../../images/backgrounds/2_n.jpg';
 import pageThreeImage from '../../images/backgrounds/3_n.jpg';
 import pageFourImage from '../../images/backgrounds/4_n.jpg';
+import auth from '../../images/backgrounds/auth1.jpg';
 
 
 class WelcomeScreen extends Component {
@@ -35,11 +36,12 @@ class WelcomeScreen extends Component {
       { text: INTRO_SLIDE_2, image: pageTwoImage, color: '#009688' },
       { text: INTRO_SLIDE_3, image: pageThreeImage, color: '#03A9F4' },
       { text: INTRO_SLIDE_4, image: pageFourImage, color: '#009688' },
+      { text: ' ', image: auth, color: '#0068a5' },
     ];
   }
 
   onSlidesComplete = () => {
-    this.props.navigation.navigate('SubmitEmail');
+    this.props.navigation.navigate('SubmitEmail', translate(this.props.user.language).ENTER_EMAIL);
   }
 
   render() {

@@ -192,7 +192,7 @@ class FeedbackList extends Component {
       return (
         <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingBottom:0}}>
           <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
-            <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>This Week's Customer Feedback</Text>
+            <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>This Weeks Customer Feedback</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'complete')?'white':null)}} onPress={() => {this.setState({ filterCategory:'complete' });}}>
             <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>Feedback with Responses from Corporate</Text>
@@ -218,7 +218,7 @@ class FeedbackList extends Component {
   renderFeedbackSubmitButton = () => {
     return (
       <View style={{position: 'absolute', right: 10, bottom: 10}}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit', translate(this.props.user.language).SUBMIT_FEEDBACK)}>
           <Icon name="mode-edit" size={30} color={'#00A2FF'} backgroundColor={'red'} raised reverse />
         </TouchableOpacity>
       </View>

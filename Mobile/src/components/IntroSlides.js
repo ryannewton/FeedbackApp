@@ -19,8 +19,10 @@ class IntroSlides extends Component {
   constructor(props){
     super(props)
     this.state = {
-      language: null
+      language: null,
+      navigate: false,
     }
+    this.handleScroll = this.handleScroll.bind(this)
   }
   languageButtonStyle(language) {
     if (this.state.language === language) {
@@ -34,7 +36,6 @@ class IntroSlides extends Component {
   languageButtonPress(language) {
     this.setState({ language });
     this.props.languageChoice(language);
-    console.log(language)
     this.myScroll.scrollTo({x: SCREEN_WIDTH, y: 0, animated: true});
   }
   renderLastSlide(index) {
@@ -42,7 +43,7 @@ class IntroSlides extends Component {
     const {
       GET_STARTED,
     } = translate(language)
-    if (index === this.props.data.length - 1) {
+    if (index === this.props.data.length - 2) {
       return (
         <Button
           title={GET_STARTED}
@@ -65,9 +66,9 @@ class IntroSlides extends Component {
                   height: 1,
                   width: 1
                 },
-              backgroundColor: '#0081cb', 
-              width: SCREEN_HEIGHT * 0.45, 
-              height: SCREEN_HEIGHT * 0.13, 
+              backgroundColor: '#0081cb',
+              width: SCREEN_HEIGHT * 0.45,
+              height: SCREEN_HEIGHT * 0.13,
             }]}
             onPress={() => this.languageButtonPress('en')}
           >
@@ -96,9 +97,9 @@ class IntroSlides extends Component {
                   height: 1,
                   width: 1
                 },
-              backgroundColor: '#f8c61c', 
-              width: SCREEN_HEIGHT * 0.45, 
-              height: SCREEN_HEIGHT * 0.13, 
+              backgroundColor: '#f8c61c',
+              width: SCREEN_HEIGHT * 0.45,
+              height: SCREEN_HEIGHT * 0.13,
             }]}
             onPress={() => this.languageButtonPress('es')}
           >
@@ -127,9 +128,9 @@ class IntroSlides extends Component {
                   height: 1,
                   width: 1
                 },
-              backgroundColor: '#f56b4b', 
-              width: SCREEN_HEIGHT * 0.45, 
-              height: SCREEN_HEIGHT * 0.13, 
+              backgroundColor: '#f56b4b',
+              width: SCREEN_HEIGHT * 0.45,
+              height: SCREEN_HEIGHT * 0.13,
             }]}
             onPress={() => this.languageButtonPress('vi')}
           >
@@ -158,9 +159,9 @@ class IntroSlides extends Component {
                   height: 1,
                   width: 1
                 },
-              backgroundColor: '#f44242', 
-              width: SCREEN_HEIGHT * 0.45, 
-              height: SCREEN_HEIGHT * 0.13, 
+              backgroundColor: '#f44242',
+              width: SCREEN_HEIGHT * 0.45,
+              height: SCREEN_HEIGHT * 0.13,
             }]}
             onPress={() => this.languageButtonPress('zh-cn')}
           >
@@ -215,7 +216,14 @@ class IntroSlides extends Component {
         <TouchableOpacity
           activeOpacity={1}
           style={{zIndex:5, width: SCREEN_WIDTH, height:SCREEN_HEIGHT}}
-          onPress={(index === 0 || index === this.props.data.length - 1)?null:() => this.myScroll.scrollTo({x: SCREEN_WIDTH*(index+1), y: 0, animated: true})}
+          onPress={() => {
+            if (index === this.props.data.length - 2) {
+              {this.props.onComplete()}
+            } else if (index !== 0) {
+              this.myScroll.scrollTo({x: SCREEN_WIDTH*(index+1), y: 0, animated: true})
+            }
+          }
+        }
         >
           <Image source={slide.image} style={styles.backgroundImageStyle}>
             {this.renderText(slide.text, index)}
@@ -227,6 +235,13 @@ class IntroSlides extends Component {
     });
   }
 
+  handleScroll(event) {
+    if (event.nativeEvent.contentOffset.x > 1500 && !this.state.navigate) {
+      this.setState({ navigate: true})
+      {this.props.onComplete()}
+    }
+  }
+
   render() {
     return (
       <ScrollView
@@ -234,6 +249,8 @@ class IntroSlides extends Component {
         horizontal
         style={{ flex: 1 }}
         pagingEnabled
+        onScroll={this.handleScroll}
+        scrollEventThrottle={10}
       >
         {this.renderSlides()}
       </ScrollView>

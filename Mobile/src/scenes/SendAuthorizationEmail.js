@@ -9,6 +9,7 @@ import { Card, CardSection, Input, Button, Spinner } from '../components/common'
 import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 
+
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth1.jpg';
@@ -29,7 +30,7 @@ class SendAuthorizationEmail extends Component {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
       Keyboard.dismiss();
-      this.props.sendAuthorizationEmail(this.state.email, () => this.props.navigation.navigate('AuthCode'), this.props.user.language);
+      this.props.sendAuthorizationEmail(this.state.email, () => this.props.navigation.navigate('AuthCode', translate(this.props.user.language).ENTER_CODE), this.props.user.language);
     } else {
       this.props.authorizeUserFail('Invalid Email Address');
     }

@@ -42,7 +42,7 @@ const MainStack = StackNavigator({
   FeedbackSubmit: {
     screen: FeedbackSubmit,
     navigationOptions: ({ navigation }) => ({
-      title: 'Submit Feedback',
+      title: navigation.state.params,
       headerRight: <FeedbackSubmitHeaderButtons navigation={navigation} />,
       headerTitleStyle: {
         color: '#fff',
@@ -58,8 +58,8 @@ const MainStack = StackNavigator({
   },
   Settings: {
     screen: Settings,
-    navigationOptions: {
-      title: 'Settings',
+    navigationOptions: ({ navigation }) => ({
+      title: navigation.state.params,
       headerTitleStyle: { color: '#fff' },
       headerStyle: {
         height: styles.header.height,
@@ -67,12 +67,12 @@ const MainStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    },
+    })
   },
   Submitted: {
     screen: Submitted,
-    navigationOptions: {
-      title: 'Feedback Received',
+    navigationOptions: ({ navigation }) => ({
+      title: navigation.state.params,
       headerTitleStyle: { color: '#fff' },
       headerStyle: {
         height: styles.header.height,
@@ -80,7 +80,7 @@ const MainStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    },
+    })
   },
 });
 

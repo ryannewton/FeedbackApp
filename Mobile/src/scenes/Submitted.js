@@ -8,6 +8,7 @@ import PropTypes from 'prop-types';
 // Import components, functions, and styles
 import { Button } from '../components/common';
 import styles from '../styles/scenes/SubmittedStyles';
+import translate from '../translation';
 
 // Import tracking
 import { sendGoogleAnalytics } from '../actions';
@@ -40,10 +41,10 @@ class Submitted extends Component {
         <View style={styles.container, { flex:4, flexDirection:'column', alignItems:'center', justifyContent:'space-around'}}>
           <Image source={check} resizeMode="contain" style={{ width: SCREEN_WIDTH/3, height: SCREEN_WIDTH/3 }} />
             {/* To do: To do: Update navigation to use react-navigation */}
-          <Text style={{ fontSize: 18 }}> Thanks for submitting feedback! </Text>
+          <Text style={{ fontSize: 18 }}> {translate(this.props.user.language).THANKS_FOR_FEEDBACK} </Text>
           <View style={{ width: SCREEN_WIDTH/2 }}>
             <Button onPress={() => this.props.navigation.navigate('Main')}>
-              Back to Board
+              {translate(this.props.user.language).BACK_TO_BOARD}
             </Button>
           </View>
         </View>
@@ -61,8 +62,8 @@ Submitted.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { group } = state;
-  return { group };
+  const { group, user } = state;
+  return { group, user };
 }
 
 export default connect(mapStateToProps, { sendGoogleAnalytics })(Submitted);
