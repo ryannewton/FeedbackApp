@@ -43,12 +43,12 @@ const defaultFromEmail = 'SuggestionBox@suggestionboxapp.com';
 connection.connect();
 
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/admin.html'));
+  res.sendFile(path.join(__dirname, './build/admin.html'));
 });
 
-// app.get('/admin/*', (req, res) => {
-//   res.sendFile(path.join(__dirname, './public/admin.html'));
-// });
+app.get('/web', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/web.html'));
+});
 
 // Text matching algorithm
 function textMatch(newQuestion) {
