@@ -39,7 +39,11 @@ const translate = language => {
         GET_STARTED:'Get Started',
         VERIFY_ORGANIZATION:'Verify Your Organization',
         ENTER_EMAIL_CODE:'Enter Code From Email',
-        ENTER_GROUP_CODE:'Enter Group Code'
+        ENTER_GROUP_CODE:'Enter Group Code',
+        SETTINGS: 'Settings',
+        FEEDBACK_RECIEVED: 'Feedback recieved',
+        THANKS_FOR_FEEDBACK: 'Thanks for submitting feedback!',
+        BACK_TO_BOARD: 'Back to board',
       }
     case 'es':
       return {
@@ -69,11 +73,10 @@ const translate = language => {
         GROUP_DESCRIPTION: 'Escriba la contraseña de su empresa para collaborar con las sugerencias de su organización',
         GROUP_CODE: 'Contraseña de su empresa',
         JOIN_GROUP: 'Unirse al grupo',
-        //TODO: human translation needed below this point
         ENTER_FEEDBACK: '¡Escriba sus comentarios aquí!',
         TEXT_INTRO: 'Únete a mí en la caja de sugerencias!\n\nEL CODIGO DEL GRUPO: ',
         SIGN_OUT: 'Desconectar',
-        OPEN: 'nuevo',
+        OPEN: 'Nuevo',
         INPROCESS: 'En proceso',
         COMPLETE: 'Terminado',
         SEARCH:'Buscar',
@@ -81,48 +84,56 @@ const translate = language => {
         GET_STARTED:'Empezar',
         VERIFY_ORGANIZATION:'Verificar su organización',
         ENTER_EMAIL_CODE:'Introduzca el código de correo electrónico',
-        ENTER_GROUP_CODE:'Introducir código de grupo'
+        ENTER_GROUP_CODE:'Introducir código de grupo',
+        SETTINGS: 'Ajustes',
+        FEEDBACK_RECIEVED: 'Retroalimentación recibida!',
+        THANKS_FOR_FEEDBACK: 'Gracias por enviar comentarios!',
+        BACK_TO_BOARD: 'De vuelta al tablero'
       }
     case 'vi':
       return {
-        INTRO_SLIDE_1: 'Welcome to the Suggestion Box!',
-        INTRO_SLIDE_2: 'Anonymously submit feedback for your community...',
-        INTRO_SLIDE_3: "...and prioritize other members' feedback by voting.",
-        INTRO_SLIDE_4: 'Top feedback will either be addressed or receive an official response',
-        SUBMIT_FEEDBACK: 'Submit Feedback',
-        POSITIVE_FILL_TEXT: 'Positives: What is something that positively contributed to sales and conversation?',
-        NEGATIVE_FILL_TEXT: 'Negatives: What is something that negatively impacted sales and conversation?',
-        ALL_FEEDBACK: 'All Feedback',
-        INVITE_OTHERS: 'Invite others',
-        INVITE_OTHERS_BODY: 'Help others in your community voice their feedback through Suggestion Box.',
-        SHARE: 'Share',
-        DISMISS: 'Dismiss',
-        PROPOSED_SOLUTIONS: 'Proposed Solutions',
-        NEW_FEEDBACK: 'New Feedback',
-        MOST_POPULAR: 'Most popular',
-        THIS_WEEK: 'This week',
-        TODAY: 'Today',
-        MY_FEEDBACK: 'My Feedback',
-        ENTER_EMAIL: 'Enter Your Email Address',
-        SEND_EMAIL: 'Send Authorization Email',
-        EMAIL_BLURB_FOR_CODE: 'Great! We sent an email with a 4-digit code to',
-        ENTER_CODE: 'Enter Code from Email',
-        VERIFY_EMAIL: 'Verify Email',
-        GROUP_DESCRIPTION: "Please enter your organization's unique group code to join your organization.",
-        GROUP_CODE: 'Your Group Code',
-        JOIN_GROUP: 'Join Group',
-        TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
-        ENTER_FEEDBACK: 'Enter your feedback here!',
-        SIGN_OUT: 'Sign Out',
-        OPEN: 'Open',
-        INPROCESS: 'In Process',
-        COMPLETE: 'Completed',
-        SEARCH:'Search',
-        CANCEL:'Cancel',
-        GET_STARTED:'Get Started',
-        VERIFY_ORGANIZATION:'Verify Your Organization',
-        ENTER_EMAIL_CODE:'Enter Code From Email',
-        ENTER_GROUP_CODE:'Enter Group Code'
+        INTRO_SLIDE_1: 'Chào bạn đến với hộp đóng góp ý kiến!',
+        INTRO_SLIDE_2: 'Xin hãy để lại phản hồi ẩn danh cho cộng đồng của bạn',
+        INTRO_SLIDE_3: "và xếp thứ tự các phản hồi khác bằng cách bỏ phiếu",
+        INTRO_SLIDE_4: 'Phản hồi xếp thứ nhất sẽ được xem xét hoặc nhận phản hồi chính thức',
+        SUBMIT_FEEDBACK: 'Gửi ý kiến',
+        POSITIVE_FILL_TEXT: 'Tích cực: Nêu một điều tích cực đã đóng góp cho doanh thu và các cuộc thảo luận',
+        NEGATIVE_FILL_TEXT: 'Tiêu cực: Nêu một điều tiêu cực đã làm ảnh hưởng đến doanh thu và các cuộc thảo luận',
+        ALL_FEEDBACK: 'Tất cả các phản hồi',
+        INVITE_OTHERS: 'Mời người khác tham gia',
+        INVITE_OTHERS_BODY: 'Giúp các thành viên khác trong cộng đồng nêu ý kiến thông qua hộp đóng góp ý kiến',
+        SHARE: 'Chia sẻ',
+        DISMISS: 'Bỏ qua',
+        PROPOSED_SOLUTIONS: 'Nêu giải pháp',
+        NEW_FEEDBACK: 'Ý kiến mới',
+        MOST_POPULAR: 'Phổ biến nhất',
+        THIS_WEEK: 'Tuần này',
+        TODAY: 'Hôm nay',
+        MY_FEEDBACK: 'Ý kiến của tôi',
+        ENTER_EMAIL: 'Điền vào địa chỉ email của bạn',
+        SEND_EMAIL: 'Gửi email xác nhận',
+        EMAIL_BLURB_FOR_CODE: 'Tuyệt! Chúng tôi đã gửi mật mã có bốn chữ số vào hòm thư của bạn',
+        ENTER_CODE: 'Điền vào mật mã có bốn chữ số trong hòm thư của bạn',
+        VERIFY_EMAIL: 'Xác nhận đỉa chỉ email',
+        GROUP_DESCRIPTION: "Xin hãy điền vào mật mã công ty của bạn để tham gia ",
+        GROUP_CODE: 'Mật mã nhóm của bạn',
+        JOIN_GROUP: 'Tham gia nhóm',
+        TEXT_INTRO: 'Tham gia vào hộp đóng góp ý kiến!\n\nMã Nhóm:',
+        ENTER_FEEDBACK: 'Điền ý kiến vào đây',
+        SIGN_OUT: 'Thoát ra',
+        OPEN: 'mở',
+        INPROCESS: 'đang tiến hành',
+        COMPLETE: 'hoàn thành',
+        SEARCH:'Tìm kiếm',
+        CANCEL:'Hủy bỏ',
+        GET_STARTED:'bắt đầu',
+        VERIFY_ORGANIZATION:'Xác minh sự sắp xếp của bạn',
+        ENTER_EMAIL_CODE:'Nhập Mã từ Email',
+        ENTER_GROUP_CODE:'Nhập mã nhóm',
+        SETTINGS: 'Cài đặt',
+        FEEDBACK_RECIEVED: 'Phản hồi nhận được',
+        THANKS_FOR_FEEDBACK: 'Thanks for submitting feedback!',
+        BACK_TO_BOARD: 'Trở lại bảng'
       }
     case 'zh-cn':
       return {
@@ -163,7 +174,11 @@ const translate = language => {
         GET_STARTED:'开始',
         VERIFY_ORGANIZATION:'验证你所在的组织',
         ENTER_EMAIL_CODE:'验证你的邮箱',
-        ENTER_GROUP_CODE:'加入你的组织'
+        ENTER_GROUP_CODE:'加入你的组织',
+        SETTINGS: '设置',
+        FEEDBACK_RECIEVED: '提交成功',
+        THANKS_FOR_FEEDBACK: '谢谢您提交的反馈',
+        BACK_TO_BOARD: '返回列表'
       }
     default:
       return {
@@ -204,7 +219,11 @@ const translate = language => {
         GET_STARTED:'Get Started',
         VERIFY_ORGANIZATION:'Verify Your Organization',
         ENTER_EMAIL_CODE:'Enter Code From Email',
-        ENTER_GROUP_CODE:'Enter Group Code'
+        ENTER_GROUP_CODE:'Enter Group Code',
+        SETTINGS: 'Settings',
+        FEEDBACK_RECIEVED: 'Feedback recieved',
+        THANKS_FOR_FEEDBACK: 'Thanks for submitting feedback!',
+        BACK_TO_BOARD: 'Back to board'
       }
     }
 }
