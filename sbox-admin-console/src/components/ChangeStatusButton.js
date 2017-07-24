@@ -3,14 +3,16 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
 import { Glyphicon, Button, Overlay, Popover } from 'react-bootstrap';
-import { submitOfficialReply } from '../actions';
+import { updateFeedback } from '../actions';
 
-
-class ReplyButton extends Component {
-
+class ChangeStatusButton extends Component {
   state = {
-    response: this.props.feedback.officialReply,
     show: false,
+  }
+
+  sortClicked = (sortMethod) => {
+    this.props.updateSortMethod(sortMethod);
+    this.setState({ show: !this.state.show });
   }
 
   buttonClicked = () => {
@@ -18,8 +20,9 @@ class ReplyButton extends Component {
     this.setState({ show: !this.state.show });
   }
 
-  submitOfficialReply = () => {
-    this.props.submitOfficialReply(this.props.feedback, this.state.response);
+  updateStatus = (newStatus) => {
+    const updatedFeedback = { ...this.props.feedback, status: newStatus };
+    this.props.updateFeedback(updatedFeedback);
   }
 
   render = () => {
@@ -42,15 +45,18 @@ class ReplyButton extends Component {
           fontSize: 12,
         }}
       >
-        <div style={{ color: 'black' }}>Add an official response:</div>
-        <input value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder="Add official response" />
-        <button onClick={this.submitOfficialReply}>Send</button>
+        <div style={{ color: 'black' }}>Change status to:</div>
+        <ul>
+          <li onClick={() => this.updateStatus('new')}>New</li>
+          <li onClick={() => this.updateStatus('inprocess')}>In Process</li>
+          <li onClick={() => this.updateStatus('complete')}>Complete</li>
+        </ul>
       </Popover>
     );
 
     return (
       <span style={{ position: 'relative'}}>
-        <Button ref="target" onClick={this.buttonClicked}><Glyphicon glyph='send' /></Button>
+        <Button ref="target" onClick={this.buttonClicked}>Change Status</Button>
         <Overlay
           rootClose
           show={this.state.show}
@@ -73,4 +79,4 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-export default connect(mapStateToProps, { submitOfficialReply })(ReplyButton);
+export default connect(mapStateToProps, { updateFeedback })(ChangeStatusButton);
