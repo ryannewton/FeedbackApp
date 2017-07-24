@@ -77,9 +77,8 @@ export const clarifyFeedback = ({ feedback, message }) => (
   }
 );
 
-export const updateFeedback = ({ feedback }) => (
+export const updateFeedback = (feedback) => (
   (dispatch) => {
-    console.log('here!')
     const token = localStorage.getItem('token');
     http.post('/updateFeedback', { authorization: token, feedback})
     .then(() => {
@@ -88,7 +87,7 @@ export const updateFeedback = ({ feedback }) => (
     })
     .catch((error) => {
       console.log('updateFeedback() Fail')
-      console.log('Error': error)
+      console.log('Error', error)
     })
   }
 )
@@ -111,7 +110,7 @@ export const rejectFeedback = ({ feedback, message }) => (
   }
 );
 
-export const submitOfficialReply = ({ feedback, officialReply }) => (
+export const submitOfficialReply = (feedback, officialReply) => (
   (dispatch) => {
     dispatch({ type: SUBMIT_OFFICIAL_REPLY });
 

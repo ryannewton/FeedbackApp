@@ -6,6 +6,7 @@ import TimeAgo from 'react-timeago'
 // Import components
 import AssignButton from './AssignButton';
 import ReplyButton from './ReplyButton';
+import ChangeStatusButton from './ChangeStatusButton';
 import ClarifyButton from './ClarifyButton';
 import RejectButton from './RejectButton';
 
@@ -50,7 +51,7 @@ class FeedbackCard extends Component {
               <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />          
               <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
             </div>
-            <Button>Change Status</Button>        
+            <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /> 
           </div>
         );
       else

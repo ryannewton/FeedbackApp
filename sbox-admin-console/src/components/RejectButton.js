@@ -39,7 +39,7 @@ class AssignButton extends Component {
         }}
       >
         <div style={{ color: 'black' }}>[REJECT FROM OLD ADMIN GOES HERE]</div>
-        <button onClick={this.buttonClicked}>Send</button>
+        <button onClick={this.buttonClicked}>Reject</button>
       </Popover>
     );
 
