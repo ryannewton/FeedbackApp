@@ -46,8 +46,11 @@ class FeedbackCard extends Component {
       if (this.props.feedback.approved)
         editButtons = (
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>          
-            <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />          
-            <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />          
+            <div>
+              <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />          
+              <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+            </div>
+            <Button>Change Status</Button>        
           </div>
         );
       else
