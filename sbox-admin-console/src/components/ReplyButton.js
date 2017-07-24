@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Button, Overlay, Popover } from 'react-bootstrap';
+import { Glyphicon, Button, Overlay, Popover, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
 import { submitOfficialReply } from '../actions';
 
 
@@ -24,7 +24,7 @@ class ReplyButton extends Component {
 
   render = () => {
     const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
-    const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
+    const marginLeft = (this.props.feedback.status === 'complete') ? 30 : 40;
     
     const sortPopover = (
       <Popover
@@ -32,6 +32,7 @@ class ReplyButton extends Component {
           ...this.props.style,
           position: 'absolute',
           backgroundColor: 'white',
+          width:350,
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
@@ -42,9 +43,11 @@ class ReplyButton extends Component {
           fontSize: 12,
         }}
       >
-        <div style={{ color: 'black' }}>Add an official response:</div>
-        <input value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder="Add official response" />
-        <button onClick={this.submitOfficialReply}>Send</button>
+        <FormGroup controlId="formControlsTextarea">
+          <ControlLabel>Add an official response:</ControlLabel>
+          <FormControl componentClass="textarea" value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder="Add official response" />
+        </FormGroup>
+        <Button onClick={this.submitOfficialReply}>Send</Button>
       </Popover>
     );
 

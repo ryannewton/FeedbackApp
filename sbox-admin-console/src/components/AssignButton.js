@@ -1,7 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Button, Overlay, Popover } from 'react-bootstrap';
+import { Glyphicon, Button, Overlay, Popover, FormControl } from 'react-bootstrap';
 
 class AssignButton extends Component {
   state = {
@@ -20,7 +20,7 @@ class AssignButton extends Component {
 
   render = () => {
     const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
-    const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
+    const marginLeft = (this.props.feedback.status === 'complete') ? -10 : 10;
 
     const sortPopover = (
       <Popover
@@ -31,6 +31,7 @@ class AssignButton extends Component {
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
+          width:350,
           marginLeft: marginLeft,
           marginTop: 5,
           padding: 10,
@@ -39,8 +40,13 @@ class AssignButton extends Component {
         }}
       >
         <div style={{ color: 'black' }}>Route this feedback to:</div>
-        <input value={this.state.email} onChange={(event) => this.setState({email: event.target.value})} placeholder="Enter email here" />
-        <button>Send</button>
+        <FormControl
+            type="text"
+            value={this.state.email}
+            placeholder="Enter email here"
+            onChange={(event) => this.setState({email: event.target.value})}
+          />
+        <Button>Send</Button>
       </Popover>
     );
 

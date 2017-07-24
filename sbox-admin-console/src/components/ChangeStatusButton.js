@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Button, Overlay, Popover } from 'react-bootstrap';
+import { Glyphicon, Button, Overlay, Popover, MenuItem } from 'react-bootstrap';
 import { updateFeedback } from '../actions';
 
 class ChangeStatusButton extends Component {
@@ -27,7 +27,7 @@ class ChangeStatusButton extends Component {
 
   render = () => {
     const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
-    const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
+    const marginLeft = (this.props.feedback.status === 'complete') ? 130 : 120;
     
     const sortPopover = (
       <Popover
@@ -45,12 +45,10 @@ class ChangeStatusButton extends Component {
           fontSize: 12,
         }}
       >
-        <div style={{ color: 'black' }}>Change status to:</div>
-        <ul>
-          <li onClick={() => this.updateStatus('new')}>New</li>
-          <li onClick={() => this.updateStatus('inprocess')}>In Process</li>
-          <li onClick={() => this.updateStatus('complete')}>Complete</li>
-        </ul>
+        <MenuItem header style={{ padding: 0 }}>Change status to:</MenuItem>
+        <MenuItem onClick={() => this.updateStatus('new')}>New</MenuItem>
+        <MenuItem onClick={() => this.updateStatus('inprocess')}>In Process</MenuItem>
+        <MenuItem onClick={() => this.updateStatus('complete')}>Complete</MenuItem>
       </Popover>
     );
 
