@@ -88,9 +88,9 @@ class Dashboard extends Component {
   renderSubmit() {
     return (
       <Panel title="Submit feedback!">
-        <div className="col-md-8">
+        <div className="col-md-10">
           <textarea
-            class="form-control"
+            className="form-control"
             id="exampleTextarea"
             rows="4"
             onChange={(event) => this.setState({ submitText: event.target.value })}
@@ -108,7 +108,9 @@ class Dashboard extends Component {
             }
           }}
           bsStyle="primary"
-        />
+        >
+        Submit
+        </Button>
         {this.renderError()}
       </Panel>
     )
