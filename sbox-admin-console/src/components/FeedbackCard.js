@@ -55,7 +55,7 @@ class FeedbackCard extends Component {
     if (this.state.mouseOver || this.state.buttonActive) {
       if (this.props.feedback.approved) {
         editButtons = (
-          <div style={{ zIndex:10 }}>          
+          <div>          
             <div>
               <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
               <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
@@ -68,7 +68,7 @@ class FeedbackCard extends Component {
           <div>
             <Button
               className="btn btn-success"
-              style={{ position: 'absolute'}}
+              style=style={{ zIndex:100, position: 'absolute'}}
               onClick={() => this.props.approveFeedback(this.props.feedback)}
             >
               Approve
@@ -116,11 +116,12 @@ class FeedbackCard extends Component {
     const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId == this.props.feedback.id)
     if (!feedbackSolutions.length) {
       return (
-        <div className='col-xs-10 col-xs-offset-1 clearfix'>
-        <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
-          No comments yet!
+        <span>
+          Solutions:
+          <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
+            No solutions yet!
           </Panel>
-        </div>
+        </span>
       );
     }
     const solutions = feedbackSolutions.map((item) => {
@@ -129,10 +130,10 @@ class FeedbackCard extends Component {
       )
     })
     return (
-      <div>
+      <span>
         Solutions:
         {solutions}
-      </div>
+      </span>
     );
   }
   renderCategoryAndSolutionsButton = () => {
@@ -149,7 +150,7 @@ class FeedbackCard extends Component {
     return (
       <div className="row" style={{height:35}}>
         <div className="pull-left">{categoryText}</div>
-        <div className="pull-right"><Glyphicon glyph='option-horizontal' /></div>
+        <div className="pull-right" style={{marginTop:10, marginRight:9}}><Glyphicon glyph='option-horizontal' /></div>
       </div>
     );
   }
