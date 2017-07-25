@@ -8,6 +8,9 @@ import {
   SIGNOUT_USER,
   UPDATE_FEEDBACK_STATUS,
   UPDATE_FEEDBACK,
+  APPROVE_FEEDBACK_SUCCESS,
+  CLARIFY_FEEDBACK_SUCCESS,
+  REJECT_FEEDBACK_SUCCESS,
   CLARIFY_FEEDBACK_FAIL,
 } from '../actions/types';
 
@@ -52,6 +55,24 @@ export default (state = INITIAL_STATE, action) => {
       newList = state.list.slice(0);
       newList[index].officialReply = action.payload.officialReply;
       return { ...state, list: newList, loading: false };
+    case APPROVE_FEEDBACK_SUCCESS:
+      index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      newList = state.list.slice(0);
+      newList[index].approved = 1;
+      newList[index].status = 'new';
+      return { ...state, list: newList };
+    case REJECT_FEEDBACK_SUCCESS:
+      index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      newList = state.list.slice(0);
+      newList[index].approved = 0;
+      newList[index].status = 'reject';
+      return { ...state, list: newList };
+    case CLARIFY_FEEDBACK_SUCCESS:
+      index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      newList = state.list.slice(0);
+      newList[index].approved = 0;
+      newList[index].status = 'clarify';
+      return { ...state, list: newList };
     case UPDATE_FEEDBACK_STATUS:
       index = state.list.findIndex(feedback => feedback.id === action.payload.feedback.id);
       newList = state.list.slice(0);

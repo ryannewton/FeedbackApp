@@ -33,6 +33,7 @@ class FeedbackCard extends Component {
           {this.renderImage()}
           <div style={{marginLeft:20, marginRight:20}}>
             {this.renderVotesAndTime()}
+            {this.maybeRenderClarifyText()}
             {this.renderText()}
             {this.renderCategoryAndSolutionsButton()}
             {this.maybeRenderSolutionCards()}
@@ -100,6 +101,15 @@ class FeedbackCard extends Component {
           <TimeAgo date={this.props.feedback.date} />
         </div>
       </div>
+    );
+  }
+
+  maybeRenderClarifyText =() => {
+    if (this.props.feedback.status != 'clarify') {
+      return null;
+    }
+    return (
+      <center><t style={{color:'#F8C61C', fontWeight:'bold', fontSize:18}}>Awaiting Clarification</t></center>
     );
   }
 
