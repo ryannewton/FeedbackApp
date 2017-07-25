@@ -9,19 +9,6 @@ import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
 import styles from '../styles/common/navStyles';
 import translate from '../translation';
 
-  // navigationOptions: {
-  //   title: '({ state }) => `${state.params.language}`',
-  //   headerTitleStyle: {
-  //     color: '#fff',
-  //   },
-  //   headerStyle: {
-  //     height: styles.header.height,
-  //     marginTop: styles.header.marginTop,
-  //     backgroundColor: '#00A2FF',
-  //   },
-  //   headerTintColor: 'white',
-  // },
-
 const AuthStack = StackNavigator({
   SubmitEmail: {
     screen: SendAuthorizationEmail,
