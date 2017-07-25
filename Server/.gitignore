@@ -14,6 +14,8 @@ production.js
 package-lock.json
 yarn.lock
 
+/build
+
 public/assets/app.bundle.js
 public/assets/app.bundle.js.map
 public/assets/app.styles.css
