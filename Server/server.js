@@ -43,12 +43,12 @@ const defaultFromEmail = 'SuggestionBox@suggestionboxapp.com';
 connection.connect();
 
 app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, './public/admin.html'));
+  res.sendFile(path.join(__dirname, './build/admin.html'));
 });
 
-// app.get('/admin/*', (req, res) => {
-//   res.sendFile(path.join(__dirname, './public/admin.html'));
-// });
+app.get('/web', (req, res) => {
+  res.sendFile(path.join(__dirname, './public/web.html'));
+});
 
 // Text matching algorithm
 function textMatch(newQuestion) {
@@ -164,10 +164,11 @@ function convertImgs(file, quality) {
 }
 
 // Sends Email from AWS SES
-function sendEmail(toEmail, fromEmail, subjectLine, bodyText) {
+function sendEmail(toEmails, fromEmail, subjectLine, bodyText) {
+  const toEmailsFiltered = toEmails.filter(email => email.toLowerCase().slice(0, 11) !== 'admin_test@');
   ses.sendEmail({
     Source: fromEmail,
-    Destination: { ToAddresses: toEmail },
+    Destination: { ToAddresses: toEmailsFiltered },
     Message: {
       Subject: {
         Data: subjectLine,
@@ -967,7 +968,41 @@ app.post('/deleteSolution', upload.array(), (req, res) => {
   });
 });
 
-//
+// PULL
+app.post('/pullFeedbackVotes', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    if (err) res.status(400).send('Authorization failed')
+    else {
+      const { userId } = decoded;
+      const connectionString = `
+      SELECT upvote, downvote, feedbackId
+      FROM feedbackVotes
+      WHERE userId=?`;
+      connection.query(connectionString, [userId], (err, rows) => {
+        if (err) console.log(err);
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
+
+app.post('/pullSolutionVotes', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    if (err) res.status(400).send('Authorization failed')
+    else {
+      const { userId } = decoded;
+      const connectionString = `
+      SELECT upvote, downvote, solutionId
+      FROM solutionVotes
+      WHERE userId=?`;
+      connection.query(connectionString, [userId], (err, rows) => {
+        if (err) console.log(err);
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
+
 app.post('/pullFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');

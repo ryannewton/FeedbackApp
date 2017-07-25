@@ -69,7 +69,7 @@ class FeedbackDetails extends Component {
     );
     const { language } = this.props.user
     const showSubmitButton = (
-      <Button onPress={this.submitSolution}>{translate(language).SUBMIT_COMMENT}</Button>
+      <Button style={{marginBottom:5}} onPress={this.submitSolution}>{translate(language).SUBMIT_COMMENT}</Button>
     );
 
     return (

@@ -6,6 +6,7 @@ import { Icon, Button } from 'react-native-elements';
 import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
 import PropTypes from 'prop-types';
+import TimeAgo from 'react-native-timeago';
 
 import fullScreen from '../../images/icons/default.jpg';
 import noOpinionY from '../../images/icons/meh_y.png';
@@ -81,28 +82,13 @@ class Feedback extends Component {
     }
     if (this.props.feedback === undefined) {
       return '';
-    } else if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
-              this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
-              this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
-      return (
-        <Text
-          style={{
-            fontSize: 16,
-            color: 'black',
-            fontWeight: '400',
-          }}
-          numberOfLines={(showImage?null:3)}
-        >
-          {this.props.feedback.text}
-        </Text>
-      );
-    }
+    } 
     return (
       <Text
         style={{
           fontSize: 16,
           color: 'black',
-          fontWeight: 'bold',
+          fontWeight: '400',
         }}
         numberOfLines={(showImage?null:3)}
       >
@@ -160,6 +146,7 @@ class Feedback extends Component {
   renderStatus = () => {
     const { status } = this.props.feedback;
     const { showImage } = this.props;
+    if (!showImage) return null;
     if (status && status === 'compliment') {
       return <View style = {{flexDirection:'row'}}><Icon name="heart" type='font-awesome' size={20} color={'#F54B5E'} /><Text style={{color:'#F54B5E'}}>{showImage?'  Compliment':null}</Text></View>;
     }
@@ -333,6 +320,20 @@ return (
     );
   }
 
+  renderMyFeedbackTag = () => {
+    const { showImage } = this.props;
+    if (this.props.user.userId != this.props.feedback.userId) {
+      return null;
+    } else if (!showImage) {
+      return (
+        <View>
+          <Icon name="person" size={23} color="#F54B5E" />
+        </View>
+      );
+    }
+    return <View style = {{flexDirection:'row', marginRight:10}}><Icon name="person" size={20} color={'#F54B5E'} /><Text style={{color:'#F54B5E'}}>{"My Feedback"}</Text></View>;
+  }
+
   renderImageIcon = () => {
     const { imageURL } = this.props.feedback;
 
@@ -463,10 +464,14 @@ renderVoteCount = () => {
                 {this.renderSmallImage()}
               </View>
             </View>
-                            <View style={{ paddingBottom:13, flexDirection: 'row', justifyContent: 'flex-end'}}>
-                  {this.renderStatusBox()}
-                  {this.renderOfficialResponseTag()}
-                  {this.renderSolutionsTag()}
+                <View style={{ paddingTop:3, paddingBottom:10, flexDirection: 'row', justifyContent: 'space-between'}}>
+                  <Text style={{color:'#bdbdbd'}}><TimeAgo time={this.props.feedback.date} /></Text>
+                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end'}}>
+                    {this.renderMyFeedbackTag()}
+                    {this.renderStatusBox()}
+                    {this.renderOfficialResponseTag()}
+                    {this.renderSolutionsTag()}
+                  </View>
                 </View>
           </View>
         </View>

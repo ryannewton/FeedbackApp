@@ -134,6 +134,7 @@ class FeedbackSubmitHeader extends Component {
     const { menuOptions, divider, pickerStyle } = styles;
     const { language } = this.props
     const { MOST_POPULAR,
+            ALL_FEEDBACK,
             THIS_WEEK,
             TODAY,
             MY_FEEDBACK,
@@ -156,7 +157,7 @@ class FeedbackSubmitHeader extends Component {
                 renderTouchable={renderTouchable}
                 style={this.hasDisabledStyle('all')}
               >
-                <Text>{MOST_POPULAR}</Text>
+                <Text>{ALL_FEEDBACK}</Text>
               </MenuOption>
               <View style={divider} />
               <MenuOption

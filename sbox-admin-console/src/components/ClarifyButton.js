@@ -1,25 +1,31 @@
 // Import Libraries
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Button, Overlay, Popover } from 'react-bootstrap';
+import { Button, Overlay, Popover, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
-class AssignButton extends Component {
+// Import actions
+import { clarifyFeedback } from '../actions';
+
+class ClarifyButton extends Component {
   state = {
     show: false,
+    message: '',
   }
 
-  sortClicked = (sortMethod) => {
-    this.props.updateSortMethod(sortMethod);
-    this.setState({ show: !this.state.show });
+  handleSubmit = () => {
+    const { message } = this.state;
+    const { feedback } = this.props;
+    this.props.clarifyFeedback({ feedback, message });
   }
 
-  buttonClicked = () => {
-    this.props.updateButtonActive(!this.state.show);
-    this.setState({ show: !this.state.show });
+  maybeRenderClarifyInput = () => {
+    const { show } = this.state;
+    this.props.updateButtonActive(!show);
+    this.setState({ show: !show });
   }
 
   render = () => {
-    const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
     const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
     
     const sortPopover = (
@@ -38,14 +44,28 @@ class AssignButton extends Component {
           fontSize: 12,
         }}
       >
-        <div style={{ color: 'black' }}>[CLARIFY FROM OLD ADMIN GOES HERE]</div>
-        <button>Get Clarification</button>
+        <FormGroup controlId="formControlsTextarea">
+          <ControlLabel>Please describe what is unclear.</ControlLabel>
+          <FormControl
+            componentClass="textarea"
+            placeholder="Enter your description here. Note that this will be sent to the member who submitted this feedback."
+            onChange={event => this.setState({ message: event.target.value })}
+          />
+        </FormGroup>
+        <Button onClick={this.handleSubmit}>Send</Button>
       </Popover>
     );
 
     return (
       <div style={{ position: 'relative'}}>
-        <Button ref="target" onClick={this.buttonClicked}>Clarify</Button>
+        <Button
+          className="btn btn-warning"
+          style={{ position: 'absolute', right:66 }}
+          ref="target"
+          onClick={this.maybeRenderClarifyInput}
+        >
+          Clarify
+        </Button>
         <Overlay
           rootClose
           show={this.state.show}
@@ -53,7 +73,7 @@ class AssignButton extends Component {
             this.props.updateButtonActive(false);
             this.setState({ show: false });
           }}
-          placement={placement}
+          placement="bottom"
           container={this}
           target={() => ReactDOM.findDOMNode(this.refs.target)}
         >
@@ -64,4 +84,4 @@ class AssignButton extends Component {
   }
 }
 
-export default AssignButton;
+export default connect(null, { clarifyFeedback })(ClarifyButton);
