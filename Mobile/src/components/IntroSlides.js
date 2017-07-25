@@ -236,7 +236,7 @@ class IntroSlides extends Component {
   }
 
   handleScroll(event) {
-    if (event.nativeEvent.contentOffset.x > 1500 && !this.state.navigate) {
+    if (event.nativeEvent.contentOffset.x > 4.9 * SCREEN_WIDTH && !this.state.navigate) {
       this.setState({ navigate: true})
       {this.props.onComplete()}
     }
