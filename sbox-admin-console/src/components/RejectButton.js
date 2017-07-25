@@ -11,9 +11,16 @@ class RejectButton extends Component {
   state = {
     show: false,
     message: '',
+    error: false,
   }
 
   handleSubmit = () => {
+    if (!this.state.message) {
+      this.setState({ error: true });
+      return null;
+    }
+
+    this.setState({ error: false });
     const { message } = this.state;
     const { feedback } = this.props;
     this.props.rejectFeedback({ feedback, message });
@@ -23,6 +30,19 @@ class RejectButton extends Component {
     const { show } = this.state;
     this.props.updateButtonActive(!show);
     this.setState({ show: !show });
+  }
+
+  maybeRenderErrorMessage() {
+    if (this.state.error) {
+      return (
+        <center>
+          <div style={{ color: 'red' }}>
+            Please add a message to help the user understand why this feedback is being rejected.
+          </div>
+        </center>
+      )
+    }
+    return null;
   }
 
   render = () => {
@@ -53,6 +73,7 @@ class RejectButton extends Component {
             onChange={event => this.setState({ message: event.target.value })}
           />
         </FormGroup>
+        {this.maybeRenderErrorMessage()}
         <Button onClick={this.handleSubmit}>Send</Button>
       </Popover>
     );

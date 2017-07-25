@@ -11,18 +11,52 @@ class ClarifyButton extends Component {
   state = {
     show: false,
     message: '',
+    error: false,
+    sent: false,
   }
 
   handleSubmit = () => {
+    if (!this.state.message) {
+      this.setState({ error: true });
+      return null;
+    }
+
+    this.setState({ error: false });
     const { message } = this.state;
     const { feedback } = this.props;
     this.props.clarifyFeedback({ feedback, message });
+    this.setState({ sent: true });
   }
 
   maybeRenderClarifyInput = () => {
     const { show } = this.state;
     this.props.updateButtonActive(!show);
     this.setState({ show: !show });
+  }
+
+  maybeRenderErrorMessage() {
+    if (this.state.error) {
+      return (
+        <center>
+          <div style={{ color: 'red' }}>
+            Please add a message to help the user understand what to clarify.
+          </div>
+        </center>
+      )
+    }
+    return null;
+  }
+
+  maybeRenderSentMessage() {
+    if (this.state.sent) {
+      return (
+        <center>
+          <div style={{ color: 'blue' }}>
+            Sent!
+          </div>
+        </center>
+      )
+    }
   }
 
   render = () => {
@@ -52,6 +86,8 @@ class ClarifyButton extends Component {
             onChange={event => this.setState({ message: event.target.value })}
           />
         </FormGroup>
+        {this.maybeRenderErrorMessage()}
+        {this.maybeRenderSentMessage()}
         <Button onClick={this.handleSubmit}>Send</Button>
       </Popover>
     );
