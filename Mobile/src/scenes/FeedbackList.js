@@ -190,7 +190,7 @@ class FeedbackList extends Component {
 
     if (this.props.group.includePositiveFeedbackBox)
       return (
-        <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingBottom:0}}>
+        <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingTop:10, height:40}}>
           <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
             <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>This Weeks Customer Feedback</Text>
           </TouchableOpacity>
@@ -201,7 +201,7 @@ class FeedbackList extends Component {
       );
 
     return (
-      <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingBottom:0}}>
+      <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingTop:10, height:40}}>
         <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
           <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>{OPEN}</Text>
         </TouchableOpacity>
