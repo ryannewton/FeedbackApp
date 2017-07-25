@@ -14,6 +14,7 @@ class Login extends Component {
       sentCode: false,
     };
     this._handleKeyPress = this._handleKeyPress.bind(this)
+    this._handleKeyPress2 = this._handleKeyPress2.bind(this)
   }
 
   handleSubmit = () => {
@@ -35,6 +36,13 @@ class Login extends Component {
       this.props.authorizeUser({ email, code });
     }
   }
+
+  _handleKeyPress2(e) {
+   if (e.key === 'Enter') {
+     this.setState({ sentCode: true });
+     this.props.sendAuthorizationEmail(this.state.email, 'en');
+   }
+ }
 
   maybeRenderErrorMessage = () => {
     if (this.state.error !== '') {
@@ -149,7 +157,8 @@ class Login extends Component {
                 placeholder='Your email address'
                 value={this.state.email}
                 style={{ width: 300 }}
-                onChange={event => this.setState({ email: event.target.value }) }
+                onChange={event => this.setState({ email: event.target.value })}
+                onKeyPress={this._handleKeyPress2}
               />
               <div style={{paddingTop:20}} />
               {this.enterCode()}
