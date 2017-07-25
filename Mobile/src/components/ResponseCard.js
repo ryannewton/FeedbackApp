@@ -2,12 +2,14 @@
 import React, { Component } from 'react';
 import { Text, View } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // Import components, styles, and actions
 import { CardSection, Card } from '../components/common';
 import ResponseCardItem from './ResponseCardItem';
 import styles from '../styles/components/ResponseCardStyles';
+import translate from '../translation';
 
 
 class ResponseCard extends Component {
@@ -21,7 +23,7 @@ class ResponseCard extends Component {
         <Card>
           <CardSection>
             <Text style={subheaderText}>
-              Offical Response
+              {translate(this.props.user.language).OFFICIAL_RESPONSE}
             </Text>
             <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
               <Icon name="verified-user" color="blue" />
@@ -39,4 +41,9 @@ ResponseCard.propTypes = {
   feedback: PropTypes.object,
 };
 
-export default ResponseCard;
+function mapStateToProps(state) {
+  const { user } = state;
+  return { user };
+}
+
+export default connect(mapStateToProps)(ResponseCard);

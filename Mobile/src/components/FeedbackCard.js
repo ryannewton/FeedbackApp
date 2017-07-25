@@ -7,6 +7,7 @@ import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
 import PropTypes from 'prop-types';
 import TimeAgo from 'react-native-timeago';
+import translate from '../translation';
 
 import fullScreen from '../../images/icons/default.jpg';
 import noOpinionY from '../../images/icons/meh_y.png';
@@ -97,6 +98,36 @@ class Feedback extends Component {
     );
   }
 
+  renderResponse = () => {
+    const { showImage, feedback } = this.props;
+    const exists = feedback.officialReply && feedback.officialReply.text !== '';
+    if (showImage||!exists) {
+      return null;
+    }
+    return (
+      <View style={{marginTop:10}}>
+        <Text
+          style={{
+            fontSize: 14,
+            color: '#00A2FF',
+            fontWeight: '800',
+          }}
+        >
+          {translate(this.props.user.language).OFFICIAL_RESPONSE}: 
+        </Text>
+        <Text
+          style={{
+            fontSize: 14,
+            color: '#00A2FF',
+            fontWeight: '400',
+          }}
+          numberOfLines={(showImage?null:2)}
+        >
+          {this.props.feedback.officialReply}
+        </Text>
+      </View>
+    );
+  }
 
   renderNoOpinionButton = () => {
     const { feedback, user, biggerCard } = this.props;
@@ -323,7 +354,15 @@ return (
   renderMyFeedbackTag = () => {
     const { showImage } = this.props;
     if (this.props.user.userId != this.props.feedback.userId) {
-      return null;
+      if (showImage) {
+        return null;
+      } else {
+        return (
+          <View>
+            <Icon name="person" size={23} color="#bdbdbd" />
+          </View>
+        );
+      }
     } else if (!showImage) {
       return (
         <View>
@@ -427,7 +466,7 @@ renderVoteCount = () => {
   }
 
   render() {
-    const { showImage, biggerCard } = this.props;
+    const { showImage, feedback, biggerCard } = this.props;
     const {
       row,
       feedbackTitle,
@@ -450,7 +489,7 @@ renderVoteCount = () => {
 
     return (
       <View style={updatedRow}>
-        <View style={{ flexDirection: 'row', padding:5, paddingLeft:0, height:((showImage||biggerCard)?null:130)}}>
+        <View style={{ flexDirection: 'row', padding:5, paddingLeft:0, height:null}}>
           <View>
             {this.renderVoteCount()}
           </View>
@@ -459,6 +498,7 @@ renderVoteCount = () => {
               <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
                 {this.renderImage()}
                 {this.renderTitle()}
+                {this.renderResponse()}
               </View>
               <View>
                 {this.renderSmallImage()}
