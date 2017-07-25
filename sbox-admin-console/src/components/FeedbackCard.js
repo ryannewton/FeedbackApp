@@ -130,7 +130,7 @@ class FeedbackCard extends Component {
     }
     const solutions = feedbackSolutions.map((item) => {
       return (
-        <SolutionCard solution={item} />
+        <CommentCard solution={item} />
       )
     })
     return (
