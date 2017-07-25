@@ -28,6 +28,7 @@ class ReplyButton extends Component {
     
     const sortPopover = (
       <Popover
+        id={'reply-' + this.props.feedback.id}
         style={{
           ...this.props.style,
           position: 'absolute',

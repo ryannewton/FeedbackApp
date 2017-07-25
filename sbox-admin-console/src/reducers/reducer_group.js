@@ -7,7 +7,7 @@ import {
 
 const INITIAL_STATE = {
   groupTree: [],
-  feedbackRequiresApproval: false,
+  includePositiveFeedbackBox: null,
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -15,7 +15,7 @@ export default (state = INITIAL_STATE, action) => {
     case GROUP_TREE_INFO:
       return { ...state, groupTree: action.payload };
     case PULL_GROUP_INFO:
-      return { ...state, feedbackRequiresApproval: Boolean(action.payload.feedbackRequiresApproval) };
+      return { ...state, includePositiveFeedbackBox: Boolean(action.payload.includePositiveFeedbackBox) };
     case SIGNOUT_USER:
       return INITIAL_STATE;
     default:
