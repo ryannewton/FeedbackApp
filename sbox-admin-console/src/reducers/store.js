@@ -17,7 +17,7 @@ const token = localStorage.getItem('token');
 if (token) {
   store.dispatch(pullFeedback(token));
   store.dispatch(pullSolutions(token));
-  store.dispatch(pullGroupTreeInfo(token));
+  //store.dispatch(pullGroupTreeInfo(token));
   store.dispatch(pullGroupInfo(token));
 }
 else store.dispatch(authorizeUserFail(''));

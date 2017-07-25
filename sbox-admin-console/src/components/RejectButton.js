@@ -51,6 +51,7 @@ class RejectButton extends Component {
     
     const sortPopover = (
       <Popover
+        id={'reject-' + this.props.feedback.id}
         style={{
           ...this.props.style,
           position: 'absolute',

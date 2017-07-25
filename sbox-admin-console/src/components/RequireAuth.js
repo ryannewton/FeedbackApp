@@ -11,7 +11,13 @@ export default function(ComposedComponent) {
       if (this.props.authenticated === false) return <Login />;
 
       // If not, then check to see if authenticated is true
-      if (this.props.authenticated === true) return <ComposedComponent {...this.props} />;
+      if (
+        this.props.authenticated &&
+        this.props.feedbackLoaded &&
+        this.props.solutionsLoaded &&
+        this.props.groupLoaded
+      )
+        return <ComposedComponent {...this.props} />;
 
       // If neither, we must still be loading
       return <Loading />;
@@ -23,6 +29,7 @@ export default function(ComposedComponent) {
       authenticated: state.auth.authenticated,
       feedbackLoaded: state.feedback.list.length,
       solutionsLoaded: state.solutions.list.length,
+      groupLoaded: state.group.includePositiveFeedbackBox,
     };
   }
 

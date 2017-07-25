@@ -21,9 +21,7 @@ class Login extends Component {
     return (
       <div className="row">
         <div style={{paddingLeft:50, paddingRight:50}}>
-          <Panel
-            title="Sign In"
-            hasTitle={true}>
+          <Panel title="Sign In">
             <div className="col-md-5 col-xs-12 col-md-offset-1" style={{paddingTop:20}}>
               <p>Signing in is easier than ever.</p>
               <p>No need to remember another password.</p>

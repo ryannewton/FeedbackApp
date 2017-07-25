@@ -64,6 +64,7 @@ class ClarifyButton extends Component {
     
     const sortPopover = (
       <Popover
+        id={'clarify-' + this.props.feedback.id}
         style={{
           ...this.props.style,
           position: 'absolute',

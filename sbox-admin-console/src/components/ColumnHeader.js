@@ -16,6 +16,7 @@ class ColumnHeader extends Component {
   render = () => {
     const sortPopover = (
       <Popover
+        id={this.props.title}
         style={{
           ...this.props.style,
           position: 'absolute',

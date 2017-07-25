@@ -49,24 +49,6 @@ export const approveSolution = (solution) => (
   }
 );
 
-// export const updateSolutionStatus = (solution) => (
-//   (dispatch) => {
-//     console.log('updateSolutionStatus() not functional');
-//     dispatch({ type: UPDATE_SOLUTION_STATUS, payload: solution });
-
-//     // const token = localStorage.getItem('token');
-//     // http.post('', { authorization: token, solution })
-//     // .then((response) => {
-//     //   console.log('clarifySolution() success');
-//     //   dispatch({ type: CLARIFY_SOLUTION_SUCCESS, payload: solution });
-//     // })
-//     // .catch((error) => {
-//     //   console.log('clarifySolution() Fail');
-//     //   console.log('Error: ', error);
-//     //   dispatch({ type: CLARIFY_SOLUTION_FAIL, payload: solution });
-//     // })
-//   }
-// );
 export const clarifySolution = ({ solution, message }) => (
   (dispatch) => {
     dispatch({ type: CLARIFY_SOLUTION });
