@@ -5,7 +5,7 @@ import { Panel, Glyphicon, Image, Button } from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
 
 // Import components
-import SolutionCard from './SolutionCard';
+import CommentCard from './CommentCard';
 import AssignButton from './AssignButton';
 import ReplyButton from './ReplyButton';
 import ChangeStatusButton from './ChangeStatusButton';
@@ -123,7 +123,7 @@ class FeedbackCard extends Component {
         <span>
           Solutions:
           <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
-            No solutions yet!
+            No comments yet!
           </Panel>
         </span>
       );
@@ -135,7 +135,7 @@ class FeedbackCard extends Component {
     })
     return (
       <span>
-        Solutions:
+        Comments:
         {solutions}
       </span>
     );

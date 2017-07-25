@@ -48,6 +48,7 @@ class ChangeStatusButton extends Component {
       >
         <MenuItem header style={{ padding: 0 }}>Change status to:</MenuItem>
         <MenuItem onClick={() => this.updateStatus('new')}>New</MenuItem>
+        <MenuItem onClick={() => this.updateStatus('queue')}>Queue</MenuItem>
         <MenuItem onClick={() => this.updateStatus('inprocess')}>In Process</MenuItem>
         <MenuItem onClick={() => this.updateStatus('complete')}>Complete</MenuItem>
       </Popover>
