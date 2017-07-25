@@ -50,70 +50,6 @@ app.get('/web', (req, res) => {
   res.sendFile(path.join(__dirname, './public/web.html'));
 });
 
-// Text matching algorithm
-function textMatch(newQuestion) {
-  // Step #1 - Pull the previous questions
-  const connectionString = `
-    SELECT question
-    FROM similarFeedback`;
-  connection.query(connectionString, (err, questions) => {
-    if (err) console.log('Error in Text Match - #1');
-    else {
-      // Step #2 - Add the newQuestion at the beginning of the array
-      const allQuestions = [{ question: newQuestion }, ...questions];
-
-      // Step #2 - Identify the wordspace (previous + new)
-      const cleanQues = cleanQuestions(allQuestions);
-      const allWords = cleanQues.reduce((acc, question) => [...acc, ...question], []);
-      const wordsWithoutDuplicates = removeDuplicateWords(allWords);
-      const wordspace = removeStopwords(wordsWithoutDuplicates);
-      // Step #3 - Map all questions (prev + new) to the wordspace
-      const occurances = cleanQues
-        .map(question => wordspace
-          .map(wordspaceWord => question
-            .filter(questionWord => wordspaceWord === questionWord).length));
-
-      // Step #4 - Calculate the cosine for each previous question (maybe a reduce)
-      const allTops = occurances
-        .map(occuranceArray => occuranceArray
-          .reduce((top, value, index) => top + (occurances[0][index] * value), 0));
-
-      const allBottomLeft = occurances
-        .map(occuranceArray => occuranceArray
-          .reduce((bottomLeft, value) => bottomLeft + (value * value), 0));
-
-      const bottomRight = occurances[0].reduce((br, value) => br + (value * value), 0);
-
-      const cosines = occurances
-        .map((occ, index) =>
-          allTops[index] / (Math.sqrt(allBottomLeft[index]) * Math.sqrt(bottomRight)));
-
-      console.log(cosines);
-      // console.log(cosines.indexOf(Math.max(...cosines)));
-    }
-  });
-}
-
-// Cleans up questions (remove punctuation, extra spaces, lowercase everything)
-// and converts them to arrays of words
-function cleanQuestions(questions) {
-  return questions.reduce((acc, row) =>
-    [...acc,
-      row.question
-        .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
-        .replace(/[\s]{2,}/g, ' ')
-        .toLowerCase()
-        .split(' ')], []);
-}
-
-function removeDuplicateWords(wordsWithDuplicates) {
-  return wordsWithDuplicates.filter((item, index, array) => array.indexOf(item) === index);
-}
-
-function removeStopwords(words) {
-  return words.filter(item => !stopwords.includes(item));
-}
-
 // Image uploading backend
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -690,7 +626,6 @@ app.post('/removeSolutionVote', upload.array(), (req, res) => {
 // UPDATE
 app.post('/updateFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    console.log(req.body)
     if (err) res.status(400).send('Authorization failed');
     else {
       const { text, status, imageURL, approved, id, category, officialReply } = req.body.feedback;
@@ -786,7 +721,6 @@ app.post('/rejectFeedback', upload.array(), (req, res) => {
 
 app.post('/rejectSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    console.log(req.body)
     const { solution, message } = req.body;
     if (err) {
       res.status(400).send('Autorization failed');
