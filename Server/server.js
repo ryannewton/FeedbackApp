@@ -14,6 +14,8 @@ const path = require('path');
 
 var googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
 
+const emailTemplates = require('./emailTemplates');
+
 aws.config.loadFromPath('config.json'); // load aws config
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
@@ -467,16 +469,30 @@ app.post('/submitOfficialReply', upload.array(), (req, res) => {
           // Insert text
           insertText(res, feedback.id, 'reply', officialReply, userId);
 
+          // Send Email to original poster
+          officialReplyEmailNotification({ feedback, officialReply });
+
           // Send Email to Moderators
           const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-          sendEmail(toEmails, defaultFromEmail, 'Reply: ' + officialReply, 'UserId: some admin');
-
+          sendEmail(toEmails, defaultFromEmail, `Reply: ${officialReply} UserId: some admin`);
           res.sendStatus(200);
         }
       });
     }
   });
 });
+
+// Email notification for new Official Replies
+function officialReplyEmailNotification({ feedback, officialReply }) {
+  const connectionString = 'SELECT email FROM feedback JOIN users ON feedback.userId = users.id WHERE feedback.id = ?';
+  connection.query(connectionString, [feedback.id], (err, rows) => {
+    if (!err && rows.length > 0) {
+      const toEmails = rows.map(row => row.email);
+      const { subjectLine, bodyText } = emailTemplates.officialReply({ feedback, message: officialReply });
+      sendEmail(toEmails, defaultFromEmail, subjectLine, bodyText);
+    }
+  });
+}
 
 function submitFeedbackVoteHelper(feedbackId, upvote, downvote, noOpinion, userId, res) {
   const connectionString = 'INSERT INTO feedbackVotes SET ?';
