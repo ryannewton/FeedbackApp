@@ -23,6 +23,7 @@ import {
   submitSolutionToServer,
   sendGoogleAnalytics,
 } from '../actions';
+import translate from '../translation';
 
 class FeedbackDetails extends Component {
   constructor(props) {
@@ -35,12 +36,12 @@ class FeedbackDetails extends Component {
     const { bannedWords, solutionsRequireApproval } = this.props.group;
     const { solution } = this.props.solutions;
     const { feedback } = this.props.navigation.state.params;
-
+    const { ERROR_MESSAGE_1, ERROR_MESSAGE_2} = translate(this.props.user.language)
     if (bannedWords.test(solution.toLowerCase())) {
       // If restricted words then we show an error to the user
-      this.setState({ errorMessage: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.' });
+      this.setState({ errorMessage: ERROR_MESSAGE_1 });
     } else if (solution === '') {
-      this.setState({ errorMessage: 'Sorry, comments cannot be blank.' });
+      this.setState({ errorMessage: ERROR_MESSAGE_2 });
     } else {
       this.setState({ errorMessage: '' });
       this.props.submitSolutionToServer(solution, feedback.id, solutionsRequireApproval);
@@ -66,8 +67,9 @@ class FeedbackDetails extends Component {
     const showSpinner = (
       <Spinner size="large" style={{ marginTop: 20 }} />
     );
+    const { language } = this.props.user
     const showSubmitButton = (
-      <Button onPress={this.submitSolution}>Submit Comment</Button>
+      <Button onPress={this.submitSolution}>{translate(language).SUBMIT_COMMENT}</Button>
     );
 
     return (
@@ -99,7 +101,7 @@ class FeedbackDetails extends Component {
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-70}>
           <TextInput
             style={inputText}
-            placeholder={'Enter your comment here...'}
+            placeholder={translate(language).ENTER_COMMENT}
             onChangeText={solution => this.props.solutionChanged(solution)}
             value={this.props.solutions.solution}
             returnKeyType={'done'}
@@ -124,8 +126,8 @@ FeedbackDetails.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { solutions, group } = state;
-  return { solutions, group };
+  const { solutions, group, user} = state;
+  return { solutions, group, user };
 }
 
 const AppScreen = connect(mapStateToProps, {

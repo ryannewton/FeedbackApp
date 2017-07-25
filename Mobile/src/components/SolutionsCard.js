@@ -9,6 +9,7 @@ import { Icon } from 'react-native-elements';
 import styles from '../styles/components/SolutionCardStyles';
 import SolutionsCardItem from './SolutionsCardItem';
 import { Card, CardSection } from '../components/common';
+import translate from '../translation';
 
 class SolutionsCard extends Component {
 
@@ -24,7 +25,7 @@ class SolutionsCard extends Component {
     if (!feedbackSolutions.length) {
       return (
         <CardSection>
-          <Text style={noSolutionsMessage}>{((status && status === 'compliment')?'No comments (yet)\nBe the first!':'No comments (yet)\nBe the first!')}</Text>
+          <Text style={noSolutionsMessage}>{translate(this.props.user.language).NO_COMMENTS}</Text>
         </CardSection>
       );
     }
@@ -39,7 +40,7 @@ class SolutionsCard extends Component {
     return (
       <View>
         <CardSection>
-          <Text style={subheaderText}>Comments</Text>
+          <Text style={subheaderText}>{translate(this.props.user.language).PROPOSED_SOLUTIONS}</Text>
             <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
               <Icon name="question-answer" color="#bdbdbd" />
             </View>
@@ -65,8 +66,8 @@ SolutionsCard.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { solutions, group } = state;
-  return { solutions, group };
+  const { solutions, group, user } = state;
+  return { solutions, group, user };
 }
 
 export default connect(mapStateToProps)(SolutionsCard);

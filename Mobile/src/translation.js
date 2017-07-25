@@ -44,6 +44,12 @@ const translate = language => {
         FEEDBACK_RECIEVED: 'Feedback recieved',
         THANKS_FOR_FEEDBACK: 'Thanks for submitting feedback!',
         BACK_TO_BOARD: 'Back to board',
+        PROPOSED_SOLUTIONS: 'Proposed Solutions',
+        NO_COMMENTS: 'No comments (yet)\n Be the first!',
+        ENTER_COMMENT: 'Enter your comment here...',
+        SUBMIT_COMMENT: 'Submit Comment',
+        ERROR_MESSAGE_1: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.',
+        ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
       }
     case 'es':
       return {
@@ -59,7 +65,7 @@ const translate = language => {
         INVITE_OTHERS_BODY: 'Ayuda a otros en tu comunidad a dar sugerencias en The Suggestion Box.',
         SHARE: 'Comparte',
         DISMISS: 'Ignorar',
-        PROPOSED_SOLUTIONS: 'Soluciones propuestas',
+        PROPOSED_SOLUTIONS: 'Comentarios',
         NEW_FEEDBACK: 'Nuevas sugerencias',
         MOST_POPULAR: 'Mas popular',
         THIS_WEEK: 'Esta semana',
@@ -85,10 +91,16 @@ const translate = language => {
         VERIFY_ORGANIZATION:'Verificar su organización',
         ENTER_EMAIL_CODE:'Introduzca el código de correo electrónico',
         ENTER_GROUP_CODE:'Introducir código de grupo',
+        // Machine translation
         SETTINGS: 'Ajustes',
         FEEDBACK_RECIEVED: 'Retroalimentación recibida!',
         THANKS_FOR_FEEDBACK: 'Gracias por enviar comentarios!',
-        BACK_TO_BOARD: 'De vuelta al tablero'
+        BACK_TO_BOARD: 'De vuelta al tablero',
+        NO_COMMENTS: 'No hay comentarios (todavía) \n ¡Sé el primero!',
+        ENTER_COMMENT: 'Escribe tu comentario aquí ...',
+        SUBMIT_COMMENT: 'Enviar comentario',
+        ERROR_MESSAGE_1: 'Una o más palabras en tu comentario están restringidas por tu administrador. Edite y vuelva a enviar.',
+        ERROR_MESSAGE_2: 'Lo sentimos, los comentarios no pueden estar en blanco.',
       }
     case 'vi':
       return {
@@ -130,10 +142,17 @@ const translate = language => {
         VERIFY_ORGANIZATION:'Xác minh sự sắp xếp của bạn',
         ENTER_EMAIL_CODE:'Nhập Mã từ Email',
         ENTER_GROUP_CODE:'Nhập mã nhóm',
+        // Machine translation
         SETTINGS: 'Cài đặt',
         FEEDBACK_RECIEVED: 'Phản hồi nhận được',
         THANKS_FOR_FEEDBACK: 'Thanks for submitting feedback!',
-        BACK_TO_BOARD: 'Trở lại bảng'
+        BACK_TO_BOARD: 'Trở lại bảng',
+        PROPOSED_SOLUTIONS: 'Đề xuất giải pháp',
+        NO_COMMENTS: 'Không có ý kiến ​​(chưa) \n Hãy là người đầu tiên!',
+        ENTER_COMMENT: 'Nhập nhận xét của bạn ở đây ...',
+        SUBMIT_COMMENT: 'Gửi bình luận',
+        ERROR_MESSAGE_1: 'Một hoặc nhiều từ trong nhận xét của bạn bị quản trị viên hạn chế. Vui lòng chỉnh sửa và gửi lại.',
+        ERROR_MESSAGE_2: 'Xin lỗi, bình luận không được để trống.',
       }
     case 'zh-cn':
       return {
@@ -178,7 +197,13 @@ const translate = language => {
         SETTINGS: '设置',
         FEEDBACK_RECIEVED: '提交成功',
         THANKS_FOR_FEEDBACK: '谢谢您提交的反馈',
-        BACK_TO_BOARD: '返回列表'
+        BACK_TO_BOARD: '返回列表',
+        PROPOSED_SOLUTIONS: '评论',
+        NO_COMMENTS: '暂时还没有评论。\n 你可以第一个提交评论！',
+        ENTER_COMMENT: '在这里输入你的评论：',
+        SUBMIT_COMMENT: '提交评论',
+        ERROR_MESSAGE_1: '你的评论中包含了你们组织限制使用的词汇，请修改你的评论并重新提交',
+        ERROR_MESSAGE_2: '抱歉，评论不能为空',
       }
     default:
       return {
@@ -194,7 +219,6 @@ const translate = language => {
         INVITE_OTHERS_BODY: 'Help others in your community voice their feedback through Suggestion Box.',
         SHARE: 'Share',
         DISMISS: 'Dismiss',
-        PROPOSED_SOLUTIONS: 'Proposed Solutions',
         NEW_FEEDBACK: 'New Feedback',
         MOST_POPULAR: 'Most popular',
         THIS_WEEK: 'This week',
@@ -223,7 +247,13 @@ const translate = language => {
         SETTINGS: 'Settings',
         FEEDBACK_RECIEVED: 'Feedback recieved',
         THANKS_FOR_FEEDBACK: 'Thanks for submitting feedback!',
-        BACK_TO_BOARD: 'Back to board'
+        BACK_TO_BOARD: 'Back to board',
+        PROPOSED_SOLUTIONS: 'Comments',
+        NO_COMMENTS: 'No comments (yet)\n Be the first!',
+        ENTER_COMMENT: 'Enter your comment here...',
+        SUBMIT_COMMENT: 'Submit Comment',
+        ERROR_MESSAGE_1: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.',
+        ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
       }
     }
 }

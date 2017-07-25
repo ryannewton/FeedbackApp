@@ -26,8 +26,8 @@ const MainStack = StackNavigator({
   },
   Details: {
     screen: FeedbackDetails,
-    navigationOptions: {
-      title: 'Proposed Solutions',
+    navigationOptions: ({ navigation }) => ({
+      title: navigation.state.params.translate,
       headerTitleStyle: {
         color: '#fff',
       },
@@ -37,7 +37,7 @@ const MainStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    },
+    }),
   },
   FeedbackSubmit: {
     screen: FeedbackSubmit,
