@@ -11,14 +11,14 @@ Note: Your contact information has been kept confidential. This message was writ
   return { subjectLine, bodyText };
 }
 
-export function rejectedFeedback({ feedback, message }) {
+export function rejectFeedback({ feedback, message }) {
   const subjectLine = 'Suggestion Box: Feedback rejected';
   const bodyText =
     `Hi! This is your friend at Suggestion Box.\n\nThank you for submitting a feedback with Suggestion Box! Sadly, your feedback: "${feedback.text}" was rejected by your administrator.\n\nThe explanation we received was: "${message}"\n\nThere is no need to worry. Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback.\n\nPlease don't let this rejection stop you from sending the next feedback! I hope to here your thoughts again soon!\n\nYour friend at Suggestion Box.`;
   return { subjectLine, bodyText };
 }
 
-export function rejectedSolution({ solution, message }) {
+export function rejectSolution({ solution, message }) {
   const subjectLine = 'Suggestion Box: Solution rejected';
   const bodyText = `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Sadly, your submission: "${solution.text}" was rejected by your administrator.\n\nThe explanation we received was: "${message}"\n\nThere is no need to worry. Your contact information has been kept confidential. This message was written without knowledge of who sent the solution.\n\nPlease don't let this rejection stop you from sending the next solution or feedback! I hope to here your thoughts again soon!\n\nYour friend at Suggestion Box.`;
   return { subjectLine, bodyText };
