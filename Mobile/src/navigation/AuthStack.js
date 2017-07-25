@@ -1,7 +1,6 @@
 // Import Libraries
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import tester from './test';
 
 // Import Scenes and styles
 import Authorize from '../scenes/Authorize';
