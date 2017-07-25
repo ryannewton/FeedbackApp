@@ -219,8 +219,8 @@ class FeedbackSubmit extends Component {
           />
         </View>
         {this.renderButtons()}
-        {this.maybeRenderImage()}
         {this.maybeRenderDeleteButton()}
+        {this.maybeRenderImage()}      
       </View>
     );
 
