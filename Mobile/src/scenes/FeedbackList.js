@@ -244,7 +244,11 @@ class FeedbackList extends Component {
           removeClippedSubviews={false}
           renderRow={rowData =>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Details', { feedback: rowData })}
+              onPress={() => this.props.navigation.navigate('Details', {
+                feedback: rowData,
+                 translate: translate(this.props.user.language).PROPOSED_SOLUTIONS,
+                }
+              )}
             >
               <FeedbackCard
                 feedback={rowData}
