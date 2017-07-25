@@ -19,12 +19,8 @@ app.use(devMiddleware(compiler, {
 
 app.use(hotMiddleware(compiler));
 
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
-});
-
-app.get('/admin/*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'admin.html'));
+app.get('/web', (req, res) => {
+  res.sendFile(path.join(__dirname, 'web.html'));
 });
 
 app.listen(3000, (err) => {

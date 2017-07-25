@@ -18,15 +18,14 @@ export const MainRoutes = () =>
   (
     <Switch>
       {/* Home */}
-      <Route exact path="/admin/" component={Dashboard} />
+      <Route exact path="/web" component={Dashboard} />
 
       {/* Auth */}
-      <Route path="/admin/login" component={Dashboard} />
-      <Route path="/admin/logout" component={Logout} />
+      <Route path="/login" component={Dashboard} />
+      <Route path="/logout" component={Logout} />
 
       {/* Main */}
-      <Route path="/admin/dashboard" component={Dashboard} />
-      <Route path="/admin/approve" component={Approve} />
+      <Route path="/dashboard" component={Dashboard} />
 
       {/* All other */}
       <Route path="*" component={PageNotFound} />
