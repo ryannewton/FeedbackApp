@@ -600,7 +600,7 @@ app.post('/approveFeedback', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       const { feedback } = req.body;
-      const connectionString = 'UPDATE feedback SET approved=1 WHERE id = ?';
+      const connectionString = "UPDATE feedback SET approved=1, status='new' WHERE id = ?";
       connection.query(connectionString, [feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
         else res.sendStatus(200);
