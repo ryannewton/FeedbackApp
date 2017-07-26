@@ -29,13 +29,15 @@ const cardSource = {
     };
   },
   endDrag(props, monitor, component) {
-    if (monitor.getDropResult().filterMethod == 'awaitingApproval') {
-      const updatedFeedback = { ...props.feedback, approved: 0 };
-      store.dispatch(updateFeedback(updatedFeedback))
+    if (monitor.getDropResult()) {
+      if (monitor.getDropResult().filterMethod == 'awaitingApproval') {
+        const updatedFeedback = { ...props.feedback, approved: 0 };
+        store.dispatch(updateFeedback(updatedFeedback))
 
-    } else {
-      const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod };
-      store.dispatch(updateFeedback(updatedFeedback))
+      } else {
+        const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod };
+        store.dispatch(updateFeedback(updatedFeedback))
+      }
     }
   }
 };
