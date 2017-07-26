@@ -11,6 +11,9 @@ import FeedbackCard from '../components/FeedbackCard';
 import RequireAuth from '../components/RequireAuth';
 import ColumnHeader from '../components/ColumnHeader';
 import { signoutUser } from '../actions';
+import { DragDropContext } from 'react-dnd';
+import HTML5Backend from 'react-dnd-html5-backend';
+import Column from '../components/Column';
 
 class App extends Component {
   state = {
@@ -29,11 +32,11 @@ class App extends Component {
 
   render = () => {
     return (
-      <div className="container-fluid">
-        {this.renderHeader()}
-        {this.renderFilterBar()}
-        {this.renderStatusColumns()}
-      </div>
+        <div className="container-fluid" style={{ overflow: 'hidden', clear: 'both' }}>
+          {this.renderHeader()}
+          {this.renderFilterBar()}
+          {this.renderStatusColumns()}
+        </div>
     );
   }
 
@@ -87,7 +90,7 @@ class App extends Component {
         </div>
       </div>
     );
-  }  
+  }
 
   renderStatusColumns = () => {
     const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
@@ -99,38 +102,37 @@ class App extends Component {
 
     return (
       <div className="row">
-        <div className="col-md-3">          
-          <ColumnHeader
-            title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
-            backgroundColor={'rgb(216,62,83)'}
-            updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })} />
-          {awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-        <div className="col-md-3">
-          <ColumnHeader
-            title={'Open (' + openFeedback.length + ')'}
-            backgroundColor={'rgb(0,162,255)'}
-            updateSortMethod={(sortMethod) => this.setState({ openSort: sortMethod })} />
-          {openFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-        <div className="col-md-3">
-          <ColumnHeader
-            title={'In Process (' + inProcessFeedback.length + ')'}
-            backgroundColor={'rgb(245,166,35)'}
-            updateSortMethod={(sortMethod) => this.setState({ inProcessSort: sortMethod })} />
-          {inProcessFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-        <div className="col-md-3">
-          <ColumnHeader
-            title={'Complete (' + completeFeedback.length + ')'}
-            backgroundColor={'rgb(126,211,33)'}
-            updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })} />
-          {completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
+        <Column
+          title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
+          backgroundColor={'rgb(216,62,83)'}
+          updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })}
+          feedback={awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          filterMethod={'awaitingApproval'}
+         />
+        <Column
+          title={'Open (' + openFeedback.length + ')'}
+          backgroundColor={'rgb(0,162,255)'}
+          updateSortMethod={(sortMethod) => this.setState({ openSort: sortMethod })}
+          feedback={openFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          filterMethod={'new'}
+        />
+        <Column
+          title={'In Process (' + inProcessFeedback.length + ')'}
+          backgroundColor={'rgb(245,166,35)'}
+          updateSortMethod={(sortMethod) => this.setState({ inProcessSort: sortMethod })}
+          feedback={inProcessFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          filterMethod={'inprocess'}
+        />
+        <Column
+          title={'Complete (' + completeFeedback.length + ')'}
+          backgroundColor={'rgb(126,211,33)'}
+          updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
+          feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          filterMethod={'completed'}
+        />
       </div>
     );
   }
-
   sortFeedback = (a, b, method) => {
     if (method === 'most votes') return (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes);
     if (method === 'most recent') return new Date(b.date) - new Date(a.date);
@@ -166,4 +168,4 @@ const mapStateToProps = (state) => {
   return { feedback, solutions, group };
 };
 
-export default connect(mapStateToProps, { signoutUser })(RequireAuth(App));
+export default connect(mapStateToProps, { signoutUser })(RequireAuth(DragDropContext(HTML5Backend)(App)));
