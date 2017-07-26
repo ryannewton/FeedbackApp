@@ -57,7 +57,7 @@ class ChangeStatusButton extends Component {
 
     return (
       <div style={{ position: 'relative'}}>
-        <Button className="btn btn-primary" ref="target" style={{ position: 'absolute', right:0}} onClick={this.buttonClicked}>Change Category</Button>
+        <Button className="btn btn-primary" ref="target" style={{ position: 'absolute' }} onClick={this.buttonClicked}>Change Category</Button>
         <Overlay
           rootClose
           show={this.state.show}

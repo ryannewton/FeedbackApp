@@ -189,8 +189,8 @@ class FeedbackCard extends Component {
     if (this.state.mouseOver || this.state.buttonActive) {
       return (
         <div className="row" style={{height:35}}>
-          <div className="pull-left"><ChangeCategoryButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /> </div>
-          <div className="pull-right"><Button onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}>...</Button></div>
+          <div><ChangeCategoryButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /></div>
+          <div><Button style={{ position: 'absolute', right: 20 }} onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}>...</Button></div>
         </div>
       );
     }
