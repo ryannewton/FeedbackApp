@@ -39,7 +39,7 @@ export default (state = INITIAL_STATE, action) => {
     case AUTHORIZE_USER_FAIL:
       return { ...state, loading: false, loggedIn: false, error: action.payload };
     case NEEDS_GROUP_CODE:
-      return { ...state, loading: false, needsGroupCode: true,  code: action.payload };
+      return { ...state, loading: false, needsGroupCode: true, code: action.payload };
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:
