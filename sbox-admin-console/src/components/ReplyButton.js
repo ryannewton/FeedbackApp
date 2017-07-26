@@ -2,7 +2,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Button, Overlay, Popover, FormGroup, ControlLabel, FormControl } from 'react-bootstrap';
+import {
+  Glyphicon,
+  Button,
+  Overlay,
+  Popover,
+  FormGroup,
+  ControlLabel,
+  FormControl,
+  Radio,
+} from 'react-bootstrap';
 import { submitOfficialReply } from '../actions';
 
 
@@ -11,6 +20,7 @@ class ReplyButton extends Component {
   state = {
     response: this.props.feedback.officialReply,
     show: false,
+    selectedResponseMethod: 'officialReply'
   }
 
   buttonClicked = () => {
@@ -22,10 +32,24 @@ class ReplyButton extends Component {
     this.props.submitOfficialReply(this.props.feedback, this.state.response);
   }
 
+  renderResponseText() {
+    const { selectedResponseMethod } = this.state;
+    switch (selectedResponseMethod) {
+      case 'officialReply':
+        return 'Add an official response:';
+      case 'submitter':
+        return 'Reply to the submitter:';
+      case 'interested':
+        return 'Reply to all interested users:';
+      default:
+        return 'Respond:';
+    }
+  }
+
   render = () => {
     const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
     const marginLeft = (this.props.feedback.status === 'complete') ? 30 : 40;
-    
+    const { selectedResponseMethod } = this.state;
     const sortPopover = (
       <Popover
         id={'reply-' + this.props.feedback.id}
@@ -33,7 +57,7 @@ class ReplyButton extends Component {
           ...this.props.style,
           position: 'absolute',
           backgroundColor: 'white',
-          width:350,
+          width: 350,
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
@@ -45,10 +69,40 @@ class ReplyButton extends Component {
         }}
       >
         <FormGroup controlId="formControlsTextarea">
-          <ControlLabel>Add an official response:</ControlLabel>
-          <FormControl componentClass="textarea" value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder="Add official response" />
+          <ControlLabel>Follow up with:</ControlLabel>
+          <div className="">
+            <FormGroup>
+              <Radio
+                checked={(selectedResponseMethod == 'officialReply')}
+                onClick={() => this.setState({ selectedResponseMethod: 'officialReply' })}
+                name="radioGroup"
+              >
+                Post Response
+              </Radio>
+              {' '}
+              <Radio
+                checked={(selectedResponseMethod == 'interested')}
+                onClick={() => this.setState({ selectedResponseMethod: 'interested' })}
+                name="radioGroup"
+              >
+                Interested Users (Voters)
+              </Radio>
+              {' '}
+              <Radio
+                checked={(selectedResponseMethod == 'submitter')}
+                onClick={() => this.setState({ selectedResponseMethod: 'submitter' })}
+                name="radioGroup"
+              >
+                Feedback Submitter
+              </Radio>
+            </FormGroup>
+          </div>
+          <ControlLabel>{this.renderResponseText()}</ControlLabel>
+          <FormControl componentClass="textarea" value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder={this.renderResponseText()} />
         </FormGroup>
-        <Button onClick={this.submitOfficialReply}>Send</Button>
+        <div className="pull-right">
+          <Button onClick={this.submitOfficialReply}>Send</Button>
+        </div>
       </Popover>
     );
 
