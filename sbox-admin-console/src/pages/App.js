@@ -25,7 +25,8 @@ class App extends Component {
 
     // Sorting
     approvalSort: 'most votes',
-    openSort: 'most votes',
+    newSort: 'most votes',
+    queueSort: 'most votes',
     inProcessSort: 'most votes',
     completeSort: 'most votes',
   }
@@ -96,11 +97,28 @@ class App extends Component {
     const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
 
     const awaitingApprovalFeedback = filteredFeedback.filter(feedback => !feedback.approved).sort((a, b) => this.sortFeedback(a, b, this.state.approvalSort));
-    const openFeedback = filteredFeedback.filter(feedback => feedback.status === 'new').sort((a, b) => this.sortFeedback(a, b, this.state.openSort));
-    const inProcessFeedback = filteredFeedback.filter(feedback => feedback.status === 'inprocess').sort((a, b) => this.sortFeedback(a, b, this.state.inProcessSort));
-    const completeFeedback = filteredFeedback.filter(feedback => feedback.status === 'complete').sort((a, b) => this.sortFeedback(a, b, this.state.completeSort));
+    const newFeedback = filteredFeedback.filter(feedback => (feedback.status === 'new' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
+    const queueFeedback = filteredFeedback.filter(feedback => (feedback.status === 'queue' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.queueSort));
+    const inProcessFeedback = filteredFeedback.filter(feedback => (feedback.status === 'inprocess' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.inProcessSort));
+    const completeFeedback = filteredFeedback.filter(feedback => (feedback.status === 'complete' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.completeSort));
 
-    return (
+    let className;
+    if (this.props.group.includePositiveFeedbackBox) {
+      className = awaitingApprovalFeedback.length ? 'col-md-4' : 'col-md-6';
+    } else {
+      className = awaitingApprovalFeedback.length ? 'col-md-5ths' : 'col-md-3';
+    }
+
+    const approvalColumn = awaitingApprovalFeedback.length ?
+      (<div className={className}>          
+        <ColumnHeader
+          title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
+          backgroundColor={'rgb(216,62,83)'}
+          updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })} />
+        {awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+      </div>) : null;
+
+    const retailColumns = (
       <div className="row">
         <Column
           title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
@@ -130,8 +148,62 @@ class App extends Component {
           feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'completed'}
         />
+
+    const retailColumns = (
+      <div className="row">
+        {approvalColumn}
+        <div className={className}>
+          <ColumnHeader
+            title={'New (' + newFeedback.length + ')'}
+            backgroundColor={'rgb(0,162,255)'}
+            updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })} />
+          {newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        </div>
+        <div className={className}>
+          <ColumnHeader
+            title={'Responded (' + completeFeedback.length + ')'}
+            backgroundColor={'rgb(126,211,33)'}
+            updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })} />
+          {completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        </div>
       </div>
     );
+
+    const actionColumns = (
+      <div className="row">
+        {approvalColumn}
+        <div className={className}>
+          <ColumnHeader
+            title={'New (' + newFeedback.length + ')'}
+            backgroundColor={'rgb(0,162,255)'}
+            updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })} />
+          {newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        </div>
+        <div className={className}>
+          <ColumnHeader
+            title={'Voting Queue (' + queueFeedback.length + ')'}
+            backgroundColor={'#0068a5'}
+            updateSortMethod={(sortMethod) => this.setState({ queueSort: sortMethod })} />
+          {queueFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        </div>
+        <div className={className}>
+          <ColumnHeader
+            title={'In Process (' + inProcessFeedback.length + ')'}
+            backgroundColor={'rgb(245,166,35)'}
+            updateSortMethod={(sortMethod) => this.setState({ inProcessSort: sortMethod })} />
+          {inProcessFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        </div>
+        <div className={className}>
+          <ColumnHeader
+            title={'Complete (' + completeFeedback.length + ')'}
+            backgroundColor={'rgb(126,211,33)'}
+            updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })} />
+          {completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        </div>
+      </div>
+    );
+
+    return (this.props.group.includePositiveFeedbackBox ? retailColumns : actionColumns);
   }
   sortFeedback = (a, b, method) => {
     if (method === 'most votes') return (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes);

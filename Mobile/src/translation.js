@@ -31,8 +31,8 @@ const translate = language => {
         TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
         ENTER_FEEDBACK: 'Enter your feedback here!',
         SIGN_OUT: 'Sign Out',
-        OPEN: 'Open',
-        INPROCESS: 'In Process',
+        OPEN: 'Queue',
+        INPROCESS: 'Working on it',
         COMPLETE: 'Completed',
         SEARCH:'Search',
         CANCEL:'Cancel',
@@ -44,12 +44,12 @@ const translate = language => {
         FEEDBACK_RECIEVED: 'Feedback recieved',
         THANKS_FOR_FEEDBACK: 'Thanks for submitting feedback!',
         BACK_TO_BOARD: 'Back to board',
-        PROPOSED_SOLUTIONS: 'Proposed Solutions',
         NO_COMMENTS: 'No comments (yet)\n Be the first!',
         ENTER_COMMENT: 'Enter your comment here...',
         SUBMIT_COMMENT: 'Submit Comment',
         ERROR_MESSAGE_1: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.',
         ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
+        OFFICIAL_RESPONSE: 'Official Response',
       }
     case 'es':
       return {
@@ -101,6 +101,7 @@ const translate = language => {
         SUBMIT_COMMENT: 'Enviar comentario',
         ERROR_MESSAGE_1: 'Una o más palabras en tu comentario están restringidas por tu administrador. Edite y vuelva a enviar.',
         ERROR_MESSAGE_2: 'Lo sentimos, los comentarios no pueden estar en blanco.',
+        OFFICIAL_RESPONSE: 'Respuesta oficial',
       }
     case 'vi':
       return {
@@ -153,6 +154,7 @@ const translate = language => {
         SUBMIT_COMMENT: 'Gửi bình luận',
         ERROR_MESSAGE_1: 'Một hoặc nhiều từ trong nhận xét của bạn bị quản trị viên hạn chế. Vui lòng chỉnh sửa và gửi lại.',
         ERROR_MESSAGE_2: 'Xin lỗi, bình luận không được để trống.',
+        OFFICIAL_RESPONSE: 'Phản ứng chính thức',
       }
     case 'zh-cn':
       return {
@@ -204,6 +206,7 @@ const translate = language => {
         SUBMIT_COMMENT: '提交评论',
         ERROR_MESSAGE_1: '你的评论中包含了你们组织限制使用的词汇，请修改你的评论并重新提交',
         ERROR_MESSAGE_2: '抱歉，评论不能为空',
+        OFFICIAL_RESPONSE: '官方回复',
       }
     default:
       return {
@@ -235,8 +238,8 @@ const translate = language => {
         TEXT_INTRO: 'Join me on Suggestion Box!\n\nGROUP CODE: ',
         ENTER_FEEDBACK: 'Enter your feedback here!',
         SIGN_OUT: 'Sign Out',
-        OPEN: 'Open',
-        INPROCESS: 'In Process',
+        OPEN: 'Queue',
+        INPROCESS: 'Working on it',
         COMPLETE: 'Completed',
         SEARCH:'Search',
         CANCEL:'Cancel',
@@ -254,6 +257,7 @@ const translate = language => {
         SUBMIT_COMMENT: 'Submit Comment',
         ERROR_MESSAGE_1: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.',
         ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
+        OFFICIAL_RESPONSE: 'Official Response',
       }
     }
 }

@@ -52,6 +52,7 @@ class ReplyButton extends Component {
     const { selectedResponseMethod } = this.state;
     const sortPopover = (
       <Popover
+        id={'reply-' + this.props.feedback.id}
         style={{
           ...this.props.style,
           position: 'absolute',

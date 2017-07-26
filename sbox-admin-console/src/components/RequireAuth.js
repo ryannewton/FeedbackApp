@@ -7,11 +7,16 @@ import Loading from './Loading';
 export default function(ComposedComponent) {
   class RequireAuth extends Component {
     render() {
+      console.log(this.props);
       // First check to see if authenticated failed (it starts off as null)
       if (this.props.authenticated === false) return <Login />;
 
       // If not, then check to see if authenticated is true
-      if (this.props.authenticated === true) return <ComposedComponent {...this.props} />;
+      if (
+        this.props.authenticated &&
+        this.props.groupLoaded !== null
+      )
+        return <ComposedComponent {...this.props} />;
 
       // If neither, we must still be loading
       return <Loading />;
@@ -21,8 +26,7 @@ export default function(ComposedComponent) {
   function mapStateToProps(state) {
     return {
       authenticated: state.auth.authenticated,
-      feedbackLoaded: state.feedback.list.length,
-      solutionsLoaded: state.solutions.list.length,
+      groupLoaded: state.group.includePositiveFeedbackBox,
     };
   }
 

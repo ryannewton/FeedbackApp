@@ -7,7 +7,7 @@ import {
 } from './types';
 
 import http from '../constants';
-import { pullFeedback, pullSolutions } from '../actions';
+import { pullFeedback, pullSolutions, pullGroupInfo } from '../actions';
 
 
 export const authorizeUser = ({ email, code }) => (
@@ -20,6 +20,8 @@ export const authorizeUser = ({ email, code }) => (
       dispatch(authorizeUserSuccess(token));
       dispatch(pullFeedback(token));
       dispatch(pullSolutions(token));
+      //dispatch(pullGroupTreeInfo(token));
+      dispatch(pullGroupInfo(token));
     })
     .catch((error) => {
       console.log('error in authorizeUser: ', error);

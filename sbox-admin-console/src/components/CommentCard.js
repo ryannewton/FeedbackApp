@@ -2,8 +2,7 @@ import React, { Component } from 'react';
 import { Panel, Glyphicon } from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
 
-
-class SolutionCard extends Component {
+class CommentCard extends Component {
 
   renderVotesAndTime = () => {
     return (
@@ -35,4 +34,4 @@ class SolutionCard extends Component {
   }
 }
 
-export default SolutionCard;
+export default CommentCard;

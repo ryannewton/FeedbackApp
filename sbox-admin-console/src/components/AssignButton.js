@@ -24,6 +24,7 @@ class AssignButton extends Component {
 
     const sortPopover = (
       <Popover
+        id={'assign-' + this.props.feedback.id}
         style={{
           ...this.props.style,
           position: 'absolute',

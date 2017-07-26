@@ -7,6 +7,43 @@
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
     <link rel="shortcut icon" href="%PUBLIC_URL%/logo.ico">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/latest/css/bootstrap.min.css">
+    <style>
+      .col-xs-5ths,
+      .col-sm-5ths,
+      .col-md-5ths,
+      .col-lg-5ths {
+          position: relative;
+          min-height: 1px;
+          padding-right: 15px;
+          padding-left: 15px;
+      }
+
+      .col-xs-5ths {
+          width: 20%;
+          float: left;
+      }
+
+      @media (min-width: 768px) {
+          .col-sm-5ths {
+              width: 20%;
+              float: left;
+          }
+      }
+
+      @media (min-width: 992px) {
+          .col-md-5ths {
+              width: 20%;
+              float: left;
+          }
+      }
+
+      @media (min-width: 1200px) {
+          .col-lg-5ths {
+              width: 20%;
+              float: left;
+          }
+      }
+    </style>
     <title>Admin Console - Suggestion Box</title>
   </head>
   <body>

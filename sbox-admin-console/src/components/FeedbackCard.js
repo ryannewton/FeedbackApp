@@ -1,11 +1,11 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Glyphicon, Image, Button, OverlayTrigger, Popover } from 'react-bootstrap';
+import { Panel, Glyphicon, Image, Button } from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
 
 // Import components
-import SolutionCard from './SolutionCard';
+import CommentCard from './CommentCard';
 import AssignButton from './AssignButton';
 import ReplyButton from './ReplyButton';
 import ChangeStatusButton from './ChangeStatusButton';
@@ -91,12 +91,6 @@ class FeedbackCard extends Component {
   renderImage = () => {
     const imageURL = this.props.feedback.imageURL;
 
-    const replyPopover = (
-      <Popover onMouseEnter={() => this.setState({ mouseOver: true })} id={this.props.feedback.id + "-reply-popover"} title="Respond to Feedback">
-        Respond Feedback Component
-      </Popover>
-    );
-
     let editButtons;
     if (this.state.mouseOver || this.state.buttonActive) {
       if (this.props.feedback.approved) {
@@ -150,7 +144,7 @@ class FeedbackCard extends Component {
   }
 
   maybeRenderClarifyText =() => {
-    if (this.props.feedback.status != 'clarify') {
+    if (this.props.feedback.status !== 'clarify') {
       return null;
     }
     return (
@@ -168,25 +162,25 @@ class FeedbackCard extends Component {
     if (!this.state.viewSolutions) {
       return null;
     }
-    const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId == this.props.feedback.id)
+    const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId === this.props.feedback.id)
     if (!feedbackSolutions.length) {
       return (
         <span>
           Solutions:
           <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
-            No solutions yet!
+            No comments yet!
           </Panel>
         </span>
       );
     }
     const solutions = feedbackSolutions.map((item) => {
       return (
-        <SolutionCard solution={item} />
+        <CommentCard solution={item} />
       )
     })
     return (
       <span>
-        Solutions:
+        Comments:
         {solutions}
       </span>
     );
