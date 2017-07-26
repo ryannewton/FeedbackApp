@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 
 // Import imgs, css, components, and actions
 import logo from '../img/wb_logo.png';
-import avatar from '../img/avatar.jpg';
+import avatar from '../img/avatar.png';
 import FeedbackCard from '../components/FeedbackCard';
 import RequireAuth from '../components/RequireAuth';
 import ColumnHeader from '../components/ColumnHeader';
@@ -33,7 +33,7 @@ class App extends Component {
 
   render = () => {
     return (
-        <div className="container-fluid" style={{ overflow: 'hidden', clear: 'both' }}>
+        <div className="container-fluid" style={{ background:'#002A43', overflow: 'hidden', clear: 'both' }}>
           {this.renderHeader()}
           {this.renderFilterBar()}
           {this.renderStatusColumns()}
@@ -44,11 +44,11 @@ class App extends Component {
   renderHeader = () => {
     return (
       <div className="row">
-        <img src={logo} height={60} className="pull-left" alt='' />
+        <img src={logo} height={60} className="pull-left" style={{marginTop:10, marginLeft:10}} alt='' />
         <div className="pull-right">
-          <Button style={{ border: 'none' }} onClick={() => this.props.signoutUser()}>
+          <Button style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }} onClick={() => this.props.signoutUser()}>
             <img src={avatar} height={40} alt='' />
-            <span style={{ paddingLeft: 10, paddingRight: 10 }}>Log Out</span>
+            <span style={{ color:'white', paddingLeft: 10, paddingRight: 10 }}>Log Out</span>
           </Button>
         </div>
       </div>
@@ -58,15 +58,15 @@ class App extends Component {
   renderFilterBar = () => {
     return (
       <div className="row" style={{ paddingBottom: 3, padding: '0.5 0 0.17 3', color: '#000', boxShadow: '0 2px 2px 0px #D3D3D3' }}>
-        <div className="col-md-8">
+        <div className="col-md-8" style={{marginTop:10}}>
           <ButtonGroup>
-            <DropdownButton id='main-filter-time' title={'Time: ' + this.state.timeFilter} style={{ border: 'none' }}>
+            <DropdownButton bsStyle="primary" id='main-filter-time' title={'Time: ' + this.state.timeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
               <MenuItem onClick={() => this.setState({ timeFilter: 'Last 7 Days' })}>Last 7 Days</MenuItem>
               <MenuItem onClick={() => this.setState({ timeFilter: 'Last 30 Days' })}>Last 30 Days</MenuItem>
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ timeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
-            <DropdownButton id='main-filter-type' title={'Type: ' + this.state.typeFilter} style={{ border: 'none' }}>
+            <DropdownButton bsStyle="primary" id='main-filter-type' title={'Type: ' + this.state.typeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
               <MenuItem onClick={() => this.setState({ typeFilter: 'Store Operations' })}>Store Operations</MenuItem>
               <MenuItem onClick={() => this.setState({ typeFilter: 'Merchandising' })}>Merchandising</MenuItem>
               <MenuItem onClick={() => this.setState({ typeFilter: 'Planning' })}>Planning & Allocation</MenuItem>
@@ -74,7 +74,7 @@ class App extends Component {
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ typeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
-            <DropdownButton id='main-fitler-location' title={'Location: ' + this.state.locationFilter} style={{ border: 'none' }}>
+            <DropdownButton bsStyle="primary" id='main-fitler-location' title={'Location: ' + this.state.locationFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
               <MenuItem onClick={() => this.setState({ locationFilter: 'District A' })}>District A</MenuItem>
               <MenuItem onClick={() => this.setState({ locationFilter: 'Distict B' })}>District B</MenuItem>
               <MenuItem onClick={() => this.setState({ locationFilter: 'District C' })}>District C</MenuItem>
@@ -83,7 +83,7 @@ class App extends Component {
             </DropdownButton>
           </ButtonGroup>
         </div>
-        <div className="col-md-4 pull-right">
+        <div className="col-md-4 pull-right" style={{marginBottom:10}}>
           <InputGroup>
             <InputGroup.Addon style={{ backgroundColor: 'white' }}><Glyphicon glyph='search' style={{ color: 'grey' }} /></InputGroup.Addon>
             <input type="text" className="form-control" placeholder="Search feedback" value={this.state.searchTerm} onChange={(event) => this.setState({ searchTerm: event.target.value })} />
@@ -113,7 +113,7 @@ class App extends Component {
       (<Column
         title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
         gridClass={className}
-        backgroundColor={'rgb(216,62,83)'}
+        backgroundColor={'#cb333f'}
         updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })}
         feedback={awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
         filterMethod={'awaitingApproval'}
@@ -125,7 +125,7 @@ class App extends Component {
         <Column
           title={'New (' + newFeedback.length + ')'}
           gridClass={className}
-          backgroundColor={'rgb(0,162,255)'}
+          backgroundColor={'#00a0b0'}
           updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })}
           feedback={newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'new'}
@@ -133,7 +133,7 @@ class App extends Component {
         <Column
           title={'Queue (' + queueFeedback.length + ')'}
           gridClass={className}
-          backgroundColor={'#0068a5'}
+          backgroundColor={'#edc951'}
           updateSortMethod={(sortMethod) => this.setState({ queueSort: sortMethod })}
           feedback={queueFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'queue'}
@@ -141,7 +141,7 @@ class App extends Component {
         <Column
           title={'Working On It (' + inProcessFeedback.length + ')'}
           gridClass={className}
-          backgroundColor={'rgb(245,166,35)'}
+          backgroundColor={'#ec6841'}
           updateSortMethod={(sortMethod) => this.setState({ inProcessSort: sortMethod })}
           feedback={inProcessFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'inprocess'}
@@ -149,7 +149,7 @@ class App extends Component {
         <Column
           title={'Complete (' + completeFeedback.length + ')'}
           gridClass={className}
-          backgroundColor={'rgb(126,211,33)'}
+          backgroundColor={'#6a4a3d'}
           updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
           feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'completed'}
@@ -163,7 +163,7 @@ class App extends Component {
         <Column
           title={'New (' + newFeedback.length + ')'}
           gridClass={className}
-          backgroundColor={'rgb(0,162,255)'}
+          backgroundColor={'#00a0b0'}
           updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })}
           feedback={newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'new'}
@@ -171,7 +171,7 @@ class App extends Component {
         <Column
           title={'Responded (' + completeFeedback.length + ')'}
           gridClass={className}
-          backgroundColor={'rgb(126,211,33)'}
+          backgroundColor={'#6a4a3d'}
           updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
           feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'completed'}

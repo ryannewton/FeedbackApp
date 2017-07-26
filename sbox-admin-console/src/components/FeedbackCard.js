@@ -91,8 +91,6 @@ class FeedbackCard extends Component {
   }
 
   renderImage = () => {
-    const imageURL = this.props.feedback.imageURL;
-
     let editButtons;
     if (this.state.mouseOver || this.state.buttonActive) {
       if (this.props.feedback.approved) {
@@ -109,7 +107,7 @@ class FeedbackCard extends Component {
         editButtons = (
           <div>
             <Button
-              className="btn btn-success"
+              className="btn btn-success btn-sm"
               style={{ zIndex:100, position: 'absolute'}}
               onClick={() => this.props.approveFeedback(this.props.feedback)}
             >
@@ -121,13 +119,10 @@ class FeedbackCard extends Component {
         );
       }
     }
-
-    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive rounded /> : null;
     
     return (
       <div>
         {editButtons}
-        {image}
       </div>
     );
   }
@@ -164,11 +159,14 @@ class FeedbackCard extends Component {
     if (!this.state.viewSolutions) {
       return null;
     }
+    const imageURL = this.props.feedback.imageURL;
+    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive /> : null;
     const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId === this.props.feedback.id)
     if (!feedbackSolutions.length) {
       return (
         <span>
-          Solutions:
+          {image}
+          Comments:
           <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
             No comments yet!
           </Panel>
@@ -182,24 +180,26 @@ class FeedbackCard extends Component {
     })
     return (
       <span>
+        {image}
         Comments:
         {solutions}
       </span>
     );
   }
+
   renderCategoryAndSolutionsButton = () => {
     if (this.state.mouseOver || this.state.buttonActive) {
       return (
-        <div className="row" style={{height:35}}>
+        <div className="row" style={{height:30}}>
           <div><ChangeCategoryButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /></div>
-          <div><Button style={{ position: 'absolute', right: 20 }} onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}>...</Button></div>
+          <div><Button style={{ position: 'absolute', right: 30 }} onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}>...</Button></div>
         </div>
       );
     }
 
     const categoryText = this.props.feedback.category ? '#' + this.props.feedback.category : '';
     return (
-      <div className="row" style={{height:35}}>
+      <div className="row" style={{height:30}}>
         <div className="pull-left">{categoryText}</div>
         <div className="pull-right" style={{marginTop:10, marginRight:9}}><Glyphicon glyph='option-horizontal' /></div>
       </div>
