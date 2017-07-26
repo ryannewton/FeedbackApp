@@ -57,7 +57,7 @@ class App extends Component {
 
   renderFilterBar = () => {
     return (
-      <div className="row" style={{ paddingBottom: 3, padding: '0.5 0 0.17 0', color: '#000', boxShadow: '0 2px 2px 0px #D3D3D3' }}>
+      <div className="row" style={{ paddingBottom: 3, padding: '0.5 0 0.17 3', color: '#000', boxShadow: '0 2px 2px 0px #D3D3D3' }}>
         <div className="col-md-8">
           <ButtonGroup>
             <DropdownButton id='main-filter-time' title={'Time: ' + this.state.timeFilter} style={{ border: 'none' }}>
@@ -110,32 +110,37 @@ class App extends Component {
     }
 
     const approvalColumn = awaitingApprovalFeedback.length ?
-      (<div className={className}>          
-        <ColumnHeader
-          title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
-          backgroundColor={'rgb(216,62,83)'}
-          updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })} />
-        {awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-      </div>) : null;
+      (<Column
+        title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
+        gridClass={className}
+        backgroundColor={'rgb(216,62,83)'}
+        updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })}
+        feedback={awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        filterMethod={'awaitingApproval'}
+       />) : null;
 
-    const retailColumns = (
+    const actionColumns = (
       <div className="row">
+        {approvalColumn}
         <Column
-          title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
-          backgroundColor={'rgb(216,62,83)'}
-          updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })}
-          feedback={awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-          filterMethod={'awaitingApproval'}
-         />
-        <Column
-          title={'Open (' + openFeedback.length + ')'}
+          title={'New (' + newFeedback.length + ')'}
+          gridClass={className}
           backgroundColor={'rgb(0,162,255)'}
-          updateSortMethod={(sortMethod) => this.setState({ openSort: sortMethod })}
-          feedback={openFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })}
+          feedback={newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'new'}
         />
         <Column
-          title={'In Process (' + inProcessFeedback.length + ')'}
+          title={'Queue (' + queueFeedback.length + ')'}
+          gridClass={className}
+          backgroundColor={'#0068a5'}
+          updateSortMethod={(sortMethod) => this.setState({ queueSort: sortMethod })}
+          feedback={queueFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          filterMethod={'queue'}
+        />
+        <Column
+          title={'Working On It (' + inProcessFeedback.length + ')'}
+          gridClass={className}
           backgroundColor={'rgb(245,166,35)'}
           updateSortMethod={(sortMethod) => this.setState({ inProcessSort: sortMethod })}
           feedback={inProcessFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
@@ -143,63 +148,34 @@ class App extends Component {
         />
         <Column
           title={'Complete (' + completeFeedback.length + ')'}
+          gridClass={className}
           backgroundColor={'rgb(126,211,33)'}
           updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
           feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'completed'}
         />
+      </div>
+    );
 
     const retailColumns = (
       <div className="row">
         {approvalColumn}
-        <div className={className}>
-          <ColumnHeader
-            title={'New (' + newFeedback.length + ')'}
-            backgroundColor={'rgb(0,162,255)'}
-            updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })} />
-          {newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-        <div className={className}>
-          <ColumnHeader
-            title={'Responded (' + completeFeedback.length + ')'}
-            backgroundColor={'rgb(126,211,33)'}
-            updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })} />
-          {completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-      </div>
-    );
-
-    const actionColumns = (
-      <div className="row">
-        {approvalColumn}
-        <div className={className}>
-          <ColumnHeader
-            title={'New (' + newFeedback.length + ')'}
-            backgroundColor={'rgb(0,162,255)'}
-            updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })} />
-          {newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-        <div className={className}>
-          <ColumnHeader
-            title={'Voting Queue (' + queueFeedback.length + ')'}
-            backgroundColor={'#0068a5'}
-            updateSortMethod={(sortMethod) => this.setState({ queueSort: sortMethod })} />
-          {queueFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-        <div className={className}>
-          <ColumnHeader
-            title={'In Process (' + inProcessFeedback.length + ')'}
-            backgroundColor={'rgb(245,166,35)'}
-            updateSortMethod={(sortMethod) => this.setState({ inProcessSort: sortMethod })} />
-          {inProcessFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
-        <div className={className}>
-          <ColumnHeader
-            title={'Complete (' + completeFeedback.length + ')'}
-            backgroundColor={'rgb(126,211,33)'}
-            updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })} />
-          {completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-        </div>
+        <Column
+          title={'New (' + newFeedback.length + ')'}
+          gridClass={className}
+          backgroundColor={'rgb(0,162,255)'}
+          updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })}
+          feedback={newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          filterMethod={'new'}
+        />
+        <Column
+          title={'Responded (' + completeFeedback.length + ')'}
+          gridClass={className}
+          backgroundColor={'rgb(126,211,33)'}
+          updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
+          feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+          filterMethod={'completed'}
+        />
       </div>
     );
 

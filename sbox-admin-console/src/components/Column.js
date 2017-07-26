@@ -6,11 +6,6 @@ import { DropTarget } from 'react-dnd';
 import ItemTypes from './ItemTypes';
 
 const chessSquareTarget = {
-  // canDrop(props, monitor) {
-  //   // You can disallow drop based on props or item
-  //   console.log('here')
-  //   return true;
-  // },
   drop(props, monitor, component) {
     return { filterMethod: component.props.filterMethod };
   }
@@ -83,9 +78,9 @@ class Column extends Component {
         </Overlay>
       </span>
     );
-    const color = isOver ? 'blue' : 'white';
+    const color = isOver ? 'grey' : 'white';
     return connectDropTarget(
-      <div className="col-md-3" style={{ backgroundColor: color}}>
+      <div className={this.props.gridClass} style={{ backgroundColor: color}}>
         <div className="panel panel-default" style={{ backgroundColor: this.props.backgroundColor, color: 'white', textAlign: 'center', paddingTop: 10, paddingBottom: 10, marginBottom: 5, marginTop: 12 }}>
           {this.props.title}{sortIcon}
         </div>
@@ -96,4 +91,3 @@ class Column extends Component {
 }
 
 export default DropTarget(ItemTypes.BOX, chessSquareTarget, collect)(Column);
-// export default Column;
