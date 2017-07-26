@@ -174,10 +174,19 @@ class FeedbackList extends Component {
       if (this.state.filterCategory == 'complete') {
         return (this.state.filterCategory == item.status)||(item.status == 'closed');
       }
+      if (this.state.filterCategory == 'new') {
+        return (this.state.filterCategory == item.status)||(item.status == 'queue')
+      }
       return this.state.filterCategory == item.status;
     });
-
-    return categorizedFeedbackList;
+    if (this.state.filterCategory !== 'new') {
+      return categorizedFeedbackList;
+    }
+    const newFeedback = categorizedFeedbackList.filter((item) => item.status == 'new')
+      .sort((a, b) => (new Date(b.date) - new Date(a.date)))
+    const queueFeedback = categorizedFeedbackList.filter((item) => item.status == 'queue')
+      .sort((a, b) => (new Date(b.date) - new Date(a.date)))
+    return [ ...newFeedback, ...queueFeedback];
   }
 
   renderShowCategory = () => {
@@ -190,26 +199,26 @@ class FeedbackList extends Component {
 
     if (this.props.group.includePositiveFeedbackBox)
       return (
-        <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingTop:10, height:40}}>
+        <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', height:40}}>
           <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
-            <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>This Weeks Customer Feedback</Text>
+            <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>This Weeks Customer Feedback</Text>
           </TouchableOpacity>
           <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'complete')?'white':null)}} onPress={() => {this.setState({ filterCategory:'complete' });}}>
-            <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>Feedback with Responses from Corporate</Text>
+            <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>Feedback with Responses from Corporate</Text>
           </TouchableOpacity>
         </View>
       );
 
     return (
-      <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', paddingTop:10, height:40}}>
+      <View style={{ flexDirection:'row', backgroundColor:'#00A2FF', height:40}}>
         <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
-          <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>{OPEN}</Text>
+          <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>{OPEN}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'inprocess')?'white':null)}} onPress={() => {this.setState({ filterCategory:'inprocess' });}}>
-          <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'inprocess')?'800':'400'), color:((this.state.filterCategory == 'inprocess')?'#00A2FF':'white')}]}>{INPROCESS}</Text>
+          <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'inprocess')?'800':'400'), color:((this.state.filterCategory == 'inprocess')?'#00A2FF':'white')}]}>{INPROCESS}</Text>
         </TouchableOpacity>
         <TouchableOpacity style={{flex:1, backgroundColor:((this.state.filterCategory == 'complete')?'white':null)}} onPress={() => {this.setState({ filterCategory:'complete' });}}>
-          <Text style={[styles.categoryText, {fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>{COMPLETE}</Text>
+          <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>{COMPLETE}</Text>
         </TouchableOpacity>
       </View>
     );
