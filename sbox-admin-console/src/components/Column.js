@@ -78,10 +78,10 @@ class Column extends Component {
         </Overlay>
       </span>
     );
-    const color = isOver ? 'grey' : 'white';
+    const color = isOver ? 'rgba(255,255,255,0.1)' : '#eee';
     return connectDropTarget(
       <div className={this.props.gridClass} style={{ backgroundColor: color}}>
-        <div className="panel panel-default" style={{ backgroundColor: this.props.backgroundColor, color: 'white', textAlign: 'center', paddingTop: 10, paddingBottom: 10, marginBottom: 5, marginTop: 12 }}>
+        <div className="panel panel-default" style={{ backgroundColor: this.props.backgroundColor, borderWidth:0, color: 'white', textAlign: 'center', paddingTop: 5, paddingBottom: 5, marginBottom: 15, marginTop: 12 }}>
           {this.props.title}{sortIcon}
         </div>
         {(this.props.feedback.length) ? this.props.feedback : <div style={{height: 300, width: 300}} /> }
