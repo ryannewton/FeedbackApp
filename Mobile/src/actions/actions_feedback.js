@@ -55,7 +55,7 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
     http.post('/submitFeedback/', { feedback, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
-      feedback = { id: response.data.id, text, status: 'new', type, imageURL, trendingScore: 1, upvotes: 1, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now() };
+      feedback = { id: response.data.id, text, status: 'new', type, imageURL, trendingScore: 1, upvotes: 0, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now() };
       if (!feedbackRequireApproval) {
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
       } else {
