@@ -97,6 +97,8 @@ class App extends Component {
     const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
 
     const awaitingApprovalFeedback = filteredFeedback.filter(feedback => !feedback.approved).sort((a, b) => this.sortFeedback(a, b, this.state.approvalSort));
+    const awaitingApprovalSolution = this.props.solutions.list.filter((item) => item.approved === 0);
+    const awaitingApproval = [ ...awaitingApprovalFeedback, ...awaitingApprovalSolution];
     const newFeedback = filteredFeedback.filter(feedback => (feedback.status === 'new' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
     const queueFeedback = filteredFeedback.filter(feedback => (feedback.status === 'queue' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.queueSort));
     const inProcessFeedback = filteredFeedback.filter(feedback => (feedback.status === 'inprocess' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.inProcessSort));
@@ -104,18 +106,18 @@ class App extends Component {
 
     let className;
     if (this.props.group.includePositiveFeedbackBox) {
-      className = awaitingApprovalFeedback.length ? 'col-md-4' : 'col-md-6';
+      className = awaitingApproval.length ? 'col-md-4' : 'col-md-6';
     } else {
-      className = awaitingApprovalFeedback.length ? 'col-md-5ths' : 'col-md-3';
+      className = awaitingApproval.length ? 'col-md-5ths' : 'col-md-3';
     }
 
-    const approvalColumn = awaitingApprovalFeedback.length ?
+    const approvalColumn = awaitingApproval.length ?
       (<Column
-        title={'Awaiting Approval (' + awaitingApprovalFeedback.length + ')'}
+        title={'Awaiting Approval (' + awaitingApproval.length + ')'}
         gridClass={className}
         backgroundColor={'#cb333f'}
         updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })}
-        feedback={awaitingApprovalFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
+        feedback={awaitingApproval.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
         filterMethod={'awaitingApproval'}
        />) : null;
 
@@ -152,7 +154,7 @@ class App extends Component {
           backgroundColor={'#6a4a3d'}
           updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
           feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-          filterMethod={'completed'}
+          filterMethod={'complete'}
         />
       </div>
     );

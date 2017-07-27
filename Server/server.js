@@ -718,7 +718,7 @@ app.post('/rejectFeedback', upload.array(), (req, res) => {
               res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
             } else {
               sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.status(200).send('Succes!');
+              res.sendStatus(200);
             }
           });
         }
@@ -762,7 +762,7 @@ app.post('/rejectSolution', upload.array(), (req, res) => {
               res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
             } else {
               sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.status(200);
+              res.sendStatus(200);
             }
           });
         }
@@ -777,7 +777,6 @@ app.post('/rejectSolution', upload.array(), (req, res) => {
 // req.body = { authorization, message, feedback }
 app.post('/clarifyFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    console.log('here1212')
     const { feedback, message } = req.body;
     if (err) {
       res.status(400).send('Autorization failed');
@@ -803,7 +802,7 @@ app.post('/clarifyFeedback', upload.array(), (req, res) => {
               res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0004');
             } else {
               sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.status(200).send('Succes!');
+              res.sendStatus(200);
             }
           });
         }
@@ -844,7 +843,7 @@ app.post('/clarifySolution', upload.array(), (req, res) => {
               res.status(400).send('Sorry, there was a problem - the server is experiencing an error - AF04');
             } else {
               sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.status(200);
+              res.sendStatus(200);
             }
           });
         }

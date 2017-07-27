@@ -20,7 +20,7 @@ import { updateFeedback } from '../actions';
 
 
 // Import actions
-import { approveFeedback } from '../actions';
+import { approveFeedback, approveSolution } from '../actions';
 
 const cardSource = {
   beginDrag(props) {
@@ -30,7 +30,7 @@ const cardSource = {
   },
   endDrag(props, monitor, component) {
     if (monitor.getDropResult()) {
-      if (monitor.getDropResult().filterMethod == 'awaitingApproval') {
+      if (monitor.getDropResult().filterMethod === 'awaitingApproval') {
         const updatedFeedback = { ...props.feedback, approved: 0 };
         store.dispatch(updateFeedback(updatedFeedback))
 
@@ -77,11 +77,11 @@ class FeedbackCard extends Component {
     return connectDragSource(
       <div onMouseEnter={() => this.setState({ mouseOver: true })} onMouseLeave={() => this.setState({ mouseOver: false})}>
         <Panel style={background}>
-          {this.renderImage()}
+          {this.renderTopButton()}
           <div style={{marginLeft:20, marginRight:20}}>
             {this.renderVotesAndTime()}
             {this.maybeRenderClarifyText()}
-            {this.renderText()}
+            {this.renderText()}            
             {this.renderCategoryAndSolutionsButton()}
             {this.maybeRenderSolutionCards()}
           </div>
@@ -90,11 +90,24 @@ class FeedbackCard extends Component {
     );
   }
 
-  renderImage = () => {
-    let editButtons;
+  renderTopButton = () => {
     if (this.state.mouseOver || this.state.buttonActive) {
+      if (this.props.feedback.feedbackId) {
+        return (
+          <div>
+            <Button
+              className="btn btn-success btn-sm"
+              style={{ zIndex:100, position: 'absolute'}}
+              onClick={() => this.props.approveSolution(this.props.feedback)}
+            >
+              Approve
+            </Button>
+            <ClarifyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+          </div>
+        );
+      }
       if (this.props.feedback.approved) {
-        editButtons = (
+        return (
           <div>
             <div>
               <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
@@ -104,7 +117,7 @@ class FeedbackCard extends Component {
           </div>
         );
       } else {
-        editButtons = (
+        return (
           <div>
             <Button
               className="btn btn-success btn-sm"
@@ -119,21 +132,15 @@ class FeedbackCard extends Component {
         );
       }
     }
-    
-    return (
-      <div>
-        {editButtons}
-      </div>
-    );
   }
 
   renderVotesAndTime = () => {
     return (
       <div className="row">
-        <div className="pull-left">
-          <Glyphicon glyph='triangle-top' /><span style={{margin:5}}>{this.props.feedback.upvotes}</span><Glyphicon glyph='triangle-bottom' /><span style={{margin:5}}>{this.props.feedback.downvotes}</span>
+        <div className="pull-left" style={{fontSize:12, color:'#555'}}>
+          <Glyphicon glyph='triangle-top' /><span style={{margin:5}}>{this.props.feedback.upvotes}</span><Glyphicon glyph='triangle-bottom' color='red'/><span style={{margin:5}}>{this.props.feedback.downvotes}</span>
         </div>
-        <div className="pull-right">
+        <div className="pull-right" style={{fontSize:12, color:'#555'}}>
           <TimeAgo date={this.props.feedback.date} />
         </div>
       </div>
@@ -150,8 +157,19 @@ class FeedbackCard extends Component {
   }
 
   renderText = () => {
+    if (!this.props.feedback.feedbackId) {
+      return (
+        <div className="row">{this.props.feedback.text}</div>
+      );
+    }
+    const theFeedback = this.props.feedbackList.list.filter((item) => item.id === this.props.feedback.feedbackId);
     return (
-      <div className="row">{this.props.feedback.text}</div>
+      <div>
+        <center style={{color:'white', backgroundColor:'#0081CB', fontWeight:'bold', fontSize:15, marginTop:5}}>Solution</center>
+        <div className="row">{this.props.feedback.text}</div>
+        <center style={{color:'white', backgroundColor:'#0081CB', fontWeight:'bold', fontSize:15, marginTop:10}}>In response to</center>
+        <div className="row">{theFeedback[0].text}</div>
+      </div>
     );
   }
 
@@ -161,7 +179,7 @@ class FeedbackCard extends Component {
     }
     const imageURL = this.props.feedback.imageURL;
     const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive /> : null;
-    const feedbackSolutions = this.props.solutions.list.filter((item) => item.feedbackId === this.props.feedback.id)
+    const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved === 1))
     if (!feedbackSolutions.length) {
       return (
         <span>
@@ -188,6 +206,9 @@ class FeedbackCard extends Component {
   }
 
   renderCategoryAndSolutionsButton = () => {
+    if (this.props.feedback.feedbackId) {
+      return null;
+    }
     if (this.state.mouseOver || this.state.buttonActive) {
       return (
         <div className="row" style={{height:30}}>
@@ -210,8 +231,9 @@ class FeedbackCard extends Component {
 FeedbackCard.propTypes = propTypes;
 
 function mapStateToProps(state) {
+  const feedbackList = state.feedback
   const { solutions } = state;
-  return { solutions }
+  return { solutions, feedbackList }
 }
 
-export default connect(mapStateToProps, { approveFeedback })(DragSource(ItemTypes.BOX, cardSource, collect)(FeedbackCard));
+export default connect(mapStateToProps, { approveFeedback, approveSolution })(DragSource(ItemTypes.BOX, cardSource, collect)(FeedbackCard));
