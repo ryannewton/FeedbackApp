@@ -29,7 +29,7 @@ class Submitted extends Component {
   }
 
   renderSubmittedText() {
-    if (this.props.group.feedbackRequireApproval) {
+    if (!this.props.group.feedbackRequireApproval) {
       return translate(this.props.user.language).THANKS_FOR_FEEDBACK;
     }
     return (

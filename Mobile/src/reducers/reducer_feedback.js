@@ -21,6 +21,8 @@ import {
   SET_SEARCH_QUERY,
   SEARCH_IN_PROGRESS,
   REMOVE_IMAGE,
+  AUTHORIZE_USER_FAIL,
+  AUTHORIZE_USER_SUCCESS
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -34,6 +36,7 @@ const INITIAL_STATE = {
   filterMethod: 'all',
   searchQuery: 'Search',
   searchInProgress: false,
+  refreshing: false
 };
 
 function filterAndOrder(list) {
@@ -46,11 +49,19 @@ function filterAndOrder(list) {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case REQUESTED_FEEDBACK:
-      return state;
+      return { ...state, refreshing: true};
 
     case RECEIVED_FEEDBACK: {
       const list = filterAndOrder(action.payload.list);
-      return { list, lastPulled: action.payload.lastPulled };
+      return { list, lastPulled: action.payload.lastPulled, refreshing: false };
+    }
+    
+    case AUTHORIZE_USER_FAIL: {
+      return { ...state, refreshing: false};
+    }
+
+    case AUTHORIZE_USER_SUCCESS: {
+      return { ...state, refreshing: false};
     }
 
     case SUBMITTING_FEEDBACK:
