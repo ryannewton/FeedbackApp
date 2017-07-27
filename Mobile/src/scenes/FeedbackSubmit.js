@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import translate from '../translation';
+import ModalPicker from 'react-native-modal-picker'
 
 // Import actions
 import {
@@ -43,7 +44,8 @@ class FeedbackSubmit extends Component {
       positiveFeedback: '',
       negativeFeedback: '',
       imageWidth: null,
-      imageHeight: null
+      imageHeight: null,
+      category: '',
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
@@ -60,13 +62,13 @@ class FeedbackSubmit extends Component {
       } else {
         // If no restricted words then we continue
         if (this.state.feedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category);
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category);
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequireApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category);
           this.setState({ negativeFeedback: '' });
         }
 
@@ -202,8 +204,15 @@ class FeedbackSubmit extends Component {
       </View>
     )
   }
-
   render() {
+    const categories = ['shop', 'store', 'test']
+    let index = 0;
+    var data = categories.map((item) => {
+      return (
+        { key: index++, label: item}
+      );
+    });
+    data.unshift({ key: index++, label: 'Choose a category', section: true})
     const { language } = this.props.user;
     const singleFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
@@ -218,9 +227,24 @@ class FeedbackSubmit extends Component {
             maxLength={500}
           />
         </View>
+        <View>
+        <ModalPicker
+          data={data}
+          initValue="Select something yummy!"
+          onChange={(category) => {
+            this.setState({ category: category.label});
+          }}
+        >
+          <TextInput
+            style={{borderWidth:1, backgroundColor:'blue', padding:10, height:30, width: 300}}
+            editable={false}
+            value={this.state.category || 'Choose a category'}
+          />
+        </ModalPicker>
+        </View>
         {this.renderButtons()}
         {this.maybeRenderDeleteButton()}
-        {this.maybeRenderImage()}      
+        {this.maybeRenderImage()}
       </View>
     );
 

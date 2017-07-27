@@ -45,7 +45,7 @@ export const pullFeedback = token => (
   }
 );
 
-export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imageURL) => (
+export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imageURL, category) => (
   (dispatch, getState) => {
     dispatch({ type: SUBMITTING_FEEDBACK });
 
