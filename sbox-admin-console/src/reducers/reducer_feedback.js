@@ -64,10 +64,8 @@ export default (state = INITIAL_STATE, action) => {
     case REJECT_FEEDBACK_SUCCESS:
       index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       newList = state.list.slice(0);
-      console.log('index: ', index, ' newList: ', newList);
       newList[index].approved = 0;
       newList[index].status = 'reject';
-      console.log('index: ', index, ' newList: ', newList);
       return { ...state, list: newList };
     case CLARIFY_FEEDBACK_SUCCESS:
       index = state.list.findIndex(feedback => feedback.id === action.payload.id);
