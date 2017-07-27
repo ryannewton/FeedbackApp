@@ -18,6 +18,7 @@ import styles from '../styles/components/FeedbackCardStyles';
 import { Card, CardSection } from './common';
 import { TinyButton } from '../components/common';
 import * as Animatable from 'react-native-animatable';
+import LightBox from 'react-native-lightbox';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
@@ -83,7 +84,7 @@ class Feedback extends Component {
     }
     if (this.props.feedback === undefined) {
       return '';
-    } 
+    }
     return (
       <Text
         style={{
@@ -113,7 +114,7 @@ class Feedback extends Component {
             fontWeight: '800',
           }}
         >
-          {translate(this.props.user.language).OFFICIAL_RESPONSE}: 
+          {translate(this.props.user.language).OFFICIAL_RESPONSE}:
         </Text>
         <Text
           style={{
@@ -240,22 +241,25 @@ class Feedback extends Component {
 
     return (
       <View style={imageViewStyle}>
-        <Image
-          source={{ uri: imageURL }}
-          indicator={ProgressBar}
-          indicatorProps={{
-            size: 80,
-            borderWidth: 0,
-            color: 'rgba(150, 150, 150, 1)',
-            unfilledColor: 'rgba(200, 200, 200, 0.2)',
-          }}
-          style={{
-            width: SCREEN_WIDTH*0.4/this.state.imageHeight*this.state.imageWidth,
-            height: SCREEN_WIDTH*0.4,
-            marginBottom:10,
-            resizeMode: 'cover',
-          }}
-        />
+        <LightBox>
+          <Image
+            source={{ uri: imageURL }}
+            indicator={ProgressBar}
+            indicatorProps={{
+              size: 80,
+              borderWidth: 0,
+              color: 'rgba(150, 150, 150, 1)',
+              unfilledColor: 'rgba(200, 200, 200, 0.2)',
+            }}
+            style={{
+              flex: 1,
+              width: SCREEN_WIDTH,
+              height: SCREEN_WIDTH*0.4,
+              marginBottom:10,
+              resizeMode: 'contain',
+            }}
+          />
+        </LightBox>
       </View>
     );
   }
@@ -478,9 +482,9 @@ renderVoteCount = () => {
       downvoteCountStyle,
       thumbStyle,
     } = styles;
-    
+
     let updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
-    
+
     if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
       this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
       this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
