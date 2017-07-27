@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Button, Overlay, Popover, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
 // Import actions
-import { clarifyFeedback } from '../actions';
+import { clarifyFeedback, clarifySolution } from '../actions';
 
 class ClarifyButton extends Component {
   state = {
@@ -24,7 +24,11 @@ class ClarifyButton extends Component {
     this.setState({ error: false });
     const { message } = this.state;
     const { feedback } = this.props;
-    this.props.clarifyFeedback({ feedback, message });
+    if (this.props.feedback.feedbackId) {
+      this.props.clarifySolution({ solution: feedback, message });
+    } else {
+      this.props.clarifyFeedback({ feedback, message });
+    }
     this.setState({ sent: true });
   }
 
@@ -96,8 +100,8 @@ class ClarifyButton extends Component {
     return (
       <div style={{ position: 'relative'}}>
         <Button
-          className="btn btn-warning"
-          style={{ position: 'absolute', right:66 }}
+          className="btn btn-warning btn-sm"
+          style={{ position: 'absolute', right:56 }}
           ref="target"
           onClick={this.maybeRenderClarifyInput}
         >
@@ -121,4 +125,4 @@ class ClarifyButton extends Component {
   }
 }
 
-export default connect(null, { clarifyFeedback })(ClarifyButton);
+export default connect(null, { clarifyFeedback, clarifySolution })(ClarifyButton);

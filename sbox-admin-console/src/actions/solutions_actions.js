@@ -51,10 +51,11 @@ export const approveSolution = (solution) => (
 
 export const clarifySolution = ({ solution, message }) => (
   (dispatch) => {
+    console.log('in clarifySolution()');
+    console.log('solution: ', solution);
     dispatch({ type: CLARIFY_SOLUTION });
 
     const token = localStorage.getItem('token');
-    console.log(solution, message, "aodisnfadsoifn!")
     http.post('/clarifySolution', { authorization: token, solution, message })
     .then(() => {
       console.log('clarifySolution() Success');
