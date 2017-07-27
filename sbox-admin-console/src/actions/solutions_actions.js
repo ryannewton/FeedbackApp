@@ -22,7 +22,6 @@ export const pullSolutions = (token) => (
 
     http.post('/pullSolutions', { authorization: token })
     .then((response) => {
-      console.log(response.data)
       const lastPulled = new Date();
       dispatch({ type: REQUEST_SOLUTIONS_SUCCESS, payload: { list: response.data, lastPulled } });
     })
