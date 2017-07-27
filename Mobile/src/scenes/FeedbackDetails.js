@@ -78,7 +78,6 @@ class FeedbackDetails extends Component {
           <ScrollView>
             <View>
               {/* Feedback description */}
-
               <FeedbackCard
                 feedback={feedback}
                 navigate={() => undefined}

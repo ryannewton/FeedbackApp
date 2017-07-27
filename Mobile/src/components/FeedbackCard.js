@@ -156,7 +156,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="arrow-drop-up" size={50} color={biggerCard?'#48D2A0':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
+        <Icon name="caret-up" type="font-awesome" size={26} color={iconColor}/>
       </View>
     );
   }
@@ -169,7 +169,7 @@ class Feedback extends Component {
     }
     return (
       <View>
-        <Icon name="arrow-drop-down" size={50} color={biggerCard?'#F54B5E':iconColor} raised={biggerCard?true:false} reverse={biggerCard?true:false}/>
+        <Icon name="caret-down" type="font-awesome" size={26} color={iconColor}/>
       </View>
     );
   }
@@ -373,66 +373,6 @@ return (
     return <View style = {{flexDirection:'row', marginRight:10}}><Icon name="person" size={20} color={'#F54B5E'} /><Text style={{color:'#F54B5E'}}>{"My Feedback"}</Text></View>;
   }
 
-  renderImageIcon = () => {
-    const { imageURL } = this.props.feedback;
-
-    // Check if there is an image and we are not currently showing the image
-    if (imageURL && !this.props.showImage) {
-      return (
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="image" color="#A9A9A9" />
-        </View>
-      );
-    }
-    return null;
-  }
-
-  renderUnreadTitle = () => {
-    const { showImage, biggerCard } = this.props;
-    const {
-      voteCountStyle,
-      upvoteCountStyle,
-      upvoteTextStyle,
-      downvoteTextStyle,
-      downvoteCountStyle,
-      thumbStyle,
-    } = styles;
-    if (this.props.feedback === undefined) {
-      return '';
-    }
-    if (!biggerCard) {
-      return null;
-    }
-    return (
-      <View>
-        <Text
-          style={{
-            fontSize: 15,
-            color: 'black',
-            fontWeight: '500',
-            paddingTop: 5,
-            paddingBottom:10,
-          }}
-          numberOfLines={(showImage?null:4)}
-        >
-          {this.props.feedback.text}
-        </Text>
-          {/* Vote count */}
-
-          {/* Upvote Button and Downvote */}
-          <View style={{ flexDirection: 'row', alignSelf: 'flex-end', alignItems: 'center'}}>
-            <TouchableOpacity onPress={this.downvote} style={{ paddingRight: 2 }}>
-              {this.renderThumbDownButton()}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.upvote} style={{ paddingRight: 3 }}>
-              {this.renderThumbUpButton()}
-            </TouchableOpacity>
-          </View>
-
-      </View>
-    );
-  }
-
 renderVoteCount = () => {
     const { showImage, biggerCard } = this.props;
     const {
@@ -450,15 +390,23 @@ renderVoteCount = () => {
       return null;
     }
     return (
-      <View style={{ justifyContent:'flex-start',alignItems: 'center'}}>
+      <View style={{ flexDirection: 'column', alignItems:'center', marginRight:10}}>
         {/* Upvote Button and Downvote */}
-        <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'row'}}>
+        <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
           {this.renderThumbUpButton()}
         </TouchableOpacity>
-        <Text style={upvoteTextStyle, { paddingLeft:2, paddingTop:4, color:'#bdbdbd'}}>
-          {this.props.feedback.upvotes - this.props.feedback.downvotes}
-        </Text>
-        <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row', marginTop:2, marginBottom:2}}>
+          <Text style={[upvoteTextStyle]}>
+            {this.props.feedback.upvotes}
+          </Text>
+          <Text style={[upvoteTextStyle, {color:'grey', marginLeft:2, marginRight:2}]}>
+            |
+          </Text>
+          <Text style={[downvoteTextStyle]}>
+            {this.props.feedback.downvotes}
+          </Text>
+        </View>
+        <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
           {this.renderThumbDownButton()}
         </TouchableOpacity>
       </View>
@@ -509,7 +457,6 @@ renderVoteCount = () => {
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end'}}>
                     {this.renderMyFeedbackTag()}
                     {this.renderStatusBox()}
-                    {this.renderOfficialResponseTag()}
                     {this.renderSolutionsTag()}
                   </View>
                 </View>
