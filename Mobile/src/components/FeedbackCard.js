@@ -252,7 +252,7 @@ class Feedback extends Component {
               unfilledColor: 'rgba(200, 200, 200, 0.2)',
             }}
             style={{
-              flex: 1,
+              flex:2,
               width: SCREEN_WIDTH,
               height: SCREEN_WIDTH*0.4,
               marginBottom:10,
@@ -448,8 +448,12 @@ renderVoteCount = () => {
           <View style={{ flex: 6, paddingTop: 13, flexDirection: 'column'}}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'flex-end' }}>
               <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'space-between' }}>
+                <View style={{ flex: 1}}>
                 {this.renderImage()}
+                </View>
+                <View style={{flex:1}}>
                 {this.renderTitle()}
+                </View>
                 {this.renderResponse()}
               </View>
               <View>
