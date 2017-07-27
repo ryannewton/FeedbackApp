@@ -32,10 +32,10 @@ const styles = StyleSheet.create({
     color: '#444444',
   },
   noSolutionsMessage: {
-    fontSize: 18,
-    textAlign: 'center',
+    fontSize: 14,
     flex: 1,
-    color: '#595959',
+    marginLeft:10,
+    color:'grey',
     fontWeight: '500',
   },
 });
