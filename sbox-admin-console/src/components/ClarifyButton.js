@@ -25,7 +25,7 @@ class ClarifyButton extends Component {
     const { message } = this.state;
     const { feedback } = this.props;
     if (this.props.feedback.feedbackId) {
-      this.props.clarifySolution({ feedback, message });
+      this.props.clarifySolution({ solution: feedback, message });
     } else {
       this.props.clarifyFeedback({ feedback, message });
     }

@@ -22,6 +22,7 @@ export const pullSolutions = (token) => (
 
     http.post('/pullSolutions', { authorization: token })
     .then((response) => {
+      console.log(response.data)
       const lastPulled = new Date();
       dispatch({ type: REQUEST_SOLUTIONS_SUCCESS, payload: { list: response.data, lastPulled } });
     })
@@ -51,10 +52,12 @@ export const approveSolution = (solution) => (
 
 export const clarifySolution = ({ solution, message }) => (
   (dispatch) => {
+    console.log('in clarifySolution()');
+    console.log('solution: ', solution);
     dispatch({ type: CLARIFY_SOLUTION });
 
     const token = localStorage.getItem('token');
-    console.log(solution, message, "aodisnfadsoifn!")
+    console.log(solution, message, 'aodisnfadsoifn!');
     http.post('/clarifySolution', { authorization: token, solution, message })
     .then(() => {
       console.log('clarifySolution() Success');

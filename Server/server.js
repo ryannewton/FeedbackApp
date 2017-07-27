@@ -975,7 +975,7 @@ app.post('/pullSolutions', upload.array(), (req, res) => {
       const language = decoded.language || 'en';
       const admin = decoded.admin ? true : false;
       const connectionString = `
-      SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date, a.text AS backupText
+      SELECT a.id, a.feedbackId, a.userId, c.translatedText AS text, c.translatedFrom, a.approved, b.upvotes, b.downvotes, a.date, a.text AS backupText, a.status
       FROM solutions a
       LEFT JOIN (
         SELECT solutionId, SUM(upvote) AS upvotes, SUM(downvote) as downvotes

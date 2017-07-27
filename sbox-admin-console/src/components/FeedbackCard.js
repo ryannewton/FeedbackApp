@@ -103,6 +103,7 @@ class FeedbackCard extends Component {
               Approve
             </Button>
             <ClarifyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+            <RejectButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
           </div>
         );
       }

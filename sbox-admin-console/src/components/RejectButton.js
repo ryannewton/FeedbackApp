@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom';
 import { Button, Overlay, Popover, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
 
 // Import actions
-import { rejectFeedback } from '../actions';
+import { rejectFeedback, rejectSolution } from '../actions';
 
 class RejectButton extends Component {
   state = {
@@ -23,7 +23,11 @@ class RejectButton extends Component {
     this.setState({ error: false });
     const { message } = this.state;
     const { feedback } = this.props;
-    this.props.rejectFeedback({ feedback, message });
+        if (this.props.feedback.feedbackId) {
+      this.props.rejectSolution({ solution: feedback, message });
+    } else {
+      this.props.rejectFeedback({ feedback, message });
+    }
   }
 
   maybeRenderRejectInput = () => {
@@ -107,4 +111,4 @@ class RejectButton extends Component {
   }
 }
 
-export default connect(null, { rejectFeedback })(RejectButton);
+export default connect(null, { rejectFeedback, rejectSolution })(RejectButton);

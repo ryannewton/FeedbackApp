@@ -5,6 +5,7 @@ import {
   REQUEST_SOLUTIONS_FAIL,
   APPROVE_SOLUTION_SUCCESS,
   CLARIFY_SOLUTION_SUCCESS,
+  REJECT_SOLUTION_SUCCESS,
   SIGNOUT_USER,
 } from '../actions/types';
 
@@ -43,6 +44,12 @@ export default (state = INITIAL_STATE, action) => {
       newList = state.list.slice(0);
       newList[index].approved = 0;
       newList[index].status = 'clarify';
+      return { ...state, list: newList };
+    case REJECT_SOLUTION_SUCCESS:
+      index = state.list.findIndex(item => item.id === action.payload.id);
+      newList = state.list.slice(0);
+      newList[index].approved = 0;
+      newList[index].status = 'rejected';
       return { ...state, list: newList };
     case SIGNOUT_USER:
       return INITIAL_STATE;
