@@ -45,8 +45,6 @@ class WelcomeScreen extends Component {
   }
 
   render() {
-    // console.log(language('es'))
-    // console.log(language)
     return (
       <Slides data={this.slideData()} onComplete={this.onSlidesComplete} />
     );
@@ -54,7 +52,6 @@ class WelcomeScreen extends Component {
 }
 
 function mapStateToProps(state) {
-  console.log('state: ', state);
   const { group, user } = state
   return { group, user };
 }

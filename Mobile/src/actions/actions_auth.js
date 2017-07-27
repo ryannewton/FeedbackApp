@@ -21,7 +21,6 @@ import loadOnLaunch from '../reducers/load_on_launch';
 
 export const sendAuthorizationEmail = (email, navigateToNext, language) => (
   (dispatch) => {
-    console.log(language)
     dispatch({ type: SENDING_AUTHORIZATION_EMAIL });
 
     // Add a new user to our database (or update the passcode of the user)
@@ -29,14 +28,25 @@ export const sendAuthorizationEmail = (email, navigateToNext, language) => (
     // If successful navigate to the login in screen (for post email verification)
     .then((response) => {
       // Change the in-authorization flag in state so we update the component
-      dispatch({ type: SENT_AUTHORIZATION_EMAIL_SUCCESS, payload: email });
+      dispatch(sendAuthorizationEmailSuccess(email));
       dispatch({ type: SAVE_GROUP_CODE, payload: response.data });
       navigateToNext();
     })
     .catch((error) => {
-      dispatch({ type: SENT_AUTHORIZATION_EMAIL_FAIL, payload: error.response.data });
+      console.log('Error running sendAuthorizationEmail()');
+      console.log('Error: ', error);
+      dispatch(sendAuthorizationEmailFail());
     });
   }
+);
+
+export const sendAuthorizationEmailFail = () => {
+  const error = 'Something went wrong on our end.\nPlease try again.';
+  return { type: SENT_AUTHORIZATION_EMAIL_FAIL, payload: error };
+};
+
+export const sendAuthorizationEmailSuccess = email => (
+  { type: SENT_AUTHORIZATION_EMAIL_SUCCESS, payload: email }
 );
 
 export const authorizeUserFail = error => ({
@@ -45,7 +55,7 @@ export const authorizeUserFail = error => ({
 });
 
 export const authorizeUserSuccess = token => (
-  (dispatch) => {
+  () => {
     loadOnLaunch(token);
     return { type: AUTHORIZE_USER_SUCCESS, payload: token };
   }
