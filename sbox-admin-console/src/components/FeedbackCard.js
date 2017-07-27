@@ -180,7 +180,7 @@ class FeedbackCard extends Component {
     }
     const imageURL = this.props.feedback.imageURL;
     const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive /> : null;
-    const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved === 1))
+    const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved))
     if (!feedbackSolutions.length) {
       return (
         <span>
