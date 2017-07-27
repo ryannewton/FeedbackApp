@@ -384,7 +384,6 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               else {
                 // Insert text
                 insertText(res, result.insertId, 'feedback', text, userId);
-                submitFeedbackVoteHelper(result.insertId, 1, 0, 0, userId, res);
                 // Send Email to Admins
                 const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
                 sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'UserId: ' + userId);
