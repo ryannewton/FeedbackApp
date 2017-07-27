@@ -1,6 +1,13 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Image, View, ListView, TouchableOpacity, Text } from 'react-native';
+import {
+  Image,
+  View,
+  ListView,
+  TouchableOpacity,
+  Text,
+  RefreshControl
+} from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
@@ -13,7 +20,7 @@ import translate from '../translation';
 
 
 // Import tracking
-import { sendGoogleAnalytics } from '../actions';
+import { sendGoogleAnalytics, pullFeedback, pullSolutions } from '../actions';
 
 const stopwords = require('stopwords').english;
 import nothing from '../../images/backgrounds/nothing.jpg';
@@ -223,6 +230,11 @@ class FeedbackList extends Component {
       </View>
     );
   }
+  _onRefresh() {
+    const { token } = this.props;
+    this.props.pullFeedback(token);
+    this.props.pullSolutions(token);
+  }
 
   renderFeedbackSubmitButton = () => {
     return (
@@ -251,6 +263,12 @@ class FeedbackList extends Component {
           style = {{zIndex: -1}}
           dataSource={ds.cloneWithRows(filteredFeedbackList)}
           removeClippedSubviews={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={this.props.feedback.refreshing}
+              onRefresh={this._onRefresh.bind(this)}
+            />
+          }
           renderRow={rowData =>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Details', {
@@ -286,6 +304,6 @@ function mapStateToProps(state) {
   return { feedback, group, user, token };
 }
 
-const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics })(FeedbackList);
+const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics, pullFeedback, pullSolutions })(FeedbackList);
 
 export default AppScreen;
