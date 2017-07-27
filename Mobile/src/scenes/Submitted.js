@@ -41,8 +41,7 @@ class Submitted extends Component {
         {"\n"}
         (A moderator reviews all feedback)
       </Text>
-    )
-
+    );
   }
 
   render() {
@@ -58,7 +57,13 @@ class Submitted extends Component {
         <View style={styles.container, { flex:4, flexDirection:'column', alignItems:'center', justifyContent:'space-around'}}>
             {/* To do: To do: Update navigation to use react-navigation */}
           <Image source={check} resizeMode="contain" style={{ width: SCREEN_WIDTH/3, height: SCREEN_WIDTH/3 }} />
-          <Text style={{ fontSize: 18, textAlign: 'center' }}> {this.renderSubmittedText()} </Text>
+          <Text style={{ 
+              fontSize: 18, 
+              textAlign: 'center' 
+            }}
+          > 
+            {this.renderSubmittedText()} 
+          </Text>
           <View style={{ width: SCREEN_WIDTH/2 }}>
             <Button onPress={() => this.props.navigation.navigate('Main')}>
               {translate(this.props.user.language).BACK_TO_BOARD}
