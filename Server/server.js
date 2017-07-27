@@ -9,10 +9,9 @@ const bodyParser = require('body-parser'); // For uploading longer/complicated t
 const Expo = require('exponent-server-sdk'); // For sending push notifications
 const aws = require('aws-sdk'); // load aws sdk
 const Jimp = require('jimp'); // For image processing
-const stopwords = require('stopwords').english;
 const path = require('path');
 
-var googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
+const googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
 
 const emailTemplates = require('./emailTemplates');
 
