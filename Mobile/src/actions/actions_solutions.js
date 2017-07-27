@@ -39,17 +39,18 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
     http.post('/submitSolution', { solution, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
+      solution = {
+        id: response.data.id,
+        feedbackId,
+        text,
+        upvotes: 0,
+        downvotes: 0,
+        approved: 1,
+      };
       if (!solutionsRequireApproval) {
-        solution = {
-          id: response.data.id,
-          feedbackId,
-          text,
-          upvotes: 0,
-          downvotes: 0,
-          approved: 1,
-        };
         dispatch({ type: ADD_SOLUTION_TO_STATE, payload: solution });
       }
+      dispatch(addSolutionUpvote(solution));
     })
     .catch((error) => {
       console.log('Error in submitSolutionToServer in actions_solutions', error.response.data);
