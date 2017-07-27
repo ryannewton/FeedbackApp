@@ -134,11 +134,6 @@ function generatePassword(len) {
   return password;
 }
 
-function getDomain(email) {
-  const re = /@\w*\.\w*$|\.\w*\.\w*$/;
-  return re.exec(email)[0].slice(1);
-}
-
 // SAVE PUSH NOTIFICATION TOKEN
 app.post('/savePushToken', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
@@ -224,7 +219,7 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
     console.log(code);
 
     // Step #2: Check to see if the user is already in the database
-    let connectionString = `
+    const connectionString = `
       SELECT a.groupId, b.groupSignupCode
       FROM users a
       JOIN groups b
@@ -232,20 +227,8 @@ app.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
       WHERE a.email=?`;
     connection.query(connectionString, [email], (err, rows) => {
       if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
-      else if (!rows.length) {
-        // Step #2A: If the user's email is not in the user table see if it has a default groupId
-        connectionString = 'SELECT id, groupSignupCode FROM groups WHERE defaultEmailDomain=?';
-        connection.query(connectionString, [getDomain(email)], (err, rows) => {
-          if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 2B3G');
-          else if (!rows.length) {
-            sendAuthEmailHelper(res, 0, email, code, 0, language);
-          } else {
-            sendAuthEmailHelper(res, rows[0].id, email, code, rows[0].groupSignupCode, language);
-          }
-        });
-      } else {
-        sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode, language);
-      }
+      else if (!rows.length || !rows[0].groupSignupCode) sendAuthEmailHelper(res, 0, email, code, 0, language);
+      else sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode, language);
     });
   }
 });
