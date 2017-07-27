@@ -62,6 +62,7 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
         const token = getState().auth.token;
         dispatch(pullFeedback(token))
       }
+      dispatch(addFeedbackUpvote(feedback));
     })
     .catch((error) => {
       console.log('Error in submitFeedbackToServer in actions_feedback', error);
