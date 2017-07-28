@@ -419,6 +419,7 @@ renderVoteCount = () => {
 
   render() {
     const { showImage, feedback, biggerCard } = this.props;
+    const categoryExists = feedback.category && feedback.category !== '';
     const {
       row,
       feedbackTitle,
@@ -461,7 +462,8 @@ renderVoteCount = () => {
               </View>
             </View>
                 <View style={{ paddingTop:3, paddingBottom:10, flexDirection: 'row', justifyContent: 'space-between'}}>
-                  <Text style={{color:'#bdbdbd'}}><TimeAgo time={this.props.feedback.date} /></Text>
+                  <Text style={{color:'#bdbdbd'}}><TimeAgo time={this.props.feedback.date}/></Text>
+                  <Text style={{color:'#bdbdbd'}}>{categoryExists?'#':null} {feedback.category} </Text>
                   <View style={{ flexDirection: 'row', justifyContent: 'flex-end'}}>
                     {this.renderMyFeedbackTag()}
                     {this.renderStatusBox()}
