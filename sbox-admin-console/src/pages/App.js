@@ -1,6 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
-
+import { saveAs } from 'file-saver';
+import json2csv from 'json2csv';
 import { ButtonGroup, DropdownButton, MenuItem, InputGroup, Button, Glyphicon } from 'react-bootstrap';
 import { connect } from 'react-redux';
 
@@ -55,6 +56,27 @@ class App extends Component {
     );
   }
 
+  exportData = () => {
+    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
+
+    const fields = ['Department', 'Agrees', 'Disagrees', 'Text', 'Date'];
+    const data = filteredFeedback.map(item => {
+      const date = new Date(item.date);
+      return { Department: item.category, Agrees: item.upvotes, Disagrees: item.downvotes, Text: item.text, Date: date.toDateString() };
+    });
+
+    const date = new Date();
+    let fileName = 'Customer Feedback - ' + this.state.typeFilter + ' - ' + date.getMonth() + '.' + date.getDate() + '.' + date.getFullYear() + '.csv';
+
+    json2csv({ data, fields }, (err, csv) => {
+      console.log(csv);
+      const file = new File([csv], fileName, {
+        type: 'text/csv',
+      });
+      saveAs(file);
+    });
+  }
+
   renderFilterBar = () => {
     return (
       <div className="row" style={{ paddingBottom: 3, padding: '0.5 0 0.17 3', color: '#000', boxShadow: '0 2px 2px 0px #D3D3D3' }}>
@@ -81,6 +103,7 @@ class App extends Component {
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ locationFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
+            <Button bsStyle="primary" id='main-fitler-export' style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }} onClick={() => this.exportData()}>Export</Button>
           </ButtonGroup>
         </div>
         <div className="col-md-4 pull-right" style={{marginBottom:10}}>
