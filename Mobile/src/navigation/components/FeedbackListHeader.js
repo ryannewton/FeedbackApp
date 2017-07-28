@@ -1,12 +1,13 @@
 // Import libraries
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, LayoutAnimation, Platform } from 'react-native';
-import Menu, { MenuOptions, MenuOption, MenuTrigger, MenuContext } from 'react-native-menu';
+import { Text, View, TouchableOpacity, LayoutAnimation, Platform, StyleSheet } from 'react-native';
+import Modal from 'react-native-modalbox';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import translate from '../../translation'
 
 // Import components, styles, and actions
+import { Button } from '../../components/common';
 import { changeFilterMethod, setSearchQuery, searchInProgress } from '../../actions';
 import SearchInput from './SearchInput';
 import SendInviteTextButton from './SendInviteTextButton';
@@ -31,7 +32,6 @@ class FeedbackSubmitHeader extends Component {
     if (this.state.searchPressed) {
       return this.renderHeaderWithSearchBar();
     }
-
     return this.renderHeaderWithIcons();
   }
 
@@ -126,12 +126,23 @@ class FeedbackSubmitHeader extends Component {
 
   renderPicker = () => {
     // Exclude on Android, library doesn't work
-    if (Platform.OS == 'android') {
-      return null;
-    }
 
     const renderTouchable = () => <TouchableOpacity />;
     const { menuOptions, divider, pickerStyle } = styles;
+    return (
+      <View style={pickerStyle}>
+        <TouchableOpacity onPress={() => this.refs.modal2.open()}>
+          <Icon name="filter" type="font-awesome" size={25} color="white" />
+        </TouchableOpacity>
+      </View>
+    );
+  }
+  changeFilterMethod = (filterMethod) => {
+    this.refs.modal2.close();
+    this.setState({ filterMethod });
+    this.props.changeFilterMethod(filterMethod);
+  }
+  render() {
     const { language } = this.props
     const { MOST_POPULAR,
             ALL_FEEDBACK,
@@ -140,63 +151,74 @@ class FeedbackSubmitHeader extends Component {
             MY_FEEDBACK,
     } = translate(language);
     return (
-      <View style={pickerStyle}>
-        <MenuContext>
-          <Menu
-            onSelect={(filterMethod) => {
-              this.setState({ filterMethod });
-              this.props.changeFilterMethod(filterMethod);
-            }}
-          >
-            <MenuTrigger renderTouchable={renderTouchable}>
-              <Icon name="filter" type="font-awesome" size={25} color="white" />
-            </MenuTrigger>
-            <MenuOptions style={menuOptions}>
-              <MenuOption
-                value="all"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('all')}
-              >
-                <Text>{ALL_FEEDBACK}</Text>
-              </MenuOption>
-              <View style={divider} />
-              <MenuOption
-                value="this_week"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('this_week')}
-              >
-                <Text>{THIS_WEEK}</Text>
-              </MenuOption>
-              <MenuOption
-                value="today"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('today')}
-              >
-                <Text>{TODAY}</Text>
-              </MenuOption>
-              <MenuOption
-                value="my_feedback"
-                renderTouchable={renderTouchable}
-                style={this.hasDisabledStyle('my_feedback')}
-              >
-                <Text>{MY_FEEDBACK}</Text>
-              </MenuOption>
-            </MenuOptions>
-          </Menu>
-        </MenuContext>
-      </View>
-    );
-  }
-  
-  render() {
-    return (
       <View style={{ height: 60, backgroundColor: '#00A2FF' }}>
         {this.renderHeader()}
+          <Modal style={[styles2.modal, styles2.modal2]} backdrop={false}  position={'top'} entry={'top'} ref={"modal2"}>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('this_week')}> This Week </Button>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('my_feedback')}> My Feedback </Button>
+              <Button onPress={() => this.refs.modal2.close()} style={{marginBottom:10}}> Cancel </Button>
+          </Modal>
       </View>
     );
   }
 }
 
+const styles2 = StyleSheet.create({
+  wrapper: {
+    paddingTop: 50,
+    flex: 1
+  },
+
+  modal: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+
+  modal2: {
+    paddingTop:50,
+    height: 300,
+    backgroundColor: 'rgba(70,70,70,0.8)'
+  },
+
+  modal3: {
+    height: 300,
+    width: 300
+  },
+
+  modal4: {
+    height: 300
+  },
+
+  btn: {
+    margin: 10,
+    backgroundColor: "#3B5998",
+    color: "white",
+    padding: 10
+  },
+
+  button: {
+    marginBottom:10,
+    backgroundColor: "rgba(255,255,255,0.8)",
+    borderWidth:0,
+  },
+
+  btnModal: {
+    position: "absolute",
+    top: 0,
+    right: 0,
+    width: 50,
+    height: 50,
+    backgroundColor: "transparent"
+  },
+
+  text: {
+    color: "black",
+    fontSize: 22
+  }
+
+});
 
 const mapStateToProps = (state) => {
   const { feedback } = state;

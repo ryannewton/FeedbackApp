@@ -85,7 +85,7 @@ export const addFeedbackUpvote = feedback => (
     if (feedbackNoOpinions.includes(feedback.id)) {
       dispatch(removeFeedbackNoOpinion(feedback));
     }
-
+    
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
     .catch(error => console.log('Error in addFeedbackUpvote in actions_feedback', error.response.data));
