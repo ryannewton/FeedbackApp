@@ -47,7 +47,7 @@ const removeItem = (arr, item) => {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case PULL_GROUP_INFO:
-      return { ...state, userId: action.payload.userId, language: action.payload.language};
+      return { ...state, userId: action.payload.groupInfo.userId, language: action.payload.groupInfo.language};
     case CHANGE_LANGUAGE_CHOICE:
       return { ...state, language: action.payload };
     case LOAD_DO_NOT_DISPLAY_LIST:

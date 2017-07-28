@@ -20,12 +20,12 @@ export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case PULL_GROUP_INFO:
       return { ...state,
-        groupName: action.payload.groupName,
-        groupSignupCode: action.payload.groupSignupCode,
-        feedbackRequiresApproval: Boolean(action.payload.feedbackRequiresApproval),
-        solutionsRequireApproval: Boolean(action.payload.solutionsRequireApproval),
-        showStatus: Boolean(action.payload.showStatus),
-        includePositiveFeedbackBox: Boolean(action.payload.includePositiveFeedbackBox),
+        groupName: action.payload.groupInfo.groupName,
+        groupSignupCode: action.payload.groupInfo.groupSignupCode,
+        feedbackRequiresApproval: Boolean(action.payload.groupInfo.feedbackRequiresApproval),
+        solutionsRequireApproval: Boolean(action.payload.groupInfo.solutionsRequireApproval),
+        showStatus: Boolean(action.payload.groupInfo.showStatus),
+        includePositiveFeedbackBox: Boolean(action.payload.groupInfo.includePositiveFeedbackBox),
         categories: action.payload.categories,
       };
     case SAVE_GROUP_CODE:
