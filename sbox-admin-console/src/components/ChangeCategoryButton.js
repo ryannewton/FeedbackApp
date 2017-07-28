@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Button, Overlay, Popover, MenuItem } from 'react-bootstrap';
+import { Button, Overlay, Popover, MenuItem } from 'react-bootstrap';
 import { updateFeedback } from '../actions';
 
 class ChangeStatusButton extends Component {
@@ -33,6 +33,7 @@ class ChangeStatusButton extends Component {
 
     const sortPopover = (
       <Popover
+        id={this.props.feedback.id}
         style={{
           ...this.props.style,
           position: 'absolute',
@@ -49,7 +50,7 @@ class ChangeStatusButton extends Component {
       >
         <MenuItem header style={{ padding: 0 }}>Change category to:</MenuItem>
         {this.props.categories.categories.map((item) => {
-          return <MenuItem onClick={() => this.updateCategory(item)}> {item} </MenuItem>
+          return <MenuItem onClick={() => this.updateCategory(item)} key={item}> {item} </MenuItem>
           }
         )}
       </Popover>

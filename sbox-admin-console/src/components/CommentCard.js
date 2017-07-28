@@ -24,7 +24,6 @@ class CommentCard extends Component {
   }
 
   render() {
-    console.log(this.props.solution);
     return (
       <Panel>
         {this.renderVotesAndTime()}

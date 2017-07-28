@@ -38,6 +38,7 @@ class Column extends Component {
     // console.log(isOver);
     const sortPopover = (
       <Popover
+        id={'column-' + this.props.title}
         style={{
           ...this.props.style,
           position: 'absolute',

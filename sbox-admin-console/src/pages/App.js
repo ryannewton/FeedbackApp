@@ -10,7 +10,6 @@ import logo from '../img/wb_logo.png';
 import avatar from '../img/avatar.png';
 import FeedbackCard from '../components/FeedbackCard';
 import RequireAuth from '../components/RequireAuth';
-import ColumnHeader from '../components/ColumnHeader';
 import { signoutUser } from '../actions';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
