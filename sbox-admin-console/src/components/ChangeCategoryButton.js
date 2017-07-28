@@ -49,7 +49,7 @@ class ChangeStatusButton extends Component {
         }}
       >
         <MenuItem header style={{ padding: 0 }}>Change category to:</MenuItem>
-        {this.props.categories.categories.map((item) => {
+        {this.props.group.categories.map((item) => {
           return <MenuItem onClick={() => this.updateCategory(item)} key={item}> {item} </MenuItem>
           }
         )}
@@ -78,8 +78,8 @@ class ChangeStatusButton extends Component {
 }
 
 const mapStateToProps = (state) => {
-  const { categories } = state;
-  return { categories };
+  const { group } = state;
+  return { group };
 };
 
 export default connect(mapStateToProps, { updateFeedback })(ChangeStatusButton);
