@@ -45,23 +45,22 @@ export const pullFeedback = token => (
   }
 );
 
-export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, imageURL) => (
+export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, imageURL, category) => (
   (dispatch, getState) => {
     dispatch({ type: SUBMITTING_FEEDBACK });
 
     const token = getState().auth.token;
-    let feedback = { text, type, imageURL };
+    let feedback = { text, type, imageURL, category };
 
     http.post('/submitFeedback/', { feedback, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
       if (!feedbackRequiresApproval) {
-        feedback = { id: response.data.id, text, status: 'new', type, imageURL, trendingScore: 1, upvotes: 1, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now() };
+        feedback = { ...feedback, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 1, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now() };
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
-      } else {
-        const token = getState().auth.token;
-        dispatch(pullFeedback(token))
       }
+
+      // Automatically upvote feedback the user submitted
       dispatch(addFeedbackUpvote(feedback));
     })
     .catch((error) => {
