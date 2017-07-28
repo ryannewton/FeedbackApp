@@ -367,7 +367,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
       connection.query(connectionString, [groupId], (err, rows) => {
         if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
-          const { text, imageURL } = req.body.feedback;
+          const { text, imageURL, category } = req.body.feedback;
 
           // Insert the feedback into the database
           const approved = !rows[0].feedbackRequiresApproval;
@@ -379,6 +379,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
               text,
               imageURL,
               approved,
+              category,
             }, (err, result) => {
               if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
               else {

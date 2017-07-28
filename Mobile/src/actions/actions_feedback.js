@@ -50,7 +50,7 @@ export const submitFeedbackToServer = (feedbackRequireApproval, text, type, imag
     dispatch({ type: SUBMITTING_FEEDBACK });
 
     const token = getState().auth.token;
-    let feedback = { text, type, imageURL };
+    let feedback = { text, type, imageURL, category };
 
     http.post('/submitFeedback/', { feedback, authorization: token })
     .then((response) => {
