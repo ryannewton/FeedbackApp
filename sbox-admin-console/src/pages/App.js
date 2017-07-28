@@ -56,13 +56,45 @@ class App extends Component {
     );
   }
 
-  exportData = () => {
-    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
+  rankFeedback = (feedback, method) => {
+    const sortedFeedback = feedback.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - b.downvotes));
+    if (method === 'Overall') {
+      return sortedFeedback.map((item, index) => {
+        return { ...item, rank: index+1 };
+      });
+    } else if (method === 'Department') {
+      let deptIndexes = sortedFeedback.reduce((agg, value) => {
+        if (agg.some(elem => elem.category === value.category)) return agg;
+        else return [...agg, { category: value.category, index: 0 }];
+      }, []);
+      return sortedFeedback.map((item, index) => {
+        let currentIndex = 0;
+        deptIndexes.forEach((elem, index) => {
+          console.log('elem', elem);
+          if (elem.category === item.category) {
+            currentIndex = elem.index + 1;
+            deptIndexes[index].index = elem.index + 1;
+          } 
+        });
+        return { ...item, rank: currentIndex }
+      });
+    }
+  }
 
-    const fields = ['Department', 'Agrees', 'Disagrees', 'Text', 'Date'];
-    const data = filteredFeedback.map(item => {
+  exportData = (type) => {
+    const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
+    let rankedFeedback;
+    if (type === "Top 2 By Department") {
+      rankedFeedback = this.rankFeedback(filteredFeedback, 'Department');
+      rankedFeedback = rankedFeedback.filter(item => item.rank <= 2).sort((a, b) => a.category > b.category);
+    } else {
+      rankedFeedback = this.rankFeedback(filteredFeedback, 'Overall');
+    }
+
+    const fields = ['Department', 'Rank', 'Agrees', 'Disagrees', 'Text', 'Date'];
+    const data = rankedFeedback.map(item => {
       const date = new Date(item.date);
-      return { Department: item.category, Agrees: item.upvotes, Disagrees: item.downvotes, Text: item.text, Date: date.toDateString() };
+      return { Department: item.category, Rank: item.rank, Agrees: item.upvotes, Disagrees: item.downvotes, Text: item.text, Date: date.toDateString() };
     });
 
     const date = new Date();
@@ -97,13 +129,17 @@ class App extends Component {
               <MenuItem onClick={() => this.setState({ typeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
             <DropdownButton bsStyle="primary" id='main-fitler-location' title={'Location: ' + this.state.locationFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
-              <MenuItem onClick={() => this.setState({ locationFilter: 'District A' })}>District A</MenuItem>
-              <MenuItem onClick={() => this.setState({ locationFilter: 'Distict B' })}>District B</MenuItem>
-              <MenuItem onClick={() => this.setState({ locationFilter: 'District C' })}>District C</MenuItem>
+              <MenuItem onClick={() => this.setState({ locationFilter: 'Central' })}>Central</MenuItem>
+              <MenuItem onClick={() => this.setState({ locationFilter: 'Northeast' })}>Northeast</MenuItem>
+              <MenuItem onClick={() => this.setState({ locationFilter: 'Southeast' })}>Southeast</MenuItem>
+              <MenuItem onClick={() => this.setState({ locationFilter: 'West' })}>West</MenuItem>
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ locationFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
-            <Button bsStyle="primary" id='main-fitler-export' style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }} onClick={() => this.exportData()}>Export</Button>
+            <DropdownButton bsStyle="primary" id='main-fitler-export' title={'Export'} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
+              <MenuItem onClick={() => this.exportData('What Is Showing')}>Export What Is Showing</MenuItem>
+              <MenuItem onClick={() => this.exportData('Top 2 By Department')}>Export Top 2 By Department</MenuItem>
+            </DropdownButton>
           </ButtonGroup>
         </div>
         <div className="col-md-4 pull-right" style={{marginBottom:10}}>
@@ -129,7 +165,7 @@ class App extends Component {
 
     let className;
     if (this.props.group.includePositiveFeedbackBox) {
-      className = awaitingApproval.length ? 'col-md-4' : 'col-md-6';
+      className = 'col-md-12';
     } else {
       className = awaitingApproval.length ? 'col-md-5ths' : 'col-md-3';
     }
@@ -186,20 +222,12 @@ class App extends Component {
       <div className="row">
         {approvalColumn}
         <Column
-          title={'New (' + newFeedback.length + ')'}
+          title={'Customer Feedback (' + newFeedback.length + ')'}
           gridClass={className}
           backgroundColor={'#00a0b0'}
           updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })}
           feedback={newFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'new'}
-        />
-        <Column
-          title={'Responded (' + completeFeedback.length + ')'}
-          gridClass={className}
-          backgroundColor={'#6a4a3d'}
-          updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
-          feedback={completeFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
-          filterMethod={'completed'}
         />
       </div>
     );

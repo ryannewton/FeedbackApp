@@ -24,7 +24,7 @@
     "jsonwebtoken": "^7.3.0",
     "multer": "^1.2.0",
     "mysql": "^2.11.1",
-    "path": "^0.12.7",
+    "path": "^0.12.7"
   },
   "devDependencies": {
     "babel-cli": "^6.24.1",
