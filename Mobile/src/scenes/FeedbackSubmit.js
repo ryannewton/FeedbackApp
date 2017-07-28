@@ -317,6 +317,7 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
+          {this.maybeRenderCategoryModal()}
           {this.renderImageButton('positive')}
           {this.renderSubmitButton('positive')}
           {this.maybeRenderImage('positive')}
@@ -337,6 +338,7 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
+          {this.maybeRenderCategoryModal()}
           {this.renderImageButton('negative')}
           {this.renderSubmitButton('negative')}
           {this.maybeRenderImage('negative')}
