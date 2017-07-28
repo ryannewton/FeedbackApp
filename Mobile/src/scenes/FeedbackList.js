@@ -29,13 +29,9 @@ class FeedbackList extends Component {
   constructor(props) {
     super(props);
 
-    // Create the initial wordspace and occurance table once for future search queries
-    const { cleanQues, wordspace } = this.wordspace();
-    const occuranceTable = this.wordspaceOccuranceTable(cleanQues, wordspace);
     this.state = {
       filterCategory: 'new',
-      wordspace,
-      occuranceTable,
+
     };
 
     props.sendGoogleAnalytics('FeedbackList', props.group.groupName);
@@ -45,109 +41,20 @@ class FeedbackList extends Component {
     registerForNotifications(this.props.token);
   }
 
-  wordspace = () => {
-    // Creates a wordspace for a given set array of strings
-    const allQuestions = this.props.feedback.list;
-
-    const cleanQues = this.cleanQuestions(allQuestions);
-    const allWords = cleanQues.reduce((acc, question) => [...acc, ...question], []);
-
-    const wordsWithoutDuplicates = this.removeDuplicateWords(allWords);
-    const wordspace = this.removeStopwords(wordsWithoutDuplicates);
-    return { cleanQues, wordspace };
-  }
-
-  wordspaceOccuranceTable = (cleanQues, wordspace) => {
-    // Create an occurance table for a given wordspace
-    const occurances = cleanQues.map(question =>
-      wordspace.map(wordspaceWord =>
-        question.filter(questionWord => wordspaceWord === questionWord).length));
-
-    return occurances;
-  }
-
-  // Helper function that cleans multiple questions
-  cleanQuestions = (questions) => {
-    return questions.reduce((acc, row) => {
-      return [...acc,
-        row.text
-          .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
-          .replace(/[\s]{2,}/g, ' ')
-          .toLowerCase()
-          .split(' ')];
-    }, []);
-  }
-
-  // Helper function that cleans a single string and returns an array
-  cleanQuestion = (question) => {
-    return question
-      .replace(/[.,\/#!$%\^&\*;:{}=\-_`~()\?\"\'\n\r]/g,"")
-      .replace(/[\s]{2,}/g, ' ')
-      .toLowerCase()
-      .split(' ');
-  }
-
-  // Remove duplicates
-  removeDuplicateWords = (wordsWithDuplicates) => {
-    return wordsWithDuplicates.filter((item, index, array) => {
-      return array.indexOf(item) === index;
-    });
-  }
-
-  // Remove stopwords
-  removeStopwords = (words) => {
-    return words.filter((item) => {
-      return !stopwords.includes(item);
-    });
-  }
-
-  // Calculate the similarity between the query and every other piece of feedback
-  cosineSimilarity = (query) => {
-    // Clean up the query and create a query specific occurance table
-    const cleanQuery = this.removeStopwords(this.removeDuplicateWords(this.cleanQuestion(query)));
-    const queryOccurance = this.state.wordspace.map((wordspaceWord) => {
-      return cleanQuery.filter(questionWord => wordspaceWord === questionWord).length;
-    });
-
-    // Calculations
-    const allTops = this.state.occuranceTable.map((occuranceArray) => {
-      return occuranceArray.reduce((top, value, index) => {
-        return top + queryOccurance[index] * value;
-      }, 0);
-    });
-    const allBottomLeft = this.state.occuranceTable.map((occuranceArray) => {
-      return occuranceArray.reduce((bottomLeft, value) => {
-        return bottomLeft + value * value;
-      }, 0);
-    });
-
-    const bottomRight = queryOccurance.reduce((bottomRight, value) => {
-      return bottomRight + value * value;
-    }, 0);
-
-    const cosines = this.state.occuranceTable.map((occ, index) => {
-      return allTops[index] / (Math.sqrt(allBottomLeft[index]) * Math.sqrt(bottomRight));
-    });
-
-    // Filter the results by a cosine value of greater than 0.3
-    const topResults = cosines.map((value, index) => {
-      if (value >= 0.3) {
-        return this.props.feedback.list[index];
+  partialWordSearch(query) {
+    return this.props.feedback.list.filter((item) => {
+      if (item.text.toLowerCase().indexOf(query.toLowerCase()) === -1) {
+        return false;
       }
-      // Bug fix with how the map function works
-    }).filter((value) => {
-      if (value) {
-        return true;
-      }
-    });
-
-    return topResults;
+      return true;
+    })
   }
+
 
   curateFeedbackList = () => {
     // Return a list of feedback given the filter/search value
     if (this.props.feedback.filterMethod === 'search') {
-      return this.cosineSimilarity(this.props.feedback.searchQuery);
+      return this.partialWordSearch(this.props.feedback.searchQuery);
     }
     // Switch through filter methods
     const filteredFeedbackList = this.props.feedback.list.filter((item) => {
@@ -187,7 +94,7 @@ class FeedbackList extends Component {
       return this.state.filterCategory === item.status;
     });
 
-    return categorizedFeedbackList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes)); 
+    return categorizedFeedbackList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
     // if (this.state.filterCategory !== 'new') {
     //   return categorizedFeedbackList;
     // }
