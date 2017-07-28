@@ -33,11 +33,11 @@ class App extends Component {
 
   render = () => {
     return (
-        <div className="container-fluid" style={{ background:'#002A43', overflow: 'hidden', clear: 'both' }}>
-          {this.renderHeader()}
-          {this.renderFilterBar()}
-          {this.renderStatusColumns()}
-        </div>
+      <div className="container-fluid" style={{ background:'#002A43', overflow: 'hidden', clear: 'both' }}>
+        {this.renderHeader()}
+        {this.renderFilterBar()}
+        {this.renderStatusColumns()}
+      </div>
     );
   }
 
