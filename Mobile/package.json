@@ -28,6 +28,7 @@
     "react-native-lightbox": "^0.6.0",
     "react-native-menu": "^0.20.2",
     "react-native-modal-picker": "0.0.16",
+    "react-native-modalbox": "^1.4.1",
     "react-native-progress": "^3.2.1",
     "react-native-tab-view": "0.0.67",
     "react-native-textinput-effects": "^0.3.1",
