@@ -223,20 +223,24 @@ class FeedbackSubmit extends Component {
     )
   }
 
-  renderCategoryModal() {
-    const categories = ['shop', 'store', 'test']
+  maybeRenderCategoryModal() {
+    // If the group doesn't have categories
+    if (!this.props.group.categories.length) {
+      return null;
+    }
+    const { categories } = this.props.group;
     let index = 0;
-    const data = categories.map((item) => {
+    const categoriesForPicker = categories.map((item) => {
       return (
         { key: index++, label: item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
       );
     });
 
-    data.unshift({ key: index++, label: 'Choose a category', section: true})
+    categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true})
     return (
       <View style={{ flexDirection: 'row'}}>
         <ModalPicker
-          data={data}
+          data={categoriesForPicker}
           style={{ flex:1 }}
           optionTextStyle={{ fontSize:18 }}
           optionStyle={{ padding: 10 }}
@@ -290,7 +294,7 @@ class FeedbackSubmit extends Component {
             maxLength={500}
           />
         </View>
-        {this.renderCategoryModal()}
+        {this.maybeRenderCategoryModal()}
         {this.renderImageButton()}
         {this.renderSubmitButton()}
         {this.maybeRenderDeleteButton()}
