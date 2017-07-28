@@ -168,6 +168,24 @@ app.post('/getGroupTreeData', upload.array(), (req, res) => {
     }
   });
 });
+
+app.post('/pullCategories', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { groupId } = decoded;
+      const connectionString =
+      `SELECT id, category, categoryOrder
+       FROM categories
+       WHERE groupId=?`;
+      connection.query(connectionString, [groupId], (err, rows) => {
+        if (err) console.log(err);
+        else res.status(200).send(rows);
+      });
+    }
+  });
+});
+
 // SEND PUSH NOTIFICATION
 app.post('/sendPushNotification', upload.array(), (req, res) => {
   if (req.body.authorization !== 'secretPushNotificationPassword9911') {
