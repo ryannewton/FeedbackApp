@@ -55,13 +55,15 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
     http.post('/submitFeedback/', { feedback, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
-      if (!feedbackRequiresApproval) {
-        feedback = { ...feedback, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 1, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now() };
-        dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
-      }
 
       // Automatically upvote feedback the user submitted
+      feedback = { ...feedback, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 0, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now()};
       dispatch(addFeedbackUpvote(feedback));
+
+      // Add to local state if no approval required
+      if (!feedbackRequiresApproval) {
+        dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
+      }
     })
     .catch((error) => {
       console.log('Error in submitFeedbackToServer in actions_feedback', error);
