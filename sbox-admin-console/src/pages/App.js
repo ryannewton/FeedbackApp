@@ -33,7 +33,7 @@ class App extends Component {
 
   render = () => {
     return (
-      <div className="container-fluid" style={{ background:'#002A43', overflow: 'hidden', clear: 'both' }}>
+      <div className="container-fluid" style={{ background:'#f0f0f0', overflow: 'hidden', clear: 'both' }}>
         {this.renderHeader()}
         {this.renderFilterBar()}
         {this.renderStatusColumns()}
@@ -43,7 +43,7 @@ class App extends Component {
 
   renderHeader = () => {
     return (
-      <div className="row">
+      <div className="row" style={{backgroundColor:'#002A43'}}>
         <img src={logo} height={60} className="pull-left" style={{marginTop:10, marginLeft:10}} alt='' />
         <div className="pull-right">
           <Button style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }} onClick={() => this.props.signoutUser()}>
@@ -114,7 +114,7 @@ class App extends Component {
     );
 
     return (
-      <div className="row" style={{ paddingBottom: 3, padding: '0.5 0 0.17 3', color: '#000', boxShadow: '0 2px 2px 0px #D3D3D3' }}>
+      <div className="row" style={{ backgroundColor:'#002A43', paddingBottom: 3, padding: '0.5 0 0.17 3', color: '#000', boxShadow: '0 2px 2px 0px #D3D3D3' }}>
         <div className="col-md-8" style={{marginTop:10}}>
           <ButtonGroup>
             <DropdownButton bsStyle="primary" id='main-filter-time' title={'Time: ' + this.state.timeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
