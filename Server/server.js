@@ -168,6 +168,7 @@ app.post('/getGroupTreeData', upload.array(), (req, res) => {
     }
   });
 });
+
 // SEND PUSH NOTIFICATION
 app.post('/sendPushNotification', upload.array(), (req, res) => {
   if (req.body.authorization !== 'secretPushNotificationPassword9911') {
@@ -996,8 +997,8 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
-      const { userId } = decoded;
-      const connectionString = `
+      const { userId, groupId } = decoded;
+      let connectionString = `
         SELECT
           a.id as userId,
           a.language,
@@ -1015,14 +1016,31 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
           a.groupId = b.id
         WHERE
           a.id=?`;
-      connection.query(connectionString, [userId], (err, rows) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
-        else res.status(200).send(rows[0]);
+      connection.query(connectionString, [userId], (err1, rows1) => {
+        if (err) {
+          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
+        } else {
+          connectionString =
+          `SELECT category, categoryOrder
+           FROM categories
+           WHERE groupId=?`;
+          connection.query(connectionString, [groupId], (err2, rows2) => {
+            if (err) {
+              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1346');
+              console.log('Error running pullCategories()');
+            } else {
+              let categories = [];
+              rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
+              categories = categories.filter(category => category !== undefined);
+              res.status(200).send({ ...rows1[0], categories });
+            }
+          });
+        }
       });
     }
   });
 });
 
 app.listen(8081, () => {
- console.log('Suggestion Box Server listening on port 8081!');
+  console.log('Suggestion Box Server listening on port 8081!');
 });
