@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import PropTypes from 'prop-types';
 import translate from '../translation';
+import ModalPicker from 'react-native-modal-picker'
 
 // Import actions
 import {
@@ -43,7 +44,8 @@ class FeedbackSubmit extends Component {
       positiveFeedback: '',
       negativeFeedback: '',
       imageWidth: null,
-      imageHeight: null
+      imageHeight: null,
+      category: '',
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
@@ -60,13 +62,13 @@ class FeedbackSubmit extends Component {
       } else {
         // If no restricted words then we continue
         if (this.state.feedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category);
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category);
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '');
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category);
           this.setState({ negativeFeedback: '' });
         }
 
@@ -164,7 +166,7 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  renderButtons = (type) => {
+  renderImageButton = (type) => {
     const { language } = this.props.user;
 
     if (this.props.feedback.loading) {
@@ -172,21 +174,39 @@ class FeedbackSubmit extends Component {
     }
 
     return (
-      <View style={{ flexDirection: 'row', paddingTop:10 }}>
-        <View style={{ flex: 3.5 }}>
-          <Button onPress={this.submitFeedback}>
-            {translate(language).SUBMIT_FEEDBACK}
-          </Button>
-        </View>
-        <View style={{ flex: 1, flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', backgroundColor:'white' }}>
           <TouchableOpacity
             onPress={() => this.addImage(type)}
-            style={styles.button}
+            style={[styles.button, {backgroundColor:'white', borderWidth:0, flexDirection:'row', alignItems:'center', padding:14 }]}
           >
-            <Icon name="add-a-photo" size={25} color={'white'} />
+            <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'left'}}>
+              Add Photo
+            </Text>
+            <Icon name="add-a-photo" size={25} color={'grey'} />
           </TouchableOpacity>
-        </View>
       </View>
+    );
+  }
+
+  renderSubmitButton = (type) => {
+    const { language } = this.props.user;
+
+    if (this.props.feedback.loading) {
+      return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
+    }
+
+    return (
+      <View style={{ flexDirection: 'row'}}>
+          <TouchableOpacity
+            onPress={this.submitFeedback}
+            style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
+          >
+            <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
+              {translate(language).SUBMIT_FEEDBACK}
+            </Text>
+          </TouchableOpacity>
+      </View>
+
     );
   }
 
@@ -203,24 +223,78 @@ class FeedbackSubmit extends Component {
     )
   }
 
+  renderCategoryModal() {
+    const categories = ['shop', 'store', 'test']
+    let index = 0;
+    const data = categories.map((item) => {
+      return (
+        { key: index++, label: item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
+      );
+    });
+
+    data.unshift({ key: index++, label: 'Choose a category', section: true})
+    return (
+      <View style={{ flexDirection: 'row'}}>
+        <ModalPicker
+          data={data}
+          style={{ flex:1 }}
+          optionTextStyle={{ fontSize:18 }}
+          optionStyle={{ padding: 10 }}
+          sectionStyle={{ padding: 20 }}
+          sectionTextStyle={{ fontSize:18, fontWeight:'600' }}
+          cancelTextStyle={{ fontSize:18, fontWeight:'600' }}
+          initValue="Select something yummy!"
+          onChange={(category) => this.setState({ category: category.label }) }
+        >
+          <View style={{ flexDirection: 'row', alignItems:'center', backgroundColor:'white', marginTop: 5, marginBottom:1 }}>
+            <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'center' }}>
+            Add Category
+            </Text>
+              <TextInput
+                style={{
+                  borderColor: '#00A2FF',
+                  flex:2,
+                  height:42,
+                  borderTopWidth: 1,
+                  borderRadius: 4,
+                  paddingTop: 3,
+                  paddingBottom: 3,
+                  paddingHorizontal: 10,
+                  fontWeight:'400',
+                  textAlign:'right',
+                  backgroundColor: 'white',
+                  fontSize: 16,
+                }}
+                editable={false}
+                value={this.state.category || 'Click to choose > '}
+              />
+          </View>
+        </ModalPicker>
+      </View>
+    );
+  }
+
   render() {
+    const { width, height } = Dimensions.get('window')
     const { language } = this.props.user;
     const singleFeedbackBox = (
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', backgroundColor:'#f0f0f0' }}>
         <View style={{ flexDirection: 'row'}}>
           <TextInput
             multiline={Boolean(true)}
             onChangeText={feedback => this.setState({ feedback })}
             style={[styles.feedbackInput, { flex: 1 }]}
             placeholder={translate(language).ENTER_FEEDBACK}
-            placeholderTextColor="#d0d0d0"f
+            placeholderTextColor="#d0d0d0"
             value={this.state.feedback}
             maxLength={500}
           />
         </View>
-        {this.renderButtons()}
+        {this.renderCategoryModal()}
+        {this.renderImageButton()}
+        {this.renderSubmitButton()}
         {this.maybeRenderDeleteButton()}
-        {this.maybeRenderImage()}      
+        {this.maybeRenderImage()}
       </View>
     );
 
@@ -239,7 +313,8 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          {this.renderButtons('positive')}
+          {this.renderImageButton('positive')}
+          {this.renderSubmitButton('positive')}
           {this.maybeRenderImage('positive')}
         </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
@@ -258,7 +333,8 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          {this.renderButtons('negative')}
+          {this.renderImageButton('negative')}
+          {this.renderSubmitButton('negative')}
           {this.maybeRenderImage('negative')}
         </View>
       </View>
