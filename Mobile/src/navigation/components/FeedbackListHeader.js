@@ -201,15 +201,13 @@ class FeedbackSubmitHeader extends Component {
     return (
       <View style={{ height: 60, backgroundColor: '#00A2FF' }}>
         {this.renderHeader()}
-        <View style={{paddingTop: 10}}>
-          <Modal style={[styles2.modal, styles2.modal2]} backdrop={false}  position={"top"} ref={"modal2"}>
-              <Button onPress={() => this.changeFilterMethod('all')} style={{marginBottom:10}}> All Feedback </Button>
-              <Button onPress={() => this.changeFilterMethod('this_week')} style={{marginBottom:10}}> This Week </Button>
-              <Button onPress={() => this.changeFilterMethod('today')} style={{marginBottom:10}}> Today </Button>
-              <Button onPress={() => this.changeFilterMethod('my_feedback')} style={{marginBottom:10}}> My Feedback </Button>
+          <Modal style={[styles2.modal, styles2.modal2]} backdrop={false}  position={'top'} entry={'top'} ref={"modal2"}>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('this_week')}> This Week </Button>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>
+              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('my_feedback')}> My Feedback </Button>
               <Button onPress={() => this.refs.modal2.close()} style={{marginBottom:10}}> Cancel </Button>
           </Modal>
-        </View>
       </View>
     );
   }
@@ -227,8 +225,9 @@ const styles2 = StyleSheet.create({
   },
 
   modal2: {
-    height: 230,
-    backgroundColor: "#3B5998"
+    paddingTop:50,
+    height: 300,
+    backgroundColor: 'rgba(70,70,70,0.8)'
   },
 
   modal3: {
@@ -245,6 +244,12 @@ const styles2 = StyleSheet.create({
     backgroundColor: "#3B5998",
     color: "white",
     padding: 10
+  },
+
+  button: {
+    marginBottom:10,
+    backgroundColor: "rgba(255,255,255,0.8)",
+    borderWidth:0,
   },
 
   btnModal: {
