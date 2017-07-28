@@ -1,8 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import ReactDOM from 'react-dom';
-import { Button, Overlay, Popover, MenuItem, Modal } from 'react-bootstrap';
+import { Button, Modal } from 'react-bootstrap';
 import { updateFeedback } from '../actions';
 
 class DeleteButton extends Component {

@@ -73,7 +73,7 @@ class ReplyButton extends Component {
           <div className="">
             <FormGroup>
               <Radio
-                checked={(selectedResponseMethod == 'officialReply')}
+                checked={(selectedResponseMethod === 'officialReply')}
                 onClick={() => this.setState({ selectedResponseMethod: 'officialReply' })}
                 name="radioGroup"
               >
@@ -81,7 +81,7 @@ class ReplyButton extends Component {
               </Radio>
               {' '}
               <Radio
-                checked={(selectedResponseMethod == 'interested')}
+                checked={(selectedResponseMethod === 'interested')}
                 onClick={() => this.setState({ selectedResponseMethod: 'interested' })}
                 name="radioGroup"
               >
@@ -89,7 +89,7 @@ class ReplyButton extends Component {
               </Radio>
               {' '}
               <Radio
-                checked={(selectedResponseMethod == 'submitter')}
+                checked={(selectedResponseMethod === 'submitter')}
                 onClick={() => this.setState({ selectedResponseMethod: 'submitter' })}
                 name="radioGroup"
               >

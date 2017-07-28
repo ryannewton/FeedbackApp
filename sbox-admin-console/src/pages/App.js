@@ -10,7 +10,6 @@ import logo from '../img/wb_logo.png';
 import avatar from '../img/avatar.png';
 import FeedbackCard from '../components/FeedbackCard';
 import RequireAuth from '../components/RequireAuth';
-import ColumnHeader from '../components/ColumnHeader';
 import { signoutUser } from '../actions';
 import { DragDropContext } from 'react-dnd';
 import HTML5Backend from 'react-dnd-html5-backend';
@@ -34,11 +33,11 @@ class App extends Component {
 
   render = () => {
     return (
-        <div className="container-fluid" style={{ background:'#002A43', overflow: 'hidden', clear: 'both' }}>
-          {this.renderHeader()}
-          {this.renderFilterBar()}
-          {this.renderStatusColumns()}
-        </div>
+      <div className="container-fluid" style={{ background:'#002A43', overflow: 'hidden', clear: 'both' }}>
+        {this.renderHeader()}
+        {this.renderFilterBar()}
+        {this.renderStatusColumns()}
+      </div>
     );
   }
 

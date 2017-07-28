@@ -13,7 +13,6 @@ import DeleteButton from './DeleteButton';
 import ClarifyButton from './ClarifyButton';
 import RejectButton from './RejectButton';
 import ChangeCategoryButton from './ChangeCategoryButton';
-import PropTypes from 'prop-types';
 import { DragSource } from 'react-dnd';
 import ItemTypes from './ItemTypes';
 import store from '../reducers/store';
@@ -54,15 +53,6 @@ function collect(connect, monitor) {
   };
 }
 
-const propTypes = {
-  text: PropTypes.string.isRequired,
-
-  // Injected by React DnD:
-  isDragging: PropTypes.bool.isRequired,
-  connectDragSource: PropTypes.func.isRequired
-};
-
-
 class FeedbackCard extends Component {
   state = {
     mouseOver: false,
@@ -76,7 +66,7 @@ class FeedbackCard extends Component {
   }
 
   render = () => {
-    const { isDragging, connectDragSource } = this.props;
+    const { connectDragSource } = this.props;
     const editBackground = { backgroundColor: 'grey' };
     const whiteBackground = { backgroundColor: 'white' };
     let background = (this.state.mouseOver || this.state.buttonActive) ? editBackground : whiteBackground;
@@ -241,8 +231,6 @@ class FeedbackCard extends Component {
     );
   }
 }
-
-FeedbackCard.propTypes = propTypes;
 
 function mapStateToProps(state) {
   const feedbackList = state.feedback

@@ -3,7 +3,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunkMiddleware from 'redux-thunk';
 
 // Import actions
-import { pullFeedback, pullSolutions, pullGroupInfo, pullGroupTreeInfo, authorizeUserFail } from '../actions';
+import { pullFeedback, pullSolutions, pullGroupInfo, authorizeUserFail } from '../actions';
 
 // Import Reducers
 import CombinedReducer from '../reducers';

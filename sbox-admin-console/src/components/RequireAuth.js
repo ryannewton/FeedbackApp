@@ -7,7 +7,6 @@ import Loading from './Loading';
 export default function(ComposedComponent) {
   class RequireAuth extends Component {
     render() {
-      console.log(this.props);
       // First check to see if authenticated failed (it starts off as null)
       if (this.props.authenticated === false) return <Login />;
 

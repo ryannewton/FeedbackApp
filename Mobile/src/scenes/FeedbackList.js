@@ -33,7 +33,7 @@ class FeedbackList extends Component {
     const { cleanQues, wordspace } = this.wordspace();
     const occuranceTable = this.wordspaceOccuranceTable(cleanQues, wordspace);
     this.state = {
-      filterCategory:'new',
+      filterCategory: 'new',
       wordspace,
       occuranceTable,
     };
@@ -178,22 +178,24 @@ class FeedbackList extends Component {
 
   categorizedList = () => {
     const categorizedFeedbackList = this.curateFeedbackList().filter((item) => {
-      if (this.state.filterCategory == 'complete') {
-        return (this.state.filterCategory == item.status)||(item.status == 'closed');
+      if (this.state.filterCategory === 'complete') {
+        return (this.state.filterCategory === item.status)||(item.status == 'closed');
       }
-      if (this.state.filterCategory == 'new') {
-        return (this.state.filterCategory == item.status)||(item.status == 'queue')
+      if (this.state.filterCategory === 'new') {
+        return (this.state.filterCategory === item.status)||(item.status == 'queue')
       }
-      return this.state.filterCategory == item.status;
+      return this.state.filterCategory === item.status;
     });
-    if (this.state.filterCategory !== 'new') {
-      return categorizedFeedbackList;
-    }
-    const newFeedback = categorizedFeedbackList.filter((item) => item.status == 'new')
-      .sort((a, b) => (new Date(b.date) - new Date(a.date)))
-    const queueFeedback = categorizedFeedbackList.filter((item) => item.status == 'queue')
-      .sort((a, b) => (new Date(b.date) - new Date(a.date)))
-    return [ ...newFeedback, ...queueFeedback];
+
+    return categorizedFeedbackList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes)); 
+    // if (this.state.filterCategory !== 'new') {
+    //   return categorizedFeedbackList;
+    // }
+    // const newFeedback = categorizedFeedbackList.filter((item) => item.status == 'new')
+    //   .sort((a, b) => (new Date(b.date) - new Date(a.date)))
+    // const queueFeedback = categorizedFeedbackList.filter((item) => item.status == 'queue')
+    //   .sort((a, b) => (new Date(b.date) - new Date(a.date)))
+    // return [ ...newFeedback, ...queueFeedback];
   }
 
   renderShowCategory = () => {
@@ -205,16 +207,7 @@ class FeedbackList extends Component {
     } = translate(language)
 
     if (this.props.group.includePositiveFeedbackBox)
-      return (
-        <View style={{ flexDirection:'row', backgroundColor:'#00A2FF'}}>
-          <TouchableOpacity style={{flex:1, justifyContent:'center', alignItems:'center', paddingTop:3, paddingBottom:5, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
-            <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>This Weeks Customer Feedback</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={{flex:1, justifyContent:'center', alignItems:'center', paddingTop:3, paddingBottom:5, backgroundColor:((this.state.filterCategory == 'complete')?'white':null)}} onPress={() => {this.setState({ filterCategory:'complete' });}}>
-            <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>Feedback with Responses from Corporate</Text>
-          </TouchableOpacity>
-        </View>
-      );
+      return null;
 
     return (
       <View style={{ flexDirection:'row', backgroundColor:'#00A2FF'}}>
