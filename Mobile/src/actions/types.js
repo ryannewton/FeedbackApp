@@ -45,7 +45,6 @@ export const ADD_FEEDBACK_NO_OPINION = 'add_feedback_no_opinion';
 export const REMOVE_FEEDBACK_NO_OPINION = 'remove_feedback_no_opinion';
 export const REMOVE_IMAGE = 'remove_image';
 
-
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
 export const LOAD_INSTRUCTIONS_VIEWED = 'load_instructions_viewed';

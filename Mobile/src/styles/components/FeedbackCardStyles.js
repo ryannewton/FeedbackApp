@@ -35,11 +35,11 @@ const styles = StyleSheet.create({
   },
   upvoteTextStyle: {
     color: '#48D2A0',
-    fontSize: 20,
+    fontSize: 14,
   },
   downvoteTextStyle: {
     color: '#F54B5E',
-    fontSize: 20,
+    fontSize: 14,
   },
   downvoteCountStyle: {
     flexDirection: 'row',

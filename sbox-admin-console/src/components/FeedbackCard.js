@@ -9,6 +9,7 @@ import CommentCard from './CommentCard';
 import AssignButton from './AssignButton';
 import ReplyButton from './ReplyButton';
 import ChangeStatusButton from './ChangeStatusButton';
+import DeleteButton from './DeleteButton';
 import ClarifyButton from './ClarifyButton';
 import RejectButton from './RejectButton';
 import ChangeCategoryButton from './ChangeCategoryButton';
@@ -61,12 +62,17 @@ const propTypes = {
   connectDragSource: PropTypes.func.isRequired
 };
 
-class FeedbackCard extends Component {
 
+class FeedbackCard extends Component {
   state = {
     mouseOver: false,
     buttonActive: false,
     viewSolutions: false,
+    modalUp: false,
+  }
+
+  onModalButtonClick = () => {
+    this.setState({ modalUp: false });
   }
 
   render = () => {
@@ -91,7 +97,7 @@ class FeedbackCard extends Component {
   }
 
   renderTopButton = () => {
-    if (this.state.mouseOver || this.state.buttonActive) {
+    if (this.state.mouseOver || this.state.buttonActive || this.state.modalUp) {
       if (this.props.feedback.feedbackId) {
         return (
           <div>
@@ -115,6 +121,13 @@ class FeedbackCard extends Component {
               <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
             </div>
             <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+            <div onClick={() => this.setState({ modalUp: true})}>
+              <DeleteButton
+                feedback={this.props.feedback}
+                updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })}
+                onModalButtonClick={this.onModalButtonClick}
+              />
+            </div>
           </div>
         );
       } else {

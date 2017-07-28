@@ -24,9 +24,13 @@ class SolutionsCard extends Component {
     // If no solutions have been submitted
     if (!feedbackSolutions.length) {
       return (
-        <CardSection>
-          <Text style={noSolutionsMessage}>{translate(this.props.user.language).NO_COMMENTS}</Text>
-        </CardSection>
+        <View style={{flex:1, flexDirection:'row', margin:30}}>
+          <Icon name="comments-o" type="font-awesome" size={50} style={{flex:1}} color={'grey'}/>
+          <View style={{flex:2}}>
+          <Text style={[noSolutionsMessage, {marginTop:10}]}>{translate(this.props.user.language).NO_COMMENTS}</Text>
+          <Text style={[noSolutionsMessage, {fontSize:18, fontWeight:'bold'}]}>{translate(this.props.user.language).BE_FIRST_COMMENT}</Text>
+          </View>
+        </View>
       );
     }
 
@@ -38,7 +42,7 @@ class SolutionsCard extends Component {
       ));
 
     return (
-      <View>
+      <Card>
         <CardSection>
           <Text style={subheaderText}>{translate(this.props.user.language).PROPOSED_SOLUTIONS}</Text>
             <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
@@ -46,15 +50,15 @@ class SolutionsCard extends Component {
             </View>
         </CardSection>
         {formattedSolutions}
-      </View>
+      </Card>
     );
   }
 
   render() {
     return (
-      <Card>
+      <View>
         {this.renderSolutionsList()}
-      </Card>
+      </View>
     );
   }
 }
