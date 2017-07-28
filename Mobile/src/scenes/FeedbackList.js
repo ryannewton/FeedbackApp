@@ -31,7 +31,6 @@ class FeedbackList extends Component {
 
     this.state = {
       filterCategory: 'new',
-
     };
 
     props.sendGoogleAnalytics('FeedbackList', props.group.groupName);
