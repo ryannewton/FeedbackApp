@@ -144,6 +144,7 @@ export const pullGroupInfo = token => (
       dispatch({ type: PULL_GROUP_INFO, payload: response.data });
     })
     .catch((error) => {
+      console.log(error);
       console.log('Error in pullGroupInfo, Error: ', error.response.data);
     })
 );

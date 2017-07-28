@@ -109,6 +109,10 @@ class App extends Component {
   }
 
   renderFilterBar = () => {
+    const categoryMenuItems = this.props.group.categories.map(category =>
+      <MenuItem onClick={() => this.setState({ typeFilter: category })} key={category}>{category}</MenuItem>
+    );
+
     return (
       <div className="row" style={{ paddingBottom: 3, padding: '0.5 0 0.17 3', color: '#000', boxShadow: '0 2px 2px 0px #D3D3D3' }}>
         <div className="col-md-8" style={{marginTop:10}}>
@@ -120,10 +124,7 @@ class App extends Component {
               <MenuItem onClick={() => this.setState({ timeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
             <DropdownButton bsStyle="primary" id='main-filter-type' title={'Type: ' + this.state.typeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
-              <MenuItem onClick={() => this.setState({ typeFilter: 'Store Operations' })}>Store Operations</MenuItem>
-              <MenuItem onClick={() => this.setState({ typeFilter: 'Merchandising' })}>Merchandising</MenuItem>
-              <MenuItem onClick={() => this.setState({ typeFilter: 'Planning' })}>Planning & Allocation</MenuItem>
-              <MenuItem onClick={() => this.setState({ typeFilter: 'Marketing' })}>Marketing</MenuItem>
+              {categoryMenuItems}
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ typeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
@@ -248,7 +249,7 @@ class App extends Component {
       if (this.state.timeFilter === 'Last 30 Days' && daysAgo > 30)
         return false;
     }
-    if (this.state.typeFilter !== 'All' && this.state.typeFilter !== feedback.type) {
+    if (this.state.typeFilter !== 'All' && this.state.typeFilter !== feedback.category) {
       return false;
     }
     // It is not about where the submission came from - it is about where the votes came from
