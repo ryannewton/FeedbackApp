@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Text, View, TouchableOpacity, LayoutAnimation, Platform, StyleSheet } from 'react-native';
 import Modal from 'react-native-modalbox';
-import Menu, { MenuOptions, MenuOption, MenuTrigger, MenuContext } from 'react-native-menu';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import translate from '../../translation'
@@ -137,53 +136,6 @@ class FeedbackSubmitHeader extends Component {
         </TouchableOpacity>
       </View>
     );
-    // return (
-    //   <View style={pickerStyle}>
-    //     <MenuContext>
-    //       <Menu
-    //         onSelect={(filterMethod) => {
-    //           this.setState({ filterMethod });
-    //           this.props.changeFilterMethod(filterMethod);
-    //         }}
-    //       >
-    //         <MenuTrigger renderTouchable={renderTouchable}>
-    //           <Icon name="filter" type="font-awesome" size={25} color="white" />
-    //         </MenuTrigger>
-    //         <MenuOptions style={menuOptions}>
-    //           <MenuOption
-    //             value="all"
-    //             renderTouchable={renderTouchable}
-    //             style={this.hasDisabledStyle('all')}
-    //           >
-    //             <Text>{ALL_FEEDBACK}</Text>
-    //           </MenuOption>
-    //           <View style={divider} />
-    //           <MenuOption
-    //             value="this_week"
-    //             renderTouchable={renderTouchable}
-    //             style={this.hasDisabledStyle('this_week')}
-    //           >
-    //             <Text>{THIS_WEEK}</Text>
-    //           </MenuOption>
-    //           <MenuOption
-    //             value="today"
-    //             renderTouchable={renderTouchable}
-    //             style={this.hasDisabledStyle('today')}
-    //           >
-    //             <Text>{TODAY}</Text>
-    //           </MenuOption>
-    //           <MenuOption
-    //             value="my_feedback"
-    //             renderTouchable={renderTouchable}
-    //             style={this.hasDisabledStyle('my_feedback')}
-    //           >
-    //             <Text>{MY_FEEDBACK}</Text>
-    //           </MenuOption>
-    //         </MenuOptions>
-    //       </Menu>
-    //     </MenuContext>
-    //   </View>
-    // );
   }
   changeFilterMethod = (filterMethod) => {
     this.refs.modal2.close();
