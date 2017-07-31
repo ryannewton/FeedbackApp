@@ -186,10 +186,13 @@ class Feedback extends Component {
       return <View style = {{flexDirection:'row'}}><Icon name="ban" type='font-awesome' size={20} color={'#f7a1aa'} /><Text style={{color:'#f7a1aa'}}>{showImage?'  Issue Closed':null}</Text></View>;
     }
     if (status && status === 'complete') {
-      return <View style = {{flexDirection:'row'}}><Icon name="done" size={20} color={'#48D2A0'} /><Text style={{color:'#48D2A0'}}>{showImage?'  Project Complete':null}</Text></View>;
+      return <View style = {{flexDirection:'row'}}><Icon name="done" size={20} color={'#48D2A0'} /><Text style={{color:'#48D2A0'}}>{showImage?'  Completed':null}</Text></View>;
+    }
+    if (status && status === 'queue') {
+      return <View style = {{flexDirection:'row'}}><Icon name="fiber-new" size={20} color={'#48D2A0'} /><Text style={{color:'#48D2A0'}}>{showImage?'  In Queue':null}</Text></View>;
     }
     if (status && status === 'inprocess') {
-      return <View style = {{flexDirection:'row'}}><Icon name="sync" size={20} color={'#F8C61C'} /><Text style={{color:'#F8C61C'}}>{showImage?'  Project in Progress':null}</Text></View>;
+      return <View style = {{flexDirection:'row'}}><Icon name="sync" size={20} color={'#F8C61C'} /><Text style={{color:'#F8C61C'}}>{showImage?'  Working on it':null}</Text></View>;
     }
     return <View style = {{flexDirection:'row'}}><Icon name="fiber-new" size={20} color={'#00A2FF'} /><Text style={{color:'#00A2FF'}}>{showImage?'  New Feedback':null}</Text></View>;
   }
