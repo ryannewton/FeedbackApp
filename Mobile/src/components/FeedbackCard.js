@@ -437,12 +437,6 @@ renderVoteCount = () => {
 
     let updatedRow = [row, { borderColor: '#fff', borderWidth: 2 }];
 
-    if (this.props.user.feedbackUpvotes.includes(this.props.feedback.id) ||
-      this.props.user.feedbackDownvotes.includes(this.props.feedback.id) ||
-      this.props.user.feedbackNoOpinions.includes(this.props.feedback.id)) {
-      updatedRow = [row, { backgroundColor: 'rgba(248, 248, 248, 248)', borderWidth: 2, borderColor: '#fff' }];
-    }
-
     return (
       <View style={updatedRow}>
         <View style={{ flexDirection: 'row', padding:5, paddingLeft:0, height:null}}>
