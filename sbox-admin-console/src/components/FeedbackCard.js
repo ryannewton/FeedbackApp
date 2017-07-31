@@ -34,6 +34,9 @@ const cardSource = {
         const updatedFeedback = { ...props.feedback, approved: 0 };
         store.dispatch(updateFeedback(updatedFeedback))
 
+      } if (!props.feedback.approved) {
+        const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod, approved: 1 };
+        store.dispatch(updateFeedback(updatedFeedback))
       } else {
         const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod };
         store.dispatch(updateFeedback(updatedFeedback))
@@ -77,7 +80,7 @@ class FeedbackCard extends Component {
           <div style={{marginLeft:20, marginRight:20}}>
             {this.renderVotesAndTime()}
             {this.maybeRenderClarifyText()}
-            {this.renderText()}            
+            {this.renderText()}
             {this.renderCategoryAndSolutionsButton()}
             {this.maybeRenderSolutionCards()}
           </div>

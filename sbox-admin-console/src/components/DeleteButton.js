@@ -20,7 +20,7 @@ class DeleteButton extends Component {
     return (
       <Modal {...this.props} className="static-modal" show={this.state.smShow} bsSize="small">
         <Modal.Body>
-          <p>You are going to delete this piece of feedback. It will not show up in the admin console or mobile app any more.</p>
+          <p>You are about to delete this piece of feedback. It will not show up within the admin console or the mobile app any more.</p>
           <Button
             className="btn btn-primary"
               onClick={this.updateStatus}
