@@ -44,7 +44,7 @@ class SolutionsCard extends Component {
     return (
       <Card>
         <CardSection>
-          <Text style={subheaderText}>{translate(this.props.user.language).PROPOSED_SOLUTIONS}</Text>
+          <Text style={subheaderText}>{translate(this.props.user.language).COMMENTS}</Text>
             <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
               <Icon name="question-answer" color="#bdbdbd" />
             </View>

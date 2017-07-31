@@ -172,7 +172,7 @@ class FeedbackList extends Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Details', {
                 feedback: rowData,
-                 translate: translate(this.props.user.language).PROPOSED_SOLUTIONS,
+                 translate: translate(this.props.user.language).COMMENTS,
                 }
               )}
             >
