@@ -53,7 +53,7 @@ class FeedbackSubmitHeader extends Component {
               {this.renderPicker()}
             <View style={{ bottom: 7}}>
               <TouchableOpacity onPress={() => this.setState({ searchPressed: true })} >
-                <Icon name="search" size={35} color="white" />
+                <Icon name="search" size={30} color="white" />
               </TouchableOpacity>
             </View>
           </View>
@@ -134,7 +134,7 @@ class FeedbackSubmitHeader extends Component {
     return (
       <View style={[pickerStyle, {bottom: 10}]}>
         <TouchableOpacity onPress={() => this.refs.modal2.open()}>
-          <Icon name="filter" type="font-awesome" size={30} color="white" />
+          <Icon name="filter" type="font-awesome" size={25} color="white" />
         </TouchableOpacity>
       </View>
     );
