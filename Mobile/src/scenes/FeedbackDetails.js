@@ -8,6 +8,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Text,
+  RefreshControl,
 } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -22,6 +23,8 @@ import {
   solutionChanged,
   submitSolutionToServer,
   sendGoogleAnalytics,
+  pullSolutions,
+  pullFeedback,
 } from '../actions';
 import translate from '../translation';
 
@@ -60,6 +63,12 @@ class FeedbackDetails extends Component {
     return null;
   }
 
+  _onRefresh() {
+    const { token } = this.props;
+    this.props.pullFeedback(token);
+    this.props.pullSolutions(token);
+  }
+
   render() {
     const { container, inputText } = styles;
     const { feedback } = this.props.navigation.state.params;
@@ -75,7 +84,14 @@ class FeedbackDetails extends Component {
     return (
       <View style={container}>
         <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
-          <ScrollView>
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.feedback.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            }
+          >
             <View>
               {/* Feedback description */}
               <FeedbackCard
@@ -125,14 +141,16 @@ FeedbackDetails.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { solutions, group, user} = state;
-  return { solutions, group, user };
+  const { solutions, group, user, auth: { token }, feedback } = state;
+  return { solutions, group, user, token, feedback };
 }
 
 const AppScreen = connect(mapStateToProps, {
   solutionChanged,
   submitSolutionToServer,
   sendGoogleAnalytics,
+  pullFeedback,
+  pullSolutions
 })(FeedbackDetails);
 
 export default AppScreen;
