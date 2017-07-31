@@ -86,6 +86,7 @@ class Column extends Component {
           {this.props.title}{sortIcon}
         </div>
         {(this.props.feedback.length) ? this.props.feedback : <div style={{height: 300, width: 300}} /> }
+        <div style={{height: 400, width: 300}} />
       </div>
     );
   }
