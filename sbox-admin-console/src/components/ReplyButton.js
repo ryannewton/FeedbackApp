@@ -58,6 +58,7 @@ class ReplyButton extends Component {
           position: 'absolute',
           backgroundColor: 'white',
           width: 350,
+          height: 430,
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
@@ -98,7 +99,7 @@ class ReplyButton extends Component {
             </FormGroup>
           </div>
           <ControlLabel>{this.renderResponseText()}</ControlLabel>
-          <FormControl componentClass="textarea" value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder={this.renderResponseText()} />
+          <FormControl componentClass="textarea" style={{height:200}} value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder={this.renderResponseText()} />
         </FormGroup>
         <div className="pull-right">
           <Button onClick={this.submitOfficialReply}>Send</Button>
