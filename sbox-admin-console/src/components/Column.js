@@ -79,7 +79,7 @@ class Column extends Component {
         </Overlay>
       </span>
     );
-    const color = isOver ? 'rgba(255,255,255,0.1)' : '#eee';
+    const color = isOver ? 'rgba(0,0,0,0.3)' : '#eee';
     return connectDropTarget(
       <div className={this.props.gridClass} style={{ backgroundColor: color}}>
         <div className="panel panel-default" style={{ backgroundColor: this.props.backgroundColor, borderWidth:0, color: 'white', textAlign: 'center', paddingTop: 5, paddingBottom: 5, marginBottom: 15, marginTop: 12 }}>
