@@ -60,9 +60,13 @@ class FeedbackList extends Component {
     }
     // Switch through filter methods
     const filteredFeedbackList = this.props.feedback.list.filter((item) => {
+      const timeFilter = ['all', 'this_week', 'today', 'my_feedback'];
       const { filterMethod } = this.props.feedback;
       const { date } = item;
       const feedbackDate = new Date(date).getTime();
+      if (filterMethod !== '' && !timeFilter.includes(filterMethod) && typeof filterMethod !== 'undefined') {
+        return item.category === filterMethod;
+      }
       switch (filterMethod) {
         case 'all':
           return true;

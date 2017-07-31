@@ -47,13 +47,15 @@ class FeedbackSubmitHeader extends Component {
             </Text>
           </View>
           <View style={iconLayout}>
-            <View style = {{paddingRight: 17}}>
+            <View style = {{paddingRight: 25, bottom: 5}}>
               <SendInviteTextButton navigation={this.props.navigation} />
             </View>
               {this.renderPicker()}
-            <TouchableOpacity onPress={() => this.setState({ searchPressed: true })} >
-              <Icon name="search" size={30} color="white" />
-            </TouchableOpacity>
+            <View style={{ bottom: 7}}>
+              <TouchableOpacity onPress={() => this.setState({ searchPressed: true })} >
+                <Icon name="search" size={35} color="white" />
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </View>
@@ -130,9 +132,9 @@ class FeedbackSubmitHeader extends Component {
     const renderTouchable = () => <TouchableOpacity />;
     const { menuOptions, divider, pickerStyle } = styles;
     return (
-      <View style={pickerStyle}>
+      <View style={[pickerStyle, {bottom: 10}]}>
         <TouchableOpacity onPress={() => this.refs.modal2.open()}>
-          <Icon name="filter" type="font-awesome" size={25} color="white" />
+          <Icon name="filter" type="font-awesome" size={30} color="white" />
         </TouchableOpacity>
       </View>
     );
@@ -142,6 +144,21 @@ class FeedbackSubmitHeader extends Component {
     this.setState({ filterMethod });
     this.props.changeFilterMethod(filterMethod);
   }
+  renderFilterButtons() {
+    if (!this.props.group.categories.length) {
+      return (
+        <View style={[styles2.modal, styles2.modal2]}>
+          <Button key={'all'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
+          <Button key={'this_week'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('this_week')}> This Week </Button>
+          <Button key={'today'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>
+          <Button  key={'my_feedback'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('my_feedback')}> My Feedback </Button>
+        </View>
+      );
+    }
+    return (
+      this.props.group.categories.map((item) => <Button key={item} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod(item)}>{item}</Button>)
+    );
+  }
   render() {
     const { language } = this.props
     const { MOST_POPULAR,
@@ -150,15 +167,13 @@ class FeedbackSubmitHeader extends Component {
             TODAY,
             MY_FEEDBACK,
     } = translate(language);
+
     return (
-      <View style={{ height: 60, backgroundColor: '#00A2FF' }}>
+      <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
         {this.renderHeader()}
           <Modal style={[styles2.modal, styles2.modal2]} backdrop={false}  position={'top'} entry={'top'} ref={"modal2"} coverScreen={true}>
-              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
-              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('this_week')}> This Week </Button>
-              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>
-              <Button style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('my_feedback')}> My Feedback </Button>
-              <Button onPress={() => this.refs.modal2.close()} style={{marginBottom:10}}> Cancel </Button>
+            {this.renderFilterButtons()}
+            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10}}> Clear filter </Button>
           </Modal>
       </View>
     );
@@ -177,8 +192,8 @@ const styles2 = StyleSheet.create({
   },
 
   modal2: {
-    paddingTop:50,
-    height: 300,
+    paddingTop:30,
+    height: 350,
     backgroundColor: 'rgba(70,70,70,0.8)'
   },
 
@@ -221,9 +236,9 @@ const styles2 = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const { feedback } = state;
+  const { feedback, group } = state;
   const { language } = state.user
-  return { feedback, language };
+  return { feedback, language, group };
 };
 
 export default connect(mapStateToProps, { changeFilterMethod, setSearchQuery, searchInProgress })(FeedbackSubmitHeader);
