@@ -47,7 +47,7 @@ class ReplyButton extends Component {
   }
 
   render = () => {
-    const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
+    const placement = (this.props.feedback.status === 'complete') ? "left" : "right";
     const marginLeft = (this.props.feedback.status === 'complete') ? 30 : 40;
     const { selectedResponseMethod } = this.state;
     const sortPopover = (
