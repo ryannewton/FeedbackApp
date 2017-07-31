@@ -6,7 +6,9 @@ import {
   ListView,
   TouchableOpacity,
   Text,
-  RefreshControl
+  RefreshControl,
+  ScrollView,
+  Dimensions,
 } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -18,6 +20,7 @@ import registerForNotifications from '../services/push_notifications';
 import { Icon } from 'react-native-elements';
 import translate from '../translation';
 
+const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // Import tracking
 import { sendGoogleAnalytics, pullFeedback, pullSolutions } from '../actions';
@@ -148,12 +151,25 @@ class FeedbackList extends Component {
   render() {
     const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
     const filteredFeedbackList = this.categorizedList();
+    const headerHeight = 80;
     if (!filteredFeedbackList.length) {
-      return <View style={styles.container}>
-      {this.renderShowCategory()}
-        <Image style={styles.background} source={nothing} resizeMode="cover" />
-        {this.renderFeedbackSubmitButton()}
-      </View>
+      return (
+        <View style={styles.container}>
+          {this.renderShowCategory()}
+          <ScrollView
+            refreshControl={
+              <RefreshControl
+                refreshing={this.props.feedback.refreshing}
+                onRefresh={this._onRefresh.bind(this)}
+              />
+            }
+          >
+            <Image style={[styles.background, { height: SCREEN_HEIGHT - headerHeight }]} source={nothing} resizeMode="cover" />
+            </ScrollView>
+            {this.renderFeedbackSubmitButton()}
+        </View>
+      )
+
     }
     return (
       <View style={styles.container}>
