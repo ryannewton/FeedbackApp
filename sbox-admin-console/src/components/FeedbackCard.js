@@ -139,6 +139,9 @@ class FeedbackCard extends Component {
   }
 
   renderVotesAndTime = () => {
+    if (!this.props.feedback.approved) {
+      return null;
+    }
     return (
       <div className="row">
         <div className="pull-left" style={{fontSize:12, color:'#555'}}>
@@ -169,10 +172,13 @@ class FeedbackCard extends Component {
     const theFeedback = this.props.feedbackList.list.filter((item) => item.id === this.props.feedback.feedbackId);
     return (
       <div>
-        <center style={{color:'white', backgroundColor:'#0081CB', fontWeight:'bold', fontSize:15, marginTop:5}}>Solution</center>
-        <div className="row">{this.props.feedback.text}</div>
-        <center style={{color:'white', backgroundColor:'#0081CB', fontWeight:'bold', fontSize:15, marginTop:10}}>In response to</center>
-        <div className="row">{theFeedback[0].text}</div>
+        <div className="row" style={{color:'grey'}}>{theFeedback[0].text}</div>
+        <span>
+          New comment:
+          <Panel hasTitle={false} style={{backgroundColor:'#eee'}}>
+            {this.props.feedback.text}
+          </Panel>
+        </span>
       </div>
     );
   }
@@ -189,7 +195,7 @@ class FeedbackCard extends Component {
         <span>
           {image}
           Comments:
-          <Panel hasTitle={false} bodyBackGndColor={'#eee'}>
+          <Panel hasTitle={false} style={{backgroundColor:'#eee'}}>
             No comments yet!
           </Panel>
         </span>
@@ -213,7 +219,7 @@ class FeedbackCard extends Component {
     if (this.props.feedback.feedbackId) {
       return null;
     }
-    if (this.state.mouseOver || this.state.buttonActive) {
+    if ((this.state.mouseOver || this.state.buttonActive) && this.props.feedback.approved) {
       return (
         <div className="row" style={{height:30}}>
           <div><ChangeCategoryButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /></div>
@@ -221,8 +227,14 @@ class FeedbackCard extends Component {
         </div>
       );
     }
-
     const categoryText = this.props.feedback.category ? '#' + this.props.feedback.category : '';
+    if (!this.props.feedback.approved) {
+      return (
+        <div className="row">
+          <div className="pull-left">{categoryText}</div>
+        </div>
+      );
+    }
     return (
       <div className="row" style={{height:30}}>
         <div className="pull-left">{categoryText}</div>
