@@ -23,11 +23,10 @@ class Login extends Component {
         <div style={{paddingLeft:50, paddingRight:50}}>
           <Panel title="Sign In">
             <div className="col-md-5 col-xs-12 col-md-offset-1" style={{paddingTop:20}}>
-              <p>Signing in is easier than ever.</p>
-              <p>No need to remember another password.</p>
+              <p>Sign in as an Administrator.</p>
+              <p>Access and edit suggestions submitted to your organization.</p>
               <p>1) Enter your email address</p>
-              <p>2) Submit the code from your email</p>
-              <p>3) We'll remember you in the future</p>
+              <p>2) Enter your Administrator Password</p>
             </div>
             <div className="col-md-5 col-xs-12 col-md-offset-1" style={{paddingTop:10}}>
               <label>Email:</label>
