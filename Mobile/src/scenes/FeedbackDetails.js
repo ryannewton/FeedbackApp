@@ -9,6 +9,7 @@ import {
   KeyboardAvoidingView,
   Text,
   RefreshControl,
+  Alert,
 } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
@@ -49,6 +50,18 @@ class FeedbackDetails extends Component {
       this.setState({ errorMessage: '' });
       this.props.submitSolutionToServer(solution, feedback.id, solutionsRequireApproval);
       Keyboard.dismiss();
+      if (this.props.group.solutionsRequireApproval) {
+        return (
+          Alert.alert(
+            'Comment Received!',
+            'Thanks for your comment. It will be placed on the board shortly, as soon as it is approved by a moderator.',
+            [
+              {text: 'OK', onPress: () => null },
+            ],
+            { cancelable: false }
+          )
+        );
+      }
     }
   }
 
