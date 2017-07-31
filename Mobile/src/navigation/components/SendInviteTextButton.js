@@ -62,7 +62,7 @@ class SendInviteTextButton extends Component {
         sytle={{ width: 50}}
         onPress={() => this.shareAppAlert(this.props.navigation)}
       >
-        <Icon name="share" size={25} color="white" />
+        <Icon name="share" size={30} color="white" />
       </TouchableOpacity>
     );
   }
