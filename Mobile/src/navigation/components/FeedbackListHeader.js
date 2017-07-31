@@ -47,11 +47,11 @@ class FeedbackSubmitHeader extends Component {
             </Text>
           </View>
           <View style={iconLayout}>
-            <View style = {{paddingRight: 25, bottom: 5}}>
+            <View style = {{paddingRight: 25, bottom: 2}}>
               <SendInviteTextButton navigation={this.props.navigation} />
             </View>
               {this.renderPicker()}
-            <View style={{ bottom: 7}}>
+            <View style={{ bottom: 4}}>
               <TouchableOpacity onPress={() => this.setState({ searchPressed: true })} >
                 <Icon name="search" size={30} color="white" />
               </TouchableOpacity>
@@ -132,7 +132,7 @@ class FeedbackSubmitHeader extends Component {
     const renderTouchable = () => <TouchableOpacity />;
     const { menuOptions, divider, pickerStyle } = styles;
     return (
-      <View style={[pickerStyle, {bottom: 10}]}>
+      <View style={[pickerStyle, {bottom: 7}]}>
         <TouchableOpacity onPress={() => this.refs.modal2.open()}>
           <Icon name="filter" type="font-awesome" size={25} color="white" />
         </TouchableOpacity>

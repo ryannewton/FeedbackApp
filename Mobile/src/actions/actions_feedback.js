@@ -57,8 +57,8 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
 
       // Automatically upvote feedback the user submitted
-      feedback = { ...feedback, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 0, downvotes: 0, noOpinions: 0, approved: 1, date: Date.now()};
-      
+      feedback = { ...feedback, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 0, downvotes: 0, noOpinions: 0, approved: !feedbackRequiresApproval, date: Date.now()};
+
       // Add to local state if no approval required
       if (!feedbackRequiresApproval) {
         dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
@@ -74,7 +74,9 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
 
 export const addFeedbackUpvote = feedback => (
   (dispatch, getState) => {
-    dispatch({ type: ADD_FEEDBACK_UPVOTE, payload: feedback });
+    if (feedback.approved) {
+      dispatch({ type: ADD_FEEDBACK_UPVOTE, payload: feedback });
+    }
     const { feedbackUpvotes, feedbackDownvotes, feedbackNoOpinions } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
 
@@ -85,7 +87,7 @@ export const addFeedbackUpvote = feedback => (
     if (feedbackNoOpinions.includes(feedback.id)) {
       dispatch(removeFeedbackNoOpinion(feedback));
     }
-    
+
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
     .catch(error => console.log('Error in addFeedbackUpvote in actions_feedback', error.response.data));
