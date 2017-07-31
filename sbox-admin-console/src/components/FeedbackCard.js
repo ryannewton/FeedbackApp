@@ -113,7 +113,7 @@ class FeedbackCard extends Component {
               <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
               <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
             </div>
-            <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+            {(this.props.group.includePositiveFeedbackBox) ? null : <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /> }
             <div onClick={() => this.setState({ modalUp: true})}>
               <DeleteButton
                 feedback={this.props.feedback}
@@ -237,8 +237,8 @@ class FeedbackCard extends Component {
 
 function mapStateToProps(state) {
   const feedbackList = state.feedback
-  const { solutions } = state;
-  return { solutions, feedbackList }
+  const { solutions, group } = state;
+  return { solutions, feedbackList, group }
 }
 
 export default connect(mapStateToProps, { approveFeedback, approveSolution })(DragSource(ItemTypes.BOX, cardSource, collect)(FeedbackCard));
