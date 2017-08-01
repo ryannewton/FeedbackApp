@@ -74,9 +74,6 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
 
 export const addFeedbackUpvote = feedback => (
   (dispatch, getState) => {
-    if (feedback.approved) {
-      dispatch({ type: ADD_FEEDBACK_UPVOTE, payload: feedback });
-    }
     const { feedbackUpvotes, feedbackDownvotes, feedbackNoOpinions } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
 
