@@ -312,6 +312,7 @@ class FeedbackSubmit extends Component {
               style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1 }]}
               placeholder={translate(language).POSITIVE_FILL_TEXT}
               placeholderTextColor="#d0d0d0"
+              editable={(this.state.negativeFeedback === '')}
               value={this.state.positiveFeedback}
               maxLength={500}
             />
@@ -332,6 +333,7 @@ class FeedbackSubmit extends Component {
               }}
               style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1 }]}
               placeholder={translate(language).NEGATIVE_FILL_TEXT}
+              editable={(this.state.positiveFeedback === '')}
               placeholderTextColor="#d0d0d0"
               value={this.state.negativeFeedback}
               maxLength={500}
