@@ -244,7 +244,7 @@ class Feedback extends Component {
 
     return (
       <View style={imageViewStyle}>
-        <LightBox>
+        <LightBox onRequestClose={() => null}>
           <Image
             source={{ uri: imageURL }}
             indicator={ProgressBar}

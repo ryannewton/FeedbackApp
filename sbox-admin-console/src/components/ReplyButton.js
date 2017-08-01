@@ -78,7 +78,7 @@ class ReplyButton extends Component {
                 onClick={() => this.setState({ selectedResponseMethod: 'officialReply' })}
                 name="radioGroup"
               >
-                Post Response
+                Add Official Response on App
               </Radio>
               {' '}
               <Radio
@@ -86,7 +86,7 @@ class ReplyButton extends Component {
                 onClick={() => this.setState({ selectedResponseMethod: 'interested' })}
                 name="radioGroup"
               >
-                Interested Users (Voters)
+                Email Interested Uses (voters)
               </Radio>
               {' '}
               <Radio
@@ -94,7 +94,7 @@ class ReplyButton extends Component {
                 onClick={() => this.setState({ selectedResponseMethod: 'submitter' })}
                 name="radioGroup"
               >
-                Feedback Submitter
+                Email Suggestion Submitter
               </Radio>
             </FormGroup>
           </div>

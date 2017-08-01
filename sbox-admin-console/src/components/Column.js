@@ -46,18 +46,18 @@ class Column extends Component {
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
-          marginLeft: 10,
-          marginTop: 28,
+          marginTop: 10,
           padding: 0,
-          width: 150,
+          width: 250,
           textAlign: 'left',
           fontSize: 12,
         }}
       >
         <MenuItem header style={{ padding: 0 }}>Sort By...</MenuItem>
-        <MenuItem onClick={() => this.sortClicked('most votes')}>Most Votes</MenuItem>
-        <MenuItem onClick={() => this.sortClicked('most recent')}>Most Recent</MenuItem>
-        <MenuItem onClick={() => this.sortClicked('oldest')}>Oldest</MenuItem>
+          <MenuItem onClick={() => this.sortClicked('most votes')}>Most Supported (Agrees - Disagrees)</MenuItem>
+          <MenuItem onClick={() => this.sortClicked('most supported')}>Most Voted (Agrees + Disagrees)</MenuItem>
+          <MenuItem onClick={() => this.sortClicked('most recent')}>Newest First</MenuItem>
+          <MenuItem onClick={() => this.sortClicked('oldest')}>Oldest First</MenuItem>
       </Popover>
     );
 
