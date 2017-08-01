@@ -86,7 +86,7 @@ class RejectButton extends Component {
     return (
       <div style={{ position: 'relative' }}>
         <Button
-          className="btn btn-danger btn-sm"
+          className="btn btn-danger btn-xs"
           ref="target"
           style={{ position: 'absolute', right:0}}
           onClick={this.maybeRenderRejectInput}

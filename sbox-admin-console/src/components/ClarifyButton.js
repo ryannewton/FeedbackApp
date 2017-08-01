@@ -100,8 +100,8 @@ class ClarifyButton extends Component {
     return (
       <div style={{ position: 'relative'}}>
         <Button
-          className="btn btn-warning btn-sm"
-          style={{ position: 'absolute', right:56 }}
+          className="btn btn-warning btn-xs"
+          style={{ position: 'absolute', right:46 }}
           ref="target"
           onClick={this.maybeRenderClarifyInput}
         >
