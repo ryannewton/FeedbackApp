@@ -123,7 +123,7 @@ class App extends Component {
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ timeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
-            <DropdownButton bsStyle="primary" id='main-filter-type' title={'Type: ' + this.state.typeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
+            <DropdownButton bsStyle="primary" id='main-filter-type' title={'Category: ' + this.state.typeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
               {categoryMenuItems}
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ typeFilter: 'All' })}>Clear Filter</MenuItem>
@@ -138,7 +138,7 @@ class App extends Component {
             </DropdownButton>
             <DropdownButton bsStyle="primary" id='main-fitler-export' title={'Export'} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
               <MenuItem onClick={() => this.exportData('What Is Showing')}>Export What Is Showing</MenuItem>
-              <MenuItem onClick={() => this.exportData('Top 2 By Department')}>Export Top 2 By Department</MenuItem>
+              <MenuItem onClick={() => this.exportData('Top 2 By Department')}>Export Top 2 By Category</MenuItem>
             </DropdownButton>
           </ButtonGroup>
         </div>

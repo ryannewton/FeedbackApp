@@ -28,7 +28,7 @@ class ChangeStatusButton extends Component {
   render = () => {
     const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
     const marginLeft = (this.props.feedback.status === 'complete') ? 0 : 0;
-    
+    const { status } = this.props.feedback;
     const sortPopover = (
       <Popover
         id={'status-' + this.props.feedback.id}
@@ -47,10 +47,10 @@ class ChangeStatusButton extends Component {
         }}
       >
         <MenuItem header style={{ padding: 0 }} key={'change-status-menu-header' + this.props.feedback.id}>Change status to:</MenuItem>
-        <MenuItem onClick={() => this.updateStatus('new')} key={'change-status-menu-1' + this.props.feedback.id}>New</MenuItem>
-        <MenuItem onClick={() => this.updateStatus('queue')} key={'change-status-menu-2' + this.props.feedback.id}>Queue</MenuItem>
-        <MenuItem onClick={() => this.updateStatus('inprocess')} key={'change-status-menu-3' + this.props.feedback.id}>In Process</MenuItem>
-        <MenuItem onClick={() => this.updateStatus('complete')} key={'change-status-menu-4' + this.props.feedback.id}>Complete</MenuItem>
+        {(status === 'new') ? null : <MenuItem onClick={() => this.updateStatus('new')} key={'change-status-menu-1' + this.props.feedback.id}>New</MenuItem>}
+        {(status === 'queue') ? null : <MenuItem onClick={() => this.updateStatus('queue')} key={'change-status-menu-2' + this.props.feedback.id}>Queue</MenuItem>}
+        {(status === 'inprocess') ? null : <MenuItem onClick={() => this.updateStatus('inprocess')} key={'change-status-menu-3' + this.props.feedback.id}>Working On It</MenuItem>}
+        {(status === 'complete') ? null : <MenuItem onClick={() => this.updateStatus('complete')} key={'change-status-menu-4' + this.props.feedback.id}>Complete</MenuItem>}
       </Popover>
     );
 
