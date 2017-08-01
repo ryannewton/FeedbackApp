@@ -19,6 +19,10 @@ import {
   UPDATE_FEEDBACK_STATUS,
   UPDATE_FEEDBACK,
   PULL_GROUP_INFO,
+  REPLY_FEEDBACK_SUCCESS,
+  REPLY_FEEDBACK_FAIL,
+  ROUTE_FEEDBACK_SUCCESS,
+  ROUTE_FEEDBACK_FAIL,
 } from './types';
 
 // Import constants
@@ -74,6 +78,40 @@ export const clarifyFeedback = ({ feedback, message }) => (
       console.log('clarifyFeedback() Fail');
       console.log('Error: ', error);
       dispatch({ type: CLARIFY_FEEDBACK_FAIL, payload: error });
+    });
+  }
+);
+
+export const replyFeedback = (feedback, message, type) => (
+  (dispatch) => {
+
+    const token = localStorage.getItem('token');
+    http.post('/replyFeedback', { authorization: token, feedback, message, type })
+    .then(() => {
+      console.log('replyFeedback() Success');
+      dispatch({ type: REPLY_FEEDBACK_SUCCESS, payload: feedback });
+    })
+    .catch((error) => {
+      console.log('replyFeedback() Fail');
+      console.log('Error: ', error);
+      dispatch({ type: REPLY_FEEDBACK_FAIL, payload: error });
+    });
+  }
+);
+
+export const routeFeedback = (feedback, email, message) => (
+  (dispatch) => {
+
+    const token = localStorage.getItem('token');
+    http.post('/routeFeedback', { authorization: token, feedback, message, email })
+    .then(() => {
+      console.log('routeFeedback() Success');
+      dispatch({ type: ROUTE_FEEDBACK_SUCCESS, payload: feedback });
+    })
+    .catch((error) => {
+      console.log('replyFeedback() Fail');
+      console.log('Error: ', error);
+      dispatch({ type: ROUTE_FEEDBACK_FAIL, payload: error });
     });
   }
 );

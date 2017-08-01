@@ -1,6 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
+import { connect } from 'react-redux';
 import {
   Glyphicon,
   Button,
@@ -9,11 +10,13 @@ import {
   FormControl,
   ControlLabel,
 } from 'react-bootstrap';
+import { routeFeedback } from '../actions';
 
 class AssignButton extends Component {
   state = {
     show: false,
     routingNote: '',
+    email: '',
   }
 
   sortClicked = (sortMethod) => {
@@ -65,7 +68,7 @@ class AssignButton extends Component {
             placeholder={'Enter note here...'}
           />
           <br />
-        <Button>Send</Button>
+        <Button onClick={() => this.props.routeFeedback(this.props.feedback, this.state.email, this.state.routingNote)}>Send</Button>
       </Popover>
     );
 
@@ -90,4 +93,4 @@ class AssignButton extends Component {
   }
 }
 
-export default AssignButton;
+export default connect(null, { routeFeedback })(AssignButton);
