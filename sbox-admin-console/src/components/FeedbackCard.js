@@ -61,6 +61,7 @@ class FeedbackCard extends Component {
     mouseOver: false,
     buttonActive: false,
     viewSolutions: false,
+    viewImage: false,
     modalUp: false,
   }
 
@@ -82,6 +83,7 @@ class FeedbackCard extends Component {
             {this.maybeRenderClarifyText()}
             {this.renderText()}
             {this.renderCategoryAndSolutionsButton()}
+            {this.maybeRenderImage()}
             {this.maybeRenderSolutionCards()}
           </div>
         </Panel>
@@ -186,17 +188,60 @@ class FeedbackCard extends Component {
     );
   }
 
+  maybeRenderSolutionIcon(){
+    const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved))
+    if (!feedbackSolutions.length) {
+      return null;
+    }
+    return (
+      <div className="pull-right" style={{color:'grey'}}><Glyphicon style={{margin:3}} glyph='comment' /></div>
+    );
+  }
+
+  maybeRenderImageIcon(){
+    const imageURL = this.props.feedback.imageURL;
+    if (!imageURL) {
+      return null;
+    }
+    return (
+      <div className="pull-right" style={{color:'grey'}}><Glyphicon style={{margin:3}} glyph='picture' /></div>
+    );
+  }
+
+  maybeRenderSolutionButton(){
+    const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved))
+    if (!feedbackSolutions.length) {
+      return null;
+    }
+    return (
+      <div><Button className="btn btn-xs" style={{ position: 'absolute', right: 30 }} onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}><Glyphicon glyph='comment' /></Button></div>
+    );
+  }
+
+  maybeRenderImageButton(){
+    const imageURL = this.props.feedback.imageURL;
+    const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved))
+    if (!imageURL) {
+      return null;
+    }
+    if (!feedbackSolutions.length) {
+      return (
+        <div><Button className="btn btn-xs" style={{ position: 'absolute', right: 30 }} onClick={() => this.setState({ viewImage: !this.state.viewImage })}><Glyphicon glyph='picture' /></Button></div>
+      );
+    }
+    return (
+      <div><Button className="btn btn-xs" style={{ position: 'absolute', right: 54 }} onClick={() => this.setState({ viewImage: !this.state.viewImage })}><Glyphicon glyph='picture' /></Button></div>
+    );
+  }
+
   maybeRenderSolutionCards(){
     if (!this.state.viewSolutions) {
       return null;
     }
-    const imageURL = this.props.feedback.imageURL;
-    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive /> : null;
     const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved))
     if (!feedbackSolutions.length) {
       return (
         <span>
-          {image}
           Comments:
           <Panel hasTitle={false} style={{backgroundColor:'#eee'}}>
             No comments yet!
@@ -211,9 +256,21 @@ class FeedbackCard extends Component {
     })
     return (
       <span>
-        {image}
         Comments:
         {solutions}
+      </span>
+    );
+  }
+
+maybeRenderImage(){
+    if (!this.state.viewImage) {
+      return null;
+    }
+    const imageURL = this.props.feedback.imageURL;
+    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive /> : null;
+    return (
+      <span>
+        {image}
       </span>
     );
   }
@@ -224,9 +281,10 @@ class FeedbackCard extends Component {
     }
     if ((this.state.mouseOver || this.state.buttonActive) && this.props.feedback.approved) {
       return (
-        <div className="row" style={{height:20}}>
+        <div className="row" style={{height:23}}>
           <div><ChangeCategoryButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /></div>
-          <div><Button className="btn btn-xs" style={{ position: 'absolute', right: 30 }} onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}><Glyphicon glyph='option-horizontal' /></Button></div>
+          {this.maybeRenderImageButton()}
+          {this.maybeRenderSolutionButton()}
         </div>
       );
     }
@@ -239,9 +297,10 @@ class FeedbackCard extends Component {
       );
     }
     return (
-      <div className="row" style={{height:20}}>
+      <div className="row" style={{height:23}}>
         <div className="pull-left">{categoryText}</div>
-        <div className="pull-right" style={{marginRight:0}}><Glyphicon glyph='option-horizontal' /></div>
+        {this.maybeRenderSolutionIcon()}
+        {this.maybeRenderImageIcon()}
       </div>
     );
   }
