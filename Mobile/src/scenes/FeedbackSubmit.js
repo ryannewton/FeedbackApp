@@ -16,6 +16,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Dimensions,
+  Platform,
   Alert,
   Picker
 } from 'react-native';
@@ -36,7 +37,7 @@ import { Button, Spinner } from '../components/common';
 import styles from '../styles/scenes/FeedbackSubmitStyles';
 
 const { width, height } = Dimensions.get('window')
-
+const android = Platform.OS === 'android';
 class FeedbackSubmit extends Component {
   constructor(props, context) {
     super(props, context);
@@ -178,7 +179,7 @@ class FeedbackSubmit extends Component {
     }
 
     return (
-      <View style={{ flexDirection: 'row', backgroundColor:'white', height: 220  }}>
+      <View style={{ flexDirection: 'row', backgroundColor:'white', height: 220, margin:2, width:(android?width:null) }}>
           <TouchableOpacity
             onPress={() => this.addImage(type)}
             style={[styles.button, {borderWidth:0, flexDirection: 'column', backgroundColor:'white', alignItems:'center', height: 220 }]}
@@ -232,12 +233,12 @@ class FeedbackSubmit extends Component {
   maybeRenderPicker = (number) => {
     if (this.state.renderPicker) {
       return (
-        <View style={{ flex: 1, width: width*0.45/number, zIndex: 10000, height: 20 }}>
+        <View style={{ flex: 1, width: width*0.45/number, zIndex: 10000, marginTop:(android?20:0)}}>
           <Picker
             selectedValue={this.state.category}
             style={{backgroundColor:'white'}}
             onValueChange={(category) => this.setState({ category })}>
-            <Picker.Item label="No Category" value="1" />
+            <Picker.Item label="No Category" value="0" />
             <Picker.Item label="1" value="1" />
             <Picker.Item label="2" value="2" />
             <Picker.Item label="3" value="3" />
@@ -265,7 +266,7 @@ class FeedbackSubmit extends Component {
 
     categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true})
     return (
-      <View style={{ flexDirection: 'column', backgroundColor:'white', alignItems:'center', height: 220 }}>
+      <View style={{ flexDirection: 'column', backgroundColor:'white', alignItems:'center', justifyContent:'center', height: (android?70:220), margin:2}}>
         <Text style={{ position:'absolute', top:10, fontSize: 16, fontWeight: '500', textAlign:'center', zIndex:10001 }}>
         Choose Category
         </Text>
@@ -328,15 +329,15 @@ class FeedbackSubmit extends Component {
             maxLength={500}
           />
         </View>
-        <View style={{ flexDirection: 'row'}}>
-          <View style={{ flex: 1}}>
+        {this.renderSubmitButton()}
+        <View style={{ flexDirection: (android?'column':'row')}}>
+          <View style={{ flex: (android?null:1)}}>
             {this.maybeRenderCategoryModal(1)}
           </View>
           <View style={{ flex: 1}}>
             {this.renderImageButton()}
           </View>
         </View>
-        {this.renderSubmitButton()}
       </View>
     );
 
