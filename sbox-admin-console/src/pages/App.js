@@ -73,7 +73,7 @@ class App extends Component {
           if (elem.category === item.category) {
             currentIndex = elem.index + 1;
             deptIndexes[index].index = elem.index + 1;
-          } 
+          }
         });
         return { ...item, rank: currentIndex }
       });
@@ -235,6 +235,7 @@ class App extends Component {
     return (this.props.group.includePositiveFeedbackBox ? retailColumns : actionColumns);
   }
   sortFeedback = (a, b, method) => {
+    if (method === 'most supported') return (b.upvotes + b.downvotes) - (a.upvotes + a.downvotes);
     if (method === 'most votes') return (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes);
     if (method === 'most recent') return new Date(b.date) - new Date(a.date);
     if (method === 'oldest') return new Date(a.date) - new Date(b.date);
