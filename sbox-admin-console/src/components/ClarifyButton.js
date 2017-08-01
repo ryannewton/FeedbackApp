@@ -65,7 +65,7 @@ class ClarifyButton extends Component {
 
   render = () => {
     const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
-    
+
     const sortPopover = (
       <Popover
         id={'clarify-' + this.props.feedback.id}

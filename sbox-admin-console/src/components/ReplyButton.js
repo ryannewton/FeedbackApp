@@ -20,7 +20,8 @@ class ReplyButton extends Component {
   state = {
     response: this.props.feedback.officialReply,
     show: false,
-    selectedResponseMethod: 'officialReply'
+    error: false,
+    selectedResponseMethod: 'officialReply',
   }
 
   buttonClicked = () => {
@@ -29,21 +30,46 @@ class ReplyButton extends Component {
   }
 
   submitOfficialReply = () => {
-    this.props.submitOfficialReply(this.props.feedback, this.state.response);
+    if (!this.state.response) {
+      this.setState({ error: true })
+    } else {
+      this.setState({ error: false })
+      const successText = (this.state.selectedResponseMethod === 'officialReply') ? 'Official Response Posted' : 'Email Sent';
+      this.props.showSuccess(false, successText);
+      // this.props.submitOfficialReply(this.props.feedback, this.state.response);
+    }
+
   }
 
-  renderResponseText() {
+  renderResponseTextFiller() {
     const { selectedResponseMethod } = this.state;
     switch (selectedResponseMethod) {
       case 'officialReply':
-        return 'Add an official response:';
+        return 'Official response here...';
       case 'submitter':
-        return 'Reply to the submitter:';
+        return 'Email interested users here...';
       case 'interested':
-        return 'Reply to all interested users:';
+        return 'Email Suggestion Submitter here...';
       default:
         return 'Respond:';
     }
+  }
+  maybeRenderErrorMessage() {
+    if (this.state.error) {
+      return (
+        <center>
+          <div style={{ color: 'red' }}>
+            Please add a message.
+          </div>
+        </center>
+      );
+    }
+    return null;
+  }
+
+  buttonText() {
+    const buttonText = (this.state.selectedResponseMethod === 'officialReply') ? 'Add/Update Post' : 'Send email'
+    return <Button onClick={this.submitOfficialReply}>{buttonText}</Button>
   }
 
   render = () => {
@@ -78,7 +104,7 @@ class ReplyButton extends Component {
                 onClick={() => this.setState({ selectedResponseMethod: 'officialReply' })}
                 name="radioGroup"
               >
-                Add Official Response on App
+                Post Official Response On App
               </Radio>
               {' '}
               <Radio
@@ -86,7 +112,7 @@ class ReplyButton extends Component {
                 onClick={() => this.setState({ selectedResponseMethod: 'interested' })}
                 name="radioGroup"
               >
-                Email Interested Uses (voters)
+                Email Interested Users (voters)
               </Radio>
               {' '}
               <Radio
@@ -99,10 +125,17 @@ class ReplyButton extends Component {
             </FormGroup>
           </div>
           <ControlLabel>{this.renderResponseText()}</ControlLabel>
-          <FormControl componentClass="textarea" style={{height:200}} value={this.state.response} onChange={(event) => this.setState({response: event.target.value})} placeholder={this.renderResponseText()} />
+          <FormControl
+            componentClass="textarea"
+            style={{height:200}}
+            value={this.state.response}
+            onChange={(event) => this.setState({response: event.target.value})}
+            placeholder={'Enter text here...'}
+          />
         </FormGroup>
+        {this.maybeRenderErrorMessage()}
         <div className="pull-right">
-          <Button onClick={this.submitOfficialReply}>Send</Button>
+          {this.buttonText()}
         </div>
       </Popover>
     );
@@ -122,6 +155,7 @@ class ReplyButton extends Component {
           target={() => ReactDOM.findDOMNode(this.refs.target)}
         >
           {sortPopover}
+
         </Overlay>
       </span>
     );

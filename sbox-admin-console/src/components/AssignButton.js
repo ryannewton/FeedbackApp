@@ -1,11 +1,19 @@
 // Import Libraries
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import { Glyphicon, Button, Overlay, Popover, FormControl } from 'react-bootstrap';
+import {
+  Glyphicon,
+  Button,
+  Overlay,
+  Popover,
+  FormControl,
+  ControlLabel,
+} from 'react-bootstrap';
 
 class AssignButton extends Component {
   state = {
     show: false,
+    routingNote: '',
   }
 
   sortClicked = (sortMethod) => {
@@ -47,6 +55,16 @@ class AssignButton extends Component {
             placeholder="Enter email here"
             onChange={(event) => this.setState({email: event.target.value})}
           />
+          <br />
+          <ControlLabel>Add a note:</ControlLabel>
+          <FormControl
+            componentClass="textarea"
+            style={{height:100}}
+            value={this.state.routingNote}
+            onChange={(event) => this.setState({routingNote: event.target.value})}
+            placeholder={'Enter note here...'}
+          />
+          <br />
         <Button>Send</Button>
       </Popover>
     );
