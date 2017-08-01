@@ -1,7 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal } from 'react-bootstrap';
+import { Button, Modal, Glyphicon } from 'react-bootstrap';
 import { updateFeedback } from '../actions';
 
 class DeleteButton extends Component {
@@ -42,7 +42,7 @@ class DeleteButton extends Component {
   render = () => {
     return (
       <div style={{ position: 'relative'}}>
-        <Button className="btn btn-sm" ref="target" style={{ position: 'absolute', right:-22, top:-20, backgroundColor:'rgba(0,0,0,0)', borderColor:'rgba(0,0,0,0)', color:'white'}} onClick={()=>this.setState({ smShow: true })}>✕</Button>
+        <Button className="btn btn-xs btn-danger" ref="target" style={{ position: 'absolute', right:0, color:'white'}} onClick={()=>this.setState({ smShow: true })}><Glyphicon glyph='trash' /></Button>
         {this.MySmallModal()}
       </div>
     );

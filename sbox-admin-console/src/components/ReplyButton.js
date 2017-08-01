@@ -109,7 +109,7 @@ class ReplyButton extends Component {
 
     return (
       <span style={{ position: 'relative'}}>
-        <Button className="btn-sm" ref="target" style={{ zIndex:100, position: 'absolute', marginLeft:34}} onClick={this.buttonClicked}><Glyphicon glyph='share' /></Button>
+        <Button className="btn-xs btn-success" ref="target" style={{ zIndex:100, position: 'absolute', left:24}} onClick={this.buttonClicked}><Glyphicon glyph='share' /></Button>
         <Overlay
           rootClose
           show={this.state.show}

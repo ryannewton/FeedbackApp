@@ -95,7 +95,7 @@ class FeedbackCard extends Component {
         return (
           <div>
             <Button
-              className="btn btn-success btn-sm"
+              className="btn btn-success btn-xs"
               style={{ zIndex:100, position: 'absolute'}}
               onClick={() => this.props.approveSolution(this.props.feedback)}
             >
@@ -127,7 +127,7 @@ class FeedbackCard extends Component {
         return (
           <div>
             <Button
-              className="btn btn-success btn-sm"
+              className="btn btn-success btn-xs"
               style={{ zIndex:100, position: 'absolute'}}
               onClick={() => this.props.approveFeedback(this.props.feedback)}
             >
@@ -224,9 +224,9 @@ class FeedbackCard extends Component {
     }
     if ((this.state.mouseOver || this.state.buttonActive) && this.props.feedback.approved) {
       return (
-        <div className="row" style={{height:30}}>
+        <div className="row" style={{height:20}}>
           <div><ChangeCategoryButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /></div>
-          <div><Button style={{ position: 'absolute', right: 30 }} onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}>...</Button></div>
+          <div><Button className="btn btn-xs" style={{ position: 'absolute', right: 30 }} onClick={() => this.setState({ viewSolutions: !this.state.viewSolutions })}><Glyphicon glyph='option-horizontal' /></Button></div>
         </div>
       );
     }
@@ -239,9 +239,9 @@ class FeedbackCard extends Component {
       );
     }
     return (
-      <div className="row" style={{height:30}}>
+      <div className="row" style={{height:20}}>
         <div className="pull-left">{categoryText}</div>
-        <div className="pull-right" style={{marginTop:10, marginRight:9}}><Glyphicon glyph='option-horizontal' /></div>
+        <div className="pull-right" style={{marginRight:0}}><Glyphicon glyph='option-horizontal' /></div>
       </div>
     );
   }
