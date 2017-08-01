@@ -55,7 +55,7 @@ export default (state = INITIAL_STATE, action) => {
       const list = filterAndOrder(action.payload.list);
       return { list, lastPulled: action.payload.lastPulled, refreshing: false };
     }
-    
+
     case AUTHORIZE_USER_FAIL: {
       return { ...state, refreshing: false};
     }
@@ -99,10 +99,13 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loadingImage: false };
 
     case ADD_FEEDBACK_UPVOTE: {
-      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
-      const newState = state.list.slice(0);
-      newState[index].upvotes += 1;
-      return { ...state, list: newState };
+      if (feedback.approved) {
+        const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+        const newState = state.list.slice(0);
+        newState[index].upvotes += 1;
+        return { ...state, list: newState };
+      }
+      return { ...state };
     }
 
     case ADD_FEEDBACK_DOWNVOTE: {
