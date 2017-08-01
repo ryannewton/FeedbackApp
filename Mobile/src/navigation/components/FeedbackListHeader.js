@@ -147,7 +147,7 @@ class FeedbackSubmitHeader extends Component {
   renderFilterButtons() {
     if (!this.props.group.categories.length) {
       return (
-        <View style={[styles2.modal, styles2.modal2]}>
+        <View>
           <Button key={'all'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
           <Button key={'this_week'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('this_week')}> This Week </Button>
           <Button key={'today'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>

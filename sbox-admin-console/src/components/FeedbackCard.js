@@ -1,7 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Glyphicon, Image, Button } from 'react-bootstrap';
+import { Panel, Glyphicon, Image, Button, Label } from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
 
 // Import components
@@ -62,6 +62,8 @@ class FeedbackCard extends Component {
     buttonActive: false,
     viewSolutions: false,
     modalUp: false,
+    showSentNotification: false,
+    sentText: ''
   }
 
   onModalButtonClick = () => {
@@ -78,6 +80,7 @@ class FeedbackCard extends Component {
         <Panel style={background}>
           {this.renderTopButton()}
           <div style={{marginLeft:20, marginRight:20}}>
+            {this.sentNotification()}
             {this.renderVotesAndTime()}
             {this.maybeRenderClarifyText()}
             {this.renderText()}
@@ -86,6 +89,16 @@ class FeedbackCard extends Component {
           </div>
         </Panel>
       </div>
+    );
+  }
+  sentNotification() {
+    if (!this.state.showSentNotification) return null;
+    return (
+      <center>
+        <Label bsStyle="success">
+          {this.state.sentText}
+        </Label>
+      </center>
     );
   }
 
@@ -111,7 +124,16 @@ class FeedbackCard extends Component {
           <div>
             <div>
               <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
-              <ReplyButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+              <ReplyButton
+                feedback={this.props.feedback}
+                updateButtonActive={(activeState) => {
+                  this.setState({ buttonActive: activeState});
+                }}
+                showSuccess={(activeState, sentText='') => {
+                  this.setState({ buttonActive: activeState, showSentNotification: true, sentText});
+                  setTimeout(() => this.setState({ showSentNotification: false }), 20000);
+                }}
+              />
             </div>
             {(this.props.group.includePositiveFeedbackBox) ? null : <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /> }
             <div onClick={() => this.setState({ modalUp: true})}>
