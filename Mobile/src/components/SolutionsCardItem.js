@@ -72,10 +72,24 @@ class SolutionsCardItem extends Component {
         <View style={{ flexDirection:'row', flex: 1, alignItems:'center' }}>
 
           {/* Upvote count and button */}
-          <View style={{ flex: 1, flexDirection:'column', alignItems:'center'}}>
-            {this.renderSolutionUpvoteButton(solution)}
-            <Text style={{ fontSize: 18, color: '#bdbdbd' }}>{ solution.upvotes - solution.downvotes }</Text>
-            {this.renderSolutionDownvoteButton(solution)}
+          <View style={{ flexDirection: 'column', alignItems:'center', marginRight:10}}>
+            <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
+              {this.renderSolutionUpvoteButton(solution)}
+            </TouchableOpacity>
+              <View style={{ flexDirection: 'row', marginTop:2, marginBottom:2}}>
+                <Text style={{color: '#48D2A0', fontSize: 14}}>
+                  {solution.upvotes}
+                </Text>
+                <Text style={{color:'grey', marginLeft:2, marginRight:2, fontSize: 14}}>
+                  |
+                </Text>
+                <Text style={{color: '#F54B5E', fontSize: 14}}>
+                  {solution.downvotes}
+                </Text>
+              </View>
+            <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
+              {this.renderSolutionDownvoteButton(solution)}
+            </TouchableOpacity>
           </View>
 
           {/* Solution description */}
