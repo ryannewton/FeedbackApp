@@ -41,6 +41,20 @@ class ReplyButton extends Component {
 
   }
 
+  renderResponseText() {
+    const { selectedResponseMethod } = this.state;
+    switch (selectedResponseMethod) {
+      case 'officialReply':
+        return 'Post official response:';
+      case 'submitter':
+        return 'Email Interested Users (voters)';
+      case 'interested':
+        return 'Email Suggestion Submitter:';
+      default:
+        return 'Respond:';
+    }
+  }
+
   renderResponseTextFiller() {
     const { selectedResponseMethod } = this.state;
     switch (selectedResponseMethod) {
