@@ -402,17 +402,17 @@ renderVoteCount = () => {
         <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
           {this.renderThumbUpButton()}
         </TouchableOpacity>
-        <View style={{ flexDirection: 'row', marginTop:2, marginBottom:2}}>
-          <Text style={[upvoteTextStyle]}>
-            {this.props.feedback.upvotes}
-          </Text>
-          <Text style={[upvoteTextStyle, {color:'grey', marginLeft:2, marginRight:2}]}>
-            |
-          </Text>
-          <Text style={[downvoteTextStyle]}>
-            {this.props.feedback.downvotes}
-          </Text>
-        </View>
+          <View style={{ flexDirection: 'row', marginTop:2, marginBottom:2}}>
+            <Text style={[upvoteTextStyle]}>
+              {this.props.feedback.upvotes}
+            </Text>
+            <Text style={[upvoteTextStyle, {color:'grey', marginLeft:2, marginRight:2}]}>
+              |
+            </Text>
+            <Text style={[downvoteTextStyle]}>
+              {this.props.feedback.downvotes}
+            </Text>
+          </View>
         <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
           {this.renderThumbDownButton()}
         </TouchableOpacity>

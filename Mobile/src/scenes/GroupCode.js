@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback, Image } from 'react-native';
+import { Text, View, Keyboard, TouchableWithoutFeedback, Image, Alert, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
@@ -85,14 +85,39 @@ class Authorize extends Component {
     );
   }
 
+  requestTrialAlert = () => {
+    const { language } = this.props;
+    const { OK,
+            NEED_GROUP_CODE,
+            DISMISS,
+            SHARE,
+          } = translate(language);
+
+    return (
+      Alert.alert(
+        NEED_GROUP_CODE,
+        'If your community has not been set up yet, send an email to tyler@suggestionboxapp.com to receive your unique group code!',
+        [
+          {text: OK, onPress: () => null },
+        ],
+        { cancelable: false }
+      )
+    );
+  }
+
   render() {
     const { language } = this.props.user
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
-          <Text style={{ fontWeight: '500', padding: 20, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
-            {translate(language).GROUP_DESCRIPTION}
-          </Text>
+          <View style={{flexDirection:'row'}}>
+            <Text style={{ flex:7, fontWeight: '500', padding: 20, paddingRight:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
+              {translate(language).GROUP_DESCRIPTION}
+            </Text>
+            <TouchableOpacity onPress={() => this.requestTrialAlert()} style={{ flex:1, margin: 20}}>
+              <Icon name="question-circle" type="font-awesome" size={25} color="white" />
+            </TouchableOpacity>
+          </View>
           {/* Email input */}
           <Fumi
             label={translate(language).GROUP_CODE}
