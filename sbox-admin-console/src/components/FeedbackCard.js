@@ -125,7 +125,16 @@ class FeedbackCard extends Component {
         return (
           <div>
             <div>
-              <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+              <AssignButton
+                feedback={this.props.feedback}
+                updateButtonActive={(activeState) => {
+                  this.setState({ buttonActive: activeState});
+                }}
+                showSuccess={(activeState, sentText='') => {
+                  this.setState({ buttonActive: activeState, showSentNotification: true, sentText});
+                  setTimeout(() => this.setState({ showSentNotification: false }), 20000);
+                }}
+              />
               <ReplyButton
                 feedback={this.props.feedback}
                 updateButtonActive={(activeState) => {
