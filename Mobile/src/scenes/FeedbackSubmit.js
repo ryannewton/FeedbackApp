@@ -58,6 +58,16 @@ class FeedbackSubmit extends Component {
         this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
       });
     }
+    if (nextProps.feedback.positiveImageURL !== this.props.feedback.positiveImageURL) {
+      Image.getSize(nextProps.feedback.positiveImageURL, (iwidth, iheight) => {
+        this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
+      });
+    }
+    if (nextProps.feedback.negativeImageURL !== this.props.feedback.negativeImageURL) {
+      Image.getSize(nextProps.feedback.negativeImageURL, (iwidth, iheight) => {
+        this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
+      });
+    }
   }
 
   submitFeedback = () => {
