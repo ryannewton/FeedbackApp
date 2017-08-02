@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '../components/common';
 import { AppLoading } from 'expo';
 
 // Import tracking

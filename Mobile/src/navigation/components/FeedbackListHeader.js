@@ -1,6 +1,7 @@
 // Import libraries
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, LayoutAnimation, Platform, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, LayoutAnimation, Platform, StyleSheet } from 'react-native';
+import { Text } from '../../components/common';
 import Modal from 'react-native-modalbox';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';

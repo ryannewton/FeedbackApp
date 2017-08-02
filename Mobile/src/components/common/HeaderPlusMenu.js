@@ -1,5 +1,6 @@
 import React from 'react';
-import { Text, View, Platform } from 'react-native';
+import { View, Platform } from 'react-native';
+import { Text } from './index';
 import PropTypes from 'prop-types';
 
 import Menu, {

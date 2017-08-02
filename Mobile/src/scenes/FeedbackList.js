@@ -5,11 +5,11 @@ import {
   View,
   ListView,
   TouchableOpacity,
-  Text,
   RefreshControl,
   ScrollView,
   Dimensions,
 } from 'react-native';
+import { Text } from '../components/common';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 

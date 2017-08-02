@@ -11,7 +11,6 @@ import {
   TouchableWithoutFeedback,
   Image,
   TouchableOpacity,
-  Text,
   KeyboardAvoidingView,
   StyleSheet,
   ActivityIndicator,
@@ -31,7 +30,7 @@ import {
 } from '../actions';
 
 // Import components, functions, and styles
-import { Button, Spinner } from '../components/common';
+import { Button, Spinner, Text } from '../components/common';
 import styles from '../styles/scenes/FeedbackSubmitStyles';
 
 class FeedbackSubmit extends Component {

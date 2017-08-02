@@ -1,6 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '../components/common';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';

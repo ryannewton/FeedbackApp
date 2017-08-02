@@ -1,13 +1,13 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback, Image, Alert, TouchableOpacity } from 'react-native';
+import { View, Keyboard, TouchableWithoutFeedback, Image, Alert, TouchableOpacity } from 'react-native';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 import { Icon } from 'react-native-elements';
 
 // Import components and action creators
-import { Card, CardSection, Input, Button, Spinner } from '../components/common';
+import { Card, CardSection, Input, Button, Spinner, Text } from '../components/common';
 import { authorizeUser, sendGoogleAnalytics } from '../actions';
 import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
