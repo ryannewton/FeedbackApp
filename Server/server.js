@@ -1081,6 +1081,7 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
       const { userId, groupId } = decoded;
+      console.log('userId', userId);
       let connectionString = `
         SELECT
           a.id as userId,
@@ -1102,6 +1103,8 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
       connection.query(connectionString, [userId], (err1, rows1) => {
         if (err) {
           res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
+        } else if (!rows1.length) {
+          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1SDF');
         } else {
           connectionString =
           `SELECT category, categoryOrder

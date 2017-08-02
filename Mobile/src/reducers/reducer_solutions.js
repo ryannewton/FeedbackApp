@@ -43,10 +43,13 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newList };
     }
     case REMOVE_SOLUTION_UPVOTE: {
-      const index = state.list.findIndex(solution => solution.id === action.payload.id);
-      const newList = state.list.slice(0);
-      newList[index].upvotes -= 1;
-      return { ...state, list: newList };
+      if (action.payload.approved) {
+        const index = state.list.findIndex(solution => solution.id === action.payload.id);
+        const newList = state.list.slice(0);
+        newList[index].upvotes -= 1;
+        return { ...state, list: newList };
+      }
+      return state;
     }
     case REMOVE_SOLUTION_DOWNVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);

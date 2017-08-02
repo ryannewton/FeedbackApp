@@ -61,9 +61,7 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
 
 export const addSolutionUpvote = solution => (
   (dispatch, getState) => {
-    if (solution.approved) {
-      dispatch({ type: ADD_SOLUTION_UPVOTE, payload: solution });
-    }
+    dispatch({ type: ADD_SOLUTION_UPVOTE, payload: solution });
     const { solutionUpvotes, solutionDownvotes } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}solutionUpvotes`, JSON.stringify(solutionUpvotes));
 
