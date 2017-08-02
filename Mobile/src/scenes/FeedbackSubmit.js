@@ -51,6 +51,15 @@ class FeedbackSubmit extends Component {
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
   }
 
+  componentWillUpdate(nextProps, nextState) {
+    // Only update image dimensions if image changes
+    if (nextProps.feedback.imageURL !== this.props.feedback.imageURL) {
+      Image.getSize(nextProps.feedback.imageURL, (iwidth, iheight) => {
+        this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
+      });
+    }
+  }
+
   submitFeedback = () => {
     if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
       // First we search the feedback for restricted words
@@ -126,9 +135,6 @@ class FeedbackSubmit extends Component {
       return null;
     }
 
-    Image.getSize(imageURL, (iwidth, iheight) => {
-      this.setState({imageWidth: iwidth, imageHeight: iheight})
-    });
     return (
         <Image
           source={{ uri: imageURL }}
@@ -236,7 +242,7 @@ class FeedbackSubmit extends Component {
       );
     });
 
-    categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true})
+    categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true })
     return (
       <View style={{ flexDirection: 'row'}}>
         <ModalPicker
