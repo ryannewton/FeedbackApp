@@ -17,7 +17,6 @@ import {
   ActivityIndicator,
   Dimensions,
   Alert,
-  Picker
 } from 'react-native';
 import PropTypes from 'prop-types';
 import translate from '../translation';
@@ -35,8 +34,6 @@ import {
 import { Button, Spinner } from '../components/common';
 import styles from '../styles/scenes/FeedbackSubmitStyles';
 
-const { width, height } = Dimensions.get('window')
-
 class FeedbackSubmit extends Component {
   constructor(props, context) {
     super(props, context);
@@ -49,7 +46,6 @@ class FeedbackSubmit extends Component {
       imageWidth: null,
       imageHeight: null,
       category: '',
-      renderPicker: true,
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
@@ -127,7 +123,7 @@ class FeedbackSubmit extends Component {
 
     // If there is no image, don't render anything
     if (!imageURL) {
-      return <Icon name="add-a-photo" style={{position:'absolute'}} size={40} color={'grey'} />;
+      return null;
     }
 
     Image.getSize(imageURL, (iwidth, iheight) => {
@@ -178,13 +174,15 @@ class FeedbackSubmit extends Component {
     }
 
     return (
-      <View style={{ flexDirection: 'row', backgroundColor:'white', height: 220  }}>
+      <View style={{ flexDirection: 'row', backgroundColor:'white' }}>
           <TouchableOpacity
             onPress={() => this.addImage(type)}
-            style={[styles.button, {borderWidth:0, flexDirection: 'column', backgroundColor:'white', alignItems:'center', height: 220 }]}
+            style={[styles.button, {backgroundColor:'white', borderWidth:0, flexDirection:'row', alignItems:'center', padding:14 }]}
           >
-            {this.maybeRenderDeleteButton(type)}
-            {this.maybeRenderImage(type)}
+            <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'left'}}>
+              Add Photo
+            </Text>
+            <Icon name="add-a-photo" size={25} color={'grey'} />
           </TouchableOpacity>
       </View>
     );
@@ -201,7 +199,7 @@ class FeedbackSubmit extends Component {
       <View style={{ flexDirection: 'row'}}>
           <TouchableOpacity
             onPress={this.submitFeedback}
-            style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8, marginBottom:10}]}
+            style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
           >
             <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
               {translate(language).SUBMIT_FEEDBACK}
@@ -214,11 +212,7 @@ class FeedbackSubmit extends Component {
 
   maybeRenderDeleteButton() {
     if (!this.props.feedback.imageURL) {
-      return (
-        <Text style={{ position:'absolute', top:10, fontSize: 16, fontWeight: '500', textAlign:'center', zIndex:10001}}>
-          Add Photo
-        </Text>
-      );
+      return null;
     }
     return (
       <View>
@@ -229,28 +223,7 @@ class FeedbackSubmit extends Component {
     )
   }
 
-  maybeRenderPicker = (number) => {
-    if (this.state.renderPicker) {
-      return (
-        <View style={{ flex: 1, width: width*0.45/number, zIndex: 10000, height: 20 }}>
-          <Picker
-            selectedValue={this.state.category}
-            style={{backgroundColor:'white'}}
-            onValueChange={(category) => this.setState({ category })}>
-            <Picker.Item label="No Category" value="1" />
-            <Picker.Item label="1" value="1" />
-            <Picker.Item label="2" value="2" />
-            <Picker.Item label="3" value="3" />
-            <Picker.Item label="4" value="4" />
-            <Picker.Item label="5" value="5" />
-            <Picker.Item label="6" value="6" />
-            <Picker.Item label="7" value="7" />
-          </Picker>
-        </View>
-      );
-    }
-  }
-  maybeRenderCategoryModal = (number) => {
+  maybeRenderCategoryModal() {
     // If the group doesn't have categories
     if (!this.props.group.categories.length) {
       return null;
@@ -265,55 +238,48 @@ class FeedbackSubmit extends Component {
 
     categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true})
     return (
-      <View style={{ flexDirection: 'column', backgroundColor:'white', alignItems:'center', height: 220 }}>
-        <Text style={{ position:'absolute', top:10, fontSize: 16, fontWeight: '500', textAlign:'center', zIndex:10001 }}>
-        Choose Category
-        </Text>
-        {this.maybeRenderPicker(number)}
+      <View style={{ flexDirection: 'row'}}>
+        <ModalPicker
+          data={categoriesForPicker}
+          style={{ flex:1 }}
+          optionTextStyle={{ fontSize:18 }}
+          optionStyle={{ padding: 10 }}
+          sectionStyle={{ padding: 20 }}
+          sectionTextStyle={{ fontSize:18, fontWeight:'600' }}
+          cancelTextStyle={{ fontSize:18, fontWeight:'600' }}
+          initValue="Select something yummy!"
+          onChange={(category) => this.setState({ category: category.label }) }
+        >
+          <View style={{ flexDirection: 'row', alignItems:'center', backgroundColor:'white', marginTop: 5, marginBottom:1 }}>
+            <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'center' }}>
+            Add Category
+            </Text>
+              <TextInput
+                style={{
+                  borderColor: '#00A2FF',
+                  flex:2,
+                  height:42,
+                  borderTopWidth: 1,
+                  borderRadius: 4,
+                  paddingTop: 3,
+                  paddingBottom: 3,
+                  paddingHorizontal: 10,
+                  fontWeight:'400',
+                  textAlign:'right',
+                  backgroundColor: 'white',
+                  fontSize: 16,
+                }}
+                editable={false}
+                value={this.state.category || 'Click to choose > '}
+              />
+          </View>
+        </ModalPicker>
       </View>
     );
-    // return (
-    //   <View style={{ flexDirection: 'row'}}>
-    //     <ModalPicker
-    //       data={categoriesForPicker}
-    //       style={{ flex:1 }}
-    //       optionTextStyle={{ fontSize:18 }}
-    //       optionStyle={{ padding: 10 }}
-    //       sectionStyle={{ padding: 20 }}
-    //       sectionTextStyle={{ fontSize:18, fontWeight:'600' }}
-    //       cancelTextStyle={{ fontSize:18, fontWeight:'600' }}
-    //       initValue="Select something yummy!"
-    //       onChange={(category) => this.setState({ category: category.label }) }
-    //     >
-    //       <View style={{ flexDirection: 'row', alignItems:'center', backgroundColor:'white', marginTop: 5, marginBottom:1 }}>
-    //         <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'center' }}>
-    //         Add Category
-    //         </Text>
-    //           <TextInput
-    //             style={{
-    //               borderColor: '#00A2FF',
-    //               flex:2,
-    //               height:42,
-    //               borderTopWidth: 1,
-    //               borderRadius: 4,
-    //               paddingTop: 3,
-    //               paddingBottom: 3,
-    //               paddingHorizontal: 10,
-    //               fontWeight:'400',
-    //               textAlign:'right',
-    //               backgroundColor: 'white',
-    //               fontSize: 16,
-    //             }}
-    //             editable={false}
-    //             value={this.state.category || 'Click to choose > '}
-    //           />
-    //       </View>
-    //     </ModalPicker>
-    //   </View>
-    // );
   }
 
   render() {
+    const { width, height } = Dimensions.get('window')
     const { language } = this.props.user;
     const singleFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', backgroundColor:'#f0f0f0' }}>
@@ -328,20 +294,16 @@ class FeedbackSubmit extends Component {
             maxLength={500}
           />
         </View>
-        <View style={{ flexDirection: 'row'}}>
-          <View style={{ flex: 1}}>
-            {this.maybeRenderCategoryModal(1)}
-          </View>
-          <View style={{ flex: 1}}>
-            {this.renderImageButton()}
-          </View>
-        </View>
+        {this.maybeRenderCategoryModal()}
+        {this.renderImageButton()}
         {this.renderSubmitButton()}
+        {this.maybeRenderDeleteButton()}
+        {this.maybeRenderImage()}
       </View>
     );
 
     const positiveFeedbackBox = (
-      <View style={{ flex: 1, flexDirection: 'row',  backgroundColor:'#f0f0f0' }}>
+      <View style={{ flex: 1, flexDirection: 'row' }}>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
           <View style={{ flexDirection: 'row'}}>
             <TextInput
@@ -356,15 +318,10 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          <View style={{ flexDirection: 'row'}}>
-            <View style={{ flex: 1}}>
-              {this.maybeRenderCategoryModal(2)}
-            </View>
-            <View style={{ flex: 1}}>
-              {this.renderImageButton('positive')}
-            </View>
-          </View>
+          {this.maybeRenderCategoryModal()}
+          {this.renderImageButton('positive')}
           {this.renderSubmitButton('positive')}
+          {this.maybeRenderImage('positive')}
         </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
           <View style={{ flexDirection: 'row'}}>
@@ -383,15 +340,10 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          <View style={{ flexDirection: 'row'}}>
-            <View style={{ flex: 1}}>
-              {this.maybeRenderCategoryModal(2)}
-            </View>
-            <View style={{ flex: 1}}>
-              {this.renderImageButton('negative')}
-            </View>
-          </View>
+          {this.maybeRenderCategoryModal()}
+          {this.renderImageButton('negative')}
           {this.renderSubmitButton('negative')}
+          {this.maybeRenderImage('negative')}
         </View>
       </View>
     );
