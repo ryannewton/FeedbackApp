@@ -2,7 +2,14 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Button, Overlay, Popover, FormControl, FormGroup, ControlLabel } from 'react-bootstrap';
+import {
+  Button,
+  Overlay,
+  Popover,
+  FormControl,
+  FormGroup,
+  ControlLabel
+} from 'react-bootstrap';
 
 // Import actions
 import { clarifyFeedback, clarifySolution } from '../actions';
@@ -73,6 +80,8 @@ class ClarifyButton extends Component {
           ...this.props.style,
           position: 'absolute',
           backgroundColor: 'white',
+          width: 350,
+          height: 310,
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
@@ -87,6 +96,7 @@ class ClarifyButton extends Component {
           <ControlLabel>Please describe what is unclear.</ControlLabel>
           <FormControl
             componentClass="textarea"
+            style={{ height: 200 }}
             placeholder="Enter your description here. Note that this will be sent to the member who submitted this feedback."
             onChange={event => this.setState({ message: event.target.value })}
           />
@@ -114,7 +124,7 @@ class ClarifyButton extends Component {
             this.props.updateButtonActive(false);
             this.setState({ show: false });
           }}
-          placement="bottom"
+          placement="right"
           container={this}
           target={() => ReactDOM.findDOMNode(this.refs.target)}
         >
