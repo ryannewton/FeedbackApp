@@ -99,7 +99,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loadingImage: false };
 
     case ADD_FEEDBACK_UPVOTE: {
-      if (feedback.approved) {
+      if (action.payload.approved) {
         const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
         const newState = state.list.slice(0);
         newState[index].upvotes += 1;
