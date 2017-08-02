@@ -45,9 +45,9 @@ class ReplyButton extends Component {
     switch (selectedResponseMethod) {
       case 'officialReply':
         return 'Post official response:';
-      case 'submitter':
-        return 'Email Interested Users (voters)';
       case 'interested':
+        return 'Email Interested Users (voters)';
+      case 'submitter':
         return 'Email Suggestion Submitter:';
       default:
         return 'Respond:';
@@ -59,9 +59,9 @@ class ReplyButton extends Component {
     switch (selectedResponseMethod) {
       case 'officialReply':
         return 'Official response here...';
-      case 'submitter':
-        return 'Email interested users here...';
       case 'interested':
+        return 'Email interested users here...';
+      case 'submitter':
         return 'Email Suggestion Submitter here...';
       default:
         return 'Respond:';
