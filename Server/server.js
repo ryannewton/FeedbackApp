@@ -793,7 +793,8 @@ app.post('/clarifyFeedback', upload.array(), (req, res) => {
 });
 
 app.post('/routeFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    const { userId } = decoded;
     const { feedback, message, email } = req.body;
     if (err) {
       res.status(400).send('Autorization failed');
@@ -802,17 +803,38 @@ app.post('/routeFeedback', upload.array(), (req, res) => {
     } else if (!feedback || !feedback.id) {
       res.status(400).send('Unrecognized feedback object');
     } else {
-      const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
-      const fromEmail = defaultFromEmail;
-      const { subjectLine, bodyText } = routeFeedback({ feedback, message });
-      sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-      res.sendStatus(200);
+      const connectionString = `
+        SELECT email
+        FROM users
+        WHERE id=?`;
+      connection.query(connectionString, [userId], (err, rows) => {
+        const adminEmail = rows[0].email;
+        const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+        const fromEmail = defaultFromEmail;
+        const { subjectLine, bodyText } = routeFeedback({ feedback, message, adminEmail });
+        sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+        res.sendStatus(200);
+      });
     }
   });
 });
 
+// function getAdminEmail(userId) {
+//   const connectionString = `
+//     SELECT email
+//     FROM users
+//     WHERE id=?`
+//   connection.query(connectionString, [userId], (err, rows) => {
+//     rrows[0].email;
+//   });
+//   console.log(helper1)
+// }
+//
+// console.log(getAdminEmail(767))
+
 app.post('/replyFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    const { userId } = decoded;
     const { feedback, message, type } = req.body;
     if (err) {
       res.status(400).send('Autorization failed');
@@ -823,34 +845,49 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
     } else if (type === 'officialReply') {
       submitOfficialReply(decoded, req, res);
     } else if (type === 'submitter') {
-      const connectionString = `
+      let connectionString = `
         SELECT email
         FROM feedback a
         JOIN users b
         ON a.userId = b.id
         WHERE a.id=?`
-        connection.query(connectionString, [feedback.id], (err, rows) => {
+        connection.query(connectionString, [feedback.id], (err, rows1) => {
           if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - FED3');
-          const toEmail = (process.env.production) ? [rows[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
-          const fromEmail = defaultFromEmail;
-          const { subjectLine, bodyText } = replyFeedback({ feedback, message });
-          sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-          res.sendStatus(200);
+          connectionString = `
+            SELECT email
+            FROM users
+            WHERE id=?`;
+          connection.query(connectionString, [userId], (err, rows) => {
+            if (err) console.log('here!!');
+            const adminEmail = rows[0].email;
+            const toEmail = (process.env.production) ? [rows1[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+            const fromEmail = defaultFromEmail;
+            const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
+            sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+            res.sendStatus(200);
+          });
         });
     } else if (type === 'interested') {
-      const connectionString = `
+      let connectionString = `
         SELECT email
         FROM feedbackVotes a
         JOIN users b
         ON a.userId = b.id
         WHERE a.feedbackId=?`;
-        connection.query(connectionString, [feedback.id], (err, rows) => {
+        connection.query(connectionString, [feedback.id], (err, rows1) => {
           if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - ALICE123');
-          const toEmail = (process.env.production) ? rows.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
-          const fromEmail = defaultFromEmail;
-          const { subjectLine, bodyText } = replyFeedback({ feedback, message });
-          sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-          res.sendStatus(200);
+          connectionString = `
+            SELECT email
+            FROM users
+            WHERE id=?`;
+          connection.query(connectionString, [userId], (err, rows) => {
+            const adminEmail = rows[0].email;
+            const toEmail = (process.env.production) ? rows1.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+            const fromEmail = defaultFromEmail;
+            const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
+            sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+            res.sendStatus(200);
+          });
         });
     }
   });
@@ -1164,17 +1201,17 @@ function clarifySolution({ solution, message }) {
   return { subjectLine, bodyText };
 }
 
-function routeFeedback({ feedback, message }) {
+function routeFeedback({ feedback, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: New Suggestion';
   const bodyText =
-    `Hi! This is an automated message from the Suggestion Box App.\n\nAn admin thought that this feedback would be of interest to you: "${feedback.text}"\n\nThey included this message: "${message}"\n\n.`;
+    `Hi! This is an automated message from the Suggestion Box App.\n\nAn admin thought that this feedback would be of interest to you: "${feedback.text}"\n\nThey included this message: "${message}".\n\nPlease reply to ${adminEmail}.`;
   return { subjectLine, bodyText };
 }
 
-function replyFeedback({ feedback, message }) {
+function replyFeedback({ feedback, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: Reply to Your Feedback';
   const bodyText =
-    `Hi! This is an automated message.\n\nA moderator had a question about this feedback: "${feedback.text}". Their message was: "${message}"\n\n.`;
+    `Hi! This is an automated message.\n\nA moderator had a question about this feedback: "${feedback.text}". Their message was: "${message}".\n\nPlease reply to ${adminEmail}.`;
   return { subjectLine, bodyText };
 }
 
