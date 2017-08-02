@@ -136,15 +136,15 @@ class ReplyButton extends Component {
                 Email Suggestion Submitter
               </Radio>
             </FormGroup>
-          </div>
-          <ControlLabel>{this.renderResponseText()}</ControlLabel>
-          <FormControl
-            componentClass="textarea"
-            style={{height:200}}
-            value={this.state.response}
-            onChange={(event) => this.setState({response: event.target.value})}
-            placeholder={'Enter text here...'}
-          />
+        </div>
+        <ControlLabel>{this.renderResponseText()}</ControlLabel>
+        <FormControl
+          componentClass="textarea"
+          style={{ height: 200 }}
+          value={this.state.response}
+          onChange={(event) => this.setState({response: event.target.value})}
+          placeholder={'Enter text here...'}
+        />
         </FormGroup>
         {this.maybeRenderErrorMessage()}
         <div className="pull-right">
@@ -155,7 +155,14 @@ class ReplyButton extends Component {
 
     return (
       <span style={{ position: 'relative'}}>
-        <Button className="btn-xs btn-success" ref="target" style={{ zIndex:100, position: 'absolute', left:24}} onClick={this.buttonClicked}><Glyphicon glyph='share' /></Button>
+        <Button
+          className="btn-xs btn-success"
+          ref="target"
+          style={{ zIndex:100, position: 'absolute', left:24 }}
+          onClick={this.buttonClicked}
+        >
+          <Glyphicon glyph='share' />
+        </Button>
         <Overlay
           rootClose
           show={this.state.show}
@@ -168,7 +175,6 @@ class ReplyButton extends Component {
           target={() => ReactDOM.findDOMNode(this.refs.target)}
         >
           {sortPopover}
-
         </Overlay>
       </span>
     );
