@@ -50,7 +50,6 @@ class RejectButton extends Component {
   }
 
   render = () => {
-    const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
     const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
     
     const sortPopover = (
@@ -60,6 +59,8 @@ class RejectButton extends Component {
           ...this.props.style,
           position: 'absolute',
           backgroundColor: 'white',
+          width: 350,
+          height: 325,
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
@@ -74,6 +75,7 @@ class RejectButton extends Component {
           <ControlLabel>Please provide a reason for rejecting this feedback.</ControlLabel>
           <FormControl
             componentClass="textarea"
+            style={{ height: 200 }}
             placeholder="Enter your reason here. Note that this will be sent to the member who submitted this feedback."
             onChange={event => this.setState({ message: event.target.value })}
           />
@@ -88,7 +90,7 @@ class RejectButton extends Component {
         <Button
           className="btn btn-danger btn-xs"
           ref="target"
-          style={{ position: 'absolute', right:0}}
+          style={{ position: 'absolute', right:0 }}
           onClick={this.maybeRenderRejectInput}
         >
           Reject
@@ -100,7 +102,7 @@ class RejectButton extends Component {
             this.props.updateButtonActive(false);
             this.setState({ show: false });
           }}
-          placement={placement}
+          placement="right"
           container={this}
           target={() => ReactDOM.findDOMNode(this.refs.target)}
         >
