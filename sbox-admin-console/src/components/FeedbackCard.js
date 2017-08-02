@@ -85,6 +85,7 @@ class FeedbackCard extends Component {
             {this.renderVotesAndTime()}
             {this.maybeRenderClarifyText()}
             {this.renderText()}
+            {this.renderResponse()}
             {this.renderCategoryAndSolutionsButton()}
             {this.maybeRenderImage()}
             {this.maybeRenderSolutionCards()}
@@ -206,6 +207,18 @@ class FeedbackCard extends Component {
             {this.props.feedback.text}
           </Panel>
         </span>
+      </div>
+    );
+  }
+
+  renderResponse = () => {
+    if (!this.props.feedback.officialReply) {
+      return null;
+    }
+    return (
+      <div style={{marginTop:10, fontSize: 14, color: '#00A2FF', fontWeight: '400',}}>
+        <b>Official Response: </b>
+        {this.props.feedback.officialReply}
       </div>
     );
   }
