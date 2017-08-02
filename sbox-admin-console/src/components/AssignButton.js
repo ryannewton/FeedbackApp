@@ -17,6 +17,7 @@ class AssignButton extends Component {
     show: false,
     routingNote: '',
     email: '',
+    error: '',
   }
 
   sortClicked = (sortMethod) => {
@@ -27,6 +28,32 @@ class AssignButton extends Component {
   buttonClicked = () => {
     this.props.updateButtonActive(!this.state.show);
     this.setState({ show: !this.state.show });
+  }
+
+  routeFeedback() {
+    if (!this.state.email) {
+      this.setState({ error: 'Please enter in an email!'});
+    } else if (!this.state.routingNote) {
+      this.setState({ error: 'Please enter in a routing note.'});
+    } else {
+      this.setState({ error: ''});
+      this.props.showSuccess(false, 'Feedback routed!');
+      this.props.routeFeedback(this.props.feedback, this.state.email, this.state.routingNote);
+    }
+  }
+
+  maybeRenderErrorMessage() {
+    const { error } = this.state;
+    if (error !== '') {
+      return (
+        <center>
+          <div style={{ color: 'red' }}>
+            {error}
+          </div>
+        </center>
+      );
+    }
+    return null;
   }
 
   render = () => {
@@ -43,7 +70,7 @@ class AssignButton extends Component {
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
-          width:350,
+          width: 350,
           marginLeft: marginLeft,
           marginTop: 5,
           padding: 10,
@@ -64,11 +91,12 @@ class AssignButton extends Component {
             componentClass="textarea"
             style={{height:100}}
             value={this.state.routingNote}
-            onChange={(event) => this.setState({routingNote: event.target.value})}
+            onChange={(event) => this.setState({ routingNote: event.target.value })}
             placeholder={'Enter note here...'}
           />
           <br />
-        <Button onClick={() => this.props.routeFeedback(this.props.feedback, this.state.email, this.state.routingNote)}>Send</Button>
+          {this.maybeRenderErrorMessage()}
+        <Button onClick={() => this.routeFeedback()}>Send</Button>
       </Popover>
     );
 
