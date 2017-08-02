@@ -298,7 +298,7 @@ class FeedbackCard extends Component {
   }
 
 maybeRenderImage(){
-    if (!this.state.viewImage) {
+    if (!this.state.viewImage && this.props.feedback.approved) {
       return null;
     }
     const imageURL = this.props.feedback.imageURL;
