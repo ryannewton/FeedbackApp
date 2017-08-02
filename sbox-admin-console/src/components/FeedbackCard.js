@@ -1,7 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Glyphicon, Image, Button, Label } from 'react-bootstrap';
+import { Panel, Glyphicon, Image, Button, Label, Modal, FormControl } from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
 
 // Import components
@@ -16,11 +16,9 @@ import ChangeCategoryButton from './ChangeCategoryButton';
 import { DragSource } from 'react-dnd';
 import ItemTypes from './ItemTypes';
 import store from '../reducers/store';
-import { updateFeedback } from '../actions';
-
 
 // Import actions
-import { approveFeedback, approveSolution } from '../actions';
+import { approveFeedback, approveSolution, replyFeedback, updateFeedback } from '../actions';
 
 const cardSource = {
   beginDrag(props) {
@@ -33,8 +31,9 @@ const cardSource = {
       if (monitor.getDropResult().filterMethod === 'awaitingApproval') {
         const updatedFeedback = { ...props.feedback, approved: 0 };
         store.dispatch(updateFeedback(updatedFeedback))
-
-      } if (!props.feedback.approved) {
+      } else if (monitor.getDropResult().filterMethod === 'complete' && props.feedback.officialReply === '') {
+        component.setState({ officialResponseModal: true })
+      } else if (!props.feedback.approved) {
         const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod, approved: 1 };
         store.dispatch(updateFeedback(updatedFeedback))
       } else {
@@ -64,7 +63,9 @@ class FeedbackCard extends Component {
     viewImage: false,
     modalUp: false,
     showSentNotification: false,
-    sentText: ''
+    sentText: '',
+    officialResponseModal: false,
+    response: '',
   }
 
   onModalButtonClick = () => {
@@ -78,6 +79,7 @@ class FeedbackCard extends Component {
     let background = (this.state.mouseOver || this.state.buttonActive) ? editBackground : whiteBackground;
     return connectDragSource(
       <div onMouseEnter={() => this.setState({ mouseOver: true })} onMouseLeave={() => this.setState({ mouseOver: false})}>
+        {this.maybeRenderOfficialResponseModal()}
         <Panel style={background}>
           {this.renderTopButton()}
           <div style={{marginLeft:20, marginRight:20}}>
@@ -104,6 +106,52 @@ class FeedbackCard extends Component {
     );
   }
 
+  updateOfficialResponse() {
+    this.props.replyFeedback(this.props.feedback, this.state.response, 'officialReply');
+    const updatedFeedback = { ...this.props.feedback, status: 'complete' };
+    this.props.updateFeedback(updatedFeedback)
+  }
+
+  maybeRenderOfficialResponseModal() {
+    if (this.state.officialResponseModal) {
+      let smClose = () => this.setState({ officialResponseModal: false });
+      return (
+        <Modal className="static-modal" show={this.state.officialResponseModal} bsSize="small">
+          <Modal.Body>
+            <p>To mark a piece of feedback as complete, you must submit an official response.</p>
+            <FormControl
+              componentClass="textarea"
+              style={{ height: 150 }}
+              value={this.state.response}
+              onChange={(event) => this.setState({response: event.target.value})}
+              placeholder={'Enter text here...'}
+            />
+            <br />
+            <Button
+              className="btn btn-cancel"
+                style={{marginRight:10}}
+                onClick={() => {
+                  smClose();
+                }}
+              >
+                Cancel
+            </Button>
+            <Button
+              className="btn btn-primary"
+                style={{marginRight:10}}
+                onClick={() => {
+                  smClose();
+                  this.updateOfficialResponse();
+                }}
+              >
+                Send
+              </Button>
+          </Modal.Body>
+        </Modal>
+      );
+    }
+    return null;
+  }
   renderTopButton = () => {
     if (this.state.mouseOver || this.state.buttonActive || this.state.modalUp) {
       if (this.props.feedback.feedbackId) {
@@ -125,7 +173,14 @@ class FeedbackCard extends Component {
         return (
           <div>
             <div>
-              <AssignButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} />
+              <AssignButton
+                feedback={this.props.feedback}
+                updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })}
+                showSuccess={(activeState, sentText='') => {
+                  this.setState({ buttonActive: activeState, showSentNotification: true, sentText});
+                  setTimeout(() => this.setState({ showSentNotification: false }), 20000);
+                }}
+              />
               <ReplyButton
                 feedback={this.props.feedback}
                 updateButtonActive={(activeState) => {
@@ -334,4 +389,4 @@ function mapStateToProps(state) {
   return { solutions, feedbackList, group }
 }
 
-export default connect(mapStateToProps, { approveFeedback, approveSolution })(DragSource(ItemTypes.BOX, cardSource, collect)(FeedbackCard));
+export default connect(mapStateToProps, { approveFeedback, approveSolution, replyFeedback, updateFeedback })(DragSource(ItemTypes.BOX, cardSource, collect)(FeedbackCard));
