@@ -85,6 +85,7 @@ class FeedbackCard extends Component {
             {this.renderVotesAndTime()}
             {this.maybeRenderClarifyText()}
             {this.renderText()}
+            {this.renderResponse()}
             {this.renderCategoryAndSolutionsButton()}
             {this.maybeRenderImage()}
             {this.maybeRenderSolutionCards()}
@@ -210,6 +211,18 @@ class FeedbackCard extends Component {
     );
   }
 
+  renderResponse = () => {
+    if (!this.props.feedback.officialReply) {
+      return null;
+    }
+    return (
+      <div style={{marginTop:10, fontSize: 14, color: '#00A2FF', fontWeight: '400',}}>
+        <b>Official Response: </b>
+        {this.props.feedback.officialReply}
+      </div>
+    );
+  }
+
   maybeRenderSolutionIcon(){
     const feedbackSolutions = this.props.solutions.list.filter((item) => (item.feedbackId === this.props.feedback.id) && (item.approved))
     if (!feedbackSolutions.length) {
@@ -285,7 +298,7 @@ class FeedbackCard extends Component {
   }
 
 maybeRenderImage(){
-    if (!this.state.viewImage) {
+    if (!this.state.viewImage && this.props.feedback.approved) {
       return null;
     }
     const imageURL = this.props.feedback.imageURL;
