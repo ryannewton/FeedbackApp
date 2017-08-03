@@ -30,7 +30,13 @@ class SendAuthorizationEmail extends Component {
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
       Keyboard.dismiss();
-      this.props.sendAuthorizationEmail(this.state.email, () => this.props.navigation.navigate('AuthCode', translate(this.props.user.language).ENTER_CODE), this.props.user.language);
+      this.props.sendAuthorizationEmail(this.state.email, () => {
+        if (this.state.email.includes('gymboree')) {
+          this.props.navigation.navigate('AuthGroupCode', translate(this.props.user.language).ENTER_GROUP_CODE);
+        } else {
+          this.props.navigation.navigate('AuthCode', translate(this.props.user.language).ENTER_CODE);
+        }
+      }, this.props.user.language);
     } else {
       this.props.authorizeUserFail('Invalid Email Address');
     }

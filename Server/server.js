@@ -288,7 +288,7 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
       connection.query(connectionString, [email, code], (err, rows) => {
         if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
         else if (!rows.length) res.status(400).send('Sorry, your email address or passcode is incorrect');
-        else if (rows[0].groupId === 0) {
+        else {
           connectionString = `
             UPDATE users
             SET groupId=?
@@ -303,7 +303,6 @@ app.post('/authorizeUser', upload.array(), (req, res) => {
             }
           });
         }
-        else res.status(400).send('Sorry, the server is experiencing an error - HJ21');
       });
     }
   });
