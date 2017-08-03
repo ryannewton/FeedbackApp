@@ -109,7 +109,7 @@ class FeedbackCard extends Component {
 
   updateOfficialResponse() {
     this.props.replyFeedback(this.props.feedback, this.state.response, 'officialReply');
-    const updatedFeedback = { ...this.props.feedback, status: 'complete' };
+    const updatedFeedback = { ...this.props.feedback, status: 'complete', officialReply: this.state.response };
     this.props.updateFeedback(updatedFeedback)
   }
 
