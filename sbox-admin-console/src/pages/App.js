@@ -152,7 +152,7 @@ class App extends Component {
   renderStatusColumns = () => {
     const filteredFeedback = this.props.feedback.list.filter(this.filterFeedback);
 
-    const awaitingApprovalFeedback = filteredFeedback.filter(feedback => !feedback.approved).sort((a, b) => this.sortFeedback(a, b, this.state.approvalSort));
+    const awaitingApprovalFeedback = filteredFeedback.filter(feedback => !feedback.approved && feedback.status !== 'rejected').sort((a, b) => this.sortFeedback(a, b, this.state.approvalSort));
     const awaitingApprovalSolution = this.props.solutions.list.filter((item) => (!item.approved && item.status !== 'rejected'));
     const awaitingApproval = [ ...awaitingApprovalFeedback, ...awaitingApprovalSolution];
     const newFeedback = filteredFeedback.filter(feedback => (feedback.status === 'new' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
