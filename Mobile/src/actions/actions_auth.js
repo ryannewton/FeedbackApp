@@ -30,6 +30,9 @@ export const sendAuthorizationEmail = (email, navigateToNext, language) => (
       // Change the in-authorization flag in state so we update the component
       dispatch(sendAuthorizationEmailSuccess(email));
       dispatch({ type: SAVE_GROUP_CODE, payload: response.data });
+      if (email.includes('gymboree')) {
+        dispatch({ type: NEEDS_GROUP_CODE, payload: '9911' });
+      }
       navigateToNext();
     })
     .catch((error) => {
