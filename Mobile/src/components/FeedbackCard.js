@@ -458,15 +458,22 @@ renderVoteCount = () => {
                 {this.renderSmallImage()}
               </View>
             </View>
-                <View style={{ paddingTop:3, paddingBottom:10, flexDirection: 'row', justifyContent: 'space-between'}}>
-                  <Text style={{color:'#bdbdbd'}}><TimeAgo time={this.props.feedback.date}/></Text>
-                  <Text style={{color:'#bdbdbd'}}>{categoryExists?'#':null} {feedback.category} </Text>
-                  <View style={{ flexDirection: 'row', justifyContent: 'flex-end'}}>
-                    {this.renderMyFeedbackTag()}
-                    {this.renderStatusBox()}
-                    {this.renderSolutionsTag()}
-                  </View>
-                </View>
+            <View
+            style={{ paddingTop: 3, paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between'}}
+            accessible={false}
+            >
+              <TimeAgo
+                time={this.props.feedback.date}
+                allowFontScaling={false}
+                style={{ color: '#bdbdbd', fontSize: 12  }}
+              />
+              <Text style={{color:'#bdbdbd'}}>{categoryExists?'#':null} {feedback.category} </Text>
+              <View style={{ flexDirection: 'row', justifyContent: 'flex-end'}}>
+                {this.renderMyFeedbackTag()}
+                {this.renderStatusBox()}
+                {this.renderSolutionsTag()}
+              </View>
+            </View>
           </View>
         </View>
       </View>
