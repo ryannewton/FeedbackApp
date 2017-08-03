@@ -28,6 +28,7 @@ class RejectButton extends Component {
     } else {
       this.props.rejectFeedback({ feedback, message });
     }
+    this.props.updateButtonActive(false);
   }
 
   maybeRenderRejectInput = () => {
@@ -51,7 +52,7 @@ class RejectButton extends Component {
 
   render = () => {
     const marginLeft = (this.props.feedback.status === 'complete') ? -50 : 10;
-    
+     
     const sortPopover = (
       <Popover
         id={'reject-' + this.props.feedback.id}
