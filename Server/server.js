@@ -670,8 +670,9 @@ app.post('/updateSolution', upload.array(), (req, res) => {
 // 2. Mark feedback status as 'rejected'
 // req.body = { authorization, message, feedback }
 app.post('/rejectFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     const { feedback, message } = req.body;
+    const { userId } = decoded;
     if (err) {
       res.status(400).send('Autorization failed');
     } else if (!message) {
@@ -690,17 +691,24 @@ app.post('/rejectFeedback', upload.array(), (req, res) => {
           } else {
             toEmail = [rows[0].email];
           }
-          const fromEmail = defaultFromEmail;
-          const { subjectLine, bodyText } = rejectFeedback({ feedback, message });
+          connectionString = `
+            SELECT email
+            FROM users
+            WHERE id=?`;
+          connection.query(connectionString, [userId], (err3, rows3) => {
+            const adminEmail = rows3[0].email;
+            const fromEmail = defaultFromEmail;
+            const { subjectLine, bodyText } = rejectFeedback({ feedback, message, adminEmail });
 
-          connectionString = "UPDATE feedback SET status='rejected' WHERE id=?";
-          connection.query(connectionString, [feedback.id], (err2) => {
-            if (err2) {
-              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
-            } else {
-              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.sendStatus(200);
-            }
+            connectionString = "UPDATE feedback SET status='rejected' WHERE id=?";
+            connection.query(connectionString, [feedback.id], (err2) => {
+              if (err2) {
+                res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
+              } else {
+                sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+                res.sendStatus(200);
+              }
+            });
           });
         }
       });
@@ -709,8 +717,9 @@ app.post('/rejectFeedback', upload.array(), (req, res) => {
 });
 
 app.post('/rejectSolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     const { solution, message } = req.body;
+    const { userId } = decoded;
     if (err) {
       res.status(400).send('Autorization failed');
     } else if (!message) {
@@ -734,17 +743,24 @@ app.post('/rejectSolution', upload.array(), (req, res) => {
           } else {
             toEmail = [rows[0].email];
           }
-          const fromEmail = defaultFromEmail;
-          const { subjectLine, bodyText } = rejectSolution({ solution, message });
+          connectionString = `
+            SELECT email
+            FROM users
+            WHERE id=?`;
+          connection.query(connectionString, [userId], (err3, rows3) => {
+            const adminEmail = rows3[0].email;
+            const fromEmail = defaultFromEmail;
+            const { subjectLine, bodyText } = rejectSolution({ solution, message, adminEmail });
 
-          connectionString = "UPDATE solutions SET status='rejected' WHERE id=?";
-          connection.query(connectionString, [solution.id], (err2) => {
-            if (err2) {
-              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
-            } else {
-              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.sendStatus(200);
-            }
+            connectionString = "UPDATE solutions SET status='rejected' WHERE id=?";
+            connection.query(connectionString, [solution.id], (err2) => {
+              if (err2) {
+                res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0002');
+              } else {
+                sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+                res.sendStatus(200);
+              }
+            });
           });
         }
       });
@@ -757,8 +773,9 @@ app.post('/rejectSolution', upload.array(), (req, res) => {
 // 2. Flag feedback as status as 'clarify'
 // req.body = { authorization, message, feedback }
 app.post('/clarifyFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     const { feedback, message } = req.body;
+    const { userId } = decoded;
     if (err) {
       res.status(400).send('Autorization failed');
     } else if (!message) {
@@ -773,18 +790,25 @@ app.post('/clarifyFeedback', upload.array(), (req, res) => {
         } else if (rows.length === 0) {
           res.status(400).send('Sorry, this feedback\'s submitter was not saved. Cannot clarify');
         } else {
-          const toEmail = [rows[0].email];
-          const fromEmail = defaultFromEmail;
-          const { subjectLine, bodyText } = clarifyFeedback({ feedback, message });
+          connectionString = `
+            SELECT email
+            FROM users
+            WHERE id=?`;
+          connection.query(connectionString, [userId], (err3, rows3) => {
+            const adminEmail = rows3[0].email;
+            const toEmail = [rows[0].email];
+            const fromEmail = defaultFromEmail;
+            const { subjectLine, bodyText } = clarifyFeedback({ feedback, message, adminEmail });
 
-          connectionString = "UPDATE feedback SET status='clarify' WHERE id=?";
-          connection.query(connectionString, [feedback.id], (err2) => {
-            if (err2) {
-              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0004');
-            } else {
-              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.sendStatus(200);
-            }
+            connectionString = "UPDATE feedback SET status='clarify' WHERE id=?";
+            connection.query(connectionString, [feedback.id], (err2) => {
+              if (err2) {
+                res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 0004');
+              } else {
+                sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+                res.sendStatus(200);
+              }
+            });
           });
         }
       });
@@ -797,7 +821,7 @@ app.post('/routeFeedback', upload.array(), (req, res) => {
     const { userId } = decoded;
     const { feedback, message, email } = req.body;
     if (err) {
-      res.status(400).send('Autorization failed');
+      res.status(400).send('Authorization failed');
     } else if (!message) {
       res.status(400).send('Message required');
     } else if (!feedback || !feedback.id) {
@@ -852,6 +876,7 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
             if (err) res.status(400).send('The server is experiencing an error - 898P');
             else if (!rows.length) res.status(400).send('The server is experiencing an error - 898C');
             else{
+              const adminEmail = rows[0].email;
               const toEmail = (process.env.production) ? [rows1[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
               const fromEmail = defaultFromEmail;
               const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
@@ -912,8 +937,9 @@ function submitOfficialReply(decoded, req, res) {
 }
 
 app.post('/clarifySolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     const { solution, message } = req.body;
+    const { userId } = decoded;
     if (err) {
       res.status(400).send('Autorization failed');
     } else if (!message) {
@@ -933,18 +959,25 @@ app.post('/clarifySolution', upload.array(), (req, res) => {
         } else if (rows.length === 0) {
           res.status(400).send('Sorry, this solution\'s submitter was not saved. Cannot clarify');
         } else {
-          const toEmail = [rows[0].email];
-          const fromEmail = defaultFromEmail;
-          const { subjectLine, bodyText } = clarifySolution({ solution, message });
+          connectionString = `
+            SELECT email
+            FROM users
+            WHERE id=?`;
+          connection.query(connectionString, [userId], (err3, rows3) => {
+            const adminEmail = rows3[0].email;
+            const toEmail = [rows[0].email];
+            const fromEmail = defaultFromEmail;
+            const { subjectLine, bodyText } = clarifySolution({ solution, message, adminEmail });
 
-          connectionString = "UPDATE solutions SET status='clarify' WHERE id=?";
-          connection.query(connectionString, [solution.id], (err2) => {
-            if (err2) {
-              res.status(400).send('Sorry, there was a problem - the server is experiencing an error - AF04');
-            } else {
-              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-              res.sendStatus(200);
-            }
+            connectionString = "UPDATE solutions SET status='clarify' WHERE id=?";
+            connection.query(connectionString, [solution.id], (err2) => {
+              if (err2) {
+                res.status(400).send('Sorry, there was a problem - the server is experiencing an error - AF04');
+              } else {
+                sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+                res.sendStatus(200);
+              }
+            });
           });
         }
       });
@@ -1183,30 +1216,30 @@ Note: Your contact information has been kept confidential. This message was writ
   return { subjectLine, bodyText };
 }
 
-function rejectFeedback({ feedback, message }) {
+function rejectFeedback({ feedback, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: Feedback rejected';
   const bodyText =
-    `Hi! This is your friend at Suggestion Box.\n\nThank you for submitting a feedback with Suggestion Box! Sadly, your feedback: "${feedback.text}" was rejected by your administrator.\n\nThe explanation we received was: "${message}"\n\nThere is no need to worry. Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback.\n\nPlease don't let this rejection stop you from sending the next feedback! I hope to here your thoughts again soon!\n\nYour friend at Suggestion Box.`;
+    `Hi! This is your friend at Suggestion Box.\n\nThank you for submitting a feedback with Suggestion Box! Sadly, your feedback: "${feedback.text}" was rejected by your administrator.\n\nThe explanation we received was: "${message}"\n\nThere is no need to worry. Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback. Here is your administrator's email if you want to reply: ${adminEmail}.\n\nPlease don't let this rejection stop you from sending the next feedback! I hope to here your thoughts again soon!\n\nYour friend at Suggestion Box.`;
   return { subjectLine, bodyText };
 }
 
-function rejectSolution({ solution, message }) {
+function rejectSolution({ solution, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: Solution rejected';
-  const bodyText = `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Sadly, your submission: "${solution.text}" was rejected by your administrator.\n\nThe explanation we received was: "${message}"\n\nThere is no need to worry. Your contact information has been kept confidential. This message was written without knowledge of who sent the solution.\n\nPlease don't let this rejection stop you from sending the next solution or feedback! I hope to here your thoughts again soon!\n\nYour friend at Suggestion Box.`;
+  const bodyText = `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Sadly, your submission: "${solution.text}" was rejected by your administrator.\n\nThe explanation we received was: "${message}"\n\nThere is no need to worry. Your contact information has been kept confidential. This message was written without knowledge of who sent the solution. Here is your administrator's email if you want to reply: ${adminEmail}.\n\nPlease don't let this rejection stop you from sending the next solution or feedback! I hope to here your thoughts again soon!\n\nYour friend at Suggestion Box.`;
   return { subjectLine, bodyText };
 }
 
-function clarifyFeedback({ feedback, message }) {
+function clarifyFeedback({ feedback, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: Clarification needed';
   const bodyText =
-    `Hi! This is your friend at Suggestion Box.\n\nThank you for submitting a feedback with Suggestion Box! Your administrator has requested for a clarification on your feedback: "${feedback.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the feedback.\n\nYou can reply to this email and your message will be passed along. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
+    `Hi! This is your friend at Suggestion Box.\n\nThank you for submitting a feedback with Suggestion Box! Your administrator has requested for a clarification on your feedback: "${feedback.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the feedback.\n\nHere is your administrator's email if you want to reply: ${adminEmail}. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
   return { subjectLine, bodyText };
 }
 
-function clarifySolution({ solution, message }) {
+function clarifySolution({ solution, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: Clarification needed';
   const bodyText =
-      `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Your administrator has requested for a clarification on your solution: "${solution.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the solution.\n\nYou can reply to this email and your message will be passed along. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
+      `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Your administrator has requested for a clarification on your solution: "${solution.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the solution.\n\nHere is your administrator's email if you want to reply: ${adminEmail}. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
   return { subjectLine, bodyText };
 }
 
