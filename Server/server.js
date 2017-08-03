@@ -819,19 +819,6 @@ app.post('/routeFeedback', upload.array(), (req, res) => {
   });
 });
 
-// function getAdminEmail(userId) {
-//   const connectionString = `
-//     SELECT email
-//     FROM users
-//     WHERE id=?`
-//   connection.query(connectionString, [userId], (err, rows) => {
-//     rrows[0].email;
-//   });
-//   console.log(helper1)
-// }
-//
-// console.log(getAdminEmail(767))
-
 app.post('/replyFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     const { userId } = decoded;
