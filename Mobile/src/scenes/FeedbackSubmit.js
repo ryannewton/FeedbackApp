@@ -45,7 +45,7 @@ class FeedbackSubmit extends Component {
       negativeFeedback: '',
       imageWidth: null,
       imageHeight: null,
-      category: '',
+      category: ''
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
