@@ -45,7 +45,7 @@ class FeedbackSubmit extends Component {
       negativeFeedback: '',
       imageWidth: null,
       imageHeight: null,
-      category: '',
+      category: ''
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
@@ -321,16 +321,20 @@ class FeedbackSubmit extends Component {
         {this.maybeRenderImage()}
       </View>
     );
+    const positiveBackgroundColor = (this.state.negativeFeedback === '') ? null : 'grey';
+    const negativeBackgroundColor = (this.state.positiveFeedback === '') ? null : 'grey';
+    const positivePlacholderText = (this.state.negativeFeedback === '') ? translate(language).POSITIVE_FILL_TEXT : 'Clear negative feedback to submit positive feedback';
+    const negativePlacholderText = (this.state.positiveFeedback === '') ? translate(language).NEGATIVE_FILL_TEXT : 'Clear positive feedback to submit negative feedback';
 
     const positiveFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
+        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
           <View style={{ flexDirection: 'row'}}>
             <TextInput
               multiline={Boolean(true)}
               onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-              style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1 }]}
-              placeholder={translate(language).POSITIVE_FILL_TEXT}
+              style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1, backgroundColor: positiveBackgroundColor }]}
+              placeholder={positivePlacholderText}
               placeholderTextColor="#d0d0d0"
               editable={(this.state.negativeFeedback === '')}
               value={this.state.positiveFeedback}
@@ -352,8 +356,8 @@ class FeedbackSubmit extends Component {
               onContentSizeChange={(event) => {
                 this.setState({ height: event.nativeEvent.contentSize.height });
               }}
-              style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1 }]}
-              placeholder={translate(language).NEGATIVE_FILL_TEXT}
+              style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1, backgroundColor: negativeBackgroundColor }]}
+              placeholder={negativePlacholderText}
               editable={(this.state.positiveFeedback === '')}
               placeholderTextColor="#d0d0d0"
               value={this.state.negativeFeedback}
