@@ -1,11 +1,11 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, Image, Dimensions } from 'react-native';
+import { View, Keyboard, Image, Dimensions } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // Import components, functions, and styles
-import { Button } from '../components/common';
+import { Button, Text } from '../components/common';
 import styles from '../styles/scenes/SubmittedStyles';
 import translate from '../translation';
 

@@ -1,11 +1,11 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, Image, TouchableWithoutFeedback } from 'react-native';
+import { View, Keyboard, Image, TouchableWithoutFeedback } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 // Import components and action creators
-import { Card, CardSection, Input, Button, Spinner } from '../components/common';
+import { Card, CardSection, Input, Button, Spinner, Text } from '../components/common';
 import { sendAuthorizationEmail, authorizeUserFail, closeInstructions, sendGoogleAnalytics } from '../actions';
 import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 

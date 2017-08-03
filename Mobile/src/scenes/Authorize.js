@@ -1,6 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, View, Keyboard, TouchableWithoutFeedback, Image } from 'react-native';
+import { View, Keyboard, TouchableWithoutFeedback, Image } from 'react-native';
+import { Text } from '../components/common';
 import { connect } from 'react-redux';
 import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';

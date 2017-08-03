@@ -1,6 +1,7 @@
 // Import libraries
 import React from 'react';
-import { TextInput, View, Text } from 'react-native';
+import { TextInput, View } from 'react-native';
+import { Text } from './index';
 import PropTypes from 'prop-types';
 
 const Input = (

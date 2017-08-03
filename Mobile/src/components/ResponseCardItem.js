@@ -1,6 +1,7 @@
 // Import Libraries
 import React from 'react';
-import { View, Text } from 'react-native';
+import { View } from 'react-native';
+import { Text } from '../components/common';
 import PropTypes from 'prop-types';
 
 // Import components and styles
