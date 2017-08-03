@@ -29,6 +29,12 @@ class AssignButton extends Component {
     this.setState({ show: !this.state.show });
   }
 
+  sendFeedback = () => {
+    const successText = 'Email Sent';
+    this.props.showSuccess(false, successText);
+    this.props.routeFeedback(this.props.feedback, this.state.email, this.state.routingNote);
+  }
+
   render = () => {
     const placement = (this.props.feedback.status === 'complete') ? "left" : "bottom";
     const marginLeft = (this.props.feedback.status === 'complete') ? -10 : 10;
@@ -68,7 +74,7 @@ class AssignButton extends Component {
             placeholder={'Enter note here...'}
           />
           <br />
-        <Button onClick={() => this.props.routeFeedback(this.props.feedback, this.state.email, this.state.routingNote)}>Send</Button>
+        <Button onClick={this.sendFeedback}>Send</Button>
       </Popover>
     );
 
@@ -93,4 +99,8 @@ class AssignButton extends Component {
   }
 }
 
-export default connect(null, { routeFeedback })(AssignButton);
+const mapStateToProps = (state) => {
+  return {};
+};
+
+export default connect(mapStateToProps, { routeFeedback })(AssignButton);
