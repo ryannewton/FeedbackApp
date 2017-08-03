@@ -809,7 +809,7 @@ app.post('/routeFeedback', upload.array(), (req, res) => {
         WHERE id=?`;
       connection.query(connectionString, [userId], (err, rows) => {
         const adminEmail = rows[0].email;
-        const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+        const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
         const fromEmail = defaultFromEmail;
         const { subjectLine, bodyText } = routeFeedback({ feedback, message, adminEmail });
         sendEmail(toEmail, fromEmail, subjectLine, bodyText);
@@ -860,7 +860,7 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
           connection.query(connectionString, [userId], (err, rows) => {
             if (err) console.log('here!!');
             const adminEmail = rows[0].email;
-            const toEmail = (process.env.production) ? [rows1[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+            const toEmail = (process.env.production) ? [rows1[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
             const fromEmail = defaultFromEmail;
             const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
             sendEmail(toEmail, fromEmail, subjectLine, bodyText);
@@ -882,7 +882,7 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
             WHERE id=?`;
           connection.query(connectionString, [userId], (err, rows) => {
             const adminEmail = rows[0].email;
-            const toEmail = (process.env.production) ? rows1.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+            const toEmail = (process.env.production) ? rows1.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
             const fromEmail = defaultFromEmail;
             const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
             sendEmail(toEmail, fromEmail, subjectLine, bodyText);

@@ -121,4 +121,8 @@ class AssignButton extends Component {
   }
 }
 
-export default connect(null, { routeFeedback })(AssignButton);
+const mapStateToProps = (state) => {
+  return {};
+};
+
+export default connect(mapStateToProps, { routeFeedback })(AssignButton);
