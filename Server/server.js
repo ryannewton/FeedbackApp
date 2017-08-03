@@ -808,12 +808,16 @@ app.post('/routeFeedback', upload.array(), (req, res) => {
         FROM users
         WHERE id=?`;
       connection.query(connectionString, [userId], (err, rows) => {
-        const adminEmail = rows[0].email;
-        const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
-        const fromEmail = defaultFromEmail;
-        const { subjectLine, bodyText } = routeFeedback({ feedback, message, adminEmail });
-        sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-        res.sendStatus(200);
+        if (err) res.status(400).send('The server is experiencing an error - 8980');
+        else if (!rows.length) res.status(400).send('The server is experiencing an error - 8981')
+        else {
+          const adminEmail = rows[0].email;
+          const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
+          const fromEmail = defaultFromEmail;
+          const { subjectLine, bodyText } = routeFeedback({ feedback, message, adminEmail });
+          sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+          res.sendStatus(200);
+        }
       });
     }
   });
@@ -845,13 +849,15 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
             FROM users
             WHERE id=?`;
           connection.query(connectionString, [userId], (err, rows) => {
-            if (err) console.log('here!!');
-            const adminEmail = rows[0].email;
-            const toEmail = (process.env.production) ? [rows1[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
-            const fromEmail = defaultFromEmail;
-            const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
-            sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-            res.sendStatus(200);
+            if (err) res.status(400).send('The server is experiencing an error - 898P');
+            else if (!rows.length) res.status(400).send('The server is experiencing an error - 898C');
+            else{
+              const toEmail = (process.env.production) ? [rows1[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
+              const fromEmail = defaultFromEmail;
+              const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
+              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+              res.sendStatus(200);
+            }
           });
         });
     } else if (type === 'interested') {
@@ -867,13 +873,17 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
             SELECT email
             FROM users
             WHERE id=?`;
-          connection.query(connectionString, [userId], (err, rows) => {
-            const adminEmail = rows[0].email;
-            const toEmail = (process.env.production) ? rows1.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
-            const fromEmail = defaultFromEmail;
-            const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
-            sendEmail(toEmail, fromEmail, subjectLine, bodyText);
-            res.sendStatus(200);
+          connection.query(connectionString, [userId], (err1, rows) => {
+            if (err1) res.status(400).send('The server is experiencing an error - 8P80');
+            else if (!rows.length) res.status(400).send('The server is experiencing an error - 8B81');
+            else {
+              const adminEmail = rows[0].email;
+              const toEmail = (process.env.production) ? rows1.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
+              const fromEmail = defaultFromEmail;
+              const { subjectLine, bodyText } = replyFeedback({ feedback, message, adminEmail });
+              sendEmail(toEmail, fromEmail, subjectLine, bodyText);
+              res.sendStatus(200);
+            }
           });
         });
     }
@@ -1105,7 +1115,6 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
       const { userId, groupId } = decoded;
-      console.log('userId', userId);
       let connectionString = `
         SELECT
           a.id as userId,
@@ -1135,14 +1144,24 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
            FROM categories
            WHERE groupId=?`;
           connection.query(connectionString, [groupId], (err2, rows2) => {
-            if (err) {
+            if (err2) {
               res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1346');
-              console.log('Error running pullCategories()');
+              console.log('Error running pullCategories()', err2);
             } else {
-              let categories = [];
-              rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
-              categories = categories.filter(category => category !== undefined);
-              res.status(200).send({ groupInfo: rows1[0], categories });
+              connectionString =
+              `SELECT location, locationOrder
+               FROM locations
+               WHERE groupId=?`;
+               connection.query(connectionString, [groupId], (err3, rows3) => {
+                 if (err3) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4625');
+                 let categories = [];
+                 let locations = [];
+                 rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
+                 rows3.forEach((row) => { locations[row.locationOrder] = row.location; });
+                 categories = categories.filter(category => category !== undefined);
+                 locations = locations.filter(location => location !== undefined);
+                 res.status(200).send({ groupInfo: rows1[0], categories, locations });
+               });
             }
           });
         }

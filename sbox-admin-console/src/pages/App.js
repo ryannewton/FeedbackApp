@@ -129,10 +129,7 @@ class App extends Component {
               <MenuItem onClick={() => this.setState({ typeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
             <DropdownButton bsStyle="primary" id='main-fitler-location' title={'Location: ' + this.state.locationFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
-              {/*<MenuItem onClick={() => this.setState({ locationFilter: 'Central' })}>Central</MenuItem>
-              <MenuItem onClick={() => this.setState({ locationFilter: 'Northeast' })}>Northeast</MenuItem>
-              <MenuItem onClick={() => this.setState({ locationFilter: 'Southeast' })}>Southeast</MenuItem>
-              <MenuItem onClick={() => this.setState({ locationFilter: 'West' })}>West</MenuItem>*/}
+              {this.props.group.locations.map((item) => <MenuItem onClick={() => this.setState({ locationFilter: item })}>{item}</MenuItem>)}
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ locationFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
