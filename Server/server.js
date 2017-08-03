@@ -802,7 +802,7 @@ app.post('/routeFeedback', upload.array(), (req, res) => {
     } else if (!feedback || !feedback.id) {
       res.status(400).send('Unrecognized feedback object');
     } else {
-      const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+      const toEmail = (process.env.production) ? [email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu', 'jbaker1@mit.edu'];
       const fromEmail = defaultFromEmail;
       const { subjectLine, bodyText } = routeFeedback({ feedback, message });
       sendEmail(toEmail, fromEmail, subjectLine, bodyText);
@@ -831,7 +831,7 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
         WHERE a.id=?`
         connection.query(connectionString, [feedback.id], (err, rows) => {
           if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - FED3');
-          const toEmail = (process.env.production) ? [rows[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+          const toEmail = (process.env.production) ? [rows[0].email] : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu', 'jbaker1@mit.edu'];
           const fromEmail = defaultFromEmail;
           const { subjectLine, bodyText } = replyFeedback({ feedback, message });
           sendEmail(toEmail, fromEmail, subjectLine, bodyText);
@@ -846,7 +846,7 @@ app.post('/replyFeedback', upload.array(), (req, res) => {
         WHERE a.feedbackId=?`;
         connection.query(connectionString, [feedback.id], (err, rows) => {
           if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - ALICE123');
-          const toEmail = (process.env.production) ? rows.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu'];
+          const toEmail = (process.env.production) ? rows.map(item => item.email) : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'alicezhy@stanford.edu', 'jbaker1@mit.edu'];
           const fromEmail = defaultFromEmail;
           const { subjectLine, bodyText } = replyFeedback({ feedback, message });
           sendEmail(toEmail, fromEmail, subjectLine, bodyText);
@@ -1081,6 +1081,7 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
     else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
     else {
       const { userId, groupId } = decoded;
+      console.log('userId', userId);
       let connectionString = `
         SELECT
           a.id as userId,
@@ -1102,6 +1103,8 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
       connection.query(connectionString, [userId], (err1, rows1) => {
         if (err) {
           res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
+        } else if (!rows1.length) {
+          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1SDF');
         } else {
           connectionString =
           `SELECT category, categoryOrder
