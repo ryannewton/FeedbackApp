@@ -9,6 +9,7 @@ const INITIAL_STATE = {
   groupTree: [],
   includePositiveFeedbackBox: null,
   categories: [],
+  locations: [],
 };
 
 export default (state = INITIAL_STATE, action) => {
@@ -19,6 +20,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state,
         includePositiveFeedbackBox: Boolean(action.payload.groupInfo.includePositiveFeedbackBox),
         categories: action.payload.categories,
+        locations: action.payload.locations,
       };
     case SIGNOUT_USER:
       return INITIAL_STATE;

@@ -1135,14 +1135,25 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
            FROM categories
            WHERE groupId=?`;
           connection.query(connectionString, [groupId], (err2, rows2) => {
-            if (err) {
+            if (err2) {
               res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1346');
-              console.log('Error running pullCategories()');
+              console.log('Error running pullCategories()', err2);
             } else {
-              let categories = [];
-              rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
-              categories = categories.filter(category => category !== undefined);
-              res.status(200).send({ groupInfo: rows1[0], categories });
+              connectionString =
+              `SELECT location, locationOrder
+               FROM locations
+               WHERE groupId=?`;
+               connection.query(connectionString, [groupId], (err3, rows3) => {
+                 if (err3) console.log(err3)
+                 console.log(rows3)
+                 let categories = [];
+                 let locations = [];
+                 rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
+                 rows3.forEach((row) => { locations[row.locationOrder] = row.location; });
+                 categories = categories.filter(category => category !== undefined);
+                 locations = locations.filter(location => location !== undefined);
+                 res.status(200).send({ groupInfo: rows1[0], categories, locations });
+               });
             }
           });
         }
