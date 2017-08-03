@@ -12,7 +12,7 @@ import {
 } from 'react-bootstrap';
 
 // Import actions
-import { clarifyFeedback, clarifySolution } from '../actions';
+import { clarifyFeedback, clarifySolution, updateFeedback } from '../actions';
 
 class ClarifyButton extends Component {
   state = {
@@ -37,6 +37,7 @@ class ClarifyButton extends Component {
       this.props.clarifyFeedback({ feedback, message });
     }
     this.setState({ sent: true });
+    this.props.updateButtonActive(false);
   }
 
   maybeRenderClarifyInput = () => {
@@ -56,18 +57,6 @@ class ClarifyButton extends Component {
       )
     }
     return null;
-  }
-
-  maybeRenderSentMessage() {
-    if (this.state.sent) {
-      return (
-        <center>
-          <div style={{ color: 'blue' }}>
-            Sent!
-          </div>
-        </center>
-      )
-    }
   }
 
   render = () => {
@@ -102,7 +91,6 @@ class ClarifyButton extends Component {
           />
         </FormGroup>
         {this.maybeRenderErrorMessage()}
-        {this.maybeRenderSentMessage()}
         <Button onClick={this.handleSubmit}>Send</Button>
       </Popover>
     );
@@ -135,4 +123,4 @@ class ClarifyButton extends Component {
   }
 }
 
-export default connect(null, { clarifyFeedback, clarifySolution })(ClarifyButton);
+export default connect(null, { clarifyFeedback, clarifySolution, updateFeedback })(ClarifyButton);

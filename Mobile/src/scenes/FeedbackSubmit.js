@@ -320,10 +320,11 @@ class FeedbackSubmit extends Component {
         {this.maybeRenderImage()}
       </View>
     );
-    const positiveBackgroundColor = (this.state.negativeFeedback === '') ? null : 'grey';
-    const negativeBackgroundColor = (this.state.positiveFeedback === '') ? null : 'grey';
-    const positivePlacholderText = (this.state.negativeFeedback === '') ? translate(language).POSITIVE_FILL_TEXT : 'Clear negative feedback to submit positive feedback';
-    const negativePlacholderText = (this.state.positiveFeedback === '') ? translate(language).NEGATIVE_FILL_TEXT : 'Clear positive feedback to submit negative feedback';
+    // console.log(this.state.negativeFeedback, this.props.feedback, 'here' );
+    const positiveBackgroundColor = (this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL === '' || this.props.feedback.negativeImageURL === undefined ) ) ? null : 'grey';
+    const negativeBackgroundColor = (this.state.positiveFeedback === '' && ( this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined)  ) ? null : 'grey';
+    const positivePlacholderText = (this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL == '' || this.props.feedback.negativeImageURL === undefined)) ? translate(language).POSITIVE_FILL_TEXT : 'Clear negative feedback to submit positive feedback';
+    const negativePlacholderText = (this.state.positiveFeedback === '' && (this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined) ) ? translate(language).NEGATIVE_FILL_TEXT : 'Clear positive feedback to submit negative feedback';
 
     const positiveFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -335,7 +336,7 @@ class FeedbackSubmit extends Component {
               style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1, backgroundColor: positiveBackgroundColor }]}
               placeholder={positivePlacholderText}
               placeholderTextColor="#d0d0d0"
-              editable={(this.state.negativeFeedback === '')}
+              editable={(this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL === '' || this.props.feedback.negativeImageURL === undefined ))}
               value={this.state.positiveFeedback}
               maxLength={500}
             />
@@ -357,7 +358,7 @@ class FeedbackSubmit extends Component {
               }}
               style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1, backgroundColor: negativeBackgroundColor }]}
               placeholder={negativePlacholderText}
-              editable={(this.state.positiveFeedback === '')}
+              editable={(this.state.positiveFeedback === '' && (this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined))}
               placeholderTextColor="#d0d0d0"
               value={this.state.negativeFeedback}
               maxLength={500}
