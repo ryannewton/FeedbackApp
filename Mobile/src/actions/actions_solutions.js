@@ -39,7 +39,7 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
     let solution = { text, feedbackId };
 
     dispatch({ type: SUBMITTING_SOLUTION });
-    http.post('/submitkjhSolution', { solution, authorization: token })
+    http.post('/submitSolution', { solution, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
       solution = {
@@ -56,7 +56,6 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
       dispatch(addSolutionUpvote(solution));
     })
     .catch((error) => {
-      console.log(error);
       const errorMessage = error.response ? error.response.data : "Sorry there was a problem, email 'BUG FOUND: AJE5' to SuggestionBox@suggestionboxapp.com";
       console.log('Error in submitSolutionToServer in actions_solutions', errorMessage);
       dispatch({ type: SUBMIT_SOLUTION_FAIL, payload: errorMessage });
