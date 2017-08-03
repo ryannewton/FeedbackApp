@@ -12,7 +12,7 @@ import {
   FormControl,
   Radio,
 } from 'react-bootstrap';
-import { replyFeedback } from '../actions';
+import { replyFeedback, updateFeedback } from '../actions';
 
 
 class ReplyButton extends Component {
@@ -37,6 +37,8 @@ class ReplyButton extends Component {
       const successText = (this.state.selectedResponseMethod === 'officialReply') ? 'Official Response Posted' : 'Email Sent';
       this.props.showSuccess(false, successText);
       this.props.replyFeedback(this.props.feedback, this.state.response, this.state.selectedResponseMethod);
+      const updatedFeedback = { ...this.props.feedback, officialReply: this.state.response };
+      this.props.updateFeedback(updatedFeedback)
     }
   }
 
@@ -185,4 +187,4 @@ const mapStateToProps = (state) => {
   return {};
 };
 
-export default connect(mapStateToProps, { replyFeedback })(ReplyButton);
+export default connect(mapStateToProps, { replyFeedback, updateFeedback })(ReplyButton);
