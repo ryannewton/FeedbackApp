@@ -31,10 +31,13 @@ export default (state = INITIAL_STATE, action) => {
     case SUBMIT_SOLUTION_FAIL:
       return { ...state, loading: false, message: action.payload || 'Error. Please try again later' };
     case ADD_SOLUTION_UPVOTE: {
-      const index = state.list.findIndex(solution => solution.id === action.payload.id);
-      const newList = state.list.slice(0);
-      newList[index].upvotes += 1;
-      return { ...state, list: newList };
+      if (action.payload.approved) {
+        const index = state.list.findIndex(solution => solution.id === action.payload.id);
+        const newList = state.list.slice(0);
+        newList[index].upvotes += 1;
+        return { ...state, list: newList };
+      }
+      return state;
     }
     case ADD_SOLUTION_DOWNVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
@@ -43,13 +46,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newList };
     }
     case REMOVE_SOLUTION_UPVOTE: {
-      if (action.payload.approved) {
-        const index = state.list.findIndex(solution => solution.id === action.payload.id);
-        const newList = state.list.slice(0);
-        newList[index].upvotes -= 1;
-        return { ...state, list: newList };
-      }
-      return state;
+      const index = state.list.findIndex(solution => solution.id === action.payload.id);
+      const newList = state.list.slice(0);
+      newList[index].upvotes -= 1;
+      return { ...state, list: newList };
     }
     case REMOVE_SOLUTION_DOWNVOTE: {
       const index = state.list.findIndex(solution => solution.id === action.payload.id);
