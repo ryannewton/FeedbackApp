@@ -1154,13 +1154,16 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
                WHERE groupId=?`;
                connection.query(connectionString, [groupId], (err3, rows3) => {
                  if (err3) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4625');
-                 let categories = [];
-                 let locations = [];
-                 rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
-                 rows3.forEach((row) => { locations[row.locationOrder] = row.location; });
-                 categories = categories.filter(category => category !== undefined);
-                 locations = locations.filter(location => location !== undefined);
-                 res.status(200).send({ groupInfo: rows1[0], categories, locations });
+                 else if (!rows3.length) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4212');
+                 else {
+                   let categories = [];
+                   let locations = [];
+                   rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
+                   rows3.forEach((row) => { locations[row.locationOrder] = row.location; });
+                   categories = categories.filter(category => category !== undefined);
+                   locations = locations.filter(location => location !== undefined);
+                   res.status(200).send({ groupInfo: rows1[0], categories, locations });
+                 }
                });
             }
           });
