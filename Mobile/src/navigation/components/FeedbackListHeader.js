@@ -129,7 +129,9 @@ class FeedbackSubmitHeader extends Component {
 
   renderPicker = () => {
     // Exclude on Android, library doesn't work
-
+    if (!this.props.group.categories.length) {
+      return null;
+    }
     const renderTouchable = () => <TouchableOpacity />;
     const { menuOptions, divider, pickerStyle } = styles;
     return (
