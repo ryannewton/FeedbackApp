@@ -2,6 +2,7 @@ import React from 'react';
 import Index from './src/containers/index';
 import { Font } from 'expo';
 import { Text } from 'react-native';
+Text.defaultProps.allowFontScaling = false;
 
 export default class App extends React.Component {
   state = {
