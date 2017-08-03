@@ -226,17 +226,21 @@ class FeedbackSubmit extends Component {
     );
   }
 
-  maybeRenderDeleteButton() {
-    if (!this.props.feedback.imageURL) {
-      return null;
+  maybeRenderDeleteButton(type) {
+    if (this.props.feedback.imageURL ||
+        this.props.feedback.positiveImageURL && type === 'positive' ||
+        this.props.feedback.negativeImageURL && type === 'negative') {
+
+      return (
+        <View>
+          <TouchableOpacity onPress={ () => this.props.removeImage() }>
+            <Icon name="remove-circle" size={40} color={'red'}/>
+          </TouchableOpacity>
+        </View>
+      );
     }
-    return (
-      <View>
-        <TouchableOpacity onPress={ () => this.props.removeImage() }>
-          <Icon name="remove-circle" size={40} color={'red'}/>
-        </TouchableOpacity>
-      </View>
-    )
+
+    return null;
   }
 
   maybeRenderCategoryModal() {
@@ -337,6 +341,7 @@ class FeedbackSubmit extends Component {
           {this.maybeRenderCategoryModal()}
           {this.renderImageButton('positive')}
           {this.renderSubmitButton('positive')}
+          {this.maybeRenderDeleteButton('positive')}
           {this.maybeRenderImage('positive')}
         </View>
         <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
@@ -359,6 +364,7 @@ class FeedbackSubmit extends Component {
           {this.maybeRenderCategoryModal()}
           {this.renderImageButton('negative')}
           {this.renderSubmitButton('negative')}
+          {this.maybeRenderDeleteButton('negative')}
           {this.maybeRenderImage('negative')}
         </View>
       </View>

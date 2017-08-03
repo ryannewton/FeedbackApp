@@ -22,7 +22,7 @@ import {
   SEARCH_IN_PROGRESS,
   REMOVE_IMAGE,
   AUTHORIZE_USER_FAIL,
-  AUTHORIZE_USER_SUCCESS
+  AUTHORIZE_USER_SUCCESS,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -36,7 +36,7 @@ const INITIAL_STATE = {
   filterMethod: 'all',
   searchQuery: 'Search',
   searchInProgress: false,
-  refreshing: false
+  refreshing: false,
 };
 
 function filterAndOrder(list) {
@@ -49,7 +49,7 @@ function filterAndOrder(list) {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case REQUESTED_FEEDBACK:
-      return { ...state, refreshing: true};
+      return { ...state, refreshing: true };
 
     case RECEIVED_FEEDBACK: {
       const list = filterAndOrder(action.payload.list);
@@ -57,11 +57,11 @@ export default (state = INITIAL_STATE, action) => {
     }
 
     case AUTHORIZE_USER_FAIL: {
-      return { ...state, refreshing: false};
+      return { ...state, refreshing: false };
     }
 
     case AUTHORIZE_USER_SUCCESS: {
-      return { ...state, refreshing: false};
+      return { ...state, refreshing: false };
     }
 
     case SUBMITTING_FEEDBACK:
@@ -77,7 +77,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loadingImage: true };
 
     case REMOVE_IMAGE:
-      return { ...state, imageURL: ''};
+      return { ...state, imageURL: '', positiveImageURL: '', negativeImageURL: '' };
 
     case SUBMIT_IMAGE_SUCCESS: {
       if (!action.payload.type)
