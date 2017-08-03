@@ -13,6 +13,7 @@ import {
   REMOVE_SOLUTION_UPVOTE,
   REMOVE_SOLUTION_DOWNVOTE,
   SOLUTION_CHANGED,
+  AUTHORIZE_USER_FAIL,
 } from './types';
 
 // Import constants
@@ -25,7 +26,9 @@ export const pullSolutions = token => (
       dispatch({ type: RECEIVED_SOLUTION_LIST, payload: response.data });
     })
     .catch((error) => {
-      console.log('Error in pullSolutions in actions_solutions', error.response.data);
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in pullSolutions in actions_solutions', errorMessage);
+      dispatch({ type: AUTHORIZE_USER_FAIL, payload: errorMessage });
     });
   }
 );
@@ -36,7 +39,7 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
     let solution = { text, feedbackId };
 
     dispatch({ type: SUBMITTING_SOLUTION });
-    http.post('/submitSolution', { solution, authorization: token })
+    http.post('/submitkjhSolution', { solution, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
       solution = {
@@ -53,8 +56,10 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
       dispatch(addSolutionUpvote(solution));
     })
     .catch((error) => {
-      console.log('Error in submitSolutionToServer in actions_solutions', error.response.data);
-      dispatch({ type: SUBMIT_SOLUTION_FAIL, payload: error.response.data });
+      console.log(error);
+      const errorMessage = error.response ? error.response.data : "Sorry there was a problem, email 'BUG FOUND: AJE5' to SuggestionBox@suggestionboxapp.com";
+      console.log('Error in submitSolutionToServer in actions_solutions', errorMessage);
+      dispatch({ type: SUBMIT_SOLUTION_FAIL, payload: errorMessage });
     });
   }
 );
@@ -72,7 +77,10 @@ export const addSolutionUpvote = solution => (
 
     const token = getState().auth.token;
     http.post('/submitSolutionVote', { solution, upvote: 1, downvote: 0, authorization: token })
-    .catch(error => console.log('Error in addSolutionUpvote in actions_solutions', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in addSolutionUpvote in actions_solutions', errorMessage);
+    });
   }
 );
 
@@ -89,7 +97,10 @@ export const addSolutionDownvote = solution => (
 
     const token = getState().auth.token;
     http.post('/submitSolutionVote', { solution, upvote: 0, downvote: 1, authorization: token })
-    .catch(error => console.log('Error in addSolutionDownvote in actions_solutions', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in addSolutionDownvote in actions_solutions', errorMessage);
+    });
   }
 );
 
@@ -101,7 +112,10 @@ export const removeSolutionUpvote = solution => (
 
     const token = getState().auth.token;
     http.post('/removeSolutionVote', { solution, upvote: 1, downvote: 0, authorization: token })
-    .catch(error => console.log('Error in removeSolutionUpvote in actions_solutions', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in removeSolutionUpvote in actions_solutions', errorMessage);
+    });
   }
 );
 
@@ -113,7 +127,10 @@ export const removeSolutionDownvote = solution => (
 
     const token = getState().auth.token;
     http.post('/removeSolutionVote', { solution, upvote: 0, downvote: 1, authorization: token })
-    .catch(error => console.log('Error in removeSolutionDownvote in actions_solutions', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in removeSolutionDownvote in actions_solutions', errorMessage);
+    });
   }
 );
 
