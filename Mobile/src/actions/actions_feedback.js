@@ -39,8 +39,9 @@ export const pullFeedback = token => (
       dispatch({ type: RECEIVED_FEEDBACK, payload: { list: response.data, lastPulled: new Date() } });
     })
     .catch((error) => {
-      console.log('Error in pullFeedback in actions_feedback', error.response.data);
-      dispatch({ type: AUTHORIZE_USER_FAIL, payload: error.response.data });
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in pullFeedback in actions_feedback', errorMessage);
+      dispatch({ type: AUTHORIZE_USER_FAIL, payload: errorMessage });
     });
   }
 );
@@ -66,8 +67,9 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
       dispatch(addFeedbackUpvote(feedback));
     })
     .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
       console.log('Error in submitFeedbackToServer in actions_feedback', error);
-      dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: error.response.data });
+      dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: errorMessage });
     });
   }
 );
@@ -89,7 +91,10 @@ export const addFeedbackUpvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
-    .catch(error => console.log('Error in addFeedbackUpvote in actions_feedback', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in addFeedbackUpvote in actions_feedback', errorMessage);
+    });
   }
 );
 
@@ -111,7 +116,10 @@ export const addFeedbackNoOpinion = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, noOpinion: 1, upvote: 0, downvote: 0, authorization: token })
-    .catch(error => console.log('Error in addFeedbackNoOpinion in actions_feedback', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in addFeedbackNoOpinion in actions_feedback', errorMessage);
+    });
   }
 );
 
@@ -123,7 +131,10 @@ export const removeFeedbackNoOpinion = feedback => (
 
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, noOpinion: 1, upvote: 0, downvote: 0, authorization: token })
-    .catch(error => console.log('Error in removeFeedbackNoOpinion in actions_feedback', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in removeFeedbackNoOpinion in actions_feedback', errorMessage);
+    });
   }
 );
 
@@ -135,7 +146,10 @@ export const removeFeedbackUpvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
-    .catch(error => console.log('Error in removeFeedbackUpvote in actions_feedback', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in removeFeedbackUpvote in actions_feedback', errorMessage);
+    });
   }
 );
 
@@ -155,7 +169,10 @@ export const addFeedbackDownvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 0, downvote: 1, noOpinion: 0, authorization: token })
-    .catch(error => console.log('Error in addFeedbackDownvote in actions_feedback', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in addFeedbackDownvote in actions_feedback', errorMessage);
+    });
   }
 );
 
@@ -167,7 +184,10 @@ export const removeFeedbackDownvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, upvote: 0, downvote: 1, noOpinion: 0, authorization: token })
-    .catch(error => console.log('Error in removeFeedbackDownvote in actions_feedback', error.response.data));
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in removeFeedbackDownvote in actions_feedback', errorMessage);
+    });
   }
 );
 
@@ -217,17 +237,17 @@ export const uploadImage = (uri, type) => (
     fetch(apiUrl, options)
     .then(response => response.json())
     .then(response => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: { location: response, type } }))
-    .catch((err) => {
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+
       dispatch({ type: SUBMIT_IMAGE_FAIL });
-      alert('Uh-oh, something went wrong :(\nPlease try again.');
-      console.log('Error uploading image');
-      console.log('Error: ', err);
+      alert("I'm sorry. The server is experiencing an error. Error message: ", errorMessage);
     });
   }
 );
 
 export const removeImage = () => (
   {
-    type: REMOVE_IMAGE
+    type: REMOVE_IMAGE,
   }
-)
+);

@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { View, Text, TouchableOpacity, Dimensions, Image as Image2 } from 'react-native';
+import { View, TouchableOpacity, Dimensions, Image as Image2 } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon, Button } from 'react-native-elements';
 import Image from 'react-native-image-progress';
@@ -16,7 +16,7 @@ import noOpinionG from '../../images/icons/meh_g1.png';
 // Import componenets, functions, and styles
 import styles from '../styles/components/FeedbackCardStyles';
 import { Card, CardSection } from './common';
-import { TinyButton } from '../components/common';
+import { Text, TinyButton } from '../components/common';
 import * as Animatable from 'react-native-animatable';
 import LightBox from 'react-native-lightbox';
 

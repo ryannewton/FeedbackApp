@@ -7,7 +7,6 @@ import {
   Keyboard,
   ScrollView,
   KeyboardAvoidingView,
-  Text,
   RefreshControl,
   Alert,
 } from 'react-native';
@@ -19,7 +18,7 @@ import styles from '../styles/scenes/FeedbackDetailsStyles';
 import FeedbackCard from '../components/FeedbackCard';
 import SolutionsCard from '../components/SolutionsCard';
 import ResponseCard from '../components/ResponseCard';
-import { Button, Spinner } from '../components/common';
+import { Button, Spinner, Text } from '../components/common';
 import {
   solutionChanged,
   submitSolutionToServer,

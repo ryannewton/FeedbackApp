@@ -1,6 +1,7 @@
 // Import libraries
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity, LayoutAnimation, Platform, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, LayoutAnimation, Platform, StyleSheet } from 'react-native';
+import { Text } from '../../components/common';
 import Modal from 'react-native-modalbox';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
@@ -128,7 +129,9 @@ class FeedbackSubmitHeader extends Component {
 
   renderPicker = () => {
     // Exclude on Android, library doesn't work
-
+    if (!this.props.group.categories.length) {
+      return null;
+    }
     const renderTouchable = () => <TouchableOpacity />;
     const { menuOptions, divider, pickerStyle } = styles;
     return (

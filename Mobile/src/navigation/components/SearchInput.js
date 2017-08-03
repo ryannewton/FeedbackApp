@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import {
-  Text,
   TouchableWithoutFeedback,
   TextInput,
   Animated,
@@ -9,6 +8,7 @@ import {
   Image,
   View
 } from 'react-native';
+import { Text } from '../../components/common';
 import { Icon } from 'react-native-elements';
 import translate from '../../translation';
 import { connect } from 'react-redux';

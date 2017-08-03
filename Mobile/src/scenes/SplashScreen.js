@@ -1,6 +1,6 @@
 // Import Libraries
 import React, { Component } from 'react';
-import { Text, Image, Linking, Platform, Alert } from 'react-native';
+import { Image, Linking, Platform, Alert } from 'react-native';
 import { connect } from 'react-redux';
 import Expo from 'expo';
 import axios from 'axios';
@@ -8,7 +8,7 @@ import { NavigationActions } from 'react-navigation';
 import PropTypes from 'prop-types';
 
 // Import image and styles
-import { Spinner } from '../components/common';
+import { Spinner, Text } from '../components/common';
 import styles from '../styles/scenes/SplashScreenStyles';
 import fullScreen from '../../images/backgrounds/SplashScreen.png';
 
