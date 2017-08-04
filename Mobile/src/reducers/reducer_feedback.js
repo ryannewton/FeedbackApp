@@ -23,6 +23,7 @@ import {
   REMOVE_IMAGE,
   AUTHORIZE_USER_FAIL,
   AUTHORIZE_USER_SUCCESS,
+  DELETE_FEEDBACK,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -155,6 +156,13 @@ export default (state = INITIAL_STATE, action) => {
 
     case ADD_FEEDBACK_TO_STATE: {
       return { ...state, list: filterAndOrder([...state.list, action.payload]) };
+    }
+
+    case DELETE_FEEDBACK: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.feedback.id);
+      const newList = state.list.slice(0);
+      newList[index].status = 'deleted';
+      return { ...state, list: newList };
     }
 
     case LOG_OUT_USER:

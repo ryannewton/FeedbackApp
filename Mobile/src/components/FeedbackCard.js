@@ -85,6 +85,7 @@ class Feedback extends Component {
     if (this.props.feedback === undefined) {
       return '';
     }
+
     return (
       <Text
         style={{
@@ -97,6 +98,14 @@ class Feedback extends Component {
         {this.props.feedback.text}
       </Text>
     );
+  }
+
+  renderEditMyFeedback = () => {
+    const { showImage } = this.props;
+    if (this.props.user.userId != this.props.feedback.userId || !showImage) {
+      return null;
+    } 
+    return <View style = {{flexDirection:'row', marginRight:10}}><Icon name="edit" size={20} color={'#F54B5E'} /></View>;
   }
 
   renderResponse = () => {

@@ -24,6 +24,7 @@ import {
   SET_SEARCH_QUERY,
   SEARCH_IN_PROGRESS,
   REMOVE_IMAGE,
+  DELETE_FEEDBACK,
 } from './types';
 
 // Import constants
@@ -249,5 +250,19 @@ export const uploadImage = (uri, type) => (
 export const removeImage = () => (
   {
     type: REMOVE_IMAGE,
+  }
+);
+
+export const deleteFeedback = feedback => (
+  (dispatch, getState) => {
+    //const token = getState().auth.token;
+    //http.post('/softDeleteFeedback', { authorization: token, feedback })
+    //.then(() => {
+      dispatch({ type: DELETE_FEEDBACK, payload: {feedback} });
+    //})
+    /*.catch((error) => {
+      console.log('deleteFeedback() Fail');
+      console.log('Error: ', error);
+    });*/
   }
 );

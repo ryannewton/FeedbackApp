@@ -44,6 +44,7 @@ export const ADD_FEEDBACK_TO_STATE = 'add_feedback_to_state';
 export const ADD_FEEDBACK_NO_OPINION = 'add_feedback_no_opinion';
 export const REMOVE_FEEDBACK_NO_OPINION = 'remove_feedback_no_opinion';
 export const REMOVE_IMAGE = 'remove_image';
+export const DELETE_FEEDBACK = 'delete_feedback';
 
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';

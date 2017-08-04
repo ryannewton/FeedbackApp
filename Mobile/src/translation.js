@@ -54,7 +54,12 @@ const translate = language => {
         ERROR_MESSAGE_1: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.',
         ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
         OFFICIAL_RESPONSE: 'Official Response',
-      }
+        EDIT_FEEDBACK: 'Edit Feedback',
+        FEEDBACK_DETAIL: 'Feedback Detail',
+        DELETE_FEEDBACK: 'Delete Feedback',
+        DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
+        DELETE: 'Delete',
+    }
     case 'es':
       return {
         INTRO_SLIDE_1: 'Bienvenido a \n The Suggestion Box \n (Caja de sugerencias)',
@@ -110,6 +115,11 @@ const translate = language => {
         OK: 'De acuerdo',
         NEED_GROUP_CODE: '¿Necesita un código de grupo?',
         NEED_GROUP_CODE_DETAIL: 'Si su comunidad aún no ha sido creada, envíe un correo electrónico a tyler@suggestionboxapp.com para recibir su código de grupo único.',
+        EDIT_FEEDBACK: 'Editar comentarios',
+        FEEDBACK_DETAIL: 'Detalle de comentarios',
+        DELETE_FEEDBACK: 'Delete Feedback',
+        DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
+        DELETE: 'Delete',
       }
     case 'vi':
       return {
@@ -166,6 +176,11 @@ const translate = language => {
         OK: 'được',
         NEED_GROUP_CODE: 'Cần một mã nhóm?',
         NEED_GROUP_CODE_DETAIL: 'Nếu cộng đồng của bạn chưa được thiết lập, hãy gửi email tới tyler@suggestionboxapp.com để nhận mã nhóm duy nhất của bạn!',
+        EDIT_FEEDBACK: 'Chỉnh sửa phản hồi',
+        FEEDBACK_DETAIL: 'Chi tiết phản hồi',
+        DELETE_FEEDBACK: 'Xóa phản hồi',
+        DELETE_FEEDBACK_BODY: 'Phiếu bầu và nhận xét sẽ bị xóa cùng với phản hồi nếu bạn nhấn Xóa bỏ',
+        DELETE: 'Xóa bỏ',
       }
     case 'zh-cn':
       return {
@@ -221,6 +236,11 @@ const translate = language => {
         ERROR_MESSAGE_1: '你的评论中包含了你们组织限制使用的词汇，请修改你的评论并重新提交',
         ERROR_MESSAGE_2: '抱歉，评论不能为空',
         OFFICIAL_RESPONSE: '官方回复',
+        EDIT_FEEDBACK: '编辑反馈',
+        FEEDBACK_DETAIL: '反馈细节',
+        DELETE_FEEDBACK: '删除反馈',
+        DELETE_FEEDBACK_BODY: '如果你点击删除，投票与评论信息也会被清除',
+        DELETE: '删除',
       }
     default:
       return {
@@ -276,6 +296,11 @@ const translate = language => {
         ERROR_MESSAGE_1: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.',
         ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
         OFFICIAL_RESPONSE: 'Official Response',
+        EDIT_FEEDBACK: 'Edit Feedback',
+        FEEDBACK_DETAIL: 'Feedback Detail',
+        DELETE_FEEDBACK: 'Delete Feedback',
+        DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
+        DELETE: 'Delete',
       }
     }
 }

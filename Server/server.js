@@ -986,6 +986,24 @@ app.post('/clarifySolution', upload.array(), (req, res) => {
 });
 
 // DELETE - Needs to also delete associated official responses and solutions
+app.post('/softDeleteFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      const { feedback } = req.body;
+      const connectionString = "UPDATE feedback SET status='deleted' WHERE id=?";
+      connection.query(connectionString, [feedback.id], (err) => {
+        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error');
+        else res.sendStatus(200);
+      });
+    }
+  });
+});
+
+
+
+
+
 app.post('/deleteFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
