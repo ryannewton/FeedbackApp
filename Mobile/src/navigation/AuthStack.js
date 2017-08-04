@@ -23,7 +23,7 @@ const AuthStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    })
+    }),
   },
   AuthCode: {
     screen: Authorize,
@@ -38,7 +38,7 @@ const AuthStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    })
+    }),
   },
   AuthGroupCode: {
     screen: GroupCode,
