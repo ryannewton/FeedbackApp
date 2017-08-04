@@ -365,7 +365,7 @@ maybeRenderImage(){
       return null;
     }
     const imageURL = this.props.feedback.imageURL;
-    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10}} responsive /> : null;
+    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10, height:(this.props.group.includePositiveFeedbackBox?300:null)}} responsive={this.props.group.includePositiveFeedbackBox?false:true} /> : null;
     return (
       <span>
         {image}
