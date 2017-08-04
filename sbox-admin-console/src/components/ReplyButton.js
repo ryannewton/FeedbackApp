@@ -34,11 +34,14 @@ class ReplyButton extends Component {
       this.setState({ error: true })
     } else {
       this.setState({ error: false })
-      const successText = (this.state.selectedResponseMethod === 'officialReply') ? 'Official Response Posted' : 'Email Sent';
+      const { selectedResponseMethod } = this.state;
+      const successText = (selectedResponseMethod === 'officialReply') ? 'Official Response Posted' : 'Email Sent';
       this.props.showSuccess(false, successText);
-      this.props.replyFeedback(this.props.feedback, this.state.response, this.state.selectedResponseMethod);
-      const updatedFeedback = { ...this.props.feedback, officialReply: this.state.response };
-      this.props.updateFeedback(updatedFeedback)
+      this.props.replyFeedback(this.props.feedback, this.state.response, selectedResponseMethod);
+      if (selectedResponseMethod === 'officialReply') {
+        const updatedFeedback = { ...this.props.feedback, officialReply: this.state.response };
+        this.props.updateFeedback(updatedFeedback)
+      }
     }
   }
 
