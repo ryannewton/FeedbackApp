@@ -44,7 +44,7 @@ const MainStack = StackNavigator({
   FeedbackSubmit: {
     screen: FeedbackSubmit,
     navigationOptions: ({ navigation }) => ({
-      title: navigation.state.params,
+      title: navigation.state.params.language,
       headerRight: <FeedbackSubmitHeaderButtons navigation={navigation} />,
       headerTitleStyle: {
         color: '#fff',

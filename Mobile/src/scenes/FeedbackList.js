@@ -145,7 +145,7 @@ class FeedbackList extends Component {
   renderFeedbackSubmitButton = () => {
     return (
       <View style={{position: 'absolute', right: 10, bottom: 10}}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit', translate(this.props.user.language).SUBMIT_FEEDBACK)}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit', { language: translate(this.props.user.language).SUBMIT_FEEDBACK })}>
           <Icon name="mode-edit" size={30} color={'#00A2FF'} backgroundColor={'red'} raised reverse />
         </TouchableOpacity>
       </View>

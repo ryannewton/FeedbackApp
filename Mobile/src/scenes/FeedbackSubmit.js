@@ -39,12 +39,12 @@ class FeedbackSubmit extends Component {
 
     this.state = {
       errorMessage: '',
-      feedback: '',
+      feedback: this.props.navigation.state.params.feedback ? this.props.navigation.state.params.feedback.text : '',
       positiveFeedback: '',
       negativeFeedback: '',
       imageWidth: null,
       imageHeight: null,
-      category: ''
+      category: this.props.navigation.state.params.feedback ? this.props.navigation.state.params.feedback.category : '',
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
@@ -298,6 +298,7 @@ class FeedbackSubmit extends Component {
   }
 
   render() {
+    console.log(this.props.navigation.state.params.feedback)
     const { width, height } = Dimensions.get('window')
     const { language } = this.props.user;
     const singleFeedbackBox = (
