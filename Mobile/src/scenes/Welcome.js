@@ -8,7 +8,6 @@ import { AppLoading } from 'expo';
 import { sendGoogleAnalytics } from '../actions';
 
 import Slides from '../components/IntroSlides';
-import translate from '../translation'
 // Import Images
 import pageZeroImage from '../../images/backgrounds/language3.jpg';
 import pageOneImage from '../../images/backgrounds/1_n.jpg';
@@ -30,7 +29,7 @@ class WelcomeScreen extends Component {
             INTRO_SLIDE_2,
             INTRO_SLIDE_3,
             INTRO_SLIDE_4
-    } = translate(language)
+    } = this.props.translation;
     return [
       { text: "", image: pageZeroImage, color: 'white' },
       { text: INTRO_SLIDE_1, image: pageOneImage, color: '#03A9F4' },
@@ -42,7 +41,7 @@ class WelcomeScreen extends Component {
   }
 
   onSlidesComplete = () => {
-    this.props.navigation.navigate('SubmitEmail', translate(this.props.user.language).ENTER_EMAIL);
+    this.props.navigation.navigate('SubmitEmail', this.props.translation.ENTER_EMAIL);
   }
 
   render() {
@@ -53,8 +52,8 @@ class WelcomeScreen extends Component {
 }
 
 function mapStateToProps(state) {
-  const { group, user } = state
-  return { group, user };
+  const { group, user, translation } = state
+  return { group, user, translation };
 }
 
 export default connect(mapStateToProps, { sendGoogleAnalytics })(WelcomeScreen);

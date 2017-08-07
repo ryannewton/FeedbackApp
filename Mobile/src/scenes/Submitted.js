@@ -7,7 +7,6 @@ import PropTypes from 'prop-types';
 // Import components, functions, and styles
 import { Button, Text } from '../components/common';
 import styles from '../styles/scenes/SubmittedStyles';
-import translate from '../translation';
 
 // Import tracking
 import { sendGoogleAnalytics } from '../actions';
@@ -28,7 +27,7 @@ class Submitted extends Component {
 
   renderSubmittedText() {
     if (!this.props.group.feedbackRequiresApproval) {
-      return translate(this.props.user.language).THANKS_FOR_FEEDBACK;
+      return this.props.translation.THANKS_FOR_FEEDBACK;
     }
     return (
       <Text>
@@ -56,7 +55,7 @@ class Submitted extends Component {
           </Text>
           <View style={{ width: SCREEN_WIDTH / 2 }}>
             <Button onPress={() => this.props.navigation.navigate('Main')}>
-              {translate(this.props.user.language).BACK_TO_BOARD}
+              {this.props.translation.BACK_TO_BOARD}
             </Button>
           </View>
         </View>
@@ -74,8 +73,8 @@ Submitted.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { group, user } = state;
-  return { group, user };
+  const { group, user, translation } = state;
+  return { group, user, translation };
 }
 
 export default connect(mapStateToProps, { sendGoogleAnalytics })(Submitted);

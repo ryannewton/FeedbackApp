@@ -6,7 +6,6 @@ import { Button } from 'react-native-elements';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { languageChoice } from '../actions';
-import translate from '../translation';
 
 import l1 from '../../images/backgrounds/l1.png';
 import l2 from '../../images/backgrounds/l2.png';
@@ -17,13 +16,13 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 class IntroSlides extends Component {
-  constructor(props){
-    super(props)
+  constructor(props) {
+    super(props);
     this.state = {
       language: null,
       navigate: false,
-    }
-    this.handleScroll = this.handleScroll.bind(this)
+    };
+    this.handleScroll = this.handleScroll.bind(this);
   }
   languageButtonStyle(language) {
     if (this.state.language === language) {
@@ -37,13 +36,12 @@ class IntroSlides extends Component {
   languageButtonPress(language) {
     this.setState({ language });
     this.props.languageChoice(language);
-    this.myScroll.scrollTo({x: SCREEN_WIDTH, y: 0, animated: true});
+    this.myScroll.scrollTo({ x: SCREEN_WIDTH, y: 0, animated: true });
   }
   renderLastSlide(index) {
-    const { language } = this.props.user;
     const {
       GET_STARTED,
-    } = translate(language)
+    } = this.props.translation;
     if (index === this.props.data.length - 2) {
       return (
         <Button
@@ -55,18 +53,18 @@ class IntroSlides extends Component {
       );
     } else if (index === 0) {
       return (
-        <View style={{alignItems:'center', paddingTop:SCREEN_HEIGHT * 0.14 }}>
+        <View style={{ alignItems: 'center', paddingTop: SCREEN_HEIGHT * 0.14 }}>
           <TouchableOpacity
             style={[this.languageButtonStyle('en'), {
-              flexDirection:'row',
-              alignItems:'center',
-              shadowColor: "#000000",
+              flexDirection: 'row',
+              alignItems: 'center',
+              shadowColor: '#000000',
               shadowOpacity: 0.7,
               shadowRadius: 7,
               shadowOffset: {
-                  height: 1,
-                  width: 1
-                },
+                height: 1,
+                width: 1,
+              },
               backgroundColor: '#0081cb',
               width: SCREEN_HEIGHT * 0.45,
               height: SCREEN_HEIGHT * 0.13,
@@ -79,25 +77,25 @@ class IntroSlides extends Component {
                 width: SCREEN_HEIGHT * 0.13,
                 height: SCREEN_HEIGHT * 0.13,
                 resizeMode: 'contain',
-                paddingLeft:SCREEN_HEIGHT*0.02,
-                flex:1.6
+                paddingLeft: SCREEN_HEIGHT * 0.02,
+                flex: 1.6,
               }}
             />
-            <Text style={{flex:3, textAlign:'center', paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, fontSize:SCREEN_HEIGHT*0.025, fontWeight:'bold', color:'white'}}>
+            <Text style={{ flex: 3, textAlign: 'center', paddingLeft: SCREEN_HEIGHT * 0.01, paddingRight: SCREEN_HEIGHT * 0.03, fontSize: SCREEN_HEIGHT * 0.025, fontWeight: 'bold', color: 'white' }}>
               Set default language to English
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[this.languageButtonStyle('en'), {
-              flexDirection:'row',
-              alignItems:'center',
-              shadowColor: "#000000",
+              flexDirection: 'row',
+              alignItems: 'center',
+              shadowColor: '#000000',
               shadowOpacity: 0.7,
               shadowRadius: 7,
               shadowOffset: {
-                  height: 1,
-                  width: 1
-                },
+                height: 1,
+                width: 1,
+              },
               backgroundColor: '#f8c61c',
               width: SCREEN_HEIGHT * 0.45,
               height: SCREEN_HEIGHT * 0.13,
@@ -110,25 +108,25 @@ class IntroSlides extends Component {
                 width: SCREEN_HEIGHT * 0.13,
                 height: SCREEN_HEIGHT * 0.13,
                 resizeMode: 'contain',
-                paddingLeft:SCREEN_HEIGHT*0.02,
-                flex:1.6
+                paddingLeft: SCREEN_HEIGHT * 0.02,
+                flex: 1.6,
               }}
             />
-            <Text style={{flex:3, textAlign:'center', paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, fontSize:SCREEN_HEIGHT*0.022, fontWeight:'bold', color:'white'}}>
+            <Text style={{ flex: 3, textAlign: 'center', paddingLeft: SCREEN_HEIGHT * 0.01, paddingRight: SCREEN_HEIGHT * 0.03, fontSize: SCREEN_HEIGHT * 0.022, fontWeight: 'bold', color: 'white' }}>
               Utilizar el español como idioma predeterminado
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[this.languageButtonStyle('en'), {
-              flexDirection:'row',
-              alignItems:'center',
-              shadowColor: "#000000",
+              flexDirection: 'row',
+              alignItems: 'center',
+              shadowColor: '#000000',
               shadowOpacity: 0.7,
               shadowRadius: 7,
               shadowOffset: {
-                  height: 1,
-                  width: 1
-                },
+                height: 1,
+                width: 1,
+              },
               backgroundColor: '#f56b4b',
               width: SCREEN_HEIGHT * 0.45,
               height: SCREEN_HEIGHT * 0.13,
@@ -141,25 +139,25 @@ class IntroSlides extends Component {
                 width: SCREEN_HEIGHT * 0.13,
                 height: SCREEN_HEIGHT * 0.13,
                 resizeMode: 'contain',
-                paddingLeft:SCREEN_HEIGHT*0.02,
-                flex:1.6
+                paddingLeft: SCREEN_HEIGHT * 0.02,
+                flex: 1.6,
               }}
             />
-            <Text style={{flex:3, paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, textAlign:'center', fontSize:SCREEN_HEIGHT*0.022, fontWeight:'bold', color:'white'}}>
+            <Text style={{ flex: 3, paddingLeft: SCREEN_HEIGHT * 0.01, paddingRight: SCREEN_HEIGHT * 0.03, textAlign: 'center', fontSize: SCREEN_HEIGHT * 0.022, fontWeight: 'bold', color: 'white' }}>
               Sử dụng tiếng Việt làm ngôn ngữ mặc định
             </Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={[this.languageButtonStyle('en'), {
-              flexDirection:'row',
-              alignItems:'center',
-              shadowColor: "#000000",
+              flexDirection: 'row',
+              alignItems: 'center',
+              shadowColor: '#000000',
               shadowOpacity: 0.7,
               shadowRadius: 7,
               shadowOffset: {
-                  height: 1,
-                  width: 1
-                },
+                height: 1,
+                width: 1,
+              },
               backgroundColor: '#f44242',
               width: SCREEN_HEIGHT * 0.45,
               height: SCREEN_HEIGHT * 0.13,
@@ -172,25 +170,23 @@ class IntroSlides extends Component {
                 width: SCREEN_HEIGHT * 0.13,
                 height: SCREEN_HEIGHT * 0.13,
                 resizeMode: 'contain',
-                paddingLeft:SCREEN_HEIGHT*0.02,
-                flex:1.6
+                paddingLeft: SCREEN_HEIGHT * 0.02,
+                flex: 1.6,
               }}
             />
-            <Text style={{flex:3, textAlign:'center', paddingLeft:SCREEN_HEIGHT*0.01, paddingRight:SCREEN_HEIGHT*0.03, fontSize:SCREEN_HEIGHT*0.027, fontWeight:'bold', color:'white'}}>
+            <Text style={{ flex: 3, textAlign: 'center', paddingLeft: SCREEN_HEIGHT * 0.01, paddingRight: SCREEN_HEIGHT * 0.03, fontSize: SCREEN_HEIGHT * 0.027, fontWeight: 'bold', color: 'white' }}>
               将简体中文设置为默认语言
             </Text>
           </TouchableOpacity>
         </View>
       )
-    } else {
-      return (
-        <TouchableOpacity
-          style={{width: SCREEN_WIDTH, height:SCREEN_HEIGHT}}
-          onPress={() => this.myScroll.scrollTo({x: SCREEN_WIDTH*(index+1), y: 0, animated: true})}
-        />
-      );
     }
-    return null;
+    return (
+      <TouchableOpacity
+        style={{ width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
+        onPress={() => this.myScroll.scrollTo({ x: SCREEN_WIDTH * (index + 1), y: 0, animated: true })}
+      />
+    );
   }
 
   renderText(text, index) {
@@ -213,23 +209,23 @@ class IntroSlides extends Component {
   renderSlides() {
     return this.props.data.map((slide, index) => {
       return (
-        <View key={slide.text} style={styles.slideStyle, {backgroundColor:'white'}}>
-        <TouchableOpacity
-          activeOpacity={1}
-          style={{zIndex:5, width: SCREEN_WIDTH, height:SCREEN_HEIGHT}}
-          onPress={() => {
-            if (index === this.props.data.length - 2) {
-              {this.props.onComplete()}
-            } else if (index !== 0) {
-              this.myScroll.scrollTo({x: SCREEN_WIDTH*(index+1), y: 0, animated: true})
+        <View key={slide.text} style={styles.slideStyle, { backgroundColor: 'white' }}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{ zIndex: 5, width: SCREEN_WIDTH, height: SCREEN_HEIGHT }}
+            onPress={() => {
+              if (index === this.props.data.length - 2) {
+                this.props.onComplete();
+              } else if (index !== 0) {
+                this.myScroll.scrollTo({ x: SCREEN_WIDTH * (index + 1), y: 0, animated: true });
+              }
             }
-          }
         }
-        >
-          <Image source={slide.image} style={styles.backgroundImageStyle}>
-            {this.renderText(slide.text, index)}
-            {this.renderLastSlide(index)}
-          </Image>
+          >
+            <Image source={slide.image} style={styles.backgroundImageStyle}>
+              {this.renderText(slide.text, index)}
+              {this.renderLastSlide(index)}
+            </Image>
           </TouchableOpacity>
         </View>
       );
@@ -238,8 +234,8 @@ class IntroSlides extends Component {
 
   handleScroll(event) {
     if (event.nativeEvent.contentOffset.x > 4.9 * SCREEN_WIDTH && !this.state.navigate) {
-      this.setState({ navigate: true})
-      {this.props.onComplete()}
+      this.setState({ navigate: true });
+      this.props.onComplete();
     }
   }
 
@@ -294,7 +290,7 @@ IntroSlides.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { group, user } = state
+  const { group, user } = state;
   return { group, user };
 }
 export default connect(mapStateToProps, { languageChoice })(IntroSlides);

@@ -3,14 +3,13 @@ import React, { Component } from 'react';
 import { TouchableOpacity, Alert, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
-import translate from '../../translation'
 
 
 const APP_STORE_URL = 'https://appurl.io/j4kj90r2';
 
 class SendInviteTextButton extends Component {
   textIntro() {
-    return translate(this.props.language).TEXT_INTRO;
+    return this.props.translation.TEXT_INTRO;
   }
   shareAppAlert = () => {
     const textLink = this.buildTextLink(this.props.group.groupSignupCode);
@@ -19,7 +18,7 @@ class SendInviteTextButton extends Component {
             INVITE_OTHERS_BODY,
             DISMISS,
             SHARE,
-          } = translate(language);
+          } = this.props.translation;
 
     return (
       Alert.alert(
@@ -71,9 +70,8 @@ class SendInviteTextButton extends Component {
 
 function mapStateToProps(state) {
   const { groupName } = state.group;
-  const { language } = state.user;
-  const { group } = state;
-  return { language, groupName, group };
+  const { group, translation } = state;
+  return { translation, groupName, group };
 }
 
 export default connect(mapStateToProps)(SendInviteTextButton);

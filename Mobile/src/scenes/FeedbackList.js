@@ -18,7 +18,6 @@ import FeedbackCard from '../components/FeedbackCard';
 import styles from '../styles/scenes/FeedbackListStyles';
 import registerForNotifications from '../services/push_notifications';
 import { Icon } from 'react-native-elements';
-import translate from '../translation';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
@@ -112,12 +111,11 @@ class FeedbackList extends Component {
   }
 
   renderShowCategory = () => {
-    const { language } = this.props.user;
     const {
       OPEN,
       INPROCESS,
       COMPLETE,
-    } = translate(language)
+    } = this.props.translation;
 
     if (this.props.group.includePositiveFeedbackBox)
       return null;
@@ -145,7 +143,7 @@ class FeedbackList extends Component {
   renderFeedbackSubmitButton = () => {
     return (
       <View style={{position: 'absolute', right: 10, bottom: 10}}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit', translate(this.props.user.language).SUBMIT_FEEDBACK)}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit', this.props.translation.SUBMIT_FEEDBACK)}>
           <Icon name="mode-edit" size={30} color={'#00A2FF'} backgroundColor={'red'} raised reverse />
         </TouchableOpacity>
       </View>
@@ -192,7 +190,7 @@ class FeedbackList extends Component {
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Details', {
                 feedback: rowData,
-                 translate: translate(this.props.user.language).COMMENTS,
+                 translate: this.props.translation.COMMENTS,
                 }
               )}
             >
@@ -219,8 +217,8 @@ FeedbackList.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { feedback, group, user, auth: { token } } = state;
-  return { feedback, group, user, token };
+  const { feedback, group, user, auth: { token }, translation } = state;
+  return { feedback, group, user, token, translation };
 }
 
 const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics, pullFeedback, pullSolutions })(FeedbackList);

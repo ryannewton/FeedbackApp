@@ -15,7 +15,6 @@ import styles from '../styles/scenes/AuthorizeStyles';
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth3.jpg';
-import translate from '../translation'
 
 class Authorize extends Component {
   constructor(props) {
@@ -68,7 +67,7 @@ class Authorize extends Component {
     const { language } = this.props.user
     return (
       <Button onPress={this.authorizeUser}>
-        {translate(language).JOIN_GROUP}
+        {this.props.translation.JOIN_GROUP}
       </Button>
     );
   }
@@ -91,7 +90,7 @@ class Authorize extends Component {
             NEED_GROUP_CODE,
             DISMISS,
             SHARE,
-          } = translate(language);
+          } = this.props.translation;
 
     return (
       Alert.alert(
@@ -106,13 +105,13 @@ class Authorize extends Component {
   }
 
   render() {
-    const { language } = this.props.user
+    const { GROUP_CODE, GROUP_DESCRIPTION } = this.props.translation;
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
           <View style={{flexDirection:'row'}}>
             <Text style={{ flex:7, fontWeight: '500', padding: 20, paddingRight:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
-              {translate(language).GROUP_DESCRIPTION}
+              {GROUP_DESCRIPTION}
             </Text>
             <TouchableOpacity onPress={() => this.requestTrialAlert()} style={{ flex:1, margin: 20}}>
               <Icon name="question-circle" type="font-awesome" size={25} color="white" />
@@ -120,7 +119,7 @@ class Authorize extends Component {
           </View>
           {/* Email input */}
           <Fumi
-            label={translate(language).GROUP_CODE}
+            label={GROUP_CODE}
             iconClass={FontAwesomeIcon}
             iconName={'user-circle'}
             iconColor={'#00A2FF'}
@@ -161,8 +160,8 @@ Authorize.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { auth, feedback, group, user } = state;
-  return { auth, feedback, group, user };
+  const { auth, feedback, group, user, translation } = state;
+  return { auth, feedback, group, user, translation };
 }
 
 
