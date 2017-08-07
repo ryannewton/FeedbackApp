@@ -1,6 +1,7 @@
 // Import action types
 import {
   PULL_GROUP_INFO,
+  UPDATE_INVITE_EMAILS,
 } from './types';
 
 // Import constants
@@ -17,11 +18,28 @@ export const pullGroupInfo = token => (
     })
 );
 
-export const createGroup = (groupName) => {
+export const updateInviteEmails = emails => (
+  {
+    type: UPDATE_INVITE_EMAILS,
+    payload: emails,
+  }
+);
+
+export const sendInviteEmails = (emails) => {
+  (dispatch, getState) => {
+    const { groupId } = getState().group;
+    http.post('/sendInviteEmails', { groupId, emails })
+    .then(() => {
+      console.log('Sent Emails!');
+    });
+  };
+}
+
+export const createGroup = (groupName, navigateToNext) => {
   dispatch =>
     http.post('/createGroup', { groupName })
     .then(() => {
-      console.log('Fill in rest of action');
+      navigateToNext();
     })
     .catch((error) => {
       console.log('Error running /createGroup');
