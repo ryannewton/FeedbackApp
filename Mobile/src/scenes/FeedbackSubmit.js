@@ -157,10 +157,7 @@ class FeedbackSubmit extends Component {
   maybeRenderImage = (type) => {
     const { width, height } = Dimensions.get('window')
     let imageURL;
-    console.log('this.state.hasImage: ', this.state.hasImage);
-    console.log(this.props.navigation.state.params.feedback)
     if (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage) {
-      console.log('got here')
       if (!type) {
         this.props.feedback.imageURL = this.props.navigation.state.params.feedback.imageURL;
       }
@@ -170,13 +167,16 @@ class FeedbackSubmit extends Component {
       else if (type === 'negative') {
         this.props.feedback.negativeImageURL = this.props.navigation.state.params.feedback.imageURL;
       }
+      Image.getSize(this.props.navigation.state.params.feedback.imageURL, (iwidth, iheight) => {
+        this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
+      });
       return (
         <Image
           source={{ uri: this.props.navigation.state.params.feedback.imageURL }}
           style={[{
             flex: 1,
-            width: 250,
-            height: 250,
+            width: this.state.imageWidth,
+            height: this.state.imageWidth,
             resizeMode: 'contain',
             shadowColor: 'rgba(0,0,0,1)',
             shadowOpacity: 0.5,
@@ -203,8 +203,6 @@ class FeedbackSubmit extends Component {
     if (!imageURL) {
       return null;
     }
-    console.log('imageURL: ', imageURL);
-
     return (
         <Image
           source={{ uri: imageURL }}
@@ -304,8 +302,7 @@ class FeedbackSubmit extends Component {
     if (this.props.feedback.imageURL ||
         this.props.feedback.positiveImageURL && type === 'positive' ||
         this.props.feedback.negativeImageURL && type === 'negative' || 
-        (this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage)) {
-      console.log('delete button rendered');
+        (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage)) {
       return (
         <View>
           <TouchableOpacity onPress={ () => {
@@ -317,7 +314,6 @@ class FeedbackSubmit extends Component {
         </View>
       );
     }
-    console.log('this.props.feedback.imageURL: ', this.props.feedback.imageURL);
     return null;
   }
 
@@ -377,7 +373,6 @@ class FeedbackSubmit extends Component {
   }
 
   render() {
-    console.log(this.props.navigation.state.params.feedback)
     const { width, height } = Dimensions.get('window')
     const { language } = this.props.user;
     const singleFeedbackBox = (
