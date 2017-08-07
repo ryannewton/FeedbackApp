@@ -18,7 +18,6 @@ import {
   Alert,
 } from 'react-native';
 import PropTypes from 'prop-types';
-import translate from '../translation';
 import ModalPicker from 'react-native-modal-picker'
 
 // Import actions
@@ -91,7 +90,7 @@ class FeedbackSubmit extends Component {
         }
 
         this.setState({ errorMessage: '' });
-        this.props.navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
+        this.props.navigation.navigate('Submitted', this.props.translation.FEEDBACK_RECIEVED);
       }
     } else {
       this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
@@ -204,7 +203,6 @@ class FeedbackSubmit extends Component {
   }
 
   renderSubmitButton = (type) => {
-    const { language } = this.props.user;
 
     if (this.props.feedback.loading) {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
@@ -217,7 +215,7 @@ class FeedbackSubmit extends Component {
             style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
           >
             <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
-              {translate(language).SUBMIT_FEEDBACK}
+              {this.props.translation.SUBMIT_FEEDBACK}
             </Text>
           </TouchableOpacity>
       </View>
@@ -307,7 +305,7 @@ class FeedbackSubmit extends Component {
             multiline={Boolean(true)}
             onChangeText={feedback => this.setState({ feedback })}
             style={[styles.feedbackInput, { flex: 1 }]}
-            placeholder={translate(language).ENTER_FEEDBACK}
+            placeholder={this.props.translation.ENTER_FEEDBACK}
             placeholderTextColor="#d0d0d0"
             value={this.state.feedback}
             maxLength={500}
@@ -321,10 +319,11 @@ class FeedbackSubmit extends Component {
       </View>
     );
     // console.log(this.state.negativeFeedback, this.props.feedback, 'here' );
+    const { POSITIVE_FILL_TEXT, NEGATIVE_FILL_TEXT } = this.props.translation;
     const positiveBackgroundColor = (this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL === '' || this.props.feedback.negativeImageURL === undefined ) ) ? null : 'grey';
     const negativeBackgroundColor = (this.state.positiveFeedback === '' && ( this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined)  ) ? null : 'grey';
-    const positivePlacholderText = (this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL == '' || this.props.feedback.negativeImageURL === undefined)) ? translate(language).POSITIVE_FILL_TEXT : 'Clear negative feedback to submit positive feedback';
-    const negativePlacholderText = (this.state.positiveFeedback === '' && (this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined) ) ? translate(language).NEGATIVE_FILL_TEXT : 'Clear positive feedback to submit negative feedback';
+    const positivePlacholderText = (this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL == '' || this.props.feedback.negativeImageURL === undefined)) ? POSITIVE_FILL_TEXT : 'Clear negative feedback to submit positive feedback';
+    const negativePlacholderText = (this.state.positiveFeedback === '' && (this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined) ) ? NEGATIVE_FILL_TEXT : 'Clear positive feedback to submit negative feedback';
 
     const positiveFeedbackBox = (
       <View style={{ flex: 1, flexDirection: 'row' }}>
@@ -397,8 +396,8 @@ FeedbackSubmit.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user, group, feedback } = state;
-  return { user, group, feedback };
+  const { user, group, feedback, translation } = state;
+  return { user, group, feedback, translation };
 }
 
 export default connect(mapStateToProps, {

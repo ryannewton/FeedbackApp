@@ -10,7 +10,6 @@ import { Icon } from 'react-native-elements';
 import styles from '../styles/components/SolutionCardStyles';
 import SolutionsCardItem from './SolutionsCardItem';
 import { Card, CardSection } from '../components/common';
-import translate from '../translation';
 
 class SolutionsCard extends Component {
 
@@ -21,15 +20,15 @@ class SolutionsCard extends Component {
     const { status } = feedback;
     const feedbackSolutions = solutions.list
       .filter(solution => solution.feedbackId === feedback.id);
-
+    const { NO_COMMENTS, COMMENTS, BE_FIRST_COMMENT } = this.props.translation;
     // If no solutions have been submitted
     if (!feedbackSolutions.length) {
       return (
         <View style={{flex:1, flexDirection:'row', margin:30}}>
           <Icon name="comments-o" type="font-awesome" size={50} style={{flex:1}} color={'grey'}/>
           <View style={{flex:2}}>
-          <Text style={[noSolutionsMessage, {marginTop:10}]}>{translate(this.props.user.language).NO_COMMENTS}</Text>
-          <Text style={[noSolutionsMessage, {fontSize:18, fontWeight:'bold'}]}>{translate(this.props.user.language).BE_FIRST_COMMENT}</Text>
+          <Text style={[noSolutionsMessage, {marginTop:10}]}>{NO_COMMENTS}</Text>
+          <Text style={[noSolutionsMessage, {fontSize:18, fontWeight:'bold'}]}>{BE_FIRST_COMMENT}</Text>
           </View>
         </View>
       );
@@ -45,7 +44,7 @@ class SolutionsCard extends Component {
     return (
       <Card>
         <CardSection>
-          <Text style={subheaderText}>{translate(this.props.user.language).COMMENTS}</Text>
+          <Text style={subheaderText}>{COMMENTS}</Text>
             <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
               <Icon name="question-answer" color="#bdbdbd" />
             </View>
@@ -71,8 +70,8 @@ SolutionsCard.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { solutions, group, user } = state;
-  return { solutions, group, user };
+  const { solutions, group, user, translation } = state;
+  return { solutions, group, user, translation };
 }
 
 export default connect(mapStateToProps)(SolutionsCard);

@@ -13,7 +13,6 @@ import styles from '../styles/scenes/SendAuthorizationEmailStyles';
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth1.jpg';
-import translate from '../translation';
 
 class SendAuthorizationEmail extends Component {
   constructor(props) {
@@ -27,14 +26,15 @@ class SendAuthorizationEmail extends Component {
   }
 
   sendAuthorizationEmail = () => {
+    const { ENTER_GROUP_CODE, ENTER_CODE } = this.props.translation;
     const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     if (re.test(this.state.email)) {
       Keyboard.dismiss();
       this.props.sendAuthorizationEmail(this.state.email, () => {
         if (this.state.email.includes('gymboree')) {
-          this.props.navigation.navigate('AuthGroupCode', translate(this.props.user.language).ENTER_GROUP_CODE);
+          this.props.navigation.navigate('AuthGroupCode', ENTER_GROUP_CODE);
         } else {
-          this.props.navigation.navigate('AuthCode', translate(this.props.user.language).ENTER_CODE);
+          this.props.navigation.navigate('AuthCode', ENTER_CODE);
         }
       }, this.props.user.language);
     } else {
@@ -67,7 +67,7 @@ class SendAuthorizationEmail extends Component {
     const {
       ENTER_EMAIL,
       SEND_EMAIL,
-    } = translate(language)
+    } = this.props.translation;
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
@@ -113,8 +113,8 @@ SendAuthorizationEmail.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { user, auth } = state;
-  return { user, auth };
+  const { user, auth, translation } = state;
+  return { user, auth, translation };
 };
 
 export default connect(mapStateToProps, {

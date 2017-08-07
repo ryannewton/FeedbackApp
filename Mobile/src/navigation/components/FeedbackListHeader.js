@@ -5,7 +5,6 @@ import { Text } from '../../components/common';
 import Modal from 'react-native-modalbox';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
-import translate from '../../translation'
 
 // Import components, styles, and actions
 import { Button } from '../../components/common';
@@ -91,7 +90,7 @@ class FeedbackSubmitHeader extends Component {
             TODAY,
             MY_FEEDBACK,
             ALL_FEEDBACK
-    } = translate(language);
+    } = this.props.translation;
 
     switch (method) {
       case 'this_week':
@@ -110,7 +109,7 @@ class FeedbackSubmitHeader extends Component {
   renderTitleHelper = () => {
     const { language } = this.props
     const { ALL_FEEDBACK,
-    } = translate(language);
+    } = this.props.translation;
 
     // Temporary fix to weird bug with reducer
     if (!this.props.feedback.filterMethod) {
@@ -169,7 +168,7 @@ class FeedbackSubmitHeader extends Component {
             THIS_WEEK,
             TODAY,
             MY_FEEDBACK,
-    } = translate(language);
+    } = this.props.translation;
 
     return (
       <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
@@ -239,9 +238,8 @@ const styles2 = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => {
-  const { feedback, group } = state;
-  const { language } = state.user
-  return { feedback, language, group };
+  const { feedback, group, translation } = state;
+  return { feedback, group, translation };
 };
 
 export default connect(mapStateToProps, { changeFilterMethod, setSearchQuery, searchInProgress })(FeedbackSubmitHeader);

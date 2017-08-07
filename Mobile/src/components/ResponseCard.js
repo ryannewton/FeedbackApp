@@ -10,21 +10,20 @@ import PropTypes from 'prop-types';
 import { CardSection, Card } from '../components/common';
 import ResponseCardItem from './ResponseCardItem';
 import styles from '../styles/components/ResponseCardStyles';
-import translate from '../translation';
 
 
 class ResponseCard extends Component {
   render() {
     const { officialReply } = this.props.feedback;
     const { subheaderText } = styles;
-
+    const { OFFICIAL_RESPONSE } = this.props.translation;
     // Is there a response?
     if (officialReply) {
       return (
         <Card>
           <CardSection>
             <Text style={subheaderText}>
-              {translate(this.props.user.language).OFFICIAL_RESPONSE}
+              {OFFICIAL_RESPONSE}
             </Text>
             <View style={{ width: 25, height: 20, alignItems: 'flex-start' }}>
               <Icon name="verified-user" color="blue" />
@@ -43,8 +42,8 @@ ResponseCard.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { user } = state;
-  return { user };
+  const { translation } = state;
+  return { translation };
 }
 
 export default connect(mapStateToProps)(ResponseCard);

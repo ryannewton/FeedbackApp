@@ -26,7 +26,6 @@ import {
   pullSolutions,
   pullFeedback,
 } from '../actions';
-import translate from '../translation';
 
 class FeedbackDetails extends Component {
   constructor(props) {
@@ -39,7 +38,7 @@ class FeedbackDetails extends Component {
     const { bannedWords, solutionsRequireApproval } = this.props.group;
     const { solution } = this.props.solutions;
     const { feedback } = this.props.navigation.state.params;
-    const { ERROR_MESSAGE_1, ERROR_MESSAGE_2} = translate(this.props.user.language)
+    const { ERROR_MESSAGE_1, ERROR_MESSAGE_2} = this.props.translation;
     if (bannedWords.test(solution.toLowerCase())) {
       // If restricted words then we show an error to the user
       this.setState({ errorMessage: ERROR_MESSAGE_1 });
@@ -88,9 +87,9 @@ class FeedbackDetails extends Component {
     const showSpinner = (
       <Spinner size="large" style={{ marginTop: 20 }} />
     );
-    const { language } = this.props.user
+    const { SUBMIT_COMMENT } = this.props.translation;
     const showSubmitButton = (
-      <Button style={{marginBottom:5}} onPress={this.submitSolution}>{translate(language).SUBMIT_COMMENT}</Button>
+      <Button style={{marginBottom:5}} onPress={this.submitSolution}>{SUBMIT_COMMENT}</Button>
     );
 
     return (
@@ -128,7 +127,7 @@ class FeedbackDetails extends Component {
         <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={-70}>
           <TextInput
             style={inputText}
-            placeholder={translate(language).ENTER_COMMENT}
+            placeholder={this.props.translation.ENTER_COMMENT}
             onChangeText={solution => this.props.solutionChanged(solution)}
             value={this.props.solutions.solution}
             returnKeyType={'done'}
@@ -153,8 +152,8 @@ FeedbackDetails.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { solutions, group, user, auth: { token }, feedback } = state;
-  return { solutions, group, user, token, feedback };
+  const { solutions, group, user, auth: { token }, feedback, translation } = state;
+  return { solutions, group, user, token, feedback, translation };
 }
 
 const AppScreen = connect(mapStateToProps, {

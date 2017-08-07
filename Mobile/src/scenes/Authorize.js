@@ -14,7 +14,6 @@ import styles from '../styles/scenes/AuthorizeStyles';
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth2.jpg';
-import translate from '../translation'
 
 
 class Authorize extends Component {
@@ -49,7 +48,7 @@ class Authorize extends Component {
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
     } else if (nextProps.auth.needsGroupCode === true) {
-      this.props.navigation.navigate('AuthGroupCode', translate(this.props.user.language).ENTER_GROUP_CODE);
+      this.props.navigation.navigate('AuthGroupCode', this.props.translation.ENTER_GROUP_CODE);
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
@@ -60,10 +59,9 @@ class Authorize extends Component {
   }
 
   renderSignupButton() {
-    const { language } = this.props.user
     return (
       <Button onPress={this.verifyEmail}>
-        {translate(language).VERIFY_EMAIL}
+        {this.props.translation.VERIFY_EMAIL}
       </Button>
     );
   }
@@ -81,16 +79,16 @@ class Authorize extends Component {
   }
 
   render() {
-    const { language } = this.props.user
+    const { ENTER_CODE, EMAIL_BLURB_FOR_CODE } = this.props.translation;
     return (
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
         <Image style={styles.background} source={fullScreen} resizeMode="cover">
           <Text style={{fontWeight: '500', padding:20, backgroundColor:'rgba(0,0,0,0)', fontSize:18, color:'white'}}>
-            {translate(language).EMAIL_BLURB_FOR_CODE} {this.props.auth.email}!
+            {EMAIL_BLURB_FOR_CODE} {this.props.auth.email}!
           </Text>
           {/* Email input */}
           <Fumi
-            label={translate(language).ENTER_CODE}
+            label={ENTER_CODE}
             iconClass={FontAwesomeIcon}
             iconName={'envelope-open'}
             iconColor={'#00A2FF'}
@@ -133,8 +131,8 @@ Authorize.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { auth, feedback, group, user } = state;
-  return { auth, feedback, group, user };
+  const { auth, feedback, group, translation } = state;
+  return { auth, feedback, group, translation };
 }
 
 

@@ -4,7 +4,6 @@ import { View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { NavigationActions } from 'react-navigation';
-import translate from '../translation'
 // Import actions
 import { logOut, sendGoogleAnalytics } from '../actions';
 
@@ -20,7 +19,6 @@ class Settings extends Component {
 
   render() {
     const { container, signoutButton } = styles;
-    const { language } = this.props.user
     return (
       <View style={container}>
         {/* To do: add change password option*/}
@@ -40,7 +38,7 @@ class Settings extends Component {
             }}
             style={{ marginTop: 10 }}
           >
-            {translate(language).SIGN_OUT}
+            {this.props.translation.SIGN_OUT}
           </Button>
         </View>
       </View>
@@ -56,8 +54,8 @@ Settings.propTypes = {
 };
 
 function mapStateToProps(state) {
-  const { group, user} = state;
-  return { group, user };
+  const { group, user, translation} = state;
+  return { group, user, translation };
 }
 
 export default connect(mapStateToProps, { logOut, sendGoogleAnalytics })(Settings);

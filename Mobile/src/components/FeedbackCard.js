@@ -7,7 +7,6 @@ import Image from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Bar';
 import PropTypes from 'prop-types';
 import TimeAgo from 'react-native-timeago';
-import translate from '../translation';
 
 import fullScreen from '../../images/icons/default.jpg';
 import noOpinionY from '../../images/icons/meh_y.png';
@@ -105,6 +104,7 @@ class Feedback extends Component {
     if (showImage||!exists) {
       return null;
     }
+    const { OFFICIAL_RESPONSE } = this.props.translation;
     return (
       <View style={{marginTop:10}}>
         <Text
@@ -114,7 +114,7 @@ class Feedback extends Component {
             fontWeight: '800',
           }}
         >
-          {translate(this.props.user.language).OFFICIAL_RESPONSE}:
+          {OFFICIAL_RESPONSE}:
         </Text>
         <Text
           style={{
@@ -496,8 +496,8 @@ Feedback.propTypes = {
 };
 
 const mapStateToProps = (state) => {
-  const { user, group, solutions } = state;
-  return { user, group, solutions };
+  const { user, group, solutions, translation } = state;
+  return { user, group, solutions, translation };
 };
 
 export default connect(mapStateToProps, {

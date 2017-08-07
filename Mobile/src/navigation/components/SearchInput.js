@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import { Text } from '../../components/common';
 import { Icon } from 'react-native-elements';
-import translate from '../../translation';
 import { connect } from 'react-redux';
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput);
@@ -58,7 +57,7 @@ class Search extends Component {
     const {
       SEARCH,
       CANCEL,
-    } = translate(language)
+    } = this.props.translation;
     this.placeholder = this.props.placeholder || SEARCH;
     this.cancelTitle = this.props.cancelTitle || CANCEL;
 
@@ -567,8 +566,8 @@ Search.defaultProps = {
 };
 
 const mapStateToProps = (state) => {
-  const { user } = state;
-  return { user };
+  const { translation } = state;
+  return { translation };
 };
 
 export default connect(mapStateToProps)(Search);

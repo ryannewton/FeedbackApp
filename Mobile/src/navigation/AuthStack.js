@@ -7,7 +7,6 @@ import Authorize from '../scenes/Authorize';
 import GroupCode from '../scenes/GroupCode';
 import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
 import styles from '../styles/common/navStyles';
-import translate from '../translation';
 
 const AuthStack = StackNavigator({
   SubmitEmail: {

@@ -7,6 +7,7 @@ import group from './reducer_group';
 import solutions from './reducer_solutions';
 import feedback from './reducer_feedback';
 import user from './reducer_user';
+import translation from './reducer_translation';
 
 export default combineReducers({
   auth,
@@ -14,4 +15,5 @@ export default combineReducers({
   solutions,
   feedback,
   user,
+  translation,
 });
