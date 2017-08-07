@@ -43,9 +43,11 @@ class FeedbackSubmit extends Component {
       feedback: this.props.navigation.state.params.feedback ? this.props.navigation.state.params.feedback.text : '',
       positiveFeedback: '',
       negativeFeedback: '',
+      hasImage: false,
       imageWidth: null,
       imageHeight: null,
       category: this.props.navigation.state.params.feedback ? this.props.navigation.state.params.feedback.category : '',
+      newFeedback: { ...this.props.navigation.state.params.feedback },
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
@@ -134,6 +136,7 @@ class FeedbackSubmit extends Component {
 
     // If user selects an image
     if (!pickerResult.cancelled) {
+      this.state.hasImage = true;
       this.props.uploadImage(pickerResult.uri, type);
     }
   }
@@ -154,24 +157,53 @@ class FeedbackSubmit extends Component {
   maybeRenderImage = (type) => {
     const { width, height } = Dimensions.get('window')
     let imageURL;
-    let sizeConstraint;
+    console.log('this.state.hasImage: ', this.state.hasImage);
+    console.log(this.props.navigation.state.params.feedback)
+    if (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage) {
+      console.log('got here')
+      if (!type) {
+        this.props.feedback.imageURL = this.props.navigation.state.params.feedback.imageURL;
+      }
+      else if (type === 'positive') {
+        this.props.feedback.positiveImageURL = this.props.navigation.state.params.feedback.imageURL;
+      }
+      else if (type === 'negative') {
+        this.props.feedback.negativeImageURL = this.props.navigation.state.params.feedback.imageURL;
+      }
+      return (
+        <Image
+          source={{ uri: this.props.navigation.state.params.feedback.imageURL }}
+          style={[{
+            flex: 1,
+            width: 250,
+            height: 250,
+            resizeMode: 'contain',
+            shadowColor: 'rgba(0,0,0,1)',
+            shadowOpacity: 0.5,
+            shadowOffset: { width: 4, height: 4 },
+            shadowRadius: 5,
+            marginTop: 10,
+            alignSelf: 'center',
+          }]}
+          resizeMode={'contain'}
+        />
+      );
+    }
     if (!type) {
       imageURL = this.props.feedback.imageURL;
-      sizeConstraint = this.state.sizeConstraint;
     }
     else if (type === 'positive') {
       imageURL = this.props.feedback.positiveImageURL;
-      sizeConstraint = this.state.positiveSizeConstraint;
     }
     else if (type === 'negative') {
       imageURL = this.props.feedback.negativeImageURL;
-      sizeConstraint = this.state.negativeSizeConstraint;
     }
 
     // If there is no image, don't render anything
     if (!imageURL) {
       return null;
     }
+    console.log('imageURL: ', imageURL);
 
     return (
         <Image
@@ -271,17 +303,21 @@ class FeedbackSubmit extends Component {
   maybeRenderDeleteButton(type) {
     if (this.props.feedback.imageURL ||
         this.props.feedback.positiveImageURL && type === 'positive' ||
-        this.props.feedback.negativeImageURL && type === 'negative') {
-
+        this.props.feedback.negativeImageURL && type === 'negative' || 
+        (this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage)) {
+      console.log('delete button rendered');
       return (
         <View>
-          <TouchableOpacity onPress={ () => this.props.removeImage() }>
+          <TouchableOpacity onPress={ () => {
+            this.props.removeImage();
+            this.state.hasImage = true;
+          }}>
             <Icon name="remove-circle" size={40} color={'red'}/>
           </TouchableOpacity>
         </View>
       );
     }
-
+    console.log('this.props.feedback.imageURL: ', this.props.feedback.imageURL);
     return null;
   }
 
