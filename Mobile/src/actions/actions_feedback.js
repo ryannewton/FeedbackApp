@@ -8,7 +8,9 @@ import {
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
   SUBMIT_FEEDBACK_SUCCESS,
+  UPDATE_FEEDBACK_SUCCESS,
   SUBMIT_FEEDBACK_FAIL,
+  UPDATE_FEEDBACK_FAIL,
   SUBMITTING_IMAGE,
   SUBMIT_IMAGE_SUCCESS,
   SUBMIT_IMAGE_FAIL,
@@ -71,6 +73,29 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in submitFeedbackToServer in actions_feedback', error);
       dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: errorMessage });
+    });
+  }
+);
+
+export const updateFeedbackToServer = (text, type, imageURL, category, id) => (
+  (dispatch, getState) => {
+    dispatch({ type: SUBMITTING_FEEDBACK });
+
+    const token = getState().auth.token;
+    let feedback = { text, type, imageURL, category, id };
+
+    http.post('/updateFeedback/', { feedback, authorization: token })
+    .then((response) => {
+      console.log('step1');
+      dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback });
+      console.log('step2');
+      dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
+      dispatch(addFeedbackUpvote(feedback));
+    })
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in updateFeedbackToServer in actions_feedback', error);
+      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorMessage });
     });
   }
 );

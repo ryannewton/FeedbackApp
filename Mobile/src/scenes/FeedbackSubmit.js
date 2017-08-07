@@ -24,6 +24,7 @@ import ModalPicker from 'react-native-modal-picker'
 // Import actions
 import {
   submitFeedbackToServer,
+  updateFeedbackToServer,
   uploadImage,
   sendGoogleAnalytics,
   removeImage
@@ -98,6 +99,34 @@ class FeedbackSubmit extends Component {
     }
   }
 
+  updateFeedback = () => {
+    if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
+      // First we search the feedback for restricted words
+      if (this.props.group.bannedWords.test(this.state.feedback.toLowerCase()) ||
+          this.props.group.bannedWords.test(this.state.positiveFeedback.toLowerCase()) ||
+          this.props.group.bannedWords.test(this.state.negativeFeedback.toLowerCase())) {
+        // If restricted words then we show an error to the user
+        this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+      } else {
+        // If no restricted words then we continue
+        if (this.state.feedback) {
+          this.props.updateFeedbackToServer(this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category, this.props.navigation.state.params.feedback.id);
+          this.setState({ feedback: '' });
+        } if (this.state.positiveFeedback) {
+          this.props.updateFeedbackToServer(this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category, this.props.navigation.state.params.feedback.id);
+          this.setState({ positiveFeedback: '' });
+        } if (this.state.negativeFeedback) {
+          this.props.updateFeedbackToServer(this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category, this.props.navigation.state.params.feedback.id);
+          this.setState({ negativeFeedback: '' });
+        }
+
+        this.setState({ errorMessage: '' });
+        this.props.navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
+      }
+    } else {
+      this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
+    }
+  }
 
   addImageHelper = async (type, pickerChoice) => {
     const pickerResult = (pickerChoice == 'takePhoto') ? await ImagePicker.launchCameraAsync() :
@@ -218,7 +247,7 @@ class FeedbackSubmit extends Component {
               style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
             >
               <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
-                {translate(language).SUBMIT_FEEDBACK}
+                {translate(language).UPDATE_FEEDBACK}
               </Text>
             </TouchableOpacity>
         </View>
@@ -232,7 +261,7 @@ class FeedbackSubmit extends Component {
             style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
           >
             <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
-              {translate(language).UPDATE_FEEDBACK}
+              {translate(language).SUBMIT_FEEDBACK}
             </Text>
           </TouchableOpacity>
       </View>
@@ -408,6 +437,7 @@ FeedbackSubmit.propTypes = {
   group: PropTypes.object,
   feedback: PropTypes.object,
   submitFeedbackToServer: PropTypes.func,
+  updateFeedbackToServer: PropTypes.func,
   navigation: PropTypes.object,
 };
 
@@ -418,6 +448,7 @@ function mapStateToProps(state) {
 
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
+  updateFeedbackToServer,
   uploadImage,
   sendGoogleAnalytics,
   removeImage,
