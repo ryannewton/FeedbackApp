@@ -210,6 +210,21 @@ class FeedbackSubmit extends Component {
       return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
     }
 
+    if (this.props.navigation.state.params.feedback) {
+      return (
+        <View style={{ flexDirection: 'row'}}>
+            <TouchableOpacity
+              onPress={this.updateFeedback}
+              style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
+            >
+              <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
+                {translate(language).SUBMIT_FEEDBACK}
+              </Text>
+            </TouchableOpacity>
+        </View>
+      );
+    }
+
     return (
       <View style={{ flexDirection: 'row'}}>
           <TouchableOpacity
@@ -217,11 +232,10 @@ class FeedbackSubmit extends Component {
             style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
           >
             <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
-              {translate(language).SUBMIT_FEEDBACK}
+              {translate(language).UPDATE_FEEDBACK}
             </Text>
           </TouchableOpacity>
       </View>
-
     );
   }
 

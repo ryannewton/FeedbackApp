@@ -59,6 +59,7 @@ const translate = language => {
         DELETE_FEEDBACK: 'Delete Feedback',
         DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
         DELETE: 'Delete',
+        UPDATE_FEEDBACK: 'Update Feedback',
     }
     case 'es':
       return {
@@ -117,9 +118,10 @@ const translate = language => {
         NEED_GROUP_CODE_DETAIL: 'Si su comunidad aún no ha sido creada, envíe un correo electrónico a tyler@suggestionboxapp.com para recibir su código de grupo único.',
         EDIT_FEEDBACK: 'Editar comentarios',
         FEEDBACK_DETAIL: 'Detalle de comentarios',
-        DELETE_FEEDBACK: 'Delete Feedback',
-        DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
-        DELETE: 'Delete',
+        DELETE_FEEDBACK: 'Eliminar comentarios',
+        DELETE_FEEDBACK_BODY: 'Los votos y los comentarios se eliminarán junto con la retroalimentación si pulsa eliminar',
+        DELETE: 'Borrar',
+        UPDATE_FEEDBACK: 'Actualizar comentarios',
       }
     case 'vi':
       return {
@@ -181,6 +183,7 @@ const translate = language => {
         DELETE_FEEDBACK: 'Xóa phản hồi',
         DELETE_FEEDBACK_BODY: 'Phiếu bầu và nhận xét sẽ bị xóa cùng với phản hồi nếu bạn nhấn Xóa bỏ',
         DELETE: 'Xóa bỏ',
+        UPDATE_FEEDBACK: 'Cập nhật Phản hồi',
       }
     case 'zh-cn':
       return {
@@ -241,6 +244,7 @@ const translate = language => {
         DELETE_FEEDBACK: '删除反馈',
         DELETE_FEEDBACK_BODY: '如果你点击删除，投票与评论信息也会被清除',
         DELETE: '删除',
+        UPDATE_FEEDBACK: '跟新反馈',
       }
     default:
       return {
@@ -301,6 +305,7 @@ const translate = language => {
         DELETE_FEEDBACK: 'Delete Feedback',
         DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
         DELETE: 'Delete',
+        UPDATE_FEEDBACK: 'Update Feedback',
       }
     }
 }
