@@ -6,8 +6,8 @@ import { StackNavigator } from 'react-navigation';
 import Authorize from '../scenes/Authorize';
 import GroupCode from '../scenes/GroupCode';
 import SendAuthorizationEmail from '../scenes/SendAuthorizationEmail';
+import CreateGroup from '../scenes/CreateGroup';
 import styles from '../styles/common/navStyles';
-import translate from '../translation';
 
 const AuthStack = StackNavigator({
   SubmitEmail: {
@@ -53,7 +53,22 @@ const AuthStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    })
+    }),
+  },
+  CreateGroup: {
+    screen: CreateGroup,
+    navigationOptions: ({ navigation }) => ({
+      title: navigation.state.params,
+      headerTitleStyle: {
+        color: '#fff',
+      },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
+      },
+      headerTintColor: 'white',
+    }),
   },
 });
 

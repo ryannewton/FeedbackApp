@@ -42,7 +42,7 @@ class WelcomeScreen extends Component {
   }
 
   onSlidesComplete = () => {
-    this.props.navigation.navigate('SubmitEmail', translate(this.props.user.language).ENTER_EMAIL);
+    this.props.navigation.navigate('AuthGroupCode', translate(this.props.user.language).ENTER_EMAIL);
   }
 
   render() {

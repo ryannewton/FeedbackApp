@@ -26,9 +26,6 @@ class GroupCode extends Component {
       cleared: false,
     };
 
-    this.route = this.route.bind(this);
-    this.authorizeUser = this.authorizeUser.bind(this);
-
     props.sendGoogleAnalytics('Group Code', 'Not Logged In');
   }
 
@@ -38,7 +35,7 @@ class GroupCode extends Component {
     }
   }
 
-  route(nextProps) {
+  route = (nextProps) => {
     if (
       nextProps.auth.loggedIn === true &&
       nextProps.group.groupName !== '' &&
@@ -55,7 +52,7 @@ class GroupCode extends Component {
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
-  authorizeUser() {
+  authorizeUser = () => {
     Keyboard.dismiss();
     this.props.authorizeUser(
       this.props.auth.email,
@@ -130,7 +127,7 @@ class GroupCode extends Component {
   renderCreateGroupLink() {
     return (
       <View style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity onPress={() => console.log('Pushed!')}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('CreateGroup')}>
           <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 18, color: 'white' }}>
             Create a new Group
           </Text>

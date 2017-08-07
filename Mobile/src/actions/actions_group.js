@@ -16,3 +16,16 @@ export const pullGroupInfo = token => (
       console.log('Error in pullGroupInfo, Error: ', error.response.data);
     })
 );
+
+export const createGroup = (groupName) => {
+  dispatch =>
+    http.post('/createGroup', { groupName })
+    .then(() => {
+      console.log('Fill in rest of action');
+    })
+    .catch((error) => {
+      console.log('Error running /createGroup');
+      console.log('Error: ', error);
+      console.log('Write a dispatch()');
+    });
+};
