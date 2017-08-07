@@ -86,9 +86,7 @@ export const updateFeedbackToServer = (text, type, imageURL, category, id) => (
 
     http.post('/updateFeedback/', { feedback, authorization: token })
     .then((response) => {
-      console.log('step1');
       dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback });
-      console.log('step2');
       dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
       dispatch(addFeedbackUpvote(feedback));
     })
