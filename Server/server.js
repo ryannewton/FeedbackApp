@@ -100,7 +100,7 @@ function convertImgs(file, quality) {
 
 // Sends Email from AWS SES
 function sendEmail(toEmails, fromEmail, subjectLine, bodyText) {
-  const toEmailsFiltered = toEmails.filter(email => email.toLowerCase().slice(0, 11) !== 'admin_test@');
+  const toEmailsFiltered = toEmails.filter(email => email !== null && email.toLowerCase().slice(0, 11) !== 'admin_test@');
   const toEmailsProductionCheck = (process.env.production) ? toEmailsFiltered : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
   ses.sendEmail({
     Source: fromEmail,
@@ -664,6 +664,40 @@ app.post('/updateSolution', upload.array(), (req, res) => {
     }
   });
 });
+
+// Create a new group
+app.post('/createGroup', upload.array(), (req, res) => {
+  const { groupName } = req.body;
+  const connectionString = `
+  INSERT INTO groups (groupName, groupSignupCode, groupAdminCode, feedbackRequiresApproval, solutionsRequireApproval, showStatus, includePositiveFeedbackBox, date)
+  VALUES (?, ?, 'demo', 0, 0, 1, 0, NOW())
+  `;
+  connection.query(connectionString, [groupName, groupName], (err) => {
+    if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 818F');
+    else res.sendStatus(200);
+  });
+});
+
+app.post('/sendInviteEmails', upload.array(), (req, res) => {
+  const { groupName, emails } = req.body;
+  const connectionString = `
+  SELECT groupSignupCode
+  FROM groups
+  WHERE groupName=?
+  `;
+  connection.query(connectionString, [groupName], (err, rows) => {
+    if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8283');
+    else {
+      console.log(rows);
+      const subjectLine = `Join me on Suggestbox Box! - GroupName '${rows[0].groupSignupCode}'`
+      const bodyText = `Please join me on Suggestion Box with the Group Name of '${rows[0].groupSignupCode}'!`
+      console.log(emails)
+      sendEmail(emails, defaultFromEmail, subjectLine, bodyText);
+      res.sendStatus(200);
+    }
+  });
+});
+
 
 // REJECT FEEDBACK
 // 1. Email rejection message to user
