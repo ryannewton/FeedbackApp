@@ -49,6 +49,7 @@ class Authorize extends Component {
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
     } else if (nextProps.auth.needsGroupCode === true) {
+      this.setState({ cleared: true });
       this.props.navigation.navigate('AuthGroupCode', translate(this.props.user.language).ENTER_GROUP_CODE);
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true

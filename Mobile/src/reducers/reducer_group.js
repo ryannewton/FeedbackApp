@@ -4,6 +4,7 @@ import {
   LOG_OUT_USER,
   SAVE_GROUP_CODE,
   UPDATE_INVITE_EMAILS,
+  SET_GROUP_NAME,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -36,6 +37,8 @@ export default (state = INITIAL_STATE, action) => {
       return INITIAL_STATE;
     case UPDATE_INVITE_EMAILS:
       return { ...state, inviteEmails: action.payload };
+    case SET_GROUP_NAME:
+      return { ...state, groupName: action.payload };
     default:
       return state;
   }

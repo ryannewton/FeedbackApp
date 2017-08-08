@@ -127,7 +127,10 @@ class GroupCode extends Component {
   renderCreateGroupLink() {
     return (
       <View style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('CreateGroup')}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('CreateGroup');
+          this.setState({ cleared: true });
+        }}>
           <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 18, color: 'white' }}>
             Create a new Group
           </Text>

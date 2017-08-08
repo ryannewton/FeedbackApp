@@ -2,10 +2,12 @@
 import {
   PULL_GROUP_INFO,
   UPDATE_INVITE_EMAILS,
+  SET_GROUP_NAME
 } from './types';
 
 // Import constants
 import { http } from '../constants';
+import { authorizeUser } from './actions_auth';
 
 export const pullGroupInfo = token => (
   dispatch =>
@@ -25,25 +27,27 @@ export const updateInviteEmails = emails => (
   }
 );
 
-export const sendInviteEmails = (emails) => {
+export const sendInviteEmails = (emails) => (
   (dispatch, getState) => {
-    const { groupId } = getState().group;
-    http.post('/sendInviteEmails', { groupId, emails })
+    const { groupName } = getState().group;
+    http.post('/sendInviteEmails', { groupName, emails })
     .then(() => {
       console.log('Sent Emails!');
     });
-  };
-}
+  }
+);
 
-export const createGroup = (groupName, navigateToNext) => {
-  dispatch =>
+export const createGroup = (groupName, navigateToNext) => (
+  (dispatch, getState) =>
     http.post('/createGroup', { groupName })
     .then(() => {
+      const { code, email } = getState().auth;
+      dispatch(authorizeUser(email, code, groupName));
       navigateToNext();
     })
     .catch((error) => {
       console.log('Error running /createGroup');
       console.log('Error: ', error);
       console.log('Write a dispatch()');
-    });
-};
+    })
+);

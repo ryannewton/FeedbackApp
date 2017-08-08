@@ -58,7 +58,10 @@ class InviteGroupUsers extends Component {
           iconColor={'#00A2FF'}
           inputStyle={{ color: 'black' }}
           value={this.props.group.inviteEmails[0]}
-          onChangeText={email1 => this.props.updateInviteEmails([ email1, this.props.group.inviteEmails[1], this.props.group.inviteEmails[2]])}
+          onChangeText={email1 => {
+            console.log('updateInviteEmails: ', updateInviteEmails);
+            this.props.updateInviteEmails([ email1, this.props.group.inviteEmails[1], this.props.group.inviteEmails[2]])
+          }}
 
           // TextInput props
           autoCapitalize={'none'}
@@ -73,7 +76,7 @@ class InviteGroupUsers extends Component {
           iconColor={'#00A2FF'}
           inputStyle={{ color: 'black' }}
           value={this.props.group.inviteEmails[1]}
-          onChangeText={email2 => this.props.updateInviteEmails([ this.props.group.inviteEmails[0], email2, this.props.group.inviteEmails[2]])}
+          onChangeText={email2 => this.props.x([ this.props.group.inviteEmails[0], email2, this.props.group.inviteEmails[2]])}
 
           // TextInput props
           autoCapitalize={'none'}
@@ -105,27 +108,6 @@ class InviteGroupUsers extends Component {
       <Text style={styles.errorTextStyle}>
         {this.props.auth.error}
       </Text>
-    );
-  }
-
-  renderSubmitButton() {
-    const { language } = this.props.user
-    if (this.props.auth.loading) {
-      return (
-        <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
-          <Spinner />
-        </View>
-      );
-    }
-    return (
-      <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
-        <View style={{ flex: 1 }}>
-          <Button onPress={() => console.log('you should create an action creator this.props.createGroup')}>
-            freaking here!
-            {translate(language).CREATE_GROUP_BUTTON}
-          </Button>
-        </View>
-      </View>
     );
   }
 

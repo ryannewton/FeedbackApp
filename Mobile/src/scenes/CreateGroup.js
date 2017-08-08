@@ -87,7 +87,7 @@ class CreateGroup extends Component {
       <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
         <View style={{ flex: 1 }}>
           <Button onPress={() => {
-            this.props.navigation.navigate('InviteGroupUsers', 'Invite Friends');
+            this.props.createGroup(this.state.groupName, () => this.props.navigation.navigate('InviteGroupUsers', 'Invite Friends'));
           }}>
             {translate(language).CREATE_GROUP_BUTTON}
           </Button>
