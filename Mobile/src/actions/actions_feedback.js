@@ -35,6 +35,7 @@ import { http, ROOT_STORAGE, ROOT_URL } from '../constants';
 export const pullFeedback = token => (
   (dispatch) => {
     dispatch({ type: REQUESTED_FEEDBACK });
+    console.log('token: ', token);
 
     http.post('/pullFeedback', { authorization: token })
     .then((response) => {
