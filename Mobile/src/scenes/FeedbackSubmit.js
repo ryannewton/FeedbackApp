@@ -47,6 +47,8 @@ class FeedbackSubmit extends Component {
       imageWidth: null,
       imageHeight: null,
       category: this.props.navigation.state.params.feedback ? this.props.navigation.state.params.feedback.category : '',
+      category1: '',
+      category2: '',
       newFeedback: { ...this.props.navigation.state.params.feedback },
     };
 
@@ -86,10 +88,10 @@ class FeedbackSubmit extends Component {
           this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category);
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category);
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category1);
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category);
+          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category2);
           this.setState({ negativeFeedback: '' });
         }
 
@@ -317,7 +319,28 @@ class FeedbackSubmit extends Component {
     return null;
   }
 
-  maybeRenderCategoryModal() {
+
+  handleCategoryChange(category, type) {
+    if (!type) {
+      this.setState({ category: category.label })
+    } else if (type === 'positive') {
+      this.setState({ category1: category.label })
+    } else {
+      this.setState({ category2: category.label })
+    }
+  }
+
+  handleValueChange(type) {
+    if (!type) {
+      return this.state.category || 'Click to choose > ';
+    } else if (type === 'positive') {
+      return this.state.category1 || 'Click to choose > ';
+    } else {
+      return this.state.category2 || 'Click to choose > ';
+    }
+  }
+
+  maybeRenderCategoryModal(type) {
     // If the group doesn't have categories
     if (!this.props.group.categories.length) {
       return null;
@@ -329,7 +352,6 @@ class FeedbackSubmit extends Component {
         { key: index++, label: item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
       );
     });
-
     categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true })
     return (
       <View style={{ flexDirection: 'row'}}>
@@ -342,7 +364,7 @@ class FeedbackSubmit extends Component {
           sectionTextStyle={{ fontSize:18, fontWeight:'600' }}
           cancelTextStyle={{ fontSize:18, fontWeight:'600' }}
           initValue="Select something yummy!"
-          onChange={(category) => this.setState({ category: category.label }) }
+          onChange={(category) => this.handleCategoryChange(category, type) }
         >
           <View style={{ flexDirection: 'row', alignItems:'center', backgroundColor:'white', marginTop: 5, marginBottom:1 }}>
             <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'center' }}>
@@ -351,8 +373,8 @@ class FeedbackSubmit extends Component {
               <TextInput
                 style={{
                   borderColor: '#00A2FF',
-                  flex:2,
-                  height:42,
+                  flex: 2,
+                  height: 42,
                   borderTopWidth: 1,
                   borderRadius: 4,
                   paddingTop: 3,
@@ -364,7 +386,7 @@ class FeedbackSubmit extends Component {
                   fontSize: 16,
                 }}
                 editable={false}
-                value={this.state.category || 'Click to choose > '}
+                value={this.handleValueChange(type)}
               />
           </View>
         </ModalPicker>
@@ -388,7 +410,7 @@ class FeedbackSubmit extends Component {
             maxLength={500}
           />
         </View>
-        {this.maybeRenderCategoryModal()}
+        {this.maybeRenderCategoryModal('negative')}
         {this.renderImageButton()}
         {this.renderSubmitButton()}
         {this.maybeRenderDeleteButton()}
@@ -417,7 +439,7 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          {this.maybeRenderCategoryModal()}
+          {this.maybeRenderCategoryModal('positive')}
           {this.renderImageButton('positive')}
           {this.renderSubmitButton('positive')}
           {this.maybeRenderDeleteButton('positive')}
