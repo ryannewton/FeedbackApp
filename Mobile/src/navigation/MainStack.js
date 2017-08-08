@@ -69,7 +69,7 @@ const MainStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    })
+    }),
   },
   Submitted: {
     screen: Submitted,
@@ -82,7 +82,7 @@ const MainStack = StackNavigator({
         backgroundColor: '#00A2FF',
       },
       headerTintColor: 'white',
-    })
+    }),
   },
 });
 
