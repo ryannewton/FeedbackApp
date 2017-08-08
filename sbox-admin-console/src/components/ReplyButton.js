@@ -11,6 +11,8 @@ import {
   ControlLabel,
   FormControl,
   Radio,
+  Tooltip,
+  OverlayTrigger,
 } from 'react-bootstrap';
 import { replyFeedback, updateFeedback } from '../actions';
 
@@ -156,17 +158,21 @@ class ReplyButton extends Component {
         </div>
       </Popover>
     );
-
+    const tooltip = (
+      <Tooltip id="tooltip"><strong>Reply</strong></Tooltip>
+    );
     return (
       <span style={{ position: 'relative'}}>
-        <Button
-          className="btn-xs btn-success"
-          ref="target"
-          style={{ zIndex:100, position: 'absolute', left:24 }}
-          onClick={this.buttonClicked}
-        >
-          <Glyphicon glyph='share' />
-        </Button>
+        <OverlayTrigger placement="top" overlay={tooltip}>
+          <Button
+            className="btn-xs btn-success"
+            ref="target"
+            style={{ zIndex:100, position: 'absolute', left:24 }}
+            onClick={this.buttonClicked}
+          >
+            <Glyphicon glyph='share' />
+          </Button>
+        </OverlayTrigger>
         <Overlay
           rootClose
           show={this.state.show}
