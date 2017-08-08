@@ -55,17 +55,17 @@ class FeedbackSubmit extends Component {
 
   componentWillUpdate(nextProps, nextState) {
     // Only update image dimensions if image changes
-    if (nextProps.feedback.imageURL !== this.props.feedback.imageURL) {
+    if (nextProps.feedback.imageURL !== this.props.feedback.imageURL && nextProps.feedback.imageURL) {
       Image.getSize(nextProps.feedback.imageURL, (iwidth, iheight) => {
         this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
       });
     }
-    if (nextProps.feedback.positiveImageURL !== this.props.feedback.positiveImageURL) {
+    if (nextProps.feedback.positiveImageURL !== this.props.feedback.positiveImageURL && nextProps.feedback.positiveImageURL) {
       Image.getSize(nextProps.feedback.positiveImageURL, (iwidth, iheight) => {
         this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
       });
     }
-    if (nextProps.feedback.negativeImageURL !== this.props.feedback.negativeImageURL) {
+    if (nextProps.feedback.negativeImageURL !== this.props.feedback.negativeImageURL && nextProps.feedback.negativeImageURL) {
       Image.getSize(nextProps.feedback.negativeImageURL, (iwidth, iheight) => {
         this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
       });
