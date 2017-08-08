@@ -70,7 +70,6 @@ class ClarifyButton extends Component {
           position: 'absolute',
           backgroundColor: 'white',
           width: 350,
-          height: 310,
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
