@@ -78,10 +78,16 @@ export const verifyEmail = (email, code) => (
         .then(() => {
           dispatch(authorizeUserSuccess(token));
         });
-      } else dispatch(authorizeUserFail('Missing token, verifyEmail routine'));
+      } else {
+        console.log('Error in verifyEmail()');
+        console.log('Error: Missing token');
+        dispatch(authorizeUserFail('Something went wrong on our end. Please try again.'));
+      }
     })
     .catch((error) => {
-      dispatch(authorizeUserFail(error.response.data));
+      console.log('Error in verifyEmail()');
+      console.log('Error: ', error);
+      dispatch(authorizeUserFail('There was an error verifying your email'));
     });
   }
 );

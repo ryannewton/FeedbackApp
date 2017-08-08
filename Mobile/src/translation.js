@@ -26,6 +26,9 @@ const translate = language => {
         ENTER_CODE: 'Enter Code from Email',
         VERIFY_EMAIL: 'Verify Email',
         GROUP_DESCRIPTION: "Please enter your community's group code.",
+        CREATE_GROUP_DESCRIPTION: 'Name your Suggestion Box group',
+        CREATE_GROUP_BUTTON: 'Create group',
+        CREATE_GROUP_TEXTINPUT: 'Your Group Name',
         OK: 'OK',
         NEED_GROUP_CODE: 'Need a group code?',
         NEED_GROUP_CODE_DETAIL: 'If your community has not been set up yet, send an email to tyler@suggestionboxapp.com to receive your unique group code!',
@@ -54,12 +57,12 @@ const translate = language => {
         ERROR_MESSAGE_1: 'One or more words in your comment is restricted by your administrator. Please edit and resubmit.',
         ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
         OFFICIAL_RESPONSE: 'Official Response',
-      }
+      };
     case 'es':
       return {
         INTRO_SLIDE_1: 'Bienvenido a \n The Suggestion Box \n (Caja de sugerencias)',
         INTRO_SLIDE_2: 'Envia sugerencias para tu comunidad anónimamente ...',
-        INTRO_SLIDE_3: "...y prioriza otras sugerencias votando.",
+        INTRO_SLIDE_3: '...y prioriza otras sugerencias votando.',
         INTRO_SLIDE_4: 'Las sugerencias mas priorizadas, las solucionaremos y recibiran una respuesta oficial',
         SUBMIT_FEEDBACK: 'Da sugerencias ',
         POSITIVE_FILL_TEXT: 'Positivo: Que es algo que contribuyo, en forma positiva, a ventas y conversacion?',
@@ -110,12 +113,12 @@ const translate = language => {
         OK: 'De acuerdo',
         NEED_GROUP_CODE: '¿Necesita un código de grupo?',
         NEED_GROUP_CODE_DETAIL: 'Si su comunidad aún no ha sido creada, envíe un correo electrónico a tyler@suggestionboxapp.com para recibir su código de grupo único.',
-      }
+      };
     case 'vi':
       return {
         INTRO_SLIDE_1: 'Chào bạn đến với hộp đóng góp ý kiến!',
         INTRO_SLIDE_2: 'Xin hãy để lại phản hồi ẩn danh cho cộng đồng của bạn',
-        INTRO_SLIDE_3: "và xếp thứ tự các phản hồi khác bằng cách bỏ phiếu",
+        INTRO_SLIDE_3: 'và xếp thứ tự các phản hồi khác bằng cách bỏ phiếu',
         INTRO_SLIDE_4: 'Phản hồi xếp thứ nhất sẽ được xem xét hoặc nhận phản hồi chính thức',
         SUBMIT_FEEDBACK: 'Gửi ý kiến',
         POSITIVE_FILL_TEXT: 'Tích cực: Nêu một điều tích cực đã đóng góp cho doanh thu và các cuộc thảo luận',
@@ -166,12 +169,12 @@ const translate = language => {
         OK: 'được',
         NEED_GROUP_CODE: 'Cần một mã nhóm?',
         NEED_GROUP_CODE_DETAIL: 'Nếu cộng đồng của bạn chưa được thiết lập, hãy gửi email tới tyler@suggestionboxapp.com để nhận mã nhóm duy nhất của bạn!',
-      }
+      };
     case 'zh-cn':
       return {
         INTRO_SLIDE_1: '欢迎使用 Suggestion Box， 一个多平台的电子意见箱',
         INTRO_SLIDE_2: '匿名地向你所在的组织提交反馈与建议',
-        INTRO_SLIDE_3: "为你所赞成的反馈投票",
+        INTRO_SLIDE_3: '为你所赞成的反馈投票',
         INTRO_SLIDE_4: '关注度最高的反馈会被管理层采纳或受到官方的回复',
         SUBMIT_FEEDBACK: '提交反馈',
         POSITIVE_FILL_TEXT: '积极反馈: 有什么可以帮助我们的销售和团队工作？',
