@@ -104,7 +104,7 @@ function sendEmail(toEmails, fromEmail, subjectLine, bodyText) {
   const toEmailsProductionCheck = (process.env.production) ? toEmailsFiltered : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
   ses.sendEmail({
     Source: fromEmail,
-    Destination: { ToAddresses: toEmailsFiltered },
+    Destination: { ToAddresses: toEmailsProductionCheck },
     Message: {
       Subject: {
         Data: subjectLine,
@@ -435,45 +435,6 @@ app.post('/submitSolution', upload.array(), (req, res) => {
     }
   });
 });
-
-// SUBMIT OFFICIAL REPLY
-// app.post('/submitOfficialReply', upload.array(), (req, res) => {
-//   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-//     if (err) res.status(400).send('Authorization failed');
-//     else {
-//       const { userId } = decoded;
-//       const { feedback, officialReply } = req.body;
-//       const connectionString = 'UPDATE feedback SET officialReply = ? WHERE id = ?';
-//       connection.query(connectionString, [officialReply, feedback.id], (err) => {
-//         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8955');
-//         else {
-//           // Insert text
-//           insertText(res, feedback.id, 'reply', officialReply, userId);
-
-//           // Send Email to original poster
-//           officialReplyEmailNotification({ feedback, officialReply });
-
-//           // Send Email to Moderators
-//           const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-//           sendEmail(toEmails, defaultFromEmail, `Reply: ${officialReply} UserId: some admin`);
-//           res.sendStatus(200);
-//         }
-//       });
-//     }
-//   });
-// });
-
-// Email notification for new Official Replies
-// function officialReplyEmailNotification({ feedback, officialReply }) {
-//   const connectionString = 'SELECT email FROM feedback JOIN users ON feedback.userId = users.id WHERE feedback.id = ?';
-//   connection.query(connectionString, [feedback.id], (err, rows) => {
-//     if (!err && rows.length > 0) {
-//       const toEmails = rows.map(row => row.email);
-//       const { subjectLine, bodyText } = officialReply1({ feedback, message: officialReply });
-//       sendEmail(toEmails, defaultFromEmail, subjectLine, bodyText);
-//     }
-//   });
-// }
 
 function submitFeedbackVoteHelper(feedbackId, upvote, downvote, noOpinion, userId, res) {
   const connectionString = 'INSERT INTO feedbackVotes SET ?';
