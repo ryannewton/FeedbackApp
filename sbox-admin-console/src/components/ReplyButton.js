@@ -119,7 +119,7 @@ class ReplyButton extends Component {
             <FormGroup>
               <Radio
                 checked={(selectedResponseMethod === 'officialReply')}
-                onClick={() => this.setState({ selectedResponseMethod: 'officialReply' })}
+                onClick={() => this.setState({ selectedResponseMethod: 'officialReply', response: this.props.feedback.officialReply})}
                 name="radioGroup"
               >
                 Post Official Response On App
@@ -127,7 +127,7 @@ class ReplyButton extends Component {
               {' '}
               <Radio
                 checked={(selectedResponseMethod === 'interested')}
-                onClick={() => this.setState({ selectedResponseMethod: 'interested' })}
+                onClick={() => this.setState({ selectedResponseMethod: 'interested', response: ''})}
                 name="radioGroup"
               >
                 Email Interested Users (voters)
@@ -135,7 +135,7 @@ class ReplyButton extends Component {
               {' '}
               <Radio
                 checked={(selectedResponseMethod === 'submitter')}
-                onClick={() => this.setState({ selectedResponseMethod: 'submitter' })}
+                onClick={() => this.setState({ selectedResponseMethod: 'submitter', response: '' })}
                 name="radioGroup"
               >
                 Email Suggestion Submitter
