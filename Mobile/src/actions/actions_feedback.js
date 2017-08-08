@@ -78,18 +78,17 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
   }
 );
 
-export const updateFeedbackToServer = (text, type, imageURL, category, id) => (
+export const updateFeedbackToServer = (text, type, imageURL, category, feedback1) => (
   (dispatch, getState) => {
     dispatch({ type: SUBMITTING_FEEDBACK });
-
+    //
     const token = getState().auth.token;
-    let feedback = { text, type, imageURL, category, id };
+    let feedback = { ...feedback1, text, type, imageURL, category };
 
     http.post('/updateFeedback/', { feedback, authorization: token })
     .then((response) => {
       dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback });
       dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
-      dispatch(addFeedbackUpvote(feedback));
     })
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
@@ -102,7 +101,7 @@ export const updateFeedbackToServer = (text, type, imageURL, category, id) => (
 export const addFeedbackUpvote = feedback => (
   (dispatch, getState) => {
     dispatch({ type: ADD_FEEDBACK_UPVOTE, payload: feedback });
-    
+
     const { feedbackUpvotes, feedbackDownvotes, feedbackNoOpinions } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
 
@@ -277,16 +276,21 @@ export const removeImage = () => (
   }
 );
 
-export const deleteFeedback = feedback => (
+
+export const deleteFeedback = feedback1 => (
   (dispatch, getState) => {
-    //const token = getState().auth.token;
-    //http.post('/softDeleteFeedback', { authorization: token, feedback })
-    //.then(() => {
-      dispatch({ type: DELETE_FEEDBACK, payload: {feedback} });
-    //})
-    /*.catch((error) => {
-      console.log('deleteFeedback() Fail');
-      console.log('Error: ', error);
-    });*/
+    //
+    const token = getState().auth.token;
+    let feedback = { ...feedback1, status: 'deleted' };
+
+    http.post('/updateFeedback/', { feedback, authorization: token })
+    .then((response) => {
+      dispatch({ type: DELETE_FEEDBACK, payload: feedback1 });
+    })
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in deleteFeedback in actions_feedback', error);
+      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorMessage });
+    });
   }
 );

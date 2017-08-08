@@ -174,7 +174,7 @@ export default (state = INITIAL_STATE, action) => {
     }
 
     case DELETE_FEEDBACK: {
-      const index = state.list.findIndex(feedback => feedback.id === action.payload.feedback.id);
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newList = state.list.slice(0);
       newList[index].status = 'deleted';
       return { ...state, list: newList };

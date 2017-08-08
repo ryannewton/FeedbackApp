@@ -112,13 +112,13 @@ class FeedbackSubmit extends Component {
       } else {
         // If no restricted words then we continue
         if (this.state.feedback) {
-          this.props.updateFeedbackToServer(this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category, this.props.navigation.state.params.feedback.id);
+          this.props.updateFeedbackToServer(this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category, this.props.navigation.state.params.feedback);
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.updateFeedbackToServer(this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category, this.props.navigation.state.params.feedback.id);
+          this.props.updateFeedbackToServer(this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.updateFeedbackToServer(this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category, this.props.navigation.state.params.feedback.id);
+          this.props.updateFeedbackToServer(this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
           this.setState({ negativeFeedback: '' });
         }
 
@@ -167,9 +167,9 @@ class FeedbackSubmit extends Component {
       else if (type === 'negative') {
         this.props.feedback.negativeImageURL = this.props.navigation.state.params.feedback.imageURL;
       }
-      Image.getSize(this.props.navigation.state.params.feedback.imageURL, (iwidth, iheight) => {
-        this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
-      });
+      // Image.getSize(this.props.navigation.state.params.feedback.imageURL, (iwidth, iheight) => {
+      //   this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
+      // });
       return (
         <Image
           source={{ uri: this.props.navigation.state.params.feedback.imageURL }}
@@ -301,7 +301,7 @@ class FeedbackSubmit extends Component {
   maybeRenderDeleteButton(type) {
     if (this.props.feedback.imageURL ||
         this.props.feedback.positiveImageURL && type === 'positive' ||
-        this.props.feedback.negativeImageURL && type === 'negative' || 
+        this.props.feedback.negativeImageURL && type === 'negative' ||
         (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage)) {
       return (
         <View>
