@@ -16,6 +16,8 @@ const googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KE
 aws.config.loadFromPath('config.json'); // load aws config
 const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
+const nodemailer = require('nodemailer'); // HTML email library
+const MailComposer = require('nodemailer/lib/mail-composer');
 
 const app = express();
 app.use(bodyParser.json()); // for parsing application/json
@@ -119,6 +121,30 @@ function sendEmail(toEmails, fromEmail, subjectLine, bodyText) {
   , (err) => {
     if (err) console.log(err);
   });
+}
+
+// Sends Email from Nodemailer
+function sendEmailNodemailer(toEmail, fromEmail, subject, htmlMessage) {
+  const mail = new MailComposer({
+    from: fromEmail,
+    to: toEmail,
+    subject,
+    html: htmlMessage,
+  });
+
+  return new Promise((resolve, reject) => {
+    mail.compile().build((err, res) => {
+      err ? reject(err) : resolve(res);
+    });
+  })
+    .then((message) => {
+      const sesParams = {
+        RawMessage: {
+          Data: message,
+        },
+      };
+      return ses.sendRawEmail(sesParams).promise();
+    });
 }
 
 function generatePassword(len) {
