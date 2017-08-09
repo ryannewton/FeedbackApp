@@ -44,7 +44,9 @@ class FeedbackSubmit extends Component {
       negativeFeedback: '',
       imageWidth: null,
       imageHeight: null,
-      category: ''
+      category: '',
+      positiveCategory: '',
+      negativeCategory: '',
     };
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
@@ -242,7 +244,7 @@ class FeedbackSubmit extends Component {
     return null;
   }
 
-  maybeRenderCategoryModal() {
+  maybeRenderCategoryModal(type) {
     // If the group doesn't have categories
     if (!this.props.group.categories.length) {
       return null;
@@ -254,6 +256,17 @@ class FeedbackSubmit extends Component {
         { key: index++, label: item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
       );
     });
+    let placeHolder;
+    switch (type) {
+      case 'negativeCategory':
+        placeHolder = this.state.negativeCategory;
+      case 'positiveCategory':
+        placeHolder = this.state.positiveCategory;
+      case 'single':
+        placeHolder = this.state.category;
+      default:
+        break
+    }
 
     categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true })
     return (
@@ -267,7 +280,15 @@ class FeedbackSubmit extends Component {
           sectionTextStyle={{ fontSize:18, fontWeight:'600' }}
           cancelTextStyle={{ fontSize:18, fontWeight:'600' }}
           initValue="Select something yummy!"
-          onChange={(category) => this.setState({ category: category.label }) }
+          onChange={(category) => {
+            if (type === 'negativeCategory') {
+              this.setState({ negativeCategory: category.label })
+            } else if (type === 'positiveCategory') {
+              this.setState({ positiveCategory: category.label })
+            } else {
+              this.setState({ category: category.label });
+            }
+          }}
         >
           <View style={{ flexDirection: 'row', alignItems:'center', backgroundColor:'white', marginTop: 5, marginBottom:1 }}>
             <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'center' }}>
@@ -289,7 +310,7 @@ class FeedbackSubmit extends Component {
                   fontSize: 16,
                 }}
                 editable={false}
-                value={this.state.category || 'Click to choose > '}
+                value={ placeHolder || 'Click to choose > '}
               />
           </View>
         </ModalPicker>
@@ -313,7 +334,7 @@ class FeedbackSubmit extends Component {
             maxLength={500}
           />
         </View>
-        {this.maybeRenderCategoryModal()}
+        {this.maybeRenderCategoryModal('single')}
         {this.renderImageButton()}
         {this.renderSubmitButton()}
         {this.maybeRenderDeleteButton()}
@@ -342,7 +363,7 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          {this.maybeRenderCategoryModal()}
+          {this.maybeRenderCategoryModal('positiveCategory')}
           {this.renderImageButton('positive')}
           {this.renderSubmitButton('positive')}
           {this.maybeRenderDeleteButton('positive')}
@@ -365,7 +386,7 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          {this.maybeRenderCategoryModal()}
+          {this.maybeRenderCategoryModal('negativeCategory')}
           {this.renderImageButton('negative')}
           {this.renderSubmitButton('negative')}
           {this.maybeRenderDeleteButton('negative')}
