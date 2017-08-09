@@ -319,7 +319,6 @@ class FeedbackSubmit extends Component {
     return null;
   }
 
-
   handleCategoryChange(category, type) {
     if (!type) {
       this.setState({ category: category.label })
@@ -352,6 +351,7 @@ class FeedbackSubmit extends Component {
         { key: index++, label: item.charAt(0).toUpperCase() + item.slice(1).toLowerCase()}
       );
     });
+
     categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true })
     return (
       <View style={{ flexDirection: 'row'}}>
@@ -462,7 +462,7 @@ class FeedbackSubmit extends Component {
             />
           </View>
           {/* Submit button / loading spinner */}
-          {this.maybeRenderCategoryModal()}
+          {this.maybeRenderCategoryModal('negativeCategory')}
           {this.renderImageButton('negative')}
           {this.renderSubmitButton('negative')}
           {this.maybeRenderDeleteButton('negative')}

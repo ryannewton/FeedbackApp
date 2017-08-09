@@ -87,7 +87,7 @@ class SplashScreen extends Component {
       this.props.navigation.dispatch(navToWelcome);
       this.setState({ cleared: true });
     // 2) loggedIn is true (we logged in) and we have stored all the data we need in state
-    } else if (
+  } else if (
         this.props.auth.loggedIn === true &&
         this.props.group.groupName !== '' &&
         this.props.feedback.lastPulled.getTime() !== 0
