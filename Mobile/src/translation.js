@@ -63,7 +63,7 @@ const translate = language => {
         DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
         DELETE: 'Delete',
         UPDATE_FEEDBACK: 'Update Feedback',
-    }
+    };
     case 'es':
       return {
         INTRO_SLIDE_1: 'Bienvenido a \n The Suggestion Box \n (Caja de sugerencias)',
@@ -125,7 +125,7 @@ const translate = language => {
         DELETE_FEEDBACK_BODY: 'Los votos y los comentarios se eliminarán junto con la retroalimentación si pulsa eliminar',
         DELETE: 'Borrar',
         UPDATE_FEEDBACK: 'Actualizar comentarios',
-      }
+      };
 
     case 'vi':
       return {
