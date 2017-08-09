@@ -9,6 +9,8 @@ import {
   Popover,
   FormControl,
   ControlLabel,
+  Tooltip,
+  OverlayTrigger,
 } from 'react-bootstrap';
 import { routeFeedback } from '../actions';
 
@@ -99,10 +101,14 @@ class AssignButton extends Component {
         <Button onClick={() => this.routeFeedback()}>Send</Button>
       </Popover>
     );
-
+    const tooltip = (
+      <Tooltip id="tooltip"><strong>Share</strong></Tooltip>
+    );
     return (
       <span style={{ position: 'relative'}}>
-        <Button className="btn-xs btn-success" style={{ zIndex:100, position: 'absolute'}} ref="target" onClick={this.buttonClicked}><Glyphicon glyph='send' /></Button>
+        <OverlayTrigger placement="top" overlay={tooltip}>
+          <Button className="btn-xs btn-success" style={{ zIndex:100, position: 'absolute'}} ref="target" onClick={this.buttonClicked}><Glyphicon glyph='send' /></Button>
+        </OverlayTrigger>
         <Overlay
           rootClose
           show={this.state.show}

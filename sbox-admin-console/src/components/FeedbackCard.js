@@ -1,7 +1,15 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Panel, Glyphicon, Image, Button, Label, Modal, FormControl } from 'react-bootstrap';
+import {
+  Panel,
+  Glyphicon,
+  Image,
+  Button,
+  Label,
+  Modal,
+  FormControl,
+} from 'react-bootstrap';
 import TimeAgo from 'react-timeago'
 
 // Import components
@@ -167,7 +175,7 @@ class FeedbackCard extends Component {
             </Button>
             <ClarifyButton
               feedback={this.props.feedback}
-              updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} 
+              updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })}
             />
             <RejectButton
               feedback={this.props.feedback}
@@ -301,6 +309,7 @@ class FeedbackCard extends Component {
     if (!imageURL) {
       return null;
     }
+
     return (
       <div className="pull-right" style={{color:'grey'}}><Glyphicon style={{margin:3}} glyph='picture' /></div>
     );
@@ -322,6 +331,7 @@ class FeedbackCard extends Component {
     if (!imageURL) {
       return null;
     }
+
     if (!feedbackSolutions.length) {
       return (
         <div><Button className="btn btn-xs" style={{ position: 'absolute', right: 30 }} onClick={() => this.setState({ viewImage: !this.state.viewImage })}><Glyphicon glyph='picture' /></Button></div>

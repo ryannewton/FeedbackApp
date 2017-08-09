@@ -8,7 +8,9 @@ import {
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
   SUBMIT_FEEDBACK_SUCCESS,
+  UPDATE_FEEDBACK_SUCCESS,
   SUBMIT_FEEDBACK_FAIL,
+  UPDATE_FEEDBACK_FAIL,
   SUBMITTING_IMAGE,
   SUBMIT_IMAGE_SUCCESS,
   SUBMIT_IMAGE_FAIL,
@@ -24,6 +26,7 @@ import {
   SET_SEARCH_QUERY,
   SEARCH_IN_PROGRESS,
   REMOVE_IMAGE,
+  DELETE_FEEDBACK,
 } from './types';
 
 // Import constants
@@ -32,6 +35,7 @@ import { http, ROOT_STORAGE, ROOT_URL } from '../constants';
 export const pullFeedback = token => (
   (dispatch) => {
     dispatch({ type: REQUESTED_FEEDBACK });
+    console.log('token: ', token);
 
     http.post('/pullFeedback', { authorization: token })
     .then((response) => {
@@ -74,10 +78,30 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
   }
 );
 
+export const updateFeedbackToServer = (text, type, imageURL, category, feedback1) => (
+  (dispatch, getState) => {
+    dispatch({ type: SUBMITTING_FEEDBACK });
+    //
+    const token = getState().auth.token;
+    let feedback = { ...feedback1, text, type, imageURL, category };
+
+    http.post('/updateFeedback/', { feedback, authorization: token })
+    .then((response) => {
+      dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback });
+      dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
+    })
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in updateFeedbackToServer in actions_feedback', error);
+      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorMessage });
+    });
+  }
+);
+
 export const addFeedbackUpvote = feedback => (
   (dispatch, getState) => {
     dispatch({ type: ADD_FEEDBACK_UPVOTE, payload: feedback });
-    
+
     const { feedbackUpvotes, feedbackDownvotes, feedbackNoOpinions } = getState().user;
     AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
 
@@ -249,5 +273,24 @@ export const uploadImage = (uri, type) => (
 export const removeImage = () => (
   {
     type: REMOVE_IMAGE,
+  }
+);
+
+
+export const deleteFeedback = feedback1 => (
+  (dispatch, getState) => {
+    //
+    const token = getState().auth.token;
+    let feedback = { ...feedback1, status: 'deleted' };
+
+    http.post('/updateFeedback/', { feedback, authorization: token })
+    .then((response) => {
+      dispatch({ type: DELETE_FEEDBACK, payload: feedback1 });
+    })
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in deleteFeedback in actions_feedback', error);
+      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorMessage });
+    });
   }
 );

@@ -11,6 +11,8 @@ import {
   ControlLabel,
   FormControl,
   Radio,
+  Tooltip,
+  OverlayTrigger,
 } from 'react-bootstrap';
 import { replyFeedback, updateFeedback } from '../actions';
 
@@ -101,7 +103,6 @@ class ReplyButton extends Component {
           position: 'absolute',
           backgroundColor: 'white',
           width: 350,
-          height: 430,
           boxShadow: '0 5px 10px rgba(0, 0, 0, 0.2)',
           border: '1px solid #CCC',
           borderRadius: 3,
@@ -118,7 +119,7 @@ class ReplyButton extends Component {
             <FormGroup>
               <Radio
                 checked={(selectedResponseMethod === 'officialReply')}
-                onClick={() => this.setState({ selectedResponseMethod: 'officialReply' })}
+                onClick={() => this.setState({ selectedResponseMethod: 'officialReply', response: this.props.feedback.officialReply})}
                 name="radioGroup"
               >
                 Post Official Response On App
@@ -126,7 +127,7 @@ class ReplyButton extends Component {
               {' '}
               <Radio
                 checked={(selectedResponseMethod === 'interested')}
-                onClick={() => this.setState({ selectedResponseMethod: 'interested' })}
+                onClick={() => this.setState({ selectedResponseMethod: 'interested', response: ''})}
                 name="radioGroup"
               >
                 Email Interested Users (voters)
@@ -134,7 +135,7 @@ class ReplyButton extends Component {
               {' '}
               <Radio
                 checked={(selectedResponseMethod === 'submitter')}
-                onClick={() => this.setState({ selectedResponseMethod: 'submitter' })}
+                onClick={() => this.setState({ selectedResponseMethod: 'submitter', response: '' })}
                 name="radioGroup"
               >
                 Email Suggestion Submitter
@@ -156,17 +157,21 @@ class ReplyButton extends Component {
         </div>
       </Popover>
     );
-
+    const tooltip = (
+      <Tooltip id="tooltip"><strong>Reply</strong></Tooltip>
+    );
     return (
       <span style={{ position: 'relative'}}>
-        <Button
-          className="btn-xs btn-success"
-          ref="target"
-          style={{ zIndex:100, position: 'absolute', left:24 }}
-          onClick={this.buttonClicked}
-        >
-          <Glyphicon glyph='share' />
-        </Button>
+        <OverlayTrigger placement="top" overlay={tooltip}>
+          <Button
+            className="btn-xs btn-success"
+            ref="target"
+            style={{ zIndex:100, position: 'absolute', left:24 }}
+            onClick={this.buttonClicked}
+          >
+            <Glyphicon glyph='share' />
+          </Button>
+        </OverlayTrigger>
         <Overlay
           rootClose
           show={this.state.show}

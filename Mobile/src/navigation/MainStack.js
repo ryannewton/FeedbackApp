@@ -13,6 +13,7 @@ import FeedbackDetails from '../scenes/FeedbackDetails';
 // Import Components and styles
 import FeedbackListHeader from './components/FeedbackListHeader';
 import FeedbackSubmitHeaderButtons from './components/FeedbackSubmitHeaderButtons';
+import FeedbackDetailsHeaderButtons from './components/FeedbackDetailsHeaderButtons';
 import styles from '../styles/common/navStyles';
 
 // Stack of scenes
@@ -28,6 +29,7 @@ const MainStack = StackNavigator({
     screen: FeedbackDetails,
     navigationOptions: ({ navigation }) => ({
       title: navigation.state.params.translate,
+      headerRight: <FeedbackDetailsHeaderButtons navigation={navigation} />,
       headerTitleStyle: {
         color: '#fff',
       },
@@ -42,7 +44,7 @@ const MainStack = StackNavigator({
   FeedbackSubmit: {
     screen: FeedbackSubmit,
     navigationOptions: ({ navigation }) => ({
-      title: navigation.state.params,
+      title: navigation.state.params.language,
       headerRight: <FeedbackSubmitHeaderButtons navigation={navigation} />,
       headerTitleStyle: {
         color: '#fff',

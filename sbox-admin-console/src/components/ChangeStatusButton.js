@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import ReactDOM from 'react-dom';
-import { Button, Overlay, Popover, MenuItem } from 'react-bootstrap';
+import { Button, Overlay, Popover, MenuItem, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { updateFeedback } from '../actions';
 
 class ChangeStatusButton extends Component {

@@ -62,6 +62,15 @@ class SendAuthorizationEmail extends Component {
     );
   }
 
+  maybeRenderError = () => {
+    console.log('props: ', this.props);
+    return (
+      <Text style={styles.errorTextStyle}>
+        {this.props.auth.error}
+      </Text>
+    );
+  }
+
   render() {
     const { language } = this.props.user;
     const {
@@ -89,9 +98,7 @@ class SendAuthorizationEmail extends Component {
           />
 
           {/* Error message (blank if no error) */}
-          <Text style={styles.errorTextStyle}>
-            {this.props.auth.error}
-          </Text>
+          {this.maybeRenderError()}
 
           {/* Confirmation button, and 'go to login' button */}
           <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>

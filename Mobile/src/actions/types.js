@@ -35,6 +35,8 @@ export const RECEIVED_FEEDBACK = 'received_feedback';
 export const SUBMITTING_FEEDBACK = 'submit_feedback';
 export const SUBMIT_FEEDBACK_SUCCESS = 'submit_feedback_success';
 export const SUBMIT_FEEDBACK_FAIL = 'submit_feedback_fail';
+export const UPDATE_FEEDBACK_SUCCESS = 'update_feedback_success';
+export const UPDATE_FEEDBACK_FAIL = 'update_feedback_fail';
 export const SUBMITTING_IMAGE = 'submitting_image';
 export const SUBMIT_IMAGE_SUCCESS = 'submit_image_success';
 export const SUBMIT_IMAGE_FAIL = 'submit_image_fail';
@@ -46,6 +48,7 @@ export const ADD_FEEDBACK_TO_STATE = 'add_feedback_to_state';
 export const ADD_FEEDBACK_NO_OPINION = 'add_feedback_no_opinion';
 export const REMOVE_FEEDBACK_NO_OPINION = 'remove_feedback_no_opinion';
 export const REMOVE_IMAGE = 'remove_image';
+export const DELETE_FEEDBACK = 'delete_feedback';
 
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';

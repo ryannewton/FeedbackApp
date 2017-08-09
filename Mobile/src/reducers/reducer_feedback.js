@@ -4,7 +4,9 @@ import {
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
   SUBMIT_FEEDBACK_SUCCESS,
+  UPDATE_FEEDBACK_SUCCESS,
   SUBMIT_FEEDBACK_FAIL,
+  UPDATE_FEEDBACK_FAIL,
   SUBMITTING_IMAGE,
   SUBMIT_IMAGE_SUCCESS,
   SUBMIT_IMAGE_FAIL,
@@ -23,6 +25,7 @@ import {
   REMOVE_IMAGE,
   AUTHORIZE_USER_FAIL,
   AUTHORIZE_USER_SUCCESS,
+  DELETE_FEEDBACK,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -143,6 +146,19 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newState };
     }
 
+    case UPDATE_FEEDBACK_SUCCESS:
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      console.log('payload: ', action.payload);
+      console.log('id: ', index);
+      const newState = state.list.slice(0);
+      newState[index].category = action.payload.category;
+      newState[index].imageURL = action.payload.imageURL;
+      newState[index].text = action.payload.text;
+      return { ...state, list: newState };
+
+    case UPDATE_FEEDBACK_FAIL:
+      return { ...state, loading: false };
+
     case SET_SEARCH_QUERY:
       return { ...state, searchQuery: action.payload };
 
@@ -155,6 +171,13 @@ export default (state = INITIAL_STATE, action) => {
 
     case ADD_FEEDBACK_TO_STATE: {
       return { ...state, list: filterAndOrder([...state.list, action.payload]) };
+    }
+
+    case DELETE_FEEDBACK: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      const newList = state.list.slice(0);
+      newList[index].status = 'deleted';
+      return { ...state, list: newList };
     }
 
     case LOG_OUT_USER:
