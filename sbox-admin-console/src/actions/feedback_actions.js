@@ -138,12 +138,10 @@ export const rejectFeedback = ({ feedback, message }) => (
     const token = localStorage.getItem('token');
     http.post('/rejectFeedback', { authorization: token, feedback, message })
     .then(() => {
-      console.log('rejectFeedback() Success');
       dispatch({ type: REJECT_FEEDBACK_SUCCESS, payload: feedback });
     })
     .catch((error) => {
-      console.log('rejectFeedback() Fail');
-      console.log('Error: ', error);
+      console.log('Error in reject feedback ', error);
       dispatch({ type: REJECT_FEEDBACK_FAIL, payload: feedback });
     });
   }

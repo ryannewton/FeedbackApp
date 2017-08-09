@@ -126,6 +126,7 @@ const translate = language => {
         DELETE: 'Borrar',
         UPDATE_FEEDBACK: 'Actualizar comentarios',
       };
+
     case 'vi':
       return {
         INTRO_SLIDE_1: 'Chào bạn đến với hộp đóng góp ý kiến!',

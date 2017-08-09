@@ -23,7 +23,7 @@ class RejectButton extends Component {
     this.setState({ error: false });
     const { message } = this.state;
     const { feedback } = this.props;
-        if (this.props.feedback.feedbackId) {
+    if (this.props.feedback.feedbackId) {
       this.props.rejectSolution({ solution: feedback, message });
     } else {
       this.props.rejectFeedback({ feedback, message });

@@ -1,7 +1,7 @@
 // Import Libraries
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Button, Modal, Glyphicon } from 'react-bootstrap';
+import { Button, Modal, Glyphicon, Tooltip, OverlayTrigger } from 'react-bootstrap';
 import { updateFeedback } from '../actions';
 
 class DeleteButton extends Component {
@@ -40,9 +40,19 @@ class DeleteButton extends Component {
   }
 
   render = () => {
+    const tooltip = (
+      <Tooltip id="tooltip"><strong>Delete</strong></Tooltip>
+    );
     return (
       <div style={{ position: 'relative'}}>
-        <Button className="btn btn-xs btn-danger" ref="target" style={{ position: 'absolute', right:0, color:'white'}} onClick={()=>this.setState({ smShow: true })}><Glyphicon glyph='trash' /></Button>
+        <OverlayTrigger placement="top" overlay={tooltip}>
+          <Button
+            className="btn btn-xs btn-danger"
+            ref="target" style={{ position: 'absolute', right:0, color:'white'}}
+            onClick={()=>this.setState({ smShow: true })}>
+              <Glyphicon glyph='trash' />
+          </Button>
+        </OverlayTrigger>
         {this.MySmallModal()}
       </div>
     );
