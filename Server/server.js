@@ -100,7 +100,7 @@ function convertImgs(file, quality) {
 
 // Sends Email from AWS SES
 function sendEmail(toEmails, fromEmail, subjectLine, bodyText) {
-  const toEmailsFiltered = toEmails.filter(email => email.toLowerCase().slice(0, 11) !== 'admin_test@');
+  const toEmailsFiltered = toEmails.filter(email => email !== null && email.toLowerCase().slice(0, 11) !== 'admin_test@');
   const toEmailsProductionCheck = (process.env.production) ? toEmailsFiltered : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
   ses.sendEmail({
     Source: fromEmail,
@@ -625,6 +625,40 @@ app.post('/updateSolution', upload.array(), (req, res) => {
     }
   });
 });
+
+// Create a new group
+app.post('/createGroup', upload.array(), (req, res) => {
+  const { groupName } = req.body;
+  const connectionString = `
+  INSERT INTO groups (groupName, groupSignupCode, groupAdminCode, feedbackRequiresApproval, solutionsRequireApproval, showStatus, includePositiveFeedbackBox, date)
+  VALUES (?, ?, 'demo', 0, 0, 1, 0, NOW())
+  `;
+  connection.query(connectionString, [groupName, groupName], (err) => {
+    if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 818F');
+    else res.sendStatus(200);
+  });
+});
+
+app.post('/sendInviteEmails', upload.array(), (req, res) => {
+  const { groupName, emails } = req.body;
+  const connectionString = `
+  SELECT groupSignupCode
+  FROM groups
+  WHERE groupName=?
+  `;
+  connection.query(connectionString, [groupName], (err, rows) => {
+    if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8283');
+    else {
+      console.log(rows);
+      const subjectLine = `Join me on Suggestbox Box! - GroupName '${rows[0].groupSignupCode}'`
+      const bodyText = `Please join me on Suggestion Box with the Group Name of '${rows[0].groupSignupCode}'!`
+      console.log(emails)
+      sendEmail(emails, defaultFromEmail, subjectLine, bodyText);
+      res.sendStatus(200);
+    }
+  });
+});
+
 
 // REJECT FEEDBACK
 // 1. Email rejection message to user
@@ -1177,20 +1211,6 @@ Note: Your contact information has been kept confidential. This message was writ
   return { subjectLine, bodyText };
 }
 
-function clarifyFeedback({ feedback, message, adminEmail }) {
-  const subjectLine = `Suggestion Box: Clarification needed on Suggestion, "${feedback.text.slice(0, 10)}"`;
-  const bodyText =
-    `Hi! This is your friend at Suggestion Box.\n\nThank you for submitting a feedback with Suggestion Box! Your administrator has requested for a clarification on your feedback: "${feedback.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the feedback.\n\nHere is your administrator's email if you want to reply: ${adminEmail}. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
-  return { subjectLine, bodyText };
-}
-
-function clarifySolution({ solution, message, adminEmail }) {
-  const subjectLine = 'Suggestion Box: Clarification needed';
-  const bodyText =
-      `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Your administrator has requested for a clarification on your solution: "${solution.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the solution.\n\nHere is your administrator's email if you want to reply: ${adminEmail}. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
-  return { subjectLine, bodyText };
-}
-
 function rejectFeedback({ feedback, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: Feedback rejected';
   const bodyText =
@@ -1201,6 +1221,20 @@ function rejectFeedback({ feedback, message, adminEmail }) {
 function rejectSolution({ solution, message, adminEmail }) {
   const subjectLine = 'Suggestion Box: Solution rejected';
   const bodyText = `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Sadly, your submission: "${solution.text}" was rejected by your administrator.\n\nThe explanation we received was: "${message}"\n\nThere is no need to worry. Your contact information has been kept confidential. This message was written without knowledge of who sent the solution. Here is your administrator's email if you want to reply: ${adminEmail}.\n\nPlease don't let this rejection stop you from sending the next solution or feedback! I hope to here your thoughts again soon!\n\nYour friend at Suggestion Box.`;
+  return { subjectLine, bodyText };
+}
+
+function clarifyFeedback({ feedback, message, adminEmail }) {
+  const subjectLine = 'Suggestion Box: Clarification needed';
+  const bodyText =
+    `Hi! This is your friend at Suggestion Box.\n\nThank you for submitting a feedback with Suggestion Box! Your administrator has requested for a clarification on your feedback: "${feedback.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the feedback.\n\nHere is your administrator's email if you want to reply: ${adminEmail}. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
+  return { subjectLine, bodyText };
+}
+
+function clarifySolution({ solution, message, adminEmail }) {
+  const subjectLine = 'Suggestion Box: Clarification needed';
+  const bodyText =
+      `Hi! This is your friend at Suggestion Box.\n\nThank you for proposing a solution with Suggestion Box! Your administrator has requested for a clarification on your solution: "${solution.text}".\n\nThe note we received from your administrator was: "${message}"\n\nYour contact information has been kept confidential. This message was written without knowledge of who sent the solution.\n\nHere is your administrator's email if you want to reply: ${adminEmail}. I hope to here more of your thoughts in the future!\n\nYour friend at Suggestion Box.`;
   return { subjectLine, bodyText };
 }
 

@@ -14,6 +14,8 @@ export const NEEDS_GROUP_CODE = 'needs_group_code';
 // Group
 export const PULL_GROUP_INFO = 'pull_group_info';
 export const SAVE_GROUP_CODE = 'save_group_code';
+export const UPDATE_INVITE_EMAILS = 'update_invite_emails';
+export const SET_GROUP_NAME = 'set_group_name';
 
 // Solutions
 export const RECEIVED_SOLUTION_LIST = 'received_solution_list';
