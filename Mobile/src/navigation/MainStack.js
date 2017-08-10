@@ -1,10 +1,10 @@
 // Import Libraries
 import React from 'react';
 import { StackNavigator } from 'react-navigation';
-import { Icon } from 'react-native-elements';
 
 // Import Scenes
 import FeedbackSubmit from '../scenes/FeedbackSubmit';
+import FeedbackSubmitSplit from '../scenes/FeedbackSubmitSplit';
 import Settings from '../scenes/Settings';
 import Submitted from '../scenes/Submitted';
 import FeedbackList from '../scenes/FeedbackList';
@@ -44,6 +44,23 @@ const MainStack = StackNavigator({
   },
   FeedbackSubmit: {
     screen: FeedbackSubmit,
+    navigationOptions: ({ navigation }) => ({
+      title: navigation.state.params.language,
+      headerRight: <FeedbackSubmitHeaderButtons navigation={navigation} />,
+      headerTitleStyle: {
+        color: '#fff',
+        fontWeight: 'bold',
+      },
+      headerStyle: {
+        height: styles.header.height,
+        marginTop: styles.header.marginTop,
+        backgroundColor: '#00A2FF',
+      },
+      headerTintColor: 'white',
+    }),
+  },
+  FeedbackSubmitSplit: {
+    screen: FeedbackSubmitSplit,
     navigationOptions: ({ navigation }) => ({
       title: navigation.state.params.language,
       headerRight: <FeedbackSubmitHeaderButtons navigation={navigation} />,

@@ -35,8 +35,9 @@ class EditFeedbackButton extends Component {
       <TouchableOpacity
         style={{ width: 50 }}
         onPress={() => {
+          const submitScene = this.props.group.includePositiveFeedbackBox ? 'FeedbackSubmitSplit' : 'FeedbackSubmit';
           this.stageFeedbackToState();
-          this.props.navigation.navigate('FeedbackSubmit', { language: translate(user.language).EDIT_FEEDBACK, feedback });
+          this.props.navigation.navigate(submitScene, { language: translate(user.language).EDIT_FEEDBACK, feedback });
         }}
       >
         <Icon name="edit" size={25} color="white" />
@@ -45,12 +46,14 @@ class EditFeedbackButton extends Component {
   }
 }
 function mapStateToProps(state) {
-  const { user } = state;
-  return { user };
+  const { user, group } = state;
+  return { user, group };
 }
 
 EditFeedbackButton.propTypes = {
   user: PropTypes.object,
+  feedback: PropTypes.object,
+  group: PropTypes.object,
   navigation: PropTypes.object,
   updateFeedbackText: PropTypes.func,
   updateImageURL: PropTypes.func,
