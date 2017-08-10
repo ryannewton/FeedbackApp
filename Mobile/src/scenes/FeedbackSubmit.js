@@ -114,13 +114,13 @@ class FeedbackSubmit extends Component {
       } else {
         // If no restricted words then we continue
         if (this.state.feedback) {
-          this.props.updateFeedbackToServer(this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category, this.props.navigation.state.params.feedback);
+          this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category, this.props.navigation.state.params.feedback);
           this.setState({ feedback: '' });
         } if (this.state.positiveFeedback) {
-          this.props.updateFeedbackToServer(this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
+          this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
           this.setState({ positiveFeedback: '' });
         } if (this.state.negativeFeedback) {
-          this.props.updateFeedbackToServer(this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
+          this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
           this.setState({ negativeFeedback: '' });
         }
 

@@ -146,16 +146,15 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newState };
     }
 
-    case UPDATE_FEEDBACK_SUCCESS:
+    case UPDATE_FEEDBACK_SUCCESS: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
-      console.log('payload: ', action.payload);
-      console.log('id: ', index);
       const newState = state.list.slice(0);
       newState[index].category = action.payload.category;
       newState[index].imageURL = action.payload.imageURL;
       newState[index].text = action.payload.text;
       return { ...state, list: newState };
-
+    }
+    
     case UPDATE_FEEDBACK_FAIL:
       return { ...state, loading: false };
 

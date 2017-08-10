@@ -13,7 +13,7 @@ class EditFeedbackButton extends Component {
     return (
       <TouchableOpacity
         style={{ width: 50 }}
-        onPress={() => this.props.navigation.navigate('FeedbackSubmit', { language: translate(this.props.user.language).EDIT_FEEDBACK, feedback: this.props.navigation.state.params.feedback})}
+        onPress={() => this.props.navigation.navigate('FeedbackSubmit', { language: translate(this.props.user.language).EDIT_FEEDBACK, feedback: this.props.navigation.state.params.feedback })}
       >
         <Icon name="edit" size={25} color="white" />
       </TouchableOpacity>
@@ -21,7 +21,7 @@ class EditFeedbackButton extends Component {
   }
 }
 function mapStateToProps(state) {
-  const { user, feedback } = state;
-  return { user, feedback };
+  const { user } = state;
+  return { user };
 }
 export default connect(mapStateToProps)(EditFeedbackButton);
