@@ -58,7 +58,7 @@ const translate = language => {
         ERROR_MESSAGE_2: 'Sorry, comments cannot be blank.',
         OFFICIAL_RESPONSE: 'Official Response',
         EDIT_FEEDBACK: 'Edit Feedback',
-        FEEDBACK_DETAIL: 'Feedback Detail',
+        FEEDBACK_DETAIL: 'Feedback Details',
         DELETE_FEEDBACK: 'Delete Feedback',
         DELETE_FEEDBACK_BODY: 'The votes and comments will be deleted along with the feedback if you hit delete',
         DELETE: 'Delete',
