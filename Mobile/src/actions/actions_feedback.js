@@ -55,6 +55,7 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
     dispatch({ type: SUBMITTING_FEEDBACK });
 
     const token = getState().auth.token;
+    const userId = getState().user.userId;
     let feedback = { text, type, imageURL, category };
 
     http.post('/submitFeedback/', { feedback, authorization: token })
@@ -62,7 +63,7 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
 
       // Automatically upvote feedback the user submitted
-      feedback = { ...feedback, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 0, downvotes: 0, noOpinions: 0, approved: !feedbackRequiresApproval, date: Date.now()};
+      feedback = { ...feedback, userId, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 0, downvotes: 0, noOpinions: 0, approved: !feedbackRequiresApproval, date: Date.now()};
 
       // Add to local state if no approval required
       if (!feedbackRequiresApproval) {
