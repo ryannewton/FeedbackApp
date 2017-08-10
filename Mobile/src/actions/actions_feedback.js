@@ -78,18 +78,15 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
   }
 );
 
-export const updateFeedbackToServer = (text, type, imageURL, category, feedback1) => (
+export const updateFeedbackToServer = (feedbackRequiresApproval, text, type, imageURL, category, originalFeedback) => (
   (dispatch, getState) => {
     dispatch({ type: SUBMITTING_FEEDBACK });
-    //
+
     const token = getState().auth.token;
-    let feedback = { ...feedback1, text, type, imageURL, category };
+    const feedback = { ...originalFeedback, text, type, imageURL, category, approved: !feedbackRequiresApproval };
 
     http.post('/updateFeedback/', { feedback, authorization: token })
-    .then((response) => {
-      dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback });
-      dispatch({ type: ADD_FEEDBACK_TO_STATE, payload: feedback });
-    })
+    .then(() => dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback }))
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in updateFeedbackToServer in actions_feedback', error);
