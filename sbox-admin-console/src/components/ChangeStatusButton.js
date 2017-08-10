@@ -50,7 +50,13 @@ class ChangeStatusButton extends Component {
         {(status === 'new') ? null : <MenuItem onClick={() => this.updateStatus('new')} key={'change-status-menu-1' + this.props.feedback.id}>New</MenuItem>}
         {(status === 'queue') ? null : <MenuItem onClick={() => this.updateStatus('queue')} key={'change-status-menu-2' + this.props.feedback.id}>Queue</MenuItem>}
         {(status === 'inprocess') ? null : <MenuItem onClick={() => this.updateStatus('inprocess')} key={'change-status-menu-3' + this.props.feedback.id}>Working On It</MenuItem>}
-        {(status === 'complete') ? null : <MenuItem onClick={() => this.updateStatus('complete')} key={'change-status-menu-4' + this.props.feedback.id}>Complete</MenuItem>}
+        {(status === 'complete') ? null : <MenuItem onClick={() => {
+          if (this.props.feedback.officialReply === '') {
+            this.props.complete();
+          } else {
+            this.updateStatus('complete');
+          }
+        }} key={'change-status-menu-4' + this.props.feedback.id}>Complete</MenuItem>}
       </Popover>
     );
 
