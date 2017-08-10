@@ -42,20 +42,10 @@ import styles from '../styles/scenes/FeedbackSubmitStyles';
 class FeedbackSubmit extends Component {
   constructor(props, context) {
     super(props, context);
-
     this.state = {
-      errorMessage: '',
-      feedback: this.props.navigation.state.params.feedback ? this.props.navigation.state.params.feedback.text : '',
-      positiveFeedback: '',
-      negativeFeedback: '',
-      hasImage: false,
       imageWidth: null,
       imageHeight: null,
-      category: this.props.navigation.state.params.feedback ? this.props.navigation.state.params.feedback.category : '',
-      category1: '',
-      category2: '',
-      newFeedback: { ...this.props.navigation.state.params.feedback },
-    };
+    }
 
     props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
   }
@@ -67,116 +57,76 @@ class FeedbackSubmit extends Component {
         this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
       });
     }
-    if (nextProps.feedback.positiveImageURL !== this.props.feedback.positiveImageURL && nextProps.feedback.positiveImageURL) {
-      Image.getSize(nextProps.feedback.positiveImageURL, (iwidth, iheight) => {
-        this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
-      });
-    }
-    if (nextProps.feedback.negativeImageURL !== this.props.feedback.negativeImageURL && nextProps.feedback.negativeImageURL) {
-      Image.getSize(nextProps.feedback.negativeImageURL, (iwidth, iheight) => {
-        this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
-      });
-    }
   }
 
   submitFeedback = () => {
-    if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
+    const { feedback, group, navigation } = this.props;
+    if (feedback.text) {
       // First we search the feedback for restricted words
-      if (this.props.group.bannedWords.test(this.state.feedback.toLowerCase()) ||
-          this.props.group.bannedWords.test(this.state.positiveFeedback.toLowerCase()) ||
-          this.props.group.bannedWords.test(this.state.negativeFeedback.toLowerCase())) {
+      if (group.bannedWords.test(feedback.text.toLowerCase())) {
         // If restricted words then we show an error to the user
-        this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+        this.props.updateErrorMessage('One or more words in your feedback is restricted by your administrator. Please edit and resubmit.');
       } else {
         // If no restricted words then we continue
-        if (this.state.feedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category);
-          this.setState({ feedback: '' });
-        } if (this.state.positiveFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category1);
-          this.setState({ positiveFeedback: '' });
-        } if (this.state.negativeFeedback) {
-          this.props.submitFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category2);
-          this.setState({ negativeFeedback: '' });
-        }
+        this.props.submitFeedbackToServer(group.feedbackRequiresApproval, feedback.text, 'single feedback', feedback.imageURL || '', feedback.category);
+        this.props.updateErrorMessage('');
 
-        this.setState({ errorMessage: '' });
-        this.props.navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
+        navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
       }
     } else {
-      this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
+      this.props.updateErrorMessage('Feedback box cannot be blank. Sorry!');
     }
   }
 
   updateFeedback = () => {
-    if (this.state.feedback || this.state.positiveFeedback || this.state.negativeFeedback) {
+    const { feedback, group, navigation } = this.props;
+    if (feedback.text) {
       // First we search the feedback for restricted words
-      if (this.props.group.bannedWords.test(this.state.feedback.toLowerCase()) ||
-          this.props.group.bannedWords.test(this.state.positiveFeedback.toLowerCase()) ||
-          this.props.group.bannedWords.test(this.state.negativeFeedback.toLowerCase())) {
+      if (group.bannedWords.test(feedback.text.toLowerCase())) {
         // If restricted words then we show an error to the user
-        this.setState({ errorMessage: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.' });
+        this.props.updateErrorMessage('One or more words in your feedback is restricted by your administrator. Please edit and resubmit.');
       } else {
         // If no restricted words then we continue
-        if (this.state.feedback) {
-          this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.feedback, 'single feedback', this.props.feedback.imageURL || '', this.state.category, this.props.navigation.state.params.feedback);
-          this.setState({ feedback: '' });
-        } if (this.state.positiveFeedback) {
-          this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.positiveFeedback, 'positive feedback', this.props.feedback.positiveImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
-          this.setState({ positiveFeedback: '' });
-        } if (this.state.negativeFeedback) {
-          this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, this.state.negativeFeedback, 'negative feedback', this.props.feedback.negativeImageURL || '', this.state.category, this.props.navigation.state.params.feedback);
-          this.setState({ negativeFeedback: '' });
-        }
+        this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, feedback.text, 'single feedback', feedback.imageURL || '', feedback.category, navigation.state.params.feedback);
 
-        this.setState({ errorMessage: '' });
-        this.props.navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
+        this.props.updateErrorMessage('');
+        navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
       }
     } else {
-      this.setState({ errorMessage: 'Feedback box cannot be blank. Sorry!' });
+      this.props.updateErrorMessage('Feedback box cannot be blank');
     }
   }
 
-  addImageHelper = async (type, pickerChoice) => {
+  addImageHelper = async (pickerChoice) => {
     const pickerResult = (pickerChoice == 'takePhoto') ? await ImagePicker.launchCameraAsync() :
       await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
 
     // If user selects an image
     if (!pickerResult.cancelled) {
-      this.state.hasImage = true;
-      this.props.uploadImage(pickerResult.uri, type);
+      this.props.uploadImage(pickerResult.uri);
     }
   }
 
-  addImage = async (type) => {
+  addImage = async () => {
     Alert.alert(
       'Upload photo.',
       '',
       [
-        {text: 'Take photo...', onPress: () => this.addImageHelper(type, 'takePhoto')},
-        {text: 'Cancel', onPress: () => {}, style: 'cancel'},
-        {text: 'Choose from library...', onPress: () => this.addImageHelper(type, 'choosePhoto')},
+        { text: 'Take photo...', onPress: () => this.addImageHelper('takePhoto') },
+        { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+        { text: 'Choose from library...', onPress: () => this.addImageHelper('choosePhoto') },
       ],
       { cancelable: false }
     )
   }
 
-  maybeRenderImage = (type) => {
+  maybeRenderImage = () => {
     const { width, height } = Dimensions.get('window')
     let imageURL;
-    if (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage) {
-      if (!type) {
-        this.props.feedback.imageURL = this.props.navigation.state.params.feedback.imageURL;
-      }
-      else if (type === 'positive') {
-        this.props.feedback.positiveImageURL = this.props.navigation.state.params.feedback.imageURL;
-      }
-      else if (type === 'negative') {
-        this.props.feedback.negativeImageURL = this.props.navigation.state.params.feedback.imageURL;
-      }
-      // Image.getSize(this.props.navigation.state.params.feedback.imageURL, (iwidth, iheight) => {
-      //   this.setState(() => ({ imageWidth: iwidth, imageHeight: iheight }));
-      // });
+    // If editing feedback
+    if (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '') {
+      this.props.feedback.imageURL = this.props.navigation.state.params.feedback.imageURL;
+
       return (
         <Image
           source={{ uri: this.props.navigation.state.params.feedback.imageURL }}
@@ -196,15 +146,8 @@ class FeedbackSubmit extends Component {
         />
       );
     }
-    if (!type) {
-      imageURL = this.props.feedback.imageURL;
-    }
-    else if (type === 'positive') {
-      imageURL = this.props.feedback.positiveImageURL;
-    }
-    else if (type === 'negative') {
-      imageURL = this.props.feedback.negativeImageURL;
-    }
+
+    imageURL = this.props.feedback.imageURL;
 
     // If there is no image, don't render anything
     if (!imageURL) {
@@ -247,7 +190,7 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  renderImageButton = (type) => {
+  renderImageButton = () => {
     const { language } = this.props.user;
 
     if (this.props.feedback.loading) {
@@ -257,10 +200,10 @@ class FeedbackSubmit extends Component {
     return (
       <View style={{ flexDirection: 'row', backgroundColor:'white' }}>
           <TouchableOpacity
-            onPress={() => this.addImage(type)}
-            style={[styles.button, {backgroundColor:'white', borderWidth:0, flexDirection:'row', alignItems:'center', padding:14 }]}
+            onPress={() => this.addImage()}
+            style={[styles.button, { backgroundColor: 'white', borderWidth: 0, flexDirection: 'row', alignItems: 'center', padding: 14 }]}
           >
-            <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'left'}}>
+            <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'left' }}>
               Add Photo
             </Text>
             <Icon name="add-a-photo" size={25} color={'grey'} />
@@ -269,7 +212,7 @@ class FeedbackSubmit extends Component {
     );
   }
 
-  renderSubmitButton = (type) => {
+  renderSubmitButton = () => {
     const { language } = this.props.user;
 
     if (this.props.feedback.loading) {
@@ -279,25 +222,25 @@ class FeedbackSubmit extends Component {
     if (this.props.navigation.state.params.feedback) {
       return (
         <View style={{ flexDirection: 'row'}}>
-            <TouchableOpacity
-              onPress={this.updateFeedback}
-              style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
-            >
-              <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
-                {translate(language).UPDATE_FEEDBACK}
-              </Text>
-            </TouchableOpacity>
+          <TouchableOpacity
+            onPress={this.updateFeedback}
+            style={[styles.button, { flexDirection: 'row', alignItems: 'center', marginLeft: 8, marginTop: 10, marginRight: 8 }]}
+          >
+            <Text style={{ color: 'white', flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'center'}}>
+              {translate(language).UPDATE_FEEDBACK}
+            </Text>
+          </TouchableOpacity>
         </View>
       );
     }
 
     return (
-      <View style={{ flexDirection: 'row'}}>
+      <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity
             onPress={this.submitFeedback}
-            style={[styles.button, {flexDirection:'row', alignItems:'center', marginLeft:8, marginTop:10, marginRight:8}]}
+            style={[styles.button, { flexDirection: 'row', alignItems: 'center', marginLeft: 8, marginTop: 10, marginRight: 8 }]}
           >
-            <Text style={{ color:'white', flex:1, fontSize: 16, fontWeight: '500', textAlign:'center'}}>
+            <Text style={{ color: 'white', flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'center' }}>
               {translate(language).SUBMIT_FEEDBACK}
             </Text>
           </TouchableOpacity>
@@ -305,16 +248,12 @@ class FeedbackSubmit extends Component {
     );
   }
 
-  maybeRenderDeleteButton(type) {
-    if (this.props.feedback.imageURL ||
-        this.props.feedback.positiveImageURL && type === 'positive' ||
-        this.props.feedback.negativeImageURL && type === 'negative' ||
-        (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '' && !this.state.hasImage)) {
+  maybeRenderDeleteButton() {
+    if (this.props.feedback.imageURL) {
       return (
         <View>
           <TouchableOpacity onPress={ () => {
             this.props.removeImage();
-            this.state.hasImage = true;
           }}>
             <Icon name="remove-circle" size={40} color={'red'}/>
           </TouchableOpacity>
@@ -324,32 +263,20 @@ class FeedbackSubmit extends Component {
     return null;
   }
 
-  handleCategoryChange(category, type) {
-    if (!type) {
-      this.setState({ category: category.label })
-    } else if (type === 'positive') {
-      this.setState({ category1: category.label })
-    } else {
-      this.setState({ category2: category.label })
-    }
+  handleCategoryChange(category) {
+    this.props.updateCategory(category.label)
   }
 
-  handleValueChange(type) {
-    if (!type) {
-      return this.state.category || 'Click to choose > ';
-    } else if (type === 'positive') {
-      return this.state.category1 || 'Click to choose > ';
-    } else {
-      return this.state.category2 || 'Click to choose > ';
-    }
+  handleValueChange() {
+    return this.props.feedback.category || 'Click to choose > ';
   }
 
-  maybeRenderCategoryModal(type) {
+  maybeRenderCategoryModal() {
     // If the group doesn't have categories
-    if (!this.props.group.categories.length) {
+    const { categories } = this.props.group;
+    if (!categories.length) {
       return null;
     }
-    const { categories } = this.props.group;
     let index = 0;
     const categoriesForPicker = categories.map((item) => {
       return (
@@ -369,11 +296,11 @@ class FeedbackSubmit extends Component {
           sectionTextStyle={{ fontSize:18, fontWeight:'600' }}
           cancelTextStyle={{ fontSize:18, fontWeight:'600' }}
           initValue="Select something yummy!"
-          onChange={(category) => this.handleCategoryChange(category, type) }
+          onChange={(category) => this.handleCategoryChange(category) }
         >
-          <View style={{ flexDirection: 'row', alignItems:'center', backgroundColor:'white', marginTop: 5, marginBottom:1 }}>
-            <Text style={{ flex:1, fontSize: 16, fontWeight: '500', textAlign:'center' }}>
-            Add Category
+          <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 5, marginBottom: 1 }}>
+            <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'center' }}>
+              Add Category
             </Text>
               <TextInput
                 style={{
@@ -391,7 +318,7 @@ class FeedbackSubmit extends Component {
                   fontSize: 16,
                 }}
                 editable={false}
-                value={this.handleValueChange(type)}
+                value={this.handleValueChange()}
               />
           </View>
         </ModalPicker>
@@ -399,90 +326,47 @@ class FeedbackSubmit extends Component {
     );
   }
 
+  renderTextInput() {
+    const { language } = this.props.user;
+    return (
+      <View style={{ flexDirection: 'row'}}>
+        <TextInput
+          multiline={Boolean(true)}
+          onChangeText={text => this.props.updateFeedbackText(text)}
+          style={[styles.feedbackInput, { flex: 1 }]}
+          placeholder={translate(language).ENTER_FEEDBACK}
+          placeholderTextColor="#d0d0d0"
+          value={this.props.feedback.text}
+          maxLength={500}
+        />
+      </View>
+    );
+  }
+
+  maybeRenderErrorMessage() {
+    return (
+      <Text style={styles.errorTextStyle}>
+        {this.props.feedback.errorMessage}
+      </Text>
+    );
+  }
+
   render() {
     const { width, height } = Dimensions.get('window')
     const { language } = this.props.user;
-    const singleFeedbackBox = (
-      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', backgroundColor:'#f0f0f0' }}>
-        <View style={{ flexDirection: 'row'}}>
-          <TextInput
-            multiline={Boolean(true)}
-            onChangeText={feedback => this.setState({ feedback })}
-            style={[styles.feedbackInput, { flex: 1 }]}
-            placeholder={translate(language).ENTER_FEEDBACK}
-            placeholderTextColor="#d0d0d0"
-            value={this.state.feedback}
-            maxLength={500}
-          />
-        </View>
-        {this.maybeRenderCategoryModal('negative')}
-        {this.renderImageButton()}
-        {this.renderSubmitButton()}
-        {this.maybeRenderDeleteButton()}
-        {this.maybeRenderImage()}
-      </View>
-    );
-    // console.log(this.state.negativeFeedback, this.props.feedback, 'here' );
-    const positiveBackgroundColor = (this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL === '' || this.props.feedback.negativeImageURL === undefined ) ) ? null : 'grey';
-    const negativeBackgroundColor = (this.state.positiveFeedback === '' && ( this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined)  ) ? null : 'grey';
-    const positivePlacholderText = (this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL == '' || this.props.feedback.negativeImageURL === undefined)) ? translate(language).POSITIVE_FILL_TEXT : 'Clear negative feedback to submit positive feedback';
-    const negativePlacholderText = (this.state.positiveFeedback === '' && (this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined) ) ? translate(language).NEGATIVE_FILL_TEXT : 'Clear positive feedback to submit negative feedback';
-
-    const positiveFeedbackBox = (
-      <View style={{ flex: 1, flexDirection: 'row' }}>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
-          <View style={{ flexDirection: 'row'}}>
-            <TextInput
-              multiline={Boolean(true)}
-              onChangeText={positiveFeedback => this.setState({ positiveFeedback })}
-              style={[styles.feedbackInput, styles.positiveFeedbackInput, { flex: 1, backgroundColor: positiveBackgroundColor }]}
-              placeholder={positivePlacholderText}
-              placeholderTextColor="#d0d0d0"
-              editable={(this.state.negativeFeedback === '' && (this.props.feedback.negativeImageURL === '' || this.props.feedback.negativeImageURL === undefined ))}
-              value={this.state.positiveFeedback}
-              maxLength={500}
-            />
-          </View>
-          {/* Submit button / loading spinner */}
-          {this.maybeRenderCategoryModal('positive')}
-          {this.renderImageButton('positive')}
-          {this.renderSubmitButton('positive')}
-          {this.maybeRenderDeleteButton('positive')}
-          {this.maybeRenderImage('positive')}
-        </View>
-        <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center'}}>
-          <View style={{ flexDirection: 'row'}}>
-            <TextInput
-              multiline={Boolean(true)}
-              onChangeText={negativeFeedback => this.setState({ negativeFeedback })}
-              onContentSizeChange={(event) => {
-                this.setState({ height: event.nativeEvent.contentSize.height });
-              }}
-              style={[styles.feedbackInput, styles.negativeFeedbackInput, { flex: 1, backgroundColor: negativeBackgroundColor }]}
-              placeholder={negativePlacholderText}
-              editable={(this.state.positiveFeedback === '' && (this.props.feedback.positiveImageURL == '' || this.props.feedback.positiveImageURL === undefined))}
-              placeholderTextColor="#d0d0d0"
-              value={this.state.negativeFeedback}
-              maxLength={500}
-            />
-          </View>
-          {/* Submit button / loading spinner */}
-          {this.maybeRenderCategoryModal('negativeCategory')}
-          {this.renderImageButton('negative')}
-          {this.renderSubmitButton('negative')}
-          {this.maybeRenderDeleteButton('negative')}
-          {this.maybeRenderImage('negative')}
-        </View>
-      </View>
-    );
 
     return (
       <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
-          <Text style={styles.errorTextStyle}>
-            {this.state.errorMessage}
-          </Text>
-          {this.props.group.includePositiveFeedbackBox ? positiveFeedbackBox : singleFeedbackBox}
+          {this.maybeRenderErrorMessage()}
+          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', backgroundColor:'#f0f0f0' }}>
+            {this.renderTextInput()}
+            {this.maybeRenderCategoryModal()}
+            {this.renderImageButton()}
+            {this.renderSubmitButton()}
+            {this.maybeRenderDeleteButton()}
+            {this.maybeRenderImage()}
+          </View>
           {this.maybeRenderUploadingOverlay()}
         </View>
       </TouchableWithoutFeedback>

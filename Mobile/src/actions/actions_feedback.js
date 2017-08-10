@@ -101,9 +101,9 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
       dispatch(addFeedbackUpvote(feedback));
     })
     .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in submitFeedbackToServer in actions_feedback', error);
-      dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: errorMessage });
+      console.log('Error running submitFeedbackToServer()');
+      console.log('Error: ', error);
+      dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: 'Something went wrong on our end. Please try again.' });
     });
   }
 );
@@ -118,9 +118,9 @@ export const updateFeedbackToServer = (feedbackRequiresApproval, text, type, ima
     http.post('/updateFeedback/', { feedback, authorization: token })
     .then(() => dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback }))
     .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in updateFeedbackToServer in actions_feedback', error);
-      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorMessage });
+      console.log('Error running updateFeedbackToServer()');
+      console.log('Error: ', error);
+      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: 'Something went wrong on our end. Please try again.' });
     });
   }
 );
@@ -145,6 +145,21 @@ export const addFeedbackUpvote = feedback => (
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in addFeedbackUpvote in actions_feedback', errorMessage);
+    });
+  }
+);
+
+export const removeFeedbackUpvote = feedback => (
+  (dispatch, getState) => {
+    dispatch({ type: REMOVE_FEEDBACK_UPVOTE, payload: feedback });
+    const { feedbackUpvotes } = getState().user;
+    AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
+
+    const token = getState().auth.token;
+    http.post('/removeFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
+    .catch((error) => {
+      const errorMessage = error.response ? error.response.data : error;
+      console.log('Error in removeFeedbackUpvote in actions_feedback', errorMessage);
     });
   }
 );
@@ -185,21 +200,6 @@ export const removeFeedbackNoOpinion = feedback => (
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in removeFeedbackNoOpinion in actions_feedback', errorMessage);
-    });
-  }
-);
-
-export const removeFeedbackUpvote = feedback => (
-  (dispatch, getState) => {
-    dispatch({ type: REMOVE_FEEDBACK_UPVOTE, payload: feedback });
-    const { feedbackUpvotes } = getState().user;
-    AsyncStorage.setItem(`${ROOT_STORAGE}feedbackUpvotes`, JSON.stringify(feedbackUpvotes));
-
-    const token = getState().auth.token;
-    http.post('/removeFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in removeFeedbackUpvote in actions_feedback', errorMessage);
     });
   }
 );
@@ -287,7 +287,7 @@ export const uploadImage = (uri, type) => (
 
     fetch(apiUrl, options)
     .then(response => response.json())
-    .then(response => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: { location: response, type } }))
+    .then(imageURL => dispatch({ type: SUBMIT_IMAGE_SUCCESS, payload: imageURL }))
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
 
@@ -302,7 +302,6 @@ export const removeImage = () => (
     type: REMOVE_IMAGE,
   }
 );
-
 
 export const deleteFeedback = feedback1 => (
   (dispatch, getState) => {
