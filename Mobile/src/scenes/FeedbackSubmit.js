@@ -25,9 +25,14 @@ import ModalPicker from 'react-native-modal-picker'
 import {
   submitFeedbackToServer,
   updateFeedbackToServer,
+  updateFeedbackText,
+  updateImageURL,
+  updateCategory,
+  updateFeedbackType,
+  updateErrorMessage,
   uploadImage,
   sendGoogleAnalytics,
-  removeImage
+  removeImage,
 } from '../actions';
 
 // Import components, functions, and styles
@@ -489,9 +494,17 @@ FeedbackSubmit.propTypes = {
   user: PropTypes.object,
   group: PropTypes.object,
   feedback: PropTypes.object,
+  navigation: PropTypes.object,
   submitFeedbackToServer: PropTypes.func,
   updateFeedbackToServer: PropTypes.func,
-  navigation: PropTypes.object,
+  updateFeedbackText: PropTypes.func,
+  updateImageURL: PropTypes.func,
+  updateCategory: PropTypes.func,
+  updateFeedbackType: PropTypes.func,
+  updateErrorMessage: PropTypes.func,
+  uploadImage: PropTypes.func,
+  sendGoogleAnalytics: PropTypes.func,
+  removeImage: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -502,6 +515,11 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
   updateFeedbackToServer,
+  updateFeedbackText,
+  updateImageURL,
+  updateCategory,
+  updateFeedbackType,
+  updateErrorMessage,
   uploadImage,
   sendGoogleAnalytics,
   removeImage,

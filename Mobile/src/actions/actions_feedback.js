@@ -3,6 +3,11 @@ import { AsyncStorage } from 'react-native';
 
 // Import action types
 import {
+  UPDATE_FEEDBACK_TEXT,
+  UPDATE_IMAGE_URL,
+  UPDATE_CATEGORY,
+  UPDATE_FEEDBACK_TYPE,
+  UPDATE_ERROR_MESSAGE,
   ADD_FEEDBACK_TO_STATE,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
@@ -32,10 +37,34 @@ import {
 // Import constants
 import { http, ROOT_STORAGE, ROOT_URL } from '../constants';
 
+export const updateFeedbackText = feedback => ({
+  type: UPDATE_FEEDBACK_TEXT,
+  payload: feedback,
+});
+
+export const updateImageURL = imageURL => ({
+  type: UPDATE_IMAGE_URL,
+  payload: imageURL,
+});
+
+export const updateCategory = category => ({
+  type: UPDATE_CATEGORY,
+  payload: category,
+});
+
+export const updateFeedbackType = feedbackType => ({
+  type: UPDATE_FEEDBACK_TYPE,
+  payload: feedbackType,
+});
+
+export const updateErrorMessage = errorMessage => ({
+  type: UPDATE_ERROR_MESSAGE,
+  payload: errorMessage,
+});
+
 export const pullFeedback = token => (
   (dispatch) => {
     dispatch({ type: REQUESTED_FEEDBACK });
-    console.log('token: ', token);
 
     http.post('/pullFeedback', { authorization: token })
     .then((response) => {
