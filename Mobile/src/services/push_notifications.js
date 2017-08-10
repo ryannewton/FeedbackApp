@@ -4,7 +4,6 @@ import { http, ROOT_STORAGE } from '../constants';
 
 export default async (authToken) => {
   // Check if a token has already been saved
-  await AsyncStorage.removeItem(`${ROOT_STORAGE}pushToken`);
   const previousToken = await AsyncStorage.getItem(`${ROOT_STORAGE}pushToken`);
 
   if (previousToken) {
