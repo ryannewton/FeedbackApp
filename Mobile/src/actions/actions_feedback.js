@@ -27,6 +27,7 @@ import {
   SEARCH_IN_PROGRESS,
   REMOVE_IMAGE,
   DELETE_FEEDBACK,
+  ROUTE,
 } from './types';
 
 // Import constants
@@ -276,7 +277,11 @@ export const removeImage = () => (
   }
 );
 
-
+export const route = () => (
+  {
+    type: ROUTE,
+  }
+)
 export const deleteFeedback = feedback1 => (
   (dispatch, getState) => {
     //

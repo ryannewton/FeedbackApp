@@ -4,6 +4,7 @@ import { TouchableOpacity, Alert, Linking, Platform } from 'react-native';
 import { connect } from 'react-redux';
 import { Icon } from 'react-native-elements';
 import translate from '../../translation'
+import Expo from 'expo';
 
 
 const APP_STORE_URL = 'https://appurl.io/j4kj90r2';
@@ -11,6 +12,16 @@ const APP_STORE_URL = 'https://appurl.io/j4kj90r2';
 class SendInviteTextButton extends Component {
   textIntro() {
     return translate(this.props.language).TEXT_INTRO;
+  }
+
+  compileFeedbackShareLink() {
+    if (this.props.navigation.state.params) {
+      const { feedback } = this.props.navigation.state.params;
+      if (feedback) {
+        return 'Check out this interesting piece of feedback!\n'.concat(Expo.Constants.linkingUri, `feedback=${feedback.id}\n`)
+      }
+    }
+    return '';
   }
   shareAppAlert = () => {
     const textLink = this.buildTextLink(this.props.group.groupSignupCode);
@@ -42,7 +53,7 @@ class SendInviteTextButton extends Component {
 
   buildTextLink = () => {
     let textLink = '';
-    const message = `${this.textIntro()}${this.props.group.groupSignupCode}\n\n `;
+    const message = `${this.compileFeedbackShareLink()}\n${this.textIntro()}${this.props.group.groupSignupCode}\n\n `;
 
     // Use percent-encoding for Android
     if (Platform.OS === 'android') {
