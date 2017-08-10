@@ -72,9 +72,9 @@ export const pullFeedback = token => (
       dispatch({ type: RECEIVED_FEEDBACK, payload: { list: response.data, lastPulled: new Date() } });
     })
     .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in pullFeedback in actions_feedback', errorMessage);
-      dispatch({ type: AUTHORIZE_USER_FAIL, payload: errorMessage });
+      console.log('Error running pullFeedback()');
+      console.log('Error: ', error);
+      dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' });
     });
   }
 );

@@ -69,7 +69,6 @@ class FeedbackSubmit extends Component {
       } else {
         // If no restricted words then we continue
         this.props.submitFeedbackToServer(group.feedbackRequiresApproval, feedback.text, 'single feedback', feedback.imageURL || '', feedback.category);
-        this.props.updateErrorMessage('');
 
         navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
       }
@@ -89,7 +88,6 @@ class FeedbackSubmit extends Component {
         // If no restricted words then we continue
         this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, feedback.text, 'single feedback', feedback.imageURL || '', feedback.category, navigation.state.params.feedback);
 
-        this.props.updateErrorMessage('');
         navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
       }
     } else {
@@ -221,7 +219,7 @@ class FeedbackSubmit extends Component {
 
     if (this.props.navigation.state.params.feedback) {
       return (
-        <View style={{ flexDirection: 'row'}}>
+        <View style={{ flexDirection: 'row' }}>
           <TouchableOpacity
             onPress={this.updateFeedback}
             style={[styles.button, { flexDirection: 'row', alignItems: 'center', marginLeft: 8, marginTop: 10, marginRight: 8 }]}

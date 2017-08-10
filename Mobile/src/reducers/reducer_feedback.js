@@ -101,7 +101,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
 
     case SUBMIT_FEEDBACK_SUCCESS:
-      return { ...state, loading: false, feedback: '', imageURL: '' };
+      return { ...state, loading: false, text: '', category: '', imageURL: '', type: '', errorMessage: '' };
 
     case SUBMIT_FEEDBACK_FAIL:
       return { ...state, loading: false };
@@ -174,14 +174,14 @@ export default (state = INITIAL_STATE, action) => {
 
     case UPDATE_FEEDBACK_SUCCESS: {
       if (action.payload.approved) {
-        const index = state.list.findIndex(feedback => feedback.id === action.payload.id);      
+        const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
         const newState = state.list.slice(0);
         newState[index].category = action.payload.category;
         newState[index].imageURL = action.payload.imageURL;
         newState[index].text = action.payload.text;
-        return { ...state, list: newState };
+        return { ...state, list: newState, errorMessage: '', text: '', imageURL: '', category: '', type: '' };
       }
-      return { ...state, list: state.list.filter(feedback => feedback.id !== action.payload.id) };
+      return { ...state, list: state.list.filter(feedback => feedback.id !== action.payload.id), errorMessage: '', text: '', imageURL: '', category: '', type: '' };
     }
 
     case UPDATE_FEEDBACK_FAIL:
