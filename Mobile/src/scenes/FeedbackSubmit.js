@@ -59,42 +59,6 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  submitFeedback = () => {
-    const { feedback, group, navigation } = this.props;
-    if (feedback.text) {
-      // First we search the feedback for restricted words
-      if (group.bannedWords.test(feedback.text.toLowerCase())) {
-        // If restricted words then we show an error to the user
-        this.props.updateErrorMessage('One or more words in your feedback is restricted by your administrator. Please edit and resubmit.');
-      } else {
-        // If no restricted words then we continue
-        this.props.submitFeedbackToServer(group.feedbackRequiresApproval, feedback.text, 'single feedback', feedback.imageURL || '', feedback.category);
-
-        navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
-      }
-    } else {
-      this.props.updateErrorMessage('Feedback box cannot be blank. Sorry!');
-    }
-  }
-
-  updateFeedback = () => {
-    const { feedback, group, navigation } = this.props;
-    if (feedback.text) {
-      // First we search the feedback for restricted words
-      if (group.bannedWords.test(feedback.text.toLowerCase())) {
-        // If restricted words then we show an error to the user
-        this.props.updateErrorMessage('One or more words in your feedback is restricted by your administrator. Please edit and resubmit.');
-      } else {
-        // If no restricted words then we continue
-        this.props.updateFeedbackToServer(this.props.group.feedbackRequiresApproval, feedback.text, 'single feedback', feedback.imageURL || '', feedback.category, navigation.state.params.feedback);
-
-        navigation.navigate('Submitted', translate(this.props.user.language).FEEDBACK_RECIEVED);
-      }
-    } else {
-      this.props.updateErrorMessage('Feedback box cannot be blank');
-    }
-  }
-
   addImageHelper = async (pickerChoice) => {
     const pickerResult = (pickerChoice == 'takePhoto') ? await ImagePicker.launchCameraAsync() :
       await ImagePicker.launchImageLibraryAsync({ allowsEditing: false });
@@ -120,32 +84,7 @@ class FeedbackSubmit extends Component {
 
   maybeRenderImage = () => {
     const { width, height } = Dimensions.get('window')
-    let imageURL;
-    // If editing feedback
-    if (this.props.navigation.state.params.feedback && this.props.navigation.state.params.feedback.imageURL !== '') {
-      this.props.feedback.imageURL = this.props.navigation.state.params.feedback.imageURL;
-
-      return (
-        <Image
-          source={{ uri: this.props.navigation.state.params.feedback.imageURL }}
-          style={[{
-            flex: 1,
-            width: this.state.imageWidth,
-            height: this.state.imageWidth,
-            resizeMode: 'contain',
-            shadowColor: 'rgba(0,0,0,1)',
-            shadowOpacity: 0.5,
-            shadowOffset: { width: 4, height: 4 },
-            shadowRadius: 5,
-            marginTop: 10,
-            alignSelf: 'center',
-          }]}
-          resizeMode={'contain'}
-        />
-      );
-    }
-
-    imageURL = this.props.feedback.imageURL;
+    const { imageURL } = this.props.feedback;
 
     // If there is no image, don't render anything
     if (!imageURL) {

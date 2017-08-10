@@ -16,7 +16,6 @@ import FeedbackSubmitHeaderButtons from './components/FeedbackSubmitHeaderButton
 import FeedbackDetailsHeaderButtons from './components/FeedbackDetailsHeaderButtons';
 import styles from '../styles/common/navStyles';
 
-//       headerRight: <FeedbackDetailsHeaderButtons navigation={navigation} />,
 
 // Stack of scenes
 const MainStack = StackNavigator({
@@ -31,6 +30,7 @@ const MainStack = StackNavigator({
     screen: FeedbackDetails,
     navigationOptions: ({ navigation }) => ({
       title: navigation.state.params.translate,
+      headerRight: <FeedbackDetailsHeaderButtons navigation={navigation} />,
       headerTitleStyle: {
         color: '#fff',
       },

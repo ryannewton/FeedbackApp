@@ -47,7 +47,7 @@ const INITIAL_STATE = {
   imageWidth: null,
   imageHeight: null,
 
-  // State
+  // Rendering information
   filterMethod: 'all',
   searchQuery: 'Search',
   searchInProgress: false,
