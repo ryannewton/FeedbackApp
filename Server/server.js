@@ -615,37 +615,41 @@ app.post('/removeSolutionVote', upload.array(), (req, res) => {
 });
 
 // UPDATE
+function updateHelperFunction(feedback, approved, res) {
+  const { text, status, imageURL, id, category, officialReply, userId } = feedback;
+  const connectionString = 'UPDATE feedback SET ? WHERE ?';
+  connection.query(connectionString,
+    [{
+      text,
+      status,
+      imageURL,
+      approved,
+      category,
+      officialReply,
+    },
+    { id }], (err) => {
+      if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4928');
+      else {
+        insertText(res, id, 'feedback', text, userId);
+        res.sendStatus(200);
+      }
+    }
+  );
+}
+
 app.post('/updateFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
-      const { groupId } = decoded;
-      let connectionString = `SELECT feedbackRequiresApproval FROM groups WHERE id=?`;
-      connection.query(connectionString, [groupId], (err, rows) => {
-        if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - FD21');
-        else {
-          const { text, status, imageURL, id, category, officialReply, userId } = req.body.feedback;
-          const approved = !rows[0].feedbackRequiresApproval;
-          connectionString = 'UPDATE feedback SET ? WHERE ?';
-          connection.query(connectionString,
-            [{
-              text,
-              status,
-              imageURL,
-              approved,
-              category,
-              officialReply,
-            },
-            { id }], (err) => {
-              if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4928');
-              else {
-                insertText(res, id, 'feedback', text, userId);
-                res.sendStatus(200);
-              }
-            }
-          );
-        }
-      });
+      const { groupId, admin } = decoded;
+      if (admin) updateHelperFunction(req.body.feedback, 1, res);
+      else {
+        let connectionString = `SELECT feedbackRequiresApproval FROM groups WHERE id=?`;
+        connection.query(connectionString, [groupId], (err, rows) => {
+          if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - FD21');
+          else updateHelperFunction(req.body.feedback, !rows[0].feedbackRequiresApproval, res);
+        });
+      }
     }
   });
 });
