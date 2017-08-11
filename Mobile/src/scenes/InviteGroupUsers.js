@@ -88,10 +88,10 @@ class InviteGroupUsers extends Component {
           if (re.test(this.state.email)) {
             this.props.sendInviteEmail(this.state.email);
             this.setState({ email: '', showSentNotfication: true });
-            setTimeout(() => this.setState({ showSentNotfication: false }), 10000);
+            setTimeout(() => this.setState({ showSentNotfication: false }), 8000);
           } else {
             this.setState({ email: '', showErrorMessage: true });
-            setTimeout(() => this.setState({ showErrorMessage: false }), 10000);
+            setTimeout(() => this.setState({ showErrorMessage: false }), 8000);
           }
           Keyboard.dismiss()
 
