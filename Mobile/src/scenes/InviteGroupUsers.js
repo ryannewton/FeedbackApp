@@ -30,18 +30,12 @@ class InviteGroupUsers extends Component {
     this.props.sendGoogleAnalytics('Invite group users', 'Not Logged In');
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.state.cleared === false) {
-  //     this.route(nextProps);
-  //   }
-  // }
-
   renderInstructions() {
     const { language } = this.props.user;
     return (
       <View style={{ flexDirection:'row' }}>
-        <Text style={{ flex:7, fontWeight: '500', padding: 20, paddingRight:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
-          Your group has been created! Invite a few people to get the feedback started.
+        <Text style={{ flex:7, fontWeight: '500', padding: 20, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
+          Your group has been created! Invite a few people to join the Suggestion Box.
         </Text>
       </View>
     );
@@ -52,7 +46,7 @@ class InviteGroupUsers extends Component {
     return (
       <View>
         <Fumi
-          label={"Enter a friend's email..."}
+          label={"Enter an email here..."}
           iconClass={FontAwesomeIcon}
           iconName={'users'}
           iconColor={'#00A2FF'}
@@ -70,7 +64,7 @@ class InviteGroupUsers extends Component {
           maxLength={100}
         />
         <Fumi
-          label={"Enter a friend's email..."}
+          label={"Enter an email here..."}
           iconClass={FontAwesomeIcon}
           iconName={'users'}
           iconColor={'#00A2FF'}
@@ -85,7 +79,7 @@ class InviteGroupUsers extends Component {
           maxLength={100}
         />
         <Fumi
-          label={"Enter a friend's email..."}
+          label={"Enter an email here..."}
           iconClass={FontAwesomeIcon}
           iconName={'users'}
           iconColor={'#00A2FF'}
@@ -106,7 +100,7 @@ class InviteGroupUsers extends Component {
   maybeRenderErrorMessage() {
     return (
       <Text style={styles.errorTextStyle}>
-        {this.props.auth.error}
+        {this.props.group.error}
       </Text>
     );
   }

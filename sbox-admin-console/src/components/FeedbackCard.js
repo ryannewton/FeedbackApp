@@ -209,7 +209,7 @@ class FeedbackCard extends Component {
                 }}
               />
             </div>
-            {(this.props.group.includePositiveFeedbackBox) ? null : <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} /> }
+            {(this.props.group.includePositiveFeedbackBox) ? null : <ChangeStatusButton feedback={this.props.feedback} updateButtonActive={(activeState) => this.setState({ buttonActive: activeState })} complete={() => this.setState({ officialResponseModal: true })}/> }
             <div onClick={() => this.setState({ modalUp: true})}>
               <DeleteButton
                 feedback={this.props.feedback}

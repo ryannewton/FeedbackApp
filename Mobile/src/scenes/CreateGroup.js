@@ -19,6 +19,7 @@ import translate from '../translation'
 
 class CreateGroup extends Component {
   state = {
+    error: '',
     groupName: '',
     cleared: false,
   }
@@ -26,12 +27,6 @@ class CreateGroup extends Component {
   componentDidMount() {
     this.props.sendGoogleAnalytics('Create Group', 'Not Logged In');
   }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if (this.state.cleared === false) {
-  //     this.route(nextProps);
-  //   }
-  // }
 
   renderInstructions() {
     const { language } = this.props.user;
@@ -60,7 +55,7 @@ class CreateGroup extends Component {
         autoCapitalize={'none'}
         autoCorrect={false}
         style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
-        maxLength={100}
+        maxLength={10}
       />
     );
   }
@@ -68,14 +63,23 @@ class CreateGroup extends Component {
   maybeRenderErrorMessage() {
     return (
       <Text style={styles.errorTextStyle}>
-        {this.props.auth.error}
+        {this.props.group.error || this.state.error}
       </Text>
     );
   }
 
+  createGroup = () => {
+    if (!this.state.groupName) this.setState({ error: 'Group name cannot be blank' });
+    else {
+      this.setState({ error: '' });
+      Keyboard.dismiss();
+      this.props.createGroup(this.state.groupName, () => this.props.navigation.navigate('InviteGroupUsers', 'Invite Friends'));
+    }
+  }
+
   renderSubmitButton() {
     const { language } = this.props.user
-    if (this.props.auth.loading) {
+    if (this.props.group.loading) {
       return (
         <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
           <Spinner />
@@ -86,9 +90,7 @@ class CreateGroup extends Component {
     return (
       <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
         <View style={{ flex: 1 }}>
-          <Button onPress={() => {
-            this.props.createGroup(this.state.groupName, () => this.props.navigation.navigate('InviteGroupUsers', 'Invite Friends'));
-          }}>
+          <Button onPress={this.createGroup}>
             {translate(language).CREATE_GROUP_BUTTON}
           </Button>
         </View>

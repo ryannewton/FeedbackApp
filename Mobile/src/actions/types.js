@@ -15,7 +15,9 @@ export const NEEDS_GROUP_CODE = 'needs_group_code';
 export const PULL_GROUP_INFO = 'pull_group_info';
 export const SAVE_GROUP_CODE = 'save_group_code';
 export const UPDATE_INVITE_EMAILS = 'update_invite_emails';
-export const SET_GROUP_NAME = 'set_group_name';
+export const CREATING_GROUP = 'creating_group';
+export const CREATED_GROUP = 'created_group';
+export const CREATE_GROUP_FAILED = 'create_group_failed';
 
 // Solutions
 export const RECEIVED_SOLUTION_LIST = 'received_solution_list';
@@ -30,6 +32,12 @@ export const ADD_SOLUTION_TO_STATE = 'add_solution_to_state';
 export const SOLUTION_CHANGED = 'solution_changed';
 
 // Feedback
+export const UPDATE_FEEDBACK_TEXT = 'update_feedback_text';
+export const UPDATE_IMAGE_URL = 'update_image_url';
+export const UPDATE_CATEGORY = 'update_category';
+export const UPDATE_FEEDBACK_TYPE = 'update_feedback_type';
+export const UPDATE_ERROR_MESSAGE = 'update_error_message';
+export const EDITING_FEEDBACK = 'editing_feedback';
 export const REQUESTED_FEEDBACK = 'requested_feedback';
 export const RECEIVED_FEEDBACK = 'received_feedback';
 export const SUBMITTING_FEEDBACK = 'submit_feedback';
