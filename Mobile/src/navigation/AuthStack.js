@@ -85,8 +85,7 @@ const AuthStack = StackNavigator({
         marginTop: styles.header.marginTop,
         backgroundColor: '#00A2FF',
       },
-      headerRight: <InviteGroup inviteText={'Send'} navigation={navigation} />,
-      headerTintColor: 'white',
+       headerTintColor: 'white',
     }),
   },
 });
