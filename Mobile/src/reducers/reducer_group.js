@@ -5,9 +5,14 @@ import {
   SAVE_GROUP_CODE,
   UPDATE_INVITE_EMAILS,
   SET_GROUP_NAME,
+  CREATING_GROUP,
+  CREATED_GROUP,
+  CREATE_GROUP_FAILED,
 } from '../actions/types';
 
 const INITIAL_STATE = {
+  loading: false,
+  error: '',
   groupSignupCode: 0,
   groupName: '',
   feedbackRequiresApproval: true,
@@ -31,6 +36,12 @@ export default (state = INITIAL_STATE, action) => {
         includePositiveFeedbackBox: Boolean(action.payload.groupInfo.includePositiveFeedbackBox),
         categories: action.payload.categories,
       };
+    case CREATING_GROUP:
+      return { ...state, loading: true, error: '' };
+    case CREATED_GROUP:
+      return { ...state, loading: false, error: '' };
+    case CREATE_GROUP_FAILED:
+      return { ...state, loading: false, error: action.payload };
     case SAVE_GROUP_CODE:
       return { ...state, groupSignupCode: action.payload };
     case LOG_OUT_USER:

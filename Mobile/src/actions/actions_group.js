@@ -2,7 +2,9 @@
 import {
   PULL_GROUP_INFO,
   UPDATE_INVITE_EMAILS,
-  SET_GROUP_NAME
+  CREATING_GROUP,
+  CREATED_GROUP,
+  CREATE_GROUP_FAILED,
 } from './types';
 
 // Import constants
@@ -27,7 +29,7 @@ export const updateInviteEmails = emails => (
   }
 );
 
-export const sendInviteEmails = (emails) => (
+export const sendInviteEmails = emails => (
   (dispatch, getState) => {
     const { groupName } = getState().group;
     http.post('/sendInviteEmails', { groupName, emails })
@@ -38,16 +40,20 @@ export const sendInviteEmails = (emails) => (
 );
 
 export const createGroup = (groupName, navigateToNext) => (
-  (dispatch, getState) =>
+  (dispatch, getState) => {
+    dispatch({ type: CREATING_GROUP });
+
     http.post('/createGroup', { groupName })
     .then(() => {
+      navigateToNext();
+      dispatch({ type: CREATED_GROUP });
+
       const { code, email } = getState().auth;
       dispatch(authorizeUser(email, code, groupName));
-      navigateToNext();
     })
     .catch((error) => {
-      console.log('Error running /createGroup');
-      console.log('Error: ', error);
-      console.log('Write a dispatch()');
-    })
+      console.log('Error in createGroup', error);
+      dispatch({ type: CREATE_GROUP_FAILED, payload: 'Sorry there was an error creating your group' });
+    });
+  }
 );

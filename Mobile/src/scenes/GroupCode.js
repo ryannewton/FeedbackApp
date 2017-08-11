@@ -128,7 +128,7 @@ class GroupCode extends Component {
     return (
       <View style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}>
         <TouchableOpacity onPress={() => {
-          this.props.navigation.navigate('CreateGroup');
+          this.props.navigation.navigate('CreateGroup', 'Enter Group Name');
           this.setState({ cleared: true });
         }}>
           <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 18, color: 'white' }}>
@@ -150,7 +150,7 @@ class GroupCode extends Component {
     return (
       Alert.alert(
         NEED_GROUP_CODE,
-        'If your community has not been set up yet, send an email to tyler@suggestionboxapp.com to receive your unique group code!',
+        `If your community does not have a suggestion box yet, you can create one by clicking the link at the bottom of this page`,
         [
           {text: OK, onPress: () => null },
         ],
@@ -170,7 +170,7 @@ class GroupCode extends Component {
               {this.maybeRenderErrorMessage()}
               {this.renderSignupButton()}
             </View>
-            {/*this.renderCreateGroupLink()*/}
+            {this.renderCreateGroupLink()}
           </Image>
         </TouchableWithoutFeedback>
       </View>
