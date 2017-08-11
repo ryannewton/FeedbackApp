@@ -14,7 +14,7 @@ import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
-import fullScreen from '../../images/backgrounds/auth3.jpg';
+import fullScreen from '../../images/backgrounds/invite.jpg';
 import translate from '../translation'
 
 class InviteGroupUsers extends Component {
@@ -60,7 +60,6 @@ class InviteGroupUsers extends Component {
           style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
           maxLength={100}
         />
-
         <Button onPress={() => {
           this.props.sendInviteEmail(this.state.email);
           this.setState({ email: ''});
