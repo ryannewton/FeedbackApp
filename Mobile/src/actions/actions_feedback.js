@@ -8,6 +8,7 @@ import {
   UPDATE_CATEGORY,
   UPDATE_FEEDBACK_TYPE,
   UPDATE_ERROR_MESSAGE,
+  EDITING_FEEDBACK,
   ADD_FEEDBACK_TO_STATE,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
@@ -60,6 +61,10 @@ export const updateFeedbackType = feedbackType => ({
 export const updateErrorMessage = errorMessage => ({
   type: UPDATE_ERROR_MESSAGE,
   payload: errorMessage,
+});
+
+export const editingFeedback = () => ({
+  type: EDITING_FEEDBACK,
 });
 
 export const pullFeedback = token => (

@@ -5,6 +5,7 @@ import {
   UPDATE_CATEGORY,
   UPDATE_FEEDBACK_TYPE,
   UPDATE_ERROR_MESSAGE,
+  EDITING_FEEDBACK,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
@@ -55,6 +56,7 @@ const INITIAL_STATE = {
   loading: false,
   loadingImage: false,
   errorMessage: '',
+  editing: false,
 };
 
 function filterAndOrder(list) {
@@ -84,6 +86,9 @@ export default (state = INITIAL_STATE, action) => {
     case UPDATE_ERROR_MESSAGE:
       return { ...state, errorMessage: action.payload };
 
+    case EDITING_FEEDBACK:
+      return { ...state, editing: true };
+
     case RECEIVED_FEEDBACK: {
       const list = filterAndOrder(action.payload.list);
       return { list, lastPulled: action.payload.lastPulled, refreshing: false };
@@ -101,7 +106,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
 
     case SUBMIT_FEEDBACK_SUCCESS:
-      return { ...state, loading: false, text: '', category: '', imageURL: '', type: '', errorMessage: '' };
+      return { ...state, loading: false, text: '', category: '', imageURL: '', type: '', errorMessage: '', editing: false };
 
     case SUBMIT_FEEDBACK_FAIL:
       return { ...state, loading: false };
@@ -179,9 +184,9 @@ export default (state = INITIAL_STATE, action) => {
         newState[index].category = action.payload.category;
         newState[index].imageURL = action.payload.imageURL;
         newState[index].text = action.payload.text;
-        return { ...state, list: newState, errorMessage: '', text: '', imageURL: '', category: '', type: '' };
+        return { ...state, list: newState, errorMessage: '', text: '', imageURL: '', category: '', type: '', editing: false };
       }
-      return { ...state, list: state.list.filter(feedback => feedback.id !== action.payload.id), errorMessage: '', text: '', imageURL: '', category: '', type: '' };
+      return { ...state, list: state.list.filter(feedback => feedback.id !== action.payload.id), errorMessage: '', text: '', imageURL: '', category: '', type: '', editing: false };
     }
 
     case UPDATE_FEEDBACK_FAIL:

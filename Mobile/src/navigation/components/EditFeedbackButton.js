@@ -13,6 +13,7 @@ import {
   updateCategory,
   updateFeedbackType,
   updateErrorMessage,
+  editingFeedback,
 } from '../../actions';
 
 class EditFeedbackButton extends Component {
@@ -23,6 +24,7 @@ class EditFeedbackButton extends Component {
     this.props.updateCategory(feedback.category);
     this.props.updateFeedbackType(feedback.type);
     this.props.updateErrorMessage(feedback.errorMessage);
+    this.props.editingFeedback();
   }
 
   render() {
@@ -60,6 +62,7 @@ EditFeedbackButton.propTypes = {
   updateCategory: PropTypes.func,
   updateFeedbackType: PropTypes.func,
   updateErrorMessage: PropTypes.func,
+  editingFeedback: PropTypes.func,
 };
 
 export default connect(mapStateToProps, {
@@ -68,4 +71,5 @@ export default connect(mapStateToProps, {
   updateCategory,
   updateFeedbackType,
   updateErrorMessage,
+  editingFeedback,
 })(EditFeedbackButton);
