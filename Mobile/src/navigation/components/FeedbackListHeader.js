@@ -175,8 +175,12 @@ class FeedbackSubmitHeader extends Component {
       <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
         {this.renderHeader()}
           <Modal style={[styles2.modal, styles2.modal2]} backdrop={false}  position={'top'} entry={'top'} ref={"modal2"} coverScreen={true}>
+            <Text style={{ color:'white', fontSize: 25}}> Filter By: </Text>
             {this.renderFilterButtons()}
-            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10}}> Clear filter </Button>
+            <Text style={{ color:'white', fontSize: 25}}> Sort By: </Text>
+            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('newFeedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> New Feedback </Button>
+            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('topFeedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> Top Feedback </Button>
+            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10, marginTop: 10}}> Clear </Button>
           </Modal>
       </View>
     );
@@ -196,7 +200,7 @@ const styles2 = StyleSheet.create({
 
   modal2: {
     paddingTop:30,
-    height: 350,
+    height: 530,
     backgroundColor: 'rgba(70,70,70,0.8)'
   },
 
