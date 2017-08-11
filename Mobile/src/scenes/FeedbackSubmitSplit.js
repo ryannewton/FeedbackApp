@@ -195,7 +195,7 @@ class FeedbackSubmitSplit extends Component {
 
   maybeRenderDeleteButton(side) {
     const { feedback } = this.props;
-    if (side !== feedback.type) {
+    if (side !== feedback.type && feedback.type != '') {
       return null;
     }
 
@@ -341,6 +341,18 @@ class FeedbackSubmitSplit extends Component {
     );
   }
 
+  renderSettingsButton() {
+    return (
+      <View style={{ height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Settings')}>
+          <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 14, color: 'black' }}>
+            {translate(this.props.user.language).SETTINGS}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   render() {
     const { width, height } = Dimensions.get('window')
     const { language } = this.props.user;
@@ -353,6 +365,7 @@ class FeedbackSubmitSplit extends Component {
             {this.renderInputPanel('positive')}
             {this.renderInputPanel('negative')}
           </View>
+          {this.renderSettingsButton()}
           {this.maybeRenderUploadingOverlay()}
         </View>
       </TouchableWithoutFeedback>

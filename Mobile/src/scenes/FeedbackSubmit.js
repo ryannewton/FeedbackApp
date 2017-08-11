@@ -288,6 +288,18 @@ class FeedbackSubmit extends Component {
     );
   }
 
+  renderSettingsButton() {
+    return (
+      <View style={{ height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f0f0' }}>
+        <TouchableOpacity onPress={() => this.props.navigation.navigate('Settings')}>
+          <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 14, color: 'black' }}>
+            {translate(this.props.user.language).SETTINGS}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
+
   render() {
     const { width, height } = Dimensions.get('window')
     const { language } = this.props.user;
@@ -300,10 +312,10 @@ class FeedbackSubmit extends Component {
             {this.renderTextInput()}
             {this.maybeRenderCategoryModal()}
             {this.renderImageButton()}
-            {this.renderSubmitButton()}
             {this.maybeRenderDeleteButton()}
             {this.maybeRenderImage()}
           </View>
+          {this.renderSettingsButton()}
           {this.maybeRenderUploadingOverlay()}
         </View>
       </TouchableWithoutFeedback>
