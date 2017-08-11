@@ -88,11 +88,11 @@ class InviteGroupUsers extends Component {
             this.props.sendInviteEmail(this.state.email);
             this.setState({ email: '', showSentNotfication: true });
             setTimeout(() => this.setState({ showSentNotfication: false }), 8000);
+            Keyboard.dismiss()
           } else {
-            this.setState({ email: '', showErrorMessage: true });
+            this.setState({ showErrorMessage: true });
             setTimeout(() => this.setState({ showErrorMessage: false }), 8000);
           }
-          Keyboard.dismiss()
 
         }}> Send! </Button>
       </View>
