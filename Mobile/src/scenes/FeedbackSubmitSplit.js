@@ -253,7 +253,7 @@ class FeedbackSubmitSplit extends Component {
           cancelTextStyle={{ fontSize: 18, fontWeight: '600' }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 5, marginBottom: 1 }}>
-            <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'center' }}>
+            <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'left', paddingLeft: 13 }}>
               Add Category
             </Text>
               <TextInput

@@ -236,7 +236,7 @@ class FeedbackSubmit extends Component {
           onChange={(category) => this.handleCategoryChange(category) }
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 5, marginBottom: 1 }}>
-            <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'center' }}>
+            <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'left', paddingLeft: 13 }}>
               Add Category
             </Text>
               <TextInput
