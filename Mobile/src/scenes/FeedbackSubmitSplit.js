@@ -134,10 +134,6 @@ class FeedbackSubmitSplit extends Component {
   renderImageButton = (side) => {
     const { language } = this.props.user;
 
-    if (this.props.feedback.loading) {
-      return <Spinner size="large" style={{ justifyContent: 'flex-start', marginTop: 20 }} />;
-    }
-
     return (
       <View style={{ flexDirection: 'row', backgroundColor:'white' }}>
           <TouchableOpacity
