@@ -14,7 +14,7 @@ import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
-import fullScreen from '../../images/backgrounds/auth3.jpg';
+import fullScreen from '../../images/backgrounds/new_group.jpg';
 import translate from '../translation'
 
 class CreateGroup extends Component {
