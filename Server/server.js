@@ -688,7 +688,7 @@ app.post('/createGroup', upload.array(), (req, res) => {
 });
 
 app.post('/sendInviteEmails', upload.array(), (req, res) => {
-  const { groupName, emails } = req.body;
+  const { groupName, email } = req.body;
   const connectionString = `
   SELECT groupSignupCode
   FROM groups
@@ -697,11 +697,9 @@ app.post('/sendInviteEmails', upload.array(), (req, res) => {
   connection.query(connectionString, [groupName], (err, rows) => {
     if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8283');
     else {
-      console.log(rows);
       const subjectLine = `Join me on Suggestbox Box! - GroupName '${rows[0].groupSignupCode}'`
       const bodyText = `Please join me on Suggestion Box with the Group Name of '${rows[0].groupSignupCode}'!`
-      console.log(emails)
-      sendEmail(emails, defaultFromEmail, subjectLine, bodyText);
+      sendEmail([email], defaultFromEmail, subjectLine, bodyText);
       res.sendStatus(200);
     }
   });
