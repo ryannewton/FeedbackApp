@@ -38,6 +38,7 @@ export const UPDATE_CATEGORY = 'update_category';
 export const UPDATE_FEEDBACK_TYPE = 'update_feedback_type';
 export const UPDATE_ERROR_MESSAGE = 'update_error_message';
 export const EDITING_FEEDBACK = 'editing_feedback';
+export const CLEAR_FEEDBACK_ON_STATE = 'clear_feedback_on_state';
 export const REQUESTED_FEEDBACK = 'requested_feedback';
 export const RECEIVED_FEEDBACK = 'received_feedback';
 export const SUBMITTING_FEEDBACK = 'submit_feedback';

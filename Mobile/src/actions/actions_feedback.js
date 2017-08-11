@@ -9,6 +9,7 @@ import {
   UPDATE_FEEDBACK_TYPE,
   UPDATE_ERROR_MESSAGE,
   EDITING_FEEDBACK,
+  CLEAR_FEEDBACK_ON_STATE,
   ADD_FEEDBACK_TO_STATE,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
@@ -65,6 +66,10 @@ export const updateErrorMessage = errorMessage => ({
 
 export const editingFeedback = () => ({
   type: EDITING_FEEDBACK,
+});
+
+export const clearFeedbackOnState = () => ({
+  type: CLEAR_FEEDBACK_ON_STATE,
 });
 
 export const pullFeedback = token => (

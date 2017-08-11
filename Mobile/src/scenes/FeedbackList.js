@@ -23,7 +23,7 @@ import translate from '../translation';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // Import tracking
-import { sendGoogleAnalytics, pullFeedback, pullSolutions } from '../actions';
+import { sendGoogleAnalytics, pullFeedback, pullSolutions, clearFeedbackOnState } from '../actions';
 
 const stopwords = require('stopwords').english;
 import nothing from '../../images/backgrounds/nothing.jpg';
@@ -226,6 +226,11 @@ function mapStateToProps(state) {
   return { feedback, group, user, token };
 }
 
-const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics, pullFeedback, pullSolutions })(FeedbackList);
+const AppScreen = connect(mapStateToProps, {
+  sendGoogleAnalytics,
+  pullFeedback,
+  pullSolutions,
+  clearFeedbackOnState,
+})(FeedbackList);
 
 export default AppScreen;
