@@ -28,6 +28,30 @@ class FeedbackSubmitHeader extends Component {
     LayoutAnimation.spring();
   }
 
+  render() {
+    const { language } = this.props
+    const { MOST_POPULAR,
+            ALL_FEEDBACK,
+            THIS_WEEK,
+            TODAY,
+            MY_FEEDBACK,
+    } = translate(language);
+
+    return (
+      <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
+        {this.renderHeader()}
+        <Modal style={[styles2.modal, styles2.modal2]} backdrop={false} position={'top'} entry={'top'} ref={"modal2"} coverScreen={true}>
+          <Text style={{ color:'white', fontSize: 25}}> Filter By: </Text>
+          {this.renderFilterButtons()}
+          <Text style={{ color:'white', fontSize: 25}}> Sort By: </Text>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('New Feedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> New Feedback </Button>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('Top Feedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> Top Feedback </Button>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10, marginTop: 10}}> Clear </Button>
+        </Modal>
+      </View>
+    );
+  }
+
   renderHeader = () => {
     // If user has pressed search button, render search text input
     if (this.state.searchPressed) {
@@ -128,11 +152,6 @@ class FeedbackSubmitHeader extends Component {
   }
 
   renderPicker = () => {
-    // Exclude on Android, library doesn't work
-    if (!this.props.group.categories.length) {
-      return null;
-    }
-    const renderTouchable = () => <TouchableOpacity />;
     const { menuOptions, divider, pickerStyle } = styles;
     return (
       <View style={[pickerStyle, {bottom: 7}]}>
@@ -142,11 +161,13 @@ class FeedbackSubmitHeader extends Component {
       </View>
     );
   }
+
   changeFilterMethod = (filterMethod) => {
     this.refs.modal2.close();
     this.setState({ filterMethod });
     this.props.changeFilterMethod(filterMethod);
   }
+
   renderFilterButtons() {
     if (!this.props.group.categories.length) {
       return (
@@ -161,30 +182,7 @@ class FeedbackSubmitHeader extends Component {
     return (
       this.props.group.categories.map((item) => <Button key={item} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod(item)}>{item}</Button>)
     );
-  }
-  render() {
-    const { language } = this.props
-    const { MOST_POPULAR,
-            ALL_FEEDBACK,
-            THIS_WEEK,
-            TODAY,
-            MY_FEEDBACK,
-    } = translate(language);
-
-    return (
-      <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
-        {this.renderHeader()}
-          <Modal style={[styles2.modal, styles2.modal2]} backdrop={false}  position={'top'} entry={'top'} ref={"modal2"} coverScreen={true}>
-            <Text style={{ color:'white', fontSize: 25}}> Filter By: </Text>
-            {this.renderFilterButtons()}
-            <Text style={{ color:'white', fontSize: 25}}> Sort By: </Text>
-            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('newFeedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> New Feedback </Button>
-            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('topFeedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> Top Feedback </Button>
-            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10, marginTop: 10}}> Clear </Button>
-          </Modal>
-      </View>
-    );
-  }
+  }  
 }
 
 const styles2 = StyleSheet.create({
@@ -239,7 +237,6 @@ const styles2 = StyleSheet.create({
     color: "black",
     fontSize: 22
   }
-
 });
 
 const mapStateToProps = (state) => {
