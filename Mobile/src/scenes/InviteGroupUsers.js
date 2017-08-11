@@ -22,12 +22,33 @@ class InviteGroupUsers extends Component {
     groupName: '',
     cleared: false,
     email: '',
+    showSentNotfication: false,
+    showErrorMessage: false,
   }
 
   componentDidMount() {
     this.props.sendGoogleAnalytics('Invite group users', 'Not Logged In');
   }
-
+  renderSentNotification() {
+    if (this.state.showSentNotfication) {
+      return (
+        <Text>
+          Sent!
+        </Text>
+      );
+    }
+    return null;
+  }
+  renderErrorMessage() {
+    if (this.state.showErrorMessage) {
+      return (
+        <Text>
+          Please enter a valid email address.
+        </Text>
+      );
+    }
+    return null;
+  }
   renderInstructions() {
     const { language } = this.props.user;
     return (
@@ -53,6 +74,7 @@ class InviteGroupUsers extends Component {
           inputStyle={{ color: 'black' }}
           value={this.state.email}
           onChangeText={email => this.setState({ email })}
+          keyboardType={'email-address'}
 
           // TextInput props
           autoCapitalize={'none'}
@@ -62,8 +84,17 @@ class InviteGroupUsers extends Component {
         />
 
         <Button onPress={() => {
-          this.props.sendInviteEmail(this.state.email);
-          this.setState({ email: ''});
+          const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          if (re.test(this.state.email)) {
+            this.props.sendInviteEmail(this.state.email);
+            this.setState({ email: '', showSentNotfication: true });
+            setTimeout(() => this.setState({ showSentNotfication: false }), 10000);
+          } else {
+            this.setState({ email: '', showErrorMessage: true });
+            setTimeout(() => this.setState({ showErrorMessage: false }), 10000);
+          }
+          Keyboard.dismiss()
+
         }}> Send! </Button>
       </View>
     );
@@ -99,7 +130,9 @@ class InviteGroupUsers extends Component {
         <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
           <Image style={styles.background} source={fullScreen} resizeMode="cover">
             {this.renderInstructions()}
+            {this.renderSentNotification()}
             {this.renderGroupNameInput()}
+            {this.renderErrorMessage()}
             {this.maybeRenderErrorMessage()}
             <View style={{ paddingTop: 40}}>
               {this.renderEnterToBoxButton()}
