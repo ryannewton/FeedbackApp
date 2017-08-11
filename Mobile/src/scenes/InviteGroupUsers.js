@@ -14,7 +14,7 @@ import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
 import { Fumi } from 'react-native-textinput-effects';
-import fullScreen from '../../images/backgrounds/auth3.jpg';
+import fullScreen from '../../images/backgrounds/invite.jpg';
 import translate from '../translation'
 
 class InviteGroupUsers extends Component {
@@ -70,7 +70,7 @@ class InviteGroupUsers extends Component {
           iconColor={'#00A2FF'}
           inputStyle={{ color: 'black' }}
           value={this.props.group.inviteEmails[1]}
-          onChangeText={email2 => this.props.x([ this.props.group.inviteEmails[0], email2, this.props.group.inviteEmails[2]])}
+          onChangeText={email2 => this.props.updateInviteEmails([ this.props.group.inviteEmails[0], email2, this.props.group.inviteEmails[2]])}
 
           // TextInput props
           autoCapitalize={'none'}
