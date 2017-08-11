@@ -40,12 +40,10 @@ export const sendInviteEmail = email => (
 export const createGroup = (groupName, navigateToNext) => (
   (dispatch, getState) => {
     dispatch({ type: CREATING_GROUP });
-
     http.post('/createGroup', { groupName })
     .then(() => {
       navigateToNext();
       dispatch({ type: CREATED_GROUP });
-
       const { code, email } = getState().auth;
       dispatch(authorizeUser(email, code, groupName));
     })
