@@ -150,7 +150,7 @@ class GroupCode extends Component {
     return (
       Alert.alert(
         NEED_GROUP_CODE,
-        'If your community has not been set up yet, send an email to tyler@suggestionboxapp.com to receive your unique group code!',
+        'If your community has not been set up yet, click "create a new Group" at the bottom to get started!',
         [
           {text: OK, onPress: () => null },
         ],
