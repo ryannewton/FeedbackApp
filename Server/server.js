@@ -642,9 +642,9 @@ app.post('/createGroup', upload.array(), (req, res) => {
   const { groupName } = req.body;
   const connectionString = `
   INSERT INTO groups (groupName, groupSignupCode, groupAdminCode, feedbackRequiresApproval, solutionsRequireApproval, showStatus, includePositiveFeedbackBox, date)
-  VALUES (?, ?, 'demo', 0, 0, 1, 0, NOW())
+  VALUES (?, ?, ?, 0, 0, 1, 0, NOW())
   `;
-  connection.query(connectionString, [groupName, groupName], (err) => {
+  connection.query(connectionString, [groupName, groupName, groupName], (err) => {
     if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 818F');
     else res.sendStatus(200);
   });
@@ -1193,7 +1193,7 @@ app.post('/pullGroupInfo', upload.array(), (req, res) => {
       connection.query(connectionString, [userId], (err1, rows1) => {
         if (err) {
           res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
-        } else if (!rows1.length) {
+        } else if (!rows1 || !rows1.length) {
           res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1SDF');
         } else {
           connectionString =
