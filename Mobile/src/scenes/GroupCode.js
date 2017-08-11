@@ -170,7 +170,7 @@ class GroupCode extends Component {
               {this.maybeRenderErrorMessage()}
               {this.renderSignupButton()}
             </View>
-            {/*this.renderCreateGroupLink()*/}
+            {this.renderCreateGroupLink()}
           </Image>
         </TouchableWithoutFeedback>
       </View>
