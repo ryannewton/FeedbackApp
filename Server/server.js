@@ -1308,9 +1308,9 @@ function inviteToGroupEmail() {
                     <tbody><tr>
                         <img align="left" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/3acab16f-2e16-4e8d-9ae6-efc183904d8c.png" width="70" style="max-width: 70px;padding-left: 25px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;" />
                         <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
-<p style="margin: 10px 0;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your friend Ryan Newton has invited you to</span></span></p>
-<p style="margin: 10px 0;padding: 0;color: #FFFFFF;font-family: Courier New;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif;font-size: 28px;font-weight: bold;">Join PearLaunchPad on Suggestion Box</span></span></p>
-<p style="margin: 10px 0;padding-top: 20px;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Download the Suggestion Box App for <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">ios</a> or <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">android</a>. Login with your email address and use Group Name "PearLaunchPad"</span></span></p>
+<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your friend Ryan Newton has invited you to</span></span></p>
+<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif;font-size: 28px;font-weight: bold;">Join PearLaunchPad on Suggestion Box</span></span></p>
+<p style="margin: 10px 10px;padding-top: 20px;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Download the Suggestion Box App for <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">ios</a> or <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">android</a>. Login with your email address and use Group Name "PearLaunchPad"</span></span></p>
 
                         </td>
                     </tr>
@@ -1376,20 +1376,32 @@ function rejectFeedbackEmail({ feedback, message, adminEmail }) {
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
                 <tr>
                   <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-      <tbody>
+              <tbody>
+        <tr>
+            <td valign="top">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                    <tbody><tr>
+                        
+                        <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
+                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
           <tr>
               <td valign="top" style="padding-top: 9px;">
                   <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                       <tbody><tr>
-                           <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 
-  <p style="margin: 10px 0;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
-  <p style="margin: 10px 0;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Unfortunately, your feedback "${feedback.text}" <span style="color: #F54B5E;"><strong>could not be added</span></strong> to the public board. The moderator responded with this message:</span></p>
+  <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
+  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Unfortunately, your feedback "${feedback.text}" <span style="color: #F54B5E;"><strong>could not be added</span></strong> to the public board. The moderator responded with this message:</span></p>
   <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
-  <p style="margin: 10px 0;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
-  <p style="margin: 10px 0;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-  <p style="margin: 10px 0;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
+  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
+  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
+  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
 
                           </td>
                       </tr>
@@ -1453,20 +1465,32 @@ function rejectSolutionEmail({ solution, message, adminEmail }) {
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
                 <tr>
                   <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-      <tbody>
+              <tbody>
+        <tr>
+            <td valign="top">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                    <tbody><tr>
+                        
+                        <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
+                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
           <tr>
               <td valign="top" style="padding-top: 9px;">
                   <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                       <tbody><tr>
-                           <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 
-  <p style="margin: 10px 0;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
-  <p style="margin: 10px 0;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Unfortunately, your comment "${solution.text}" <span style="color: #F54B5E;"><strong>could not be added</span></strong> to the public board. The moderator responded with this message:</span></p>
+  <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
+  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Unfortunately, your comment "${solution.text}" <span style="color: #F54B5E;"><strong>could not be added</span></strong> to the public board. The moderator responded with this message:</span></p>
   <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
-  <p style="margin: 10px 0;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
-  <p style="margin: 10px 0;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-  <p style="margin: 10px 0;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
+  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
+  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
+  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
 
                           </td>
                       </tr>
@@ -1530,20 +1554,32 @@ function clarifyFeedbackEmail({ feedback, message, adminEmail }) {
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
                 <tr>
                   <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-      <tbody>
+              <tbody>
+        <tr>
+            <td valign="top">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                    <tbody><tr>
+                        
+                        <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
+                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
           <tr>
               <td valign="top" style="padding-top: 9px;">
                   <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                       <tbody><tr>
-                           <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 
-  <p style="margin: 10px 0;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
-  <p style="margin: 10px 0;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your moderator has <span style="color: #F8C61C;"><strong>requested for a clarification</span></strong> on your recent feedback "${feedback.text}". The moderator responded with this message:</span></p>
+  <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
+  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your moderator has <span style="color: #F8C61C;"><strong>requested for a clarification</span></strong> on your recent feedback "${feedback.text}". The moderator responded with this message:</span></p>
   <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
-  <p style="margin: 10px 0;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The feedback is not published at this point. Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
-  <p style="margin: 10px 0;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-  <p style="margin: 10px 0;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
+  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The feedback is not published at this point. Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
+  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
+  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
 
                           </td>
                       </tr>
@@ -1607,20 +1643,32 @@ function clarifySolutionEmail({ solution, message, adminEmail }) {
               <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
                 <tr>
                   <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-      <tbody>
+              <tbody>
+        <tr>
+            <td valign="top">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                    <tbody><tr>
+                        
+                        <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
+                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody>
+    <tbody>
           <tr>
               <td valign="top" style="padding-top: 9px;">
                   <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                       <tbody><tr>
-                           <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 
-  <p style="margin: 10px 0;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
-  <p style="margin: 10px 0;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your moderator has <span style="color: #F8C61C;"><strong>requested for a clarification</span></strong> on your recent comment "${solution.text}". The moderator responded with this message:</span></p>
+  <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
+  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your moderator has <span style="color: #F8C61C;"><strong>requested for a clarification</span></strong> on your recent comment "${solution.text}". The moderator responded with this message:</span></p>
   <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
-  <p style="margin: 10px 0;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The comment is not published at this point. Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
-  <p style="margin: 10px 0;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-  <p style="margin: 10px 0;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
+  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The comment is not published at this point. Your contact information has been kept confidential. If you would like to follow up, please email the moderator at ${adminEmail}.</span></p>
+  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
+  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
 
                           </td>
                       </tr>
@@ -1686,18 +1734,30 @@ function routeFeedbackEmail({ feedback, message, adminEmail }) {
                   <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
       <tbody>
           <tr>
+              <td valign="top">
+                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                      <tbody><tr>
+                          
+                          <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
+                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+
+                      </tr>
+                  </tbody></table>
+              </td>
+          </tr>
+      </tbody>
+      <tbody>
+          <tr>
               <td valign="top" style="padding-top: 9px;">
                   <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                       <tbody><tr>
-                           <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 
-  <p style="margin: 10px 0;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
-  <p style="margin: 10px 0;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>An admin thought that this feedback would be of interest to you: "${feedback.text}". They included this message:</span></p>
+  <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
+  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>An admin thought that this feedback would be of interest to you: "${feedback.text}". They included this message:</span></p>
   <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
-  <p style="margin: 10px 0;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>If you would like to follow up, please email the admin at ${adminEmail}.</span></p>
-  <p style="margin: 10px 0;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-  <p style="margin: 10px 0;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
+  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>If you would like to follow up, please email the admin at ${adminEmail}.</span></p>
+  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
+  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
 
                           </td>
                       </tr>
@@ -1752,7 +1812,7 @@ function replyFeedbackEmail({ feedback, message, adminEmail }) {
    </head>
 
     <body>
-    <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Reply to Your Feedback: "${feedback.text}"</span>
+    <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Your Feedback received a reply from a group administrator</span>
 
         <center>
             <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #fff;">
@@ -1761,20 +1821,32 @@ function replyFeedbackEmail({ feedback, message, adminEmail }) {
             <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
               <tr>
                 <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
+        <tbody>
+        <tr>
+            <td valign="top">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                    <tbody><tr>
+                        
+                        <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
+                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody>
     <tbody>
         <tr>
             <td valign="top" style="padding-top: 9px;">
                 <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                     <tbody><tr>
-                         <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
-                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
-
-<p style="margin: 10px 0;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
-<p style="margin: 10px 0;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>A moderator had a question about this feedback: "${feedback.text}". They included this message:</span></p>
+                         
+<p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 28px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>Hi</span></strong></p>
+<p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>A moderator had a question about this feedback: "${feedback.text}". They included this message:</span></p>
 <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
-<p style="margin: 10px 0;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your contact information has been kept confidential. If you would like to follow up, please email the admin at ${adminEmail}.</span></p>
-<p style="margin: 10px 0;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-<p style="margin: 10px 0;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
+<p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your contact information has been kept confidential. If you would like to follow up, please email the admin at ${adminEmail}.</span></p>
+<p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
+<p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
 
                         </td>
                     </tr>
