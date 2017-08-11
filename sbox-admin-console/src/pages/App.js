@@ -108,6 +108,19 @@ class App extends Component {
     });
   }
 
+  renderCategoryDropdown(categoryMenuItems) {
+    if (categoryMenuItems.length) {
+      return (
+        <DropdownButton bsStyle="primary" id='main-filter-type' title={'Category: ' + this.state.typeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
+          {categoryMenuItems}
+          <MenuItem divider />
+          <MenuItem onClick={() => this.setState({ typeFilter: 'All' })}>Clear Filter</MenuItem>
+        </DropdownButton>
+      );
+    }
+    return null;
+  }
+
   renderFilterBar = () => {
     const categoryMenuItems = this.props.group.categories.map(category =>
       <MenuItem onClick={() => this.setState({ typeFilter: category })} key={category}>{category}</MenuItem>
@@ -123,11 +136,7 @@ class App extends Component {
               <MenuItem divider />
               <MenuItem onClick={() => this.setState({ timeFilter: 'All' })}>Clear Filter</MenuItem>
             </DropdownButton>
-            <DropdownButton bsStyle="primary" id='main-filter-type' title={'Category: ' + this.state.typeFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
-              {categoryMenuItems}
-              <MenuItem divider />
-              <MenuItem onClick={() => this.setState({ typeFilter: 'All' })}>Clear Filter</MenuItem>
-            </DropdownButton>
+            {this.renderCategoryDropdown(categoryMenuItems)}
             <DropdownButton bsStyle="primary" id='main-fitler-location' title={'Location: ' + this.state.locationFilter} style={{ border: 'none', backgroundColor:'rgba(0,0,0,0)' }}>
               {this.props.group.locations.map((item) => <MenuItem onClick={() => this.setState({ locationFilter: item })}>{item}</MenuItem>)}
               <MenuItem divider />

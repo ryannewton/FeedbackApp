@@ -407,11 +407,18 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
             }, (err, result) => {
               if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
               else {
+                let adminEmail = [];
+                if (groupId === 9) {
+                  adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu'];
+                }
+                if (groupId === 3) {
+                  adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu'];
+                }
                 // Insert text
                 insertText(res, result.insertId, 'feedback', text, userId);
                 // Send Email to Admins
-                const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ' + text, 'UserId: ' + userId);
+                const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', ...adminEmail];
+                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Feedback: ', `A new piece of feedback from your community has been submitted! \n '${text}''`);
                 res.json({ id: result.insertId });
               }
             }
