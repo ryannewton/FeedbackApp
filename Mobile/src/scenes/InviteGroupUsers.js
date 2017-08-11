@@ -52,11 +52,12 @@ class InviteGroupUsers extends Component {
   renderInstructions() {
     const { language } = this.props.user;
     return (
-      <View style={{ flexDirection:'row' }}>
-        <Text style={{ flex:7, fontWeight: '500', padding: 20, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
-           Your group has been created!{'\n'}
-           Group code: {this.props.group.groupName}{'\n'}
-           Invite a few people to join the Suggestion Box.
+      <View style={{ flexDirection:'column' }}>
+        <Text style={{ fontWeight: 'bold', padding: 20, paddingBottom: 0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white', textAlign:'center' }}>
+           Your Suggestion Box has been created!{'\n'}
+        </Text>
+        <Text style={{ fontWeight: '400', padding: 20, paddingTop: 0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 16, color: 'white' }}>
+           Community members can download the app and login with group code: <Text style={{ fontWeight: 'bold' }}>{this.props.group.groupName}</Text>
         </Text>
       </View>
     );
@@ -66,35 +67,41 @@ class InviteGroupUsers extends Component {
     const { language } = this.props.user;
     return (
       <View style={{ paddingTop: 30, flexDirection: 'column' }}>
-        <Fumi
-          label={"Enter an email here..."}
-          iconClass={FontAwesomeIcon}
-          iconName={'users'}
-          iconColor={'#00A2FF'}
-          inputStyle={{ color: 'black' }}
-          value={this.state.email}
-          onChangeText={email => this.setState({ email })}
-          keyboardType={'email-address'}
+        <Text style={{ fontWeight: '400', padding: 10, paddingTop: 0, paddingBottom:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 16, color: 'white' }}>
+           Invite your first users now:
+        </Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Fumi
+            label={"Enter an email here..."}
+            iconClass={FontAwesomeIcon}
+            iconName={'users'}
+            iconColor={'#00A2FF'}
+            inputStyle={{ color: 'black' }}
+            value={this.state.email}
+            onChangeText={email => this.setState({ email })}
+            keyboardType={'email-address'}
 
-          // TextInput props
-          autoCapitalize={'none'}
-          autoCorrect={false}
-          style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
-          maxLength={100}
-        />
-        <Button onPress={() => {
-          const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          if (re.test(this.state.email)) {
-            this.props.sendInviteEmail(this.state.email);
-            this.setState({ email: '', showSentNotfication: true });
-            setTimeout(() => this.setState({ showSentNotfication: false }), 8000);
-            Keyboard.dismiss()
-          } else {
-            this.setState({ showErrorMessage: true });
-            setTimeout(() => this.setState({ showErrorMessage: false }), 8000);
-          }
-
-        }}> Send! </Button>
+            // TextInput props
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            style={{ flex:9, height:65, marginLeft: 10, backgroundColor:'white' }}
+            maxLength={100}
+          />
+          <View style={{ flex:2, flexDirection: 'column' }}>
+            <Button style={{ flex:1, height:65 }} onPress={() => {
+              const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+                if (re.test(this.state.email)) {
+                  this.props.sendInviteEmail(this.state.email);
+                  this.setState({ email: '', showSentNotfication: true });
+                  setTimeout(() => this.setState({ showSentNotfication: false }), 8000);
+                  Keyboard.dismiss()
+                } else {
+                  this.setState({ showErrorMessage: true });
+                  setTimeout(() => this.setState({ showErrorMessage: false }), 8000);
+                }
+            }}> Send! </Button>
+          </View>
+        </View>
       </View>
     );
   }
@@ -110,7 +117,7 @@ class InviteGroupUsers extends Component {
   renderEnterToBoxButton() {
     return (
       <View>
-        <Button onPress={() => {
+        <Button textStyle={{fontSize: 20}} style={{ height:65}} onPress={() => {
           const navToFeedbackList = NavigationActions.reset({
             index: 0,
             key: null,
