@@ -17,8 +17,10 @@ class SettingsButton extends Component {
     );
   }
 }
+
 function mapStateToProps(state) {
   const { user } = state;
   return { user };
 }
+
 export default connect(mapStateToProps)(SettingsButton);

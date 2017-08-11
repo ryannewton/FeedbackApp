@@ -108,7 +108,9 @@ export const authorizeUser = (email, code, groupSignupCode) => (
     })
     // If not, show an error message
     .catch((error) => {
-      dispatch(authorizeUserFail(error.response.data));
+      console.log('Error running authorizeUser()');
+      console.log('Error: ', error);
+      dispatch(authorizeUserFail('Something went wrong on our end. Please try again.'));
     });
   }
 );

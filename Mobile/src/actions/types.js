@@ -32,6 +32,12 @@ export const ADD_SOLUTION_TO_STATE = 'add_solution_to_state';
 export const SOLUTION_CHANGED = 'solution_changed';
 
 // Feedback
+export const UPDATE_FEEDBACK_TEXT = 'update_feedback_text';
+export const UPDATE_IMAGE_URL = 'update_image_url';
+export const UPDATE_CATEGORY = 'update_category';
+export const UPDATE_FEEDBACK_TYPE = 'update_feedback_type';
+export const UPDATE_ERROR_MESSAGE = 'update_error_message';
+export const EDITING_FEEDBACK = 'editing_feedback';
 export const REQUESTED_FEEDBACK = 'requested_feedback';
 export const RECEIVED_FEEDBACK = 'received_feedback';
 export const SUBMITTING_FEEDBACK = 'submit_feedback';
