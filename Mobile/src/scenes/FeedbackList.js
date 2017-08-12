@@ -148,7 +148,10 @@ class FeedbackList extends Component {
     const submitScene = this.props.group.includePositiveFeedbackBox ? 'FeedbackSubmitSplit' : 'FeedbackSubmit';
     return (
       <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate(submitScene, { language: translate(this.props.user.language).SUBMIT_FEEDBACK })}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate(submitScene, { language: translate(this.props.user.language).SUBMIT_FEEDBACK});
+          this.props.clearFeedbackOnState();
+        }}>
           <Icon name="mode-edit" size={30} color={'#00A2FF'} backgroundColor={'red'} raised reverse />
         </TouchableOpacity>
       </View>
