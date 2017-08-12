@@ -6,6 +6,7 @@ import {
   UPDATE_FEEDBACK_TYPE,
   UPDATE_ERROR_MESSAGE,
   EDITING_FEEDBACK,
+  CLEAR_FEEDBACK_ON_STATE,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
@@ -88,6 +89,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case EDITING_FEEDBACK:
       return { ...state, editing: true };
+
+    case CLEAR_FEEDBACK_ON_STATE:
+      return { ...INITIAL_STATE, list: state.list, lastPulled: state.lastPulled };
 
     case RECEIVED_FEEDBACK: {
       const list = filterAndOrder(action.payload.list);

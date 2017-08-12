@@ -23,7 +23,7 @@ import translate from '../translation';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // Import tracking
-import { sendGoogleAnalytics, pullFeedback, pullSolutions } from '../actions';
+import { sendGoogleAnalytics, pullFeedback, pullSolutions, clearFeedbackOnState } from '../actions';
 
 const stopwords = require('stopwords').english;
 import nothing from '../../images/backgrounds/nothing.jpg';
@@ -148,7 +148,10 @@ class FeedbackList extends Component {
     const submitScene = this.props.group.includePositiveFeedbackBox ? 'FeedbackSubmitSplit' : 'FeedbackSubmit';
     return (
       <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate(submitScene, { language: translate(this.props.user.language).SUBMIT_FEEDBACK })}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate(submitScene, { language: translate(this.props.user.language).SUBMIT_FEEDBACK});
+          this.props.clearFeedbackOnState();
+        }}>
           <Icon name="mode-edit" size={30} color={'#00A2FF'} backgroundColor={'red'} raised reverse />
         </TouchableOpacity>
       </View>
@@ -226,6 +229,11 @@ function mapStateToProps(state) {
   return { feedback, group, user, token };
 }
 
-const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics, pullFeedback, pullSolutions })(FeedbackList);
+const AppScreen = connect(mapStateToProps, {
+  sendGoogleAnalytics,
+  pullFeedback,
+  pullSolutions,
+  clearFeedbackOnState,
+})(FeedbackList);
 
 export default AppScreen;
