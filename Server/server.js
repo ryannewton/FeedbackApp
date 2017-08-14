@@ -268,6 +268,92 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode, languag
     else if (!email.includes('admin_test')) {
       // Step #4: Send an email with the code to the user (make sure it shows up in notification)
       sendEmail([email], defaultFromEmail, `Suggestion Box Code: ${code}`, `To complete the signin process, use code: ${code}`);
+      const subjectLine = `Suggestion Box Code: ${code}`
+      const bodyText = `
+   <!doctype html>
+  <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+    <head>
+      <meta charset="UTF-8">
+          <meta http-equiv="X-UA-Compatible" content="IE=edge">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+      <title>Suggestion Box Code: ${code}</title>
+     </head>
+
+      <body>
+      <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Welcome to Suggestion Box!</span>
+
+          <center>
+              <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #fff;">
+                  <tr>
+                      <td align="center" valign="top" id="bodyCell" style="height: 100%;margin: 0;padding: 10px;width: 100%;border-top: 0;">
+              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
+                <tr>
+                  <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
+      <tbody>
+          <tr>
+              <td valign="top">
+                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                      <tbody><tr>
+                          
+                          <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
+                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+
+                      </tr>
+                  </tbody></table>
+              </td>
+          </tr>
+      </tbody>
+      <tbody>
+          <tr>
+              <td valign="top" style="padding-top: 9px;">
+                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                      <tbody><tr>
+
+  <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: left;font-weight: normal;font-family:sans-serif;">Hi</p>
+  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Welcome to Suggestion Box!</span></p>
+  <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: normal;font-family:sans-serif;">Use code ${code} to verify your email address</p>
+  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Hope you enjoy our app!</span></p>
+  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
+  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
+
+                          </td>
+                      </tr>
+                  </tbody></table>
+              </td>
+          </tr>
+      </tbody>
+  </table>
+  </td>
+                </tr>
+                <tr>
+                  <td valign="top" style="background-color: #0081CB;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;padding-top: 15px;padding-bottom: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
+      <tbody>
+          <tr>
+              <td valign="top" style="padding-top: 9px;">
+                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                      <tbody><tr>
+                          
+                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #fff;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
+  <br>
+  <em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #fff;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
+   
+                          </td>
+                      </tr>
+                  </tbody></table>
+              </td>
+          </tr>
+      </tbody>
+  </table></td>
+                </tr>
+              </table>
+                      </td>
+                  </tr>
+              </table>
+          </center>
+  </body>
+  </html>
+  `;
+      sendEmail([email], defaultFromEmail, subjectLine, bodyText);
       res.status(200).json(groupSignupCode);
     } else res.status(200).json(groupSignupCode);
   });
@@ -688,7 +774,7 @@ app.post('/createGroup', upload.array(), (req, res) => {
 });
 
 app.post('/sendInviteEmails', upload.array(), (req, res) => {
-  const { groupName, email } = req.body;
+  const { groupName, email, name } = req.body;
   const connectionString = `
   SELECT groupSignupCode
   FROM groups
@@ -698,7 +784,76 @@ app.post('/sendInviteEmails', upload.array(), (req, res) => {
     if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8283');
     else {
       const subjectLine = `Join me on Suggestbox Box! - GroupName '${rows[0].groupSignupCode}'`
-      const bodyText = `Please join me on Suggestion Box with the Group Name of '${rows[0].groupSignupCode}'!`
+      const bodyText = `
+  <!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+  <head>
+    <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Join Suggestion Box</title>
+   </head>
+
+    <body>
+    <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Ryan Newton has invited you to join the Suggestion Box group</span>
+
+        <center>
+            <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #FFFFFF;">
+                <tr>
+                    <td align="center" valign="top" id="bodyCell" style="height: 100%;margin: 0;padding: 10px;width: 100%;border-top: 0;">
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
+              <tr>
+                <td valign="top" id="templateHeader" style="background-color: #61b8eb;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;border-top: 0;border-bottom: 0;padding-top: 20px;padding-bottom: 40px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
+    <tbody>
+        <tr>
+            <td valign="top" style="padding-top: 9px;">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                    <tbody><tr>
+                        <img align="left" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/3acab16f-2e16-4e8d-9ae6-efc183904d8c.png" width="70" style="max-width: 70px;padding-left: 25px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;" />
+                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
+<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your friend ${name} has invited you to</span></span></p>
+<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif;font-size: 28px;font-weight: bold;">Join '${rows[0].groupSignupCode}' on Suggestion Box</span></span></p>
+<p style="margin: 10px 10px;padding-top: 20px;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Download the Suggestion Box App for <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">ios</a> or <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">android</a>. Login with your email address and use Group Name "PearLaunchPad"</span></span></p>
+
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</td>
+              </tr>
+              <tr>
+                <td valign="top" style="background-color: #012234;padding-top: 15px;padding-bottom: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
+    <tbody>
+        <tr>
+            <td valign="top" style="padding-top: 9px;">
+                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
+                    <tbody><tr>
+                        
+                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
+                        
+                            <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;"><img data-file-id="137253" height="29" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/03d0eede-989a-4f96-a179-e04902bf930b.png" width="100" style="border: 0;height: auto !important;outline: none;text-decoration: none;"></a>  <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;"><img data-file-id="137257" height="29" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/ea792423-13da-425f-84a0-f22cf6c57e11.png" width="100" style="border: 0;height: auto !important;outline: none;text-decoration: none;"></a><br>
+<br>
+<em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
+ 
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+        </tr>
+    </tbody>
+</table></td>
+              </tr>
+            </table>
+                    </td>
+                </tr>
+            </table>
+        </center>
+</body>
+</html>
+  `;
       sendEmail([email], defaultFromEmail, subjectLine, bodyText);
       res.sendStatus(200);
     }
@@ -1276,81 +1431,6 @@ ${message}\n
 \n
 Note: Your contact information has been kept confidential. This message was written without knowledge of who sent the feedback.`;
 
-  return { subjectLine, bodyText };
-}
-
-function inviteToGroupEmail() {
-  const subjectLine = 'Join Suggestion Box';
-  const bodyText = `
-  <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-  <head>
-    <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Join Suggestion Box</title>
-   </head>
-
-    <body>
-    <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Ryan Newton has invited you to join the Suggestion Box group</span>
-
-        <center>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #FFFFFF;">
-                <tr>
-                    <td align="center" valign="top" id="bodyCell" style="height: 100%;margin: 0;padding: 10px;width: 100%;border-top: 0;">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
-              <tr>
-                <td valign="top" id="templateHeader" style="background-color: #61b8eb;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;border-top: 0;border-bottom: 0;padding-top: 20px;padding-bottom: 40px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-    <tbody>
-        <tr>
-            <td valign="top" style="padding-top: 9px;">
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                    <tbody><tr>
-                        <img align="left" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/3acab16f-2e16-4e8d-9ae6-efc183904d8c.png" width="70" style="max-width: 70px;padding-left: 25px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;" />
-                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
-<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your friend Ryan Newton has invited you to</span></span></p>
-<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif;font-size: 28px;font-weight: bold;">Join PearLaunchPad on Suggestion Box</span></span></p>
-<p style="margin: 10px 10px;padding-top: 20px;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Download the Suggestion Box App for <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">ios</a> or <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">android</a>. Login with your email address and use Group Name "PearLaunchPad"</span></span></p>
-
-                        </td>
-                    </tr>
-                </tbody></table>
-            </td>
-        </tr>
-    </tbody>
-</table>
-</td>
-              </tr>
-              <tr>
-                <td valign="top" style="background-color: #012234;padding-top: 15px;padding-bottom: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-    <tbody>
-        <tr>
-            <td valign="top" style="padding-top: 9px;">
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                    <tbody><tr>
-                        
-                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
-                        
-                            <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;"><img data-file-id="137253" height="29" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/03d0eede-989a-4f96-a179-e04902bf930b.png" width="100" style="border: 0;height: auto !important;outline: none;text-decoration: none;"></a>  <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;"><img data-file-id="137257" height="29" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/ea792423-13da-425f-84a0-f22cf6c57e11.png" width="100" style="border: 0;height: auto !important;outline: none;text-decoration: none;"></a><br>
-<br>
-<em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
- 
-                        </td>
-                    </tr>
-                </tbody></table>
-            </td>
-        </tr>
-    </tbody>
-</table></td>
-              </tr>
-            </table>
-                    </td>
-                </tr>
-            </table>
-        </center>
-</body>
-</html>
-  `;
   return { subjectLine, bodyText };
 }
 

@@ -29,10 +29,10 @@ export const updateInviteEmails = emails => (
   }
 );
 
-export const sendInviteEmail = email => (
+export const sendInviteEmail = (email, name) => (
   (dispatch, getState) => {
     const { groupName } = getState().group;
-    http.post('/sendInviteEmails', { groupName, email })
+    http.post('/sendInviteEmails', { groupName, email, name })
     .catch(() => console.error('/sendInviteEmails failed'))
   }
 );

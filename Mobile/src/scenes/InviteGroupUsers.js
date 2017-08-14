@@ -21,6 +21,7 @@ class InviteGroupUsers extends Component {
   state = {
     groupName: '',
     cleared: false,
+    name: '',
     email: '',
     showSentNotfication: false,
     showErrorMessage: false,
@@ -68,8 +69,26 @@ class InviteGroupUsers extends Component {
     return (
       <View style={{ paddingTop: 30, flexDirection: 'column' }}>
         <Text style={{ fontWeight: '400', padding: 10, paddingTop: 0, paddingBottom:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 16, color: 'white' }}>
-           Invite your first users now:
+           Invite your first users now: (Your name is only used for the invitation email.)
         </Text>
+        <View style={{ flexDirection: 'row' }}>
+          <Fumi
+            label={"Enter your name here..."}
+            iconClass={FontAwesomeIcon}
+            iconName={'user'}
+            iconColor={'#00A2FF'}
+            inputStyle={{ color: 'black' }}
+            value={this.state.name}
+            onChangeText={email => this.setState({ name })}
+            keyboardType={'email-address'}
+
+            // TextInput props
+            autoCapitalize={'none'}
+            autoCorrect={false}
+            style={{ flex:9, height:65, margin: 10, backgroundColor:'white' }}
+            maxLength={100}
+          />
+        </View>        
         <View style={{ flexDirection: 'row' }}>
           <Fumi
             label={"Enter an email here..."}
@@ -79,7 +98,6 @@ class InviteGroupUsers extends Component {
             inputStyle={{ color: 'black' }}
             value={this.state.email}
             onChangeText={email => this.setState({ email })}
-            keyboardType={'email-address'}
 
             // TextInput props
             autoCapitalize={'none'}
@@ -91,7 +109,7 @@ class InviteGroupUsers extends Component {
             <Button style={{ flex:1, height:65 }} onPress={() => {
               const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
                 if (re.test(this.state.email)) {
-                  this.props.sendInviteEmail(this.state.email);
+                  this.props.sendInviteEmail(this.state.email, this.state.name);
                   this.setState({ email: '', showSentNotfication: true });
                   setTimeout(() => this.setState({ showSentNotfication: false }), 8000);
                   Keyboard.dismiss()
@@ -117,7 +135,7 @@ class InviteGroupUsers extends Component {
   renderEnterToBoxButton() {
     return (
       <View>
-        <Button textStyle={{fontSize: 20}} style={{ height:65}} onPress={() => {
+        <Button textStyle={{fontSize: 20}} style={{ height:55}} onPress={() => {
           const navToFeedbackList = NavigationActions.reset({
             index: 0,
             key: null,
