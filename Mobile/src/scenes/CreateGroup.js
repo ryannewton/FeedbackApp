@@ -73,6 +73,7 @@ class CreateGroup extends Component {
     else {
       this.setState({ error: '' });
       Keyboard.dismiss();
+      this.props.sendInviteEmail(this.state.email);
       this.props.createGroup(this.state.groupName, () => this.props.navigation.navigate('InviteGroupUsers', 'Invite Friends'));
     }
   }

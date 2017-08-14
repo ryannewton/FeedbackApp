@@ -29,11 +29,19 @@ export const updateInviteEmails = emails => (
   }
 );
 
-export const sendInviteEmail = email => (
+export const sendInviteEmail = (email, name) => (
   (dispatch, getState) => {
     const { groupName } = getState().group;
-    http.post('/sendInviteEmails', { groupName, email })
-    .catch(() => console.error('/sendInviteEmails failed'))
+    http.post('/sendInviteEmail', { groupName, email, name })
+    .catch(() => console.error('/sendInviteEmail failed'))
+  }
+);
+
+export const sendWelcomeEmail = email => (
+  (dispatch, getState) => {
+    const { groupName } = getState().group;
+    http.post('/sendWelcomeEmails', { groupName, email })
+    .catch(() => console.error('/sendWelcomeEmails failed'))
   }
 );
 
