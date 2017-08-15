@@ -1,11 +1,18 @@
 // Import action types
 import {
+  UPDATE_FEEDBACK_TEXT,
+  UPDATE_IMAGE_URL,
+  UPDATE_CATEGORY,
+  UPDATE_FEEDBACK_TYPE,
+  UPDATE_ERROR_MESSAGE,
+  EDITING_FEEDBACK,
+  CLEAR_FEEDBACK_ON_STATE,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
   SUBMIT_FEEDBACK_SUCCESS,
-  UPDATE_FEEDBACK_SUCCESS,
   SUBMIT_FEEDBACK_FAIL,
+  UPDATE_FEEDBACK_SUCCESS,
   UPDATE_FEEDBACK_FAIL,
   SUBMITTING_IMAGE,
   SUBMIT_IMAGE_SUCCESS,
@@ -30,18 +37,30 @@ import {
 } from '../actions/types';
 
 const INITIAL_STATE = {
-  loading: false,
-  loadingImage: false,
-  imageURL: '',
-  positiveImageURL: '',
-  negativeImageURL: '',
+  // List of all feedback
   list: [],
   lastPulled: new Date(0),
+
+
+  // Data for feedback about to be submitted
+  text: '',
+  imageURL: '',
+  category: '',
+  type: '',
+  imageWidth: null,
+  imageHeight: null,
+
+  // Rendering information
   filterMethod: 'all',
   searchQuery: 'Search',
   searchInProgress: false,
   refreshing: false,
   route: false,
+  loading: false,
+  loadingImage: false,
+  errorMessage: '',
+  editing: false,
+
 };
 
 function filterAndOrder(list) {
@@ -53,8 +72,29 @@ function filterAndOrder(list) {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
+    case UPDATE_FEEDBACK_TEXT:
+      return { ...state, text: action.payload };
+
+    case UPDATE_IMAGE_URL:
+      return { ...state, imageURL: action.payload };
+
+    case UPDATE_CATEGORY:
+      return { ...state, category: action.payload };
+
+    case UPDATE_FEEDBACK_TYPE:
+      return { ...state, type: action.payload };
+
     case REQUESTED_FEEDBACK:
       return { ...state, refreshing: true };
+
+    case UPDATE_ERROR_MESSAGE:
+      return { ...state, errorMessage: action.payload };
+
+    case EDITING_FEEDBACK:
+      return { ...state, editing: true };
+
+    case CLEAR_FEEDBACK_ON_STATE:
+      return { ...INITIAL_STATE, list: state.list, lastPulled: state.lastPulled };
 
     case RECEIVED_FEEDBACK: {
       const list = filterAndOrder(action.payload.list);
@@ -73,7 +113,7 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, loading: true };
 
     case SUBMIT_FEEDBACK_SUCCESS:
-      return { ...state, loading: false, feedback: '', imageURL: '', positiveImageURL: '', negativeImageURL: '' };
+      return { ...state, loading: false, text: '', category: '', imageURL: '', type: '', errorMessage: '', editing: false };
 
     case SUBMIT_FEEDBACK_FAIL:
       return { ...state, loading: false };
@@ -81,17 +121,16 @@ export default (state = INITIAL_STATE, action) => {
     case SUBMITTING_IMAGE:
       return { ...state, loadingImage: true };
 
-    case REMOVE_IMAGE:
-      return { ...state, imageURL: '', positiveImageURL: '', negativeImageURL: '' };
-
     case SUBMIT_IMAGE_SUCCESS: {
       if (!action.payload.type)
-        return { ...state, loadingImage: false, imageURL: action.payload.location };
-      else if (action.payload.type === 'positive')
-        return { ...state, loadingImage: false, positiveImageURL: action.payload.location };
-      else if (action.payload.type === 'negative')
-        return { ...state, loadingImage: false, negativeImageURL: action.payload.location };
+        return { ...state, loadingImage: false, imageURL: action.payload };
     }
+
+    case SUBMIT_IMAGE_FAIL:
+      return { ...state, loadingImage: false };
+
+    case REMOVE_IMAGE:
+      return { ...state, imageURL: '' };
 
     case SEARCH_IN_PROGRESS: {
       return { ...state, searchInProgress: action.payload };
@@ -99,9 +138,6 @@ export default (state = INITIAL_STATE, action) => {
 
     case CHANGE_FILTER_METHOD:
       return { ...state, filterMethod: action.payload };
-
-    case SUBMIT_IMAGE_FAIL:
-      return { ...state, loadingImage: false };
 
     case ADD_FEEDBACK_UPVOTE: {
       if (action.payload.approved) {
@@ -113,10 +149,24 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state };
     }
 
+    case REMOVE_FEEDBACK_UPVOTE: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      const newList = state.list.slice(0);
+      newList[index].upvotes -= 1;
+      return { ...state, list: newList };
+    }
+
     case ADD_FEEDBACK_DOWNVOTE: {
       const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       const newState = state.list.slice(0);
       newState[index].downvotes += 1;
+      return { ...state, list: newState };
+    }
+
+    case REMOVE_FEEDBACK_DOWNVOTE: {
+      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+      const newState = state.list.slice(0);
+      newState[index].downvotes -= 1;
       return { ...state, list: newState };
     }
 
@@ -134,29 +184,17 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newList };
     }
 
-    case REMOVE_FEEDBACK_UPVOTE: {
-      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
-      const newList = state.list.slice(0);
-      newList[index].upvotes -= 1;
-      return { ...state, list: newList };
+    case UPDATE_FEEDBACK_SUCCESS: {
+      if (action.payload.approved) {
+        const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
+        const newState = state.list.slice(0);
+        newState[index].category = action.payload.category;
+        newState[index].imageURL = action.payload.imageURL;
+        newState[index].text = action.payload.text;
+        return { ...state, list: newState, errorMessage: '', text: '', imageURL: '', category: '', type: '', editing: false };
+      }
+      return { ...state, list: state.list.filter(feedback => feedback.id !== action.payload.id), errorMessage: '', text: '', imageURL: '', category: '', type: '', editing: false };
     }
-
-    case REMOVE_FEEDBACK_DOWNVOTE: {
-      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
-      const newState = state.list.slice(0);
-      newState[index].downvotes -= 1;
-      return { ...state, list: newState };
-    }
-
-    case UPDATE_FEEDBACK_SUCCESS:
-      const index = state.list.findIndex(feedback => feedback.id === action.payload.id);
-      console.log('payload: ', action.payload);
-      console.log('id: ', index);
-      const newState = state.list.slice(0);
-      newState[index].category = action.payload.category;
-      newState[index].imageURL = action.payload.imageURL;
-      newState[index].text = action.payload.text;
-      return { ...state, list: newState };
 
     case UPDATE_FEEDBACK_FAIL:
       return { ...state, loading: false };

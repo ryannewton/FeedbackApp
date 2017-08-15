@@ -3,5 +3,8 @@
   "rules": {
     "react/jsx-filename-extension": [1, { "extensions": [".js"] }],
     "no-use-before-define": ["error", { "functions": false, "classes": false, "variables": false }],
+    "react/sort-comp": "off",
+    "react/prop-types": "off",
+    "max-len": "off",
   }
 }

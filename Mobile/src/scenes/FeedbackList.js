@@ -26,7 +26,7 @@ import translate from '../translation';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // Import tracking
-import { sendGoogleAnalytics, pullFeedback, pullSolutions, route } from '../actions';
+import { sendGoogleAnalytics, pullFeedback, pullSolutions, clearFeedbackOnState, route } from '../actions';
 
 const stopwords = require('stopwords').english;
 import nothing from '../../images/backgrounds/nothing.jpg';
@@ -84,9 +84,10 @@ class FeedbackList extends Component {
     if (this.props.feedback.filterMethod === 'search') {
       return this.partialWordSearch(this.props.feedback.searchQuery);
     }
+
     // Switch through filter methods
     const filteredFeedbackList = this.props.feedback.list.filter((item) => {
-      const timeFilter = ['all', 'this_week', 'today', 'my_feedback'];
+      const timeFilter = ['all', 'this_week', 'today', 'my_feedback', 'New Feedback', 'Top Feedback'];
       const { filterMethod } = this.props.feedback;
       const { date } = item;
       const feedbackDate = new Date(date).getTime();
@@ -111,7 +112,6 @@ class FeedbackList extends Component {
           return true;
       }
     });
-
     return filteredFeedbackList;
   }
 
@@ -125,7 +125,9 @@ class FeedbackList extends Component {
       }
       return this.state.filterCategory === item.status;
     });
-
+    if (this.props.feedback.filterMethod === 'New Feedback') {
+      return categorizedFeedbackList.sort((a,b) => new Date(b.date).getTime() - new Date(a.date));
+    }
     return categorizedFeedbackList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
     // if (this.state.filterCategory !== 'new') {
     //   return categorizedFeedbackList;
@@ -169,9 +171,13 @@ class FeedbackList extends Component {
   }
 
   renderFeedbackSubmitButton = () => {
+    const submitScene = this.props.group.includePositiveFeedbackBox ? 'FeedbackSubmitSplit' : 'FeedbackSubmit';
     return (
-      <View style={{position: 'absolute', right: 10, bottom: 10}}>
-        <TouchableOpacity onPress={() => this.props.navigation.navigate('FeedbackSubmit', { language: translate(this.props.user.language).SUBMIT_FEEDBACK })}>
+      <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate(submitScene, { language: translate(this.props.user.language).SUBMIT_FEEDBACK});
+          this.props.clearFeedbackOnState();
+        }}>
           <Icon name="mode-edit" size={30} color={'#00A2FF'} backgroundColor={'red'} raised reverse />
         </TouchableOpacity>
       </View>
@@ -249,6 +255,12 @@ function mapStateToProps(state) {
   return { feedback, group, user, token };
 }
 
-const AppScreen = connect(mapStateToProps, { sendGoogleAnalytics, pullFeedback, pullSolutions, route })(FeedbackList);
+const AppScreen = connect(mapStateToProps, {
+  sendGoogleAnalytics,
+  pullFeedback,
+  pullSolutions,
+  clearFeedbackOnState,
+  route,
+})(FeedbackList);
 
 export default AppScreen;

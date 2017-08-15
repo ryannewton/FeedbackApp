@@ -65,7 +65,7 @@ export default (state = INITIAL_STATE, action) => {
       index = state.list.findIndex(feedback => feedback.id === action.payload.id);
       newList = state.list.slice(0);
       newList[index].approved = 0;
-      newList[index].status = 'reject';
+      newList[index].status = 'rejected';
       return { ...state, list: newList };
     case CLARIFY_FEEDBACK_SUCCESS:
       index = state.list.findIndex(feedback => feedback.id === action.payload.id);

@@ -17,7 +17,7 @@ import { Fumi } from 'react-native-textinput-effects';
 import fullScreen from '../../images/backgrounds/auth3.jpg';
 import translate from '../translation'
 
-class Authorize extends Component {
+class GroupCode extends Component {
   constructor(props) {
     super(props);
 
@@ -25,9 +25,6 @@ class Authorize extends Component {
       groupSignupCode: '',
       cleared: false,
     };
-
-    this.route = this.route.bind(this);
-    this.authorizeUser = this.authorizeUser.bind(this);
 
     props.sendGoogleAnalytics('Group Code', 'Not Logged In');
   }
@@ -38,7 +35,7 @@ class Authorize extends Component {
     }
   }
 
-  route(nextProps) {
+  route = (nextProps) => {
     if (
       nextProps.auth.loggedIn === true &&
       nextProps.group.groupName !== '' &&
@@ -55,7 +52,7 @@ class Authorize extends Component {
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
-  authorizeUser() {
+  authorizeUser = () => {
     Keyboard.dismiss();
     this.props.authorizeUser(
       this.props.auth.email,
@@ -64,23 +61,80 @@ class Authorize extends Component {
     );
   }
 
-  renderSignupButton() {
-    const { language } = this.props.user
+  renderInstructions() {
+    const { language } = this.props.user;
     return (
-      <Button onPress={this.authorizeUser}>
-        {translate(language).JOIN_GROUP}
-      </Button>
+      <View style={{ flexDirection:'row' }}>
+        <Text style={{ flex:7, fontWeight: '500', padding: 20, paddingRight:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
+          {translate(language).GROUP_DESCRIPTION}
+        </Text>
+        <TouchableOpacity onPress={() => this.requestTrialAlert()} style={{ flex:1, margin: 20}}>
+          <Icon name="question-circle" type="font-awesome" size={25} color="white" />
+        </TouchableOpacity>
+      </View>
     );
   }
 
-  renderButtons() {
-    if (this.props.auth.loading) {
-      return <Spinner />;
-    }
-
+  renderEmailInput() {
+    const { language } = this.props.user;
     return (
-      <View style={{ flex: 1 }}>
-        {this.renderSignupButton()}
+      <Fumi
+        label={translate(language).GROUP_CODE}
+        iconClass={FontAwesomeIcon}
+        iconName={'user-circle'}
+        iconColor={'#00A2FF'}
+        inputStyle={{ color: 'black' }}
+        value={this.state.groupSignupCode}
+        onChangeText={text => this.setState({ groupSignupCode: text })}
+
+        // TextInput props
+        autoCapitalize={'none'}
+        autoCorrect={false}
+        style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
+        maxLength={100}
+      />
+    );
+  }
+
+  maybeRenderErrorMessage() {
+    return (
+      <Text style={styles.errorTextStyle}>
+        {this.props.auth.error}
+      </Text>
+    );
+  }
+
+  renderSignupButton() {
+    const { language } = this.props.user
+    if (this.props.auth.loading) {
+      return (
+        <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
+          <Spinner />
+        </View>
+      );
+    }
+    return (
+      <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
+        <View style={{ flex: 1 }}>
+          <Button onPress={this.authorizeUser}>
+            {translate(language).JOIN_GROUP}
+          </Button>
+        </View>
+      </View>
+    );
+  }
+
+  renderCreateGroupLink() {
+    return (
+      <View style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}>
+        <TouchableOpacity onPress={() => {
+          this.props.navigation.navigate('CreateGroup', 'Enter Group Name');
+          this.setState({ cleared: true });
+        }}>
+          <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 18, color: 'white' }}>
+            Create a new Group
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -96,7 +150,7 @@ class Authorize extends Component {
     return (
       Alert.alert(
         NEED_GROUP_CODE,
-        'If your community has not been set up yet, send an email to tyler@suggestionboxapp.com to receive your unique group code!',
+        `If your community does not have a suggestion box yet, you can create one by clicking the link at the bottom of this page`,
         [
           {text: OK, onPress: () => null },
         ],
@@ -106,52 +160,25 @@ class Authorize extends Component {
   }
 
   render() {
-    const { language } = this.props.user
     return (
-      <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <Image style={styles.background} source={fullScreen} resizeMode="cover">
-          <View style={{flexDirection:'row'}}>
-            <Text style={{ flex:7, fontWeight: '500', padding: 20, paddingRight:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white' }}>
-              {translate(language).GROUP_DESCRIPTION}
-            </Text>
-            <TouchableOpacity onPress={() => this.requestTrialAlert()} style={{ flex:1, margin: 20}}>
-              <Icon name="question-circle" type="font-awesome" size={25} color="white" />
-            </TouchableOpacity>
-          </View>
-          {/* Email input */}
-          <Fumi
-            label={translate(language).GROUP_CODE}
-            iconClass={FontAwesomeIcon}
-            iconName={'user-circle'}
-            iconColor={'#00A2FF'}
-            inputStyle={{ color: 'black' }}
-            value={this.state.groupSignupCode}
-            onChangeText={text => this.setState({ groupSignupCode: text })}
-
-            // TextInput props
-            autoCapitalize={'none'}
-            autoCorrect={false}
-            style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
-            maxLength={100}
-          />
-
-          {/* Error message (blank if no error) */}
-          <Text style={styles.errorTextStyle}>
-            {this.props.auth.error}
-          </Text>
-
-          {/* Confirmation button, and 'go to login' button */}
-          <View style={{ marginLeft: 15, marginRight: 15, marginTop: 15 }}>
-            {this.renderButtons()}
-          </View>
-        </Image>
-      </TouchableWithoutFeedback>
+      <View style={{ flex: 1 }}>
+        <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+          <Image style={styles.background} source={fullScreen} resizeMode="cover">
+            <View style={{ flex: 1 }}>
+              {this.renderInstructions()}
+              {this.renderEmailInput()}
+              {this.maybeRenderErrorMessage()}
+              {this.renderSignupButton()}
+            </View>
+            {this.renderCreateGroupLink()}
+          </Image>
+        </TouchableWithoutFeedback>
+      </View>
     );
   }
-
 }
 
-Authorize.propTypes = {
+GroupCode.propTypes = {
   auth: PropTypes.object,
   authorizeUser: PropTypes.func,
   navigation: PropTypes.object,
@@ -166,4 +193,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { authorizeUser, sendGoogleAnalytics })(Authorize);
+export default connect(mapStateToProps, { authorizeUser, sendGoogleAnalytics })(GroupCode);

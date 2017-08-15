@@ -63,7 +63,6 @@ class SendAuthorizationEmail extends Component {
   }
 
   maybeRenderError = () => {
-    console.log('props: ', this.props);
     return (
       <Text style={styles.errorTextStyle}>
         {this.props.auth.error}

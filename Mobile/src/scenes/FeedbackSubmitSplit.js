@@ -39,7 +39,7 @@ import {
 import { Button, Spinner, Text } from '../components/common';
 import styles from '../styles/scenes/FeedbackSubmitStyles';
 
-class FeedbackSubmit extends Component {
+class FeedbackSubmitSplit extends Component {
   constructor(props, context) {
     super(props, context);
     this.state = {
@@ -82,9 +82,13 @@ class FeedbackSubmit extends Component {
     )
   }
 
-  maybeRenderImage = () => {
+  maybeRenderImage = (side) => {
+    if (side !== this.props.feedback.type) {
+      return null;
+    }
+
     const { width, height } = Dimensions.get('window')
-    const { imageURL } = this.props.feedback;
+    const imageURL = this.props.feedback.imageURL;
 
     // If there is no image, don't render anything
     if (!imageURL) {
@@ -127,13 +131,17 @@ class FeedbackSubmit extends Component {
     }
   }
 
-  renderImageButton = () => {
+  renderImageButton = (side) => {
     const { language } = this.props.user;
 
     return (
       <View style={{ flexDirection: 'row', backgroundColor:'white' }}>
           <TouchableOpacity
-            onPress={() => this.addImage()}
+            onPress={() => {
+              if (side === this.props.feedback.type) {
+                this.addImage();
+              }
+            }}
             style={[styles.button, { backgroundColor: 'white', borderWidth: 0, flexDirection: 'row', alignItems: 'center', padding: 14 }]}
           >
             <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'left' }}>
@@ -145,7 +153,7 @@ class FeedbackSubmit extends Component {
     );
   }
 
-  renderSubmitButton = () => {
+  renderSubmitButton = (side) => {
     const { language } = this.props.user;
 
     if (this.props.feedback.loading) {
@@ -181,30 +189,40 @@ class FeedbackSubmit extends Component {
     );
   }
 
-  maybeRenderDeleteButton() {
-    if (this.props.feedback.imageURL) {
-      return (
-        <View>
-          <TouchableOpacity onPress={ () => {
-            this.props.removeImage();
-          }}>
-            <Icon name="remove-circle" size={40} color={'red'}/>
-          </TouchableOpacity>
-        </View>
-      );
+  maybeRenderDeleteButton(side) {
+    const { feedback } = this.props;
+    if (side !== feedback.type && feedback.type != '') {
+      return null;
     }
-    return null;
+
+    if (!feedback.imageURL) {
+      return null;
+    }
+
+    return (
+      <View>
+        <TouchableOpacity onPress={ () => {
+          this.props.removeImage();
+        }}>
+          <Icon name="remove-circle" size={40} color={'red'}/>
+        </TouchableOpacity>
+      </View>
+    );
   }
 
   handleCategoryChange(category) {
     this.props.updateCategory(category.label)
   }
 
-  handleValueChange() {
-    return this.props.feedback.category || 'Click to choose > ';
+  handleValueChange(side) {
+    const { feedback } = this.props;
+    if (side !== feedback.type && feedback.type != '') {
+      return 'N/A';
+    }
+    return feedback.category || 'Click to choose > ';
   }
 
-  maybeRenderCategoryModal() {
+  maybeRenderCategoryModal(side) {
     // If the group doesn't have categories
     const { categories } = this.props.group;
     if (!categories.length) {
@@ -222,14 +240,13 @@ class FeedbackSubmit extends Component {
       <View style={{ flexDirection: 'row'}}>
         <ModalPicker
           data={categoriesForPicker}
-          style={{ flex:1 }}
-          optionTextStyle={{ fontSize:18 }}
+          onChange={(category) => this.handleCategoryChange(category)}
+          style={{ flex: 1 }}
+          optionTextStyle={{ fontSize: 18 }}
           optionStyle={{ padding: 10 }}
           sectionStyle={{ padding: 20 }}
-          sectionTextStyle={{ fontSize:18, fontWeight:'600' }}
-          cancelTextStyle={{ fontSize:18, fontWeight:'600' }}
-          initValue="Select something yummy!"
-          onChange={(category) => this.handleCategoryChange(category) }
+          sectionTextStyle={{ fontSize: 18, fontWeight: '600' }}
+          cancelTextStyle={{ fontSize: 18, fontWeight: '600' }}
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 5, marginBottom: 1 }}>
             <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'left', paddingLeft: 13 }}>
@@ -251,7 +268,7 @@ class FeedbackSubmit extends Component {
                   fontSize: 16,
                 }}
                 editable={false}
-                value={this.handleValueChange()}
+                value={this.handleValueChange(side)}
               />
           </View>
         </ModalPicker>
@@ -259,19 +276,55 @@ class FeedbackSubmit extends Component {
     );
   }
 
-  renderTextInput() {
+  renderTextInput(side) {
+    const { feedback } = this.props;
     const { language } = this.props.user;
+    const active = side===feedback.type || !feedback.type;
+    const backgroundColor = active ? null : 'grey';
+    let inactiveText;
+    let placeholderText;
+    let extraStyles;
+    if (side==='positive') {
+      inactiveText = 'Clear negative feedback to submit positive feedback';
+      placeholderText = translate(language).POSITIVE_FILL_TEXT;
+      extraStyles = styles.positiveFeedbackInput;
+    } else {
+      inactiveText = 'Clear positive feedback to submit negative feedback';
+      placeholderText = translate(language).NEGATIVE_FILL_TEXT;
+      extraStyles = styles.negativeFeedbackInput;
+    }
+
     return (
-      <View style={{ flexDirection: 'row'}}>
+      <View style={{ flexDirection: 'row' }}>
         <TextInput
           multiline={Boolean(true)}
-          onChangeText={text => this.props.updateFeedbackText(text)}
-          style={[styles.feedbackInput, { flex: 1 }]}
-          placeholder={translate(language).ENTER_FEEDBACK}
+          onChangeText={(text) => {
+            if (text === '') {
+              this.props.updateFeedbackType('');
+            } else {
+              this.props.updateFeedbackType(side);
+            }
+            this.props.updateFeedbackText(text);
+          }}
+          style={[styles.feedbackInput, extraStyles, { flex: 1, backgroundColor }]}
+          placeholder={placeholderText}
           placeholderTextColor="#d0d0d0"
-          value={this.props.feedback.text}
+          editable={active}
+          value={active ? feedback.text : inactiveText}
           maxLength={500}
         />
+      </View>
+    );
+  }
+
+  renderInputPanel(side) {
+    return (
+      <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center' }}>
+        {this.renderTextInput(side)}
+        {this.maybeRenderCategoryModal(side)}
+        {this.renderImageButton(side)}
+        {this.maybeRenderDeleteButton(side)}
+        {this.maybeRenderImage(side)}
       </View>
     );
   }
@@ -286,7 +339,7 @@ class FeedbackSubmit extends Component {
 
   renderSettingsButton() {
     return (
-      <View style={{ height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f0f0' }}>
+      <View style={{ height: 30, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
         <TouchableOpacity onPress={() => this.props.navigation.navigate('Settings')}>
           <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 14, color: 'black' }}>
             {translate(this.props.user.language).SETTINGS}
@@ -304,12 +357,9 @@ class FeedbackSubmit extends Component {
       <TouchableWithoutFeedback style={{ flex: 1 }} onPress={() => Keyboard.dismiss()}>
         <View style={{ flex: 1, backgroundColor: '#fff' }}>
           {this.maybeRenderErrorMessage()}
-          <View style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', backgroundColor:'#f0f0f0' }}>
-            {this.renderTextInput()}
-            {this.maybeRenderCategoryModal()}
-            {this.renderImageButton()}
-            {this.maybeRenderDeleteButton()}
-            {this.maybeRenderImage()}
+          <View style={{ flex: 1, flexDirection: 'row' }}>
+            {this.renderInputPanel('positive')}
+            {this.renderInputPanel('negative')}
           </View>
           {this.renderSettingsButton()}
           {this.maybeRenderUploadingOverlay()}
@@ -319,7 +369,7 @@ class FeedbackSubmit extends Component {
   }
 }
 
-FeedbackSubmit.propTypes = {
+FeedbackSubmitSplit.propTypes = {
   user: PropTypes.object,
   group: PropTypes.object,
   feedback: PropTypes.object,
@@ -352,4 +402,4 @@ export default connect(mapStateToProps, {
   uploadImage,
   sendGoogleAnalytics,
   removeImage,
-})(FeedbackSubmit);
+})(FeedbackSubmitSplit);

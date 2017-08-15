@@ -290,7 +290,7 @@ class Feedback extends Component {
       return null;
     }
     return (
-      <View style={imageViewStyle, {paddingLeft: 20}}>
+      <View style={imageViewStyle, { paddingLeft: 20 }}>
         <Image
           source={{ uri: imageURL }}
           indicator={ProgressBar}
@@ -355,13 +355,13 @@ return (
     }
     if (feedbackSolutions.length && !this.props.showImage) {
       return (
-        <View style={{paddingTop:2}}>
+        <View style={{ paddingTop: 2 }}>
           <Icon name="question-answer" size={20} color="#F8C61C" />
         </View>
       );
     }
     return (
-      <View style={{paddingTop:2}}>
+      <View style={{ paddingTop: 2 }}>
         <Icon name="question-answer" size={20} color="#bdbdbd" />
       </View>
     );
@@ -386,7 +386,7 @@ return (
         </View>
       );
     }
-    return <View style = {{flexDirection:'row', marginRight:10}}><Icon name="person" size={20} color={'#F54B5E'} /><Text style={{color:'#F54B5E'}}>{"My Feedback"}</Text></View>;
+    return <View style = {{ flexDirection: 'row', marginRight: 10 }}><Icon name="person" size={20} color={'#F54B5E'} /><Text style={{ color: '#F54B5E' }}>{"My Feedback"}</Text></View>;
   }
 
 renderVoteCount = () => {
@@ -406,23 +406,23 @@ renderVoteCount = () => {
       return null;
     }
     return (
-      <View style={{ flexDirection: 'column', alignItems:'center', marginRight:10}}>
+      <View style={{ flexDirection: 'column', alignItems: 'center', marginRight: 10 }}>
         {/* Upvote Button and Downvote */}
-        <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
+        <TouchableOpacity onPress={this.upvote} style={{ flexDirection: 'column', padding: 5, paddingLeft: 10, paddingRight: 10 }}>
           {this.renderThumbUpButton()}
         </TouchableOpacity>
-          <View style={{ flexDirection: 'row', marginTop:2, marginBottom:2}}>
+          <View style={{ flexDirection: 'row', marginTop: 2, marginBottom: 2 }}>
             <Text style={[upvoteTextStyle]}>
               {this.props.feedback.upvotes}
             </Text>
-            <Text style={[upvoteTextStyle, {color:'grey', marginLeft:2, marginRight:2}]}>
+            <Text style={[upvoteTextStyle, { color: 'grey', marginLeft: 2, marginRight: 2 }]}>
               |
             </Text>
             <Text style={[downvoteTextStyle]}>
               {this.props.feedback.downvotes}
             </Text>
           </View>
-        <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10}}>
+        <TouchableOpacity onPress={this.downvote} style={{ flexDirection: 'column', padding:5, paddingLeft:10, paddingRight:10 }}>
           {this.renderThumbDownButton()}
         </TouchableOpacity>
       </View>
