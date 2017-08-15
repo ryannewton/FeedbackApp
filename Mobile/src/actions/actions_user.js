@@ -101,8 +101,14 @@ export const sendGoogleAnalytics = (page, feedbackId = 'default') => (
         'User-Agent': 'SuggestionBox',
       },
     };
+    let action = false;
+    if (page === 'Submit Feedback' || page === 'Submit Solution' ||
+        page === 'Feedback Upvote' || page === 'Feedback Downvote' ||
+        page === 'Solution Upvote' || page === 'Solution Downvote') {
+      action = true;
+    }
 
-    const googleURL = encodeURI(`${GOOGLE_ANALYTICS_ROOT_URL}${Expo.Constants.deviceId}&cd=${page}&cd1=${groupName}&cd2=${feedbackId}&an=Suggestion%20Box`);
+    const googleURL = encodeURI(`${GOOGLE_ANALYTICS_ROOT_URL}${Expo.Constants.deviceId}&cd=${page}&cd1=${groupName}&cd2=${feedbackId}&cd=3${action}&an=Suggestion%20Box`);
     fetch(googleURL, options)
       .catch(error => console.log('Error caught in sendGoogleAnalytics', error));
   }
