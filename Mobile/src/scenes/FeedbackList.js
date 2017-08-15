@@ -56,17 +56,18 @@ class FeedbackList extends Component {
   }
 
   _handleUrl = (url) => {
-    let queryString = url.replace(Expo.Constants.linkingUri, '');
-    if (queryString && !this.props.feedback.route) {
-      let data = qs.parse(queryString);
-      console.log(data)
-      const index = this.props.feedback.list.findIndex(feedback => feedback.id === parseInt(data.feedback));
-      this.props.navigation.navigate('Details', {
-        feedback: this.props.feedback.list[index],
-         translate: translate(this.props.user.language).FEEDBACK_DETAIL,
-        }
-      );
-      this.props.route()
+    if (!url === Expo.Constants.linkingUri) {
+      let queryString = url.replace(Expo.Constants.linkingUri, '');
+      if (queryString && !this.props.feedback.route) {
+        let data = qs.parse(queryString);
+        const index = this.props.feedback.list.findIndex(feedback => feedback.id === parseInt(data.feedback));
+        this.props.navigation.navigate('Details', {
+          feedback: this.props.feedback.list[index],
+           translate: translate(this.props.user.language).FEEDBACK_DETAIL,
+          }
+        );
+        this.props.route()
+      }
     }
   }
 
