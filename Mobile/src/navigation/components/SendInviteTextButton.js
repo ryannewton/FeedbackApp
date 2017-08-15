@@ -83,8 +83,8 @@ class SendInviteTextButton extends Component {
 function mapStateToProps(state) {
   const { groupName } = state.group;
   const { language } = state.user;
-  const { group } = state;
-  return { language, groupName, group };
+  const { group, auth } = state;
+  return { language, groupName, group, auth };
 }
 
 export default connect(mapStateToProps)(SendInviteTextButton);
