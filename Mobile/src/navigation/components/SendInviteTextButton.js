@@ -65,7 +65,7 @@ class SendInviteTextButton extends Component {
   }
 
   render() {
-    if (this.props.groupName === 'Gymboree') {
+    if (this.props.groupName === 'Gymboree' || this.props.auth.email.toLowerCase().slice(0, 11) !== 'admin_test@') {
       return null;
     }
     return (
