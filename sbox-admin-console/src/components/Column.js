@@ -85,8 +85,8 @@ class Column extends Component {
         <div className="panel panel-default" style={{ backgroundColor: this.props.backgroundColor, borderWidth:0, color: 'white', textAlign: 'center', paddingTop: 5, paddingBottom: 5, marginBottom: 15, marginTop: 12 }}>
           {this.props.title}{sortIcon}
         </div>
-        {(this.props.feedback.length) ? this.props.feedback : <div style={{height: 300, width: 300}} /> }
-        <div style={{height: 400, width: 300}} />
+        {(this.props.feedback.length) ? this.props.feedback : <div style={{height: 10000, width: 300}} /> }
+        <div style={{height: 10000, width: 300}} />
       </div>
     );
   }
