@@ -25,7 +25,7 @@ class CreateGroup extends Component {
   }
 
   componentDidMount() {
-    this.props.sendGoogleAnalytics('Create Group', 'Not Logged In');
+    this.props.sendGoogleAnalytics('Create Group');
   }
 
   renderInstructions() {

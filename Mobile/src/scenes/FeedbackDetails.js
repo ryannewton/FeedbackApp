@@ -32,7 +32,7 @@ class FeedbackDetails extends Component {
   constructor(props) {
     super(props);
     this.state = { errorMessage: '' };
-    props.sendGoogleAnalytics('FeedbackDetails', props.group.groupName, props.navigation.state.params.feedback.feedbackId);
+    props.sendGoogleAnalytics('FeedbackDetails', props.navigation.state.params.feedback.feedbackId);
   }
 
   submitSolution = () => {

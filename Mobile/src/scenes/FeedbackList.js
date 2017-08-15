@@ -39,7 +39,7 @@ class FeedbackList extends Component {
       filterCategory: 'new',
     };
 
-    props.sendGoogleAnalytics('FeedbackList', props.group.groupName);
+    props.sendGoogleAnalytics('FeedbackList');
   }
 
   componentDidMount() {

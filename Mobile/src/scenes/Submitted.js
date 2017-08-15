@@ -19,7 +19,7 @@ const SCREEN_WIDTH = Dimensions.get('window').width;
 class Submitted extends Component {
   constructor(props) {
     super(props);
-    props.sendGoogleAnalytics('Submitted', props.group.groupName);
+    props.sendGoogleAnalytics('Submitted');
   }
 
   componentWillMount() {
