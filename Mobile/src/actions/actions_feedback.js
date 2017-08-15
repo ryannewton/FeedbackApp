@@ -1,6 +1,9 @@
 // Import libraries
 import { AsyncStorage } from 'react-native';
 
+// Import other actions
+import { sendGoogleAnalytics } from './actions_user';
+
 // Import action types
 import {
   UPDATE_FEEDBACK_TEXT,
@@ -101,6 +104,7 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
     http.post('/submitFeedback/', { feedback, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_FEEDBACK_SUCCESS });
+      dispatch(sendGoogleAnalytics('Submit Feedback', response.data.id));
 
       // Automatically upvote feedback the user submitted
       feedback = { ...feedback, userId, id: response.data.id, status: 'new', trendingScore: 1, upvotes: 0, downvotes: 0, noOpinions: 0, approved: !feedbackRequiresApproval, date: Date.now()};
@@ -153,6 +157,9 @@ export const addFeedbackUpvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
+    .then(() => {
+      dispatch(sendGoogleAnalytics('Feedback Upvote', feedback.id));
+    })
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in addFeedbackUpvote in actions_feedback', errorMessage);
@@ -231,6 +238,9 @@ export const addFeedbackDownvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 0, downvote: 1, noOpinion: 0, authorization: token })
+    .then(() => {
+      dispatch(sendGoogleAnalytics('Feedback Downvote', feedback.id));
+    })
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in addFeedbackDownvote in actions_feedback', errorMessage);

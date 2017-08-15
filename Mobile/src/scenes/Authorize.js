@@ -26,7 +26,7 @@ class Authorize extends Component {
       cleared: false,
     };
 
-    props.sendGoogleAnalytics('Authorize', 'Not Logged In');
+    props.sendGoogleAnalytics('Authorize');
   }
 
   componentWillReceiveProps(nextProps) {

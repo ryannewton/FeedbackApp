@@ -17,7 +17,7 @@ import {
 } from './types';
 
 // Import constants
-import { ROOT_STORAGE } from '../constants';
+import { ROOT_STORAGE, GOOGLE_ANALYTICS_ROOT_URL } from '../constants';
 
 export const closeInstructions = instructionKey => (
   (dispatch, getState) => {
@@ -92,8 +92,9 @@ export const languageChoice = language => (
 );
 
 
-export const sendGoogleAnalytics = (page, groupName = 'default', feedbackId = 'default') => (
-  () => {
+export const sendGoogleAnalytics = (page, feedbackId = 'default') => (
+  (dispatch, getState) => {
+    const groupName = getState().group.groupName || 'Not Logged In';
     const options = {
       method: 'POST',
       headers: {
@@ -101,7 +102,7 @@ export const sendGoogleAnalytics = (page, groupName = 'default', feedbackId = 'd
       },
     };
 
-    const googleURL = 'https://www.google-analytics.com/collect?v=1&t=screenview&tid=UA-99660629-1&cid=' + String(Expo.Constants.deviceId) + '&cd=' + String(page) + '&cd1=' + String(groupName) + '&cd2=' + String(feedbackId) + '&an=Suggestion%20Box'
+    const googleURL = `${GOOGLE_ANALYTICS_ROOT_URL} ${Expo.Constants.deviceId}&cd=${page}&cd1=${groupName}&cd2=${feedbackId}&an=Suggestion%20Box`;
     fetch(googleURL, options)
       .catch(error => console.log('Error caught in sendGoogleAnalytics', error));
   }

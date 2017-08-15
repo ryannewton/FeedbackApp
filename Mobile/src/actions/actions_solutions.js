@@ -1,6 +1,9 @@
 // Import libraries
 import { AsyncStorage } from 'react-native';
 
+// Import other actions
+import { sendGoogleAnalytics } from './actions_user';
+
 // Import action types
 import {
   RECEIVED_SOLUTION_LIST,
@@ -42,6 +45,8 @@ export const submitSolutionToServer = (text, feedbackId, solutionsRequireApprova
     http.post('/submitSolution', { solution, authorization: token })
     .then((response) => {
       dispatch({ type: SUBMIT_SOLUTION_SUCCESS });
+      dispatch(sendGoogleAnalytics('Submit Solution', feedbackId));
+
       solution = {
         id: response.data.id,
         feedbackId,
@@ -76,6 +81,9 @@ export const addSolutionUpvote = solution => (
 
     const token = getState().auth.token;
     http.post('/submitSolutionVote', { solution, upvote: 1, downvote: 0, authorization: token })
+    .then(() => {
+      dispatch(sendGoogleAnalytics('Solution Upvote', solution.feedbackId));
+    })
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in addSolutionUpvote in actions_solutions', errorMessage);
@@ -96,6 +104,9 @@ export const addSolutionDownvote = solution => (
 
     const token = getState().auth.token;
     http.post('/submitSolutionVote', { solution, upvote: 0, downvote: 1, authorization: token })
+    .then(() => {
+      dispatch(sendGoogleAnalytics('Solution Downvote', solution.feedbackId));
+    })
     .catch((error) => {
       const errorMessage = error.response ? error.response.data : error;
       console.log('Error in addSolutionDownvote in actions_solutions', errorMessage);

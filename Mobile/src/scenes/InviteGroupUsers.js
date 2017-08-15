@@ -28,7 +28,7 @@ class InviteGroupUsers extends Component {
   }
 
   componentDidMount() {
-    this.props.sendGoogleAnalytics('Invite group users', 'Not Logged In');
+    this.props.sendGoogleAnalytics('Invite group users');
   }
   renderSentNotification() {
     if (this.state.showSentNotfication) {

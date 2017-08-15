@@ -21,7 +21,7 @@ import auth from '../../images/backgrounds/auth1.jpg';
 class WelcomeScreen extends Component {
   constructor(props) {
     super(props);
-    props.sendGoogleAnalytics('Welcome Screen', 'Not Logged In');
+    props.sendGoogleAnalytics('Welcome Screen');
   }
 
   slideData() {
