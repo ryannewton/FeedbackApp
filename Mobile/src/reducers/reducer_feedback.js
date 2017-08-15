@@ -33,6 +33,7 @@ import {
   AUTHORIZE_USER_FAIL,
   AUTHORIZE_USER_SUCCESS,
   DELETE_FEEDBACK,
+  ROUTE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -54,10 +55,12 @@ const INITIAL_STATE = {
   searchQuery: 'Search',
   searchInProgress: false,
   refreshing: false,
+  route: false,
   loading: false,
   loadingImage: false,
   errorMessage: '',
   editing: false,
+
 };
 
 function filterAndOrder(list) {
@@ -217,6 +220,9 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newList };
     }
 
+    case ROUTE: {
+      return { ...state, route: true};
+    }
     case LOG_OUT_USER:
       return INITIAL_STATE;
 

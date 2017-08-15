@@ -8,10 +8,13 @@ import {
   RefreshControl,
   ScrollView,
   Dimensions,
+  Linking,
 } from 'react-native';
 import { Text } from '../components/common';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import qs from 'qs';
+import Expo from 'expo';
 
 // Import components, functions, and styles
 import FeedbackCard from '../components/FeedbackCard';
@@ -23,7 +26,7 @@ import translate from '../translation';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 
 // Import tracking
-import { sendGoogleAnalytics, pullFeedback, pullSolutions, clearFeedbackOnState } from '../actions';
+import { sendGoogleAnalytics, pullFeedback, pullSolutions, clearFeedbackOnState, route } from '../actions';
 
 const stopwords = require('stopwords').english;
 import nothing from '../../images/backgrounds/nothing.jpg';
@@ -50,6 +53,29 @@ class FeedbackList extends Component {
       }
       return true;
     })
+  }
+
+  _handleUrl = (url) => {
+    let queryString = url.replace(Expo.Constants.linkingUri, '');
+    if (queryString && !this.props.feedback.route) {
+      let data = qs.parse(queryString);
+      console.log(data)
+      const index = this.props.feedback.list.findIndex(feedback => feedback.id === parseInt(data.feedback));
+      this.props.navigation.navigate('Details', {
+        feedback: this.props.feedback.list[index],
+         translate: translate(this.props.user.language).FEEDBACK_DETAIL,
+        }
+      );
+      this.props.route()
+    }
+  }
+
+  componentDidMount() {
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        this._handleUrl(url);
+      }
+    }).catch(err => console.error('An error occurred', err));
   }
 
 
@@ -234,6 +260,7 @@ const AppScreen = connect(mapStateToProps, {
   pullFeedback,
   pullSolutions,
   clearFeedbackOnState,
+  route,
 })(FeedbackList);
 
 export default AppScreen;
