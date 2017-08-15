@@ -102,7 +102,7 @@ export const sendGoogleAnalytics = (page, feedbackId = 'default') => (
       },
     };
 
-    const googleURL = `${GOOGLE_ANALYTICS_ROOT_URL} ${Expo.Constants.deviceId}&cd=${page}&cd1=${groupName}&cd2=${feedbackId}&an=Suggestion%20Box`;
+    const googleURL = encodeURI(`${GOOGLE_ANALYTICS_ROOT_URL}${Expo.Constants.deviceId}&cd=${page}&cd1=${groupName}&cd2=${feedbackId}&an=Suggestion%20Box`);
     fetch(googleURL, options)
       .catch(error => console.log('Error caught in sendGoogleAnalytics', error));
   }
