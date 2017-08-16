@@ -21,22 +21,23 @@ def read_in():
 def main():
     #get our data as an array from read_in()
     line = read_in()
+    # Parse data
     fields = ['text', 'category']
-    # get data here
-    test_data = pd.read_csv('stanford_test_data2.csv', usecols=fields)
+    test_data = pd.read_csv('stanford_training_data.csv', usecols=fields)
 
+    # Create model
     pipeline = Pipeline(steps=[
         ('bow', CountVectorizer(analyzer=clean_space)),
         ('tfidf', TfidfTransformer()),
         ('classifer', MultinomialNB())
     ])
-
+    # Train model
     pipeline.fit(test_data['text'],test_data['category'])
-    # Fit
-    lines_sum = pipeline.predict([line])
 
-    #return the sum to the output stream
-    print(lines_sum[0])
+    # Predict
+    predicted_category_array = pipeline.predict([line])
+
+    print(predicted_category_array[0])
 
 #start process
 if __name__ == '__main__':

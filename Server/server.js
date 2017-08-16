@@ -601,17 +601,16 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
     if (err) res.status(400).send('Authorization failed');
     else {
       // Check if the feedback requires approval
-      const { groupId, userId } = decoded;
-      let connectionString = `SELECT feedbackRequiresApproval, groupName FROM groups WHERE id=?`;
-      connection.query(connectionString, [groupId], (err, rows) => {
-        if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
+      const { groupId } = decoded;
+      const connectionString = 'SELECT feedbackRequiresApproval, groupName FROM groups WHERE id=?';
+      connection.query(connectionString, [groupId], (err1, rows) => {
+        if (err1) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
-          let { text, imageURL, category } = req.body.feedback;
-          console.log(groupId)
+          const { text, imageURL, category } = req.body.feedback;
           if (!category && groupId === 1) {
-            predictCategory(text, (category1) => submitFeedbackHelper(rows, res, decoded, { text, imageURL, category: category1 }));
+            predictCategory(text, predictedCategory => submitFeedbackHelper(rows, res, decoded, { text, imageURL, category: predictedCategory }));
           } else {
-            submitFeedbackHelper(rows, res, decoded, { text, imageURL, category})
+            submitFeedbackHelper(rows, res, decoded, { text, imageURL, category });
           }
         }
       });
