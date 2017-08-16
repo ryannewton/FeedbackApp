@@ -609,7 +609,7 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
           let { text, imageURL, category } = req.body.feedback;
           console.log(groupId)
           if (!category && groupId === 1) {
-            predictCategory(text, (category1) => submitFeedbackHelper(rows, res, decoded, { text, imageURL, category: category1 }));
+            predictCategory(text, (predicted_category) => submitFeedbackHelper(rows, res, decoded, { text, imageURL, category: predicted_category }));
           } else {
             submitFeedbackHelper(rows, res, decoded, { text, imageURL, category})
           }
