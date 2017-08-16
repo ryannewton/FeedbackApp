@@ -32,23 +32,23 @@ export const updateInviteEmails = emails => (
 export const sendInviteEmail = (email, name) => (
   (dispatch, getState) => {
     const { groupName } = getState().group;
-    http.post('/sendInviteEmail', { groupName, email, name })
-    .catch(() => console.error('/sendInviteEmail failed'))
+    http.post('/sendInviteEmails', { groupName, email, name })
+    .catch(() => console.error('/sendInviteEmails failed'))
   }
 );
 
 export const sendWelcomeEmail = email => (
   (dispatch, getState) => {
     const { groupName } = getState().group;
-    http.post('/sendWelcomeEmails', { groupName, email })
-    .catch(() => console.error('/sendWelcomeEmails failed'))
+    http.post('/sendWelcomeEmail', { groupName, email })
+    .catch(() => console.error('/sendWelcomeEmail failed'))
   }
 );
 
-export const createGroup = (groupName, navigateToNext) => (
+export const createGroup = (groupName, email, navigateToNext) => (
   (dispatch, getState) => {
     dispatch({ type: CREATING_GROUP });
-    http.post('/createGroup', { groupName })
+    http.post('/createGroup', { groupName, email })
     .then(() => {
       navigateToNext();
       dispatch({ type: CREATED_GROUP });

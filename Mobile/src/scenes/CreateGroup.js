@@ -8,7 +8,7 @@ import { Icon } from 'react-native-elements';
 
 // Import components and action creators
 import { Card, CardSection, Input, Button, Spinner, Text } from '../components/common';
-import { createGroup, sendGoogleAnalytics } from '../actions';
+import { createGroup, sendGoogleAnalytics, sendWelcomeEmail } from '../actions';
 import loadOnLaunch from '../reducers/load_on_launch';
 import styles from '../styles/scenes/AuthorizeStyles';
 
@@ -73,8 +73,7 @@ class CreateGroup extends Component {
     else {
       this.setState({ error: '' });
       Keyboard.dismiss();
-      this.props.sendInviteEmail(this.state.email);
-      this.props.createGroup(this.state.groupName, () => this.props.navigation.navigate('InviteGroupUsers', 'Invite Friends'));
+      this.props.createGroup(this.state.groupName, this.props.auth.email, () => this.props.navigation.navigate('InviteGroupUsers', 'Invite Friends'));
     }
   }
 
@@ -130,4 +129,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { createGroup, sendGoogleAnalytics })(CreateGroup);
+export default connect(mapStateToProps, { createGroup, sendGoogleAnalytics, sendWelcomeEmail })(CreateGroup);
