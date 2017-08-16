@@ -127,7 +127,7 @@ class FeedbackList extends Component {
       return this.state.filterCategory === item.status;
     });
     if (this.props.feedback.filterMethod === 'New Feedback' || this.props.feedback.filterMethod === 'all') {
-      return categorizedFeedbackList.sort((a,b) => new Date(b.date).getTime() - new Date(a.date));
+      return categorizedFeedbackList.sort((a,b) => new Date(b.date) - new Date(a.date));
     }
     return categorizedFeedbackList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
     // if (this.state.filterCategory !== 'new') {
