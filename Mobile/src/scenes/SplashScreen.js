@@ -23,7 +23,7 @@ class SplashScreen extends Component {
       cleared: false,
     };
 
-    props.sendGoogleAnalytics('LoadingScreen', 'Not Logged In');
+    props.sendGoogleAnalytics('LoadingScreen');
   }
 
   componentDidMount() {

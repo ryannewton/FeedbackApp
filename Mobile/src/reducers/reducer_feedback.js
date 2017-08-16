@@ -6,6 +6,7 @@ import {
   UPDATE_FEEDBACK_TYPE,
   UPDATE_ERROR_MESSAGE,
   EDITING_FEEDBACK,
+  CLEAR_FEEDBACK_ON_STATE,
   REQUESTED_FEEDBACK,
   RECEIVED_FEEDBACK,
   SUBMITTING_FEEDBACK,
@@ -32,6 +33,7 @@ import {
   AUTHORIZE_USER_FAIL,
   AUTHORIZE_USER_SUCCESS,
   DELETE_FEEDBACK,
+  ROUTE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -53,10 +55,12 @@ const INITIAL_STATE = {
   searchQuery: 'Search',
   searchInProgress: false,
   refreshing: false,
+  route: false,
   loading: false,
   loadingImage: false,
   errorMessage: '',
   editing: false,
+
 };
 
 function filterAndOrder(list) {
@@ -88,6 +92,9 @@ export default (state = INITIAL_STATE, action) => {
 
     case EDITING_FEEDBACK:
       return { ...state, editing: true };
+
+    case CLEAR_FEEDBACK_ON_STATE:
+      return { ...INITIAL_STATE, list: state.list, lastPulled: state.lastPulled };
 
     case RECEIVED_FEEDBACK: {
       const list = filterAndOrder(action.payload.list);
@@ -213,6 +220,9 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, list: newList };
     }
 
+    case ROUTE: {
+      return { ...state, route: true};
+    }
     case LOG_OUT_USER:
       return INITIAL_STATE;
 

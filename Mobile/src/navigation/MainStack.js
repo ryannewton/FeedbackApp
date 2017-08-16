@@ -39,6 +39,7 @@ const MainStack = StackNavigator({
         marginTop: styles.header.marginTop,
         backgroundColor: '#00A2FF',
       },
+      headerRight: <FeedbackDetailsHeaderButtons navigation={navigation} />,
       headerTintColor: 'white',
     }),
   },

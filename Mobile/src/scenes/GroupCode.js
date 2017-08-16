@@ -26,7 +26,7 @@ class GroupCode extends Component {
       cleared: false,
     };
 
-    props.sendGoogleAnalytics('Group Code', 'Not Logged In');
+    props.sendGoogleAnalytics('Group Code');
   }
 
   componentWillReceiveProps(nextProps) {

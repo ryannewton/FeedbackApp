@@ -29,7 +29,7 @@ class Authorize extends Component {
     this.route = this.route.bind(this);
     this.authorizeUser = this.authorizeUser.bind(this);
 
-    props.sendGoogleAnalytics('Group Code', 'Not Logged In');
+    props.sendGoogleAnalytics('Group Code');
   }
 
   componentWillReceiveProps(nextProps) {

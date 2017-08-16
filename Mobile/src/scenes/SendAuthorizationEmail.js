@@ -23,7 +23,7 @@ class SendAuthorizationEmail extends Component {
       email: '',
     };
 
-    props.sendGoogleAnalytics('SendAuthEmail', 'Not Logged In');
+    props.sendGoogleAnalytics('SendAuthEmail');
   }
 
   sendAuthorizationEmail = () => {

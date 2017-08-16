@@ -15,12 +15,12 @@ import styles from '../styles/scenes/SettingsStyles';
 class Settings extends Component {
   constructor(props) {
     super(props);
-    props.sendGoogleAnalytics('Settings', props.group.groupName);
+    props.sendGoogleAnalytics('Settings');
   }
 
   render() {
     const { container, signoutButton } = styles;
-    const { language } = this.props.user
+    const { language } = this.props.user;
     return (
       <View style={container}>
         {/* To do: add change password option*/}

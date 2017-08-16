@@ -28,12 +28,12 @@ class InviteGroupUsers extends Component {
   }
 
   componentDidMount() {
-    this.props.sendGoogleAnalytics('Invite group users', 'Not Logged In');
+    this.props.sendGoogleAnalytics('Invite group users');
   }
   renderSentNotification() {
     if (this.state.showSentNotfication) {
       return (
-        <Text>
+        <Text style={[styles.errorTextStyle, {color:'#48D2A0'}]}>
           Sent!
         </Text>
       );
@@ -43,7 +43,7 @@ class InviteGroupUsers extends Component {
   renderErrorMessage() {
     if (this.state.showErrorMessage) {
       return (
-        <Text>
+        <Text style={styles.errorTextStyle}>
           Please enter a valid email address.
         </Text>
       );

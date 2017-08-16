@@ -18,6 +18,7 @@ const upload = multer(); // for parsing multipart/form-data
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 const nodemailer = require('nodemailer'); // HTML email library
 const MailComposer = require('nodemailer/lib/mail-composer');
+const spawn = require('child_process').spawn;
 
 const app = express();
 app.use(bodyParser.json()); // for parsing application/json
@@ -99,6 +100,16 @@ function convertImgs(file, quality) {
 
   return promise;
 }
+
+function predictCategory(feedback, callback) {
+  const py = spawn('python3', ['compute_input.py']);
+  let dataString = '';
+  py.stdout.on('data', data => dataString += data.toString());
+  py.stdout.on('end', () => callback(dataString));
+  py.stdin.write(JSON.stringify(feedback));
+  py.stdin.end();
+}
+
 
 // Sends Email from AWS SES
 function sendEmailSES(toEmails, fromEmail, subjectLine, bodyText) {
@@ -465,45 +476,33 @@ function insertText(res, targetId, type, text, userId) {
     });
   });
 }
-
-// SUBMIT
-app.post('/submitFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) res.status(400).send('Authorization failed');
-    else {
-      // Check if the feedback requires approval
-      const { groupId, userId } = decoded;
-      let connectionString = `SELECT feedbackRequiresApproval, groupName FROM groups WHERE id=?`;
-      connection.query(connectionString, [groupId], (err, rows) => {
-        if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
-        else {
-          const { text, imageURL, category } = req.body.feedback;
-
-          // Insert the feedback into the database
-          const approved = !rows[0].feedbackRequiresApproval;
-          connectionString = 'INSERT INTO feedback SET ?';
-          connection.query(connectionString,
-            {
-              groupId,
-              userId,
-              text,
-              imageURL,
-              approved,
-              category,
-            }, (err, result) => {
-              if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
-              else {
-                let adminEmail = [];
-                if (groupId === 9) {
-                  adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu', 'alicezhy@stanford.edu'];
-                }
-                if (groupId === 3) {
-                  adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu', 'alicezhy@stanford.edu'];
-                }
-                // Insert text
-                insertText(res, result.insertId, 'feedback', text, userId);
-                // Send Email to Admins
-                const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', ...adminEmail];
+function submitFeedbackHelper(rows, res, decoded, feedback) {
+  const approved = !rows[0].feedbackRequiresApproval;
+  const { groupId, userId } = decoded;
+  let { text, imageURL, category } = feedback;
+  let connectionString = 'INSERT INTO feedback SET ?';
+  connection.query(connectionString,
+    {
+      groupId,
+      userId,
+      text,
+      imageURL,
+      approved,
+      category,
+    }, (err, result) => {
+      if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3156');
+      else {
+        let adminEmail = [];
+        if (groupId === 9) {
+          adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu'];
+        }
+        if (groupId === 3) {
+          adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu'];
+        }
+        // Insert text
+        insertText(res, result.insertId, 'feedback', text, userId);
+        // Send Email to Admins
+        const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', ...adminEmail];
 				const subjectLine = 'An new feedback has been submitted to your group' + rows[0].groupName;
   				const bodyText = `
  <!doctype html>
@@ -589,11 +588,30 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
   </body>
   </html>
 `;
-                sendEmail(toEmails, defaultFromEmail, subjectLine, bodyText);
-                res.json({ id: result.insertId });
-              }
-            }
-          );
+        sendEmail(toEmails, defaultFromEmail, subjectLine, bodyText);
+        res.json({ id: result.insertId });
+      }
+    }
+  );
+}
+
+// SUBMIT
+app.post('/submitFeedback', upload.array(), (req, res) => {
+  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
+    if (err) res.status(400).send('Authorization failed');
+    else {
+      // Check if the feedback requires approval
+      const { groupId } = decoded;
+      const connectionString = 'SELECT feedbackRequiresApproval, groupName FROM groups WHERE id=?';
+      connection.query(connectionString, [groupId], (err1, rows) => {
+        if (err1) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
+        else {
+          const { text, imageURL, category } = req.body.feedback;
+          if (!category && groupId === 1) {
+            predictCategory(text, predictedCategory => submitFeedbackHelper(rows, res, decoded, { text, imageURL, category: predictedCategory }));
+          } else {
+            submitFeedbackHelper(rows, res, decoded, { text, imageURL, category });
+          }
         }
       });
     }
@@ -916,7 +934,7 @@ app.post('/sendWelcomeEmail', upload.array(), (req, res) => {
             <td valign="top" style="padding-top: 9px;">
                 <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                     <tbody><tr>
-                        
+
                         <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
 <br>
 <em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>

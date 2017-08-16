@@ -47,7 +47,7 @@ class FeedbackSubmit extends Component {
       imageHeight: null,
     }
 
-    props.sendGoogleAnalytics('FeedbackSubmit', props.group.groupName)
+    props.sendGoogleAnalytics('FeedbackSubmit');
   }
 
   componentWillUpdate(nextProps, nextState) {

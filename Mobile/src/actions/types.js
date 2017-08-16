@@ -38,6 +38,7 @@ export const UPDATE_CATEGORY = 'update_category';
 export const UPDATE_FEEDBACK_TYPE = 'update_feedback_type';
 export const UPDATE_ERROR_MESSAGE = 'update_error_message';
 export const EDITING_FEEDBACK = 'editing_feedback';
+export const CLEAR_FEEDBACK_ON_STATE = 'clear_feedback_on_state';
 export const REQUESTED_FEEDBACK = 'requested_feedback';
 export const RECEIVED_FEEDBACK = 'received_feedback';
 export const SUBMITTING_FEEDBACK = 'submit_feedback';
@@ -57,6 +58,7 @@ export const ADD_FEEDBACK_NO_OPINION = 'add_feedback_no_opinion';
 export const REMOVE_FEEDBACK_NO_OPINION = 'remove_feedback_no_opinion';
 export const REMOVE_IMAGE = 'remove_image';
 export const DELETE_FEEDBACK = 'delete_feedback';
+export const ROUTE = 'route';
 
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';
