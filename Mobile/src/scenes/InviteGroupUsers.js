@@ -79,7 +79,7 @@ class InviteGroupUsers extends Component {
             iconColor={'#00A2FF'}
             inputStyle={{ color: 'black' }}
             value={this.state.name}
-            onChangeText={email => this.setState({ name })}
+            onChangeText={name => this.setState({ name })}
             keyboardType={'email-address'}
 
             // TextInput props
@@ -88,7 +88,7 @@ class InviteGroupUsers extends Component {
             style={{ flex:9, height:65, margin: 10, backgroundColor:'white' }}
             maxLength={100}
           />
-        </View>        
+        </View>
         <View style={{ flexDirection: 'row' }}>
           <Fumi
             label={"Enter an email here..."}
