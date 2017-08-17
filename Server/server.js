@@ -2157,6 +2157,50 @@ function replyFeedbackEmail({ feedback, message, adminEmail }) {
   return { subjectLine, bodyText };
 }
 
+function surveyEmail({ feedback }) {
+  const subjectLine = `Feedback completed. Tell us what you think!`;
+  const bodyText =
+    `<!doctype html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
+  <head>
+    <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Feedback completed. Tell us what you think!</title>
+   </head>
+
+    <body>
+    <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Your feedback "${feedback.text}" is just marked as comleted by your administrator</span>
+
+        <center>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
+              <tr>
+    <tbody>
+              <tr>
+                <td valign="top" style="background-color: #012234;padding-top: 15px;padding-bottom: 0px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
+    <tbody>
+                                                            <tr><img align="left" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/3acab16f-2e16-4e8d-9ae6-efc183904d8c.png" width="70" style="max-width: 70px;padding-left: 25px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;" /></tr>
+        <tr>
+                        <td valign="top" style="padding-top: 0;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;word-break: break-word;color: #FFFFFF;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
+<p style="margin: 10px 10px;padding: 10px;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your feedback "${feedback.text}" is marked as completed by your group's administrator.</span></span></p>
+
+                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSchqqEcb4BHEdI2HtpBiQZqchAGL-Apic5azhiA2_IG8eS-FQ/viewform?embedded=true" width="760" height="1480" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
+
+<em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
+ 
+                        </td>
+                    </tr>
+                </tbody></table>
+            </td>
+              </tr>
+            </table>
+        </center>
+</body>
+</html>
+    `;
+  return { subjectLine, bodyText };
+}
+
 app.listen(8081, () => {
   console.log('Suggestion Box Server listening on port 8081!');
 });
