@@ -15,6 +15,7 @@ import {
   SAVE_GROUP_CODE,
   NEEDS_GROUP_CODE,
 } from './types';
+import errorHandling from '../errorHandling';
 
 // Import functions
 import loadOnLaunch from '../reducers/load_on_launch';
@@ -87,7 +88,7 @@ export const verifyEmail = (email, code) => (
     .catch((error) => {
       console.log('Error in verifyEmail()');
       console.log('Error: ', error);
-      dispatch(authorizeUserFail('There was an error verifying your email'));
+      dispatch(authorizeUserFail(errorHandling(error)));
     });
   }
 );
@@ -110,7 +111,7 @@ export const authorizeUser = (email, code, groupSignupCode) => (
     .catch((error) => {
       console.log('Error running authorizeUser()');
       console.log('Error: ', error);
-      dispatch(authorizeUserFail('Something went wrong on our end. Please try again.'));
+      dispatch(authorizeUserFail(errorHandling(error)));
     });
   }
 );
