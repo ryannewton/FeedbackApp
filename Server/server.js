@@ -301,12 +301,12 @@ function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode, languag
                 <tr>
                   <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
       <tbody>
+      <tr><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></tr>
           <tr>
               <td valign="top">
                   <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                       <tbody><tr>
 
-                          <p><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></p>
                           <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 
                       </tr>
@@ -525,12 +525,13 @@ function submitFeedbackHelper(rows, res, decoded, feedback) {
                 <tr>
                   <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
       <tbody>
+            <tr><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></tr>
+
           <tr>
               <td valign="top">
                   <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                       <tbody><tr>
 
-                          <p><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></p>
                           <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 
                       </tr>
@@ -908,11 +909,12 @@ app.post('/sendWelcomeEmail', upload.array(), (req, res) => {
               <tr>
                 <td valign="top" id="templateHeader" style="background-color: #61b8eb;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;border-top: 0;border-bottom: 0;padding-top: 20px;padding-bottom: 40px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
     <tbody>
+          <tr><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></tr>
+
         <tr>
             <td valign="top" style="padding-top: 9px;">
                 <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                     <tbody><tr>
-                        <p><img align="left" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/3acab16f-2e16-4e8d-9ae6-efc183904d8c.png" width="70" style="max-width: 70px;padding-left: 25px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;" /></p>
                         <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 <p style="margin: 10px 0;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Thank you for join Suggestion box!</span></span></p>
 <p style="margin: 10px 0;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;font-weight: bold"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">You just created a new group: </span><span style="font-size:25px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">${groupName}</span></span></p>
@@ -993,11 +995,12 @@ app.post('/sendInviteEmails', upload.array(), (req, res) => {
               <tr>
                 <td valign="top" id="templateHeader" style="background-color: #61b8eb;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;border-top: 0;border-bottom: 0;padding-top: 20px;padding-bottom: 40px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
     <tbody>
+          <tr><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></tr>
+
         <tr>
             <td valign="top" style="padding-top: 9px;">
                 <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
                     <tbody><tr>
-                        <p><img align="left" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/3acab16f-2e16-4e8d-9ae6-efc183904d8c.png" width="70" style="max-width: 70px;padding-left: 25px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;" /></p>
                         <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
 <p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your friend ${name} has invited you to</span></span></p>
 <p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif;font-size: 28px;font-weight: bold;">Join '${rows[0].groupSignupCode}' on Suggestion Box</span></span></p>
@@ -2183,9 +2186,7 @@ function surveyEmail({ feedback }) {
         <tr>
                         <td valign="top" style="padding-top: 0;padding-right: 0px;padding-bottom: 0px;padding-left: 0px;word-break: break-word;color: #FFFFFF;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
 <p style="margin: 10px 10px;padding: 10px;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your feedback "${feedback.text}" is marked as completed by your group's administrator.</span></span></p>
-
-                        <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSchqqEcb4BHEdI2HtpBiQZqchAGL-Apic5azhiA2_IG8eS-FQ/viewform?embedded=true" width="760" height="1480" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
-
+<iframe src="https://docs.google.com/forms/d/e/1FAIpQLSdKaZ2BWPH6SSnXyIJ3cOugtfDcSq6_a1Nx8-ZA-vg4jCiaWA/viewform?embedded=true" width="760" height="1480" frameborder="0" marginheight="0" marginwidth="0">Loading...</iframe>
 <em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
  
                         </td>
