@@ -42,6 +42,7 @@ import {
 
 // Import constants
 import { http, ROOT_STORAGE, ROOT_URL } from '../constants';
+import errorHandling from '../errorHandling';
 
 export const updateFeedbackText = feedback => ({
   type: UPDATE_FEEDBACK_TEXT,
@@ -86,8 +87,7 @@ export const pullFeedback = token => (
       dispatch({ type: RECEIVED_FEEDBACK, payload: { list: response.data, lastPulled: new Date() } });
     })
     .catch((error) => {
-      console.log('Error running pullFeedback()');
-      console.log('Error: ', error);
+      errorHandling(error, 'pullFeedback()');
       dispatch({ type: AUTHORIZE_USER_FAIL, payload: '' });
     });
   }
@@ -115,11 +115,7 @@ export const submitFeedbackToServer = (feedbackRequiresApproval, text, type, ima
       }
       dispatch(addFeedbackUpvote(feedback));
     })
-    .catch((error) => {
-      console.log('Error running submitFeedbackToServer()');
-      console.log('Error: ', error);
-      dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: 'Something went wrong on our end. Please try again.' });
-    });
+    .catch(error => dispatch({ type: SUBMIT_FEEDBACK_FAIL, payload: errorHandling(error, 'submitFeedbackToServer()') }));
   }
 );
 
@@ -132,11 +128,7 @@ export const updateFeedbackToServer = (feedbackRequiresApproval, text, type, ima
 
     http.post('/updateFeedback/', { feedback, authorization: token })
     .then(() => dispatch({ type: UPDATE_FEEDBACK_SUCCESS, payload: feedback }))
-    .catch((error) => {
-      console.log('Error running updateFeedbackToServer()');
-      console.log('Error: ', error);
-      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: 'Something went wrong on our end. Please try again.' });
-    });
+    .catch(error => dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorHandling(error, 'updateFeedback()') }));
   }
 );
 
@@ -157,13 +149,8 @@ export const addFeedbackUpvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
-    .then(() => {
-      dispatch(sendGoogleAnalytics('Feedback Upvote', feedback.id));
-    })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in addFeedbackUpvote in actions_feedback', errorMessage);
-    });
+    .then(() => dispatch(sendGoogleAnalytics('Feedback Upvote', feedback.id)))
+    .catch(error => errorHandling(error, 'addFeedbackUpvote()'));
   }
 );
 
@@ -175,10 +162,7 @@ export const removeFeedbackUpvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, upvote: 1, downvote: 0, noOpinion: 0, authorization: token })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in removeFeedbackUpvote in actions_feedback', errorMessage);
-    });
+    .catch((error) => errorHandling(error, 'removeFeedbackUpvote()'));
   }
 );
 
@@ -200,10 +184,7 @@ export const addFeedbackNoOpinion = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, noOpinion: 1, upvote: 0, downvote: 0, authorization: token })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in addFeedbackNoOpinion in actions_feedback', errorMessage);
-    });
+    .catch(error => errorHandling(error, 'addFeedbackNoOpinion'));
   }
 );
 
@@ -215,10 +196,7 @@ export const removeFeedbackNoOpinion = feedback => (
 
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, noOpinion: 1, upvote: 0, downvote: 0, authorization: token })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in removeFeedbackNoOpinion in actions_feedback', errorMessage);
-    });
+    .catch(error => errorHandling(error, 'removeFeedbackNoOpinion()'));
   }
 );
 
@@ -238,13 +216,8 @@ export const addFeedbackDownvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/submitFeedbackVote', { feedback, upvote: 0, downvote: 1, noOpinion: 0, authorization: token })
-    .then(() => {
-      dispatch(sendGoogleAnalytics('Feedback Downvote', feedback.id));
-    })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in addFeedbackDownvote in actions_feedback', errorMessage);
-    });
+    .then(() => dispatch(sendGoogleAnalytics('Feedback Downvote', feedback.id)))
+    .catch(error => errorHandling(error, 'addFeedbackDownvote()'));
   }
 );
 
@@ -256,10 +229,7 @@ export const removeFeedbackDownvote = feedback => (
 
     const token = getState().auth.token;
     http.post('/removeFeedbackVote', { feedback, upvote: 0, downvote: 1, noOpinion: 0, authorization: token })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in removeFeedbackDownvote in actions_feedback', errorMessage);
-    });
+    .catch(error => errorHandling(error, 'removeFeedbackDownvote()'));
   }
 );
 
@@ -337,13 +307,7 @@ export const deleteFeedback = feedback1 => (
     let feedback = { ...feedback1, status: 'deleted' };
 
     http.post('/updateFeedback/', { feedback, authorization: token })
-    .then((response) => {
-      dispatch({ type: DELETE_FEEDBACK, payload: feedback1 });
-    })
-    .catch((error) => {
-      const errorMessage = error.response ? error.response.data : error;
-      console.log('Error in deleteFeedback in actions_feedback', error);
-      dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorMessage });
-    });
+    .then(response => dispatch({ type: DELETE_FEEDBACK, payload: feedback1 }))
+    .catch(error => dispatch({ type: UPDATE_FEEDBACK_FAIL, payload: errorHandling(error, 'deleteFeedback()') }));
   }
 );
