@@ -12,11 +12,27 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
   },
-  	categoryText:{
-    textAlign:'center',
-    color:'white',
-    fontSize:16,
-    margin:5,
+  categoryText: {
+    textAlign: 'center',
+    color: 'white',
+    fontSize: 16,
+    margin: 5,
+    paddingTop: 6,
+    fontWeight: '400',
+  },
+  categoryTextSelected: {
+    fontWeight: '800',
+    color: '#00A2FF',
+  },
+  statusSelector: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingTop: 3,
+    paddingBottom: 5,
+  },
+  statusSelectorSelected: {
+    backgroundColor: 'white',
   },
 });
 

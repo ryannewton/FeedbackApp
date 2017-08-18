@@ -59,6 +59,7 @@ export const REMOVE_FEEDBACK_NO_OPINION = 'remove_feedback_no_opinion';
 export const REMOVE_IMAGE = 'remove_image';
 export const DELETE_FEEDBACK = 'delete_feedback';
 export const ROUTE = 'route';
+export const CHANGE_SORT_METHOD = 'change_sort_method';
 
 // User
 export const LOAD_DO_NOT_DISPLAY_LIST = 'load_do_not_display_list';

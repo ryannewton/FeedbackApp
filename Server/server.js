@@ -101,14 +101,14 @@ function convertImgs(file, quality) {
   return promise;
 }
 
-function predictCategory(feedback, callback) {
-  const py = spawn('python3', ['compute_input.py']);
-  let dataString = '';
-  py.stdout.on('data', data => dataString += data.toString());
-  py.stdout.on('end', () => callback(dataString));
-  py.stdin.write(JSON.stringify(feedback));
-  py.stdin.end();
-}
+// function predictCategory(feedback, callback) {
+//   const py = spawn('python3', ['compute_input.py']);
+//   let dataString = '';
+//   py.stdout.on('data', data => dataString += data.toString());
+//   py.stdout.on('end', () => callback(dataString));
+//   py.stdin.write(JSON.stringify(feedback));
+//   py.stdin.end();
+// }
 
 
 // Sends Email from AWS SES
@@ -608,11 +608,12 @@ app.post('/submitFeedback', upload.array(), (req, res) => {
         if (err1) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - 3112');
         else {
           const { text, imageURL, category } = req.body.feedback;
-          if (!category && groupId === 1) {
-            predictCategory(text, predictedCategory => submitFeedbackHelper(rows, res, decoded, { text, imageURL, category: predictedCategory }));
-          } else {
-            submitFeedbackHelper(rows, res, decoded, { text, imageURL, category });
-          }
+          submitFeedbackHelper(rows, res, decoded, { text, imageURL, category });
+          // if (!category && groupId === 1) {
+          //   predictCategory(text, predictedCategory => submitFeedbackHelper(rows, res, decoded, { text, imageURL, category: predictedCategory }));
+          // } else {
+          //   submitFeedbackHelper(rows, res, decoded, { text, imageURL, category });
+          // }
         }
       });
     }

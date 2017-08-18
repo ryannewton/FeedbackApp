@@ -9,7 +9,7 @@ import translate from '../../translation'
 
 // Import components, styles, and actions
 import { Button } from '../../components/common';
-import { changeFilterMethod, setSearchQuery, searchInProgress } from '../../actions';
+import { changeFilterMethod, changeSortMethod, setSearchQuery, searchInProgress } from '../../actions';
 import SearchInput from './SearchInput';
 import SendInviteTextButton from './SendInviteTextButton';
 import styles from '../../styles/components/SearchBarStyles';
@@ -44,8 +44,8 @@ class FeedbackSubmitHeader extends Component {
           <Text style={{ color:'white', fontSize: 25}}> Filter By: </Text>
           {this.renderFilterButtons()}
           <Text style={{ color:'white', fontSize: 25}}> Sort By: </Text>
-          <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('New Feedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> New Feedback </Button>
-          <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('Top Feedback'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> Top Feedback </Button>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('New'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> New Feedback </Button>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('Top'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> Top Feedback </Button>
           <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10, marginTop: 10}}> Clear </Button>
         </Modal>
       </View>
@@ -173,9 +173,9 @@ class FeedbackSubmitHeader extends Component {
       return (
         <View>
           <Button key={'all'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
-          <Button key={'this_week'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('this_week')}> This Week </Button>
+          <Button key={'thisWeek'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('thisWeek')}> This Week </Button>
           <Button key={'today'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>
-          <Button  key={'my_feedback'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('my_feedback')}> My Feedback </Button>
+          <Button  key={'myFeedback'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('myFeedback')}> My Feedback </Button>
         </View>
       );
     }
@@ -245,4 +245,4 @@ const mapStateToProps = (state) => {
   return { feedback, language, group };
 };
 
-export default connect(mapStateToProps, { changeFilterMethod, setSearchQuery, searchInProgress })(FeedbackSubmitHeader);
+export default connect(mapStateToProps, { changeFilterMethod, changeSortMethod, setSearchQuery, searchInProgress })(FeedbackSubmitHeader);

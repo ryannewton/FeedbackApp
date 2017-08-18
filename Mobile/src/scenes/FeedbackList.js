@@ -36,7 +36,7 @@ class FeedbackList extends Component {
     super(props);
 
     this.state = {
-      filterCategory: 'new',
+      selectedStatus: 'queue',
     };
 
     props.sendGoogleAnalytics('FeedbackList');
@@ -44,15 +44,117 @@ class FeedbackList extends Component {
 
   componentDidMount() {
     registerForNotifications(this.props.token);
+
+    Linking.getInitialURL().then((url) => {
+      if (url) {
+        this._handleUrl(url);
+      }
+    }).catch(err => console.error('An error occurred', err));
   }
 
-  partialWordSearch(query) {
-    return this.props.feedback.list.filter((item) => {
-      if (item.text.toLowerCase().indexOf(query.toLowerCase()) === -1) {
-        return false;
+  render() {
+    const filteredFeedback = this.filterFeedback();
+    const sortedFeedback = this.sortFeedback(filteredFeedback);
+
+    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
+    const dataSource = ds.cloneWithRows(sortedFeedback);
+
+    const noFeedbackFound = (
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={this.props.feedback.refreshing}
+            onRefresh={this.refresh}
+          />
+        }
+      >
+        <Image style={[styles.background, { height: SCREEN_HEIGHT - 88 }]} source={nothing} resizeMode="cover" />
+      </ScrollView>
+    );
+
+    const feedbackFound = (
+      <ListView
+        style = {{zIndex: -1}}
+        dataSource={dataSource}
+        removeClippedSubviews={false}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.props.feedback.refreshing}
+            onRefresh={this.refresh}
+          />
+        }
+        renderRow={rowData =>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Details', {
+              feedback: rowData,
+               translate: translate(this.props.user.language).FEEDBACK_DETAIL,
+              }
+            )}
+          >
+            <FeedbackCard
+              feedback={rowData}
+              key={rowData.id}
+              navigate={this.props.navigation.navigate}
+              showResponseTag={Boolean(true)}
+            />
+          </TouchableOpacity>
+        }
+      />
+    );
+
+    return (
+      <View style={styles.container}>
+        {this.renderShowCategory()}
+        {sortedFeedback.length ? feedbackFound : noFeedbackFound}
+        {this.renderFeedbackSubmitButton()}
+      </View>
+    )
+  }
+
+  sortFeedback = (filteredFeedback) => {
+    if (this.props.feedback.sortMethod === 'New') {
+      return filteredFeedback.sort((a,b) => new Date(b.date) - new Date(a.date));
+    } else {
+      return filteredFeedback.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
+    }
+  }
+
+  filterFeedback = () => {
+    // Return a list of feedback given the filter/search value
+    const { filterMethod, list, searchQuery } = this.props.feedback;
+    const { selectedStatus } = this.state;
+    const { userId } = this.props.user;
+
+    return list.filter((feedback) => {
+      if (selectedStatus === 'queue') {
+        if (feedback.status !== 'queue' && feedback.status !== 'new') return false;
+      } else {
+        if (selectedStatus !== feedback.status) return false;
       }
-      return true;
-    })
+      switch (filterMethod) {
+        case 'all':
+          break;
+        case 'search':
+          if (!feedback.text.toLowerCase().includes(searchQuery.toLowerCase())) return false;
+          break;
+        case 'thisWeek':
+          let feedbackDate = new Date(item.date).getTime();
+          const oneWeekAgo = Date.now() - (60000 * 60 * 24 * 7);
+          if (feedbackDate < oneWeekAgo) return false;
+          break;
+        case 'today':
+          feedbackDate = new Date(item.date).getTime();
+          const oneDayAgo = Date.now() - (60000 * 60 * 24);
+          if (feedbackDate < oneDayAgo) return false;
+          break;
+        case 'myFeedback':
+          if (feedback.userId !== userId) return false;
+          break;
+        default:
+          if (feedback.category !== filterMethod) return false;
+      }      
+      return true;    
+    });
   }
 
   _handleUrl = (url) => {
@@ -71,75 +173,6 @@ class FeedbackList extends Component {
     }
   }
 
-  componentDidMount() {
-    Linking.getInitialURL().then((url) => {
-      if (url) {
-        this._handleUrl(url);
-      }
-    }).catch(err => console.error('An error occurred', err));
-  }
-
-
-  curateFeedbackList = () => {
-    // Return a list of feedback given the filter/search value
-    if (this.props.feedback.filterMethod === 'search') {
-      return this.partialWordSearch(this.props.feedback.searchQuery);
-    }
-
-    // Switch through filter methods
-    const filteredFeedbackList = this.props.feedback.list.filter((item) => {
-      const timeFilter = ['all', 'this_week', 'today', 'my_feedback', 'New Feedback', 'Top Feedback'];
-      const { filterMethod } = this.props.feedback;
-      const { date } = item;
-      const feedbackDate = new Date(date).getTime();
-      if (filterMethod !== '' && !timeFilter.includes(filterMethod) && typeof filterMethod !== 'undefined') {
-        return item.category === filterMethod;
-      }
-      switch (filterMethod) {
-        case 'all':
-          return true;
-        case 'this_week': {
-          const oneWeekAgo = Date.now() - (60000 * 60 * 24 * 7);
-          return feedbackDate >= oneWeekAgo;
-        }
-        case 'today': {
-          const oneDayAgo = Date.now() - (60000 * 60 * 24);
-          return feedbackDate >= oneDayAgo;
-        }
-        case 'my_feedback': {
-          return item.userId == this.props.user.userId;
-        }
-        default:
-          return true;
-      }
-    });
-    return filteredFeedbackList;
-  }
-
-  categorizedList = () => {
-    const categorizedFeedbackList = this.curateFeedbackList().filter((item) => {
-      if (this.state.filterCategory === 'complete') {
-        return (this.state.filterCategory === item.status)||(item.status == 'closed');
-      }
-      if (this.state.filterCategory === 'new') {
-        return (this.state.filterCategory === item.status)||(item.status == 'queue')
-      }
-      return this.state.filterCategory === item.status;
-    });
-    if (this.props.feedback.filterMethod === 'New Feedback' || this.props.feedback.filterMethod === 'all') {
-      return categorizedFeedbackList.sort((a,b) => new Date(b.date) - new Date(a.date));
-    }
-    return categorizedFeedbackList.sort((a, b) => (b.upvotes - b.downvotes) - (a.upvotes - a.downvotes));
-    // if (this.state.filterCategory !== 'new') {
-    //   return categorizedFeedbackList;
-    // }
-    // const newFeedback = categorizedFeedbackList.filter((item) => item.status == 'new')
-    //   .sort((a, b) => (new Date(b.date) - new Date(a.date)))
-    // const queueFeedback = categorizedFeedbackList.filter((item) => item.status == 'queue')
-    //   .sort((a, b) => (new Date(b.date) - new Date(a.date)))
-    // return [ ...newFeedback, ...queueFeedback];
-  }
-
   renderShowCategory = () => {
     const { language } = this.props.user;
     const {
@@ -147,25 +180,48 @@ class FeedbackList extends Component {
       INPROCESS,
       COMPLETE,
     } = translate(language)
+    const { selectedStatus } = this.state;
+    const statusSelectorStyle = [styles.statusSelector];
 
-    if (this.props.group.includePositiveFeedbackBox)
-      return null;
+    if (this.props.group.includePositiveFeedbackBox) return null;
 
     return (
       <View style={{ flexDirection:'row', backgroundColor:'#00A2FF'}}>
-        <TouchableOpacity style={{flex:1, justifyContent:'center', alignItems:'center', paddingTop:3, paddingBottom:5, backgroundColor:((this.state.filterCategory == 'new')?'white':null)}} onPress={() => {this.setState({ filterCategory:'new' });}}>
-          <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'new')?'800':'400'), color:((this.state.filterCategory == 'new')?'#00A2FF':'white')}]}>{OPEN}</Text>
+        <TouchableOpacity
+          style={(selectedStatus === 'queue') ? [styles.statusSelector, styles.statusSelectorSelected] : [styles.statusSelector]}
+          onPress={() => {this.setState({ selectedStatus:'queue' });}}
+        >
+          <Text
+            style={(selectedStatus === 'queue') ? [styles.categoryText, styles.categoryTextSelected] : [styles.categoryText]}
+          >
+            {OPEN}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{flex:1, justifyContent:'center', alignItems:'center', paddingTop:3, paddingBottom:5, backgroundColor:((this.state.filterCategory == 'inprocess')?'white':null)}} onPress={() => {this.setState({ filterCategory:'inprocess' });}}>
-          <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'inprocess')?'800':'400'), color:((this.state.filterCategory == 'inprocess')?'#00A2FF':'white')}]}>{INPROCESS}</Text>
+        <TouchableOpacity
+          style={(selectedStatus === 'inprocess') ? [styles.statusSelector, styles.statusSelectorSelected] : [styles.statusSelector]}
+          onPress={() => {this.setState({ selectedStatus:'inprocess' });}}
+        >
+          <Text
+            style={(selectedStatus === 'inprocess') ? [styles.categoryText, styles.categoryTextSelected] : [styles.categoryText]}
+          >
+            {INPROCESS}
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={{flex:1, justifyContent:'center', alignItems:'center', paddingTop:3, paddingBottom:5, backgroundColor:((this.state.filterCategory == 'complete')?'white':null)}} onPress={() => {this.setState({ filterCategory:'complete' });}}>
-          <Text style={[styles.categoryText, {paddingTop:6, fontWeight:((this.state.filterCategory == 'complete')?'800':'400'), color:((this.state.filterCategory == 'complete')?'#00A2FF':'white')}]}>{COMPLETE}</Text>
+        <TouchableOpacity
+          style={(selectedStatus === 'complete') ? [styles.statusSelector, styles.statusSelectorSelected] : [styles.statusSelector]}
+          onPress={() => {this.setState({ selectedStatus:'complete' });}}
+        >
+          <Text
+            style={(selectedStatus === 'complete') ? [styles.categoryText, styles.categoryTextSelected] : [styles.categoryText]}
+          >
+            {COMPLETE}
+          </Text>
         </TouchableOpacity>
       </View>
     );
   }
-  _onRefresh() {
+
+  refresh = () => {
     const { token } = this.props;
     this.props.pullFeedback(token);
     this.props.pullSolutions(token);
@@ -183,64 +239,6 @@ class FeedbackList extends Component {
         </TouchableOpacity>
       </View>
     )
-  }
-
-  render() {
-    const ds = new ListView.DataSource({ rowHasChanged: (r1, r2) => r1 !== r2 });
-    const filteredFeedbackList = this.categorizedList();
-    const headerHeight = 80;
-    if (!filteredFeedbackList.length) {
-      return (
-        <View style={styles.container}>
-          {this.renderShowCategory()}
-          <ScrollView
-            refreshControl={
-              <RefreshControl
-                refreshing={this.props.feedback.refreshing}
-                onRefresh={this._onRefresh.bind(this)}
-              />
-            }
-          >
-            <Image style={[styles.background, { height: SCREEN_HEIGHT - headerHeight }]} source={nothing} resizeMode="cover" />
-            </ScrollView>
-            {this.renderFeedbackSubmitButton()}
-        </View>
-      )
-
-    }
-    return (
-      <View style={styles.container}>
-        {this.renderShowCategory()}
-        <ListView
-          style = {{zIndex: -1}}
-          dataSource={ds.cloneWithRows(filteredFeedbackList)}
-          removeClippedSubviews={false}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.props.feedback.refreshing}
-              onRefresh={this._onRefresh.bind(this)}
-            />
-          }
-          renderRow={rowData =>
-            <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Details', {
-                feedback: rowData,
-                 translate: translate(this.props.user.language).FEEDBACK_DETAIL,
-                }
-              )}
-            >
-              <FeedbackCard
-                feedback={rowData}
-                key={rowData.id}
-                navigate={this.props.navigation.navigate}
-                showResponseTag={Boolean(true)}
-              />
-            </TouchableOpacity>
-          }
-        />
-        {this.renderFeedbackSubmitButton()}
-      </View>
-    );
   }
 }
 
