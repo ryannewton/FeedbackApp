@@ -38,6 +38,7 @@ import {
   REMOVE_IMAGE,
   DELETE_FEEDBACK,
   ROUTE,
+  CHANGE_SORT_METHOD,
 } from './types';
 
 // Import constants
@@ -243,6 +244,13 @@ export const searchInProgress = bool => (
 export const changeFilterMethod = method => (
   {
     type: CHANGE_FILTER_METHOD,
+    payload: method,
+  }
+);
+
+export const changeSortMethod = method => (
+  {
+    type: CHANGE_SORT_METHOD,
     payload: method,
   }
 );
