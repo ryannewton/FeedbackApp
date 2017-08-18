@@ -18,6 +18,7 @@ import {
 
 // Import constants
 import { ROOT_STORAGE, GOOGLE_ANALYTICS_ROOT_URL } from '../constants';
+import errorHandling from '../errorHandling';
 
 export const closeInstructions = instructionKey => (
   (dispatch, getState) => {
@@ -110,6 +111,6 @@ export const sendGoogleAnalytics = (page, feedbackId = 'default') => (
 
     const googleURL = encodeURI(`${GOOGLE_ANALYTICS_ROOT_URL}${Expo.Constants.deviceId}&cd=${page}&cd1=${groupName}&cd2=${feedbackId}&cd=3${action}&an=Suggestion%20Box`);
     fetch(googleURL, options)
-      .catch(error => console.log('Error caught in sendGoogleAnalytics', error));
+      .catch(error => errorHandling(error, 'sendGoogleAnalytics()'));
   }
 );

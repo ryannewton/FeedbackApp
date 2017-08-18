@@ -10,16 +10,13 @@ import {
 // Import constants
 import { http } from '../constants';
 import { authorizeUser } from './actions_auth';
+import errorHandling from '../errorHandling';
 
 export const pullGroupInfo = token => (
   dispatch =>
     http.post('/pullGroupInfo', { authorization: token })
-    .then((response) => {
-      dispatch({ type: PULL_GROUP_INFO, payload: response.data });
-    })
-    .catch((error) => {
-      console.log('Error in pullGroupInfo, Error: ', error.response.data);
-    })
+    .then(response => dispatch({ type: PULL_GROUP_INFO, payload: response.data }))
+    .catch(error => errorHandling(error, 'pullGroupInfo()'))
 );
 
 export const updateInviteEmails = emails => (
@@ -33,7 +30,7 @@ export const sendInviteEmail = (email, name) => (
   (dispatch, getState) => {
     const { groupName } = getState().group;
     http.post('/sendInviteEmails', { groupName, email, name })
-    .catch(() => console.error('/sendInviteEmails failed'))
+    .catch(error => errorHandling(error, 'sendInviteEmail()'))
   }
 );
 
@@ -41,7 +38,7 @@ export const sendWelcomeEmail = email => (
   (dispatch, getState) => {
     const { groupName } = getState().group;
     http.post('/sendWelcomeEmail', { groupName, email })
-    .catch(() => console.error('/sendWelcomeEmail failed'))
+    .catch(error => errorHandling(error, 'sendWelcomeEmail()'))
   }
 );
 
@@ -55,9 +52,6 @@ export const createGroup = (groupName, email, navigateToNext) => (
       const { code, email } = getState().auth;
       dispatch(authorizeUser(email, code, groupName));
     })
-    .catch((error) => {
-      console.log('Error in createGroup', error);
-      dispatch({ type: CREATE_GROUP_FAILED, payload: 'Sorry there was an error creating your group' });
-    });
+    .catch(error => errorHandling(error, 'createGroup'));
   }
 );

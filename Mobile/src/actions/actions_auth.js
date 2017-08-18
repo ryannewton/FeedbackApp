@@ -15,6 +15,7 @@ import {
   SAVE_GROUP_CODE,
   NEEDS_GROUP_CODE,
 } from './types';
+import errorHandling from '../errorHandling';
 
 // Import functions
 import loadOnLaunch from '../reducers/load_on_launch';
@@ -36,15 +37,12 @@ export const sendAuthorizationEmail = (email, navigateToNext, language) => (
       navigateToNext();
     })
     .catch((error) => {
-      console.log('Error running sendAuthorizationEmail()');
-      console.log('Error: ', error);
-      dispatch(sendAuthorizationEmailFail());
+      dispatch(sendAuthorizationEmailFail(errorHandling(error, 'sendAuthorizationEmail()')));
     });
   }
 );
 
-export const sendAuthorizationEmailFail = () => {
-  const error = 'Something went wrong on our end.\nPlease try again.';
+export const sendAuthorizationEmailFail = error => {
   return { type: SENT_AUTHORIZATION_EMAIL_FAIL, payload: error };
 };
 
@@ -85,9 +83,7 @@ export const verifyEmail = (email, code) => (
       }
     })
     .catch((error) => {
-      console.log('Error in verifyEmail()');
-      console.log('Error: ', error);
-      dispatch(authorizeUserFail('There was an error verifying your email'));
+      dispatch(authorizeUserFail(errorHandling(error, 'verifyEmail()')));
     });
   }
 );
@@ -107,11 +103,7 @@ export const authorizeUser = (email, code, groupSignupCode) => (
       });
     })
     // If not, show an error message
-    .catch((error) => {
-      console.log('Error running authorizeUser()');
-      console.log('Error: ', error);
-      dispatch(authorizeUserFail('Something went wrong on our end. Please try again.'));
-    });
+    .catch(error => dispatch(authorizeUserFail(errorHandling(error, 'authorizeUser()'))));
   }
 );
 
