@@ -38,4 +38,27 @@ function sendEmail(toEmail, fromEmail, subject, htmlMessage) {
     });
 }
 
-module.exports = { sendEmail, connection };
+// Sends Email from AWS SES
+function sendEmailSES(toEmails, fromEmail, subjectLine, bodyText) {
+  const toEmailsFiltered = toEmails.filter(email => email !== null && email.toLowerCase().slice(0, 11) !== 'admin_test@');
+  const toEmailsProductionCheck = (process.env.production) ? toEmailsFiltered : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
+  ses.sendEmail({
+    Source: fromEmail,
+    Destination: { ToAddresses: toEmailsProductionCheck },
+    Message: {
+      Subject: {
+        Data: subjectLine,
+      },
+      Body: {
+        Text: {
+          Data: bodyText,
+        },
+      },
+    },
+  }
+  , (err) => {
+    if (err) console.log(err);
+  });
+}
+
+module.exports = { sendEmail, connection, sendEmailSES };

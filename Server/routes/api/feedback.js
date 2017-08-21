@@ -3,34 +3,16 @@ const jwt = require('jsonwebtoken'); // For authentication
 const upload = require('multer')(); // for parsing multipart/form-data
 const aws = require('aws-sdk'); // load aws sdk
 const Jimp = require('jimp'); // For image processing
-const MailComposer = require('nodemailer/lib/mail-composer');
 const googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
-const mysql = require('mysql');
-const Expo = require('exponent-server-sdk'); // For sending push notifications
 
 const { defaultFromEmail } = require('../constants');
 const { sendEmail, connection } = require('../helpers');
-
-const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 
 // Image uploading backend
 const s3 = new aws.S3({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
   region: 'us-west-2',
-});
-
-router.post('/saveEmailForDemo', (req, res) => {
-  const email = req.body.email;
-  const connectionString = 'INSERT INTO demoRequest (email) VALUES (?) ON DUPLICATE KEY UPDATE email=?';
-  connection.query(connectionString, [email, email], (err) => {
-    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 9GT5');
-  });
-});
-
-router.post('/test', (req, res) => {
-  console.log('running /test');
-  res.sendStatus(200);
 });
 
 router.post('/uploadPhoto', upload.single('photo'), (req, res) => {
@@ -76,324 +58,6 @@ function convertImgs(file, quality) {
 //   py.stdin.end();
 // }
 
-
-// Sends Email from AWS SES
-function sendEmailSES(toEmails, fromEmail, subjectLine, bodyText) {
-  const toEmailsFiltered = toEmails.filter(email => email !== null && email.toLowerCase().slice(0, 11) !== 'admin_test@');
-  const toEmailsProductionCheck = (process.env.production) ? toEmailsFiltered : ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', 'jbaker1@mit.edu', 'alicezhy@stanford.edu'];
-  ses.sendEmail({
-    Source: fromEmail,
-    Destination: { ToAddresses: toEmailsProductionCheck },
-    Message: {
-      Subject: {
-        Data: subjectLine,
-      },
-      Body: {
-        Text: {
-          Data: bodyText,
-        },
-      },
-    },
-  }
-  , (err) => {
-    if (err) console.log(err);
-  });
-}
-
-function generatePassword(len) {
-  let password = '';
-  let num;
-  // Add random characters to password
-  for (let i = 0; i < len; i++) {
-    // Generate an integer between 33 & 125 (valid ascii chars)
-    num = Math.random() * 10;
-    num = Math.floor(num);
-    password += String(num);
-  }
-  return password;
-}
-
-// SAVE PUSH NOTIFICATION TOKEN
-router.post('/savePushToken', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) {
-      res.status(400).send('Authorization failed');
-    } else {
-      const { pushToken } = req.body;
-      const { userId } = decoded;
-      const connectionString = 'UPDATE users SET pushToken=? WHERE id=?';
-      connection.query(connectionString, [pushToken, userId], (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem with the server - 3611');
-        else res.sendStatus(200);
-      });
-    }
-  });
-});
-
-router.post('/getGroupTreeData', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) res.status(400).send('Authorization failed');
-    else {
-      const { groupId } = decoded;
-      const connectionString =
-      `SELECT id, name, parent
-       FROM locationStructure
-       WHERE groupId=?`;
-      connection.query(connectionString, [groupId], (err, rows) => {
-        if (err) console.log(err, 'here@!@#@');
-        else res.status(200).send(rows);
-      });
-    }
-  });
-});
-
-// SEND PUSH NOTIFICATION
-router.post('/sendPushNotification', upload.array(), (req, res) => {
-  if (req.body.authorization !== 'secretPushNotificationPassword9911') {
-    return res.sendStatus(401);
-  }
-
-  const { message, userEmail } = req.body;
-  const connectionString = 'SELECT pushToken FROM users WHERE email=?';
-
-  connection.query(connectionString, [userEmail], (err, rows) => {
-    if (err) {
-      return res.status(400).send('Sorry, there was a problem with the server - 4511');
-    }
-    if (rows.length === 0) {
-      return res.status(400).send('Could not find user.');
-    }
-    if (!rows[0].pushToken) {
-      return res.status(400).send('Sorry, notifications have not been set up for this user');
-    }
-
-    // Send notification
-    const pushToken = rows[0].pushToken;
-    const expo = new Expo();
-    expo.sendPushNotificationsAsync([{
-      to: pushToken,
-      sound: 'default',
-      body: message,
-      data: { withSome: 'data' }, // Filler; server requires non-empty object
-    }])
-    .then((receipts) => {
-      res.status(200).json({ receipts });
-    })
-    .catch((error) => {
-      res.status(400).send(error);
-    });
-  });
-});
-
-// AUTH
-router.post('/sendAuthorizationEmail', upload.array(), (req, res) => {
-  const { email, language } = req.body;
-
-  // Checks to make sure it is a valid email address
-  const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  if (!re.test(email)) {
-    res.status(400).send('Sorry, this does not appear to be a valid email address :(');
-  } else {
-    // Step #1: Generate a code
-    const code = generatePassword(4);
-    console.log(code);
-
-    // Step #2: Check to see if the user is already in the database
-    const connectionString = `
-      SELECT a.groupId, b.groupSignupCode
-      FROM users a
-      JOIN groups b
-      ON a.groupId = b.id
-      WHERE a.email=?`;
-    connection.query(connectionString, [email], (err, rows) => {
-      if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A2F');
-      else if (!rows.length || !rows[0].groupSignupCode) sendAuthEmailHelper(res, 0, email, code, 0, language);
-      else sendAuthEmailHelper(res, rows[0].groupId, email, code, rows[0].groupSignupCode, language);
-    });
-  }
-});
-
-function sendAuthEmailHelper(res, groupId, email, code, groupSignupCode, language) {
-  // Step #3: Add the email, groupId, code, and timestamp to the database
-  const connectionString = 'INSERT INTO users (groupId, email, passcode, language) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE passcode=?, groupId=?, passcodeTime=NOW(), language=?';
-  connection.query(connectionString, [groupId, email, String(code), language, String(code), groupId, language], (err) => {
-    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - 1A4P');
-    else if (!email.includes('admin_test')) {
-      // Step #4: Send an email with the code to the user (make sure it shows up in notification)
-      sendEmail([email], defaultFromEmail, `Suggestion Box Code: ${code}`, `To complete the signin process, use code: ${code}`);
-      const subjectLine = `Suggestion Box Code: ${code}`;
-      const bodyText = `
-   <!doctype html>
-  <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-    <head>
-      <meta charset="UTF-8">
-          <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Suggestion Box Code: ${code}</title>
-     </head>
-
-      <body>
-      <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Welcome to Suggestion Box!</span>
-
-          <center>
-              <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #fff;">
-                  <tr>
-                      <td align="center" valign="top" id="bodyCell" style="height: 100%;margin: 0;padding: 10px;width: 100%;border-top: 0;">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
-                <tr>
-                  <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-      <tbody>
-      <tr><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></tr>
-          <tr>
-              <td valign="top">
-                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                      <tbody><tr>
-
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
-
-                      </tr>
-                  </tbody></table>
-              </td>
-          </tr>
-      </tbody>
-      <tbody>
-          <tr>
-              <td valign="top" style="padding-top: 9px;">
-                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                      <tbody><tr>
-
-  <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: left;font-weight: normal;font-family:sans-serif;">Hi</p>
-  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Welcome to Suggestion Box!</span></p>
-  <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: normal;font-family:sans-serif;">Use code ${code} to verify your email address</p>
-  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Hope you enjoy our app!</span></p>
-  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box Team</span></p>
-
-                          </td>
-                      </tr>
-                  </tbody></table>
-              </td>
-          </tr>
-      </tbody>
-  </table>
-  </td>
-                </tr>
-                <tr>
-                  <td valign="top" style="background-color: #0081CB;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;padding-top: 15px;padding-bottom: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-      <tbody>
-          <tr>
-              <td valign="top" style="padding-top: 9px;">
-                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                      <tbody><tr>
-
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #fff;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
-  <br>
-  <em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #fff;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
-   
-                          </td>
-                      </tr>
-                  </tbody></table>
-              </td>
-          </tr>
-      </tbody>
-  </table></td>
-                </tr>
-              </table>
-                      </td>
-                  </tr>
-              </table>
-          </center>
-  </body>
-  </html>
-  `;
-      sendEmail([email], defaultFromEmail, subjectLine, bodyText);
-      res.status(200).json(groupSignupCode);
-    } else res.status(200).json(groupSignupCode);
-  });
-}
-
-router.post('/verifyEmail', upload.array(), (req, res) => {
-  const { email, code } = req.body;
-  const connectionString = `
-    SELECT a.id as userId, a.language, b.groupName, b.id as groupId
-    FROM users a
-    LEFT JOIN groups b
-    ON a.groupId = b.id
-    WHERE a.email=?` + ((code === '9911') ? '' : ' AND passcode=?');
-  connection.query(connectionString, [email, code], (err, user) => {
-    if (err) res.status(400).send('Sorry the server is experiencing an error - G2D6');
-    else if (!user.length) res.status(400).send('Sorry, your email verification code is incorrect');
-    else if (!user[0].groupName) res.status(200).json({ needsGroupSignupCode: true });
-    else if (user[0].userId && user[0].groupName && user[0].groupId && user[0].language) res.status(200).json({ needsGroupSignupCode: false, token: generateToken(user[0]) });
-    else res.status(400).send('Sorry the server is experiencing an error - G2D7');
-  });
-});
-
-function generateToken(userInfo) {
-  return jwt.sign(userInfo, process.env.JWT_KEY);
-}
-
-router.post('/authorizeUser', upload.array(), (req, res) => {
-  const { email, code, groupSignupCode } = req.body;
-  // Step #1: Check if the authCode is accurate
-  let connectionString = `
-    SELECT id, groupName
-    FROM groups
-    WHERE groupSignupCode=?`;
-  connection.query(connectionString, [groupSignupCode], (err, group) => {
-    if (err) res.status(400).send('Sorry the server is experiencing an error - 2D6T');
-    else if (!group.length) res.status(400).send('Sorry, your Group Code is incorrect');
-    else {
-      // Step #1: Query the database for the userinfo associated with the email
-      connectionString = `
-        SELECT a.id AS userId, a.language, a.groupId, b.groupName
-        FROM users a
-        LEFT JOIN groups b
-        ON a.groupId = b.id
-        WHERE a.email=?` + ((code === '9911') ? '' : ' AND passcode=?');
-      connection.query(connectionString, [email, code], (err, rows) => {
-        if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
-        else if (!rows.length) res.status(400).send('Sorry, your email address or passcode is incorrect');
-        else {
-          connectionString = `
-            UPDATE users
-            SET groupId=?
-            WHERE email=?`;
-          connection.query(connectionString, [group[0].id, email], (err) => {
-            if (err) res.status(400).send('Sorry, the server is experiencing an error - 41H1');
-            else {
-              const groupInfo = rows[0];
-              groupInfo.groupId = group[0].id;
-              groupInfo.groupName = group[0].groupName;
-              res.status(200).json(generateToken(groupInfo));
-            }
-          });
-        }
-      });
-    }
-  });
-});
-
-router.post('/authorizeAdministrator', upload.array(), (req, res) => {
-  // Step #1: Query the database for the groupId associated with the email address, passcode, and admin passcode in req.body
-  const { email, code } = req.body;
-  const connectionString = `
-    SELECT a.id AS userId, a.language, a.groupId, a.admin, b.groupName
-    FROM users a
-    JOIN groups b
-    ON a.groupId = b.id
-    WHERE a.email=? AND b.groupAdminCode=? AND a.admin=1`;
-  connection.query(connectionString, [email, code], (err, rows) => {
-    if (err) res.status(400).send('Sorry, there was a problem with your email or the server is experiencing an error - D69S');
-    else if (rows.length) {
-      // Step #2: If it checks out then create a JWT token and send to the user
-      res.status(200).json(generateToken(rows[0]));
-    } else {
-      res.status(400).send("I'm sorry. The code is inccorect or you have not been designated as an Administrator");
-    }
-  });
-});
-
 function insertText(res, targetId, type, text, userId) {
   const supportedLanguages = ['en', 'es', 'vi', 'zh-cn'];
   supportedLanguages.forEach((language) => {
@@ -418,6 +82,7 @@ function insertText(res, targetId, type, text, userId) {
     });
   });
 }
+
 function submitFeedbackHelper(rows, res, decoded, feedback) {
   const approved = !rows[0].feedbackRequiresApproval;
   const { groupId, userId } = decoded;
@@ -562,46 +227,6 @@ router.post('/submitFeedback', upload.array(), (req, res) => {
   });
 });
 
-router.post('/submitSolution', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) res.status(400).send('Authorization failed');
-    else {
-      // Check if the solution requires approval
-      const { groupId, userId } = decoded;
-      let connectionString = `SELECT solutionsRequireApproval, groupName FROM groups WHERE id=?`;
-      connection.query(connectionString, [groupId], (err, rows) => {
-        if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 0942');
-        else {
-          // Insert the solution into the database
-          const { feedbackId, text } = req.body.solution;
-          const approved = !rows[0].solutionsRequireApproval;
-          connectionString = 'INSERT INTO solutions SET ?';
-          connection.query(connectionString,
-            {
-              feedbackId,
-              userId,
-              text,
-              approved,
-            }, (err, result) => {
-              if (err) res.status(400).send('Sorry, there was a problem with your solution or the server is experiencing an error - 2579');
-              else {
-                // Insert text
-                insertText(res, result.insertId, 'solution', text, userId);
-
-                // Send Email to Moderators
-                const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com'];
-                sendEmail(toEmails, defaultFromEmail, rows[0].groupName + '- Solution: ' + text, 'UserId: ' + userId);
-
-                res.json({ id: result.insertId });
-              }
-            }
-          );
-        }
-      });
-    }
-  });
-});
-
 function submitFeedbackVoteHelper(feedbackId, upvote, downvote, noOpinion, userId, res) {
   const connectionString = 'INSERT INTO feedbackVotes SET ?';
   connection.query(connectionString,
@@ -638,21 +263,6 @@ router.post('/approveFeedback', upload.array(), (req, res) => {
     else {
       const { feedback } = req.body;
       const connectionString = "UPDATE feedback SET approved=1, status='new' WHERE id = ?";
-      connection.query(connectionString, [feedback.id], (err) => {
-        if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
-        else res.sendStatus(200);
-      });
-    }
-  });
-});
-
-// APPROVE FEEDBACK
-router.post('/approveFeedback', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
-    if (err) res.status(400).send('Authorization failed');
-    else {
-      const { feedback } = req.body;
-      const connectionString = 'UPDATE feedback SET approved=1 WHERE feedbackId = ?';
       connection.query(connectionString, [feedback.id], (err) => {
         if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4120');
         else res.sendStatus(200);
@@ -718,19 +328,6 @@ router.post('/updateFeedback', upload.array(), (req, res) => {
   });
 });
 
-// Create a new group
-router.post('/createGroup', upload.array(), (req, res) => {
-  const { groupName } = req.body;
-  const connectionString = `
-  INSERT INTO groups (groupName, groupSignupCode, groupAdminCode, feedbackRequiresApproval, solutionsRequireApproval, showStatus, includePositiveFeedbackBox, date)
-  VALUES (?, ?, ?, 0, 0, 1, 0, NOW())
-  `;
-  connection.query(connectionString, [groupName, groupName, groupName], (err) => {
-    if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 818F');
-    else res.sendStatus(200);
-  });
-});
-
 router.post('/sendWelcomeEmail', upload.array(), (req, res) => {
   const { groupName, email } = req.body;
   const connectionString = `
@@ -792,94 +389,6 @@ router.post('/sendWelcomeEmail', upload.array(), (req, res) => {
                     <tbody><tr>
 
                         <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
-<br>
-<em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
- 
-                        </td>
-                    </tr>
-                </tbody></table>
-            </td>
-        </tr>
-    </tbody>
-</table></td>
-              </tr>
-            </table>
-                    </td>
-                </tr>
-            </table>
-        </center>
-</body>
-</html>
-  `;
-      sendEmail([email], defaultFromEmail, subjectLine, bodyText);
-      res.sendStatus(200);
-    }
-  });
-});
-
-router.post('/sendInviteEmails', upload.array(), (req, res) => {
-  const { groupName, email, name } = req.body;
-  const connectionString = `
-  SELECT groupSignupCode
-  FROM groups
-  WHERE groupName=?
-  `;
-  connection.query(connectionString, [groupName], (err, rows) => {
-    if (err) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 8283');
-    else {
-      const subjectLine = `Join me on Suggestbox Box! - GroupName '${rows[0].groupSignupCode}'`;
-      const bodyText = `
-  <!doctype html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-  <head>
-    <meta charset="UTF-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Join Suggestion Box</title>
-   </head>
-
-    <body>
-    <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Ryan Newton has invited you to join the Suggestion Box group</span>
-
-        <center>
-            <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #FFFFFF;">
-                <tr>
-                    <td align="center" valign="top" id="bodyCell" style="height: 100%;margin: 0;padding: 10px;width: 100%;border-top: 0;">
-            <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
-              <tr>
-                <td valign="top" id="templateHeader" style="background-color: #61b8eb;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;border-top: 0;border-bottom: 0;padding-top: 20px;padding-bottom: 40px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-    <tbody>
-          <tr><img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage"></tr>
-
-        <tr>
-            <td valign="top" style="padding-top: 9px;">
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                    <tbody><tr>
-                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
-<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Your friend ${name} has invited you to</span></span></p>
-<p style="margin: 10px 10px;padding: 0;color: #FFFFFF;font-family: Courier New;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif;font-size: 28px;font-weight: bold;">Join '${rows[0].groupSignupCode}' on Suggestion Box</span></span></p>
-<p style="margin: 10px 10px;padding-top: 20px;color: #FFFFFF;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;"><span style="font-size:18px"><span style="font-family:arial,helvetica neue,helvetica,sans-serif">Download the Suggestion Box App for <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">ios</a> or <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: bold;text-decoration: underline;">android</a>. Login with your email address and use Group Name "${groupName}"</span></span></p>
-
-                        </td>
-                    </tr>
-                </tbody></table>
-            </td>
-        </tr>
-    </tbody>
-</table>
-</td>
-              </tr>
-              <tr>
-                <td valign="top" style="background-color: #012234;padding-top: 15px;padding-bottom: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-    <tbody>
-        <tr>
-            <td valign="top" style="padding-top: 9px;">
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                    <tbody><tr>
-
-                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #FFFFFF;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
-
-                            <a href="https://itunes.apple.com/us/app/collaborative-feedback-app/id1183559556?ls=1&mt=8" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;"><img data-file-id="137253" height="29" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/03d0eede-989a-4f96-a179-e04902bf930b.png" width="100" style="border: 0;height: auto !important;outline: none;text-decoration: none;"></a>  <a href="https://play.google.com/store/apps/details?id=com.feedbackapp" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;"><img data-file-id="137257" height="29" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/ea792423-13da-425f-84a0-f22cf6c57e11.png" width="100" style="border: 0;height: auto !important;outline: none;text-decoration: none;"></a><br>
 <br>
 <em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #FFFFFF;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
  
@@ -1140,7 +649,6 @@ router.post('/softDeleteFeedback', upload.array(), (req, res) => {
   });
 });
 
-
 router.post('/deleteFeedback', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err) => {
     if (err) res.status(400).send('Authorization failed');
@@ -1218,67 +726,6 @@ router.post('/pullFeedback', upload.array(), (req, res) => {
             return row;
           });
           res.status(200).send(adjRows);
-        }
-      });
-    }
-  });
-});
-
-router.post('/pullGroupInfo', upload.array(), (req, res) => {
-  jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
-    if (err) res.status(400).send('Authorization failed');
-    else if (!decoded.userId || !decoded.groupName || !decoded.groupId) res.status(400).send('Token out of date, please re-login');
-    else {
-      const { userId, groupId } = decoded;
-      let connectionString = `
-        SELECT
-          a.id as userId,
-          a.language,
-          b.groupName,
-          b.groupSignupCode,
-          b.feedbackRequiresApproval,
-          b.solutionsRequireApproval,
-          b.showStatus,
-          b.includePositiveFeedbackBox
-        FROM
-          users a
-        JOIN
-          groups b
-        ON
-          a.groupId = b.id
-        WHERE
-          a.id=?`;
-      connection.query(connectionString, [userId], (err1, rows1) => {
-        if (err) {
-          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1345');
-        } else if (!rows1 || !rows1.length) {
-          res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1SDF');
-        } else {
-          connectionString =
-          `SELECT category, categoryOrder
-           FROM categories
-           WHERE groupId=?`;
-          connection.query(connectionString, [groupId], (err2, rows2) => {
-            if (err2) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 1346');
-            else {
-              connectionString =
-              `SELECT location, locationOrder
-               FROM locations
-               WHERE groupId=?`;
-               connection.query(connectionString, [groupId], (err3, rows3) => {
-                 if (err3) res.status(400).send('Sorry, there was a problem - the server is experiencing an error - 4625');
-                 else {
-                   let categories = [];
-                   let locations = [];
-                   rows2.forEach((row) => { categories[row.categoryOrder] = row.category; });
-                   rows3.forEach((row) => { locations[row.locationOrder] = row.location; });
-                   categories = categories.filter(category => category !== undefined);
-                   locations = locations.filter(location => location !== undefined);
-                   res.status(200).send({ groupInfo: rows1[0], categories, locations });
-                 }
-               });
-            }
-          });
         }
       });
     }
@@ -1435,96 +882,6 @@ function clarifyFeedbackEmail({ feedback, message, adminEmail }) {
   <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The moderator responded with this message:</span></p>
   <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
   <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The feedback is not published at this point. Your contact information has been kept confidential. Please respond to ${adminEmail} to clarify your feedback.</span></p>
-  <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
-  <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box</span></p>
-
-                          </td>
-                      </tr>
-                  </tbody></table>
-              </td>
-          </tr>
-      </tbody>
-  </table>
-  </td>
-                </tr>
-                <tr>
-                  <td valign="top" style="background-color: #0081CB;background-image: url(https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/2b689f9f-bb1e-4724-b1ac-33427391a3d1.jpg);background-repeat: no-repeat;background-position: center;background-size: cover;padding-top: 15px;padding-bottom: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-      <tbody>
-          <tr>
-              <td valign="top" style="padding-top: 9px;">
-                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                      <tbody><tr>
-
-                          <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #fff;font-family: Helvetica;font-size: 12px;line-height: 150%;text-align: center;">
-  <br>
-  <em>Copyright © 2017 <a href="http://www.suggestionboxapp.com" target="_blank" style="color: #fff;font-weight: normal;text-decoration: underline;">Suggestion Box</a>, All rights reserved.</em><br>
-   
-                          </td>
-                      </tr>
-                  </tbody></table>
-              </td>
-          </tr>
-      </tbody>
-  </table></td>
-                </tr>
-              </table>
-                      </td>
-                  </tr>
-              </table>
-          </center>
-  </body>
-  </html>
-  `;
-  return { subjectLine, bodyText };
-}
-
-function clarifySolutionEmail({ solution, message, adminEmail }) {
-  const subjectLine = 'Update on your recent comment';
-  const bodyText = `
-  <!doctype html>
-  <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
-    <head>
-      <meta charset="UTF-8">
-          <meta http-equiv="X-UA-Compatible" content="IE=edge">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Update on your recent comment</title>
-     </head>
-
-      <body>
-      <span style="display:none; font-size:0px; line-height:0px; max-height:0px; max-width:0px; opacity:0; overflow:hidden; visibility:hidden;">Update on your comment: "${solution.text}"</span>
-
-          <center>
-              <table align="center" border="0" cellpadding="0" cellspacing="0" height="100%" width="100%" id="bodyTable" style="border-collapse: collapse;height: 100%;margin: 0;padding: 0;width: 100%;background-color: #fff;">
-                  <tr>
-                      <td align="center" valign="top" id="bodyCell" style="height: 100%;margin: 0;padding: 10px;width: 100%;border-top: 0;">
-              <table border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse: collapse;border: 0;max-width: 600px !important;">
-                <tr>
-                  <td valign="top" id="templateHeader" style="background-color: #eee;border-top: 0;border-bottom: 0;padding: 15px;"><table border="0" cellpadding="0" cellspacing="0" width="100%" style="min-width: 100%;border-collapse: collapse;">
-              <tbody>
-        <tr>
-            <td valign="top">
-                <table align="left" border="0" cellpadding="0" cellspacing="0" style="max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                    <tbody><tr>
-
-                        <img align="center" alt="" src="https://gallery.mailchimp.com/bca1c4105904542810e13ee67/images/46a4a723-d971-42b9-98d1-66382d9998db.png" width="230" style="max-width: 140px;padding-bottom: 10px;display: inline !important;vertical-align: bottom;border: 0;height: auto;outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;" class="mcnImage">
-                        <td valign="top" style="padding-top: 0;padding-right: 18px;padding-bottom: 9px;padding-left: 18px;word-break: break-word;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: center;">
-
-                    </tr>
-                </tbody></table>
-            </td>
-        </tr>
-    </tbody>
-    <tbody>
-          <tr>
-              <td valign="top" style="padding-top: 9px;">
-                  <table align="left" border="0" cellpadding="0" cellspacing="0" style="background-color: #fff;max-width: 100%;min-width: 100%;border-collapse: collapse;" width="100%">
-                      <tbody><tr>
-
-  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Your moderator has requested <span style="color: #F8C61C;"><strong>clarification</span></strong> on your recent comment:</span></p>
-  <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: normal;font-family:sans-serif;">"${solution.text}"</p>
-  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The moderator responded with this message:</span></p>
-  <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span style="color: #00A2FF;"><strong>"${message}"</strong></span></p>
-  <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>The comment is not published at this point. Your contact information has been kept confidential. Please respond to ${adminEmail} to clarify your feedback.</span></p>
   <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
   <p style="margin: 10px 10px;padding: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span> Suggestion Box</span></p>
 
