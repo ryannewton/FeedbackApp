@@ -15,13 +15,13 @@ class SendFeedbackButton extends Component {
     submitFeedback = () => {
     const { feedback, group, navigation, user } = this.props;
     if (!feedback.text) {
-      this.props.updateErrorMessage('Feedback box cannot be blank. Sorry!');
+      this.props.updateErrorMessage(translate(this.props.user.language).FEEDBACK_CANT_BE_BLANK);
       return null;
     }
       
     // Search for restricted words
     if (group.bannedWords.test(feedback.text.toLowerCase())) {
-      this.props.updateErrorMessage('One or more words in your feedback is restricted by your administrator. Please edit and resubmit.');
+      this.props.updateErrorMessage((this.props.user.language).RESTRICTED_WORD);
       return null;
     }
 

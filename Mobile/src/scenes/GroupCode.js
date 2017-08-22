@@ -125,14 +125,15 @@ class GroupCode extends Component {
   }
 
   renderCreateGroupLink() {
+    const { language } = this.props.user
     return (
       <View style={{ height: 50, justifyContent: 'center', alignItems: 'center' }}>
         <TouchableOpacity onPress={() => {
-          this.props.navigation.navigate('CreateGroup', 'Enter Group Name');
+          this.props.navigation.navigate('CreateGroup', translate(this.props.user.language).CREATE_GROUP);
           this.setState({ cleared: true });
         }}>
           <Text style={{ fontWeight: '500', backgroundColor: 'transparent', fontSize: 18, color: 'white' }}>
-            Create a new Group
+            {translate(language).CREATE_GROUP}
           </Text>
         </TouchableOpacity>
       </View>
@@ -140,19 +141,13 @@ class GroupCode extends Component {
   }
 
   requestTrialAlert = () => {
-    const { language } = this.props;
-    const { OK,
-            NEED_GROUP_CODE,
-            DISMISS,
-            SHARE,
-          } = translate(language);
-
+    const { language } = this.props.user;
     return (
       Alert.alert(
-        NEED_GROUP_CODE,
-        `If your community does not have a suggestion box yet, you can create one by clicking the link at the bottom of this page`,
+        translate(language).NEED_GROUP_CODE,
+        translate(language).NEED_GROUP_CODE_DETAIL,
         [
-          {text: OK, onPress: () => null },
+          {text: translate(language).OK, onPress: () => null },
         ],
         { cancelable: false }
       )

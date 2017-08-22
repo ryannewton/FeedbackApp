@@ -30,23 +30,16 @@ class FeedbackSubmitHeader extends Component {
 
   render() {
     const { language } = this.props
-    const { MOST_POPULAR,
-            ALL_FEEDBACK,
-            THIS_WEEK,
-            TODAY,
-            MY_FEEDBACK,
-    } = translate(language);
-
     return (
       <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
         {this.renderHeader()}
         <Modal style={[styles2.modal, styles2.modal2]} backdrop={false} position={'top'} entry={'top'} ref={"modal2"} coverScreen={true}>
-          <Text style={{ color:'white', fontSize: 25}}> Filter By: </Text>
+          <Text style={{ color:'white', fontSize: 25}}> {translate(language).FILTER_BY} </Text>
           {this.renderFilterButtons()}
-          <Text style={{ color:'white', fontSize: 25}}> Sort By: </Text>
-          <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('New'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> New Feedback </Button>
-          <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('Top'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> Top Feedback </Button>
-          <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10, marginTop: 10}}> Clear </Button>
+          <Text style={{ color:'white', fontSize: 25}}> {translate(language).SORT_BY} </Text>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('New'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> {translate(language).NEW_FEEDBACK} </Button>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('Top'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> {translate(language).MOST_POPULAR} </Button>
+          <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10, marginTop: 10}}> {translate(language).CLEAR} </Button>
         </Modal>
       </View>
     );

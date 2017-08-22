@@ -55,10 +55,10 @@ class InviteGroupUsers extends Component {
     return (
       <View style={{ flexDirection:'column' }}>
         <Text style={{ fontWeight: 'bold', padding: 20, paddingBottom: 0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 18, color: 'white', textAlign:'center' }}>
-           Your Suggestion Box has been created!{'\n'}
+           {translate(language).GROUP_CREATED}{'\n'}
         </Text>
         <Text style={{ fontWeight: '400', padding: 20, paddingTop: 0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 16, color: 'white' }}>
-           Community members can download the app and login with group code: <Text style={{ fontWeight: 'bold' }}>{this.props.group.groupName}</Text>
+           {translate(language).GROUP_CREATED_BODY}<Text style={{ fontWeight: 'bold' }}>{this.props.group.groupName}</Text>
         </Text>
       </View>
     );
@@ -69,11 +69,11 @@ class InviteGroupUsers extends Component {
     return (
       <View style={{ paddingTop: 30, flexDirection: 'column' }}>
         <Text style={{ fontWeight: '400', padding: 10, paddingTop: 0, paddingBottom:0, backgroundColor: 'rgba(0,0,0,0)', fontSize: 16, color: 'white' }}>
-           Invite your first users now: (Your name is only used for the invitation email.)
+           {translate(language).INVITE_FIRST}
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Fumi
-            label={"Enter your name here..."}
+            label={translate(language).ENTER_YOUR_NAME}
             iconClass={FontAwesomeIcon}
             iconName={'user'}
             iconColor={'#00A2FF'}
@@ -91,7 +91,7 @@ class InviteGroupUsers extends Component {
         </View>
         <View style={{ flexDirection: 'row' }}>
           <Fumi
-            label={"Enter an email here..."}
+            label={translate(language).ENTER_YOUR_EMAIL}
             iconClass={FontAwesomeIcon}
             iconName={'users'}
             iconColor={'#00A2FF'}
@@ -117,7 +117,7 @@ class InviteGroupUsers extends Component {
                   this.setState({ showErrorMessage: true });
                   setTimeout(() => this.setState({ showErrorMessage: false }), 8000);
                 }
-            }}> Send! </Button>
+            }}> {translate(language).SEND} </Button>
           </View>
         </View>
       </View>
@@ -133,6 +133,7 @@ class InviteGroupUsers extends Component {
   }
 
   renderEnterToBoxButton() {
+    const { language } = this.props.user;
     return (
       <View>
         <Button textStyle={{fontSize: 20}} style={{ height:55}} onPress={() => {
@@ -143,7 +144,7 @@ class InviteGroupUsers extends Component {
           });
           this.props.navigation.dispatch(navToFeedbackList);}}
         >
-          Enter the Suggestion Box!
+          {translate(language).ENTER_SUGGESTION_BOX}
         </Button>
       </View>
     );

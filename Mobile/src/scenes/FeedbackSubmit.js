@@ -70,13 +70,14 @@ class FeedbackSubmit extends Component {
   }
 
   addImage = async () => {
+    const { language } = this.props.user;
     Alert.alert(
-      'Upload photo.',
+      translate(language).UPLOAD_PHOTO,
       '',
       [
-        { text: 'Take photo...', onPress: () => this.addImageHelper('takePhoto') },
-        { text: 'Cancel', onPress: () => {}, style: 'cancel' },
-        { text: 'Choose from library...', onPress: () => this.addImageHelper('choosePhoto') },
+        { text: translate(language).TAKE_PHOTO, onPress: () => this.addImageHelper('takePhoto') },
+        { text: translate(language).CANCEL, onPress: () => {}, style: 'cancel' },
+        { text: translate(language).CHOOSE_FROM_LIBRARY, onPress: () => this.addImageHelper('choosePhoto') },
       ],
       { cancelable: false }
     )
@@ -112,7 +113,7 @@ class FeedbackSubmit extends Component {
 
   maybeRenderUploadingOverlay = () => {
     const { loadingImage } = this.props.feedback;
-
+    const { language } = this.props.user;
     if (loadingImage) {
       return (
         <View style={[StyleSheet.absoluteFill, { backgroundColor: 'rgba(0,0,0,0.4)', alignItems: 'center', justifyContent: 'center' }]}>
@@ -121,7 +122,7 @@ class FeedbackSubmit extends Component {
             animating
             size="large"
           />
-          <Text style={{ color: 'white' }}>Uploading photo...</Text>
+          <Text style={{ color: 'white' }}>{translate(language).UPLOAD_PHOTO}...</Text>
         </View>
       );
     }
@@ -137,7 +138,7 @@ class FeedbackSubmit extends Component {
             style={[styles.button, { backgroundColor: 'white', borderWidth: 0, flexDirection: 'row', alignItems: 'center', padding: 14 }]}
           >
             <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'left' }}>
-              Add Photo
+              {translate(language).ADD_PHOTO}
             </Text>
             <Icon name="add-a-photo" size={25} color={'grey'} />
           </TouchableOpacity>
@@ -201,11 +202,13 @@ class FeedbackSubmit extends Component {
   }
 
   handleValueChange() {
-    return this.props.feedback.category || 'Click to choose > ';
+    const { language } = this.props.user;
+    return this.props.feedback.category || translate(language).CLICK_TO_CHOOSE;
   }
 
   maybeRenderCategoryModal() {
     // If the group doesn't have categories
+    const { language } = this.props.user;
     const { categories } = this.props.group;
     if (!categories.length) {
       return null;
@@ -217,7 +220,7 @@ class FeedbackSubmit extends Component {
       );
     });
 
-    categoriesForPicker.unshift({ key: index++, label: 'Choose a category', section: true })
+    categoriesForPicker.unshift({ key: index++, label: translate(language).CHOOSE_CATEGORY, section: true })
     return (
       <View style={{ flexDirection: 'row'}}>
         <ModalPicker
@@ -233,7 +236,7 @@ class FeedbackSubmit extends Component {
         >
           <View style={{ flexDirection: 'row', alignItems: 'center', backgroundColor: 'white', marginTop: 5, marginBottom: 1 }}>
             <Text style={{ flex: 1, fontSize: 16, fontWeight: '500', textAlign: 'left', paddingLeft: 13 }}>
-              Add Category
+              {translate(language).ADD_CATEGORY}
             </Text>
               <TextInput
                 style={{
