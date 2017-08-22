@@ -69,7 +69,7 @@ class CreateGroup extends Component {
   }
 
   createGroup = () => {
-    if (!this.state.groupName) this.setState({ error: 'Group name cannot be blank' });
+    if (!this.state.groupName) this.setState({ error: translate(this.props.user.language).GROUP_NAME_CANT_BE_BLANK });
     else {
       this.setState({ error: '' });
       Keyboard.dismiss();

@@ -73,7 +73,7 @@ class InviteGroupUsers extends Component {
         </Text>
         <View style={{ flexDirection: 'row' }}>
           <Fumi
-            label={"Enter your name here..."}
+            label={translate(language).ENTER_YOUR_NAME}
             iconClass={FontAwesomeIcon}
             iconName={'user'}
             iconColor={'#00A2FF'}
@@ -91,7 +91,7 @@ class InviteGroupUsers extends Component {
         </View>
         <View style={{ flexDirection: 'row' }}>
           <Fumi
-            label={"Enter an email here..."}
+            label={translate(language).ENTER_YOUR_EMAIL}
             iconClass={FontAwesomeIcon}
             iconName={'users'}
             iconColor={'#00A2FF'}
@@ -117,7 +117,7 @@ class InviteGroupUsers extends Component {
                   this.setState({ showErrorMessage: true });
                   setTimeout(() => this.setState({ showErrorMessage: false }), 8000);
                 }
-            }}> Send! </Button>
+            }}> {translate(language).SEND} </Button>
           </View>
         </View>
       </View>

@@ -68,7 +68,9 @@ class FeedbackList extends Component {
           />
         }
       >
-        <Image style={[styles.background, { height: SCREEN_HEIGHT - 88 }]} source={nothing} resizeMode="cover" />
+        <Image style={[styles.background, { height: SCREEN_HEIGHT - 88 }]} source={nothing} resizeMode="cover">
+        <Text style={{zIndex:100, position:'absolute', top:SCREEN_HEIGHT*0.52, fontSize:SCREEN_HEIGHT*0.05, color:'grey'}}>{translate(this.props.user.language).NOTHING_FOUND}</Text>
+        </Image>
       </ScrollView>
     );
 

@@ -77,6 +77,14 @@ const translate = language => {
         FILTER_BY: 'Filter by:',
         SORT_BY: 'Sort by:',
         CLEAR: 'Clear',
+        ENTER_YOUR_NAME: 'Enter your name here...',
+        ENTER_YOUR_EMAIL: 'Enter an email here...',
+        SEND: 'Send',
+        NOTHING_FOUND: 'Nothing Found...',
+        ADD_CATEGORY: 'Add Category',
+        GROUP_NAME_CANT_BE_BLANK: 'Group name cannot be blank',
+        FEEDBACK_CANT_BE_BLANK: 'Feedback box cannot be blank. Sorry!',
+        RESTRICTED_WORD: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.',
     };
     case 'es':
       return {
@@ -156,6 +164,14 @@ const translate = language => {
         SORT_BY: 'Ordenar por:',
         CLEAR: 'Claro',
         INVITE_FIRST: 'Invita a tus primeros usuarios ahora: (Tu nombre solo se usa para el correo electrónico de invitación.)',
+        ENTER_YOUR_NAME: 'Introduzca su nombre aquí...',
+        ENTER_YOUR_EMAIL: 'Ingrese un correo electrónico aquí...',
+        SEND: 'Enviar',
+        NOTHING_FOUND: 'Nada Encontrado...',
+        ADD_CATEGORY: 'añadir categoría',
+        GROUP_NAME_CANT_BE_BLANK: 'El nombre del grupo no puede estar en blanco',
+        FEEDBACK_CANT_BE_BLANK: 'La casilla de realimentación no puede estar en blanco. ¡Lo siento!',
+        RESTRICTED_WORD: 'Una o más palabras en sus comentarios son restringidas por su administrador. Edite y vuelva a enviar.',
       };
 
     case 'vi':
@@ -236,6 +252,14 @@ const translate = language => {
         SORT_BY: 'Sắp xếp theo:',
         CLEAR: 'Trong sáng',
         GROUP_CREATED_BODY: 'Các thành viên cộng đồng có thể tải ứng dụng và đăng nhập bằng mã nhóm: ',
+        ENTER_YOUR_NAME: 'Nhập tên của bạn vào đây...',
+        ENTER_YOUR_EMAIL: 'Nhập email ở đây...',
+        SEND: 'Gửi',
+        NOTHING_FOUND: 'Không kết quả...',
+        ADD_CATEGORY: 'thêm thể loại',
+        GROUP_NAME_CANT_BE_BLANK: 'Tên nhóm không được để trống',
+        FEEDBACK_CANT_BE_BLANK: 'Hộp phản hồi không được để trống. Lấy làm tiếc!',
+        RESTRICTED_WORD: 'Một hoặc nhiều từ trong phản hồi của bạn bị hạn chế bởi quản trị viên của bạn. Vui lòng chỉnh sửa và gửi lại.',
       }
 
     case 'zh-cn':
@@ -315,6 +339,14 @@ const translate = language => {
         SORT_BY: '排序方式:',
         CLEAR: '清除',
         GROUP_CREATED_BODY: '你的成员们可以下载我们的app然后用这个组名登录：',
+        ENTER_YOUR_NAME: '输入你的名字...',
+        ENTER_YOUR_EMAIL: '输入一个成员邮箱...',
+        SEND: '发送',
+        NOTHING_FOUND: '没有找到任何东西...',
+        ADD_CATEGORY: '添加分类',
+        GROUP_NAME_CANT_BE_BLANK: '组名不能为空',
+        FEEDBACK_CANT_BE_BLANK: '不好意思，你不能提交空的反馈',
+        RESTRICTED_WORD: '你的反馈包含了管理员禁止的词汇，请重新编辑后提交',
       }
     default:
       return {
@@ -393,6 +425,14 @@ const translate = language => {
         SORT_BY: 'Sort by:',
         CLEAR: 'Clear',
         GROUP_CREATED_BODY: 'Community members can download the app and login with group code: ',
+        ENTER_YOUR_NAME: 'Enter your name here...',
+        ENTER_YOUR_EMAIL: 'Enter an email here...',
+        SEND: 'Send',
+        NOTHING_FOUND: 'Nothing Found...',
+        ADD_CATEGORY: 'Add Category',
+        GROUP_NAME_CANT_BE_BLANK: 'Group name cannot be blank',
+        FEEDBACK_CANT_BE_BLANK: 'Feedback box cannot be blank. Sorry!',
+        RESTRICTED_WORD: 'One or more words in your feedback is restricted by your administrator. Please edit and resubmit.',
       }
     }
 }
