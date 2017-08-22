@@ -13,7 +13,8 @@ import {
   AUTHORIZE_USER_SUCCESS,
   LOG_OUT_USER,
   SAVE_GROUP_CODE,
-  NEEDS_GROUP_CODE,
+  UPDATE_NEEDS_GROUP_CODE,
+  UPDATE_AUTH_CODE,
 } from './types';
 import errorHandling from '../errorHandling';
 
@@ -32,7 +33,8 @@ export const sendAuthorizationEmail = (email, navigateToNext, language) => (
       dispatch(sendAuthorizationEmailSuccess(email));
       dispatch({ type: SAVE_GROUP_CODE, payload: response.data });
       if (email.includes('gymboree')) {
-        dispatch({ type: NEEDS_GROUP_CODE, payload: '9911' });
+        dispatch(updateNeedsGroupCode(false));
+        dispatch(updateAuthCode(9911));
       }
       navigateToNext();
     })
@@ -42,13 +44,15 @@ export const sendAuthorizationEmail = (email, navigateToNext, language) => (
   }
 );
 
-export const sendAuthorizationEmailFail = error => {
-  return { type: SENT_AUTHORIZATION_EMAIL_FAIL, payload: error };
-};
+export const sendAuthorizationEmailFail = error => ({
+  type: SENT_AUTHORIZATION_EMAIL_FAIL,
+  payload: error,
+});
 
-export const sendAuthorizationEmailSuccess = email => (
-  { type: SENT_AUTHORIZATION_EMAIL_SUCCESS, payload: email }
-);
+export const sendAuthorizationEmailSuccess = email => ({
+  type: SENT_AUTHORIZATION_EMAIL_SUCCESS,
+  payload: email,
+});
 
 export const authorizeUserFail = error => ({
   type: AUTHORIZE_USER_FAIL,
@@ -62,14 +66,15 @@ export const authorizeUserSuccess = token => (
   }
 );
 
-export const verifyEmail = (email, code) => (
-  (dispatch) => {
+export const verifyEmail = () => (
+  (dispatch, getState) => {
     dispatch({ type: VERIFYING_EMAIL });
+    const { email, code } = getState().auth;
 
     return http.post('/verifyEmail', { email, code })
     .then((response) => {
       if (response.data.needsGroupSignupCode) {
-        dispatch({ type: NEEDS_GROUP_CODE, payload: code });
+        dispatch(updateNeedsGroupCode(true));
       } else if (response.data.token) {
         const token = String(response.data.token);
         AsyncStorage.setItem(`${ROOT_STORAGE}token`, token)
@@ -106,6 +111,16 @@ export const authorizeUser = (email, code, groupSignupCode) => (
     .catch(error => dispatch(authorizeUserFail(errorHandling(error, 'authorizeUser()'))));
   }
 );
+
+export const updateAuthCode = code => ({
+  type: UPDATE_AUTH_CODE,
+  payload: code,
+});
+
+export const updateNeedsGroupCode = needsGroupCode => ({
+  type: UPDATE_NEEDS_GROUP_CODE,
+  payload: needsGroupCode,
+});
 
 export const logOut = () => (
   (dispatch) => {
