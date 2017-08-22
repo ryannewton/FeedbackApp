@@ -101,10 +101,10 @@ function submitFeedbackHelper(rows, res, decoded, feedback) {
       else {
         let adminEmail = [];
         if (groupId === 9) {
-          adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu'];
+          adminEmail = ['alics@stanford.edu'];
         }
         if (groupId === 3) {
-          adminEmail = ['jbaker1@mit.edu', 'thannasc@stanford.edu'];
+          adminEmail = ['Amy_King@gymboree.com'];
         }
         // Insert text
         insertText(res, result.insertId, 'feedback', text, userId);
