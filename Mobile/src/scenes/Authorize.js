@@ -47,7 +47,7 @@ class Authorize extends Component {
       });
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
-    } else if (nextProps.auth.needsGroupCode === true) {
+    } else if (nextProps.auth.emailVerified && nextProps.auth.needsGroupCode) {
       this.setState({ cleared: true });
       this.props.navigation.navigate('AuthGroupCode', translate(this.props.user.language).JOIN_GROUP);
     }
@@ -55,7 +55,7 @@ class Authorize extends Component {
   }
 
   renderSignupButton() {
-    const { language } = this.props.user
+    const { language } = this.props.user;
     return (
       <Button onPress={() => {
         this.props.updateNeedsGroupCode(false);

@@ -18,6 +18,7 @@ const INITIAL_STATE = {
   loading: false,
   code: '',
   sentAuthorizationEmail: false,
+  emailVerified: false,
   error: null,
   loggedIn: null,
   needsGroupCode: false,
@@ -26,11 +27,11 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SENDING_AUTHORIZATION_EMAIL:
-      return { ...state, loading: true, loggedIn: false, code: '' };
+      return { ...state, loading: true, loggedIn: false, code: '', emailVerified: false };
     case SENT_AUTHORIZATION_EMAIL_SUCCESS:
-      return { ...state, loading: false, sentAuthorizationEmail: true, error: false, email: action.payload };
+      return { ...state, loading: false, sentAuthorizationEmail: true, error: false, email: action.payload, emailVerified: true };
     case SENT_AUTHORIZATION_EMAIL_FAIL:
-      return { ...state, loading: false, sentAuthorizationEmail: false, error: action.payload };
+      return { ...state, loading: false, sentAuthorizationEmail: false, error: action.payload, emailVerified: false };
     case AUTHORIZING_USER:
       return { ...state, loading: true };
     case VERIFYING_EMAIL:
