@@ -63,7 +63,10 @@ class Authorize extends Component {
   renderSignupButton() {
     const { language } = this.props.user
     return (
-      <Button onPress={this.verifyEmail}>
+      <Button onPress={() => {
+        this.setState({ cleared: false });
+        this.verifyEmail();
+      }}>
         {translate(language).VERIFY_EMAIL}
       </Button>
     );
