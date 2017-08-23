@@ -36,17 +36,27 @@ const cardSource = {
   },
   endDrag(props, monitor, component) {
     if (monitor.getDropResult()) {
-      if (monitor.getDropResult().filterMethod === 'awaitingApproval') {
-        const updatedFeedback = { ...props.feedback, approved: 0 };
-        store.dispatch(updateFeedback(updatedFeedback))
-      } else if (monitor.getDropResult().filterMethod === 'complete' && props.feedback.officialReply === '') {
-        component.setState({ officialResponseModal: true })
-      } else if (!props.feedback.approved) {
-        const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod, approved: 1 };
-        store.dispatch(updateFeedback(updatedFeedback))
+      if (props.group.includePositiveFeedbackBox) {
+        if (monitor.getDropResult().filterMethod === 'noCategory') {
+          const updatedFeedback = { ...props.feedback, category: '' };
+          store.dispatch(updateFeedback(updatedFeedback))
+        } else {
+          const updatedFeedback = { ...props.feedback, category: monitor.getDropResult().filterMethod };
+          store.dispatch(updateFeedback(updatedFeedback))
+        }
       } else {
-        const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod };
-        store.dispatch(updateFeedback(updatedFeedback))
+        if (monitor.getDropResult().filterMethod === 'awaitingApproval') {
+          const updatedFeedback = { ...props.feedback, approved: 0 };
+          store.dispatch(updateFeedback(updatedFeedback))
+        } else if (monitor.getDropResult().filterMethod === 'complete' && props.feedback.officialReply === '') {
+          component.setState({ officialResponseModal: true })
+        } else if (!props.feedback.approved) {
+          const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod, approved: 1 };
+          store.dispatch(updateFeedback(updatedFeedback))
+        } else {
+          const updatedFeedback = { ...props.feedback, status: monitor.getDropResult().filterMethod };
+          store.dispatch(updateFeedback(updatedFeedback))
+        }
       }
     }
   }
@@ -375,7 +385,7 @@ maybeRenderImage(){
       return null;
     }
     const imageURL = this.props.feedback.imageURL;
-    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10, height:(this.props.group.includePositiveFeedbackBox?300:null)}} responsive={this.props.group.includePositiveFeedbackBox?false:true} /> : null;
+    const image = imageURL ? <Image src={imageURL} style={{marginBottom:10, height:null}} responsive={true} /> : null;
     return (
       <span>
         {image}
