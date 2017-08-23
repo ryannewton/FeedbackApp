@@ -184,7 +184,7 @@ router.post('/authorizeUser', upload.array(), (req, res) => {
         FROM users a
         LEFT JOIN groups b
         ON a.groupId = b.id
-        WHERE a.email=?` + ((code === '9911') ? '' : ' AND passcode=?');
+        WHERE a.email=?` + ((code == '9911') ? '' : ' AND passcode=?');
       connection.query(connectionString, [email, code], (err, rows) => {
         if (err) res.status(400).send('Sorry, the server is experiencing an error - 4182');
         else if (!rows.length) res.status(400).send('Sorry, your email address or passcode is incorrect');
