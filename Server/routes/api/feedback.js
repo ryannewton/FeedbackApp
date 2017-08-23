@@ -84,7 +84,7 @@ function submitFeedbackHelper(rows, res, decoded, feedback) {
         insertText(res, result.insertId, 'feedback', text, userId);
         // Send Email to Admins
         const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', ...adminEmail];
-        const subjectLine = 'An new feedback has been submitted to your group' + rows[0].groupName;
+        const subjectLine = 'A new suggestion has been submitted to your group: ' + rows[0].groupName;
           const bodyText = `
  <!doctype html>
   <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
@@ -92,7 +92,7 @@ function submitFeedbackHelper(rows, res, decoded, feedback) {
       <meta charset="UTF-8">
           <meta http-equiv="X-UA-Compatible" content="IE=edge">
           <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>An new feedback has been submitted to your group ${rows[0].groupName}</title>
+      <title>A new suggestion has been submitted to your group ${rows[0].groupName}</title>
      </head>
 
       <body>
@@ -127,7 +127,7 @@ function submitFeedbackHelper(rows, res, decoded, feedback) {
                       <tbody><tr>
 
   <p style="margin: 10px 10px;padding-top: 10px;color: #000;font-family: Courier New;font-size: 22px;line-height: 125%;text-align: left;font-weight: normal;font-family:sans-serif;">Hi</p>
-  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>A new feedback has just been submitted to your Suggestion Box group:</span></p>
+  <p style="margin: 10px 10px;padding-top: 0px;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>A new piece of feedback has just been submitted to your Suggestion Box group:</span></p>
   <p style="margin: 10px 50px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: normal;font-family:sans-serif;">"${text}"</p>
   <p style="margin: 10px 10px;padding: 0;color: #000;font-family: Courier New;font-size: 18px;line-height: 125%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>You can login to admin console http://suggestionboxapp.com/admin to take actions on the feedback.</span></p>
   <p style="margin: 10px 10px;padding-top: 20px;color: #000;font-family: Courier New;font-size: 18px;line-height: 100%;text-align: left;font-weight: lighter;font-family:sans-serif;"><span>Sincerely,</span></p>
