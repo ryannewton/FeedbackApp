@@ -98,12 +98,11 @@ class Authorize extends Component {
             value={this.props.auth.code}
             onChangeText={text => this.props.updateAuthCode(text)}
             keyboardType="phone-pad"
-            maxLength={10}
+            maxLength={45}
             // TextInput props
             autoCapitalize={'none'}
             autoCorrect={false}
             style={{ height:65, marginLeft: 20, marginRight: 20, marginTop: 10, backgroundColor:'white' }}
-            maxLength={100}
           />
 
           {/* Error message (blank if no error) */}

@@ -3,10 +3,9 @@ const jwt = require('jsonwebtoken'); // For authentication
 const upload = require('multer')(); // for parsing multipart/form-data
 const aws = require('aws-sdk'); // load aws sdk
 const Jimp = require('jimp'); // For image processing
-const googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
 
 const { defaultFromEmail } = require('../constants');
-const { sendEmail, connection } = require('../helpers');
+const { sendEmail, connection, insertText } = require('../helpers');
 
 // Image uploading backend
 const s3 = new aws.S3({
@@ -58,36 +57,11 @@ function convertImgs(file, quality) {
 //   py.stdin.end();
 // }
 
-function insertText(res, targetId, type, text, userId) {
-  const supportedLanguages = ['en', 'es', 'vi', 'zh-cn'];
-  supportedLanguages.forEach((language) => {
-    googleTranslate.translate(text, language, (err, translation) => {
-      if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2');
-      else {
-        const { translatedText, detectedSourceLanguage } = translation;
-        const connectionString = 'INSERT INTO translatedText SET ? ON DUPLICATE KEY UPDATE ?';
-        connection.query(connectionString,
-          [{
-            targetId,
-            type,
-            translatedText,
-            translatedFrom: detectedSourceLanguage,
-            language,
-            userId,
-          }, { translatedText, userId }], (err) => {
-            if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - JKD1');
-          }
-        );
-      }
-    });
-  });
-}
-
 function submitFeedbackHelper(rows, res, decoded, feedback) {
   const approved = !rows[0].feedbackRequiresApproval;
   const { groupId, userId } = decoded;
-  let { text, imageURL, category } = feedback;
-  let connectionString = 'INSERT INTO feedback SET ?';
+  const { text, imageURL, category } = feedback;
+  const connectionString = 'INSERT INTO feedback SET ?';
   connection.query(connectionString,
     {
       groupId,
