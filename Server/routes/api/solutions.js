@@ -3,8 +3,7 @@ const jwt = require('jsonwebtoken'); // For authentication
 const upload = require('multer')(); // for parsing multipart/form-data
 
 const { defaultFromEmail } = require('../constants');
-const { sendEmail, connection } = require('../helpers');
-
+const { sendEmail, connection, insertText } = require('../helpers');
 
 router.post('/submitSolution', upload.array(), (req, res) => {
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {

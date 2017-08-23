@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken'); // For authentication
 const upload = require('multer')(); // for parsing multipart/form-data
 const Expo = require('exponent-server-sdk'); // For sending push notifications
 
-
 const { connection } = require('../helpers');
 
 // SAVE PUSH NOTIFICATION TOKEN

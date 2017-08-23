@@ -1,6 +1,7 @@
 const MailComposer = require('nodemailer/lib/mail-composer');
 const aws = require('aws-sdk'); // load aws sdk
 const mysql = require('mysql');
+const googleTranslate = require('google-translate')(process.env.TRANSLATE_API_KEY);
 
 const ses = new aws.SES({ apiVersion: '2010-12-01' }); // load AWS SES
 
@@ -61,4 +62,29 @@ function sendEmailSES(toEmails, fromEmail, subjectLine, bodyText) {
   });
 }
 
-module.exports = { sendEmail, connection, sendEmailSES };
+function insertText(res, targetId, type, text, userId) {
+  const supportedLanguages = ['en', 'es', 'vi', 'zh-cn'];
+  supportedLanguages.forEach((language) => {
+    googleTranslate.translate(text, language, (err, translation) => {
+      if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - GDS2');
+      else {
+        const { translatedText, detectedSourceLanguage } = translation;
+        const connectionString = 'INSERT INTO translatedText SET ? ON DUPLICATE KEY UPDATE ?';
+        connection.query(connectionString,
+          [{
+            targetId,
+            type,
+            translatedText,
+            translatedFrom: detectedSourceLanguage,
+            language,
+            userId,
+          }, { translatedText, userId }], (err) => {
+            if (err) res.status(400).send('Sorry, there was a problem with your feedback or the server is experiencing an error - JKD1');
+          }
+        );
+      }
+    });
+  });
+}
+
+module.exports = { sendEmail, connection, sendEmailSES, insertText };
