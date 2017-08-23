@@ -110,7 +110,7 @@ function submitFeedbackHelper(rows, res, decoded, feedback) {
         insertText(res, result.insertId, 'feedback', text, userId);
         // Send Email to Admins
         const toEmails = ['tyler.hannasch@gmail.com', 'newton1988@gmail.com', ...adminEmail];
-        const subjectLine = 'An new feedback has been submitted to your group' + rows[0].groupName;
+        const subjectLine = 'A new feedback has been submitted to your group: ' + rows[0].groupName;
           const bodyText = `
  <!doctype html>
   <html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office">
