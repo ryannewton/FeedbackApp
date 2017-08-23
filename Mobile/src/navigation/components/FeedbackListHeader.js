@@ -30,6 +30,24 @@ class FeedbackSubmitHeader extends Component {
 
   render() {
     const { language } = this.props
+    if (!this.props.group.categories.length) {
+      return (
+        <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
+        {this.renderHeader()}
+          <Modal style={[styles2.modal, styles2.modal2]} backdrop={false} position={'top'} entry={'top'} ref={"modal2"} coverScreen={true}>
+            <Text style={{ color:'white', fontSize: 25}}> {translate(language).FILTER_BY} </Text>
+            <Button key={'all'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
+            <Button key={'thisWeek'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('thisWeek')}> This Week </Button>
+            <Button key={'today'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>
+            <Button key={'myFeedback'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('myFeedback')}> My Feedback </Button>
+            <Text style={{ color:'white', fontSize: 25}}> {translate(language).SORT_BY} </Text>
+            <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('New'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> {translate(language).NEW_FEEDBACK} </Button>
+            <Button onPress={() => {this.refs.modal2.close(); this.props.changeSortMethod('Top'); }} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}}> {translate(language).MOST_POPULAR} </Button>
+            <Button onPress={() => {this.refs.modal2.close(); this.props.changeFilterMethod('all'); }} style={{marginBottom:10, marginTop: 10}}> {translate(language).CLEAR} </Button>
+          </Modal>
+        </View>
+      );
+    }
     return (
       <View style={{ height: 60, backgroundColor: '#00A2FF'}}>
         {this.renderHeader()}
@@ -162,16 +180,6 @@ class FeedbackSubmitHeader extends Component {
   }
 
   renderFilterButtons() {
-    if (!this.props.group.categories.length) {
-      return (
-        <View>
-          <Button key={'all'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('all')}> All Feedback </Button>
-          <Button key={'thisWeek'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('thisWeek')}> This Week </Button>
-          <Button key={'today'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('today')}> Today </Button>
-          <Button  key={'myFeedback'} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod('myFeedback')}> My Feedback </Button>
-        </View>
-      );
-    }
     return (
       this.props.group.categories.map((item) => <Button key={item} style={styles2.button} textStyle={{color:'black', fontWeight:'400'}} onPress={() => this.changeFilterMethod(item)}>{item}</Button>)
     );
