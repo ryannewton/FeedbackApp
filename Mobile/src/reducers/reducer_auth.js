@@ -8,7 +8,8 @@ import {
   AUTHORIZE_USER_SUCCESS,
   AUTHORIZE_USER_FAIL,
   LOG_OUT_USER,
-  NEEDS_GROUP_CODE,
+  UPDATE_NEEDS_GROUP_CODE,
+  UPDATE_AUTH_CODE,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -17,6 +18,7 @@ const INITIAL_STATE = {
   loading: false,
   code: '',
   sentAuthorizationEmail: false,
+  emailVerified: false,
   error: null,
   loggedIn: null,
   needsGroupCode: false,
@@ -25,21 +27,23 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case SENDING_AUTHORIZATION_EMAIL:
-      return { ...state, loading: true };
+      return { ...state, loading: true, loggedIn: false, code: '', emailVerified: false };
     case SENT_AUTHORIZATION_EMAIL_SUCCESS:
-      return { ...state, loading: false, sentAuthorizationEmail: true, error: false, email: action.payload };
+      return { ...state, loading: false, sentAuthorizationEmail: true, error: false, email: action.payload, emailVerified: true };
     case SENT_AUTHORIZATION_EMAIL_FAIL:
-      return { ...state, loading: false, sentAuthorizationEmail: false, error: action.payload };
+      return { ...state, loading: false, sentAuthorizationEmail: false, error: action.payload, emailVerified: false };
     case AUTHORIZING_USER:
       return { ...state, loading: true };
     case VERIFYING_EMAIL:
-      return { ...state, loading: true };
+      return { ...state, loading: true, loggedIn: false };
     case AUTHORIZE_USER_SUCCESS:
       return { ...state, loading: false, sentAuthorizationEmail: false, loggedIn: true, token: action.payload, error: false };
     case AUTHORIZE_USER_FAIL:
       return { ...state, loading: false, loggedIn: false, error: action.payload };
-    case NEEDS_GROUP_CODE:
-      return { ...state, loading: false, needsGroupCode: true, code: action.payload };
+    case UPDATE_NEEDS_GROUP_CODE:
+      return { ...state, loading: false, needsGroupCode: action.payload };
+    case UPDATE_AUTH_CODE:
+      return { ...state, code: action.payload };
     case LOG_OUT_USER:
       return INITIAL_STATE;
     default:

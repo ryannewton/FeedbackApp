@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 
 // Import components and action creators
 import { Button, Spinner } from '../components/common';
-import { verifyEmail, sendGoogleAnalytics } from '../actions';
+import { verifyEmail, sendGoogleAnalytics, updateAuthCode, updateNeedsGroupCode } from '../actions';
 import styles from '../styles/scenes/AuthorizeStyles';
 
 import FontAwesomeIcon from '@expo/vector-icons/FontAwesome';
@@ -22,7 +22,6 @@ class Authorize extends Component {
     super(props);
 
     this.state = {
-      code: '',
       cleared: false,
     };
 
@@ -37,7 +36,7 @@ class Authorize extends Component {
 
   route = (nextProps) => {
     if (
-      nextProps.auth.loggedIn === true &&
+      nextProps.auth.loggedIn &&
       nextProps.group.groupName !== '' &&
       nextProps.feedback.lastPulled.getTime() !== 0
     ) {
@@ -48,22 +47,22 @@ class Authorize extends Component {
       });
       this.props.navigation.dispatch(navToFeedbackList);
       this.setState({ cleared: true });
-    } else if (nextProps.auth.needsGroupCode === true) {
+    } else if (nextProps.auth.emailVerified && nextProps.auth.needsGroupCode) {
       this.setState({ cleared: true });
       this.props.navigation.navigate('AuthGroupCode', translate(this.props.user.language).JOIN_GROUP);
     }
     // Otherwise we wait until we receive a response and one of these two conditions becomes true
   }
 
-  verifyEmail = () => {
-    Keyboard.dismiss();
-    this.props.verifyEmail(this.props.auth.email, this.state.code);
-  }
-
   renderSignupButton() {
-    const { language } = this.props.user
+    const { language } = this.props.user;
     return (
-      <Button onPress={this.verifyEmail}>
+      <Button onPress={() => {
+        this.props.updateNeedsGroupCode(false);
+        this.setState({ cleared: false });
+        Keyboard.dismiss();
+        this.props.verifyEmail();
+      }}>
         {translate(language).VERIFY_EMAIL}
       </Button>
     );
@@ -96,8 +95,8 @@ class Authorize extends Component {
             iconName={'envelope-open'}
             iconColor={'#00A2FF'}
             inputStyle={{ color: 'black' }}
-            value={this.state.code}
-            onChangeText={text => this.setState({ code: text })}
+            value={this.props.auth.code}
+            onChangeText={text => this.props.updateAuthCode(text)}
             keyboardType="phone-pad"
             maxLength={10}
             // TextInput props
@@ -131,6 +130,8 @@ Authorize.propTypes = {
   group: PropTypes.object,
   feedback: PropTypes.object,
   sendGoogleAnalytics: PropTypes.func,
+  updateAuthCode: PropTypes.func,
+  updateNeedsGroupCode: PropTypes.func,
 };
 
 function mapStateToProps(state) {
@@ -139,4 +140,9 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, { verifyEmail, sendGoogleAnalytics })(Authorize);
+export default connect(mapStateToProps, {
+  verifyEmail,
+  sendGoogleAnalytics,
+  updateAuthCode,
+  updateNeedsGroupCode,
+})(Authorize);
