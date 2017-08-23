@@ -140,12 +140,12 @@ class FeedbackList extends Component {
           if (!feedback.text.toLowerCase().includes(searchQuery.toLowerCase())) return false;
           break;
         case 'thisWeek':
-          let feedbackDate = new Date(item.date).getTime();
+          let feedbackDate = new Date(feedback.date).getTime();
           const oneWeekAgo = Date.now() - (60000 * 60 * 24 * 7);
           if (feedbackDate < oneWeekAgo) return false;
           break;
         case 'today':
-          feedbackDate = new Date(item.date).getTime();
+          feedbackDate = new Date(feedback.date).getTime();
           const oneDayAgo = Date.now() - (60000 * 60 * 24);
           if (feedbackDate < oneDayAgo) return false;
           break;
