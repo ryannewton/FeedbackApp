@@ -30,6 +30,12 @@ class App extends Component {
     queueSort: 'most votes',
     inProcessSort: 'most votes',
     completeSort: 'most votes',
+    boySort: 'most votes',
+    girlSort: 'most votes',
+    newbornSort: 'most votes',
+    accessoriesSort: 'most votes',
+    otherSort: 'most votes',
+    nocatSort: 'most votes',
   }
 
   render = () => {
@@ -188,12 +194,12 @@ class App extends Component {
     const inProcessFeedback = filteredFeedback.filter(feedback => (feedback.status === 'inprocess' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.inProcessSort));
     const completeFeedback = filteredFeedback.filter(feedback => (feedback.status === 'complete' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.completeSort));
 
-    const boyFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Boy' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
-    const girlFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Girl' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
-    const newbornFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Newborn' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
-    const accessoriesFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Accessories' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
-    const otherFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Other' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
-    const noCategoryFeedback = filteredFeedback.filter(feedback => (feedback.category !== 'Boy' && feedback.category !== 'Girl' && feedback.category !== 'Newborn' && feedback.category !== 'Accessories' && feedback.category !== 'Other' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newSort));
+    const boyFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Boy' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.boySort));
+    const girlFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Girl' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.girlSort));
+    const newbornFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Newborn' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.newbornSort));
+    const accessoriesFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Accessories' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.accessoriesSort));
+    const otherFeedback = filteredFeedback.filter(feedback => (feedback.category === 'Other' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.otherSort));
+    const noCategoryFeedback = filteredFeedback.filter(feedback => (feedback.category !== 'Boy' && feedback.category !== 'Girl' && feedback.category !== 'Newborn' && feedback.category !== 'Accessories' && feedback.category !== 'Other' && feedback.approved)).sort((a, b) => this.sortFeedback(a, b, this.state.nocatSort));
 
     let className;
     if (this.props.group.includePositiveFeedbackBox) {
@@ -256,7 +262,7 @@ class App extends Component {
         title={'No Category (' + noCategoryFeedback.length + ')'}
         gridClass={className}
         backgroundColor={'#cb333f'}
-        updateSortMethod={(sortMethod) => this.setState({ approvalSort: sortMethod })}
+        updateSortMethod={(sortMethod) => this.setState({ nocatSort: sortMethod })}
         feedback={noCategoryFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
         filterMethod={'noCategory'}
        />
@@ -264,7 +270,7 @@ class App extends Component {
           title={'Boy (' + boyFeedback.length + ')'}
           gridClass={className}
           backgroundColor={'#00a0b0'}
-          updateSortMethod={(sortMethod) => this.setState({ newSort: sortMethod })}
+          updateSortMethod={(sortMethod) => this.setState({ boySort: sortMethod })}
           feedback={boyFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'Boy'}
         />
@@ -272,7 +278,7 @@ class App extends Component {
           title={'Girl (' + girlFeedback.length + ')'}
           gridClass={className}
           backgroundColor={'#EF5FA7'}
-          updateSortMethod={(sortMethod) => this.setState({ queueSort: sortMethod })}
+          updateSortMethod={(sortMethod) => this.setState({ girlSort: sortMethod })}
           feedback={girlFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'Girl'}
         />
@@ -280,7 +286,7 @@ class App extends Component {
           title={'Newborn (' + newbornFeedback.length + ')'}
           gridClass={className}
           backgroundColor={'#F8BA00'}
-          updateSortMethod={(sortMethod) => this.setState({ inProcessSort: sortMethod })}
+          updateSortMethod={(sortMethod) => this.setState({ newbornSort: sortMethod })}
           feedback={newbornFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'Newborn'}
         />
@@ -288,7 +294,7 @@ class App extends Component {
           title={'Accessories (' + accessoriesFeedback.length + ')'}
           gridClass={className}
           backgroundColor={'#FF9300'}
-          updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
+          updateSortMethod={(sortMethod) => this.setState({ accessoriesSort: sortMethod })}
           feedback={accessoriesFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'Accessories'}
         />
@@ -296,7 +302,7 @@ class App extends Component {
           title={'Other (' + otherFeedback.length + ')'}
           gridClass={className}
           backgroundColor={'#6a4a3d'}
-          updateSortMethod={(sortMethod) => this.setState({ completeSort: sortMethod })}
+          updateSortMethod={(sortMethod) => this.setState({ otherSort: sortMethod })}
           feedback={otherFeedback.map(feedback => <FeedbackCard key={feedback.id} feedback={feedback} />)}
           filterMethod={'Other'}
         />

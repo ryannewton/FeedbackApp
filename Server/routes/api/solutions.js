@@ -6,6 +6,7 @@ const { defaultFromEmail } = require('../constants');
 const { sendEmail, connection, insertText } = require('../helpers');
 
 router.post('/submitSolution', upload.array(), (req, res) => {
+  console.log('here!!');
   jwt.verify(req.body.authorization, process.env.JWT_KEY, (err, decoded) => {
     if (err) res.status(400).send('Authorization failed');
     else {
