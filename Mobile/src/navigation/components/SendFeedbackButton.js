@@ -9,29 +9,30 @@ import translate from '../../translation';
 import {
   submitFeedbackToServer,
   updateFeedbackToServer,
+  updateErrorMessage,
 } from '../../actions';
 
 class SendFeedbackButton extends Component {
-    submitFeedback = () => {
+  submitFeedback = () => {
     const { feedback, group, navigation, user } = this.props;
     if (!feedback.text) {
       this.props.updateErrorMessage(translate(this.props.user.language).FEEDBACK_CANT_BE_BLANK);
-      return null;
     }
       
     // Search for restricted words
-    if (group.bannedWords.test(feedback.text.toLowerCase())) {
-      this.props.updateErrorMessage((this.props.user.language).RESTRICTED_WORD);
-      return null;
+    else if (group.bannedWords.test(feedback.text.toLowerCase())) {
+      this.props.updateErrorMessage(translate(this.props.user.language).RESTRICTED_WORD);
     }
 
-    if (feedback.editing) {
+    else if (feedback.editing) {
       this.props.updateFeedbackToServer(group.feedbackRequiresApproval, feedback.text, feedback.type, feedback.imageURL || '', feedback.category, navigation.state.params.feedback);
-    } else {
-      this.props.submitFeedbackToServer(group.feedbackRequiresApproval, feedback.text, feedback.type, feedback.imageURL || '', feedback.category);    
+      navigation.navigate('Submitted', translate(user.language).FEEDBACK_RECIEVED);
     }
 
-    navigation.navigate('Submitted', translate(user.language).FEEDBACK_RECIEVED);
+    else {
+      this.props.submitFeedbackToServer(group.feedbackRequiresApproval, feedback.text, feedback.type, feedback.imageURL || '', feedback.category);    
+      navigation.navigate('Submitted', translate(user.language).FEEDBACK_RECIEVED);
+    }
   }
 
   render() {
@@ -39,10 +40,7 @@ class SendFeedbackButton extends Component {
     return (
       <TouchableOpacity
         style={{ width: 40 }}
-        onPress={() => {
-          this.submitFeedback();
-          this.props.navigation.navigate('Submitted');
-        }}
+        onPress={this.submitFeedback}
       >
         <Icon name="send" size={25} color="white" />
       </TouchableOpacity>
@@ -67,4 +65,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   submitFeedbackToServer,
   updateFeedbackToServer,
+  updateErrorMessage,
 })(SendFeedbackButton);
